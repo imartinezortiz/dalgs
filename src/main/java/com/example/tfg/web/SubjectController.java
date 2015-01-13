@@ -151,8 +151,7 @@ public class SubjectController {
 	protected String formModifySubjects(@PathVariable("subjectId") long id,
 			Model model) throws ServletException {
 		Subject p = serviceSubject.getSubject(id);
-		if(p.getDegree()!= null)
-			model.addAttribute("idDegree",p.getDegree().getId());
+		model.addAttribute("idDegree",p.getDegree().getId());
 		//model.addAttribute("idAcademicTerm",p.getAcademicTerm().getId());
 		p.setDegree(null);
 		//p.setAcademicTerm(null);

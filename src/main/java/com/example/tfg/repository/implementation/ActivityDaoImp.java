@@ -114,9 +114,6 @@ public class ActivityDaoImp implements ActivityDao {
 		Query query = em.createQuery("select c from Activity c where c.name=?1");
 		query.setParameter(1, name);
 		
-		if (query.getResultList().isEmpty())
-			return null;
-		
 		return (Activity) query.getResultList().get(0);
 
 	}

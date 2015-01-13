@@ -67,6 +67,7 @@ public class DegreeDaoImp implements DegreeDao {
 		try {
 			degree.setDeleted(true);
 			em.merge(degree);
+
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -79,8 +80,6 @@ public class DegreeDaoImp implements DegreeDao {
 		Query query = em.createQuery("select d from Degree d where d.name=?1");
 		query.setParameter(1, degree.getName());
 
-		if (query.getResultList().isEmpty())
-			return null;
 		return query.getResultList();
 	}
 

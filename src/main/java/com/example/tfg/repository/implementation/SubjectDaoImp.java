@@ -87,8 +87,8 @@ public class SubjectDaoImp implements SubjectDao {
 
 		if (query.getResultList().isEmpty())
 			return null;
-		return  (List<Subject>) query.getResultList();
-		
+		List<Subject> s = (List<Subject>) query.getResultList();
+		return s;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -98,8 +98,6 @@ public class SubjectDaoImp implements SubjectDao {
 		// .createQuery("select c from Competence c where c.subject=?1");
 				("select s from Subject s JOIN s.competences c where c = ?1");
 		query.setParameter(1, competence);
-		if (query.getResultList().isEmpty())
-			return null;
 		return query.getResultList();
 	}
 
@@ -140,8 +138,7 @@ public class SubjectDaoImp implements SubjectDao {
 	public Subject getSubjectByName(String name) {
 		Query query = em.createQuery("select c from Subject c where c.name=?1");
 		query.setParameter(1, name);
-		if (query.getResultList().isEmpty())
-			return null;
+		
 		return (Subject) query.getResultList().get(0);
 
 	}

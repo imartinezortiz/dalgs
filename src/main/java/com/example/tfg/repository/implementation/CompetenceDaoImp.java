@@ -105,8 +105,6 @@ public class CompetenceDaoImp implements CompetenceDao {
 		//		.createQuery("select c from Competence c where c.subject=?1");
 				("select c from Competence c JOIN c.subjects s where s = ?1");
 		query.setParameter(1, subject);
-		if (query.getResultList().isEmpty())
-			return null;
 		return query.getResultList();
 	}
 
@@ -119,8 +117,6 @@ public class CompetenceDaoImp implements CompetenceDao {
 		Query query = em
 				.createQuery("select c from Competence c where c.degree=?1");
 		query.setParameter(1, degree);
-		if (query.getResultList().isEmpty())
-			return null;
 		return query.getResultList();
 	}
 	
@@ -128,8 +124,7 @@ public class CompetenceDaoImp implements CompetenceDao {
 	public Competence getCompetenceByName(String name) {
 		Query query = em.createQuery("select c from Competence c where c.name=?1");
 		query.setParameter(1, name);
-		if (query.getResultList().isEmpty())
-			return null;
+		
 		return (Competence) query.getResultList().get(0);
 
 	}

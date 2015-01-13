@@ -125,8 +125,7 @@ public class CompetenceController {
 			throws ServletException {
 
 		Competence p = serviceCompetence.getCompetence(id);
-		if(p.getDegree()!= null)
-			model.addAttribute("idDegree",p.getDegree().getId());
+		model.addAttribute("idDegree",p.getDegree().getId());
 		//p.setDegree(null);
 
 		model.addAttribute("modifyCompetence", p);

@@ -10,6 +10,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
 
 import com.example.tfg.domain.AcademicTerm;
+import com.example.tfg.domain.Competence;
 import com.example.tfg.domain.Course;
 import com.example.tfg.repository.CourseDao;
 
@@ -57,6 +58,7 @@ public class CourseDaoImp implements CourseDao {
 
 	@Override
 	public Course getCourse(Long id) {
+
 		return em.find(Course.class, id);
 	}
 
@@ -78,8 +80,7 @@ public class CourseDaoImp implements CourseDao {
 	public List<Course> getCoursesByAcademicTerm(AcademicTerm aT) { 
 		Query query = em.createQuery("select c from Course c  join c.academicTerm t where t.id=?1");
 		query.setParameter(1, aT.getId());
-		if (query.getResultList().isEmpty())
-			return null;
+ 
 		return query.getResultList();
 	}
 
@@ -96,8 +97,7 @@ public class CourseDaoImp implements CourseDao {
 	public Course getCourseByName(String name) {
 		Query query = em.createQuery("select c from Course c where c.name=?1");
 		query.setParameter(1, name);
-		if (query.getResultList().isEmpty())
-			return null;
+		
 		return (Course) query.getResultList().get(0);
 
 	}
