@@ -4,25 +4,23 @@ package com.example.tfg.domain;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 
 
 @Embeddable
 public class CompetenceStatus {
+//	@ManyToOne
+//	private Competence competence;
 	
-
-	/*@ManyToOne
-	@JoinColumn(name = "id_competence")
-	private Competence competence;
-*/
 	
     @Basic
     private long id_competence;
     
+    
 	
 	
+
 	public long getId_competence() {
 		return id_competence;
 	}
@@ -33,7 +31,7 @@ public class CompetenceStatus {
 	@Column(name = "percentage", nullable = false, columnDefinition = "double default 0.0")
 	private double percentage;
  
-	/*public Competence getCompetence() {
+/*	public Competence getCompetence() {
 		return competence;
 	}
 	public void setCompetence(Competence competence) {

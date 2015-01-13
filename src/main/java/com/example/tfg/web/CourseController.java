@@ -151,9 +151,7 @@ public class CourseController {
 		Course p = serviceCourse.getCourse(id);
 		
 		model.addAttribute("idAcademicTerm",p.getAcademicTerm().getId());
-		if (p.getSubject()!= null)
-			model.addAttribute("idSubject", p.getSubject().getId());
-		
+		model.addAttribute("idSubject", p.getSubject().getId());
 	
 		model.addAttribute("activities", serviceActivity.getAll());
 		model.addAttribute("modifyCourse", p);

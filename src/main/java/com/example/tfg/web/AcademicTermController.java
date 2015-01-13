@@ -142,22 +142,6 @@ public class AcademicTermController {
 	/**
 	 * Methods for modifying academic Term
 	 */
-	
-	@RequestMapping(value = "/academicTerm/modifyChoose/{academicTermId}.htm", method = RequestMethod.GET)
-	protected String formModifyActivities(@PathVariable("academicTermId") long id,
-			Model model) throws ServletException {
-
-		AcademicTerm p = serviceAcademicTerm.getAcademicTerm(id);
-		if(p.getDegree()!= null)
-			model.addAttribute("idDegree",p.getDegree().getId());
-		
-		
-		model.addAttribute("modifyAcademicTerm", p);
-	
-
-		return "academicTerm/modifyChoose";
-	}
-	
 	@RequestMapping(value = "/academicTerm/modifyChoose/{academicTermId}.htm", method = RequestMethod.POST)
 	public String formModifySystem(@PathVariable("academicTermId") long id,
 			@ModelAttribute("modifyAcademicTerm") AcademicTerm modify,
@@ -180,7 +164,19 @@ public class AcademicTermController {
 
 	}
 
+	@RequestMapping(value = "/academicTerm/modifyChoose/{academicTermId}.htm", method = RequestMethod.GET)
+	protected String formModifyActivities(@PathVariable("academicTermId") long id,
+			Model model) throws ServletException {
+
+		AcademicTerm p = serviceAcademicTerm.getAcademicTerm(id);
+		model.addAttribute("idDegree",p.getDegree().getId());
+		
+		
+		model.addAttribute("modifyAcademicTerm", p);
 	
+
+		return "academicTerm/modifyChoose";
+	}
 	/**
 	 * Delete an academicTerm.
 	 */

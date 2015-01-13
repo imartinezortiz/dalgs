@@ -123,7 +123,7 @@ public class Subject {
 		this.courses = courses;
 	}
 	
-	@PostLoad
+/*	@PostLoad
 	public void postLoad(){
 	    try {
 	        if(getDegree() != null && getDegree().getId() == 0){
@@ -133,5 +133,5 @@ public class Subject {
 	    catch (EntityNotFoundException e){
 	        setDegree(null);
 	    }
-	} 
+	} */
 }

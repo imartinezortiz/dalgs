@@ -185,8 +185,7 @@ public class ActivityController {
 			Model model) throws ServletException {
 		boolean contains = false;
 		Activity p = serviceActivity.getActivity(id);
-		if(p.getCourse()!= null)
-			model.addAttribute("idCourse",p.getCourse().getId());
+		model.addAttribute("idCourse",p.getCourse().getId());
 		p.setCourse(null);
 
 		model.addAttribute("modifyactivity", p);
@@ -265,7 +264,7 @@ public class ActivityController {
 	}
 
 	/**
-	 * Method for delete an competence status of anactivities
+	 * Method for delete an competence status of activities
 	 */
 	
 	@RequestMapping(value = "/activity/competenceStatus/delete/{activityId}/{compStatusId}.htm", method = RequestMethod.GET)
