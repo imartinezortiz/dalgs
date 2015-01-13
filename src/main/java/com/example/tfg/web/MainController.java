@@ -39,7 +39,7 @@ public class MainController {
 		return "home";
 	}
 	
-	@RequestMapping(value = "/error.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "/error.html", method = RequestMethod.GET)
 	public String error() {
 		return "error";
 	}
