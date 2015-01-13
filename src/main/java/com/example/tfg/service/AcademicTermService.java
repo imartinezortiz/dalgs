@@ -1,0 +1,17 @@
+package com.example.tfg.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.example.tfg.domain.AcademicTerm;
+
+@Service
+public interface AcademicTermService {
+	public boolean addAcademicTerm(AcademicTerm academicTerm);
+	public List<AcademicTerm> getAll();
+	public boolean modifyAcademicTerm(AcademicTerm academicTerm);
+	public  AcademicTerm getAcademicTerm(long id);
+	public boolean deleteAcademicTerm(long id);
+	public List<AcademicTerm> getAcademicTermsForDegree(long id_degree);
+}
