@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.example.tfg.domain.AcademicTerm;
 import com.example.tfg.domain.Competence;
 import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Subject;
@@ -156,56 +155,56 @@ public class DegreeController {
     	
     	return new ModelAndView("degree/view", "model", myModel);
     }
-	/**
-	 * Method for manage competences of a degree
-	 */
-	
-	@RequestMapping(value="/degree/competence/delete/{degreeId}/{competenceId}.htm",method=RequestMethod.GET)
-	public String formDeleteCompetenceFromDegree(@PathVariable("degreeId") long id_degree,@PathVariable("competenceId") long id_competence)
-            throws ServletException {
-
-		if (serviceCompetence.deleteCompetence(id_competence)){
-			return "redirect:/degree/view/"+id_degree+".htm";
-		}
-		else return "redirect:/error.htm";
-	}
-	
-	@RequestMapping(value= "/degree/competence/modify/{degreeId}/{competenceId}.htm",method=RequestMethod.POST)	
-	public String formModifyCompetenceFromDegree(@PathVariable("degreeId") long id_degree,@PathVariable("competenceId") long id_competence, @ModelAttribute("modifyCompetence")Competence modify)
-
-    {      
-        serviceCompetence.modifyCompetence(modify);
-        return "redirect:/degree/view/"+id_degree+".htm";
-    }
-	
-	
-	@RequestMapping(value = "/degree/competence/add/{degreeId}.htm", method = RequestMethod.GET)
-	protected String getAddNewCompetenceForm2(Model model,
-			@PathVariable("degreeId") long id) {
-		Competence newCompetence = new Competence();
-		newCompetence.setCode(serviceCompetence.getNextCode());
-
-		Degree d = serviceDegree.getDegree(id);
-
-		newCompetence.setDegree(d);
-		model.addAttribute("addcompetence", newCompetence);
-		return "competence/add";
-	}
-
-	@RequestMapping(value = "/degree/competence/add/{degreeId}.htm", method = RequestMethod.POST)
-	// Every Post have to return redirect
-	public String processAddNewCompetence2(
-			@ModelAttribute("addcompetence") Competence newCompetence,
-			@PathVariable("degreeId") long id) {
-		Degree degree = serviceDegree.getDegree(id);
-
-		newCompetence.setDegree(degree);
-		boolean created = serviceCompetence.addCompetence(newCompetence);
-		if (created)
-			return "redirect:/degree/view/" + id + ".htm";
-		else
-			return "redirect:/error.htm";
-	}
+//	/**
+//	 * Method for manage competences of a degree
+//	 */
+//	
+//	@RequestMapping(value="/degree/competence/delete/{degreeId}/{competenceId}.htm",method=RequestMethod.GET)
+//	public String formDeleteCompetenceFromDegree(@PathVariable("degreeId") long id_degree,@PathVariable("competenceId") long id_competence)
+//            throws ServletException {
+//
+//		if (serviceCompetence.deleteCompetence(id_competence)){
+//			return "redirect:/degree/view/"+id_degree+".htm";
+//		}
+//		else return "redirect:/error.htm";
+//	}
+//	
+//	@RequestMapping(value= "/degree/competence/modify/{degreeId}/{competenceId}.htm",method=RequestMethod.POST)	
+//	public String formModifyCompetenceFromDegree(@PathVariable("degreeId") long id_degree,@PathVariable("competenceId") long id_competence, @ModelAttribute("modifyCompetence")Competence modify)
+//
+//    {      
+//        serviceCompetence.modifyCompetence(modify);
+//        return "redirect:/degree/view/"+id_degree+".htm";
+//    }
+//	
+//	
+//	@RequestMapping(value = "/degree/competence/add/{degreeId}.htm", method = RequestMethod.GET)
+//	protected String getAddNewCompetenceForm2(Model model,
+//			@PathVariable("degreeId") long id) {
+//		Competence newCompetence = new Competence();
+//		newCompetence.setCode(serviceCompetence.getNextCode());
+//
+//		Degree d = serviceDegree.getDegree(id);
+//
+//		newCompetence.setDegree(d);
+//		model.addAttribute("addcompetence", newCompetence);
+//		return "competence/add";
+//	}
+//
+//	@RequestMapping(value = "/degree/competence/add/{degreeId}.htm", method = RequestMethod.POST)
+//	// Every Post have to return redirect
+//	public String processAddNewCompetence2(
+//			@ModelAttribute("addcompetence") Competence newCompetence,
+//			@PathVariable("degreeId") long id) {
+//		Degree degree = serviceDegree.getDegree(id);
+//
+//		newCompetence.setDegree(degree);
+//		boolean created = serviceCompetence.addCompetence(newCompetence);
+//		if (created)
+//			return "redirect:/degree/view/" + id + ".htm";
+//		else
+//			return "redirect:/error.htm";
+//	}
 	
 
 	

@@ -1,18 +1,14 @@
 package com.example.tfg.web;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -116,77 +112,75 @@ public class CompetenceController {
     	model.addAttribute("modifyCompetence",p);
     	return "/competence/modify";
     	
-    	
-    //	return model;
 	}
 	
 	
-
-	/**
-	 * Methods for listing competences
-	 */
-
-	@RequestMapping(value = "/competence/list.htm")
-	public ModelAndView handleRequestCompetenceList(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
-		Map<String, Object> myModel = new HashMap<String, Object>();
-
-		List<Competence> result = serviceCompetence.getAll();
-		myModel.put("competences", result);
-
-		return new ModelAndView("competence/list", "model", myModel);
-	}
-
-	/**
-	 * Methods for modifying competences
-	 */
-	@RequestMapping(value = "/competence/modifyChoose/{competenceId}.htm", method = RequestMethod.POST)
-	public String formModifyCompetence(@PathVariable("competenceId") Long id,
-			@ModelAttribute("modifyCompetence") Competence modify,
-			BindingResult result, Model model)
-
-	{
-		if(modify.getDegree() == null)
-			return "redirect://competence/modifyChoose/"+id+".htm";
-		
-		if (!result.hasErrors()) {
-			modify.setId(id);
-			boolean success = serviceCompetence.modifyCompetence(modify);
-			if (success)
-				return "redirect:/competence/list.htm";
-		}
-
-		return "redirect:/error.htm";
-
-	}
-
-	@RequestMapping(value = "/competence/modifyChoose/{competenceId}.htm", method = RequestMethod.GET)
-	protected String formModifyCompetences(
-			@PathVariable("competenceId") Long id, Model model)
-			throws ServletException {
-
-		Competence p = serviceCompetence.getCompetence(id);
-		model.addAttribute("idDegree",p.getDegree().getId());
-		//p.setDegree(null);
-
-		model.addAttribute("modifyCompetence", p);
-		return "competence/modifyChoose";
-	}
-
-
-	/**
-	 * Delete Competence
-	 */
-	@RequestMapping(value = "/competence/delete/{competenceId}.htm", method = RequestMethod.GET)
-	public String formDeleteCompetences(@PathVariable("competenceId") Long id)
-			throws ServletException {
-
-		if (serviceCompetence.deleteCompetence(id)) {
-			return "redirect:/competence/list.htm";
-		} else
-			return "redirect:/error.htm";
-	}
+//
+//	/**
+//	 * Methods for listing competences
+//	 */
+//
+//	@RequestMapping(value = "/competence/list.htm")
+//	public ModelAndView handleRequestCompetenceList(HttpServletRequest request,
+//			HttpServletResponse response) throws ServletException, IOException {
+//
+//		Map<String, Object> myModel = new HashMap<String, Object>();
+//
+//		List<Competence> result = serviceCompetence.getAll();
+//		myModel.put("competences", result);
+//
+//		return new ModelAndView("competence/list", "model", myModel);
+//	}
+//
+//	/**
+//	 * Methods for modifying competences
+//	 */
+//	@RequestMapping(value = "/competence/modifyChoose/{competenceId}.htm", method = RequestMethod.POST)
+//	public String formModifyCompetence(@PathVariable("competenceId") Long id,
+//			@ModelAttribute("modifyCompetence") Competence modify,
+//			BindingResult result, Model model)
+//
+//	{
+//		if(modify.getDegree() == null)
+//			return "redirect://competence/modifyChoose/"+id+".htm";
+//		
+//		if (!result.hasErrors()) {
+//			modify.setId(id);
+//			boolean success = serviceCompetence.modifyCompetence(modify);
+//			if (success)
+//				return "redirect:/competence/list.htm";
+//		}
+//
+//		return "redirect:/error.htm";
+//
+//	}
+//
+//	@RequestMapping(value = "/competence/modifyChoose/{competenceId}.htm", method = RequestMethod.GET)
+//	protected String formModifyCompetences(
+//			@PathVariable("competenceId") Long id, Model model)
+//			throws ServletException {
+//
+//		Competence p = serviceCompetence.getCompetence(id);
+//		model.addAttribute("idDegree",p.getDegree().getId());
+//		//p.setDegree(null);
+//
+//		model.addAttribute("modifyCompetence", p);
+//		return "competence/modifyChoose";
+//	}
+//
+//
+//	/**
+//	 * Delete Competence
+//	 */
+//	@RequestMapping(value = "/competence/delete/{competenceId}.htm", method = RequestMethod.GET)
+//	public String formDeleteCompetences(@PathVariable("competenceId") Long id)
+//			throws ServletException {
+//
+//		if (serviceCompetence.deleteCompetence(id)) {
+//			return "redirect:/competence/list.htm";
+//		} else
+//			return "redirect:/error.htm";
+//	}
 	/**
 	 * Delete Subject of a Competence
 	 */
@@ -211,7 +205,7 @@ public class CompetenceController {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		//ModelAndView model = new ModelAndView();
+	
 		Competence p= serviceCompetence.getCompetence(id_competence);
 		myModel.put("competence",p);
 

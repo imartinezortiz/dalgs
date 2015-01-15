@@ -1,16 +1,12 @@
 package com.example.tfg.web;
 
-import java.io.IOException;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,14 +67,13 @@ public class SubjectController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(SubjectController.class);
 
-	/**
-	 * Methods for adding subjects
-	 */
+	
 
 	/**
-	 * Methods for manage subjects of a degree
+	 * Methods for delete subjects
 	 */
 
+	
 	@RequestMapping(value="/degree/{degreeId}/subject/{subjectId}/delete.htm",method=RequestMethod.GET)
 	public String formDeleteSubjectFromDegree(@PathVariable("degreeId") Long id_degree,@PathVariable("subjectId") Long id_subject)
 			throws ServletException {
@@ -89,6 +84,9 @@ public class SubjectController {
 		else return "redirect:/error.htm";
 	}
 
+	/**
+	 * Methods for adding subjects
+	 */
 	@RequestMapping(value = "/degree/{degreeId}/subject/add.htm", method = RequestMethod.GET)
 	protected String getAddNewActivityForm(Model model,
 			@PathVariable("degreeId") Long id) {
@@ -117,6 +115,9 @@ public class SubjectController {
 			return "redirect:/error.htm";
 	}
 	
+	/**
+	 * Methods for modify subjects
+	 */
 	@RequestMapping(value= "/degree/{degreeId}/subject/{subjectId}/modify.htm",method=RequestMethod.POST)	
 	public String formModifySubjectFromDegree(@PathVariable("degreeId") Long id_degree,@PathVariable("subjectId") Long id_subject, @ModelAttribute("modifySubject")Subject modify)
 
