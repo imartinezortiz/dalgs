@@ -29,7 +29,7 @@
 					<td><c:out value="${degree.description}" /></td>
 
 					<td><a class="btn list-btn btn-success"
-						href="<c:url value='view/${degree.id}.htm'/>">View</a> <!-- <a href="modify.html"  class="btn list-btn btn-warning">Modify</a>-->
+						href="<c:url value='/degree/${degree.id}.htm'/>">View</a> <!-- <a href="modify.html"  class="btn list-btn btn-warning">Modify</a>-->
 						<a class="btn list-btn btn-danger"
 						href="<c:url value='delete/${degree.id}.htm'/>">Delete</a></td>
 

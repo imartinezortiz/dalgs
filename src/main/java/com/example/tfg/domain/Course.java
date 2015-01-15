@@ -31,7 +31,7 @@ public class Course {
 	@Column(name = "isDeleted", nullable=false, columnDefinition="boolean default false")
 	private boolean isDeleted;
 	
-	
+	@ManyToOne
 	@JoinColumn(name = "id_subject")
 	private Subject subject;
 	

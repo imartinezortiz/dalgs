@@ -18,7 +18,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">Subject Details</h3>
 			<a class="btn list-btn btn-warning"
-				href="<c:url value='/subject/modifyChoose/${subjectId}.htm'/>">Modify</a>
+				href="<c:url value='/degree/${model.subject.degree.id}/subject/${subjectId}/modify.htm'/>">Modify</a>
 
 		</div>
 

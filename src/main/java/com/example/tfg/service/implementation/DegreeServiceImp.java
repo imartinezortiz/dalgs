@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Subject;
 import com.example.tfg.repository.DegreeDao;
+import com.example.tfg.repository.SubjectDao;
 import com.example.tfg.service.DegreeService;
 
 @Service
@@ -17,6 +18,9 @@ public class DegreeServiceImp implements DegreeService {
 
 	@Autowired
 	private DegreeDao daoDegree;
+	
+	@Autowired
+	private SubjectDao daoSubject;
 	
 	@Transactional(readOnly = false)
 	public boolean addDegree(Degree degree) {

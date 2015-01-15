@@ -18,7 +18,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">Degree Details</h3>
 			<a class="btn list-btn btn-warning"
-				href="<c:url value='/degree/modify/${degreeId}.htm'/>">Modify</a>
+				href="<c:url value='/degree/${degreeId}/modify.htm'/>">Modify</a>
 
 		</div>
 
@@ -46,7 +46,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">Subject List</h3>
 			<a class="btn list-btn btn-warning2"
-				href="<c:url value='/degree/subject/add/${degreeId}.htm'/>">Add</a>
+				href="<c:url value='/degree/${degreeId}/subject/add.htm'/>">Add</a>
 
 		</div>
 		<div class="panel-body">
@@ -67,8 +67,10 @@
 							</div>
 						</td>
 
-						<td><a
-							href="<c:url value='/degree/subject/delete/${degreeId}/${subject.id}.htm'/>">
+						<td><a class="btn list-btn btn-success"
+						href="<c:url value='/degree/${degreeId}/subject/${subject.id}.htm'/>">View</a>
+						<a
+							href="<c:url value='/degree/${degreeId}/subject/${subject.id}/delete.htm'/>">
 							<img WIDTH="20" HEIGHT="20" border="0" src="<c:url value="/resources/images/error.jpeg" /> " > 
 							</a></td>
 

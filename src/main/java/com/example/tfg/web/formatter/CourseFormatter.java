@@ -21,7 +21,7 @@ public class CourseFormatter implements Formatter<Course> {
 	     @Override
 	     public String print(Course course, Locale arg1) {
 	          
-	    	 return course.getName();
+	    	 return course.getSubject().getName();
 	     }
 	 
 	     @Override

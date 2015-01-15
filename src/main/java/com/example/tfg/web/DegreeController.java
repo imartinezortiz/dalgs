@@ -92,7 +92,7 @@ public class DegreeController {
 	/**
 	 * Methods for modify degrees
 	 */
-	@RequestMapping(value= "/degree/modify/{degreeId}.htm",method=RequestMethod.POST)	
+	@RequestMapping(value= "/degree/{degreeId}/modify.htm",method=RequestMethod.POST)	
 	public String formModifyDegree(@PathVariable("degreeId") long id, @ModelAttribute("modifyDegree")Degree modify)
 
     {
@@ -102,7 +102,7 @@ public class DegreeController {
         return "redirect:/degree/list.htm";
     }
 	
-	@RequestMapping(value="/degree/modify/{degreeId}.htm",method=RequestMethod.GET)
+	@RequestMapping(value="/degree/{degreeId}/modify.htm",method=RequestMethod.GET)
     protected ModelAndView formModifyDegrees(@PathVariable("degreeId") long id)
             throws ServletException {
 	  	ModelAndView model = new ModelAndView();
@@ -132,7 +132,7 @@ public class DegreeController {
 	/**
 	 * Methods for view degrees
 	 */
-	@RequestMapping(value="/degree/view/{degreeId}.htm",method=RequestMethod.GET)
+	@RequestMapping(value="/degree/{degreeId}.htm",method=RequestMethod.GET)
     protected ModelAndView formViewDegree(@PathVariable("degreeId") long id)
             throws ServletException {
 		
@@ -151,11 +151,11 @@ public class DegreeController {
     	
     	List<Subject> subjects = serviceSubject.getSubjectsForDegree(id);
     	List<Competence> competences =  serviceCompetence.getCompetencesForDegree(id);
-    	List<AcademicTerm> academicTerms = serviceAcademicTerm.getAcademicTermsForDegree(id);
+    	
     	
     	if(subjects != null) myModel.put("subjects",subjects);
     	if(competences != null) myModel.put("competences", competences);
-    	if(academicTerms != null) myModel.put("academicTerms", academicTerms);
+    	
     	
     	//model.setViewName("subject/view");
     	
@@ -226,48 +226,9 @@ public class DegreeController {
     	return model;
     }
 	*/
-	/**
-	 * Methods for manage subjects of a degree
-	 */
-	@RequestMapping(value="/degree/subject/delete/{degreeId}/{subjectId}.htm",method=RequestMethod.GET)
-	public String formDeleteSubjectFromDegree(@PathVariable("degreeId") long id_degree,@PathVariable("subjectId") long id_subject)
-            throws ServletException {
 
-		if (serviceSubject.deleteSubject(id_subject)){
-			return "redirect:/degree/view/"+id_degree+".htm";
-		}
-		else return "redirect:/error.htm";
-	}
 
-		@RequestMapping(value = "/degree/subject/add/{degreeId}.htm", method = RequestMethod.GET)
-		protected String getAddNewActivityForm(Model model,
-				@PathVariable("degreeId") long id) {
-			Subject newSubject = new Subject();
-			newSubject.setCode(serviceSubject.getNextCode());
-
-			Degree d = serviceDegree.getDegree(id);
-
-			newSubject.setDegree(d);
-			model.addAttribute("addsubject", newSubject);
-			return "subject/add";
-		}
-
-		@RequestMapping(value = "/degree/subject/add/{degreeId}.htm", method = RequestMethod.POST)
-		// Every Post have to return redirect
-		public String processAddNewActivity(
-				@ModelAttribute("addsubject") Subject newSubject,
-				@PathVariable("degreeId") long id) {
-			Degree degree = serviceDegree.getDegree(id);
-
-			newSubject.setDegree(degree);
-			boolean created = serviceSubject.addSubject(newSubject);
-			if (created)
-				return "redirect:/degree/view/" + id + ".htm";
-			else
-				return "redirect:/error.htm";
-		}
-
-	/*
+	
 	@RequestMapping(value= "/degree/subject/modify/{degreeId}/{subjectId}.htm",method=RequestMethod.POST)	
 	public String formModifySubjectFromDegree(@PathVariable("degreeId") long id_degree,@PathVariable("subjectId") long id_subject, @ModelAttribute("modifySubject")Subject modify)
 
@@ -289,66 +250,5 @@ public class DegreeController {
     	return model;
     }
     
-	*/
-	/**
-	 * Methods for manage academic Term of a degree
-	 */
-	@RequestMapping(value="/degree/academicTerm/delete/{degreeId}/{academicTermId}.htm",method=RequestMethod.GET)
-	public String formDeleteAcademicTermFromDegree(@PathVariable("degreeId") long id_degree,@PathVariable("academicTermId") long id_academicTerm)
-            throws ServletException {
-
-		if (serviceAcademicTerm.deleteAcademicTerm(id_academicTerm)){
-			return "redirect:/degree/view/"+id_degree+".htm";
-		}
-		else return "redirect:/error.htm";
-	}
 	
-	@RequestMapping(value = "/degree/academicTerm/add/{degreeId}.htm", method = RequestMethod.GET)
-	protected String getAddNewAcademicTermForm(Model model,
-			@PathVariable("degreeId") long id) {
-		AcademicTerm newAcademicTerm = new AcademicTerm();
-//		newAcademicTerm.setCode(serviceAcademicTerm.getNextCode());
-		Degree d = serviceDegree.getDegree(id);
-		newAcademicTerm.setDegree(d);
-		model.addAttribute("addAcademicTerm", newAcademicTerm);
-		return "academicTerm/add";
-	}
-
-	@RequestMapping(value = "/degree/academicTerm/add/{degreeId}.htm", method = RequestMethod.POST)
-	// Every Post have to return redirect
-	public String processAddNewAcademicTerm(
-			@ModelAttribute("addAcademicTerm") AcademicTerm newAcademicTerm,
-			@PathVariable("degreeId") long id) {
-		Degree degree = serviceDegree.getDegree(id);
-		newAcademicTerm.setDegree(degree);
-		boolean created = serviceAcademicTerm.addAcademicTerm(newAcademicTerm);
-		if (created)
-			return "redirect:/degree/view/" + id + ".htm";
-		else
-			return "redirect:/error.htm";
-	}
-
-/*
-	@RequestMapping(value= "/degree/academicTerm/modify/{degreeId}/{academicTermId}.htm",method=RequestMethod.POST)	
-	public String formModifyAcademicTermFromDegree(@PathVariable("degreeId") long id_degree,@PathVariable("academicTermId") long id_academicTerm, @ModelAttribute("modifyAcademicTerm")AcademicTerm modify)
-
-    {
-		modify.setDegree(serviceDegree.getDegree(id_degree));
-		modify.setId(id_academicTerm);
-        serviceAcademicTerm.modifyAcademicTerm(modify);
-        return "redirect:/degree/view/"+id_degree+".htm";
-    }
-	
-	@RequestMapping(value="/degree/academicTerm/modify/{degreeId}/{academicTermId}.htm",method=RequestMethod.GET)
-    protected ModelAndView formModifyAcademicTermFromDegree(@PathVariable("degreeId") long id_degree, @PathVariable("academicTermId") long id_academicTerm)
-            throws ServletException {
-	  	ModelAndView model = new ModelAndView();
-    	AcademicTerm p= serviceAcademicTerm.getAcademicTerm(id_academicTerm);
-    	model.addObject("modifyAcademicTerm",p);
-    	model.setViewName("/academicTerm/modify");
-    	
-    	return model;
-    }
-    */
-
 }
