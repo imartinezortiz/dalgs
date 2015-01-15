@@ -57,12 +57,12 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 		}
 	}
 
-	public AcademicTerm getAcademicTerm(long id) {
+	public AcademicTerm getAcademicTerm(Long id) {
 		return em.find(AcademicTerm.class, id);
 
 	}
 
-	public boolean deleteAcademicTerm(long id) {
+	public boolean deleteAcademicTerm(Long id) {
 		AcademicTerm academicTerm = em.getReference(AcademicTerm.class, id);
 		academicTerm.setDeleted(true);
 		try {
@@ -77,7 +77,7 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AcademicTerm> getAcademicTermsForDegree(long id_degree) {
+	public List<AcademicTerm> getAcademicTermsForDegree(Long id_degree) {
 		Degree degree = em.getReference(Degree.class, id_degree);
 
 		Query query = em

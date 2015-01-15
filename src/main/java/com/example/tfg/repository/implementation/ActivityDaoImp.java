@@ -57,12 +57,12 @@ public class ActivityDaoImp implements ActivityDao {
 		}
 	}
 
-	public Activity getActivity(long id) {
+	public Activity getActivity(Long id) {
 		return em.find(Activity.class, id);
 
 	}
 
-	public boolean deleteActivity(long id) {
+	public boolean deleteActivity(Long id) {
 		Activity activity = em.getReference(Activity.class, id);
 		activity.setDeleted(true);
 		try {
@@ -77,7 +77,7 @@ public class ActivityDaoImp implements ActivityDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Activity> getActivitiesForCourse(long id_course) {
+	public List<Activity> getActivitiesForCourse(Long id_course) {
 		Course course = em.getReference(Course.class, id_course);
 
 		Query query = em

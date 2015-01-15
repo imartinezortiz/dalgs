@@ -92,7 +92,7 @@ public class SubjectDaoImp implements SubjectDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Subject> getSubjectsForCompetence(long id) {
+	public List<Subject> getSubjectsForCompetence(Long id) {
 		Competence competence = em.getReference(Competence.class, id);
 		Query query = em.createQuery
 		// .createQuery("select c from Competence c where c.subject=?1");
@@ -122,7 +122,7 @@ public class SubjectDaoImp implements SubjectDao {
 			return true;
 	}
 	
-	public Subject getSubjectForCourse(long id_course) {
+	public Subject getSubjectForCourse(Long id_course) {
 		Course course = em.getReference(Course.class, id_course);
 
 		Query query = em

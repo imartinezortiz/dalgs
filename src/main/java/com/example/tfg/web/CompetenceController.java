@@ -104,8 +104,8 @@ public class CompetenceController {
     }
 	
 	@RequestMapping(value="/degree/{degreeId}/competence/{competenceId}/modify.htm",method=RequestMethod.GET)
-    protected String formModifyCompetenceFromDegree(@PathVariable("degreeId") long id_degree,
-    		@PathVariable("competenceId") long id_competence, Model model)
+    protected String formModifyCompetenceFromDegree(@PathVariable("degreeId") Long id_degree,
+    		@PathVariable("competenceId") Long id_competence, Model model)
             throws ServletException {
 	  
     	Competence p= serviceCompetence.getCompetence(id_competence);

@@ -75,13 +75,13 @@ public class CompetenceDaoImp implements CompetenceDao {
 		}
 	}
 
-	public Competence getCompetence(long id) {
+	public Competence getCompetence(Long id) {
 		return em.find(Competence.class, id);
 
 	}
 
 	
-	public boolean deleteCompetence(long id) {
+	public boolean deleteCompetence(Long id) {
 		Competence competence = this.getCompetence(id);
 		competence.setDeleted(true);
 
@@ -97,7 +97,7 @@ public class CompetenceDaoImp implements CompetenceDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Competence> getCompetencesForSubject(long id_subject) {
+	public List<Competence> getCompetencesForSubject(Long id_subject) {
 		Subject subject = em.getReference(Subject.class, id_subject);
 	    //Hibernate.initialize(subject);
 
@@ -110,7 +110,7 @@ public class CompetenceDaoImp implements CompetenceDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Competence> getCompetencesForDegree(long id_degree) {
+	public List<Competence> getCompetencesForDegree(Long id_degree) {
 		Degree degree = em.getReference(Degree.class, id_degree);
 	    Hibernate.initialize(degree.getId());
 

@@ -116,7 +116,7 @@ public class AcademicTermController {
 	 * Methods for view subjects
 	 */
 	@RequestMapping(value = "/academicTerm/view/{academicTermId}.htm", method = RequestMethod.GET)
-	protected ModelAndView formViewAcademicTerm(@PathVariable("academicTermId") long id)
+	protected ModelAndView formViewAcademicTerm(@PathVariable("academicTermId") Long id)
 			throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
@@ -143,7 +143,7 @@ public class AcademicTermController {
 	 * Methods for modifying academic Term
 	 */
 	@RequestMapping(value = "/academicTerm/modifyChoose/{academicTermId}.htm", method = RequestMethod.POST)
-	public String formModifySystem(@PathVariable("academicTermId") long id,
+	public String formModifySystem(@PathVariable("academicTermId") Long id,
 			@ModelAttribute("modifyAcademicTerm") AcademicTerm modify,
 			BindingResult result, Model model)
 
@@ -165,7 +165,7 @@ public class AcademicTermController {
 	}
 
 	@RequestMapping(value = "/academicTerm/modifyChoose/{academicTermId}.htm", method = RequestMethod.GET)
-	protected String formModifyActivities(@PathVariable("academicTermId") long id,
+	protected String formModifyActivities(@PathVariable("academicTermId") Long id,
 			Model model) throws ServletException {
 
 		AcademicTerm p = serviceAcademicTerm.getAcademicTerm(id);
@@ -182,7 +182,7 @@ public class AcademicTermController {
 	 */
 	
 	@RequestMapping(value = "/academicTerm/delete/{academicTermId}.htm", method = RequestMethod.GET)
-	public String formDeleteAcademicTerm(@PathVariable("academicTermId") long id)
+	public String formDeleteAcademicTerm(@PathVariable("academicTermId") Long id)
 			throws ServletException {
 
 		if (serviceAcademicTerm.deleteAcademicTerm(id)) {
@@ -196,8 +196,8 @@ public class AcademicTermController {
 	 */
 	
 	@RequestMapping(value = "/academicTerm/course/delete/{academicTermId}/{courseId}.htm", method = RequestMethod.GET)
-	public String formDeleteCourseofAcademicTerm(@PathVariable("academicTermId") long id_academicTerm,
-			@PathVariable("courseId") long id_course)
+	public String formDeleteCourseofAcademicTerm(@PathVariable("academicTermId") Long id_academicTerm,
+			@PathVariable("courseId") Long id_course)
 			throws ServletException {
 
 		if (serviceCourse.deleteCourse(id_course)) {

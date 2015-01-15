@@ -1,5 +1,4 @@
 package com.example.tfg.service.implementation;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,17 +38,17 @@ public class AcademicTermServiceImp implements AcademicTermService {
 	}
 
 	@Transactional(readOnly = false)
-	public AcademicTerm getAcademicTerm(long id) {
+	public AcademicTerm getAcademicTerm(Long id) {
 		return daoAcademicTerm.getAcademicTerm(id);
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteAcademicTerm(long id) {
+	public boolean deleteAcademicTerm(Long id) {
 		return daoAcademicTerm.deleteAcademicTerm(id);
 	}
 
 	@Transactional(readOnly = false)
-	public List<AcademicTerm> getAcademicTermsForDegree(long id_degree) {
+	public List<AcademicTerm> getAcademicTermsForDegree(Long id_degree) {
 		return daoAcademicTerm.getAcademicTermsForDegree(id_degree);
 	}
 	
