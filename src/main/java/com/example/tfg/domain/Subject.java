@@ -6,7 +6,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityNotFoundException;
+
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,8 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.PostLoad;
+
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
@@ -54,8 +53,6 @@ public class Subject {
 	@Column(name = "code_subject", nullable=false)
 	private String code;
 
-	@OneToMany(mappedBy="subject", fetch = FetchType.LAZY,cascade= CascadeType.ALL)//, orphanRemoval=true)
-	private Collection<Course> courses;
 
 
 	public Subject() {
@@ -115,23 +112,5 @@ public class Subject {
 		this.code = code;
 	}
 
-	public Collection<Course> getCourse() {
-		return courses;
-	}
 
-	public void setCourse(Collection<Course> courses) {
-		this.courses = courses;
-	}
-	
-/*	@PostLoad
-	public void postLoad(){
-	    try {
-	        if(getDegree() != null && getDegree().getId() == 0){
-	            setDegree(null);
-	        }
-	    }
-	    catch (EntityNotFoundException e){
-	        setDegree(null);
-	    }
-	} */
 }

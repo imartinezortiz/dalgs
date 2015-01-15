@@ -7,12 +7,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PostLoad;
 import javax.persistence.Table;
@@ -35,8 +32,7 @@ public class AcademicTerm {
 	@Column(name = "isDeleted", nullable=false, columnDefinition="boolean default false")
 	private boolean isDeleted;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "id_degree", insertable=false, updatable=false)
+	@Column(name="idDegree")
 	private Degree degree;
 	
 
