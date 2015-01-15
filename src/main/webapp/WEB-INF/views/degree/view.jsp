@@ -86,7 +86,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">Competence List</h3>
 			<a class="btn list-btn btn-warning2"
-				href="<c:url value='/degree/competence/add/${degreeId}.htm'/>">Add</a>
+				href="<c:url value='/degree/${degreeId}/competence/add.htm'/>">Add</a>
 
 		</div>
 		<div class="panel-body">
@@ -108,7 +108,10 @@
 							</div>
 						</td>
 
-						<td><a	href="<c:url value='/degree/competence/delete/${degreeId}/${competence.id}.htm'/>">
+						<td>
+						<a class="btn list-btn btn-success"
+						href="<c:url value='/degree/${degreeId}/competence/${competence.id}.htm'/>">View</a>
+						<a	href="<c:url value='/degree/${degreeId}/competence/${competence.id}/delete.htm'/>">
 							<img WIDTH="20" HEIGHT="20" border="0" src="<c:url value="/resources/images/error.jpeg" /> " > 
 							</a></td>
 
@@ -122,40 +125,7 @@
 
 	</div>
 
-	<div class="panel panel-primary group">
-		<div class="panel-heading">
-			<h3 class="panel-title list">Academic Terms List</h3>
-			<a class="btn list-btn btn-warning2"
-				href="<c:url value='/degree/academicTerm/add/${degreeId}.htm'/>">Add</a>
 
-		</div>
-		<div class="panel-body">
-
-			<table class="table table-striped table-bordered">
-				<tr align="center">
-					<td width="70%"><div class="td-label">Term</div></td>
-				
-				</tr>
-				<c:forEach items="${model.academicTerms}" var="academicTerm">
-					<tr align="center">
-						<td><div class="td-content">
-								<c:out value="${academicTerm.term}" />
-							</div></td>
-
-
-						<td><a	href="<c:url value='/degree/academicTerm/delete/${degreeId}/${academicTerm.id}.htm'/>">
-								<img WIDTH="20" HEIGHT="20" border="0"
-								src="<c:url value="/resources/images/error.jpeg" /> ">
-
-						</a></td>
-
-					</tr>
-				</c:forEach>
-
-
-			</table>
-		</div>
-	</div>
 
 	<div class="home-button">
 		<a class="btn home" href="<c:url value="/home.htm"/>">Home</a>

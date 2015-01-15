@@ -37,7 +37,7 @@ public class Degree {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="degree", cascade= CascadeType.ALL)//, orphanRemoval=true)
 	private Collection<Subject> subjects;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy="degree", cascade= CascadeType.ALL)//, orphanRemoval=true)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="degree", cascade= CascadeType.ALL)//, orphanRemoval=true)
 	private Collection<Competence> competences;
 	
 	@Column(name = "isDeleted", nullable=false, columnDefinition="boolean default false")

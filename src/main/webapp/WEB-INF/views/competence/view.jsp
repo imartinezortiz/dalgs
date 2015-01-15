@@ -18,7 +18,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">Competence Details </h3>
 			<a class="btn list-btn btn-warning"
-				href="<c:url value='/competence/modifyChoose/${competenceId}.htm'/>">Modify</a>
+				href="<c:url value='/degree/${model.competence.degree.id}/competence/${competenceId}/modify.htm'/>">Modify</a>
 
 		</div>
 
@@ -66,8 +66,11 @@
 							</div>
 						</td>
 
-						<td><a 
-							href="<c:url value='/competence/subject/delete/${competenceId}/${subject.id}.htm'/>">
+						<td>
+						<a class="btn list-btn btn-success"
+						href="<c:url value='/degree/${degreeId}/subject/${subject.id}.htm'/>">View</a>
+						<a 
+							href="<c:url value='/degree/${model.competence.degree.id}/competence/${competenceId}/subject/${subject.id}/delete.htm'/>">
 							<img WIDTH="20" HEIGHT="20" border="0" src="<c:url value="/resources/images/error.jpeg" /> " > 
 						
 						</a></td>

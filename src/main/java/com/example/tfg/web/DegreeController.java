@@ -137,16 +137,10 @@ public class DegreeController {
             throws ServletException {
 		
 		Map<String, Object> myModel = new HashMap<String, Object>();
-		
-	  	//ModelAndView model = new ModelAndView();
+
     	Degree p= serviceDegree.getDegree(id);
     	myModel.put("degree",p);
     	
-/*    	Collection<Competence> c = p.getCompetences();
-    	if(p.getCompetences() != null)
-    		model.addObject("competences",p.getCompetences());
-    	if(p.getActivities() != null)
-    		model.addObject("activities",p.getActivities());*/
     	
     	
     	List<Subject> subjects = serviceSubject.getSubjectsForDegree(id);
@@ -157,7 +151,7 @@ public class DegreeController {
     	if(competences != null) myModel.put("competences", competences);
     	
     	
-    	//model.setViewName("subject/view");
+    
     	
     	
     	return new ModelAndView("degree/view", "model", myModel);
@@ -213,42 +207,28 @@ public class DegreeController {
 			return "redirect:/error.htm";
 	}
 	
-	/*
-	@RequestMapping(value="/degree/competence/modify/{degreeId}/{competenceId}.htm",method=RequestMethod.GET)
-    protected ModelAndView formModifyCompetenceFromDegree(@PathVariable("degreeId") long id_degree,@PathVariable("competenceId") long id_competence)
-            throws ServletException {
-	  	ModelAndView model = new ModelAndView();
-    	Competence p= serviceCompetence.getCompetence(id_competence);
-    	model.addObject("modifyCompetence",p);
-    	model.setViewName("/competence/modify");
-    	
-    	
-    	return model;
-    }
-	*/
-
 
 	
-	@RequestMapping(value= "/degree/subject/modify/{degreeId}/{subjectId}.htm",method=RequestMethod.POST)	
-	public String formModifySubjectFromDegree(@PathVariable("degreeId") long id_degree,@PathVariable("subjectId") long id_subject, @ModelAttribute("modifySubject")Subject modify)
-
-    {
-		modify.setDegree(serviceDegree.getDegree(id_degree));
-        serviceSubject.modifySubject(modify);
-        return "redirect:/degree/view/"+id_degree+".htm";
-    }
-	
-	
-	@RequestMapping(value="/degree/subject/modify/{degreeId}/{subjectId}.htm",method=RequestMethod.GET)
-    protected ModelAndView formModifySubjectFromDegree(@PathVariable("degreeId") long id_degree, @PathVariable("subjectId") long id_subject)
-            throws ServletException {
-	  	ModelAndView model = new ModelAndView();
-    	Subject p= serviceSubject.getSubject(id_subject);
-    	model.addObject("modifySubject",p);
-    	model.setViewName("/subject/modify");
-    	
-    	return model;
-    }
+//	@RequestMapping(value= "/degree/subject/modify/{degreeId}/{subjectId}.htm",method=RequestMethod.POST)	
+//	public String formModifySubjectFromDegree(@PathVariable("degreeId") long id_degree,@PathVariable("subjectId") long id_subject, @ModelAttribute("modifySubject")Subject modify)
+//
+//    {
+//		modify.setDegree(serviceDegree.getDegree(id_degree));
+//        serviceSubject.modifySubject(modify);
+//        return "redirect:/degree/view/"+id_degree+".htm";
+//    }
+//	
+//	
+//	@RequestMapping(value="/degree/subject/modify/{degreeId}/{subjectId}.htm",method=RequestMethod.GET)
+//    protected ModelAndView formModifySubjectFromDegree(@PathVariable("degreeId") long id_degree, @PathVariable("subjectId") long id_subject)
+//            throws ServletException {
+//	  	ModelAndView model = new ModelAndView();
+//    	Subject p= serviceSubject.getSubject(id_subject);
+//    	model.addObject("modifySubject",p);
+//    	model.setViewName("/subject/modify");
+//    	
+//    	return model;
+//    }
     
 	
 }
