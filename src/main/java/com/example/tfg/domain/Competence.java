@@ -40,7 +40,7 @@ public class Competence {
 	@ManyToMany(mappedBy="competences",fetch = FetchType.LAZY)
 	private Collection<Subject> subjects;
 	
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER)//, optional = false)
 	@JoinColumn(name = "id_degree")
 	private Degree degree;
 	

@@ -15,7 +15,7 @@ public interface DegreeDao {
     public boolean saveSubject(Degree degree);
     public Degree getDegree(Long id);
     public List<Degree> getDegreeByName(Degree degree);
-	public boolean deleteDegree(Long id);
+	public boolean deleteDegree(Degree degree);
 	public Degree getDegreeSubject(Subject p);
 	public String getNextCode();
 	public boolean existByCode(String code);

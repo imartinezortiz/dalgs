@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.example.tfg.domain.Competence;
+import com.example.tfg.domain.Degree;
 
 
 @Repository
@@ -20,5 +21,6 @@ public interface CompetenceDao {
 
     public Competence getCompetenceByName(String name);
 	public String getNextCode();
+	public boolean deleteCompetencesForDegree(Degree degree);
 
 }

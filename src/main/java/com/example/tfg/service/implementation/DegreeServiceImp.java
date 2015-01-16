@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Subject;
+import com.example.tfg.repository.CompetenceDao;
 import com.example.tfg.repository.DegreeDao;
 import com.example.tfg.repository.SubjectDao;
 import com.example.tfg.service.DegreeService;
@@ -21,6 +22,9 @@ public class DegreeServiceImp implements DegreeService {
 	
 	@Autowired
 	private SubjectDao daoSubject;
+
+	@Autowired
+	private CompetenceDao daoCompetence;
 	
 	@Transactional(readOnly = false)
 	public boolean addDegree(Degree degree) {
@@ -45,9 +49,14 @@ public class DegreeServiceImp implements DegreeService {
 		return daoDegree.getDegree(id);
 	}
 	
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional(readOnly = false)
 	public boolean deleteDegree(Long id){
-		return daoDegree.deleteDegree(id);
+		Degree d = daoDegree.getDegree(id);
+		boolean deleteSubjects = daoSubject.deleteSubjectsForDegree(d);
+		boolean deleteCompetences = daoCompetence.deleteCompetencesForDegree(d);
+		if (deleteSubjects && deleteCompetences)
+			return daoDegree.deleteDegree(d);
+		else return false;
 	}
 
 	@Transactional(readOnly = true)

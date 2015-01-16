@@ -40,7 +40,7 @@ public class Subject {
 	@Column(name = "isDeleted", nullable=false, columnDefinition="boolean default false")
 	private boolean isDeleted;
 	
-	@ManyToOne(optional = false, fetch=FetchType.EAGER)//cascade= CascadeType.ALL)
+	@ManyToOne( fetch=FetchType.EAGER)//, optional = false)//cascade= CascadeType.ALL)
 	@JoinColumn(name = "id_degree")
 	private Degree degree;
  

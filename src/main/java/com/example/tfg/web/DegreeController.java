@@ -24,7 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.tfg.domain.Competence;
 import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Subject;
-import com.example.tfg.service.AcademicTermService;
 import com.example.tfg.service.CompetenceService;
 import com.example.tfg.service.DegreeService;
 import com.example.tfg.service.SubjectService;
@@ -41,8 +40,7 @@ public class DegreeController {
 	@Autowired
 	private CompetenceService serviceCompetence;
 	
-	@Autowired 
-	private AcademicTermService serviceAcademicTerm;
+	
 	
 	private static final Logger logger = LoggerFactory.getLogger(DegreeController.class);
 	

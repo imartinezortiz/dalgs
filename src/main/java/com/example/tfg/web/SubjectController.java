@@ -54,15 +54,7 @@ public class SubjectController {
 	@Autowired
 	private AcademicTermService serviceAcademicTerm;
 
-	@ModelAttribute("degrees")
-	public List<Degree> degrees() {
-		return serviceDegree.getAll();
-	}
 
-	@ModelAttribute("aTerms")
-	public List<AcademicTerm> academicTerms() {
-		return serviceAcademicTerm.getAll();
-	}
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(SubjectController.class);
@@ -147,19 +139,19 @@ public class SubjectController {
 	 * Methods for view subjects
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/subject/{subjectId}.htm", method = RequestMethod.GET)
-	protected ModelAndView formViewSubject(@PathVariable("subjectId") Long id)
+	protected ModelAndView formViewSubject(@PathVariable("degreeId") Long id_degree, @PathVariable("subjectId") Long id_subject)
 			throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		Subject p = serviceSubject.getSubject(id);
-		Degree d = serviceDegree.getDegreeSubject(p);
+		Subject p = serviceSubject.getSubject(id_subject);
+		Degree d = serviceDegree.getDegree(id_degree);
 		p.setDegree(d);
 		myModel.put("subject", p);
 
 
 		List<Competence> competences = serviceCompetence
-				.getCompetencesForSubject(id);
+				.getCompetencesForSubject(id_subject);
 
 
 		if (competences != null)
