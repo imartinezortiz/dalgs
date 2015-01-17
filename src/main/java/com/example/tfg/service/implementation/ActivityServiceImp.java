@@ -92,7 +92,7 @@ public class ActivityServiceImp implements ActivityService {
 		Collection<CompetenceStatus> c = a.getCompetenceStatus();
 		try {
 			for (CompetenceStatus aux: c){
-				if(aux.getId_competence() == id_competenceStatus){
+				if(aux.getCompetence().getId() == id_competenceStatus){
 					a.getCompetenceStatus().remove(aux);
 					
 					//daoActivity.saveActivity(c);

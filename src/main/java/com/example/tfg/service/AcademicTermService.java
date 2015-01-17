@@ -9,9 +9,11 @@ import com.example.tfg.domain.AcademicTerm;
 @Service
 public interface AcademicTermService {
 	public boolean addAcademicTerm(AcademicTerm academicTerm);
-	public List<AcademicTerm> getAll();
+	//public List<AcademicTerm> getAll();
 	public boolean modifyAcademicTerm(AcademicTerm academicTerm);
-	public  AcademicTerm getAcademicTerm(Long id);
-	public boolean deleteAcademicTerm(Long id);
+	public  List<AcademicTerm> getAcademicsTerm(String term);
+	public boolean deleteAcademicTerm(String term);
 	public List<AcademicTerm> getAcademicTermsForDegree(Long id_degree);
+	public List<String> getAllTerms();
+	public AcademicTerm getAcademicTermDegree(String term, Long id_degree);
 }

@@ -4,12 +4,12 @@ INSERT INTO degree (id_degree,code_degree,description,name) VALUES (2,'DEG2','Gr
 INSERT INTO degree (id_degree,code_degree,description,name) VALUES (3,'DEG3','Grado en Ingenieria de Computadores','GIC');
 
 -- Academic Term Inserts
-INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (1, '2014/2015', '1');
-INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (2, '2014/2015', '2');
-INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (3, '2014/2015', '3');
-INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (4, '2015/2016', '1');
-INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (5, '2015/2016', '2');
-INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (6, '2015/2016', '3');
+INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (1, '2014-2015', '1');
+INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (2, '2014-2015', '2');
+INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (3, '2014-2015', '3');
+INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (4, '2015-2016', '1');
+INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (5, '2015-2016', '2');
+INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (6, '2015-2016', '3');
 
 -- Subject Inserts
 INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES (1,'SUB1','Ingenieria Software','IS',1);
@@ -23,12 +23,12 @@ INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES
 INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES (9,'SUB3','Sistemas Operativos','SO', 3);
 
 -- Course Inserts
---INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (1, '1', '1');
---INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (2, '1', '2');
---INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (3, '1', '3');
---INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (4, '2', '4');
---INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (5, '2', '5');
---INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (6, '3', '7');
+INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (1, '1', '1');
+INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (2, '1', '2');
+INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (3, '1', '3');
+INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (4, '2', '4');
+INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (5, '2', '5');
+INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (6, '3', '7');
 
 -- Competence Inserts 
 INSERT INTO competence (id_competence,code_competence,description,name,id_degree) VALUES (1,'COMP1','adquirir conocimientos en UML','UML',1);

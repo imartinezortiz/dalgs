@@ -40,7 +40,7 @@
 				</div>
 
 								
-				<div class="form-group">
+				<%-- <div class="form-group">
 					<label>Course:</label>
 					<form:select class="form-control 2" path="course" id="courseSelect">
 						<form:option value=""> --Select an option-- </form:option>
@@ -56,7 +56,7 @@
 						</c:forEach>
 					</form:select>
 				</div>
-
+ --%>
 				<div class="panel-body">
 					<label>Competence Status List</label>
 				
@@ -87,7 +87,7 @@
 				<input type="submit" class="btn btn-primary btn-lg addActivity" value="Modify Activity" />
 
 			</form:form >
-			<div class="addCOmeptenceStatus">
+			<div class="addComeptenceStatus">
 			<form:form method="post" commandName="addcompetencestatus">
 					<h4> New Competence Status</h4>
 					<label>Competence:</label>
@@ -102,8 +102,13 @@
 					<form:input class="form-control" path="percentage" id="percentage"
 						required="true" />
 
-					<input type="submit" class="btn btn-success CompSta"
-						value="Add Competence Status" />
+
+					<a class="btn btn-success CompSta" 
+						href="<c:url value='/course/${idCourse}/activity/${activity.id}/addCompetenceStatus.htm'/>">
+							Add Competence Status
+					</a>
+					<!-- <input type="submit" class="btn btn-success CompSta"
+						value="Add Competence Status" /> -->
 
 			</form:form>
 			</div>

@@ -46,15 +46,6 @@ import com.example.tfg.service.SubjectService;
 @Controller
 public class ActivityController {
 
-	// @Autowired
-	// private ConversionService conversionService;
-	// Autowiring the ConversionService we declared in the context file above.
-	/*
-	 * @InitBinder public void registerConversionServices(WebDataBinder
-	 * dataBinder) { dataBinder.setConversionService(conversionService);
-	 * 
-	 * }
-	 */
 
 	@Autowired
 	private ActivityService serviceActivity;
@@ -83,71 +74,70 @@ public class ActivityController {
 		return serviceCourse.getAll();
 	}
 	
-	@ModelAttribute("competenceStatus")
+	/*@ModelAttribute("competenceStatus")
 	public List<CompetenceStatus> competencestatus() {
 		return (List<CompetenceStatus>) col;
 	}
-	
-	
-	
-	private List<CompetenceStatus> col = new ArrayList<CompetenceStatus>();
+*/
+	//private List<CompetenceStatus> col = new ArrayList<CompetenceStatus>();
 	/**
 	 * Methods for adding activities
 	 */
-	@RequestMapping(value = "/activity/add.htm", method = RequestMethod.GET)
-	protected String getAddNewActivityForm(Model model) {
+	@RequestMapping(value = "/course/{idCourse}/activity/add.htm", method = RequestMethod.GET)
+	protected String getAddNewActivityForm(@PathVariable("idCourse") Long id_course, Model model) {
 		Activity newActivity = new Activity();
 		newActivity.setCompetenceStatus(new ArrayList<CompetenceStatus>());
 		newActivity.setCode(serviceActivity.getNextCode());
-		newActivity.setCourse(new Course());
+		newActivity.setCourse(serviceCourse.getCourse(id_course));
 		model.addAttribute("addactivity", newActivity);	
 
-		CompetenceStatus cs = new CompetenceStatus();
-		model.addAttribute("addcompetencestatus", cs);
+		//CompetenceStatus cs = new CompetenceStatus();
+		//model.addAttribute("addcompetencestatus", cs);
 	
 	
 		return "activity/addChoose";
 
 	}
 
-	@RequestMapping(value = "/activity/add.htm", method = RequestMethod.POST)
+	@RequestMapping(value = "/course/{idCourse}/activity/add.htm", method = RequestMethod.POST)
 	// Every Post have to return redirect
 	public String processAddNewCompetence(
+			@PathVariable("idCourse") Long id_course,
 			@ModelAttribute("addactivity") @Valid Activity newactivity, BindingResult result, 
-			@ModelAttribute("addcompetencestatus") @Valid CompetenceStatus competencestatus, BindingResult result2,
-			@ModelAttribute("course") @Valid Course course, BindingResult result3, 
+			//@ModelAttribute("addcompetencestatus") @Valid CompetenceStatus competencestatus, BindingResult result2,
+			//@ModelAttribute("course") @Valid Course course, BindingResult result3, 
 			Model model) {
 		
-		if(!result2.hasErrors() && competencestatus.getId_competence() != 0){
-			if( competencestatus.getPercentage() <= 0.0 || competencestatus.getPercentage() > 100.0)		
-				return "redirect:/activity/add.htm";
-				
-			for(CompetenceStatus cs: col){
-					if (cs.getId_competence() == competencestatus.getId_competence()){
-						return "redirect:/activity/add.htm";
-					}
-			}			
-			
-			col.add(competencestatus);
-			return "redirect:/activity/add.htm";
+//		if(!result.hasErrors()){
+//			/*if( competencestatus.getPercentage() <= 0.0 || competencestatus.getPercentage() > 100.0)		
+//				return "redirect:/activity/add.htm";
+//				
+//			for(CompetenceStatus cs: col){
+//					if (cs.getCompetence()getId_competence() == competencestatus.getId_competence()){
+//						return "redirect:/activity/add.htm";
+//					}
+//			}			*/
+//			
+//			//col.add(competencestatus);
+//			return "redirect:/activity/add.htm";
 			
 			// return "redirect:/activity/add.htm";
 
 			//newactivity.getCompetenceStatus().add(competencestatus);  //CASCA AQUI!!!
 			//model.addAttribute("addactivity", newactivity);
 			//return "redirect:/activity/add.htm";
-		}
+		//}
 		
-		if(course == null)
-			return "redirect:/activity/add.htm";
+		//if(course == null)
+		//	return "redirect:/activity/add.htm";
 		
 		if (!result.hasErrors()) {
-			newactivity.setCourse(course);
-			newactivity.setCompetenceStatus(col);
+			newactivity.setCourse(serviceCourse.getCourse(id_course));
+			
 			boolean created = serviceActivity.addActivity(newactivity);
 			if (created){
-				col = new ArrayList<CompetenceStatus>();
-				return "redirect:/activity/list.htm";
+				
+				return "redirect:/course/"+id_course+"/activity/"+newactivity.getId()+"/modify.htm";
 			}
 			else
 				return "redirect:/activity/add.htm";
@@ -161,16 +151,13 @@ public class ActivityController {
 	 * Methods for listing activities
 	 */
 
-	@RequestMapping(value = "/activity/list.htm")
-	public ModelAndView handleRequestActivityList(HttpServletRequest request,
+	@RequestMapping(value = "/course/{idCourse}/activity/list.htm")
+	public ModelAndView handleRequestActivityList(@PathVariable("idCourse") Long id_course, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-
-		String now = (new Date()).toString();
-		logger.info("Returning hello view with " + now);
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		List<Activity> result = serviceActivity.getAll();
+		List<Activity> result = serviceActivity.getActivitiesForCourse(id_course);
 		myModel.put("activities", result);
 
 		return new ModelAndView("activity/list", "model", myModel);
@@ -180,41 +167,41 @@ public class ActivityController {
 	 * Methods for modifying activities
 	 */
 	
-	@RequestMapping(value = "/activity/modifyChoose/{activityId}.htm", method = RequestMethod.GET)
-	protected String formModifyActivities(@PathVariable("activityId") long id,
+	@RequestMapping(value = "/course/{idCourse}/activity/{activityId}/modifyChoose.htm", method = RequestMethod.GET)
+	protected String formModifyActivities(@PathVariable("idCourse") Long id_course, @PathVariable("activityId") long id,
 			Model model) throws ServletException {
-		boolean contains = false;
+
 		Activity p = serviceActivity.getActivity(id);
-		model.addAttribute("idCourse",p.getCourse().getId());
-		p.setCourse(null);
+		model.addAttribute("idCourse",id_course);
+		//p.setCourse(null);
 
 		model.addAttribute("modifyactivity", p);
 	
 		CompetenceStatus cs = new CompetenceStatus();
 		model.addAttribute("addcompetencestatus", cs);
 	
-		
-		for (CompetenceStatus coms : p.getCompetenceStatus())
+		//model.addAttribute("finish", "false;"); --
+		/*for (CompetenceStatus coms : p.getCompetenceStatus())
 			for (CompetenceStatus coms2 : col)	
 				if (coms.getId_competence() == coms2.getId_competence() && coms.getPercentage() == coms2.getPercentage()){
 					contains = true;
 					break;
 				}
 		if (!contains)		
-				col.addAll(p.getCompetenceStatus());
+				col.addAll(p.getCompetenceStatus());*/
 		//model.addAttribute("col", p.getCompetenceStatus());
-		return "activity/modifyChoose";
+		return "/course/"+id_course+"/activity/"+id+"/modifyChoose";
 	}
 	
-	@RequestMapping(value = "/activity/modifyChoose/{activityId}.htm", method = RequestMethod.POST)
+	@RequestMapping(value = "/course/{idCourse}/activity/{activityId}/modifyChoose.htm", method = RequestMethod.POST)
 	public String formModifySystem(@PathVariable("activityId") long id,
 			@ModelAttribute("modifyactivity") @Valid Activity modify,BindingResult result, 
-			@ModelAttribute("addcompetencestatus") @Valid CompetenceStatus competencestatus, BindingResult result2,
-			@ModelAttribute("course") @Valid Course course, BindingResult result3,
+			//@ModelAttribute("addcompetencestatus") @Valid CompetenceStatus competencestatus, BindingResult result2,
+			//@ModelAttribute("course") @Valid Course course, BindingResult result3,
 			Model model)
 
 	{
-		if(!result2.hasErrors() && competencestatus.getId_competence() != 0){
+	/*	if(!result2.hasErrors() && competencestatus.getId_competence() != 0){
 			if( competencestatus.getPercentage() <= 0.0 || competencestatus.getPercentage() > 100.0)		
 				return "redirect:/activity/modifyChoose/"+id+".htm";
 				
@@ -233,32 +220,47 @@ public class ActivityController {
 
 		//modify.setSubject(serviceSubject.getSubject(modify.getSubject().getId()));
 		if(modify.getCourse() == null)
-			return "redirect:/activity/modifyChoose/"+id+".htm";
+			return "redirect:/activity/modifyChoose/"+id+".htm";*/
 		
 		if (!result.hasErrors()) {
 			modify.setId(id);
-			modify.setCompetenceStatus(col);
+			//modify.setCompetenceStatus(col);
 			boolean success = serviceActivity.modifyActivity(modify);
 			if (success){
-				col = new ArrayList<CompetenceStatus>();
-				return "redirect:/activity/view/"+id+".htm";
+				//col = new ArrayList<CompetenceStatus>();
+				return "redirect:/activity/"+id+"/view.htm";
 			}
 		}
 		return "redirect:/error.htm";
-
 	}
 
+	@RequestMapping(value = "/course/{idCourse}/activity/{activityId}/addCompetenceStatus.htm")
+	protected String formModifyActivitiesCompetenceStatus(@PathVariable("idCourse") Long id_course, 
+			@PathVariable("activityId") long id,
+			@ModelAttribute("addcompetencestatus") @Valid CompetenceStatus competencestatus, BindingResult result,
+			Model model) throws ServletException {
+	
+		Activity p = serviceActivity.getActivity(id);
+		if (!result.hasErrors()) 
+			p.getCompetenceStatus().add(competencestatus);
+		
+		//model.addAttribute("addcompetencestatus",new CompetenceStatus());
+
+
+		return "/course/"+id_course+"/activity/"+id+"/modifyChoose";
+	}
+	
 
 	/**
 	 * Method for delete an activities
 	 */
 	
-	@RequestMapping(value = "/activity/delete/{activityId}.htm", method = RequestMethod.GET)
-	public String formDeleteActivity(@PathVariable("activityId") long id)
+	@RequestMapping(value = "/course/{idCourse}/activity/{activityId}/delete.htm", method = RequestMethod.GET)
+	public String formDeleteActivity(@PathVariable("idCourse") Long id_course,@PathVariable("activityId") long id)
 			throws ServletException {
 
 		if (serviceActivity.deleteActivity(id)) {
-			return "redirect:/activity/list.htm";
+			return "redirect:/course/"+id_course+"/activity/list.htm";
 		} else
 			return "redirect:/error.htm";
 	}
@@ -267,12 +269,13 @@ public class ActivityController {
 	 * Method for delete an competence status of activities
 	 */
 	
-	@RequestMapping(value = "/activity/competenceStatus/delete/{activityId}/{compStatusId}.htm", method = RequestMethod.GET)
-	public String formDeleteCompetenceStatusActivity(@PathVariable("activityId") long id_Activity,@PathVariable("compStatusId") long id_competenceStatus)
+	@RequestMapping(value = "/course/{idCourse}/activity/{activityId}/competenceStatus/delete/{compStatusId}.htm", method = RequestMethod.GET)
+	public String formDeleteCompetenceStatusActivity(@PathVariable("idCourse") Long id_course,
+			@PathVariable("activityId") long id_Activity,@PathVariable("compStatusId") long id_competenceStatus)
 			throws ServletException {
 
 		if (serviceActivity.deleteCompetenceActivity(id_competenceStatus, id_Activity)) {
-			return "redirect:/activity/view/"+ id_Activity+".htm";
+			return "redirect:/course/"+id_course+"/activity/"+ id_Activity+"/view.htm";
 		} else
 			return "redirect:/error.htm";
 	}
@@ -282,8 +285,8 @@ public class ActivityController {
 	/**
 	 * Methods for view subjects
 	 */
-	@RequestMapping(value = "/activity/view/{activityId}.htm", method = RequestMethod.GET)
-	protected ModelAndView formViewActivity(@PathVariable("activityId") long id)
+	@RequestMapping(value = "/course/{idCourse}/activity/{activityId}/view.htm", method = RequestMethod.GET)
+	protected ModelAndView formViewActivity(@PathVariable("idCourse") Long id_course,@PathVariable("activityId") long id)
 			throws ServletException {
 
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -295,26 +298,22 @@ public class ActivityController {
 		model.put("activityId", id);
 		
 		model.put("competenceStatus", a.getCompetenceStatus());
-		
-		List<CompetenceStatus> comps = (List<CompetenceStatus>) a.getCompetenceStatus(); //La competencia de competenceStatus llega null
-	
-		//model.put("competences", a.)
-		
+
 		return new ModelAndView("activity/view", "model", model);
 	}
 	
-
+/*
 	public Collection<CompetenceStatus> getCol() {
 		return col;
 	}
 
 	public void setCol(List<CompetenceStatus> col) {
 		this.col = col;
-	}
+	}*/
 	
 	/**
 	 * For binding the courses of the activity
-	 */
+	 *//*
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) throws Exception {
 		binder.registerCustomEditor(Set.class, "courses",
@@ -337,5 +336,5 @@ public class ActivityController {
 						return null;
 					}
 				});
-	}
+	}*/
 }

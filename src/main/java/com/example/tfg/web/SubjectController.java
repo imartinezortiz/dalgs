@@ -85,9 +85,9 @@ public class SubjectController {
 		Subject newSubject = new Subject();
 		newSubject.setCode(serviceSubject.getNextCode());
 
-		Degree d = serviceDegree.getDegree(id);
+		
 
-		newSubject.setDegree(d);
+		newSubject.setDegree(serviceDegree.getDegree(id));
 		model.addAttribute("addsubject", newSubject);
 		return "subject/add";
 	}
@@ -97,9 +97,9 @@ public class SubjectController {
 	public String processAddNewActivity(
 			@ModelAttribute("addsubject") Subject newSubject,
 			@PathVariable("degreeId") Long id) {
-		Degree degree = serviceDegree.getDegree(id);
+		//Degree degree = serviceDegree.getDegree(id);
 
-		newSubject.setDegree(degree);
+		//newSubject.setDegree(degree);
 		boolean created = serviceSubject.addSubject(newSubject);
 		if (created)
 			return "redirect:/degree/" + id + ".htm";

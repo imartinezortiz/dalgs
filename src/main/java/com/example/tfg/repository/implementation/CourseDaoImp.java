@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.tfg.domain.AcademicTerm;
 import com.example.tfg.domain.Course;
+import com.example.tfg.domain.Degree;
 import com.example.tfg.repository.CourseDao;
 
 @Repository
@@ -76,29 +77,42 @@ public class CourseDaoImp implements CourseDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Course> getCoursesByAcademicTerm(AcademicTerm aT) { 
-		Query query = em.createQuery("select c from Course c  join c.academicTerm t where t.id=?1");
-		query.setParameter(1, aT.getId());
+	public List<Course> getCoursesByAcademicTerm(String term) { 
+		Query query = em.createQuery("select c from Course c  join c.academicTerm t where t.term=?1");
+		query.setParameter(1, term);
  
 		return query.getResultList();
 	}
 
-	public boolean existByName(String name) {
-		Query query = em.createQuery("from Course c  where c.name=?1");
-		query.setParameter(1, name);
+	
 
+	public boolean exist(Course course) {
+		Query query = em.createQuery("select c from Course c  where c.academicTerm=?1 and c.subject=?2");
+		query.setParameter(1, course.getAcademicTerm());
+		query.setParameter(2, course.getSubject());
+ 
 		if (query.getResultList().isEmpty())
 			return false;
 		else
 			return true;
 	}
 
-	public Course getCourseByName(String name) {
-		Query query = em.createQuery("select c from Course c where c.name=?1");
-		query.setParameter(1, name);
-		
-		return (Course) query.getResultList().get(0);
+	@SuppressWarnings("unchecked")
+	public List<Course> getCoursesByAcademicTermDegree(String term,
+			Long id_degree) {
+		Degree degree = em.getReference(Degree.class, id_degree);
 
+		Query query = em.createQuery("select c from Course c  join c.academicTerm a  where a.term=?1 and a.degree=?2");
+		query.setParameter(1, term);
+		query.setParameter(2, degree);
+ 
+		if (query.getResultList().isEmpty())
+			return null;
+		else
+			return query.getResultList();
+	
 	}
+
+
 
 }

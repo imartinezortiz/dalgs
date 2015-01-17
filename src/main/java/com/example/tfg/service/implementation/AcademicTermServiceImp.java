@@ -26,11 +26,12 @@ public class AcademicTermServiceImp implements AcademicTermService {
 
 	}
 
+/*
 	@Transactional(readOnly = true)
 	public List<AcademicTerm> getAll() {
 		return daoAcademicTerm.getAll();
 	}
-
+*/
 	@Transactional(readOnly = false)
 	public boolean modifyAcademicTerm(AcademicTerm academicTerm) {
 		return daoAcademicTerm.saveAcademicTerm(academicTerm);
@@ -38,20 +39,28 @@ public class AcademicTermServiceImp implements AcademicTermService {
 	}
 
 	@Transactional(readOnly = false)
-	public AcademicTerm getAcademicTerm(Long id) {
-		return daoAcademicTerm.getAcademicTerm(id);
+	public List<AcademicTerm> getAcademicsTerm(String term) {
+		return daoAcademicTerm.getAcademicsTerm(term);
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteAcademicTerm(Long id) {
-		return daoAcademicTerm.deleteAcademicTerm(id);
+	public boolean deleteAcademicTerm(String term) {
+		return daoAcademicTerm.deleteAcademicTerm(term);
 	}
 
 	@Transactional(readOnly = false)
 	public List<AcademicTerm> getAcademicTermsForDegree(Long id_degree) {
 		return daoAcademicTerm.getAcademicTermsForDegree(id_degree);
 	}
-	
+	@Transactional(readOnly = true)
+	public List<String> getAllTerms() {
+		return daoAcademicTerm.getAllTerms();
+	}
+
+	@Transactional(readOnly = true)
+	public AcademicTerm getAcademicTermDegree(String term, Long id_degree) {
+		return daoAcademicTerm.getAcademicTermDegree(term,id_degree);
+	}
 
 
 }

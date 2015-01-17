@@ -13,12 +13,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
-
+ <div class="panel-heading list">
+     
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
 			<h3 class="panel-title list">Academic Term Details</h3>
 			<a class="btn list-btn btn-warning"
-				href="<c:url value='/academicTerm/modifyChoose/${academicTermId}.htm'/>">Modify</a>
+				href="<c:url value='/academicTerm/${term}/degree/${idDegree}.htm'/>">Modify</a>
 
 		</div>
 
@@ -47,6 +48,8 @@
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
 			<h3 class="panel-title list">Course List </h3>
+					<a class="btn list-btn btn-warning"
+				href="<c:url value='/academicTerm/${term}/degree/${idDegree}/course/add.htm'/>">Add Course</a>
 		</div>
 		<div class="panel-body">
 			<table class="table table-striped table-bordered">
