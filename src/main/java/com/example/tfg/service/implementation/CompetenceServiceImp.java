@@ -34,7 +34,7 @@ public class CompetenceServiceImp implements CompetenceService {
 
 	/*
 	 * @Transactional(readOnly = false)
-	public void modifyCompetence(long id, String name, String description,Subject subject){
+	public void modifyCompetence(Long id, String name, String description,Subject subject){
 		Competence aux = daoCompetence.getCompetence(id);
 		aux.setName(name);
 		aux.setDescription(description);
@@ -45,7 +45,7 @@ public class CompetenceServiceImp implements CompetenceService {
 
 
 	@Transactional(readOnly=false)
-	public  Competence getCompetence(long id){
+	public  Competence getCompetence(Long id){
 		return daoCompetence.getCompetence(id);
 	}
 
@@ -56,19 +56,19 @@ public class CompetenceServiceImp implements CompetenceService {
 
 
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteCompetence(long id){
+	public boolean deleteCompetence(Long id){
 		//	Subject subject = daoSubject.getSubject(id);
 		return daoCompetence.deleteCompetence(id);
 	}
 
 	@Transactional(readOnly = false)
-	public List<Competence> getCompetencesForSubject(long id_subject) {
+	public List<Competence> getCompetencesForSubject(Long id_subject) {
 		
 		return daoCompetence.getCompetencesForSubject(id_subject);
 	}
 
 	@Transactional(readOnly = true)
-	public List<Competence> getCompetencesForDegree(long id_degree) {
+	public List<Competence> getCompetencesForDegree(Long id_degree) {
 		// TODO Auto-generated method stub
 		return daoCompetence.getCompetencesForDegree(id_degree);
 	}
@@ -82,7 +82,7 @@ public class CompetenceServiceImp implements CompetenceService {
 	//----
 	/*
 	@Transactional(readOnly = true)
-	public boolean existsInSubject(long id_subject, Competence c) {
+	public boolean existsInSubject(Long id_subject, Competence c) {
 		// TODO Auto-generated method stub
 		return daoCompetence.existsInSubject(id_subject, c);
 	}
@@ -90,7 +90,7 @@ public class CompetenceServiceImp implements CompetenceService {
 
 
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteCompetenceFromSubject(long id_competence, long id_subject){
+	public boolean deleteCompetenceFromSubject(Long id_competence, Long id_subject){
 		//Subject subject = daoSubject.getSubject(id);
 		
 		Collection<Competence> c = daoSubject.getSubject(id_subject).getCompetences();

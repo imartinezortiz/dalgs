@@ -10,7 +10,6 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
 
 import com.example.tfg.domain.AcademicTerm;
-import com.example.tfg.domain.Competence;
 import com.example.tfg.domain.Course;
 import com.example.tfg.repository.CourseDao;
 

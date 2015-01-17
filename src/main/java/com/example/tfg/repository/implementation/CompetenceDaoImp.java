@@ -6,7 +6,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.hibernate.Hibernate;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
 
@@ -62,7 +61,7 @@ public class CompetenceDaoImp implements CompetenceDao {
 	@SuppressWarnings("unchecked")
 	public List<Competence> getAll() {
 		return em.createQuery("select c from Competence c inner join c.degree d order by c.id")
-			//	"from Competence a inner join a.subject s order by a.id")
+			
 				.getResultList();
 	}
 
@@ -75,13 +74,13 @@ public class CompetenceDaoImp implements CompetenceDao {
 		}
 	}
 
-	public Competence getCompetence(long id) {
+	public Competence getCompetence(Long id) {
 		return em.find(Competence.class, id);
 
 	}
 
 	
-	public boolean deleteCompetence(long id) {
+	public boolean deleteCompetence(Long id) {
 		Competence competence = this.getCompetence(id);
 		competence.setDeleted(true);
 
@@ -97,12 +96,12 @@ public class CompetenceDaoImp implements CompetenceDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Competence> getCompetencesForSubject(long id_subject) {
+	public List<Competence> getCompetencesForSubject(Long id_subject) {
 		Subject subject = em.getReference(Subject.class, id_subject);
-	    //Hibernate.initialize(subject);
+
 
 		Query query = em.createQuery
-		//		.createQuery("select c from Competence c where c.subject=?1");
+	
 				("select c from Competence c JOIN c.subjects s where s = ?1");
 		query.setParameter(1, subject);
 		return query.getResultList();
@@ -110,9 +109,9 @@ public class CompetenceDaoImp implements CompetenceDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Competence> getCompetencesForDegree(long id_degree) {
+	public List<Competence> getCompetencesForDegree(Long id_degree) {
 		Degree degree = em.getReference(Degree.class, id_degree);
-	    Hibernate.initialize(degree.getId());
+
 
 		Query query = em
 				.createQuery("select c from Competence c where c.degree=?1");
@@ -137,5 +136,20 @@ public class CompetenceDaoImp implements CompetenceDao {
 			return null;
 		}
 
+	}
+
+	
+	public boolean deleteCompetencesForDegree(Degree degree) {
+		try{
+			Query query = em.createQuery("UPDATE Competence c SET c.isDeleted = true where c.degree=?1");
+				
+				query.setParameter(1, degree);
+				int n = query.executeUpdate();
+				System.out.println(n);
+			}catch(Exception e){
+
+				return false;
+			}
+			return true;
 	}
 }

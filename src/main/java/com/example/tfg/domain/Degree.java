@@ -34,10 +34,10 @@ public class Degree {
 	@Column(name = "description", length=250,nullable=false)
 	private String description;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy="degree", cascade= CascadeType.ALL)//, orphanRemoval=true)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="degree")//, cascade= CascadeType.ALL)//, orphanRemoval=true)
 	private Collection<Subject> subjects;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy="degree", cascade= CascadeType.ALL)//, orphanRemoval=true)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="degree")//, cascade= CascadeType.ALL)//, orphanRemoval=true)
 	private Collection<Competence> competences;
 	
 	@Column(name = "isDeleted", nullable=false, columnDefinition="boolean default false")
@@ -46,8 +46,7 @@ public class Degree {
 	@Column(name = "code_degree", nullable=false)
 	private String code;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy="degree", cascade= CascadeType.ALL)//, orphanRemoval=true)
-	private Collection<AcademicTerm> academicTerms;
+
 	
 	public Degree() {
 		 super();
@@ -102,12 +101,6 @@ public class Degree {
 		this.code = code;
 	}
 
-	public Collection<AcademicTerm> getAcademicTerms() {
-		return academicTerms;
-	}
 
-	public void setAcademicTerms(Collection<AcademicTerm> academicTerm) {
-		this.academicTerms = academicTerm;
-	}
 	
 }

@@ -10,9 +10,9 @@ public interface ActivityDao {
 	public boolean addActivity(Activity activity);
 	public List<Activity> getAll();
     public boolean saveActivity(Activity activity);
-    public Activity getActivity(long id);
-	public boolean deleteActivity(long id);
-	public List<Activity> getActivitiesForCourse(long id_subject);
+    public Activity getActivity(Long id);
+	public boolean deleteActivity(Long id);
+	public List<Activity> getActivitiesForCourse(Long id_subject);
 
 	public boolean existByCode(String code);
 	public String getNextCode();

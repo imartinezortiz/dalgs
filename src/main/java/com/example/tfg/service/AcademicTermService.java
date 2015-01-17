@@ -11,7 +11,7 @@ public interface AcademicTermService {
 	public boolean addAcademicTerm(AcademicTerm academicTerm);
 	public List<AcademicTerm> getAll();
 	public boolean modifyAcademicTerm(AcademicTerm academicTerm);
-	public  AcademicTerm getAcademicTerm(long id);
-	public boolean deleteAcademicTerm(long id);
-	public List<AcademicTerm> getAcademicTermsForDegree(long id_degree);
+	public  AcademicTerm getAcademicTerm(Long id);
+	public boolean deleteAcademicTerm(Long id);
+	public List<AcademicTerm> getAcademicTermsForDegree(Long id_degree);
 }

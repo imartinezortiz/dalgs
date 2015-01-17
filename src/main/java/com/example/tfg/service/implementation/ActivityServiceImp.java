@@ -44,17 +44,17 @@ public class ActivityServiceImp implements ActivityService {
 	}
 
 	@Transactional(readOnly = false)
-	public Activity getActivity(long id) {
+	public Activity getActivity(Long id) {
 		return daoActivity.getActivity(id);
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteActivity(long id) {
+	public boolean deleteActivity(Long id) {
 		return daoActivity.deleteActivity(id);
 	}
 
 	@Transactional(readOnly = false)
-	public List<Activity> getActivitiesForCourse(long id_course) {
+	public List<Activity> getActivitiesForCourse(Long id_course) {
 		return daoActivity.getActivitiesForCourse(id_course);
 	}
 
@@ -65,7 +65,7 @@ public class ActivityServiceImp implements ActivityService {
 	}
 
 /*	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteActivityFromCourse(long id_course, long id_activity) {
+	public boolean deleteActivityFromCourse(Long id_course, Long id_activity) {
 
 		Collection<Activity> c = daoCourse.getCourse(id_course).getActivities();
 		try {
@@ -86,8 +86,8 @@ public class ActivityServiceImp implements ActivityService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteCompetenceActivity(long id_competenceStatus,
-			long id_Activity) {
+	public boolean deleteCompetenceActivity(Long id_competenceStatus,
+			Long id_Activity) {
 		Activity a = daoActivity.getActivity(id_Activity);
 		Collection<CompetenceStatus> c = a.getCompetenceStatus();
 		try {

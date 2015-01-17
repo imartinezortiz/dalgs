@@ -2,22 +2,23 @@ package com.example.tfg.domain;
 
 import java.util.Collection;
 
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.FetchType;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.PostLoad;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
+
 
 @Entity
 @Table(name = "academicterm")
@@ -35,12 +36,11 @@ public class AcademicTerm {
 	@Column(name = "isDeleted", nullable=false, columnDefinition="boolean default false")
 	private boolean isDeleted;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "id_degree", insertable=false, updatable=false)
+	@ManyToOne
+	@JoinColumn(name= "id_degree")
 	private Degree degree;
-	
 
-	@OneToMany(mappedBy="academicTerm", cascade= CascadeType.ALL)//, orphanRemoval=true)
+	@OneToMany(mappedBy="academicTerm", cascade= CascadeType.ALL)
 	private Collection<Course> courses;
 	
 	public AcademicTerm() {
@@ -88,15 +88,5 @@ public class AcademicTerm {
 		this.degree = degree;
 	}
 	
-	@PostLoad
-	public void postLoad(){
-	    try {
-	        if(getDegree() != null && getDegree().getId() == 0){
-	            setDegree(null);
-	        }
-	    }
-	    catch (EntityNotFoundException e){
-	        setDegree(null);
-	    }
-	} 
+
 }

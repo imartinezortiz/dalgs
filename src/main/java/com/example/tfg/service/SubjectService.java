@@ -19,9 +19,9 @@ public interface SubjectService {
 	public String getNextCode();
 
 	public boolean modifySubject(Subject modify);
-	public List<Subject> getSubjectsForCompetence(long id);
+	public List<Subject> getSubjectsForCompetence(Long id);
 	
-	public Subject getSubjectForCourse(long id_course);
-	//public boolean deleteSubjectFromCourse(long id_course, long id_subject);
+	public Subject getSubjectForCourse(Long id_course);
+	//public boolean deleteSubjectFromCourse(Long id_course, Long id_subject);
 	public Subject getSubjectByName(String string);
 }

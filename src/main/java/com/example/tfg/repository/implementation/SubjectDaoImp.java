@@ -92,10 +92,10 @@ public class SubjectDaoImp implements SubjectDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Subject> getSubjectsForCompetence(long id) {
+	public List<Subject> getSubjectsForCompetence(Long id) {
 		Competence competence = em.getReference(Competence.class, id);
 		Query query = em.createQuery
-		// .createQuery("select c from Competence c where c.subject=?1");
+				// .createQuery("select c from Competence c where c.subject=?1");
 				("select s from Subject s JOIN s.competences c where c = ?1");
 		query.setParameter(1, competence);
 		return query.getResultList();
@@ -121,8 +121,8 @@ public class SubjectDaoImp implements SubjectDao {
 		else
 			return true;
 	}
-	
-	public Subject getSubjectForCourse(long id_course) {
+
+	public Subject getSubjectForCourse(Long id_course) {
 		Course course = em.getReference(Course.class, id_course);
 
 		Query query = em
@@ -134,13 +134,31 @@ public class SubjectDaoImp implements SubjectDao {
 
 		return (Subject) query.getSingleResult();
 	}
-	
+
 	public Subject getSubjectByName(String name) {
 		Query query = em.createQuery("select c from Subject c where c.name=?1");
 		query.setParameter(1, name);
-		
+
 		return (Subject) query.getResultList().get(0);
 
+	}
+
+
+	public boolean deleteSubjectsForDegree(Degree degree) {
+
+		
+
+		try{
+		Query query = em.createQuery("UPDATE Subject s SET s.isDeleted = true where s.degree=?1");
+			
+			query.setParameter(1, degree);
+			int n = query.executeUpdate();
+			System.out.println(n);
+		}catch(Exception e){
+
+			return false;
+		}
+		return true;
 	}
 
 }

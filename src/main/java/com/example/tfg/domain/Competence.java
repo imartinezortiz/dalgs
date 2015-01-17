@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.PostLoad;
 import javax.persistence.Table;
 
@@ -41,8 +40,8 @@ public class Competence {
 	@ManyToMany(mappedBy="competences",fetch = FetchType.LAZY)
 	private Collection<Subject> subjects;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "id_degree", insertable=false, updatable=false)
+	@ManyToOne(fetch = FetchType.EAGER)//, optional = false)
+	@JoinColumn(name = "id_degree")
 	private Degree degree;
 	
 	@Column(name = "isDeleted", nullable=false, columnDefinition="boolean default false")

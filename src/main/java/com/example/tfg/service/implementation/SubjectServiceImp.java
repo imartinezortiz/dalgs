@@ -71,7 +71,7 @@ public class SubjectServiceImp implements SubjectService{
 	}
 
 	@Transactional(readOnly = true)
-	public List<Subject> getSubjectsForCompetence(long id) {
+	public List<Subject> getSubjectsForCompetence(Long id) {
 		return daoSubject.getSubjectsForCompetence(id);
 	}
 	@Transactional(readOnly = true)
@@ -80,13 +80,13 @@ public class SubjectServiceImp implements SubjectService{
 	
 	}
 	@Transactional(readOnly = true)
-	public Subject getSubjectForCourse(long id) {
+	public Subject getSubjectForCourse(Long id) {
 		return daoSubject.getSubjectForCourse(id);
 	}
 
 	/*
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteSubjectFromCourse(long id_course, long id_subject) {
+	public boolean deleteSubjectFromCourse(Long id_course, Long id_subject) {
 		Subject c = daoCourse.getCourse(id_course).getSubject();
 		try {
 			return daoSubject.deleteSubject(c.getId());

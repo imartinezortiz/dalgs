@@ -41,8 +41,10 @@ public class DegreeDaoImp implements DegreeDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Degree> getAll() {
+		
 		return em.createQuery("select d from Degree d order by d.id")
 				.getResultList();
+		
 	}
 
 	@Override
@@ -62,8 +64,8 @@ public class DegreeDaoImp implements DegreeDao {
 	}
 
 	@Override
-	public boolean deleteDegree(Long id) {
-		Degree degree = em.getReference(Degree.class, id);
+	public boolean deleteDegree(Degree degree) {
+//		Degree degree = em.getReference(Degree.class, id);
 		try {
 			degree.setDeleted(true);
 			em.merge(degree);

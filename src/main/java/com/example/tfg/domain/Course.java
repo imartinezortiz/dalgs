@@ -5,7 +5,7 @@ import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityNotFoundException;
+
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.PostLoad;
+
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
@@ -31,13 +31,10 @@ public class Course {
 	@Column(name = "isDeleted", nullable=false, columnDefinition="boolean default false")
 	private boolean isDeleted;
 	
-	//@OneToMany(mappedBy="course", cascade= CascadeType.ALL)
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "id_subject", insertable=false, updatable=false)
+	@ManyToOne
+	@JoinColumn(name = "id_subject")
 	private Subject subject;
 	
-	@Column(name="name",nullable = true)
-	private String name;
 
 	@OneToMany(mappedBy="course", cascade= CascadeType.ALL)//, orphanRemoval=true)
 	private Collection<Activity> activities;
@@ -89,31 +86,5 @@ public class Course {
 		this.activities = activities;
 	}
 
-	public String getName() {
-		return name;
-	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	@PostLoad
-	public void postLoad(){
-	    try {
-	        if(getSubject() != null && getSubject().getId() == 0){
-	            setSubject(null);
-	        }
-	    }
-	    catch (EntityNotFoundException e){
-	        setSubject(null);
-	    }
-	    
-	    try {
-	        if(getAcademicTerm() != null && getAcademicTerm().getId() == 0){
-	            setAcademicTerm(null);
-	        }
-	    }
-	    catch (EntityNotFoundException e){
-	        setAcademicTerm(null);
-	    }
-	} 
 }

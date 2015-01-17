@@ -146,7 +146,7 @@ public class CourseController {
 	
 
 	@RequestMapping(value = "/course/modify/{courseId}.htm", method = RequestMethod.GET)
-	protected String formModifyCourses(@PathVariable("courseId") long id,
+	protected String formModifyCourses(@PathVariable("courseId") Long id,
 			Model model) throws ServletException {
 		Course p = serviceCourse.getCourse(id);
 		
@@ -161,7 +161,7 @@ public class CourseController {
 
 
 	@RequestMapping(value = "/course/modify/{courseId}.htm", method = RequestMethod.POST)
-	public String formModifyCourse(@PathVariable("courseId") long id,
+	public String formModifyCourse(@PathVariable("courseId") Long id,
 			@ModelAttribute("modifyCourse") Course modify,
 			BindingResult result, Model model)
 
@@ -185,7 +185,7 @@ public class CourseController {
 	 */
 
 	@RequestMapping(value = "/course/delete/{courseId}.htm", method = RequestMethod.GET)
-	public String formDeleteCourses(@PathVariable("courseId") long id)
+	public String formDeleteCourses(@PathVariable("courseId") Long id)
 			throws ServletException {
 
 		if (serviceCourse.deleteCourse(id)) {
@@ -199,7 +199,7 @@ public class CourseController {
 	 * Methods for view courses
 	 */
 	@RequestMapping(value = "/course/view/{courseId}.htm", method = RequestMethod.GET)
-	protected ModelAndView formViewCourse(@PathVariable("courseId") long id)
+	protected ModelAndView formViewCourse(@PathVariable("courseId") Long id)
 			throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
@@ -222,8 +222,8 @@ public class CourseController {
 	 */
 	@RequestMapping(value = "/course/activity/delete/{courseId}/{activityId}.htm", method = RequestMethod.GET)
 	public String formDeleteActivityFromCourse(
-			@PathVariable("courseId") long id_course,
-			@PathVariable("activityId") long id_activity)
+			@PathVariable("courseId") Long id_course,
+			@PathVariable("activityId") Long id_activity)
 			throws ServletException {
 
 		if (serviceActivity.deleteActivity(	id_activity)) {
@@ -235,7 +235,7 @@ public class CourseController {
 /**
 	@RequestMapping(value = "/course/addCompetences/{courseId}.htm", method = RequestMethod.GET)
 	protected String getAddNewCompetenceForm(
-			@PathVariable("courseId") long id_course, Model model) {
+			@PathVariable("courseId") Long id_course, Model model) {
 
 		Course s = serviceCourse.getCourse(id_course);
 		Collection<Competence> competences = serviceCompetence
@@ -251,7 +251,7 @@ public class CourseController {
 	@RequestMapping(value = "/course/addCompetences/{courseId}.htm", method = RequestMethod.POST)
 	// Every Post have to return redirect
 	public String processAddNewCompetence(
-			@PathVariable("courseId") long id_course,
+			@PathVariable("courseId") Long id_course,
 			@ModelAttribute("course") Course course, BindingResult result,
 			Model model) {
 
