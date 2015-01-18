@@ -1,10 +1,14 @@
 package com.example.tfg.repository.implementation;
 
 import java.util.List;
+import java.util.logging.Logger;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import javax.transaction.RollbackException;
 
 import org.springframework.stereotype.Repository;
 
@@ -35,6 +39,8 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 		try {
 			em.persist(academicTerm);
 			return true;
+		} catch (PersistenceException e) {
+			return false;
 		} catch (Exception e) {
 			return false;
 		}
@@ -71,7 +77,7 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 
 	}
 
-	public boolean deleteAcademicTerm(String term) {
+	public boolean deleteTerm(String term) {
 		List<AcademicTerm> academicsTerms = getAcademicsTerm(term);
 
 		for (AcademicTerm a : academicsTerms) {
@@ -87,6 +93,26 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 
 		}
 		return true;
+	}
+	public boolean deleteAcademicTerm(String term, Long id_degree) {
+		Degree degree = em.getReference(Degree.class, id_degree);
+
+		Query query = em
+				.createQuery("select a from AcademicTerm a where a.degree=?1 and a.term=?2");
+		query.setParameter(1, degree);
+		query.setParameter(2, term);
+		
+		
+		try {
+			AcademicTerm aux = (AcademicTerm) query.getSingleResult();
+			aux.setDeleted(true);
+			em.merge(aux);
+			return true;
+			
+		} catch (Exception e) {
+			return false;
+		}
+		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -146,4 +172,61 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 			return (AcademicTerm) query.getSingleResult();
 	}
 
+	
+	public boolean exists(String term, Long id_degree) {
+		Degree degree = em.getReference(Degree.class, id_degree);
+
+		Query query = em
+				.createQuery("select a from AcademicTerm a where a.degree=?1 and a.term=?2");
+		query.setParameter(1, degree);
+		query.setParameter(2, term);
+
+
+		if (query.getResultList().isEmpty())
+			return false;
+
+		return true;
+	}
+
+	public boolean isDisabled(String term, Long id_degree) {
+		Degree degree = em.getReference(Degree.class, id_degree);
+
+		Query query = em
+				.createQuery("select a from AcademicTerm a where a.degree=?1 and a.term=?2 and a.isDeleted=1");
+		query.setParameter(1, degree);
+		query.setParameter(2, term);
+
+
+		if (query.getResultList().isEmpty())
+			return false;
+
+		return true;
+	}
+	
+	@Override
+	public boolean existTerm(String term) {
+
+		Query query = em
+				.createQuery("select a from AcademicTerm a where  a.term=?1");
+		query.setParameter(1, term);
+
+
+		if (query.getResultList().isEmpty())
+			return false;
+
+		return true;
+	}
+
+	@Override
+	public boolean modifyTerm(String term, String newTerm) {
+		Query query = em
+				.createQuery("UPDATE AcademicTerm SET term =?1 WHERE term=?2");
+		query.setParameter(1, newTerm);
+		query.setParameter(2, term);
+
+		query.executeUpdate();
+		if (query.executeUpdate() >=0)
+			return true;
+		return false;
+	}
 }

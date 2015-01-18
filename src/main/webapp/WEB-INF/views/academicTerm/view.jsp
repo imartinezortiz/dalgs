@@ -18,9 +18,7 @@
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
 			<h3 class="panel-title list">Academic Term Details</h3>
-			<a class="btn list-btn btn-warning"
-				href="<c:url value='/academicTerm/${term}/degree/${idDegree}.htm'/>">Modify</a>
-
+			
 		</div>
 
 		<div class="panel-body">
@@ -28,7 +26,7 @@
 
 			<div class="form-group">
 				<div class="form-group view">
-					<label>Code: </label>
+					<label>Term: </label>
 					<p class="details">
 						${model.academicTerm.term}
 					</p>
@@ -69,10 +67,16 @@
 							</div>
 						</td>
 
-						<td><a 
-							href="<c:url value='/academicTerm/course/delete/${academicTermId}/${course.id}.htm'/>">
-							<img WIDTH="20" HEIGHT="20" border="0" src="<c:url value="/resources/images/error.jpeg" /> " > 
-							</a></td>
+						<td>
+							<a class="btn btn-success"
+							href="<c:url value='/academicTerm/${term}/degree/${idDegree}/course/${course.id}/view.htm'/>">
+							View
+							</a>
+							<a  class="btn btn-danger"
+							href="<c:url value='/academicTerm/${term}/degree/${idDegree}/course/${course.id}/delete.htm'/>">
+							Delete
+							</a>
+						</td>
 
 					</tr>
 				</c:forEach>

@@ -26,7 +26,9 @@
 				
 			
   				<td>
-  					<a href="<c:url value='${term}/listTermDegree.htm'/>" class="btn btn-warning 2">View</a>
+  					<a href="<c:url value='${term}/degrees.htm'/>" class="btn btn-success">View
+				</a>
+  					
   					<a href="<c:url value='${term}/delete.htm'/>" class="btn btn-danger">Delete</a>
   				</td>
 		

@@ -51,7 +51,7 @@
 					<label>Available Courses:</label>
 					<div class="checkbox">
 						<form:checkboxes items="${courses}" path="courses"
-							itemLabel="name" />
+							  itemValue="id" itemLabel="subject.name" />
 						<br> <br>
 						<br>
 			

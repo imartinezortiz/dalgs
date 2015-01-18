@@ -12,9 +12,16 @@ public interface AcademicTermDao {
     public List<AcademicTerm> getAcademicsTerm(String term);
     public AcademicTerm getAcademicTermById(Long id);
 
-	public boolean deleteAcademicTerm(String term);
+	public boolean deleteTerm(String term);
+	public boolean deleteAcademicTerm(String term, Long id_degree);
+
 	public List<AcademicTerm> getAcademicTermsForDegree(Long id_degree);
 	public List<String> getAllTerms();
 	public AcademicTerm getAcademicTermDegree(String term, Long id_degree);
+	
+	public boolean exists(String term, Long id_degree);
+	public boolean existTerm(String term);
+	public boolean modifyTerm(String term, String newTerm);
+	public boolean isDisabled(String term, Long id);
 
 }

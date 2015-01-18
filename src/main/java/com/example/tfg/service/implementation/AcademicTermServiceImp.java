@@ -19,10 +19,13 @@ public class AcademicTermServiceImp implements AcademicTermService {
 
 	@Transactional(readOnly = false)
 	public boolean addAcademicTerm(AcademicTerm academicTerm) {
-	//	if (!daoAcademicTerm.existByCode(academicTerm.getTerm()))
-			return daoAcademicTerm.addAcademicTerm(academicTerm);
-	//	else
-	//		return false;
+	 
+	 	 if(daoAcademicTerm.isDisabled(academicTerm.getTerm(), academicTerm.getDegree().getId()))
+		 		return daoAcademicTerm.saveAcademicTerm(academicTerm);
+
+	 	 else if (!daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree().getId()))
+				return daoAcademicTerm.addAcademicTerm(academicTerm);	
+	 	return false;
 
 	}
 
@@ -34,8 +37,9 @@ public class AcademicTermServiceImp implements AcademicTermService {
 */
 	@Transactional(readOnly = false)
 	public boolean modifyAcademicTerm(AcademicTerm academicTerm) {
-		return daoAcademicTerm.saveAcademicTerm(academicTerm);
-	
+	 	if (!daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree().getId()))
+	 		return daoAcademicTerm.saveAcademicTerm(academicTerm);
+	 	return false;
 	}
 
 	@Transactional(readOnly = false)
@@ -44,8 +48,13 @@ public class AcademicTermServiceImp implements AcademicTermService {
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteAcademicTerm(String term) {
-		return daoAcademicTerm.deleteAcademicTerm(term);
+	public boolean deleteTerm(String term) {
+		return daoAcademicTerm.deleteTerm(term);
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED)
+	public boolean deleteAcademicTerm(String term,Long id_degree) {
+		return daoAcademicTerm.deleteAcademicTerm(term, id_degree);
 	}
 
 	@Transactional(readOnly = false)
@@ -61,6 +70,15 @@ public class AcademicTermServiceImp implements AcademicTermService {
 	public AcademicTerm getAcademicTermDegree(String term, Long id_degree) {
 		return daoAcademicTerm.getAcademicTermDegree(term,id_degree);
 	}
+
+	@Transactional(readOnly = false)
+	public boolean modifyTerm(String term, String newTerm) {
+		if(!daoAcademicTerm.existTerm(newTerm))
+		return daoAcademicTerm.modifyTerm(term, newTerm);
+		return false;
+	}
+
+
 
 
 }
