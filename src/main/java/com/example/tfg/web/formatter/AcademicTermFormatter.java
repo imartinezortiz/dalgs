@@ -25,7 +25,7 @@ public class AcademicTermFormatter implements Formatter<AcademicTerm> {
     
    public AcademicTerm parse(String academicTermId, Locale arg1) throws ParseException {
 
-          return academicTermDao.getAcademicTerm(Long.parseLong(academicTermId));
+          return (AcademicTerm) academicTermDao.getAcademicTermById(Long.parseLong(academicTermId));
           //Else you can just return a new object by setting some values
           //which you deem fit.
      }

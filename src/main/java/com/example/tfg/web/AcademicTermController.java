@@ -56,10 +56,10 @@ public class AcademicTermController {
 	public List<Degree> degree() {
 		return serviceDegree.getAll();
 	}
-	@ModelAttribute("courses")
-	public List<Course> courses() {
-		return serviceCourse.getAll();
-	}
+	
+
+	
+
 	
 	/**
 	 * Methods for adding academicTerms
@@ -68,8 +68,9 @@ public class AcademicTermController {
 	protected String getAddNewAcademicTermForm(Model model) {
 
 		AcademicTerm newAcademicTerm = new AcademicTerm();
+		newAcademicTerm.setDegree(null);
 		model.addAttribute("addAcademicTerm", newAcademicTerm);
-		return "academicTerm/addChoose";
+		return "academicTerm/add";
 
 	}
 
@@ -83,6 +84,8 @@ public class AcademicTermController {
 			return "redirect://academicTerm/add.htm";
 		
 		if (!result.hasErrors()) {
+			
+
 			boolean created = serviceAcademicTerm.addAcademicTerm(newAcademicTerm);
 			if (created)
 				return "redirect:/academicTerm/list.htm";
@@ -91,45 +94,90 @@ public class AcademicTermController {
 		}
 		return "redirect:/error.htm";
 	}
+	
+	@RequestMapping(value = "/academicTerm/{term}/add.htm", method = RequestMethod.GET)
+	protected String getAddNewAddDegree(@PathVariable("term") String term,Model model) {
+
+		AcademicTerm newAcademicTerm = new AcademicTerm();
+		newAcademicTerm.setTerm(term);
+		model.addAttribute("addAcademicTerm", newAcademicTerm);
+		return "academicTerm/addChoose";
+
+	}
+
+	@RequestMapping(value = "/academicTerm/{term}/add.htm", method = RequestMethod.POST)
+	// Every Post have to return redirect
+	public String processAddNewDegree(@PathVariable("term") String term,
+			@ModelAttribute("addacademicTerm") @Valid AcademicTerm newAcademicTerm,
+			BindingResult result, Model model) {
+		
+	///	if(newAcademicTerm.getDegree() == null)
+	//		return "redirect://academicTerm/add.htm";
+		
+		if (!result.hasErrors()) {
+			boolean created = serviceAcademicTerm.addAcademicTerm(newAcademicTerm);
+			if (created)
+				return "redirect:/academicTerm/"+term+"/degrees.htm";
+			else
+				return "redirect:/academicTerm/"+term+"/add.htm";
+		}
+		return "redirect:/error.htm";
+	}
+
 
 	
 	/**
-	 * Methods for listing activities
+	 * Methods for listing 
 	 */
 
 	@RequestMapping(value = "/academicTerm/list.htm")
 	public ModelAndView handleRequestAcademicTermList(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		String now = (new Date()).toString();
-		logger.info("Returning hello view with " + now);
+		
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		List<AcademicTerm> result = serviceAcademicTerm.getAll();
+		List<String> result = serviceAcademicTerm.getAllTerms();
 		myModel.put("academicTerms", result);
 
 		return new ModelAndView("academicTerm/list", "model", myModel);
 	}
+	
 
 	/**
 	 * Methods for view subjects
 	 */
-	@RequestMapping(value = "/academicTerm/view/{academicTermId}.htm", method = RequestMethod.GET)
-	protected ModelAndView formViewAcademicTerm(@PathVariable("academicTermId") Long id)
+	@RequestMapping(value = "/academicTerm/{term}/degrees.htm")
+	protected ModelAndView formViewAcademicTerm(@PathVariable("term") String term)
+			throws ServletException {
+
+		Map<String, Object> myModel = new HashMap<String, Object>();
+
+		List<AcademicTerm> p = serviceAcademicTerm.getAcademicsTerm(term);
+
+		myModel.put("academicTerms", p);
+
+		return new ModelAndView("academicTerm/degree/list", "model", myModel);
+	}
+	
+	@RequestMapping(value = "/academicTerm/{term}/degree/{idDegree}/view.htm")
+	protected ModelAndView formViewAcademicTermDegree(@PathVariable("term") String term,
+			@PathVariable("idDegree") Long id_degree)
 			throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
 		// ModelAndView model = new ModelAndView();
-		AcademicTerm p = serviceAcademicTerm.getAcademicTerm(id);
-//		Degree d = serviceDegree.getDegreeAcademicTerm(p);
+		AcademicTerm a = serviceAcademicTerm.getAcademicTermDegree(term,id_degree);
+		//Degree d = serviceDegree.getDegreeAcademicTerm(p);
 //		p.setDegree(d);
-		myModel.put("academicTerm", p);
+		
+		myModel.put("academicTerm", a);
 
 		
 
-		List<Course> courses = serviceCourse.getCoursesByAcademicTerm(p);
+		List<Course> courses = serviceCourse.getCoursesByAcademicTermDegree(term, id_degree);
 		
 
 		if (courses != null)
@@ -138,77 +186,101 @@ public class AcademicTermController {
 	
 		return new ModelAndView("academicTerm/view", "model", myModel);
 	}
-	
 	/**
 	 * Methods for modifying academic Term
 	 */
-	@RequestMapping(value = "/academicTerm/modifyChoose/{academicTermId}.htm", method = RequestMethod.POST)
-	public String formModifySystem(@PathVariable("academicTermId") Long id,
-			@ModelAttribute("modifyAcademicTerm") AcademicTerm modify,
+	
+	@RequestMapping(value = "/academicTerm/{term_id}/modify.htm", method = RequestMethod.GET)
+	protected String formModifyActivities(@PathVariable("term_id") String term_id,
+			Model model) throws ServletException {
+
+		//List<AcademicTerm> p = serviceAcademicTerm.getAcademicsTerm(term);
+		//model.addAttribute("idDegree",id_degree);
+		//List<Course> courses= serviceCourse.getCoursesByAcademicTermDegree(term, id_degree);
+		//if(courses != null)
+		//model.addAttribute("courses", courses) ;
+		//p.setCourses(null);
+		AcademicTerm aux = new AcademicTerm();
+		aux.setTerm(term_id);
+		model.addAttribute("generic", aux);
+		
+
+		return "academicTerm/modify";
+	}
+	
+	@RequestMapping(value = "/academicTerm/{term_id}/modify.htm", method = RequestMethod.POST)
+	public String formModifySystem(@PathVariable("term_id") String term_id,
+			@ModelAttribute("generic") AcademicTerm newTerm,
 			BindingResult result, Model model)
-
-	{
-
-		modify.setId(id);
-		if(modify.getDegree() == null)
-			return "redirect://academicTerm/modifyChoose/"+id+".htm";
+	{	
 		
 		if (!result.hasErrors()) {
-			modify.setId(id);
-			boolean success = serviceAcademicTerm.modifyAcademicTerm(modify);
+			//modify.setId(id);
+			boolean success = serviceAcademicTerm.modifyTerm(term_id, newTerm.getTerm());
 			if (success)
-				return "redirect:/academicTerm/view/"+id+".htm";
+				return "redirect:/academicTerm/list.htm";
 			
 		}
 		return "redirect:/error.htm";
 
 	}
 
-	@RequestMapping(value = "/academicTerm/modifyChoose/{academicTermId}.htm", method = RequestMethod.GET)
-	protected String formModifyActivities(@PathVariable("academicTermId") Long id,
-			Model model) throws ServletException {
-
-		AcademicTerm p = serviceAcademicTerm.getAcademicTerm(id);
-		model.addAttribute("idDegree",p.getDegree().getId());
-		
-		
-		model.addAttribute("modifyAcademicTerm", p);
 	
-
-		return "academicTerm/modifyChoose";
-	}
+	
+	
 	/**
-	 * Delete an academicTerm.
+	 * Delete a Term.
 	 */
 	
-	@RequestMapping(value = "/academicTerm/delete/{academicTermId}.htm", method = RequestMethod.GET)
-	public String formDeleteAcademicTerm(@PathVariable("academicTermId") Long id)
+	@RequestMapping(value = "/academicTerm/{term}/delete.htm", method = RequestMethod.GET)
+	public String formDeleteTerm(@PathVariable("term") String term)
 			throws ServletException {
 
-		if (serviceAcademicTerm.deleteAcademicTerm(id)) {
+		if (serviceAcademicTerm.deleteTerm(term)) {
 			return "redirect:/academicTerm/list.htm";
 		} else
 			return "redirect:/error.htm";
 	}
 	
 	/**
-	 * Delete a course of an academicTerm.
+	 * Delete an academicTerm 
 	 */
 	
-	@RequestMapping(value = "/academicTerm/course/delete/{academicTermId}/{courseId}.htm", method = RequestMethod.GET)
-	public String formDeleteCourseofAcademicTerm(@PathVariable("academicTermId") Long id_academicTerm,
+	@RequestMapping(value = "/academicTerm/{term}/degree/{degreeId}/delete.htm", method = RequestMethod.GET)
+	public String formDeleteAcademicTerm(@PathVariable("term") String term,
+			@PathVariable("degreeId") Long id_degree)
+			throws ServletException {
+
+		if (serviceAcademicTerm.deleteAcademicTerm(term,id_degree)) {
+			return "redirect:/academicTerm/"+term+"/degrees.htm";
+		} else
+			return "redirect:/error.htm";
+	}
+	
+	/**
+	 * Delete a course of an academicTerm 
+	 */
+	@RequestMapping(value = "/academicTerm/{term}/degree/{degreeId}/course/{courseId}/delete.htm", method = RequestMethod.GET)
+	public String formDeleteAcademicTermCourse(@PathVariable("term") String term,
+			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("courseId") Long id_course)
 			throws ServletException {
 
 		if (serviceCourse.deleteCourse(id_course)) {
-			return "redirect:/academicTerm/view/"+id_academicTerm+".htm";
+			return "redirect:/academicTerm/"+term+"/degree/"+id_degree+"/view.htm";
 		} else
 			return "redirect:/error.htm";
 	}
+	
+
+	
+	
+	
+	
 	/**
 	 * For binding the courses of the academicTerm.
 	 */
-	@InitBinder
+	/*@InitBinder
 	protected void initBinder(WebDataBinder binder) throws Exception {
 		binder.registerCustomEditor(Set.class, "courses",
 				new CustomCollectionEditor(Set.class) {
@@ -219,7 +291,7 @@ public class AcademicTermController {
 						}
 					
 						if (element instanceof String) {
-							Course course = serviceCourse.getCourseByName(element.toString());
+							Course course = serviceCourse.getCourse(Long.parseLong(element.toString()));
 							logger.info("Loking up {} to {}", element,course);
 							return course;
 						}
@@ -230,5 +302,5 @@ public class AcademicTermController {
 				});
 		
 		
-	}
+	}*/
 }

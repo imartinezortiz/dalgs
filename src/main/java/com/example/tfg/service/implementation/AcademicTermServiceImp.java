@@ -19,39 +19,66 @@ public class AcademicTermServiceImp implements AcademicTermService {
 
 	@Transactional(readOnly = false)
 	public boolean addAcademicTerm(AcademicTerm academicTerm) {
-	//	if (!daoAcademicTerm.existByCode(academicTerm.getTerm()))
-			return daoAcademicTerm.addAcademicTerm(academicTerm);
-	//	else
-	//		return false;
+	 
+	 	 if(daoAcademicTerm.isDisabled(academicTerm.getTerm(), academicTerm.getDegree().getId()))
+		 		return daoAcademicTerm.saveAcademicTerm(academicTerm);
+
+	 	 else if (!daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree().getId()))
+				return daoAcademicTerm.addAcademicTerm(academicTerm);	
+	 	return false;
 
 	}
 
+/*
 	@Transactional(readOnly = true)
 	public List<AcademicTerm> getAll() {
 		return daoAcademicTerm.getAll();
 	}
-
+*/
 	@Transactional(readOnly = false)
 	public boolean modifyAcademicTerm(AcademicTerm academicTerm) {
-		return daoAcademicTerm.saveAcademicTerm(academicTerm);
-	
+	 	if (!daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree().getId()))
+	 		return daoAcademicTerm.saveAcademicTerm(academicTerm);
+	 	return false;
 	}
 
 	@Transactional(readOnly = false)
-	public AcademicTerm getAcademicTerm(Long id) {
-		return daoAcademicTerm.getAcademicTerm(id);
+	public List<AcademicTerm> getAcademicsTerm(String term) {
+		return daoAcademicTerm.getAcademicsTerm(term);
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteAcademicTerm(Long id) {
-		return daoAcademicTerm.deleteAcademicTerm(id);
+	public boolean deleteTerm(String term) {
+		return daoAcademicTerm.deleteTerm(term);
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED)
+	public boolean deleteAcademicTerm(String term,Long id_degree) {
+		return daoAcademicTerm.deleteAcademicTerm(term, id_degree);
 	}
 
 	@Transactional(readOnly = false)
 	public List<AcademicTerm> getAcademicTermsForDegree(Long id_degree) {
 		return daoAcademicTerm.getAcademicTermsForDegree(id_degree);
 	}
-	
+	@Transactional(readOnly = true)
+	public List<String> getAllTerms() {
+		return daoAcademicTerm.getAllTerms();
+	}
+
+	@Transactional(readOnly = true)
+	public AcademicTerm getAcademicTermDegree(String term, Long id_degree) {
+		return daoAcademicTerm.getAcademicTermDegree(term,id_degree);
+	}
+
+	@Transactional(readOnly = false)
+	public boolean modifyTerm(String term, String newTerm) {
+		if(!daoAcademicTerm.existTerm(newTerm))
+		return daoAcademicTerm.modifyTerm(term, newTerm);
+		return false;
+	}
+
+
 
 
 }

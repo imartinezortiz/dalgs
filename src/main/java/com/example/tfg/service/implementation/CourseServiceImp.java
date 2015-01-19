@@ -11,6 +11,7 @@ import com.example.tfg.domain.AcademicTerm;
 import com.example.tfg.domain.Competence;
 import com.example.tfg.domain.Course;
 import com.example.tfg.repository.CourseDao;
+import com.example.tfg.repository.DegreeDao;
 import com.example.tfg.service.CourseService;
 
 @Service
@@ -19,9 +20,12 @@ public class CourseServiceImp implements CourseService {
 	@Autowired
 	private CourseDao daoCourse;
 	
+	@Autowired
+	private DegreeDao daoDegree;
+	
 	@Transactional(readOnly = false)
 	public boolean addCourse(Course course) {
-		if (!daoCourse.existByName(course.getName()))
+		if (!daoCourse.exist(course))
 		//if (!daoCourse.existByAcademicTerm(course.getAcademicTerm()))			
 				return daoCourse.addCourse(course);
 		else return false;
@@ -49,12 +53,21 @@ public class CourseServiceImp implements CourseService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Course> getCoursesByAcademicTerm(AcademicTerm at) {
-		return daoCourse.getCoursesByAcademicTerm(at);
+	public List<Course> getCoursesByAcademicTerm(String term) {
+		return daoCourse.getCoursesByAcademicTerm(term);
 	}
 
 	@Transactional(readOnly=false)
-	public  Course getCourseByName(String name){
-		return daoCourse.getCourseByName(name);
+	public  boolean exists(Course course){
+		return daoCourse.exist(course);
 	}
+
+	@Transactional(readOnly = true)
+	public List<Course> getCoursesByAcademicTermDegree(String term,
+			Long id_degree) {
+		
+		return daoCourse.getCoursesByAcademicTermDegree(term,id_degree);
+	}
+
+
 }

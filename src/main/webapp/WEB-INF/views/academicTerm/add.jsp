@@ -16,17 +16,31 @@
 
 	<div class="panel panel-primary group category">
 		<div class="panel-heading">
-			<h3 class="panel-title list">Add Academic Term</h3>
+			<h3 class="panel-title list">Add AcademicTerm</h3>
 		</div>
 		<div class="panel-body">
+			<%-- 	<form:form  method="post" modelAttribute="modifyProduct" > (ResquestParam)  --%>
 
 			<form:form method="post" commandName="addAcademicTerm" role="form">
-				<div class="form-group">
-					<label>Term: </label>
+  				<div class="form-group">
+  					<label>Term: </label>
 					<form:input path="term" class="form-control" placeholder="Code of the academicTerm" required="true"/>
 				</div>
-	
 				
+
+				<div class="form-group">
+					<label>Degrees List:</label>
+					
+
+					<form:select class="form-control 2" path="degree" id="degreeSelect">
+						<form:option value=""> --Select an option-- </form:option>
+						<c:forEach items="${degrees}" var="degree">
+							<form:option value="${degree.id}">${degree.code}-${degree.name}</form:option>
+						</c:forEach>
+					</form:select>
+
+				</div>
+
 				<input type="submit" class="btn btn-success" value="Add" />
 
 			</form:form>
@@ -34,6 +48,9 @@
 	</div>
 </body>
 </html>
-<div class="home-button"><a class="btn home" href="<c:url value="/home.htm"/>">Home</a></div></body>
+<div class="home-button">
+	<a class="btn home" href="<c:url value="/home.htm"/>">Home</a>
+</div>
+</body>
 </body>
 </html>

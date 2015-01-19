@@ -14,8 +14,9 @@ public interface CourseService {
 	public boolean modifyCourse(Course course);
 	public  Course getCourse(Long id);
 	public boolean deleteCourse(Long id);
-    public List<Course> getCoursesByAcademicTerm(AcademicTerm at);
-	public Course getCourseByName(String name);
+    public List<Course> getCoursesByAcademicTerm(String term);
+	public List<Course> getCoursesByAcademicTermDegree(String term,
+			Long id_degree);
 
 
 }

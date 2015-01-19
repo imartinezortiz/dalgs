@@ -71,10 +71,13 @@ public class CourseController {
 		return serviceDegree.getAll();
 	}
 	*/
+	
+	/*s
 	@ModelAttribute("academicTerms")
-	public List<AcademicTerm> academicTerms() {
-		return serviceAcademicTerm.getAll();
+	public List<String> academicTerms() {
+		return serviceAcademicTerm.getAllTerms();
 	}
+	*/
 	
 	@ModelAttribute("subjects")
 	public List<Subject> subjects() {
@@ -105,7 +108,6 @@ public class CourseController {
 				return "redirect:/course/add.htm";
 		
 		if (!result.hasErrors()) {
-			newCourse.setName(newCourse.getAcademicTerm().getTerm()+"-"+newCourse.getSubject().getName()+"-"+newCourse.getSubject().getDegree().getName());
 			boolean created = serviceCourse.addCourse(newCourse);
 			
 		
@@ -124,17 +126,13 @@ public class CourseController {
 	 * Methods for listing courses
 	 */
 
-	@RequestMapping(value = "/course/list.htm")
-	public ModelAndView handleRequestCourseList(HttpServletRequest request,
+	@RequestMapping(value = "/academicTerm/{term}/course/list.htm")
+	public ModelAndView handleRequestCourseList(@PathVariable("term") String term, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		String now = (new Date()).toString();
-		logger.info("Returning hello view with " + now);
-
 		Map<String, Object> myModel = new HashMap<String, Object>();
-		myModel.put("now", now);
 
-		List<Course> result = serviceCourse.getAll();
+		List<Course> result = serviceCourse.getCoursesByAcademicTerm(term);
 		myModel.put("courses", result);
 
 		return new ModelAndView("course/list", "model", myModel);
@@ -145,12 +143,12 @@ public class CourseController {
 	 */
 	
 
-	@RequestMapping(value = "/course/modify/{courseId}.htm", method = RequestMethod.GET)
-	protected String formModifyCourses(@PathVariable("courseId") Long id,
+	@RequestMapping(value = "/academicTerm/{term}/course/{courseId}/modify.htm", method = RequestMethod.GET)
+	protected String formModifyCourses(@PathVariable("term") String term, @PathVariable("courseId") Long id,
 			Model model) throws ServletException {
 		Course p = serviceCourse.getCourse(id);
 		
-		model.addAttribute("idAcademicTerm",p.getAcademicTerm().getId());
+		model.addAttribute("idAcademicTerm",term);
 		model.addAttribute("idSubject", p.getSubject().getId());
 	
 		model.addAttribute("activities", serviceActivity.getAll());

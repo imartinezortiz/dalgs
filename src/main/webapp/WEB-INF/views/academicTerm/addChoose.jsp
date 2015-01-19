@@ -24,7 +24,7 @@
 			<form:form method="post" commandName="addAcademicTerm" role="form">
   				<div class="form-group">
   					<label>Term: </label>
-					<form:input path="term" class="form-control" placeholder="Code of the academicTerm" required="true"/>
+					<form:input path="term" class="form-control" placeholder="Code of the academicTerm" readonly="true"/>
 				</div>
 				
 
