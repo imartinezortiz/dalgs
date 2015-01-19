@@ -23,6 +23,7 @@ INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES
 INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES (9,'SUB9','Sistemas Operativos','SO', 3);
 
 -- Course Inserts
+
 INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (1, '1', '1');
 INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (2, '1', '2');
 INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (3, '1', '3');
