@@ -23,14 +23,9 @@
 			<form:form method="post" commandName="addcourse" role="form">
 
 				<div class="form-group">
-					<label>Academic Term</label>
-					<form:select class="form-control 2" path="academicTerm"
-						id="degreeSelect">
-						<form:option value="">-- Select an option --</form:option>
-						<c:forEach items="${academicTerms}" var="at">
-							<form:option value="${at.id}">${at.term}-${at.degree.name}</form:option>
-						</c:forEach>
-					</form:select>
+					<label>Academic Term</label> 
+					<p>${academicTerm.term} &nbsp; ${academicTerm.degree.name}</p>
+					
 					
 				</div>
 
@@ -40,7 +35,7 @@
 						id="subjectSelect">
 						<form:option value="">-- Select an option --</form:option>
 						<c:forEach items="${subjects}" var="subject">
-							<form:option value="${subject.id}">${subject.code}-${subject.name}-${subject.degree.name}</form:option>
+							<form:option value="${subject.id}">${subject.code} - ${subject.name}</form:option>
 						</c:forEach>
 					</form:select>
 

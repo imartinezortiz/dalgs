@@ -52,10 +52,11 @@ public class CourseServiceImp implements CourseService {
 		return daoCourse.deleteCourse(id);
 	}
 
-	@Transactional(readOnly = true)
+	/*@Transactional(readOnly = true)
 	public List<Course> getCoursesByAcademicTerm(String term) {
 		return daoCourse.getCoursesByAcademicTerm(term);
 	}
+	*/
 
 	@Transactional(readOnly=false)
 	public  boolean exists(Course course){
@@ -63,10 +64,9 @@ public class CourseServiceImp implements CourseService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Course> getCoursesByAcademicTermDegree(String term,
-			Long id_degree) {
+	public List<Course> getCoursesByAcademicTerm(Long id_academic) {
 		
-		return daoCourse.getCoursesByAcademicTermDegree(term,id_degree);
+		return daoCourse.getCoursesByAcademicTerm(id_academic);
 	}
 
 

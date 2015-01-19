@@ -19,12 +19,11 @@
 			<h3 class="panel-title list">Add AcademicTerm</h3>
 		</div>
 		<div class="panel-body">
-			<%-- 	<form:form  method="post" modelAttribute="modifyProduct" > (ResquestParam)  --%>
 
 			<form:form method="post" commandName="addAcademicTerm" role="form">
   				<div class="form-group">
   					<label>Term: </label>
-					<form:input path="term" class="form-control" placeholder="Code of the academicTerm" readonly="true"/>
+					<form:input path="term" class="form-control" readonly="true"/>
 				</div>
 				
 

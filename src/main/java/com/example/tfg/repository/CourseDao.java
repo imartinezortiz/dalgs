@@ -15,14 +15,13 @@ public interface CourseDao {
 	public List<Course> getAll();
     public boolean saveSubject(Course course);
     public Course getCourse(Long id);
-    public List<Course> getCoursesByAcademicTerm(String term);
+    //public List<Course> getCoursesByAcademicTerm(String term);
 	public boolean deleteCourse(Long id);
 	
 	//public boolean existByAcademicTerm(AcademicTerm aT);
 	//public Course getCourseByName(String name);
 	//public boolean exist(Course course);
 	public boolean exist(Course course);
-	public List<Course> getCoursesByAcademicTermDegree(String term,
-			Long id_degree);
+	public List<Course> getCoursesByAcademicTerm(Long id_academic);
 
 }
