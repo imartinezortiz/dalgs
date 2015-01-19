@@ -8,28 +8,36 @@
 <body>
 <div class="table-responsive list">
     <div class="panel-heading list">
-        <h4>Academic Terms</h4>
-        <a  class="btn list-btn btn-warning2" href="<c:url value='/academicTerm/add.htm'/>"> Add Term </a>
+        <h4>Academic Terms ${term}</h4>
+        <a  class="btn list-btn btn-warning2" href="<c:url value='/academicTerm/${term}/add.htm'/>"> Add Academic Term </a>
     </div>
     <table class="table table-striped table-bordered">
 		<tr align="center">
-			<td>Term</td>
-
+			
+			<td>Code Degree</td>
+			<td>Name Degree</td>
+<!--			<td>Name</td>
+			<td>Description</td>
+			<td>Subject</td>
+			<td>Actions</td>-->
 		</tr>
 		
 		
-		<c:forEach items="${model.academicTerms}" var="term" varStatus="loop">
+		<c:forEach items="${model.academicTerms}" var="academicTerm">
 		
 			<tr align="center">
-				<td><c:out value="${term}" /></td>
-
+			
+				<td><c:out value="${academicTerm.degree.code}" /></td>
+				<td><c:out value="${academicTerm.degree.name}" /></td>
+			<!-- <td><c:out value="${activity.name}" /></td>
+				<td><c:out value="${activity.description}" /></td>
+				<td><c:out value="${activity.subject.name}" /></td>
+				-->
 				
 			
   				<td>
-  					<a href="<c:url value='${term}/degrees.htm'/>" class="btn btn-success">View
-				</a>
-  					
-  					<a href="<c:url value='${term}/delete.htm'/>" class="btn btn-danger">Delete</a>
+  					<a href="<c:url value='/academicTerm/${academicTerm.id}/view.htm'/>" class="btn btn-warning 2">View</a>
+  					<a href="<c:url value='/academicTerm/${academicTerm.id}/delete.htm'/>" class="btn btn-danger">Delete</a>
   				</td>
 		
 			</tr>

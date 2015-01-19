@@ -53,22 +53,23 @@ public class AcademicTermServiceImp implements AcademicTermService {
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteAcademicTerm(String term,Long id_degree) {
-		return daoAcademicTerm.deleteAcademicTerm(term, id_degree);
+	public boolean deleteAcademicTerm(Long id_academic) {
+		return daoAcademicTerm.deleteAcademicTerm(id_academic);
 	}
 
-	@Transactional(readOnly = false)
+	/*@Transactional(readOnly = false)
 	public List<AcademicTerm> getAcademicTermsForDegree(Long id_degree) {
 		return daoAcademicTerm.getAcademicTermsForDegree(id_degree);
 	}
+	*/
 	@Transactional(readOnly = true)
 	public List<String> getAllTerms() {
 		return daoAcademicTerm.getAllTerms();
 	}
 
 	@Transactional(readOnly = true)
-	public AcademicTerm getAcademicTermDegree(String term, Long id_degree) {
-		return daoAcademicTerm.getAcademicTermDegree(term,id_degree);
+	public AcademicTerm getAcademicTerm( Long id_academic) {
+		return daoAcademicTerm.getAcademicTerm(id_academic);
 	}
 
 	@Transactional(readOnly = false)

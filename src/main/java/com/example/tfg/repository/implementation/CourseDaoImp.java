@@ -75,7 +75,7 @@ public class CourseDaoImp implements CourseDao {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	@Override
 	public List<Course> getCoursesByAcademicTerm(String term) { 
 		Query query = em.createQuery("select c from Course c  join c.academicTerm t where t.term=?1");
@@ -84,6 +84,7 @@ public class CourseDaoImp implements CourseDao {
 		return query.getResultList();
 	}
 
+	*/
 	
 
 	public boolean exist(Course course) {
@@ -98,13 +99,12 @@ public class CourseDaoImp implements CourseDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Course> getCoursesByAcademicTermDegree(String term,
-			Long id_degree) {
-		Degree degree = em.getReference(Degree.class, id_degree);
+	public List<Course> getCoursesByAcademicTerm(Long academic_id) {
+		AcademicTerm academic = em.getReference(AcademicTerm.class, academic_id);
 
-		Query query = em.createQuery("select c from Course c  join c.academicTerm a  where a.term=?1 and a.degree=?2");
-		query.setParameter(1, term);
-		query.setParameter(2, degree);
+		Query query = em.createQuery("select c from Course c  join c.academicTerm a  where a=?1");
+		query.setParameter(1, academic);
+
  
 		if (query.getResultList().isEmpty())
 			return null;

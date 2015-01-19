@@ -18,25 +18,18 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">Course Details</h3>
 			<a class="btn list-btn btn-warning"
-				href="<c:url value='/course/modify/${courseId}.htm'/>">Modify</a>
+				href="<c:url value='/academicTerm/${academicId}/course/${courseId}/modify.htm'/>">Modify</a>
 
 		</div>
 
 		<div class="panel-body">
-
-
 			<div class="form-group">
 				<div class="form-group view">
 					<label>Academic Term: </label> 
 					<p class="details">${model.course.academicTerm.term}</p>
 
 				</div>
-				<div class="form-group view">
-					<label>Subject: </label> 
-					<p class="details">${model.course.subject.code} - ${model.course.subject.name}</p>
-				</div>
-
-
+				
 				<div class="form-group view">
 					<label>Degree: </label> 
 					<p class="details">${model.course.academicTerm.degree.name}</p>
@@ -45,9 +38,24 @@
 
 		</div>
 	</div>
+	
+	<div class="panel panel-primary group">
+		<div class="panel-heading">
+			<h3 class="panel-title list"> Subject</h3>			
+		</div>
+		<div class="panel-body">
+		<div class="form-group view">
+				<label>Subject: </label> 
+					<p class="details">${model.course.subject.code} - ${model.course.subject.name}</p>
+				</div>
+		</div>
+	</div>
+	
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
 			<h3 class="panel-title list"> Activity List</h3>
+			<a  class="btn list-btn btn-warning2" href="<c:url value='/course/${courseId}/add.htm'/>"> Add Activity </a>
+			
 		</div>
 		<div class="panel-body">
 
@@ -68,7 +76,7 @@
 						</td>
 
 						<td><a 
-							href="<c:url value='/course/activity/delete/${courseId}/${activity.id}.htm'/>">
+							href="<c:url value='/course/${courseId}/activity/${activity.id}/delete.htm'/>">
 							<img WIDTH="20" HEIGHT="20" border="0" src="<c:url value="/resources/images/error.jpeg" /> " > 
 							</a></td>
 

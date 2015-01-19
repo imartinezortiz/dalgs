@@ -26,7 +26,9 @@
 				
 				<div class="form-group">
 					<label>Academic Term:</label>
-					<form:select class="form-control 2" path="academicTerm" id="termSelect">
+					<p>${academicTerm.term} &nbsp; ${academicTerm.degree.name}</p>
+					
+					<!--<form:select class="form-control 2" path="academicTerm" id="termSelect">
 						<form:option value="">-- Select an option --</form:option>
 						<c:forEach items="${academicTerms}" var="at">
 							<c:choose>
@@ -39,6 +41,7 @@
 							</c:choose>
 						</c:forEach>
 					</form:select>
+					-->
 				</div>
 				
 				<div class="form-group">
@@ -48,10 +51,10 @@
 						<c:forEach items="${subjects}" var="subject">
 							<c:choose>
 								<c:when test="${subject.id == idSubject}">
-									<form:option value="${subject.id}" selected='true'>${subject.code}-${subject.name}-${subject.degree.name}</form:option>
+									<form:option value="${subject.id}" selected='true'>${subject.code} - ${subject.name}</form:option>
 								</c:when>
 								<c:otherwise>
-									<form:option value="${subject.id}">${subject.code}-${subject.name}-${subject.degree.name}</form:option>
+									<form:option value="${subject.id}">${subject.code} - ${subject.name} </form:option>
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>

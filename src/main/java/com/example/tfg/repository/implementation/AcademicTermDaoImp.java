@@ -94,28 +94,26 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 		}
 		return true;
 	}
-	public boolean deleteAcademicTerm(String term, Long id_degree) {
-		Degree degree = em.getReference(Degree.class, id_degree);
+	public boolean deleteAcademicTerm(Long id_academic) {
+		//Degree degree = em.getReference(Degree.class, id_degree);
 
-		Query query = em
-				.createQuery("select a from AcademicTerm a where a.degree=?1 and a.term=?2");
-		query.setParameter(1, degree);
-		query.setParameter(2, term);
+		AcademicTerm academic =  em.getReference(AcademicTerm.class, id_academic);
+
 		
-		
-		try {
-			AcademicTerm aux = (AcademicTerm) query.getSingleResult();
-			aux.setDeleted(true);
-			em.merge(aux);
-			return true;
-			
-		} catch (Exception e) {
-			return false;
-		}
+			academic.setDeleted(true);
+			try {
+
+				em.merge(academic);
+				// em.remove(academicTerm);
+				return true;
+				
+			} catch (Exception e) {
+				return false;
+			}
 		
 	}
 
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	public List<AcademicTerm> getAcademicTermsForDegree(Long id_degree) {
 		Degree degree = em.getReference(Degree.class, id_degree);
 
@@ -128,6 +126,7 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 
 		return query.getResultList();
 	}
+	*/
 
 	public boolean existByTerm(String term) {
 		Query query = em.createQuery("from AcademicTerm a where a.term=?1");
@@ -158,8 +157,9 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 	}
 
 	@Override
-	public AcademicTerm getAcademicTermDegree(String term, Long id_degree) {
-		Degree degree = em.getReference(Degree.class, id_degree);
+	public AcademicTerm getAcademicTerm(Long id_academic) {
+		return  em.getReference(AcademicTerm.class, id_academic);
+		/*Degree degree = em.getReference(Degree.class, id_degree);
 
 		Query query = em
 				.createQuery("select a from AcademicTerm a  where a.term=?1 and a.degree=?2");
@@ -170,6 +170,7 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 			return null;
 		else
 			return (AcademicTerm) query.getSingleResult();
+			*/
 	}
 
 	
