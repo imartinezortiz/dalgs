@@ -27,11 +27,11 @@ public class Degree {
 	private Long id;
 	
 	@Basic(optional=false)
-	@Column(name = "name", length=50,nullable=false)
+	@Column(name = "name", length=50, nullable=false)
 	private String name;
 	
 	@Basic(optional=false)
-	@Column(name = "description", length=250,nullable=false)
+	@Column(name = "description", length=250, nullable=false)
 	private String description;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="degree")//, cascade= CascadeType.ALL)//, orphanRemoval=true)

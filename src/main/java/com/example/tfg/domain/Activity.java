@@ -36,7 +36,7 @@ public class Activity {
 	private String description;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "id_course", insertable=false, updatable=false)
+	@JoinColumn(name = "id_course")//, insertable=false, updatable=false)
 	private Course course;
 	
 	@Column(name = "isDeleted", nullable=false, columnDefinition="boolean default false")
