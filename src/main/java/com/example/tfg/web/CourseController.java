@@ -148,11 +148,12 @@ public class CourseController {
 			BindingResult result, Model model)
 
 	{
-		if(modify.getAcademicTerm() == null)
-			return "redirect:/academicTerm/"+id_academic+"/course/"+id_course+"/modify.htm";
+//		if(modify.getAcademicTerm() == null)
+//			return "redirect:/academicTerm/"+id_academic+"/course/"+id_course+"/modify.htm";
 		
 		if (!result.hasErrors()) {
 			modify.setId(id_course);
+			modify.setAcademicTerm(serviceAcademic.getAcademicTerm(id_academic));
 			boolean success = serviceCourse.modifyCourse(modify);
 			if (success)
 				return "redirect:/academicTerm/"+id_academic+"/course/"+id_course+"/view.htm";

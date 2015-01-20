@@ -26,7 +26,7 @@ INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES
 INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (1, '1', '1');
 INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (2, '1', '2');
 INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (3, '1', '3');
-INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (4, '2', '4');
+INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (4, '2', '1');
 INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (5, '2', '5');
 INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (6, '3', '7');
 
@@ -38,19 +38,19 @@ INSERT INTO competence (id_competence,code_competence,description,name,id_degree
 INSERT INTO competence (id_competence,code_competence,description,name,id_degree) VALUES (5,'COMP5','Aprendizaje de sincronizacion y comunicacion de procesos','Sincronizacion de Procesos',3);
 
 
--- Activity Inserts 
---INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (1,'ACT1','Desarrollar diagramas de casos de uso','Casos de Uso',1);
---INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (2,'ACT2','Elaborar un diagrama Entidad-Relacion','Entidad-Relacion',1);
---INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (3,'ACT1','Desarrollar diagramas de casos de uso','Casos de Uso',2);
---INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (4,'ACT2','Elaborar un diagrama Entidad-Relacion','Entidad-Relacion',2);
---INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (5,'ACT3','Elaborar scripts en c','Lenguaje c',3);
+--Activity Inserts 
+INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (1,'ACT1','Desarrollar diagramas de casos de uso','Casos de Uso',1);
+INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (2,'ACT2','Elaborar un diagrama Entidad-Relacion','Entidad-Relacion',1);
+INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (3,'ACT1','Desarrollar diagramas de casos de uso','Casos de Uso',2);
+INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (4,'ACT2','Elaborar un diagrama Entidad-Relacion','Entidad-Relacion',2);
+INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (5,'ACT3','Elaborar scripts en c','Lenguaje c',3);
 
 -- Activity Inserts 
---INSERT INTO activity_competencestatus (id_activity, id_competence, percentage) VALUES ('1', 1,'10');
---INSERT INTO activity_competencestatus (id_activity, id_competence, percentage) VALUES ('2', 3,'20');
---INSERT INTO activity_competencestatus (id_activity, id_competence, percentage) VALUES ('3', 1,'30');
---INSERT INTO activity_competencestatus (id_activity, id_competence, percentage) VALUES ('4', 3, '40');
---INSERT INTO activity_competencestatus (id_activity, id_competence, percentage) VALUES ('5', 5,'20');
+INSERT INTO activity_competencestatus (id_activity, id_competence, percentage) VALUES ('1', 1,'10');
+INSERT INTO activity_competencestatus (id_activity, id_competence, percentage) VALUES ('2', 3,'20');
+INSERT INTO activity_competencestatus (id_activity, id_competence, percentage) VALUES ('3', 1,'30');
+INSERT INTO activity_competencestatus (id_activity, id_competence, percentage) VALUES ('4', 3, '40');
+INSERT INTO activity_competencestatus (id_activity, id_competence, percentage) VALUES ('5', 5,'20');
 
 -- Subject_Competence Inserts 
 INSERT INTO subject_competence(id_subject,id_competence) VALUES (1,1)

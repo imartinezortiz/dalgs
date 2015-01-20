@@ -54,7 +54,7 @@
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
 			<h3 class="panel-title list"> Activity List</h3>
-			<a  class="btn list-btn btn-warning2" href="<c:url value='/course/${courseId}/add.htm'/>"> Add Activity </a>
+			<a  class="btn list-btn btn-warning2" href="<c:url value='/academicTerm/${academicId}/course/${courseId}/add.htm'/>"> Add Activity </a>
 			
 		</div>
 		<div class="panel-body">
