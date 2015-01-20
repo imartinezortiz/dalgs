@@ -65,7 +65,7 @@
 							</td>
 
 							<td><a class="btn btn-success"
-								href="<c:url value='/academicTerm/${model.academicTerm.id}/course/${course.id}/view.htm'/>">
+								href="<c:url value='/academicTerm/${model.academicTerm.id}/course/${course.id}.htm'/>">
 									View </a> <a class="btn btn-danger"
 								href="<c:url value='/academicTerm/${model.academicTerm.id}/course/${course.id}/delete.htm'/>">
 									Delete </a></td>

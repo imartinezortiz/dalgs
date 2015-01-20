@@ -50,6 +50,7 @@ public class ActivityServiceImp implements ActivityService {
 
 	@Transactional(propagation = Propagation.REQUIRED)
 	public boolean deleteActivity(Long id) {
+		
 		return daoActivity.deleteActivity(id);
 	}
 
@@ -94,12 +95,14 @@ public class ActivityServiceImp implements ActivityService {
 			for (CompetenceStatus aux: c){
 				if(aux.getCompetence().getId() == id_competenceStatus){
 					a.getCompetenceStatus().remove(aux);
+					break;
 					
-					//daoActivity.saveActivity(c);
-					return true;
+					
 				}
+				
 			}
-			return false;
+			daoActivity.saveActivity(a);
+			return true;
 
 		} catch (Exception e) {
 			return false;

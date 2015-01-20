@@ -15,12 +15,12 @@ INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (6, '2015-2016
 INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES (1,'SUB1','Ingenieria Software','IS',1);
 INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES (2,'SUB2','Bases de Datos','BD', 1);
 INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES (3,'SUB3','Sistemas Operativos','SO', 1);
-INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES (4,'SUB1','Ingenieria Software','IS',2);
-INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES (5,'SUB2','Bases de Datos','BD', 2);
-INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES (6,'SUB3','Sistemas Operativos','SO', 2); 
-INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES (7,'SUB1','Ingenieria Software','IS',3);
-INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES (8,'SUB2','Bases de Datos','BD', 3);
-INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES (9,'SUB3','Sistemas Operativos','SO', 3);
+INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES (4,'SUB4','Ingenieria Software','IS',2);
+INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES (5,'SUB5','Bases de Datos','BD', 2);
+INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES (6,'SUB6','Sistemas Operativos','SO', 2); 
+INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES (7,'SUB7','Ingenieria Software','IS',3);
+INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES (8,'SUB8','Bases de Datos','BD', 3);
+INSERT INTO subject (id_subject,code_subject,description,name, id_degree) VALUES (9,'SUB9','Sistemas Operativos','SO', 3);
 
 -- Course Inserts
 INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (1, '1', '1');
@@ -46,11 +46,11 @@ INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALU
 INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (5,'ACT3','Elaborar scripts en c','Lenguaje c',3);
 
 -- Activity Inserts 
-INSERT INTO activity_competencestatus (id_activity, id_competence, percentage) VALUES ('1', 1,'10');
-INSERT INTO activity_competencestatus (id_activity, id_competence, percentage) VALUES ('2', 3,'20');
-INSERT INTO activity_competencestatus (id_activity, id_competence, percentage) VALUES ('3', 1,'30');
-INSERT INTO activity_competencestatus (id_activity, id_competence, percentage) VALUES ('4', 3, '40');
-INSERT INTO activity_competencestatus (id_activity, id_competence, percentage) VALUES ('5', 5,'20');
+INSERT INTO activity_competencestatus (id_activity, competence_id_competence, percentage) VALUES ('1', 1,'10');
+INSERT INTO activity_competencestatus (id_activity, competence_id_competence, percentage) VALUES ('2', 3,'20');
+INSERT INTO activity_competencestatus (id_activity, competence_id_competence, percentage) VALUES ('3', 1,'30');
+INSERT INTO activity_competencestatus (id_activity, competence_id_competence, percentage) VALUES ('4', 3, '40');
+INSERT INTO activity_competencestatus (id_activity, competence_id_competence, percentage) VALUES ('5', 5,'20');
 
 -- Subject_Competence Inserts 
 INSERT INTO subject_competence(id_subject,id_competence) VALUES (1,1)

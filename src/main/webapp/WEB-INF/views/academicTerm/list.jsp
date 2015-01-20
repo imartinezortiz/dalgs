@@ -36,7 +36,7 @@
 				
 			
   				<td>
-  					<a href="<c:url value='/academicTerm/${academicTerm.id}/view.htm'/>" class="btn btn-warning 2">View</a>
+  					<a href="<c:url value='/academicTerm/${academicTerm.id}.htm'/>" class="btn btn-warning 2">View</a>
   					<a href="<c:url value='/academicTerm/${academicTerm.id}/delete.htm'/>" class="btn btn-danger">Delete</a>
   				</td>
 		
