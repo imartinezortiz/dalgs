@@ -19,7 +19,7 @@ import org.hibernate.annotations.Where;
 
 
 @Entity
-@Table(name = "academicterm")//, uniqueConstraints = {@UniqueConstraint(columnNames={"term", "id_degree"})})
+@Table(name = "academicterm", uniqueConstraints = {@UniqueConstraint(columnNames={"term", "id_degree"})})
 @Where(clause = "isDeleted='false'")
 public class AcademicTerm {
 	

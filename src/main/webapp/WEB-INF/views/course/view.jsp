@@ -30,10 +30,7 @@
 
 				</div>
 				
-				<div class="form-group view">
-					<label>Degree: </label> 
-					<p class="details">${model.course.academicTerm.degree.name}</p>
-				</div>
+				
 			</div>
 
 		</div>
@@ -54,7 +51,7 @@
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
 			<h3 class="panel-title list"> Activity List</h3>
-			<a  class="btn list-btn btn-warning2" href="<c:url value='/course/${courseId}/add.htm'/>"> Add Activity </a>
+			<a  class="btn list-btn btn-warning2" href="<c:url value='/academicTerm/${academicId}/course/${courseId}/add.htm'/>"> Add Activity </a>
 			
 		</div>
 		<div class="panel-body">
@@ -75,8 +72,11 @@
 							</div>
 						</td>
 
-						<td><a 
-							href="<c:url value='/course/${courseId}/activity/${activity.id}/delete.htm'/>">
+						<td><a class="btn btn-success" 
+							href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}.htm'/>">
+									View </a> 
+							<a 
+							href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}/delete.htm'/>">
 							<img WIDTH="20" HEIGHT="20" border="0" src="<c:url value="/resources/images/error.jpeg" /> " > 
 							</a></td>
 

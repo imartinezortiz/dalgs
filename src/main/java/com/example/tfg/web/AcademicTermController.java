@@ -139,7 +139,7 @@ public class AcademicTermController {
 		return new ModelAndView("academicTerm/list", "model", myModel);
 	}
 	
-	@RequestMapping(value = "/academicTerm/{academicId}/view.htm")
+	@RequestMapping(value = "/academicTerm/{academicId}.htm")
 	protected ModelAndView formViewAcademicTermDegree(@PathVariable("academicId") Long id)
 			throws ServletException {
 		Map<String, Object> myModel = new HashMap<String, Object>();

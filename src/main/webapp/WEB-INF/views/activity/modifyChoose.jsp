@@ -40,23 +40,7 @@
 				</div>
 
 								
-				<%-- <div class="form-group">
-					<label>Course:</label>
-					<form:select class="form-control 2" path="course" id="courseSelect">
-						<form:option value=""> --Select an option-- </form:option>
-						<c:forEach items="${courses}" var="c">
-							<c:choose>
-								<c:when test="${c.id == idCourse}">
-									<form:option value="${c.id}" selected='true'>${c.name}</form:option>
-									</c:when>
-									<c:otherwise>
-									<form:option value="${c.id}">${c.name}</form:option>
-									</c:otherwise>
-							</c:choose>
-						</c:forEach>
-					</form:select>
-				</div>
- --%>
+
 				<div class="panel-body">
 					<label>Competence Status List</label>
 				
@@ -69,7 +53,7 @@
 						<c:forEach items="${competenceStatus}" var="compStatus" >		
 							<tr align="center">
 								<td><div class="td-content">
-										<c:out value="${competences[compStatus.id_competence-1].name}" />
+										<c:out value="${compStatus.name}" />
 								
 									</div></td>
 								<td>
@@ -91,7 +75,7 @@
 			<form:form method="post" commandName="addcompetencestatus">
 					<h4> New Competence Status</h4>
 					<label>Competence:</label>
-					<form:select class="form-control 2" path="id_competence"
+					<form:select class="form-control 2" path=""
 						id="competence">
 						<form:option value="0"> --Select an option-- </form:option>
 						<c:forEach items="${competences}" var="comp">
@@ -104,10 +88,10 @@
 
 
 					<a class="btn btn-success CompSta" 
-						href="<c:url value='/course/${idCourse}/activity/${activity.id}/addCompetenceStatus.htm'/>">
+						href="<c:url value='/academicTerm/${academicId}/course/${idCourse}/activity/${activityId}/addCompetenceStatus.htm'/>">
 							Add Competence Status
 					</a>
-					<!-- <input type="submit" class="btn btn-success CompSta"
+					 <input type="submit" class="btn btn-success CompSta" name="button1"
 						value="Add Competence Status" /> -->
 
 			</form:form>

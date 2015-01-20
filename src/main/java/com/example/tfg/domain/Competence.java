@@ -15,11 +15,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.PostLoad;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Where;
 
 @Entity
-@Table(name = "competence")
+@Table(name = "competence",uniqueConstraints=
+			@UniqueConstraint(columnNames={"code_competence", "id_degree"}))
 @Where(clause = "isDeleted='false'")
 public class Competence {
 

@@ -38,10 +38,12 @@ import com.example.tfg.domain.Competence;
 import com.example.tfg.domain.CompetenceStatus;
 import com.example.tfg.domain.Course;
 import com.example.tfg.domain.Subject;
+import com.example.tfg.service.AcademicTermService;
 import com.example.tfg.service.ActivityService;
 import com.example.tfg.service.CompetenceService;
 import com.example.tfg.service.CourseService;
 import com.example.tfg.service.SubjectService;
+import com.example.tfg.web.form.FormModifyActivity;
 
 @Controller
 public class ActivityController {
@@ -59,53 +61,52 @@ public class ActivityController {
 	@Autowired
 	private CompetenceService serviceCompetence; 
 	
+	@Autowired
+	private AcademicTermService serviceAcademicTerm;
+	
 	private static final Logger logger = LoggerFactory
 			.getLogger(ActivityController.class);
 
 	
 
-	@ModelAttribute("competences")
-	public List<Competence> competences() {
-		return serviceCompetence.getAll();
-	}
+//	@ModelAttribute("competences")
+//	public List<Competence> competences() {
+//		return serviceCompetence.getAll();
+//	}
 	
-	@ModelAttribute("courses")
-	public List<Course> courses() {
-		return serviceCourse.getAll();
-	}
+//	@ModelAttribute("courses")
+//	public List<Course> courses() {
+//		return serviceCourse.getAll();
+//	}
 	
-	/*@ModelAttribute("competenceStatus")
-	public List<CompetenceStatus> competencestatus() {
-		return (List<CompetenceStatus>) col;
-	}
-*/
-	//private List<CompetenceStatus> col = new ArrayList<CompetenceStatus>();
+//	@ModelAttribute("competenceStatus")
+//	public List<CompetenceStatus> competencestatus() {
+//		return (List<CompetenceStatus>) col;
+//	}
+
+//	private List<CompetenceStatus> col = new ArrayList<CompetenceStatus>();
 	/**
 	 * Methods for adding activities
 	 */
-	@RequestMapping(value = "/course/{idCourse}/activity/add.htm", method = RequestMethod.GET)
-	protected String getAddNewActivityForm(@PathVariable("idCourse") Long id_course, Model model) {
+	
+
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/add.htm", method = RequestMethod.GET)
+	protected String getAddNewActivityForm(@PathVariable("academicId") Long id_Long, @PathVariable("courseId") Long id_course, Model model) {
 		Activity newActivity = new Activity();
-		newActivity.setCompetenceStatus(new ArrayList<CompetenceStatus>());
 		newActivity.setCode(serviceActivity.getNextCode());
 		newActivity.setCourse(serviceCourse.getCourse(id_course));
-		model.addAttribute("addactivity", newActivity);	
-
-		//CompetenceStatus cs = new CompetenceStatus();
-		//model.addAttribute("addcompetencestatus", cs);
+		model.addAttribute("addactivity", newActivity);		
 	
-	
-		return "activity/addChoose";
+		return "activity/add";
 
 	}
 
-	@RequestMapping(value = "/course/{idCourse}/activity/add.htm", method = RequestMethod.POST)
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/add.htm", method = RequestMethod.POST)
 	// Every Post have to return redirect
 	public String processAddNewCompetence(
-			@PathVariable("idCourse") Long id_course,
+			@PathVariable("academicId") Long id_academicTerm,
+			@PathVariable("courseId") Long id_course,
 			@ModelAttribute("addactivity") @Valid Activity newactivity, BindingResult result, 
-			//@ModelAttribute("addcompetencestatus") @Valid CompetenceStatus competencestatus, BindingResult result2,
-			//@ModelAttribute("course") @Valid Course course, BindingResult result3, 
 			Model model) {
 		
 //		if(!result.hasErrors()){
@@ -137,7 +138,7 @@ public class ActivityController {
 			boolean created = serviceActivity.addActivity(newactivity);
 			if (created){
 				
-				return "redirect:/course/"+id_course+"/activity/"+newactivity.getId()+"/modify.htm";
+				return "redirect:/academicTerm/" + id_academicTerm + "/course/"+id_course+"/activity/"+ newactivity.getId() +"/modify.htm";
 			}
 			else
 				return "redirect:/activity/add.htm";
@@ -151,84 +152,90 @@ public class ActivityController {
 	 * Methods for listing activities
 	 */
 
-	@RequestMapping(value = "/course/{idCourse}/activity/list.htm")
-	public ModelAndView handleRequestActivityList(@PathVariable("idCourse") Long id_course, HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
-		Map<String, Object> myModel = new HashMap<String, Object>();
-
-		List<Activity> result = serviceActivity.getActivitiesForCourse(id_course);
-		myModel.put("activities", result);
-
-		return new ModelAndView("activity/list", "model", myModel);
-	}
+//	@RequestMapping(value = "/course/{idCourse}/activity/list.htm")
+//	public ModelAndView handleRequestActivityList(@PathVariable("idCourse") Long id_course, HttpServletRequest request,
+//			HttpServletResponse response) throws ServletException, IOException {
+//
+//		Map<String, Object> myModel = new HashMap<String, Object>();
+//
+//		List<Activity> result = serviceActivity.getActivitiesForCourse(id_course);
+//		myModel.put("activities", result);
+//
+//		return new ModelAndView("activity/list", "model", myModel);
+//	}
 
 	/**
 	 * Methods for modifying activities
 	 */
 	
-	@RequestMapping(value = "/course/{idCourse}/activity/{activityId}/modifyChoose.htm", method = RequestMethod.GET)
-	protected String formModifyActivities(@PathVariable("idCourse") Long id_course, @PathVariable("activityId") long id,
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/{activityId}/modify.htm", method = RequestMethod.GET)
+	protected String formModifyActivities(
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("courseId") Long id_course, @PathVariable("activityId") long id_activity,
 			Model model) throws ServletException {
 
-		Activity p = serviceActivity.getActivity(id);
+		Activity p = serviceActivity.getActivity(id_activity);
+		AcademicTerm at = serviceAcademicTerm.getAcademicTerm(id_academic);
 		model.addAttribute("idCourse",id_course);
-		//p.setCourse(null);
-
-		model.addAttribute("modifyactivity", p);
+		List<Competence> competences = serviceCompetence.getCompetencesForDegree(at.getDegree().getId());
+		
+		FormModifyActivity fAct = new FormModifyActivity();
+		fAct.setActivity(p);
+		fAct.setCompetences(competences);
+		
+		model.addAttribute("competenceStatus", fAct.getActivity().getCompetenceStatus());
+		model.addAttribute("modifyactivity", fAct.getActivity());
+//		model.addAttribute("competences", fAct.getCompetences());
+//		CompetenceStatus cs = new CompetenceStatus();
+//		model.addAttribute("addcompetencestatus", cs);
+		
+		
+		
 	
-		CompetenceStatus cs = new CompetenceStatus();
-		model.addAttribute("addcompetencestatus", cs);
-	
-		//model.addAttribute("finish", "false;"); --
-		/*for (CompetenceStatus coms : p.getCompetenceStatus())
-			for (CompetenceStatus coms2 : col)	
-				if (coms.getId_competence() == coms2.getId_competence() && coms.getPercentage() == coms2.getPercentage()){
-					contains = true;
-					break;
-				}
-		if (!contains)		
-				col.addAll(p.getCompetenceStatus());*/
-		//model.addAttribute("col", p.getCompetenceStatus());
-		return "/course/"+id_course+"/activity/"+id+"/modifyChoose";
+		return "activity/modifyChoose";
+//		return "/course/"+id_course+"/activity/"+id_academic+"/modifyChoose";
 	}
-	
-	@RequestMapping(value = "/course/{idCourse}/activity/{activityId}/modifyChoose.htm", method = RequestMethod.POST)
-	public String formModifySystem(@PathVariable("activityId") long id,
-			@ModelAttribute("modifyactivity") @Valid Activity modify,BindingResult result, 
-			//@ModelAttribute("addcompetencestatus") @Valid CompetenceStatus competencestatus, BindingResult result2,
-			//@ModelAttribute("course") @Valid Course course, BindingResult result3,
+//	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/{activityId}/modify.htm", method = RequestMethod.GET)
+//	protected String formModifyActivitiess(
+//			@PathVariable("academicId") Long id_academic,
+//			@PathVariable("courseId") Long id_course, @PathVariable("activityId") long id_activity,
+//			Model model) throws ServletException {
+//
+//		
+//		AcademicTerm at = serviceAcademicTerm.getAcademicTerm(id_academic);
+//		model.addAttribute("idCourse",id_course);
+//		List<Competence> competences = serviceCompetence.getCompetencesForDegree(at.getDegree().getId());
+//		
+//		
+//		model.addAttribute("competences", competences);
+//		CompetenceStatus cs = new CompetenceStatus();
+//		model.addAttribute("addcompetencestatus", cs);
+//		
+//		
+//		
+//	
+//		return "activity/modifyChoose";
+////		return "/course/"+id_course+"/activity/"+id_academic+"/modifyChoose";
+//	}
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/{activityId}/modify.htm", params="button1", method = RequestMethod.POST)
+	public String formModifySystem(
+			@PathVariable("academicId") Long id_academicTerm,
+			@PathVariable("courseId") Long id_course,
+			@PathVariable("activityId") Long id_activity,
+			@ModelAttribute("addcompetencestatus") @Valid CompetenceStatus competenceStatus,BindingResult result,
 			Model model)
 
 	{
-	/*	if(!result2.hasErrors() && competencestatus.getId_competence() != 0){
-			if( competencestatus.getPercentage() <= 0.0 || competencestatus.getPercentage() > 100.0)		
-				return "redirect:/activity/modifyChoose/"+id+".htm";
-				
-			for(CompetenceStatus cs: col){
-					if (cs.getId_competence() == competencestatus.getId_competence()){
-						return "redirect:/activity/modifyChoose/"+id+".htm";
-					}
-			}
-					
-			col.add(competencestatus);
-			return "redirect:/activity/modifyChoose/"+id+".htm";
-			
 
-		}
-		
-
-		//modify.setSubject(serviceSubject.getSubject(modify.getSubject().getId()));
-		if(modify.getCourse() == null)
-			return "redirect:/activity/modifyChoose/"+id+".htm";*/
 		
 		if (!result.hasErrors()) {
-			modify.setId(id);
+			Activity a = serviceActivity.getActivity(id_activity);
+			a.getCompetenceStatus().add(competenceStatus);
 			//modify.setCompetenceStatus(col);
-			boolean success = serviceActivity.modifyActivity(modify);
+			boolean success = serviceActivity.modifyActivity(a);
 			if (success){
-				//col = new ArrayList<CompetenceStatus>();
-				return "redirect:/activity/"+id+"/view.htm";
+				
+				return "redirect:/academicTerm/"+id_academicTerm +"/course/"+ id_course+ "/activity/" +id_activity+"/modify.htm";
 			}
 		}
 		return "redirect:/error.htm";
@@ -255,12 +262,14 @@ public class ActivityController {
 	 * Method for delete an activities
 	 */
 	
-	@RequestMapping(value = "/course/{idCourse}/activity/{activityId}/delete.htm", method = RequestMethod.GET)
-	public String formDeleteActivity(@PathVariable("idCourse") Long id_course,@PathVariable("activityId") long id)
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/{activityId}/delete.htm", method = RequestMethod.GET)
+	public String formDeleteActivity(
+			@PathVariable("academicId") Long id_AcademicTerm,
+			@PathVariable("courseId") Long id_course,@PathVariable("activityId") Long id_activity)
 			throws ServletException {
 
-		if (serviceActivity.deleteActivity(id)) {
-			return "redirect:/course/"+id_course+"/activity/list.htm";
+		if (serviceActivity.deleteActivity(id_activity)) {
+			return "redirect:/academicTerm/"+ id_AcademicTerm + "/course/"+id_course+".htm";
 		} else
 			return "redirect:/error.htm";
 	}
@@ -269,13 +278,16 @@ public class ActivityController {
 	 * Method for delete an competence status of activities
 	 */
 	
-	@RequestMapping(value = "/course/{idCourse}/activity/{activityId}/competenceStatus/delete/{compStatusId}.htm", method = RequestMethod.GET)
-	public String formDeleteCompetenceStatusActivity(@PathVariable("idCourse") Long id_course,
-			@PathVariable("activityId") long id_Activity,@PathVariable("compStatusId") long id_competenceStatus)
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/{activityId}/competenceStatus/{compStatusId}/delete.htm", method = RequestMethod.GET)
+	public String formDeleteCompetenceStatusActivity(
+			@PathVariable("academicId") Long id_AcademicTerm,
+			@PathVariable("courseId") Long id_course,
+			@PathVariable("activityId") long id_Activity,@PathVariable("compStatusId") Long id_competenceStatus)
 			throws ServletException {
 
+		
 		if (serviceActivity.deleteCompetenceActivity(id_competenceStatus, id_Activity)) {
-			return "redirect:/course/"+id_course+"/activity/"+ id_Activity+"/view.htm";
+			return "redirect:/academicTerm/"+  id_AcademicTerm+ "/course/"+id_course+"/activity/"+ id_Activity+".htm";
 		} else
 			return "redirect:/error.htm";
 	}
@@ -285,18 +297,20 @@ public class ActivityController {
 	/**
 	 * Methods for view subjects
 	 */
-	@RequestMapping(value = "/course/{idCourse}/activity/{activityId}/view.htm", method = RequestMethod.GET)
-	protected ModelAndView formViewActivity(@PathVariable("idCourse") Long id_course,@PathVariable("activityId") long id)
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/{activityId}.htm", method = RequestMethod.GET)
+	protected ModelAndView formViewActivity(
+			@PathVariable("academicId")Long id_academic,
+			@PathVariable("courseId") Long id_course,@PathVariable("activityId") long id_activity)
 			throws ServletException {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
 
-		Activity a = serviceActivity.getActivity(id);
+		Activity a = serviceActivity.getActivity(id_academic);
 
 		model.put("activity", a);
-		model.put("activityId", id);
-		
+		model.put("activityId", id_activity);
+	
 		model.put("competenceStatus", a.getCompetenceStatus());
 
 		return new ModelAndView("activity/view", "model", model);
@@ -313,8 +327,8 @@ public class ActivityController {
 	
 	/**
 	 * For binding the courses of the activity
-	 *//*
-	@InitBinder
+	 */
+/*	@InitBinder
 	protected void initBinder(WebDataBinder binder) throws Exception {
 		binder.registerCustomEditor(Set.class, "courses",
 				new CustomCollectionEditor(Set.class) {
@@ -324,7 +338,7 @@ public class ActivityController {
 							return element;
 						}
 						if (element instanceof String) {
-							Course course = serviceCourse.getCourseByName(element.toString());
+							Course course = serviceCourse.getCourse(element.toString());
 								
 							logger.info("Loking up {} to {}", element,course);
 

@@ -89,7 +89,7 @@ public class CourseController {
 		
 
 			if (created)
-				return "redirect:/academicTerm/"+id_academic+"/view.htm";
+				return "redirect:/academicTerm/"+id_academic+".htm";
 			else
 				return "redirect:/academicTerm/"+id_academic+"/course/add.htm";
 		}
@@ -99,7 +99,7 @@ public class CourseController {
 	/**
 	 * Methods for view courses
 	 */
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/view.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}.htm", method = RequestMethod.GET)
 	protected ModelAndView formViewCourse(@PathVariable("academicId") Long id_academic,@PathVariable("courseId") Long id)
 			throws ServletException {
 
@@ -148,14 +148,15 @@ public class CourseController {
 			BindingResult result, Model model)
 
 	{
-		if(modify.getAcademicTerm() == null)
-			return "redirect:/academicTerm/"+id_academic+"/course/"+id_course+"/modify.htm";
+//		if(modify.getAcademicTerm() == null)
+//			return "redirect:/academicTerm/"+id_academic+"/course/"+id_course+"/modify.htm";
 		
 		if (!result.hasErrors()) {
 			modify.setId(id_course);
+			modify.setAcademicTerm(serviceAcademic.getAcademicTerm(id_academic));
 			boolean success = serviceCourse.modifyCourse(modify);
 			if (success)
-				return "redirect:/academicTerm/"+id_academic+"/course/"+id_course+"/view.htm";
+				return "redirect:/academicTerm/"+id_academic+"/course/"+id_course+".htm";
 		}
 
 		return "redirect:/error.htm";
@@ -171,7 +172,7 @@ public class CourseController {
 			throws ServletException {
 
 		if (serviceCourse.deleteCourse(id_course)) {
-			return "redirect:/academicTerm/"+id_academic+"/view.htm";
+			return "redirect:/academicTerm/"+id_academic+".htm";
 		} else
 			return "redirect:/error.htm";
 	}
