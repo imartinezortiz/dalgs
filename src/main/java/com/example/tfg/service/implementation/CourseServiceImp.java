@@ -25,11 +25,16 @@ public class CourseServiceImp implements CourseService {
 	
 	@Transactional(readOnly = false)
 	public boolean addCourse(Course course) {
-		if (!daoCourse.exist(course))
-		//if (!daoCourse.existByAcademicTerm(course.getAcademicTerm()))			
+		Long aux = daoCourse.isDisabled(course.getAcademicTerm().getId(), course.getSubject().getId());
+		 if(aux!=null){
+			 course.setId(aux);
+			 course.setDeleted(false);
+		 	return daoCourse.saveCourse(course);
+		 }
+	 	 else if (!daoCourse.exist(course))
 				return daoCourse.addCourse(course);
-		else return false;
 		
+		return false;
 	}
 	
 	@Transactional(readOnly = true)
@@ -39,7 +44,7 @@ public class CourseServiceImp implements CourseService {
 
 	@Transactional(readOnly = false)
 	public boolean modifyCourse(Course course){
-		return daoCourse.saveSubject(course);
+		return daoCourse.saveCourse(course);
 	}
 	
 	@Transactional(readOnly = false)

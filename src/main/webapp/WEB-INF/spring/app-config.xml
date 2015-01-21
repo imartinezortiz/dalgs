@@ -43,6 +43,7 @@
                  <ref bean="courseFormatter"/>
                  <ref bean="degreeFormatter"/>
                  <ref bean="subjectFormatter"/>    
+                 <ref bean="competenceStatusFormatter"/>
            </set>
       </property>
 </bean>

@@ -208,6 +208,7 @@
 			<version>4.3.5</version>
 			<classifier>tests</classifier>
 		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>

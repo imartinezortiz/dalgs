@@ -13,7 +13,7 @@ public interface CourseDao {
 
 	public boolean addCourse(Course course);
 	public List<Course> getAll();
-    public boolean saveSubject(Course course);
+    public boolean saveCourse(Course course);
     public Course getCourse(Long id);
     //public List<Course> getCoursesByAcademicTerm(String term);
 	public boolean deleteCourse(Long id);
@@ -23,5 +23,6 @@ public interface CourseDao {
 	//public boolean exist(Course course);
 	public boolean exist(Course course);
 	public List<Course> getCoursesByAcademicTerm(Long id_academic);
+	public Long isDisabled(Long id_academic, Long id_subject);
 
 }

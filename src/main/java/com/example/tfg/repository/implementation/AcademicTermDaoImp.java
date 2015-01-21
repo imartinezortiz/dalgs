@@ -10,6 +10,7 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.transaction.RollbackException;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 import com.example.tfg.domain.AcademicTerm;
@@ -41,7 +42,10 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 			return true;
 		} catch (PersistenceException e) {
 			return false;
-		} catch (Exception e) {
+		 } catch (DataIntegrityViolationException e) {
+	        //LOGGER.info("unable to remove channel, try to close the channel.", e);
+	        return false;
+	    }catch (Exception e) {
 			return false;
 		}
 	}
@@ -64,11 +68,11 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AcademicTerm> getAcademicsTerm(String term) {
+	public List<AcademicTerm> getAcademicsTerm(){//String term) {
 		Query query = em
-				.createQuery("select a from AcademicTerm a where a.term=?");
+				.createQuery("select a from AcademicTerm a order by a.term DESC");
 
-		query.setParameter(1, term);
+		//query.setParameter(1, term);
 
 		if (query.getResultList().isEmpty())
 			return null;
@@ -77,7 +81,7 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 
 	}
 
-	public boolean deleteTerm(String term) {
+	/*public boolean deleteTerm(String term) {
 		List<AcademicTerm> academicsTerms = getAcademicsTerm(term);
 
 		for (AcademicTerm a : academicsTerms) {
@@ -94,6 +98,7 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 		}
 		return true;
 	}
+	*/
 	public boolean deleteAcademicTerm(Long id_academic) {
 		//Degree degree = em.getReference(Degree.class, id_degree);
 
@@ -113,20 +118,6 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 		
 	}
 
-	/*@SuppressWarnings("unchecked")
-	public List<AcademicTerm> getAcademicTermsForDegree(Long id_degree) {
-		Degree degree = em.getReference(Degree.class, id_degree);
-
-		Query query = em
-				.createQuery("select a from AcademicTerm a where a.degree=?1");
-		query.setParameter(1, degree);
-
-		if (query.getResultList().isEmpty())
-			return null;
-
-		return query.getResultList();
-	}
-	*/
 
 	public boolean existByTerm(String term) {
 		Query query = em.createQuery("from AcademicTerm a where a.term=?1");
@@ -138,7 +129,7 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 			return true;
 	}
 
-	@SuppressWarnings("unchecked")
+/*	@SuppressWarnings("unchecked")
 	public List<String> getAllTerms() {
 
 		Query query = em.createQuery("select distinct term from AcademicTerm ");
@@ -147,7 +138,7 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 
 		return query.getResultList();
 	}
-
+*/
 	@Override
 	public AcademicTerm getAcademicTermById(Long id) {
 		
@@ -159,18 +150,6 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 	@Override
 	public AcademicTerm getAcademicTerm(Long id_academic) {
 		return  em.getReference(AcademicTerm.class, id_academic);
-		/*Degree degree = em.getReference(Degree.class, id_degree);
-
-		Query query = em
-				.createQuery("select a from AcademicTerm a  where a.term=?1 and a.degree=?2");
-		query.setParameter(1, term);
-		query.setParameter(2, degree);
-
-		if (query.getResultList().isEmpty())
-			return null;
-		else
-			return (AcademicTerm) query.getSingleResult();
-			*/
 	}
 
 	
@@ -189,7 +168,7 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 		return true;
 	}
 
-	public boolean isDisabled(String term, Long id_degree) {
+	public Long isDisabled(String term, Long id_degree) {
 		Degree degree = em.getReference(Degree.class, id_degree);
 
 		Query query = em
@@ -199,9 +178,10 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 
 
 		if (query.getResultList().isEmpty())
-			return false;
+			return null;
 
-		return true;
+		AcademicTerm aux = (AcademicTerm) query.getSingleResult();
+		return aux.getId();
 	}
 	
 	@Override

@@ -21,7 +21,7 @@
 		<div class="panel-body">
 			<%-- 	<form:form  method="post" modelAttribute="modifyProduct" > (ResquestParam)  --%>
 
-			<form:form method="post" commandName="modifyactivity">
+			<form:form method="post"  action="modify.htm" commandName="modifyactivity">
 				<div class="form-group">
 					<label>Code: </label>
 					<form:input path="code" class="form-control"
@@ -50,20 +50,29 @@
 							<td width="50%"><div class="td-label">Percentage</div></td>
 						</tr>
 						
-						<c:forEach items="${competenceStatus}" var="compStatus" >		
+						<c:forEach items="${competenceStatus}" var="compStatus" varStatus="status">		
 							<tr align="center">
 								<td><div class="td-content">
-										<c:out value="${compStatus.name}" />
+										<c:out value="${compStatus.competence.name}" />
 								
 									</div></td>
 								<td>
 									<div class="td-content">
 										<c:out value="${compStatus.percentage}" />
+										
 									</div>
 								</td>
+								<td>
+									<a href="<c:url value='competenceStatus/${compStatus.competence.id}/delete.htm'/>">
+										<img WIDTH="20" HEIGHT="20" border="0" src="<c:url value="/resources/images/error.jpeg" /> " > 
+									</a>
+							</td>
+								
 							</tr>
 							
 						</c:forEach>
+						
+						
 
 
 					</table>
@@ -72,12 +81,12 @@
 
 			</form:form >
 			<div class="addComeptenceStatus">
-			<form:form method="post" commandName="addcompetencestatus">
+			<form:form method="post" action="addCompetenceStatus.htm" commandName="addcompetencestatus">
 					<h4> New Competence Status</h4>
 					<label>Competence:</label>
-					<form:select class="form-control 2" path=""
+					<form:select class="form-control 2" path="competence"
 						id="competence">
-						<form:option value="0"> --Select an option-- </form:option>
+						<form:option value=""> --Select an option-- </form:option>
 						<c:forEach items="${competences}" var="comp">
 							<form:option value="${comp.id}">${comp.name}</form:option>
 						</c:forEach>
@@ -87,10 +96,7 @@
 						required="true" />
 
 
-					<a class="btn btn-success CompSta" 
-						href="<c:url value='/academicTerm/${academicId}/course/${idCourse}/activity/${activityId}/addCompetenceStatus.htm'/>">
-							Add Competence Status
-					</a>
+				
 					 <input type="submit" class="btn btn-success CompSta" name="button1"
 						value="Add Competence Status" /> -->
 

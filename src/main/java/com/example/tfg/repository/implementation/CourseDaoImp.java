@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.example.tfg.domain.AcademicTerm;
 import com.example.tfg.domain.Course;
 import com.example.tfg.domain.Degree;
+import com.example.tfg.domain.Subject;
 import com.example.tfg.repository.CourseDao;
 
 @Repository
@@ -47,7 +48,7 @@ public class CourseDaoImp implements CourseDao {
 	}
 
 	@Override
-	public boolean saveSubject(Course course) {
+	public boolean saveCourse(Course course) {
 		try {
 			em.merge(course);
 		} catch (ConstraintViolationException e) {
@@ -113,6 +114,22 @@ public class CourseDaoImp implements CourseDao {
 	
 	}
 
+	public Long isDisabled(Long id_academic, Long id_subject){
+		Subject subject  = em.getReference(Subject.class, id_subject);
+		AcademicTerm academic = em.getReference(AcademicTerm.class, id_academic);
+
+		Query query = em
+				.createQuery("select c from Course c where c.subject=?1 and c.academicTerm=?2 and c.isDeleted=1");
+		query.setParameter(1, subject);
+		query.setParameter(2, academic);
+
+
+		if (query.getResultList().isEmpty())
+			return null;
+
+		Course aux = (Course) query.getSingleResult();
+		return aux.getId();
+	}
 
 
 }

@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 
 @Embeddable
 public class CompetenceStatus {
+	
 	@ManyToOne
 	private Competence competence;
 	
@@ -30,7 +31,5 @@ public class CompetenceStatus {
 	public void setPercentage(double percentage) {
 		this.percentage = percentage;
 	}
-
-
 
 }
