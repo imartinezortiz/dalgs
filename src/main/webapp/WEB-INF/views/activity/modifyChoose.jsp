@@ -98,7 +98,7 @@
 
 				
 					 <input type="submit" class="btn btn-success CompSta" name="button1"
-						value="Add Competence Status" /> -->
+						value="Add Competence Status" /> 
 
 			</form:form>
 			</div>

@@ -142,7 +142,7 @@ public class ActivityController {
 
 	
 		if (!result.hasErrors()) {
-
+			activity.setId(id_activity);
 			activity.setCourse(serviceCourse.getCourse(id_course));
 			boolean success = serviceActivity.modifyActivity(activity);
 			if (success){
@@ -165,6 +165,9 @@ public class ActivityController {
 	
 		Activity p = serviceActivity.getActivity(id);
 		if (!result.hasErrors()) 
+				if(serviceActivity.existsCompetenceStatus(id, competencestatus.getCompetence().getId()))
+					return  "redirect:/academicTerm/"+ id_academicTerm+"/course/"+id_course+"/activity/"+id+"/modify.htm";
+
 				if( competencestatus.getPercentage() <= 0.0 || competencestatus.getPercentage() > 100.0)		
 					return  "redirect:/academicTerm/"+ id_academicTerm+"/course/"+id_course+"/activity/"+id+"/modify.htm";
 				 

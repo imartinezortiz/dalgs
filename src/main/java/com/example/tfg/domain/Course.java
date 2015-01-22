@@ -18,8 +18,7 @@ import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Where;
 
 @Entity
-@Table(name = "course", uniqueConstraints = {@UniqueConstraint(columnNames={"id_academicterm", "id_subject"})})
-
+@Table(name = "course",uniqueConstraints = {@UniqueConstraint(columnNames={"id_subject", "id_academicterm"})})
 @Where(clause = "isDeleted='false'")
 public class Course {
 	@Id 
@@ -40,7 +39,7 @@ public class Course {
 	private Collection<Activity> activities;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "id_academicterm", insertable=false, updatable=false)
+	@JoinColumn(name = "id_academicterm")//, insertable=false, updatable=false)
 	private AcademicTerm academicTerm;
 	
 	public Course() {

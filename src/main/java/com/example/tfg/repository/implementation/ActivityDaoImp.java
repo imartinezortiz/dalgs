@@ -10,6 +10,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
 
 import com.example.tfg.domain.Activity;
+import com.example.tfg.domain.Competence;
 import com.example.tfg.domain.Course;
 import com.example.tfg.repository.ActivityDao;
 
@@ -116,6 +117,18 @@ public class ActivityDaoImp implements ActivityDao {
 		
 		return (Activity) query.getResultList().get(0);
 
+	}
+
+	
+	public boolean existsCompetenceStatus(Long id_activity, Long id_competence) {
+		Query query = em.createNativeQuery("select * from activity_competencestatus   where id_activity=?1 and competence_id_competence=?2 ");
+		query.setParameter(1, id_activity);
+		query.setParameter(2, id_competence);
+
+		if (query.getResultList().isEmpty())
+			return false;
+		else
+			return true;
 	}
 
 	
