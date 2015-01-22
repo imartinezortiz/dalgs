@@ -144,6 +144,7 @@ public class ActivityController {
 		if (!result.hasErrors()) {
 			activity.setId(id_activity);
 			activity.setCourse(serviceCourse.getCourse(id_course));
+			activity.setCompetenceStatus(serviceActivity.getActivity(id_activity).getCompetenceStatus());
 			boolean success = serviceActivity.modifyActivity(activity);
 			if (success){
 				
