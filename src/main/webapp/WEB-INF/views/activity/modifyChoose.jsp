@@ -53,12 +53,12 @@
 						<c:forEach items="${competenceStatus}" var="compStatus" >		
 							<tr align="center">
 								<td><div class="td-content">
-										<c:out value="${compStatus.name}" />
+										<c:out value="${compStatus.competence.name}" />
 								
 									</div></td>
 								<td>
 									<div class="td-content">
-										<c:out value="${compStatus.percentage}" />
+										<c:out value="${compStatus.competence.percentage}" />
 									</div>
 								</td>
 							</tr>

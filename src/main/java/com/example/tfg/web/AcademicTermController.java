@@ -51,7 +51,6 @@ public class AcademicTermController {
 	protected String getAddNewAcademicTermForm(Model model) {
 
 		AcademicTerm newAcademicTerm = new AcademicTerm();
-		newAcademicTerm.setDegree(null);
 		model.addAttribute("addAcademicTerm", newAcademicTerm);
 		return "academicTerm/add";
 
