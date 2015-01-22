@@ -17,7 +17,7 @@ public interface AcademicTermDao {
 
 	//public List<AcademicTerm> getAcademicTermsForDegree(Long id_degree);
 	//public List<String> getAllTerms();
-	public AcademicTerm getAcademicTerm(Long id_academic);
+	//spublic AcademicTerm getAcademicTerm(Long id_academic);
 	//public AcademicTerm getAcademicTermDegree(String term, Long id_degree);
 
 	public boolean exists(String term, Long id_degree);

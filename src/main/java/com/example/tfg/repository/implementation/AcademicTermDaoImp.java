@@ -148,9 +148,9 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 	}
 
 	@Override
-	public AcademicTerm getAcademicTerm(Long id_academic) {
+	/*public AcademicTerm getAcademicTerm(Long id_academic) {
 		return  em.getReference(AcademicTerm.class, id_academic);
-	}
+	}*/
 
 	
 	public boolean exists(String term, Long id_degree) {

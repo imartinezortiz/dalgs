@@ -70,7 +70,7 @@ public class AcademicTermServiceImp implements AcademicTermService {
 
 	@Transactional(readOnly = true)
 	public AcademicTerm getAcademicTerm( Long id_academic) {
-		return daoAcademicTerm.getAcademicTerm(id_academic);
+		return daoAcademicTerm.getAcademicTermById(id_academic);
 	}
 
 	@Transactional(readOnly = false)
