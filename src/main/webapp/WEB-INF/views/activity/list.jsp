@@ -38,9 +38,10 @@
 				</td> --%>
 				
 			
-  				<td>
-  					<a href="<c:url value='view/${activity.id}.htm'/>" class="btn btn-warning 2">View</a>
-  					<a href="<c:url value='delete/${activity.id}.htm'/>" class="btn btn-danger">Delete</a>
+  				<td>		
+  				
+  					<a href="<c:url value='${activity.id}view.htm'/>" class="btn btn-warning 2">View</a>
+  					<a href="<c:url value='${activity.id}/delete.htm'/>" class="btn btn-danger">Delete</a>
   				</td>
 		
 			</tr>

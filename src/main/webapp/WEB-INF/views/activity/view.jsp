@@ -18,7 +18,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">Activity Details</h3>
 			<a class="btn list-btn btn-warning"
-				href="<c:url value='/activity/modifyChoose/${activityId}.htm'/>">Modify</a>
+				href="<c:url value='${activityId}/modify.htm'/>">Modify</a>
 
 		</div>
 
@@ -44,12 +44,7 @@
 						${model.activity.description}
 					</p>
 				</div>
-					<div class="form-group view">
-					<label>Course:</label>
-					<p class="details">
-						${model.activity.course.name}
-					</p>
-				</div>
+					
 
 			</div>
 
@@ -70,7 +65,7 @@
 				<c:forEach items="${model.competenceStatus}" var="cs">
 					<tr align="center">
 						<td><div class="td-content">
-								<c:out value="${competences[cs.id_competence].name}" />
+								<c:out value="${cs.competence.name}" />
 							</div></td>
 						<td>
 							<div class="td-content">
@@ -78,10 +73,6 @@
 							</div>
 						</td>
 
-						<td><a 
-							href="<c:url value='/activity/competenceStatus/delete/${model.activityId}/${cs.id_competence}.htm'/>">
-							<img WIDTH="20" HEIGHT="20" border="0" src="<c:url value="/resources/images/error.jpeg" /> " > 
-							</a></td>
 
 					</tr>
 				</c:forEach>

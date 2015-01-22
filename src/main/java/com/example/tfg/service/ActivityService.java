@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.tfg.domain.Activity;
+import com.example.tfg.domain.Competence;
 
 
 @Service
@@ -20,5 +21,6 @@ public interface ActivityService {
 	public Activity getActivityByName(String string);
 	public boolean deleteCompetenceActivity(Long id_competenceStatus,
 			Long id_Activity);
+	public boolean existsCompetenceStatus(Long id_activity, Long id_competence);
 
 }

@@ -52,6 +52,8 @@ public class Activity {
 	        name="activity_competencestatus",
 	        joinColumns=@JoinColumn(name="id_activity")
 	  )
+	 @Column(nullable = false)
+
 	// @OrderColumn(insertable=true,updatable=true,name="competencestatus")
 	private Collection<CompetenceStatus> competenceStatus;
 	

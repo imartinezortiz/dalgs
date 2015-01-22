@@ -70,13 +70,14 @@ public class AcademicTermController {
 
 			boolean created = serviceAcademicTerm.addAcademicTerm(newAcademicTerm);
 			if (created)
-				return "redirect:/academicTerm/terms.htm";
+				return "redirect:/academicTerm.htm";
 			else
 				return "redirect:/academicTerm/add.htm";
 		}
 		return "redirect:/error.htm";
 	}
 	
+	/*
 	@RequestMapping(value = "/academicTerm/{term}/add.htm", method = RequestMethod.GET)
 	protected String getAddNewAddDegree(@PathVariable("term") String term,Model model) {
 
@@ -102,13 +103,13 @@ public class AcademicTermController {
 		}
 		return "redirect:/error.htm";
 	}
-
+*/
 
 	
 	/**
 	 * Methods for listing 
 	 */
-
+/*
 	@RequestMapping(value = "/academicTerm/terms.htm")
 	public ModelAndView handleRequestAcademicTermList(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -120,18 +121,18 @@ public class AcademicTermController {
 
 		return new ModelAndView("academicTerm/terms", "model", myModel);
 	}
-	
+*/
 
 	/**
 	 * Methods for list academic terms of a term
 	 */
-	@RequestMapping(value = "/academicTerm/{term}/list.htm")
-	protected ModelAndView formViewAcademicTerm(@PathVariable("term") String term)
+	@RequestMapping(value = "/academicTerm.htm")
+	protected ModelAndView formViewAcademicTerm()
 			throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		List<AcademicTerm> p = serviceAcademicTerm.getAcademicsTerm(term);
+		List<AcademicTerm> p = serviceAcademicTerm.getAcademicsTerm();//getAcademicsTerm(term);
 
 		myModel.put("academicTerms", p);
 
@@ -192,7 +193,7 @@ public class AcademicTermController {
 	/**
 	 * Delete a Term.
 	 */
-	
+	/*
 	@RequestMapping(value = "/academicTerm/{term}/deleteAll.htm", method = RequestMethod.GET)
 	public String formDeleteTerm(@PathVariable("term") String term)
 			throws ServletException {
@@ -201,7 +202,7 @@ public class AcademicTermController {
 			return "redirect:/academicTerm/terms.htm";
 		} else
 			return "redirect:/error.htm";
-	}
+	}*/
 	
 	/**
 	 * Delete an academicTerm 
