@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.tfg.domain.Activity;
+import com.example.tfg.domain.Competence;
 import com.example.tfg.domain.CompetenceStatus;
 import com.example.tfg.repository.ActivityDao;
 import com.example.tfg.repository.CourseDao;
@@ -108,6 +109,11 @@ public class ActivityServiceImp implements ActivityService {
 			return false;
 		}
 	
+	}
+
+	@Transactional(readOnly = true)
+	public boolean existsCompetenceStatus(Long id_activity, Long id_competence) {
+		return daoActivity.existsCompetenceStatus(id_activity, id_competence);
 	}
 
 }

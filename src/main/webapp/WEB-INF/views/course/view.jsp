@@ -75,10 +75,14 @@
 						<td><a class="btn btn-success" 
 							href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}.htm'/>">
 									View </a> 
-							<a 
+									<a class="btn btn-danger"
+								href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}/delete.htm'/>">
+									Delete </a>
+							<%-- <a 
 							href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}/delete.htm'/>">
 							<img WIDTH="20" HEIGHT="20" border="0" src="<c:url value="/resources/images/error.jpeg" /> " > 
-							</a></td>
+							</a> --%>
+							</td>
 
 					</tr>
 				</c:forEach>
