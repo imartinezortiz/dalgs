@@ -191,7 +191,7 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 	}
 
 	public Integer numberOfPages() {
-		double dou = (double)(em.createQuery("select a from AcademicTerm a order by a.term DESC").getResultList().size()) /((double)noOfRecords);
+		double dou = (double)(em.createQuery("select count (a) from AcademicTerm a order by a.term DESC").getResultList().size()) /((double)noOfRecords);
 		return (int) Math.ceil(dou);
 		
 	}
