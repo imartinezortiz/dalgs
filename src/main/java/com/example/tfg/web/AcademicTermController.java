@@ -1,13 +1,10 @@
 package com.example.tfg.web;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +48,6 @@ public class AcademicTermController {
 	protected String getAddNewAcademicTermForm(Model model) {
 
 		AcademicTerm newAcademicTerm = new AcademicTerm();
-		newAcademicTerm.setDegree(null);
 		model.addAttribute("addAcademicTerm", newAcademicTerm);
 		return "academicTerm/add";
 

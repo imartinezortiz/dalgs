@@ -1,20 +1,10 @@
 package com.example.tfg.web;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -32,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.example.tfg.domain.AcademicTerm;
 import com.example.tfg.domain.Activity;
 import com.example.tfg.domain.Competence;
 import com.example.tfg.domain.CompetenceStatus;
@@ -160,9 +149,10 @@ public class ActivityController {
 	protected String formModifyActivitiesCompetenceStatus(
 			@PathVariable("academicId") Long id_academicTerm,
 			@PathVariable("idCourse") Long id_course, 
-			@PathVariable("activityId") long id,
+			@PathVariable("activityId") Long id,
 			@ModelAttribute("addcompetencestatus") @Valid CompetenceStatus competencestatus, BindingResult result,
 			Model model) throws ServletException {
+		
 	
 		Activity p = serviceActivity.getActivity(id);
 		if (!result.hasErrors()) 
@@ -193,7 +183,7 @@ public class ActivityController {
 			throws ServletException {
 
 		if (serviceActivity.deleteActivity(id_activity)) {
-			return "redirect:/academicTerm/"+ id_AcademicTerm + "/course/"+id_course+".htm";
+			return "redirect:/academicTerm/"+ id_AcademicTerm + "/course/"+id_course+"/activity/"+id_activity+"/modify.htm";
 		} else
 			return "redirect:/error.htm";
 	}
@@ -211,7 +201,7 @@ public class ActivityController {
 
 		
 		if (serviceActivity.deleteCompetenceActivity(id_competenceStatus, id_Activity)) {
-			return "redirect:/academicTerm/"+  id_AcademicTerm+ "/course/"+id_course+"/activity/"+ id_Activity+".htm";
+			return "redirect:/academicTerm/"+  id_AcademicTerm+ "/course/"+id_course+"/activity/"+ id_Activity+"/modify.htm";
 		} else
 			return "redirect:/error.htm";
 	}
@@ -219,7 +209,7 @@ public class ActivityController {
 
 
 	/**
-	 * Methods for view subjects
+	 * Methods for view activities
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/{activityId}.htm", method = RequestMethod.GET)
 	protected ModelAndView formViewActivity(

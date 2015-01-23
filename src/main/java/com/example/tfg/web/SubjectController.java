@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.example.tfg.domain.AcademicTerm;
 import com.example.tfg.domain.Competence;
 import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Subject;
