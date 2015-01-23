@@ -1,20 +1,16 @@
 package com.example.tfg.repository.implementation;
 
 import java.util.List;
-import java.util.logging.Logger;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
-import javax.transaction.RollbackException;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 import com.example.tfg.domain.AcademicTerm;
-import com.example.tfg.domain.Activity;
 import com.example.tfg.domain.Degree;
 import com.example.tfg.repository.AcademicTermDao;
 
