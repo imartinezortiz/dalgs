@@ -209,9 +209,8 @@ public class AcademicTermController {
 	public String formDeleteAcademicTerm(@PathVariable("academicId") Long id_academic)
 			throws ServletException {
 
-		String term = serviceAcademicTerm.getAcademicTerm(id_academic).getTerm();
 		if (serviceAcademicTerm.deleteAcademicTerm(id_academic)) {
-			return "redirect:/academicTerm/"+term+"/list.htm";
+			return "redirect:/academicTerm.htm";
 		} else
 			return "redirect:/error.htm";
 	}
