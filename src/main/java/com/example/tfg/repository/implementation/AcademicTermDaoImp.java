@@ -19,6 +19,7 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 
 	protected EntityManager em;
 
+	private static final Integer noOfRecords = 5;
 	public EntityManager getEntityManager() {
 		return em;
 	}
@@ -64,7 +65,7 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AcademicTerm> getAcademicsTerm(){//String term) {
+	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex){//String term) {
 		Query query = em
 				.createQuery("select a from AcademicTerm a order by a.term DESC");
 
@@ -73,28 +74,10 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 		if (query.getResultList().isEmpty())
 			return null;
 
-		return query.getResultList();
+		return query.setMaxResults(noOfRecords).setFirstResult(pageIndex * noOfRecords).getResultList();
 
 	}
 
-	/*public boolean deleteTerm(String term) {
-		List<AcademicTerm> academicsTerms = getAcademicsTerm(term);
-
-		for (AcademicTerm a : academicsTerms) {
-			a.setDeleted(true);
-			try {
-
-				em.merge(a);
-				// em.remove(academicTerm);
-				
-			} catch (Exception e) {
-				return false;
-			}
-
-		}
-		return true;
-	}
-	*/
 	public boolean deleteAcademicTerm(Long id_academic) {
 		//Degree degree = em.getReference(Degree.class, id_degree);
 
@@ -205,5 +188,11 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 		if (query.executeUpdate() >=0)
 			return true;
 		return false;
+	}
+
+	public Integer numberOfPages() {
+		double dou = (double)(em.createQuery("select a from AcademicTerm a order by a.term DESC").getResultList().size()) /((double)noOfRecords);
+		return (int) Math.ceil(dou);
+		
 	}
 }

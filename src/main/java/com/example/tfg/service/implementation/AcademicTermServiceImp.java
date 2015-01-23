@@ -42,8 +42,8 @@ public class AcademicTermServiceImp implements AcademicTermService {
 	}
 
 	@Transactional(readOnly = false)
-	public List<AcademicTerm> getAcademicsTerm(){//String term) {
-		return daoAcademicTerm.getAcademicsTerm();//term);
+	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex){//String term) {
+		return daoAcademicTerm.getAcademicsTerm(pageIndex);//term);
 	}
 	
 	/*@Transactional(propagation = Propagation.REQUIRED)
@@ -56,16 +56,10 @@ public class AcademicTermServiceImp implements AcademicTermService {
 		return daoAcademicTerm.deleteAcademicTerm(id_academic);
 	}
 
-	/*@Transactional(readOnly = false)
-	public List<AcademicTerm> getAcademicTermsForDegree(Long id_degree) {
-		return daoAcademicTerm.getAcademicTermsForDegree(id_degree);
-	}
-	*/
-	/*@Transactional(readOnly = true)
-	public List<String> getAllTerms() {
-		return daoAcademicTerm.getAllTerms();
-	}
-	*/
+	@Transactional(readOnly = false)
+		public Integer numberOfPages(){
+			return daoAcademicTerm.numberOfPages();
+		}
 	
 
 	@Transactional(readOnly = true)
