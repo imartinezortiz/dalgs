@@ -11,7 +11,7 @@ public interface AcademicTermService {
 	public boolean addAcademicTerm(AcademicTerm academicTerm);
 	//public List<AcademicTerm> getAll();
 	public boolean modifyAcademicTerm(AcademicTerm academicTerm);
-	public  List<AcademicTerm> getAcademicsTerm();//String term);
+	public  List<AcademicTerm> getAcademicsTerm(Integer pageIndex);//String term);
 	
 	//public boolean deleteTerm(String term);
 	public boolean deleteAcademicTerm(Long id);
@@ -24,5 +24,6 @@ public interface AcademicTermService {
 
 	
 	public boolean modifyTerm(String term, String newTerm) ;
+	public Integer numberOfPages();
 
 }

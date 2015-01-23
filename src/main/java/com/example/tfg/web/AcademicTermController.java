@@ -123,15 +123,18 @@ public class AcademicTermController {
 	/**
 	 * Methods for list academic terms of a term
 	 */
-	@RequestMapping(value = "/academicTerm.htm")
-	protected ModelAndView formViewAcademicTerm()
+	@RequestMapping(value = "/academicTerm/page/{pageIndex}.htm")
+	protected ModelAndView formViewAcademicTerm(@PathVariable("pageIndex") Integer pageIndex)
 			throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		List<AcademicTerm> p = serviceAcademicTerm.getAcademicsTerm();//getAcademicsTerm(term);
+		List<AcademicTerm> p = serviceAcademicTerm.getAcademicsTerm(pageIndex);//getAcademicsTerm(term);
 
 		myModel.put("academicTerms", p);
+		//Integer aux = serviceAcademicTerm.numberOfPages();
+		myModel.put("numberOfPages", serviceAcademicTerm.numberOfPages());
+		myModel.put("currentPage", pageIndex);
 
 		return new ModelAndView("academicTerm/list", "model", myModel);
 	}
@@ -209,9 +212,8 @@ public class AcademicTermController {
 	public String formDeleteAcademicTerm(@PathVariable("academicId") Long id_academic)
 			throws ServletException {
 
-		String term = serviceAcademicTerm.getAcademicTerm(id_academic).getTerm();
 		if (serviceAcademicTerm.deleteAcademicTerm(id_academic)) {
-			return "redirect:/academicTerm/"+term+"/list.htm";
+			return "redirect:/academicTerm.htm";
 		} else
 			return "redirect:/error.htm";
 	}

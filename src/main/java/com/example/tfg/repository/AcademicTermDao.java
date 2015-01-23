@@ -9,7 +9,7 @@ public interface AcademicTermDao {
 	public boolean addAcademicTerm(AcademicTerm academicTerm);
 	//public List<AcademicTerm> getAll();
     public boolean saveAcademicTerm(AcademicTerm academicTerm);
-    public List<AcademicTerm> getAcademicsTerm();//String term);
+    public List<AcademicTerm> getAcademicsTerm(Integer pageIndex);
     public AcademicTerm getAcademicTermById(Long id);
 
 	//public boolean deleteTerm(String term);
@@ -25,4 +25,5 @@ public interface AcademicTermDao {
 	public boolean modifyTerm(String term, String newTerm);
 	public Long isDisabled(String term, Long id);
 
+	public Integer numberOfPages();
 }
