@@ -51,14 +51,14 @@
 
 		<nav>
 			<ul class="pagination">
-				<c:if test="${currentPage > 0}">
+				<c:if test="${model.currentPage > 0}">
 
 					<li><a
-						href="<c:url value='/academicTerm/page/${currentPage - 1}.htm'/>"
+						href="<c:url value='/academicTerm/page/${model.currentPage - 1}.htm'/>"
 						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 					</a></li>
 				</c:if>
-				<c:forEach var="index" begin="0" end="${numberOfPages}" step="1">
+				<c:forEach var="index" begin="0" end="${model.numberOfPages -1}" step="1">
 
 
 					<li><a href="<c:url value='/academicTerm/page/${index}.htm'/>">
@@ -67,9 +67,9 @@
 
 
 				</c:forEach>
-				<c:if test="${currentPage < numberOfPages}">
+				<c:if test="${model.currentPage < model.numberOfPages -1}">
 					<li><a
-						href="<c:url value='/academicTerm/page/${currentPage + 1}.htm'/>"
+						href="<c:url value='/academicTerm/page/${model.currentPage + 1}.htm'/>"
 						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 					</a></li>
 				</c:if>

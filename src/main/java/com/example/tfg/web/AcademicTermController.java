@@ -67,7 +67,7 @@ public class AcademicTermController {
 
 			boolean created = serviceAcademicTerm.addAcademicTerm(newAcademicTerm);
 			if (created)
-				return "redirect:/academicTerm.htm";
+				return "redirect:/academicTerm/page/0.htm";
 			else
 				return "redirect:/academicTerm/add.htm";
 		}
