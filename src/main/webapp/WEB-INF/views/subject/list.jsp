@@ -11,6 +11,8 @@
 
 	<div class="table-responsive list">
 		<div class="panel-heading list">
+			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
+
 			<h4>Subjects</h4>
 			<a class="btn btn-add2" href="<c:url value='/subject/add.htm'/>">
 				Add Subject </a>
@@ -50,12 +52,6 @@
 
 		</table>
 	</div>
-	<div class="home-button">
-		<a class="btn home" href="<c:url value="/home.htm"/>">Home</a>
-	</div>
-
-
-
 
 </body>
 </html>

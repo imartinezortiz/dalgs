@@ -19,6 +19,8 @@
 		<class>com.example.tfg.domain.Course</class> 
 		<class>com.example.tfg.domain.Degree</class>
 		<class>com.example.tfg.domain.Subject</class>
+		<class>com.example.tfg.domain.User</class>
+		<class>com.example.tfg.domain.Role</class>
 		
 		
 	</persistence-unit>

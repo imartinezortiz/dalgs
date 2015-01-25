@@ -1,12 +1,14 @@
 fieldset {
-    min-width: 0; 
-    width: 100%; 
+	min-width: 0;
+	width: 100%;
 }
 
-@-moz-document url-prefix() {
-  fieldset { display: table-cell; }
+@
+-moz-document url-prefix () {fieldset {
+	display: table-cell;
 }
 
+}
 img.img-rounded.logo {
 	float: right;
 	margin-top: -0.5%;
@@ -111,16 +113,17 @@ h3.panel-title.list {
 a.btn.list-btn.btn-warning {
 	display: inline-block;
 	float: right;
-	background-color: rgb(32, 35, 143);
+	background-color: firebrick;
+	border-color: aliceblue;
 }
 
 a.btn.btn-add2, a.btn.list-btn.btn-warning2 {
-	background-color: #0D3651;
-	border-radius: 12%;
+	background-color: mediumblue;
+	/* border-radius: 12%; */
 	text-transform: uppercase;
-	max-width: 12%;
+	/* max-width: 12%; */
 	text-align: center;
-	border: 2px outset;
+	border: 1px outset;
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
@@ -156,22 +159,58 @@ img.img-rounded2 {
 	display: inherit;
 	margin-left: 20px;
 }
+
 .addCOmeptenceStatus {
-border: 2px outset rgb(148, 219, 140);
-padding: 1%;
+	border: 1px outset rgb(148, 219, 140);
+	padding: 2%;
+	border-radius: 3px;
 }
 
 input.btn.btn-success.CompSta {
-margin: 2% 0 0 80%;
+	margin: 2% 0 0 80%;
 }
+
 input.btn.btn-primary.btn-lg.addActivity {
-margin: -2% 0 0 83%;
+	margin: 0% 0 0 81.5%;
+	font-size: initial;
 }
 
 p.details {
-display: inline-block;
+	display: inline-block;
 }
 
-td > a > img {
-float: left;
+td>a>img {
+	float: left;
+}
+
+p.username {
+	top: 80%;
+	vertical-align: middle;
+	position: absolute;
+	color: rgb(19, 19, 166);
+}
+
+a.btn.btn-danger {
+	background-color: crimson;
+}
+
+.btn-success {
+	background-color: rgb(0, 161, 0);
+}
+
+body{
+	font-family: 'Gruppo', cursive;
+	font-size: 18px;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h {
+	font-family: 'Prosto One', cursive;
+}
+
+td {
+font-size: 19px;
+}
+
+.btn {
+	font-size:15px;
 }

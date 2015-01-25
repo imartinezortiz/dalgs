@@ -47,8 +47,5 @@
 
 
 </body>
-<div class="home-button">
-	<a class="btn home" href="<c:url value="/home.htm"/>">Home</a>
-</div>
-</body>
+
 </html>

@@ -8,6 +8,7 @@
 <body>
 <div class="table-responsive list">
     <div class="panel-heading list">
+  		<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
         <h4>Activities</h4>
         <a  class="btn list-btn btn-warning2" href="<c:url value='/activity/add.htm'/>"> Add Activity </a>
     </div>
@@ -48,7 +49,6 @@
 
 		</c:forEach>
 	</table></div>
-<div class="home-button"><a class="btn home" href="<c:url value="/home.htm"/>">Home</a></div></body>
 
 </body>
 </html>

@@ -16,9 +16,15 @@
 
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
-			<h3 class="panel-title list">Degree Details</h3>
+			<h3 class="panel-title list">
+				<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
+				Degree Details
+			</h3>
 			<a class="btn list-btn btn-warning"
-				href="<c:url value='/degree/${degreeId}/modify.htm'/>">Modify</a>
+				href="<c:url value='/degree/${degreeId}/modify.htm'/>"> <span
+				class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
+				Modify
+			</a>
 
 		</div>
 
@@ -44,9 +50,16 @@
 	</div>
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
-			<h3 class="panel-title list">Subject List</h3>
+			<h3 class="panel-title list">
+				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
+
+				Subject List
+			</h3>
 			<a class="btn list-btn btn-warning2"
-				href="<c:url value='/degree/${degreeId}/subject/add.htm'/>">Add</a>
+				href="<c:url value='/degree/${degreeId}/subject/add.htm'/>"> <span
+				class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
+				Add
+			</a>
 
 		</div>
 		<div class="panel-body">
@@ -68,11 +81,11 @@
 						</td>
 
 						<td><a class="btn list-btn btn-success"
-						href="<c:url value='/degree/${degreeId}/subject/${subject.id}.htm'/>">View</a>
-						<a
+							href="<c:url value='/degree/${degreeId}/subject/${subject.id}.htm'/>">View</a>
+							<a class="btn btn-danger"
 							href="<c:url value='/degree/${degreeId}/subject/${subject.id}/delete.htm'/>">
-							<img WIDTH="20" HEIGHT="20" border="0" src="<c:url value="/resources/images/error.jpeg" /> " > 
-							</a></td>
+								Delete
+						</a></td>
 
 					</tr>
 				</c:forEach>
@@ -84,9 +97,14 @@
 
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
-			<h3 class="panel-title list">Competence List</h3>
+			<h3 class="panel-title list">			
+			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
+			Competence List</h3>
 			<a class="btn list-btn btn-warning2"
-				href="<c:url value='/degree/${degreeId}/competence/add.htm'/>">Add</a>
+				href="<c:url value='/degree/${degreeId}/competence/add.htm'/>">
+				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
+				Add
+			</a>
 
 		</div>
 		<div class="panel-body">
@@ -95,7 +113,7 @@
 				<tr align="center">
 					<td width="20%"><div class="td-label">Name</div></td>
 					<td width="50%"><div class="td-label">Description</div></td>
-				
+
 				</tr>
 				<c:forEach items="${model.competences}" var="competence">
 					<tr align="center">
@@ -108,12 +126,12 @@
 							</div>
 						</td>
 
-						<td>
-						<a class="btn list-btn btn-success"
-						href="<c:url value='/degree/${degreeId}/competence/${competence.id}.htm'/>">View</a>
-						<a	href="<c:url value='/degree/${degreeId}/competence/${competence.id}/delete.htm'/>">
-							<img WIDTH="20" HEIGHT="20" border="0" src="<c:url value="/resources/images/error.jpeg" /> " > 
-							</a></td>
+						<td><a class="btn list-btn btn-success"
+							href="<c:url value='/degree/${degreeId}/competence/${competence.id}.htm'/>">View</a>
+							<a class="btn btn-danger"
+							href="<c:url value='/degree/${degreeId}/competence/${competence.id}/delete.htm'/>">
+						Delete
+						</a></td>
 
 					</tr>
 				</c:forEach>
@@ -125,11 +143,6 @@
 
 	</div>
 
-
-
-	<div class="home-button">
-		<a class="btn home" href="<c:url value="/home.htm"/>">Home</a>
-	</div>
 
 </body>
 

@@ -16,7 +16,8 @@
 
 	<div class="panel panel-primary group category">
 		<div class="panel-heading">
-			<h3 class="panel-title list">Modify Activity</h3>
+			<h3 class="panel-title list">			<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
+			Modify Activity</h3>
 		</div>
 		<div class="panel-body">
 			<%-- 	<form:form  method="post" modelAttribute="modifyProduct" > (ResquestParam)  --%>
@@ -64,7 +65,7 @@
 								</td>
 								<td>
 									<a href="<c:url value='competenceStatus/${compStatus.competence.id}/delete.htm'/>">
-										<img WIDTH="20" HEIGHT="20" border="0" src="<c:url value="/resources/images/error.jpeg" /> " > 
+										<img WIDTH="30" HEIGHT="30" border="0" src="<c:url value="/resources/images/delete.png" /> " > 
 									</a>
 							</td>
 								
@@ -82,7 +83,10 @@
 			</form:form >
 			<div class="addComeptenceStatus">
 			<form:form method="post" action="addCompetenceStatus.htm" commandName="addcompetencestatus">
-					<h4> New Competence Status</h4>
+					<h4 style=" color: forestgreen;">   		
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+					New Competence Status</h4>
+					<br>
 					<label>Competence:</label>
 					<form:select class="form-control 2" path="competence"
 						id="competence">
@@ -91,6 +95,7 @@
 							<form:option value="${comp.id}">${comp.name}</form:option>
 						</c:forEach>
 					</form:select>
+					<br>
 					<label>Competence Percentage:</label>
 					<form:input class="form-control" path="percentage" id="percentage"
 						required="true" />
@@ -104,11 +109,5 @@
 			</div>
 		</div>
 	</div>
-</body>
-</html>
-<div class="home-button">
-	<a class="btn home" href="<c:url value="/home.htm"/>">Home</a>
-</div>
-</body>
 </body>
 </html>

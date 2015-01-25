@@ -17,7 +17,9 @@
 
 	<div class="panel panel-primary group category">
 		<div class="panel-heading">
-			<h3 class="panel-title list">Add Subject</h3>
+			<h3 class="panel-title list">
+							<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
+			Add Subject</h3>
 		</div>
 		<div class="panel-body">
 			<form:form method="post" commandName="addsubject" role="form">
@@ -42,10 +44,5 @@
 			</form:form>
 		</div>
 	</div>
-</body>
-</html>
-<div class="home-button">
-	<a class="btn home" href="<c:url value="/home.htm"/>">Home</a>
-</div>
 </body>
 </html>

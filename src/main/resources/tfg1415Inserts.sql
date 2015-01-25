@@ -62,8 +62,12 @@ INSERT INTO subject_competence(id_subject,id_competence) VALUES (3,5)
 INSERT INTO subject_competence(id_subject,id_competence) VALUES (5,5)
 
 
+-- User - Role Inserts  ROLE_USER(2) ROLE_ADMIN(1)
+INSERT INTO user (id, firstName, lastName, password, username) VALUES ('1', 'first', 'last', 'admin', 'admin');
+INSERT INTO role (id, role, user_id) VALUES (NULL, '1', '1');
 
-
+INSERT INTO user (id, firstName, lastName, password, username) VALUES ('2', 'first', 'last', 'user', 'user');
+INSERT INTO role (id, role, user_id) VALUES (NULL, '2', '2');
 
 
 

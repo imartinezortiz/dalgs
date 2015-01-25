@@ -56,10 +56,5 @@
 		</div>
 	</div>
 </body>
-</html>
-<div class="home-button">
-	<a class="btn home" href="<c:url value="/home.htm"/>">Home</a>
-</div>
-</body>
-</body>
+
 </html>

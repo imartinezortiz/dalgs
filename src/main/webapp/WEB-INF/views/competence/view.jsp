@@ -16,7 +16,9 @@
 
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
-			<h3 class="panel-title list">Competence Details </h3>
+			<h3 class="panel-title list">
+			<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
+			Competence Details </h3>
 			<a class="btn list-btn btn-warning"
 				href="<c:url value='/degree/${model.competence.degree.id}/competence/${competenceId}/modify.htm'/>">Modify</a>
 
@@ -45,7 +47,10 @@
 
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
-			<h3 class="panel-title list">Subject List</h3>
+		
+			<h3 class="panel-title list">						
+			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
+			Subject List</h3>
 			
 		</div>
 		<div class="panel-body">
@@ -69,9 +74,10 @@
 						<td>
 						<a class="btn list-btn btn-success"
 						href="<c:url value='/degree/${degreeId}/subject/${subject.id}.htm'/>">View</a>
-						<a 
+						<a class="btn btn-danger"
 							href="<c:url value='/degree/${model.competence.degree.id}/competence/${competenceId}/subject/${subject.id}/delete.htm'/>">
-							<img WIDTH="20" HEIGHT="20" border="0" src="<c:url value="/resources/images/error.jpeg" /> " > 
+							
+							Delete
 						
 						</a></td>
 
@@ -83,9 +89,7 @@
 		</div>
 
 	</div>
-	<div class="home-button">
-		<a class="btn home" href="<c:url value="/home.htm"/>">Home</a>
-	</div>
+
 
 </body>
 
