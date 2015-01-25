@@ -1,87 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/security"
-	xmlns:beans="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:p="http://www.springframework.org/schema/p" 
-	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 		http://www.springframework.org/schema/security 
 		http://www.springframework.org/schema/security/spring-security-3.2.xsd
 		http://www.springframework.org/schema/util 
 		http://www.springframework.org/schema/util/spring-util-3.2.xsd">
- 
+
 
 
 
 	<!--This contains the core Spring Security configuration. -->
- 
- 
-	<!-- the http tag
-	This means the path /resources should be ignored by Spring Security; therefore it will not be secured. 
-	Why do you want to do this? 
-	Mainly because these are static images, CSS, and JavaScript files that don't need to be secured.
-	-->
-	<http pattern="/resources" security="none" />
-		
-	<!--
-	the second http tag
-	This contains the core security rules of our application. 
-	-->
 
-	<http auto-config="true"  use-expressions="true">
-	
-		<!--
-		intercept urls
-		Here we declare URL patterns to be protected. Notice the use of SPEL hasRole and permitAll (see more)
-		-->
-		<intercept-url pattern="/login.htm" access="permitAll"/>
-		<intercept-url pattern="/logout.htm" access="permitAll"/>
-		<intercept-url pattern="/denied.htm" access="hasRole('ROLE_USER')"/>
-		<intercept-url pattern="/" access="hasRole('ROLE_USER')"/>
-		<intercept-url pattern="/user.htm" access="hasRole('ROLE_USER')"/>
-		<intercept-url pattern="/admin.htm" access="hasRole('ROLE_ADMIN')"/>
-		
-		
-		<!--
-		form login
-		This declares our login settings:
-		login-page: the URL path of our login page
-		authentication-failure-url: the URL where a user will be redirected after a failed login
-		default-target-url: the URL where a user will be redirected after a successful login
-		-->	
-		<form-login login-page="/login.htm" 
-			authentication-failure-url="/login/failure.htm" 
-			default-target-url="/"/>
-		
-		
-		<!--
-		denied handler
-		This declares the URL where a user will be redirected after a denied access.
-		-->		
-		<access-denied-handler error-page="/denied.htm"/>
-		
-		<logout invalidate-session="true" 
-			logout-success-url="/logout/success.htm" 
-			logout-url="/logout.hrm"/>
+
+	<!-- the http tag This means the path /resources should be ignored by Spring 
+		Security; therefore it will not be secured. Why do you want to do this? Mainly 
+		because these are static images, CSS, and JavaScript files that don't need 
+		to be secured. -->
+	<http pattern="/resources" security="none" />
+
+	<!-- the second http tag This contains the core security rules of our application. -->
+
+	<http auto-config="true" use-expressions="true">
+
+		<!-- intercept urls Here we declare URL patterns to be protected. Notice 
+			the use of SPEL hasRole and permitAll (see more) -->
+		<intercept-url pattern="/login.htm" access="permitAll" />
+		<intercept-url pattern="/logout.htm" access="permitAll" />
+		<intercept-url pattern="/denied.htm" access="hasRole('ROLE_USER')" />
+		<intercept-url pattern="/" access="hasRole('ROLE_USER')" />
+		<intercept-url pattern="/user.htm" access="hasRole('ROLE_USER')" />
+		<intercept-url pattern="/admin.htm" access="hasRole('ROLE_ADMIN')" />
+
+
+		<!-- form login This declares our login settings: login-page: the URL path 
+			of our login page authentication-failure-url: the URL where a user will be 
+			redirected after a failed login default-target-url: the URL where a user 
+			will be redirected after a successful login -->
+		<form-login login-page="/login.htm"
+			authentication-failure-url="/login/failure.htm" default-target-url="/" />
+
+
+		<!-- denied handler This declares the URL where a user will be redirected 
+			after a denied access. -->
+		<access-denied-handler error-page="/denied.htm" />
+
+		<logout invalidate-session="true" logout-success-url="/logout/success.htm"
+			logout-url="/logout.htm" />
 	</http>
 
 
-	<!-- 
-	authentication manager This is similar with the login element. - logout-success-url: 
-	the URL where a user will be redirected after a successful logout - logout-url: 
-	the URL path of our logout page - authentication-manager: registers an AuthenticationManager 
-	that provides authentication services (see more) - authentication-provider: 
-	this is a shorthand for configuring a DaoAuthenticationProvider which loads 
-	user information from a UserDetailsService (see more) - user-service-ref: 
-	this allows us to declare a custom UserDetailsService - password-encoder: 
-	this allows us to declare various password encoders such as md5 and sha -->	
+	<!-- authentication manager This is similar with the login element. - logout-success-url: 
+		the URL where a user will be redirected after a successful logout - logout-url: 
+		the URL path of our logout page - authentication-manager: registers an AuthenticationManager 
+		that provides authentication services (see more) - authentication-provider: 
+		this is a shorthand for configuring a DaoAuthenticationProvider which loads 
+		user information from a UserDetailsService (see more) - user-service-ref: 
+		this allows us to declare a custom UserDetailsService - password-encoder: 
+		this allows us to declare various password encoders such as md5 and sha -->
 	<authentication-manager>
 		<authentication-provider user-service-ref="customUserDetailsService">
-	    	<password-encoder hash="md5"/>
-	    </authentication-provider>
+			<!-- <password-encoder hash="sha"/> -->
+		</authentication-provider>
+		<!-- <authentication-provider>
+			<user-service>
+				<user name="user" password="user" authorities="ROLE_USER" />
+				<user name="admin" password="admin" authorities="ROLE_ADMIN" />
+			</user-service>
+		</authentication-provider> -->
 	</authentication-manager>
-	
+
 </beans:beans>
 	
 	

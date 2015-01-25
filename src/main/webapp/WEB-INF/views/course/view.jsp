@@ -22,9 +22,7 @@
 			Course Details</h3>
 			<a class="btn list-btn btn-warning"
 				href="<c:url value='/academicTerm/${academicId}/course/${courseId}/modify.htm'/>">
-				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
-				
-				Modify</a>
+				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>Edit</a>
 
 		</div>
 

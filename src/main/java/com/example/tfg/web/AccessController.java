@@ -31,8 +31,5 @@ public class AccessController {
 		return "redirect:/login.htm?message="+message;
 	}
 	
-	@RequestMapping(value = "/logout.htm")
- 	public String logout() {
-		return "access/login";
-	}
+	
 }

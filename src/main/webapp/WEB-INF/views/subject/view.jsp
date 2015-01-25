@@ -22,7 +22,7 @@
 			<a class="btn list-btn btn-warning"
 				href="<c:url value='/degree/${model.subject.degree.id}/subject/${subjectId}/modify.htm'/>">				
 				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
-				Modify</a>
+				Edit</a>
 
 		</div>
 

@@ -11,11 +11,11 @@ public class MediatorController {
 	
 	@RequestMapping(value="/user.htm")
 	public String getUserPage() {
-		return "user";
+		return "user/user";
 	}
 	
 	@RequestMapping(value="/admin.htm")
 	public String getAdminPage() {
-		return "admin";
+		return "user/admin";
 	}
 }
