@@ -12,7 +12,7 @@
 <!-- spring:out formatea la salida -->
 
 <link rel="shortcut icon"
-	href="<c:url value= "/resources/images/image200.ico" />">
+	href="<c:url value= "/resources/images/favicon.ico" />">
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
