@@ -65,7 +65,7 @@
 								</td>
 								<td>
 									<a href="<c:url value='competenceStatus/${compStatus.competence.id}/delete.htm'/>">
-										<img WIDTH="30" HEIGHT="30" border="0" src="<c:url value="/resources/images/delete.png" /> " > 
+										<img style="width: 25px; height: 10px; margin-top: 3%;" border="0" src="<c:url value="/resources/images/delete.png" /> " > 
 									</a>
 							</td>
 								

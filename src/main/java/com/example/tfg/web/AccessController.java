@@ -1,5 +1,6 @@
 package com.example.tfg.web;
 
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,5 +32,5 @@ public class AccessController {
 		return "redirect:/login.htm?message="+message;
 	}
 	
-	
+	  
 }

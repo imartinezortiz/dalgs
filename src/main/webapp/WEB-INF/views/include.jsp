@@ -7,9 +7,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!-- spring:out formatea la salida -->
+
+
+<!-- Encoding -->
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 
 <link rel="shortcut icon"
 	href="<c:url value= "/resources/images/favicon.ico" />">
@@ -25,11 +29,14 @@
 <!-- Latest compiled and minified JavaScript -->
 <script type="text/javascript"
 	src="<c:url value="/resources/scripts/jquery-1.11.1.min.js" /> ">
-	
 </script>
+
 <script type="text/javascript"
 	src=" <c:url value="/resources/scripts/bootstrap.js" /> ">
-	
+</script>
+
+<script type="text/javascript"
+	src=" <c:url value="/resources/scripts/bootstrap-filestyle.js" /> ">
 </script>
 
 <!-- FONTS -->
@@ -53,6 +60,7 @@
 <c:url value="/user.htm" var="userUrl" />
 <c:url value="/admin.htm" var="adminUrl" />
 <c:url value="/logout.htm" var="logoutUrl" />
+<c:url value="/upload/User.htm" var="uploadUrl" />
 
 <div class="list-group index">
 
@@ -102,7 +110,7 @@
 
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="${userUrl}"> <span
+					<li><a href="${uploadUrl}"> <span
 							class="glyphicon glyphicon-upload" aria-hidden="true"></span> CVS
 							<span class="sr-only">(current)</span></a></li>
 					<p class="navbar-text navbar-right" style="font-size: 15px;">
