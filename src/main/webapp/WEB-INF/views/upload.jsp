@@ -27,6 +27,9 @@
 					<div class="form-group view">
 						<label>Encoding</label><br>
 						<form:select path="charset">
+							<form:option value="UTF-8">UTF-8</form:option>
+							<form:option value="">--------------------</form:option>
+							
 							<form:options items="${listCharsets}" />
 						</form:select>
 						

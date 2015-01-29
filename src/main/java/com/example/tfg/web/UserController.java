@@ -68,11 +68,11 @@ public class UserController {
 	public String uploadPost(@PathVariable("entityClass") String entityClass, @ModelAttribute("newUpload") @Valid UploadForm upload,
 			BindingResult result, Model model) {
 		
-		if (result.hasErrors()){
+		if (result.hasErrors() || upload.getCharset().isEmpty()){
 	      for(ObjectError error : result.getAllErrors()){
 	        System.err.println("Error: " + error.getCode() +  " - " + error.getDefaultMessage());
 	      }
-	      return "upload/uploadForm";
+	      return "upload";
 	    }
 		
 
@@ -119,6 +119,7 @@ public class UserController {
 
 			while ((u = beanReader.read(User.class, nameMapping, processors)) != null) {
 				usrs.add(u);
+				//serviceUser.add(u);
 			}
 
 		} finally {
