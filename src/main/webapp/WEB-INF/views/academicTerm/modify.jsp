@@ -22,12 +22,13 @@
 		<div class="panel-body">
 
 
-			<form:form method="post" commandName="generic" role="form">
+			<form:form method="post" commandName="academicTerm" role="form">
 				<div class="form-group">
 					<label>Term: </label>
 					<form:input path="term" class="form-control" required="true" length="20"  />
+				
 				</div>		
-
+				
 				<input type="submit" class="btn btn-success" value="Update">
 
 			</form:form>

@@ -1,6 +1,5 @@
 package com.example.tfg.classes;
 
-
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 public class UploadForm {
@@ -71,5 +70,4 @@ public class UploadForm {
 		this.charset = charset;
 	}
 
-	
 }

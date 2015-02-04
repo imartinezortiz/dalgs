@@ -6,7 +6,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.slf4j.Logger;
 import org.hibernate.exception.ConstraintViolationException;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.example.tfg.domain.Degree;
@@ -22,9 +24,17 @@ public class DegreeDaoImp implements DegreeDao {
 		return em;
 	}
 
+	protected static final Logger logger = LoggerFactory
+			.getLogger(DegreeDaoImp.class);
+
 	@PersistenceContext
 	public void setEntityManager(EntityManager entityManager) {
-		this.em = entityManager;
+		try {
+			this.em = entityManager;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+
+		}
 	}
 
 	@Override
@@ -32,6 +42,7 @@ public class DegreeDaoImp implements DegreeDao {
 		try {
 			em.persist(degree);
 		} catch (ConstraintViolationException e) {
+			logger.error(e.getMessage());
 			return false;
 		}
 
@@ -41,10 +52,10 @@ public class DegreeDaoImp implements DegreeDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Degree> getAll() {
-		
+
 		return em.createQuery("select d from Degree d order by d.id")
 				.getResultList();
-		
+
 	}
 
 	@Override
@@ -52,6 +63,7 @@ public class DegreeDaoImp implements DegreeDao {
 		try {
 			em.merge(degree);
 		} catch (ConstraintViolationException e) {
+			logger.error(e.getMessage());
 			return false;
 		}
 		return true;
@@ -65,13 +77,14 @@ public class DegreeDaoImp implements DegreeDao {
 
 	@Override
 	public boolean deleteDegree(Degree degree) {
-//		Degree degree = em.getReference(Degree.class, id);
+		// Degree degree = em.getReference(Degree.class, id);
 		try {
 			degree.setDeleted(true);
 			em.merge(degree);
 
 			return true;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			return false;
 		}
 	}
@@ -101,6 +114,8 @@ public class DegreeDaoImp implements DegreeDao {
 			Long aux = (Long) query.getSingleResult() + 1;
 			return "DEG" + aux;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
+
 			return null;
 		}
 
@@ -115,4 +130,15 @@ public class DegreeDaoImp implements DegreeDao {
 		else
 			return true;
 	}
+
+	// @Override
+	// public Degree getDegreeAll(Long id) {
+	// Degree degree = em.getReference(Degree.class, id);
+	// Query query =
+	// em.createQuery("select d from Degree d join d.subjects s join d.competences c where d=?1");
+	// query.setParameter(1, degree);
+	//
+	//
+	// return (Degree) query.getSingleResult();
+	// }
 }

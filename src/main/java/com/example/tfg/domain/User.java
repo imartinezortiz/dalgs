@@ -1,6 +1,5 @@
 package com.example.tfg.domain;
 
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,23 +10,24 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.example.tfg.domain.Role;
- 
-@Entity//(name="user")
-@Table(name="user")
+
+@Entity
+// (name="user")
+@Table(name = "user")
 public class User {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	private String firstName;
 	private String lastName;
-	
-	@Column(unique=true)
+
+	@Column(unique = true)
 	private String username;
 	private String password;
-	
-	@OneToOne(mappedBy="user", cascade={CascadeType.ALL})
+
+	@OneToOne(mappedBy = "user", cascade = { CascadeType.ALL })
 	private Role role;
 
 	public Long getId() {
@@ -77,6 +77,5 @@ public class User {
 	public void setRole(Role role) {
 		this.role = role;
 	}
- 
 
 }

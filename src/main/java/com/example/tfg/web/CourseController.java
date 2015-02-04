@@ -1,6 +1,5 @@
 package com.example.tfg.web;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,56 +41,58 @@ public class CourseController {
 
 	@Autowired
 	private SubjectService serviceSubject;
-	
+
 	@Autowired
 	private ActivityService serviceActivity;
-	
+
 	@Autowired
 	private AcademicTermService serviceAcademic;
-	
+
 	private static final Logger logger = LoggerFactory
 			.getLogger(CourseController.class);
-	
+
 	/**
 	 * Methods for adding courses
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/add.htm", method = RequestMethod.GET)
-	protected String getAddNewCourseForm(@PathVariable("academicId") Long id_academic,Model model) {
+	protected String getAddNewCourseForm(
+			@PathVariable("academicId") Long id_academic, Model model) {
 		Course newCourse = new Course();
-		
-		AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic); 
-		
-		model.addAttribute("activities",serviceActivity.getAll());
+
+		AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic);
+
+		model.addAttribute("activities", serviceActivity.getAll());
 		model.addAttribute("addcourse", newCourse);
-		
-		List<Subject> subjects = serviceSubject.getSubjectsForDegree(academic.getDegree().getId());
+
+		// List<Subject> subjects =
+		// serviceSubject.getSubjectsForDegree(academic.getDegree().getId());
 		model.addAttribute("academicTerm", academic);
-		model.addAttribute("subjects", subjects);
+		model.addAttribute("subjects", academic.getDegree().getSubjects());
 		return "course/add";
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/add.htm", method = RequestMethod.POST)
 	// Every Post have to return redirect
-	public String processAddNewCourse(@PathVariable("academicId") Long id_academic,
-			@ModelAttribute("addcourse") Course newCourse, BindingResult result, Model model) {
+	public String processAddNewCourse(
+			@PathVariable("academicId") Long id_academic,
+			@ModelAttribute("addcourse") Course newCourse,
+			BindingResult result, Model model) {
 
-		
-		AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic); 
-		academic.setId(id_academic);
-		newCourse.setAcademicTerm(academic);
-		
-		if(newCourse.getSubject() == null)	
-				return "redirect:/academicTerm/"+id_academic+"/course/add.htm";
-		
+		// AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic);
+		// academic.setId(id_academic);
+		// newCourse.setAcademicTerm(academic);
+
+		if (newCourse.getSubject() == null)
+			return "redirect:/academicTerm/" + id_academic + "/course/add.htm";
+
 		if (!result.hasErrors()) {
-			boolean created = serviceCourse.addCourse(newCourse);
-			
-		
+			boolean created = serviceCourse.addCourse(newCourse, id_academic);
 
 			if (created)
-				return "redirect:/academicTerm/"+id_academic+".htm";
+				return "redirect:/academicTerm/" + id_academic + ".htm";
 			else
-				return "redirect:/academicTerm/"+id_academic+"/course/add.htm";
+				return "redirect:/academicTerm/" + id_academic
+						+ "/course/add.htm";
 		}
 		return "redirect:/error.htm";
 	}
@@ -100,8 +101,9 @@ public class CourseController {
 	 * Methods for view courses
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}.htm", method = RequestMethod.GET)
-	protected ModelAndView formViewCourse(@PathVariable("academicId") Long id_academic,@PathVariable("courseId") Long id)
-			throws ServletException {
+	protected ModelAndView formViewCourse(
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("courseId") Long id) throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
@@ -111,115 +113,119 @@ public class CourseController {
 		List<Activity> activities = serviceActivity.getActivitiesForCourse(id);
 
 		if (activities != null)
-			myModel.put("activities", activities);
+			myModel.put("activities", p.getActivities());
 
 		return new ModelAndView("course/view", "model", myModel);
 	}
-	
+
 	/**
 	 * Methods for modify courses
 	 */
-	
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/modify.htm", method = RequestMethod.GET)
-	protected String formModifyCourses(@PathVariable("academicId") Long id_academic, @PathVariable("courseId") Long id,
-			Model model) throws ServletException {
-		
+	protected String formModifyCourses(
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("courseId") Long id, Model model)
+			throws ServletException {
+
 		Course p = serviceCourse.getCourse(id);
-		
+
 		AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic);
 		model.addAttribute("idSubject", p.getSubject().getId());
-		
-		List<Subject> subjects = serviceSubject.getSubjectsForDegree(academic.getDegree().getId());
-		model.addAttribute("academicTerm",academic);
-		model.addAttribute("subjects", subjects);
-		
+
+		// List<Subject> subjects =
+		// serviceSubject.getSubjectsForDegree(academic.getDegree().getId());
+		model.addAttribute("academicTerm", academic);
+		model.addAttribute("subjects", academic.getDegree().getSubjects());
+
 		model.addAttribute("activities", serviceActivity.getAll());
 		model.addAttribute("modifyCourse", p);
 		return "course/modify";
 
 	}
 
-
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/modify.htm", method = RequestMethod.POST)
-	public String formModifyCourse(@PathVariable("academicId") Long id_academic,
+	public String formModifyCourse(
+			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@ModelAttribute("modifyCourse") Course modify,
 			BindingResult result, Model model)
 
 	{
-//		if(modify.getAcademicTerm() == null)
-//			return "redirect:/academicTerm/"+id_academic+"/course/"+id_course+"/modify.htm";
-		
+		// if(modify.getAcademicTerm() == null)
+		// return
+		// "redirect:/academicTerm/"+id_academic+"/course/"+id_course+"/modify.htm";
+
 		if (!result.hasErrors()) {
 			modify.setId(id_course);
-			modify.setAcademicTerm(serviceAcademic.getAcademicTerm(id_academic));
-			boolean success = serviceCourse.modifyCourse(modify);
+			// modify.setAcademicTerm(serviceAcademic.getAcademicTerm(id_academic));
+			boolean success = serviceCourse.modifyCourse(modify, id_academic);
 			if (success)
-				return "redirect:/academicTerm/"+id_academic+"/course/"+id_course+".htm";
+				return "redirect:/academicTerm/" + id_academic + "/course/"
+						+ id_course + ".htm";
 		}
 
 		return "redirect:/error.htm";
 
 	}
-	
+
 	/**
-	 * Delete a course of an academicTerm 
+	 * Delete a course of an academicTerm
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/delete.htm", method = RequestMethod.GET)
-	public String formDeleteAcademicTermCourse(@PathVariable("academicId") Long id_academic,
-			@PathVariable("courseId") Long id_course)
-			throws ServletException {
+	public String formDeleteAcademicTermCourse(
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("courseId") Long id_course) throws ServletException {
 
 		if (serviceCourse.deleteCourse(id_course)) {
-			return "redirect:/academicTerm/"+id_academic+".htm";
+			return "redirect:/academicTerm/" + id_academic + ".htm";
 		} else
 			return "redirect:/error.htm";
 	}
 
-	
+	/**
+	 * For binding subject and activities of the course.
+	 */
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) throws Exception {
+		binder.registerCustomEditor(Set.class, "subject",
+				new CustomCollectionEditor(Set.class) {
+					protected Object convertElement(Object element) {
+						if (element instanceof Subject) {
+							logger.info("Converting...{}", element);
+							return element;
+						}
 
-/**
- * For binding subject and activities of the course.
- */
-@InitBinder
-protected void initBinder(WebDataBinder binder) throws Exception {
-	binder.registerCustomEditor(Set.class, "subject",
-			new CustomCollectionEditor(Set.class) {
-				protected Object convertElement(Object element) {
-					if (element instanceof Subject) {
-						logger.info("Converting...{}", element);
-						return element;
+						if (element instanceof String) {
+							Subject subject = serviceSubject
+									.getSubjectByName(element.toString());
+							logger.info("Loking up {} to {}", element, subject);
+							return subject;
+						}
+						System.out.println("Don't know what to do with: "
+								+ element);
+						return null;
 					}
-				
-					if (element instanceof String) {
-						Subject subject = serviceSubject.getSubjectByName(element.toString());
-						logger.info("Loking up {} to {}", element,subject);
-						return subject;
+				});
+
+		binder.registerCustomEditor(Set.class, "activities",
+				new CustomCollectionEditor(Set.class) {
+					protected Object convertElement(Object element) {
+						if (element instanceof Activity) {
+							logger.info("Converting...{}", element);
+							return element;
+						}
+
+						if (element instanceof String) {
+							Activity activity = serviceActivity
+									.getActivityByName(element.toString());
+							logger.info("Loking up {} to {}", element, activity);
+							return activity;
+						}
+						System.out.println("Don't know what to do with: "
+								+ element);
+						return null;
 					}
-					System.out.println("Don't know what to do with: "
-							+ element);
-					return null;
-				}
-			});
-	
-	binder.registerCustomEditor(Set.class, "activities",
-			new CustomCollectionEditor(Set.class) {
-				protected Object convertElement(Object element) {
-					if (element instanceof Activity) {
-						logger.info("Converting...{}", element);
-						return element;
-					}
-				
-					if (element instanceof String) {
-						Activity activity = serviceActivity.getActivityByName(element.toString());
-						logger.info("Loking up {} to {}", element,activity);
-						return activity;
-					}
-					System.out.println("Don't know what to do with: "
-							+ element);
-					return null;
-				}
-			});
-}
+				});
+	}
 }

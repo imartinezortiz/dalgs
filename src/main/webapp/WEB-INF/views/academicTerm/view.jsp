@@ -19,6 +19,8 @@
 				<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
 			
 				<h3 class="panel-title list">Academic Term Details</h3>
+							<a class="btn list-btn btn-warning"
+				href="<c:url value='/academicTerm/${academicId}/modify.htm'/>">Modify</a>
 
 			</div>
 

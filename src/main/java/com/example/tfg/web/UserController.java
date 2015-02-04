@@ -1,6 +1,5 @@
 package com.example.tfg.web;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -36,10 +35,9 @@ import com.example.tfg.domain.User;
 @Controller
 public class UserController {
 
-	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(UserController.class);
+	private static final org.slf4j.Logger logger = LoggerFactory
+			.getLogger(UserController.class);
 
-	
-	
 	@SuppressWarnings("rawtypes")
 	@ModelAttribute("listCharsets")
 	public List<String> ListCharsets() {
@@ -54,63 +52,65 @@ public class UserController {
 		return listCharsets;
 	}
 
-	
-	
-	
 	@RequestMapping(value = "/upload/{entityClass}.htm", method = RequestMethod.GET)
-	public String uploadGet(@PathVariable("entityClass") String entityClass, Model model) {
-		
-		model.addAttribute("newUpload", new  UploadForm(entityClass));
+	public String uploadGet(@PathVariable("entityClass") String entityClass,
+			Model model) {
+
+		model.addAttribute("newUpload", new UploadForm(entityClass));
 		return "upload";
 	}
 
 	@RequestMapping(value = "/upload/{entityClass}.htm", method = RequestMethod.POST)
-	public String uploadPost(@PathVariable("entityClass") String entityClass, @ModelAttribute("newUpload") @Valid UploadForm upload,
+	public String uploadPost(@PathVariable("entityClass") String entityClass,
+			@ModelAttribute("newUpload") @Valid UploadForm upload,
 			BindingResult result, Model model) {
-		
-		if (result.hasErrors() || upload.getCharset().isEmpty()){
-	      for(ObjectError error : result.getAllErrors()){
-	        System.err.println("Error: " + error.getCode() +  " - " + error.getDefaultMessage());
-	      }
-	      return "upload";
-	    }
-		
 
-		CsvPreference prefers= 
-				//new CsvPreference.Builder('"', ';',"\n").build();
-		new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload.getDelimiterChar().charAt(0), upload.getEndOfLineSymbols()).build();
+		if (result.hasErrors() || upload.getCharset().isEmpty()) {
+			for (ObjectError error : result.getAllErrors()) {
+				System.err.println("Error: " + error.getCode() + " - "
+						+ error.getDefaultMessage());
+			}
+			return "upload";
+		}
+
+		CsvPreference prefers =
+		// new CsvPreference.Builder('"', ';',"\n").build();
+		new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload
+				.getDelimiterChar().charAt(0), upload.getEndOfLineSymbols())
+				.build();
 
 		List<User> list = null;
 		try {
-	
+
 			FileItem fileItem = upload.getFileData().getFileItem();
-			list = readCSVUserToBean(fileItem.getInputStream(), upload.getCharset(), prefers);//getInputStream().toString()
-			
+			list = readCSVUserToBean(fileItem.getInputStream(),
+					upload.getCharset(), prefers);// getInputStream().toString()
+
 			for (Object object : list) {
 				User user = (User) object;
 				System.out.println(user.getFirstName());
 			}
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			return "upload";
 		}
-		
-		
+
 		return "home";
 	}
-	
-
 
 	@SuppressWarnings("unused")
-	private static List<User> readCSVUserToBean(InputStream in , String charsetName,CsvPreference csvPreference ) throws IOException {
+	private static List<User> readCSVUserToBean(InputStream in,
+			String charsetName, CsvPreference csvPreference) throws IOException {
 		CsvBeanReader beanReader = null;
 		List<User> usrs = new ArrayList<User>();
 		try {
-			beanReader = new CsvBeanReader(new InputStreamReader(in, Charset.forName(charsetName)), csvPreference);
+			beanReader = new CsvBeanReader(new InputStreamReader(in,
+					Charset.forName(charsetName)), csvPreference);
 			// the name mapping provide the basis for bean setters
-			final String[] nameMapping = new String[] { "id", "firstname","lastname", "password", "username" };
-			// just read the header, so that it don't get mapped to User 
+			final String[] nameMapping = new String[] { "id", "firstname",
+					"lastname", "password", "username" };
+			// just read the header, so that it don't get mapped to User
 			// object
 			final String[] header = beanReader.getHeader(true);
 			final CellProcessor[] processors = getUserProcessors();
@@ -119,7 +119,7 @@ public class UserController {
 
 			while ((u = beanReader.read(User.class, nameMapping, processors)) != null) {
 				usrs.add(u);
-				//serviceUser.add(u);
+				// serviceUser.add(u);
 			}
 
 		} finally {
@@ -130,7 +130,7 @@ public class UserController {
 		return usrs;
 	}
 
-	/*CellProcessors have to correspond to the entity database fields */
+	/* CellProcessors have to correspond to the entity database fields */
 	private static CellProcessor[] getUserProcessors() {
 
 		final CellProcessor[] processors = new CellProcessor[] {

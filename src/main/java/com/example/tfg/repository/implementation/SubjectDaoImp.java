@@ -7,9 +7,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.hibernate.exception.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import com.example.tfg.domain.Competence;
 import com.example.tfg.domain.Course;
 import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Subject;
@@ -20,13 +21,20 @@ public class SubjectDaoImp implements SubjectDao {
 
 	protected EntityManager em;
 
+	protected static final Logger logger = LoggerFactory
+			.getLogger(SubjectDaoImp.class);
+
 	public EntityManager getEntityManager() {
 		return em;
 	}
 
 	@PersistenceContext
 	public void setEntityManager(EntityManager entityManager) {
-		this.em = entityManager;
+		try {
+			this.em = entityManager;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
 	}
 
 	public boolean addSubject(Subject subject) {
@@ -35,6 +43,7 @@ public class SubjectDaoImp implements SubjectDao {
 			em.persist(subject);
 			return true;
 		} catch (ConstraintViolationException e) {
+			logger.error(e.getMessage());
 			return false;
 		}
 
@@ -53,6 +62,7 @@ public class SubjectDaoImp implements SubjectDao {
 			em.merge(subject);
 			return true;
 		} catch (ConstraintViolationException e) {
+			logger.error(e.getMessage());
 			return false;
 
 		}
@@ -72,6 +82,7 @@ public class SubjectDaoImp implements SubjectDao {
 
 			return true;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			return false;
 		}
 
@@ -91,15 +102,18 @@ public class SubjectDaoImp implements SubjectDao {
 		return s;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Subject> getSubjectsForCompetence(Long id) {
-		Competence competence = em.getReference(Competence.class, id);
-		Query query = em.createQuery
-				// .createQuery("select c from Competence c where c.subject=?1");
-				("select s from Subject s JOIN s.competences c where c = ?1");
-		query.setParameter(1, competence);
-		return query.getResultList();
-	}
+	// @SuppressWarnings("unchecked")
+	// public List<Subject> getSubjectsForCompetence(Long id) {
+	// Competence competence = em.getReference(Competence.class, id);
+	// Query query = em.createQuery
+	// //
+	// createQuery("select c from Subject s join s.competences c where c=?1");
+	// ("select s from Subject s JOIN s.competences c where c = ?1");
+	// query.setParameter(1, competence);
+	//
+	// Competence c = (Competence)query.getSingleResult();
+	// return query.getResultList();
+	// }
 
 	public String getNextCode() {
 		Query query = em.createQuery("Select MAX(e.id ) from Subject e");
@@ -107,6 +121,7 @@ public class SubjectDaoImp implements SubjectDao {
 			Long aux = (Long) query.getSingleResult() + 1;
 			return "SUB" + aux;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			return null;
 		}
 
@@ -143,22 +158,32 @@ public class SubjectDaoImp implements SubjectDao {
 
 	}
 
-
 	public boolean deleteSubjectsForDegree(Degree degree) {
 
-		
+		try {
 
-		try{
-		Query query = em.createQuery("UPDATE Subject s SET s.isDeleted = true where s.degree=?1");
-			
+			Query query = em
+					.createQuery("UPDATE Subject c SET c.isDeleted = true where c.degree=?1");
 			query.setParameter(1, degree);
-			int n = query.executeUpdate();
-			System.out.println(n);
-		}catch(Exception e){
-
+			query.executeUpdate();
+			return true;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 			return false;
 		}
-		return true;
+
+	}
+
+	@Override
+	public boolean addSubjects(List<Subject> s) {
+		try {
+			for (Subject subject : s)
+				em.persist(subject);
+			return true;
+		} catch (ConstraintViolationException e) {
+			logger.error(e.getMessage());
+			return false;
+		}
 	}
 
 }

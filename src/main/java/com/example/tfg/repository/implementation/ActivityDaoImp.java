@@ -7,6 +7,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.hibernate.exception.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.example.tfg.domain.Activity;
@@ -17,6 +19,9 @@ import com.example.tfg.repository.ActivityDao;
 public class ActivityDaoImp implements ActivityDao {
 	protected EntityManager em;
 
+	protected static final Logger logger = LoggerFactory
+			.getLogger(ActivityDaoImp.class);
+
 	public EntityManager getEntityManager() {
 		return em;
 	}
@@ -26,6 +31,8 @@ public class ActivityDaoImp implements ActivityDao {
 		try {
 			this.em = entityManager;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
+
 		}
 	}
 
@@ -35,6 +42,7 @@ public class ActivityDaoImp implements ActivityDao {
 			em.persist(activity);
 			return true;
 		} catch (ConstraintViolationException e) {
+			logger.error(e.getMessage());
 			return false;
 		}
 	}
@@ -53,6 +61,7 @@ public class ActivityDaoImp implements ActivityDao {
 			em.merge(activity);
 			return true;
 		} catch (ConstraintViolationException e) {
+			logger.error(e.getMessage());
 			return false;
 		}
 	}
@@ -71,6 +80,7 @@ public class ActivityDaoImp implements ActivityDao {
 			// em.remove(activity);
 			return true;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			return false;
 		}
 
@@ -106,21 +116,24 @@ public class ActivityDaoImp implements ActivityDao {
 			Long aux = (Long) query.getSingleResult() + 1;
 			return "ACT" + aux;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			return null;
 		}
 
 	}
+
 	public Activity getActivityByName(String name) {
-		Query query = em.createQuery("select c from Activity c where c.name=?1");
+		Query query = em
+				.createQuery("select c from Activity c where c.name=?1");
 		query.setParameter(1, name);
-		
+
 		return (Activity) query.getResultList().get(0);
 
 	}
 
-	
 	public boolean existsCompetenceStatus(Long id_activity, Long id_competence) {
-		Query query = em.createNativeQuery("select * from activity_competencestatus   where id_activity=?1 and competence_id_competence=?2 ");
+		Query query = em
+				.createNativeQuery("select * from activity_competencestatus   where id_activity=?1 and competence_id_competence=?2 ");
 		query.setParameter(1, id_activity);
 		query.setParameter(2, id_competence);
 
@@ -130,7 +143,21 @@ public class ActivityDaoImp implements ActivityDao {
 			return true;
 	}
 
-	
-	
+	public boolean deleteActivitiesFromCourse(Course course) {
+
+		try {
+			Query query = em
+					.createQuery("UPDATE Activity a SET a.isDeleted = true where a.course=?1");
+
+			query.setParameter(1, course);
+			query.executeUpdate();
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+
+			return false;
+		}
+		return true;
+	}
 
 }

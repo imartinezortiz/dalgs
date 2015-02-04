@@ -4,69 +4,104 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.tfg.domain.AcademicTerm;
 import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Subject;
-import com.example.tfg.repository.CompetenceDao;
 import com.example.tfg.repository.DegreeDao;
-import com.example.tfg.repository.SubjectDao;
+import com.example.tfg.service.AcademicTermService;
+import com.example.tfg.service.CompetenceService;
 import com.example.tfg.service.DegreeService;
+import com.example.tfg.service.SubjectService;
 
 @Service
 public class DegreeServiceImp implements DegreeService {
 
 	@Autowired
 	private DegreeDao daoDegree;
-	
-	@Autowired
-	private SubjectDao daoSubject;
 
 	@Autowired
-	private CompetenceDao daoCompetence;
-	
+	private SubjectService serviceSubject;
+
+	@Autowired
+	private CompetenceService serviceCompetence;
+
+	@Autowired
+	private AcademicTermService serviceAcademicTerm;
+
 	@Transactional(readOnly = false)
 	public boolean addDegree(Degree degree) {
 		if (!daoDegree.existByCode(degree.getCode()))
 			return daoDegree.addDegree(degree);
-		else return false;
-		
+		else
+			return false;
+
 	}
-	
+
 	@Transactional(readOnly = true)
-	public List<Degree> getAll(){
+	public List<Degree> getAll() {
 		return daoDegree.getAll();
 	}
 
-	@Transactional(readOnly = false)
-	public boolean modifyDegree(Degree degree){
+	public boolean modifyDegree(Degree degree) {
+
 		return daoDegree.saveSubject(degree);
 	}
-	
+
 	@Transactional(readOnly = false)
-	public  Degree getDegree(Long id){
+	public boolean modifyDegree(Degree degree, Long id_degree) {
+
+		Degree Modifydegree = daoDegree.getDegree(id_degree);
+		if (degree.getCode() != null)
+			Modifydegree.setCode(degree.getCode());
+		if (degree.getName() != null)
+			Modifydegree.setName(degree.getName());
+		if (degree.getDescription() != null)
+			Modifydegree.setDescription(degree.getDescription());
+		return daoDegree.saveSubject(Modifydegree);
+	}
+
+	@Transactional(readOnly = false)
+	public Degree getDegree(Long id) {
 		return daoDegree.getDegree(id);
 	}
-	
+
 	@Transactional(readOnly = false)
-	public boolean deleteDegree(Long id){
+	public boolean deleteDegree(Long id) {
 		Degree d = daoDegree.getDegree(id);
-		boolean deleteSubjects = daoSubject.deleteSubjectsForDegree(d);
-		boolean deleteCompetences = daoCompetence.deleteCompetencesForDegree(d);
-		if (deleteSubjects && deleteCompetences)
+		boolean deleteSubjects = serviceSubject.deleteSubjectsForDegree(d);
+		boolean deleteCompetences = serviceCompetence
+				.deleteCompetencesForDegree(d);
+		if (deleteSubjects && deleteCompetences) {
+			for (AcademicTerm a : serviceAcademicTerm
+					.getAcademicTermsByDegree(id)) {
+				serviceAcademicTerm.deleteAcademicTerm(a.getId());
+			}
 			return daoDegree.deleteDegree(d);
-		else return false;
+		} else
+			return false;
 	}
 
 	@Transactional(readOnly = true)
 	public Degree getDegreeSubject(Subject p) {
-		
+
 		return daoDegree.getDegreeSubject(p);
 	}
+
 	@Transactional(readOnly = true)
-	public String getNextCode(){
+	public String getNextCode() {
 		return daoDegree.getNextCode();
-	
+
 	}
+
+	@Transactional(readOnly = true)
+	public Degree getDegreeAll(Long id) {
+
+		Degree d = daoDegree.getDegree(id);
+		d.setSubjects(serviceSubject.getSubjectsForDegree(id));
+		d.setCompetences(serviceCompetence.getCompetencesForDegree(id));
+		return d;
+	}
+
 }

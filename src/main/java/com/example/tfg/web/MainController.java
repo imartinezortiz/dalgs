@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
@@ -35,25 +34,25 @@ public class MainController {
 				DateFormat.LONG, locale);
 
 		String formattedDate = dateFormat.format(date);
-
+		model.addAttribute("class", "User");
 		model.addAttribute("serverTime", formattedDate);
 
 		return "home";
 	}
 
-	/*@RequestMapping(value = "/tfg/home", method = RequestMethod.GET)
-	public String home2(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
-				DateFormat.LONG, locale);
-
-		String formattedDate = dateFormat.format(date);
-
-		model.addAttribute("serverTime", formattedDate);
-
-		return "home";
-	}*/
+	/*
+	 * @RequestMapping(value = "/tfg/home", method = RequestMethod.GET) public
+	 * String home2(Locale locale, Model model) {
+	 * logger.info("Welcome home! The client locale is {}.", locale); Date date
+	 * = new Date(); DateFormat dateFormat =
+	 * DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+	 * 
+	 * String formattedDate = dateFormat.format(date);
+	 * 
+	 * model.addAttribute("serverTime", formattedDate);
+	 * 
+	 * return "home"; }
+	 */
 
 	@RequestMapping(value = "/error.htm", method = RequestMethod.GET)
 	public String error() {

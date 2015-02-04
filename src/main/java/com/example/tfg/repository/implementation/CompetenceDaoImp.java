@@ -7,6 +7,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.hibernate.exception.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.example.tfg.domain.Competence;
@@ -19,25 +21,35 @@ public class CompetenceDaoImp implements CompetenceDao {
 
 	protected EntityManager em;
 
+	protected static final Logger logger = LoggerFactory
+			.getLogger(CompetenceDaoImp.class);
+
 	public EntityManager getEntityManager() {
 		return em;
 	}
 
 	@PersistenceContext
 	public void setEntityManager(EntityManager entityManager) {
-		this.em = entityManager;
+		try {
+			this.em = entityManager;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+
+		}
 	}
 
-	public boolean existByCode(String code) {
-		Query query = em.createQuery("from Competence a where a.code=?1");
+	public boolean existByCode(String code, Degree degree) {
+		Query query = em
+				.createQuery("from Competence a where a.code=?1 and a.degree=?2");
 		query.setParameter(1, code);
+		query.setParameter(2, degree);
 
 		if (query.getResultList().isEmpty())
 			return false;
 		else
 			return true;
 	}
-	
+
 	public boolean addCompetence(Competence competence) {
 		Query query = em
 				.createQuery("select p from Competence p where p.name=?1");
@@ -49,24 +61,26 @@ public class CompetenceDaoImp implements CompetenceDao {
 			try {
 				em.persist(competence);
 			} catch (ConstraintViolationException e) {
+				logger.error(e.getMessage());
 				return false;
 			}
-			
+
 		} else
 			return false;
 		return true;
 	}
 
-
 	@SuppressWarnings("unchecked")
 	public List<Competence> getAll() {
-		return em.createQuery("select c from Competence c inner join c.degree d order by c.id")
-			
+		return em
+				.createQuery(
+						"select c from Competence c inner join c.degree d order by c.id")
+
 				.getResultList();
 	}
 
 	public boolean saveCompetence(Competence competence) {
-		try{
+		try {
 			em.merge(competence);
 			return true;
 		} catch (ConstraintViolationException e) {
@@ -79,17 +93,16 @@ public class CompetenceDaoImp implements CompetenceDao {
 
 	}
 
-	
 	public boolean deleteCompetence(Long id) {
 		Competence competence = this.getCompetence(id);
 		competence.setDeleted(true);
 
 		try {
 			em.merge(competence);
-			//em.remove(competence);
 
 			return true;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			return false;
 		}
 
@@ -99,11 +112,10 @@ public class CompetenceDaoImp implements CompetenceDao {
 	public List<Competence> getCompetencesForSubject(Long id_subject) {
 		Subject subject = em.getReference(Subject.class, id_subject);
 
-
-		Query query = em.createQuery
-	
-				("select c from Competence c JOIN c.subjects s where s = ?1");
+		Query query = em
+				.createQuery("select c from Subject s.competences c where s = ?1");
 		query.setParameter(1, subject);
+
 		return query.getResultList();
 	}
 
@@ -112,44 +124,45 @@ public class CompetenceDaoImp implements CompetenceDao {
 	public List<Competence> getCompetencesForDegree(Long id_degree) {
 		Degree degree = em.getReference(Degree.class, id_degree);
 
-
 		Query query = em
 				.createQuery("select c from Competence c where c.degree=?1");
 		query.setParameter(1, degree);
 		return query.getResultList();
 	}
-	
 
 	public Competence getCompetenceByName(String name) {
-		Query query = em.createQuery("select c from Competence c where c.name=?1");
+		Query query = em
+				.createQuery("select c from Competence c where c.name=?1");
 		query.setParameter(1, name);
-		
+
 		return (Competence) query.getResultList().get(0);
 
 	}
-	public String getNextCode(){
-		Query query = em.createQuery("Select MAX(e.id ) from Competence e");
-		try {
-			Long aux = (Long) query.getSingleResult() + 1;
-			return "COMP" + aux;
-		} catch (Exception e) {
-			return null;
-		}
 
-	}
+	// public String getNextCode(){
+	// Query query = em.createQuery("Select MAX(e.id ) from Competence e");
+	// try {
+	// Long aux = (Long) query.getSingleResult() + 1;
+	// return "COMP" + aux;
+	// } catch (Exception e) {
+	// return null;
+	// }
+	//
+	// }
 
-	
 	public boolean deleteCompetencesForDegree(Degree degree) {
-		try{
-			Query query = em.createQuery("UPDATE Competence c SET c.isDeleted = true where c.degree=?1");
-				
-				query.setParameter(1, degree);
-				int n = query.executeUpdate();
-				System.out.println(n);
-			}catch(Exception e){
 
-				return false;
-			}
-			return true;
+		try {
+			Query query = em
+					.createQuery("UPDATE Competence c SET c.isDeleted = true where c.degree=?1");
+
+			query.setParameter(1, degree);
+			query.executeUpdate();
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return false;
+		}
+		return true;
 	}
 }

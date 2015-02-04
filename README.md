@@ -1,6 +1,5 @@
 Proyecto TFG
- 	Spring Security -> http://krams915.blogspot.com.es/2012/01/spring-security-31-implement_1244.html 
-	Eliminar bidireccionales
-	Pasar todo a servicios
+	CSV
+	/upload/nombre_de_la_entity.htm (User/Subject/...)
 
 / Almudena
