@@ -131,14 +131,16 @@ public class DegreeDaoImp implements DegreeDao {
 			return true;
 	}
 
-	// @Override
-	// public Degree getDegreeAll(Long id) {
-	// Degree degree = em.getReference(Degree.class, id);
-	// Query query =
-	// em.createQuery("select d from Degree d join d.subjects s join d.competences c where d=?1");
-	// query.setParameter(1, degree);
-	//
-	//
-	// return (Degree) query.getSingleResult();
-	// }
+
+
+//	@Override
+//	public Degree getDegreeAll(Long id) {
+//		Degree degree = em.getReference(Degree.class, id);
+//		Query query =
+//				em.createQuery("select d from Degree d join d.subjects s join d.competences c where d=?1");
+//		query.setParameter(1, degree);
+//
+//
+//		return (Degree) query.getSingleResult();
+//	}
 }

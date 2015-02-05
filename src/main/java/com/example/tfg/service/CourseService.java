@@ -25,4 +25,6 @@ public interface CourseService {
 
 	public boolean deleteCoursesFromAcademic(AcademicTerm academic);
 
+	public Course getCourseAll(Long id);
+
 }

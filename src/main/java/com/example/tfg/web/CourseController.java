@@ -107,7 +107,7 @@ public class CourseController {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		Course p = serviceCourse.getCourse(id);
+		Course p = serviceCourse.getCourseAll(id);
 		myModel.put("course", p);
 
 		List<Activity> activities = serviceActivity.getActivitiesForCourse(id);

@@ -92,4 +92,11 @@ public class AcademicTermServiceImp implements AcademicTermService {
 		return daoAcademicTerm.getAcademicTermsByDegree(id_degree);
 	}
 
+	@Transactional(readOnly = true)
+	public AcademicTerm getAcademicTermAll(Long id_academic) {
+		AcademicTerm aT= daoAcademicTerm.getAcademicTermById(id_academic);
+		aT.setCourses(serviceCourse.getCoursesByAcademicTerm(id_academic));
+		return aT;
+	}
+
 }

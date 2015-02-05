@@ -27,4 +27,6 @@ public interface AcademicTermService {
 
 	public List<AcademicTerm> getAcademicTermsByDegree(Long id_degree);
 
+	public AcademicTerm getAcademicTermAll(Long id_academic);
+
 }

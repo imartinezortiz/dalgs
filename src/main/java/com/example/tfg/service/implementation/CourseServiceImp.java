@@ -101,4 +101,11 @@ public class CourseServiceImp implements CourseService {
 		return deleted;
 	}
 
+	@Override
+	public Course getCourseAll(Long id) {
+		Course c = daoCourse.getCourse(id);
+		c.setActivities(serviceActivity.getActivitiesForCourse(id));
+		return c;
+	}
+
 }

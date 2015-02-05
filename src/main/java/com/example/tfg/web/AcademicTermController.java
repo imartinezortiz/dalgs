@@ -98,7 +98,7 @@ public class AcademicTermController {
 			throws ServletException {
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		AcademicTerm a = serviceAcademicTerm.getAcademicTerm(id_academic);
+		AcademicTerm a = serviceAcademicTerm.getAcademicTermAll(id_academic);
 		myModel.put("academicTerm", a);
 
 		// List<Course> courses =
