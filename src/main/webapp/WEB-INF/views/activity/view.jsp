@@ -16,9 +16,13 @@
 
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
-			<h3 class="panel-title list">Activity Details</h3>
+			<h3 class="panel-title list">
+				<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
+				Activity Details
+			</h3>
 			<a class="btn list-btn btn-warning"
-				href="<c:url value='${activityId}/modify.htm'/>">Modify</a>
+				href="<c:url value='${activityId}/modify.htm'/>">			
+				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>Edit</a>
 
 		</div>
 
@@ -53,7 +57,9 @@
 
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
-			<h3 class="panel-title list">Competence Status List </h3>
+			<h3 class="panel-title list">						
+			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
+			Competence Status List </h3>
 		</div>
 		<div class="panel-body">
 			<table class="table table-striped table-bordered">
@@ -82,9 +88,7 @@
 		</div>
 
 	</div>
-	<div class="home-button">
-		<a class="btn home" href="<c:url value="/home.htm"/>">Home</a>
-	</div>
+
 
 </body>
 

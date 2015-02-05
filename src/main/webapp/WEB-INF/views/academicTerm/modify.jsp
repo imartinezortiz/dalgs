@@ -16,28 +16,24 @@
 
 	<div class="panel panel-primary group category">
 		<div class="panel-heading">
-			<h3 class="panel-title list">Modify Activity</h3>
+			<h3 class="panel-title list">				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
+			Modify Activity</h3>
 		</div>
 		<div class="panel-body">
 
 
-			<form:form method="post" commandName="generic" role="form">
+			<form:form method="post" commandName="academicTerm" role="form">
 				<div class="form-group">
 					<label>Term: </label>
 					<form:input path="term" class="form-control" required="true" length="20"  />
+				
 				</div>		
-
+				
 				<input type="submit" class="btn btn-success" value="Update">
 
 			</form:form>
 		</div>
 	</div>
 
-</body>
-</html>
-<div class="home-button">
-	<a class="btn home" href="<c:url value="/home.htm"/>">Home</a>
-</div>
-</body>
 </body>
 </html>

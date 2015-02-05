@@ -16,9 +16,13 @@
 
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
-			<h3 class="panel-title list">Course Details</h3>
+			<h3 class="panel-title list">
+							<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
+			
+			Course Details</h3>
 			<a class="btn list-btn btn-warning"
-				href="<c:url value='/academicTerm/${academicId}/course/${courseId}/modify.htm'/>">Modify</a>
+				href="<c:url value='/academicTerm/${academicId}/course/${courseId}/modify.htm'/>">
+				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>Edit</a>
 
 		</div>
 
@@ -38,6 +42,8 @@
 	
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
+			<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
+		
 			<h3 class="panel-title list"> Subject</h3>			
 		</div>
 		<div class="panel-body">
@@ -50,8 +56,13 @@
 	
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
-			<h3 class="panel-title list"> Activity List</h3>
-			<a  class="btn list-btn btn-warning2" href="<c:url value='/academicTerm/${academicId}/course/${courseId}/add.htm'/>"> Add Activity </a>
+			<h3 class="panel-title list">						
+			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
+			 Activity List</h3>
+			<a  class="btn list-btn btn-warning2" href="<c:url value='/academicTerm/${academicId}/course/${courseId}/add.htm'/>">
+								<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
+			
+			 Add Activity </a>
 			
 		</div>
 		<div class="panel-body">
@@ -78,10 +89,7 @@
 									<a class="btn btn-danger"
 								href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}/delete.htm'/>">
 									Delete </a>
-							<%-- <a 
-							href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}/delete.htm'/>">
-							<img WIDTH="20" HEIGHT="20" border="0" src="<c:url value="/resources/images/error.jpeg" /> " > 
-							</a> --%>
+							
 							</td>
 
 					</tr>
@@ -92,9 +100,6 @@
 		</div>
 	</div>
 
-	<div class="home-button">
-		<a class="btn home" href="<c:url value="/home.htm"/>">Home</a>
-	</div>
 
 </body>
 

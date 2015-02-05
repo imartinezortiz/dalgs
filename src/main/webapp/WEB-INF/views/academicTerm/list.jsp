@@ -8,9 +8,14 @@
 <body>
 	<div class="table-responsive list">
 		<div class="panel-heading list">
-			<h4>Academic Terms</h4>
+			<h4>  
+			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
+			 Academic Terms</h4>
 			<a class="btn list-btn btn-warning2"
-				href="<c:url value='/academicTerm/add.htm'/>"> Add Academic Term
+				href="<c:url value='/academicTerm/add.htm'/>"> 
+				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
+				
+				Add Academic Term
 			</a>
 		</div>
 		<table class="table table-striped table-bordered">
@@ -40,7 +45,7 @@
 
 					<td><a
 						href="<c:url value='/academicTerm/${academicTerm.id}.htm'/>"
-						class="btn btn-warning 2">View</a> <a
+						class="btn btn-success">View</a> <a
 						href="<c:url value='/academicTerm/${academicTerm.id}/delete.htm'/>"
 						class="btn btn-danger">Delete</a></td>
 
@@ -51,14 +56,17 @@
 
 		<nav>
 			<ul class="pagination">
-				<c:if test="${currentPage > 0}">
+				<c:if test="${model.currentPage > 0}">
 
 					<li><a
-						href="<c:url value='/academicTerm/page/${currentPage - 1}.htm'/>"
+						href="<c:url value='/academicTerm/page/${model.currentPage - 1}.htm'/>"
 						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 					</a></li>
 				</c:if>
-				<c:forEach var="index" begin="0" end="${numberOfPages}" step="1">
+
+				<c:forEach var="index" begin="0" end="${model.numberOfPages -1}"
+					step="1">
+
 
 
 					<li><a href="<c:url value='/academicTerm/page/${index}.htm'/>">
@@ -67,9 +75,11 @@
 
 
 				</c:forEach>
-				<c:if test="${currentPage < numberOfPages}">
+
+				<c:if test="${model.currentPage < model.numberOfPages -1}">
+
 					<li><a
-						href="<c:url value='/academicTerm/page/${currentPage + 1}.htm'/>"
+						href="<c:url value='/academicTerm/page/${model.currentPage + 1}.htm'/>"
 						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 					</a></li>
 				</c:if>
@@ -77,10 +87,7 @@
 		</nav>
 	</div>
 
-	<div class="home-button">
-		<a class="btn home" href="<c:url value="/home.htm"/>">Home</a>
-	</div>
-</body>
+
 
 </body>
 </html>

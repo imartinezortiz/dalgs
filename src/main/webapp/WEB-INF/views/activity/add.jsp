@@ -16,7 +16,9 @@
 
 	<div class="panel panel-primary group category">
 		<div class="panel-heading">
-			<h3 class="panel-title list">Add Activity</h3>
+			<h3 class="panel-title list">			<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
+			
+			Add Activity</h3>
 		</div>
 		<div class="panel-body">
 
@@ -40,8 +42,5 @@
 			</form:form>
 		</div>
 	</div>
-</body>
-</html>
-<div class="home-button"><a class="btn home" href="<c:url value="/home.htm"/>">Home</a></div></body>
 </body>
 </html>

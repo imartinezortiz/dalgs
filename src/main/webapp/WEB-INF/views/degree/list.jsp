@@ -11,8 +11,11 @@
 
 	<div class="table-responsive list">
 		<div class="panel-heading list">
-			<h4>Degrees</h4>
+
+			<h4>			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
+			Degrees</h4>
 			<a class="btn btn-add2" href="<c:url value='/degree/add.htm'/>">
+							<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 				Add Degree </a>
 		</div>
 		<table class="table table-striped table-bordered">
@@ -39,12 +42,5 @@
 
 		</table>
 	</div>
-	<div class="home-button">
-		<a class="btn home" href="<c:url value="/home.htm"/>">Home</a>
-	</div>
-
-
-
-
 </body>
 </html>

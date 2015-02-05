@@ -14,20 +14,20 @@ import com.example.tfg.repository.DegreeDao;
 @Component
 public class DegreeFormatter implements Formatter<Degree> {
 
+	@Autowired
+	private DegreeDao degreeDao;
 
-    @Autowired
-    private DegreeDao degreeDao;
-    //Some service class which can give the Actor after
-    //fetching from Database
-    
-    public String print(Degree degree, Locale arg1) {
-          return degree.getName();	     
-    }
-    
-   public Degree parse(String degreeId, Locale arg1) throws ParseException {
+	// Some service class which can give the Actor after
+	// fetching from Database
 
-          return degreeDao.getDegree(Long.parseLong(degreeId));
-          //Else you can just return a new object by setting some values
-          //which you deem fit.
-     }
+	public String print(Degree degree, Locale arg1) {
+		return degree.getName();
+	}
+
+	public Degree parse(String degreeId, Locale arg1) throws ParseException {
+
+		return degreeDao.getDegree(Long.parseLong(degreeId));
+		// Else you can just return a new object by setting some values
+		// which you deem fit.
+	}
 }

@@ -18,34 +18,35 @@ import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Where;
 
 @Entity
-@Table(name = "course",uniqueConstraints = {@UniqueConstraint(columnNames={"id_subject", "id_academicterm"})})
+@Table(name = "course", uniqueConstraints = { @UniqueConstraint(columnNames = {
+		"id_subject", "id_academicterm" }) })
 @Where(clause = "isDeleted='false'")
 public class Course {
-	@Id 
+	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_course")
+	@Column(name = "id_course")
 	private Long id;
-	
-	
-	@Column(name = "isDeleted", nullable=false, columnDefinition="boolean default false")
+
+	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private boolean isDeleted;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_subject")
 	private Subject subject;
-	
 
-	@OneToMany(mappedBy="course", cascade= CascadeType.ALL)//, orphanRemoval=true)
+	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+	// , orphanRemoval=true)
 	private Collection<Activity> activities;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "id_academicterm")//, insertable=false, updatable=false)
+	@JoinColumn(name = "id_academicterm")
+	// , insertable=false, updatable=false)
 	private AcademicTerm academicTerm;
-	
+
 	public Course() {
 		super();
 	}
-	
+
 	public AcademicTerm getAcademicTerm() {
 		return academicTerm;
 	}
@@ -77,6 +78,7 @@ public class Course {
 	public void setSubject(Subject subject) {
 		this.subject = subject;
 	}
+
 	public Collection<Activity> getActivities() {
 		return activities;
 	}
@@ -84,6 +86,5 @@ public class Course {
 	public void setActivities(Collection<Activity> activities) {
 		this.activities = activities;
 	}
-
 
 }
