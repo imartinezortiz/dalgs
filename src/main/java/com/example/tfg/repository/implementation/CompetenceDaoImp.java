@@ -74,7 +74,7 @@ public class CompetenceDaoImp implements CompetenceDao {
 	public List<Competence> getAll() {
 		return em
 				.createQuery(
-						"select c from Competence c inner join c.degree d order by c.id")
+						"select c from Competence c inner join c.degree where c.isDeleted='false' d order by c.id")
 
 				.getResultList();
 	}
@@ -113,7 +113,7 @@ public class CompetenceDaoImp implements CompetenceDao {
 		Subject subject = em.getReference(Subject.class, id_subject);
 
 		Query query = em
-				.createQuery("select c from Subject s.competences c where s = ?1");
+				.createQuery("select c from Subject s.competences c where s = ?1 and c.isDeleted='false'");
 		query.setParameter(1, subject);
 
 		return query.getResultList();
@@ -125,7 +125,7 @@ public class CompetenceDaoImp implements CompetenceDao {
 		Degree degree = em.getReference(Degree.class, id_degree);
 
 		Query query = em
-				.createQuery("select c from Competence c where c.degree=?1");
+				.createQuery("select c from Competence c where c.degree=?1 and c.isDeleted='false'");
 		query.setParameter(1, degree);
 		return query.getResultList();
 	}

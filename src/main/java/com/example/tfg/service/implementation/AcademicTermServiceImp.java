@@ -3,6 +3,7 @@ package com.example.tfg.service.implementation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,8 @@ public class AcademicTermServiceImp implements AcademicTermService {
 
 	@Autowired
 	private CourseService serviceCourse;
-
+	
+	@Secured("ROLE_ADMIN")
 	@Transactional(readOnly = false)
 	public boolean addAcademicTerm(AcademicTerm academicTerm) {
 
@@ -35,7 +37,7 @@ public class AcademicTermServiceImp implements AcademicTermService {
 		// return false;
 
 	}
-
+	@Secured("ROLE_ADMIN")
 	@Transactional(readOnly = false)
 	public boolean modifyAcademicTerm(AcademicTerm academicTerm,
 			Long id_academic) {
@@ -47,6 +49,7 @@ public class AcademicTermServiceImp implements AcademicTermService {
 		return false;
 	}
 
+	
 	@Transactional(readOnly = false)
 	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex) {// String
 																	// term) {

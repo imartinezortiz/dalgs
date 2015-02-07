@@ -79,7 +79,7 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex) {// String
 																	// term) {
 		Query query = em
-				.createQuery("select a from AcademicTerm a order by a.term DESC");
+				.createQuery("select a from AcademicTerm a  where a.isDeleted='false' order by a.term DESC");
 
 		// query.setParameter(1, term);
 
@@ -121,14 +121,7 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 			return true;
 	}
 
-	/*
-	 * @SuppressWarnings("unchecked") public List<String> getAllTerms() {
-	 * 
-	 * Query query = em.createQuery("select distinct term from AcademicTerm ");
-	 * if (query.getResultList().isEmpty()) return null;
-	 * 
-	 * return query.getResultList(); }
-	 */
+
 	@Override
 	public AcademicTerm getAcademicTermById(Long id) {
 
@@ -160,7 +153,7 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 		// Degree degree = em.getReference(Degree.class, id_degree);
 
 		Query query = em
-				.createQuery("select a from AcademicTerm a where a.degree=?1 and a.term=?2");
+				.createQuery("select a from AcademicTerm a where a.degree=?1 and a.term=?2 and a.isDeleted='true'");
 		query.setParameter(1, degree);
 		query.setParameter(2, term);
 
@@ -211,7 +204,7 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 		Degree degree = em.getReference(Degree.class, id_degree);
 
 		Query query = em
-				.createQuery("select a from AcademicTerm a where  a.degree=?1");
+				.createQuery("select a from AcademicTerm a where a.isDeleted='false' and  a.degree=?1");
 		query.setParameter(1, degree);
 
 		return query.getResultList();

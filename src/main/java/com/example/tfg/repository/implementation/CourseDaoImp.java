@@ -51,7 +51,7 @@ public class CourseDaoImp implements CourseDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Course> getAll() {
-		return em.createQuery("select d from Course d order by d.id")
+		return em.createQuery("select d from Course d where d.isDeleted='false' order by d.id")
 				.getResultList();
 	}
 
@@ -86,16 +86,7 @@ public class CourseDaoImp implements CourseDao {
 		}
 	}
 
-	/*
-	 * @SuppressWarnings("unchecked")
-	 * 
-	 * @Override public List<Course> getCoursesByAcademicTerm(String term) {
-	 * Query query = em.createQuery(
-	 * "select c from Course c  join c.academicTerm t where t.term=?1");
-	 * query.setParameter(1, term);
-	 * 
-	 * return query.getResultList(); }
-	 */
+
 
 	public boolean exist(Course course) {
 		Query query = em
@@ -115,7 +106,7 @@ public class CourseDaoImp implements CourseDao {
 				.getReference(AcademicTerm.class, academic_id);
 
 		Query query = em
-				.createQuery("select c from Course c  join c.academicTerm a  where a=?1");
+				.createQuery("select c from Course c  join c.academicTerm a  where a=?1 and c.isDeleted='false'");
 		query.setParameter(1, academic);
 
 		if (query.getResultList().isEmpty())

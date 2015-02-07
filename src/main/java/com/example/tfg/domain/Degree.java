@@ -12,11 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "degree")
-@Where(clause = "isDeleted='false'")
 public class Degree {
 
 	@Id

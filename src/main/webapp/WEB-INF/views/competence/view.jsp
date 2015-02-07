@@ -20,7 +20,7 @@
 			<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
 			Competence Details </h3>
 			<a class="btn list-btn btn-warning"
-				href="<c:url value='/degree/${model.competence.degree.id}/competence/${competenceId}/modify.htm'/>">Edit</a>
+				href="<c:url value='/degree/${degreeId}/competence/${competenceId}/modify.htm'/>">Edit</a>
 
 		</div>
 

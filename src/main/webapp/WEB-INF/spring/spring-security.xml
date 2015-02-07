@@ -31,7 +31,7 @@
 		<intercept-url pattern="/login.htm" access="permitAll" />
 		<intercept-url pattern="/logout.htm" access="permitAll" />
 		<intercept-url pattern="/denied.htm" access="hasRole('ROLE_USER')" />
-		<intercept-url pattern="/" access="hasRole('ROLE_USER')" />
+		<!--<intercept-url pattern="/" access="hasRole('ROLE_USER')" />-->
 		<intercept-url pattern="/user.htm" access="hasRole('ROLE_USER')" />
 		<intercept-url pattern="/admin.htm" access="hasRole('ROLE_ADMIN')" />
 
@@ -63,7 +63,7 @@
 		this allows us to declare various password encoders such as md5 and sha -->
 	<authentication-manager>
 		<authentication-provider user-service-ref="customUserDetailsService">
-			<!-- <password-encoder hash="sha"/> -->
+			<password-encoder ref="passwordEncoder"/> 
 		</authentication-provider>
 		<!-- <authentication-provider>
 			<user-service>
@@ -72,6 +72,8 @@
 			</user-service>
 		</authentication-provider> -->
 	</authentication-manager>
+	
+	
 
 </beans:beans>
 	

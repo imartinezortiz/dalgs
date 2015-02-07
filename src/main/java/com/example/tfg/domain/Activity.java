@@ -6,21 +6,17 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PostLoad;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "activity")
-@Where(clause = "isDeleted='false'")
 public class Activity {
 
 	@Id
@@ -110,15 +106,5 @@ public class Activity {
 		this.competenceStatus = competenceStatus;
 	}
 
-	@PostLoad
-	public void postLoad() {
-		try {
-			if (getCourse() != null && getCourse().getId() == 0) {
-				setCourse(null);
-			}
-		} catch (EntityNotFoundException e) {
-			setCourse(null);
-		}
-	}
 
 }

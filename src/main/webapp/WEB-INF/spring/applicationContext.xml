@@ -65,6 +65,8 @@
 	<context:component-scan base-package="com.example.tfg.service" />
 
 
-
+ <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
+     <constructor-arg value="256"/>
+ </bean>
 
 </beans>

@@ -1,11 +1,14 @@
 package com.example.tfg.domain;
 
-import javax.persistence.CascadeType;
+import java.util.Collection;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -18,18 +21,33 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id_user")
 	private Long id;
 
+	@Column(name = "firstname")
 	private String firstName;
+	
+	@Column(name = "lastname")
 	private String lastName;
 
-	@Column(unique = true)
+	@Column(name="username", unique = true)
 	private String username;
+	
+	@Column(name = "password")
 	private String password;
 
-	@OneToOne(mappedBy = "user", cascade = { CascadeType.ALL })
+	@Column(name="email", unique = true)
+	private String email;
+	
+	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
+	private boolean isDeleted;
+	
+	@OneToOne(mappedBy="user",optional=false,fetch=FetchType.LAZY)
 	private Role role;
 
+	@ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+	private Collection<Course> courses;
+	
 	public Long getId() {
 		return id;
 	}
@@ -76,6 +94,30 @@ public class User {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	public Collection<Course> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(Collection<Course> courses) {
+		this.courses = courses;
 	}
 
 }

@@ -1,6 +1,8 @@
 package com.example.tfg.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,7 +12,6 @@ import javax.persistence.Table;
 import com.example.tfg.domain.User;
 
 @Entity
-// (name="role")
 @Table(name = "role")
 public class Role {
 
@@ -18,13 +19,19 @@ public class Role {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@OneToOne
+	@OneToOne(optional = false, fetch = FetchType.LAZY)
 	private User user;
 
+	@Column(name="role",columnDefinition = "int default 2")
 	private Integer role;
 
 	public Long getId() {
 		return id;
+	}
+
+	public Role() {
+		super();
+
 	}
 
 	public void setId(Long id) {

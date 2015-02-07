@@ -61,7 +61,7 @@ public class ActivityServiceImp implements ActivityService {
 		return daoActivity.deleteActivity(id);
 	}
 
-	@Transactional(readOnly = false)
+	@Transactional(readOnly = true)
 	public List<Activity> getActivitiesForCourse(Long id_course) {
 		return daoActivity.getActivitiesForCourse(id_course);
 	}

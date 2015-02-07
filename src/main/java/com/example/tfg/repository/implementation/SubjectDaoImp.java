@@ -53,7 +53,7 @@ public class SubjectDaoImp implements SubjectDao {
 	public List<Subject> getAll() {
 
 		return em.createQuery(
-				"select s from Subject s inner join s.degree d order by s.id")
+				"select s from Subject s inner join s.degree d where s.isDeleted='false' order by s.id")
 				.getResultList();
 	}
 
@@ -93,7 +93,7 @@ public class SubjectDaoImp implements SubjectDao {
 		Degree degree = em.getReference(Degree.class, id_degree);
 
 		Query query = em
-				.createQuery("select s from Subject s where s.degree=?1");
+				.createQuery("select s from Subject s where s.degree=?1 and s.isDeleted='false'");
 		query.setParameter(1, degree);
 
 		if (query.getResultList().isEmpty())

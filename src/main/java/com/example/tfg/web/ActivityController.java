@@ -136,7 +136,7 @@ public class ActivityController {
 			if (success) {
 
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
-						+ id_course + "/activity/" + id_activity + ".htm";
+						+ id_course + ".htm";
 			}
 		}
 		return "redirect:/error.htm";

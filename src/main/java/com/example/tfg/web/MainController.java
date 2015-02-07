@@ -24,7 +24,7 @@ public class MainController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@Secured("ROLE_USER")
+	@Secured({"ROLE_USER","ROLE_ADMIN"})
 	@RequestMapping(value = "/home.htm", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
@@ -40,19 +40,6 @@ public class MainController {
 		return "home";
 	}
 
-	/*
-	 * @RequestMapping(value = "/tfg/home", method = RequestMethod.GET) public
-	 * String home2(Locale locale, Model model) {
-	 * logger.info("Welcome home! The client locale is {}.", locale); Date date
-	 * = new Date(); DateFormat dateFormat =
-	 * DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-	 * 
-	 * String formattedDate = dateFormat.format(date);
-	 * 
-	 * model.addAttribute("serverTime", formattedDate);
-	 * 
-	 * return "home"; }
-	 */
 
 	@RequestMapping(value = "/error.htm", method = RequestMethod.GET)
 	public String error() {

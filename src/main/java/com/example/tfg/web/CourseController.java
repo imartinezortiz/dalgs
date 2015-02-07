@@ -1,11 +1,13 @@
 package com.example.tfg.web;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +63,7 @@ public class CourseController {
 
 		AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic);
 
-		model.addAttribute("activities", serviceActivity.getAll());
+		//model.addAttribute("activities", serviceActivity.getAll());
 		model.addAttribute("addcourse", newCourse);
 
 		// List<Subject> subjects =
@@ -133,12 +135,12 @@ public class CourseController {
 		AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic);
 		model.addAttribute("idSubject", p.getSubject().getId());
 
-		// List<Subject> subjects =
+		//Collection<Activity> activities  =serviceActivity.getAll();
 		// serviceSubject.getSubjectsForDegree(academic.getDegree().getId());
 		model.addAttribute("academicTerm", academic);
 		model.addAttribute("subjects", academic.getDegree().getSubjects());
 
-		model.addAttribute("activities", serviceActivity.getAll());
+		//model.addAttribute("activities", activities);
 		model.addAttribute("modifyCourse", p);
 		return "course/modify";
 
@@ -208,7 +210,7 @@ public class CourseController {
 					}
 				});
 
-		binder.registerCustomEditor(Set.class, "activities",
+		/*binder.registerCustomEditor(Set.class, "activities",
 				new CustomCollectionEditor(Set.class) {
 					protected Object convertElement(Object element) {
 						if (element instanceof Activity) {
@@ -226,6 +228,6 @@ public class CourseController {
 								+ element);
 						return null;
 					}
-				});
+				});*/
 	}
 }

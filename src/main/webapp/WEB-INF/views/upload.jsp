@@ -12,17 +12,14 @@
 
 		<div class="panel panel-primary group">
 			<div class="panel-heading">
-				<h3 class="panel-title list">Upload a CSV File</h3>
+				<h3 class="panel-title list">Upload a ${className} CSV File  </h3>
 
 			</div>
 
 			<div class="panel-body">
 				<form:form commandName="newUpload" method="post"
 					enctype="multipart/form-data">
-					<div class="form-group view">
-						<label>Entity Class</label><br>
-						<form:input path="nameClass" type="text" readonly="true" />
-					</div>
+					
 					<br>
 					<div class="form-group view">
 						<label>Encoding</label><br>

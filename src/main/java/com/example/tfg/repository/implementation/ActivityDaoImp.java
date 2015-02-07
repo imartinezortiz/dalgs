@@ -52,7 +52,7 @@ public class ActivityDaoImp implements ActivityDao {
 
 		return em
 				.createQuery(
-						"select a from Activity a inner join a.course s order by a.course")
+						"select a from Activity a inner join a.course s  where a.isDeleted='false' order by a.course")
 				.getResultList();
 	}
 
@@ -91,7 +91,7 @@ public class ActivityDaoImp implements ActivityDao {
 		Course course = em.getReference(Course.class, id_course);
 
 		Query query = em
-				.createQuery("select a from Activity a where a.course=?1");
+				.createQuery("select a from Activity a where a.course=?1 and a.isDeleted='false' ");
 		query.setParameter(1, course);
 
 		if (query.getResultList().isEmpty())

@@ -63,17 +63,6 @@
 					</form:select>
 				</div>
 				
-				<div class="form-group">
-					<label>Available Activities:</label>
-					<div class="checkbox">
-						<form:checkboxes items="${activities}" path="activities"
-							itemLabel="name" />
-						<br> <br>
-						<br>
-			
-					</div>
-				</div>
-				
 				
 				<input type="submit" class="btn btn-success" value="Update">
 

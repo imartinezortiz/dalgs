@@ -92,7 +92,7 @@ public class DegreeDaoImp implements DegreeDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Degree> getDegreeByName(Degree degree) {
-		Query query = em.createQuery("select d from Degree d where d.name=?1");
+		Query query = em.createQuery("select d from Degree d where d.name=?1 and d.isDeleted='false'");
 		query.setParameter(1, degree.getName());
 
 		return query.getResultList();

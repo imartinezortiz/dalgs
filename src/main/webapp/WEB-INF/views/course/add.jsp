@@ -44,13 +44,7 @@
 
 				</div>
 
-				<div class="form-group">
-					<label>Activities: </label>
-					<div class="checkbox">
-						<form:checkboxes items="${activities}" path="activities"
-							itemLabel="name" />
-					</div>
-				</div>
+		
 
 				<br>
 				<input type="submit" class="btn btn-success" value="Add" />

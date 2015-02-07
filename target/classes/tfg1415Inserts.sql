@@ -76,11 +76,20 @@ INSERT INTO subject_competence(id_subject,id_competence) VALUES (5,5)
 
 
 -- User - Role Inserts  ROLE_USER(2) ROLE_ADMIN(1)
-INSERT INTO user (id, firstName, lastName, password, username) VALUES ('1', 'first', 'last', 'admin', 'admin');
-INSERT INTO role (id, role, user_id) VALUES (NULL, '1', '1');
+INSERT INTO user (id_user, email, firstName, lastName, password, username) VALUES ('1', 'user1@gmail.com','first', 'last', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'admin');
+INSERT INTO role (id, role, user_id_user) VALUES (NULL, '1', '1');
 
-INSERT INTO user (id, firstName, lastName, password, username) VALUES ('2', 'first', 'last', 'user', 'user');
-INSERT INTO role (id, role, user_id) VALUES (NULL, '2', '2');
+INSERT INTO user (id_user, email,firstName, lastName, password, username) VALUES ('2', 'user2@gmail.com','first', 'last', '04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb', 'user');
+INSERT INTO role (id, role, user_id_user) VALUES (NULL, '2', '2');
+
+
+--User Courses
+INSERT INTO course_user (id_course, id_user) VALUES ('1', '2');
+INSERT INTO course_user (id_course, id_user) VALUES ('2', '2');
+INSERT INTO course_user (id_course, id_user) VALUES ('3', '2');
+
+
+
 
 
 
