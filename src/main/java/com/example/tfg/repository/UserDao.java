@@ -19,5 +19,6 @@ public interface UserDao {// extends JpaRepository<User, Long> {
 	public boolean existInCourse(Long id, Long id_course);
 	public User getUser(Long id_user);
 
+	public boolean persistALotUsers(List<User> users);
 	public Integer numberOfPages();
 }

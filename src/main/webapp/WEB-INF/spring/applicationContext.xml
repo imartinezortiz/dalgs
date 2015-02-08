@@ -39,12 +39,11 @@
 	 			<prop key="hibernate.hbm2ddl.import_files">/tfg1415Inserts.sql</prop>
 	 			<!-- Use JDBC batch API with a batch size of 100 -->
 	 			<prop key="hibernate.jdbc.batch_size">100</prop>
-	 			
+	 			<prop key="hibernate.jdbc.use_getGeneratedKeys">false</prop>
 	 			<!-- <prop key="hibernate.jdbc.fetch_size">100</prop>-->
 			</props>
 		</property>
 	</bean>
-
 
 	<bean id="jpaAdapter"
 		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"

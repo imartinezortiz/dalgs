@@ -7,8 +7,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.validator.cfg.defs.EmailDef;
-import org.supercsv.cellprocessor.ParseInt;
+
 import org.supercsv.cellprocessor.ParseLong;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.constraint.StrRegEx;
@@ -23,7 +22,7 @@ public class UserUpload {
 	
 	
 	@SuppressWarnings("unused")
-	public	static List<User> readCSVUserToBean(InputStream in,
+	public	 List<User> readCSVUserToBean(InputStream in,
 			String charsetName, CsvPreference csvPreference) throws IOException {
 		CsvBeanReader beanReader = null;
 		List<User> users = new ArrayList<User>();

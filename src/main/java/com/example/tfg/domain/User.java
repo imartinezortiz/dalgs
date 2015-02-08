@@ -2,6 +2,7 @@ package com.example.tfg.domain;
 
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -42,7 +43,7 @@ public class User {
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private boolean isDeleted;
 	
-	@OneToOne(mappedBy="user",optional=false,fetch=FetchType.LAZY)
+	@OneToOne(mappedBy="user",optional=false,fetch=FetchType.LAZY,cascade=CascadeType.ALL)
 	private Role role;
 
 	@ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)

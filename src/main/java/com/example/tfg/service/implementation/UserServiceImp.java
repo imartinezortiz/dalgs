@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.supercsv.prefs.CsvPreference;
 
+import com.example.tfg.classes.StringSHA;
 import com.example.tfg.classes.UploadForm;
 import com.example.tfg.domain.Role;
 import com.example.tfg.domain.User;
@@ -23,6 +24,8 @@ public class UserServiceImp implements UserService {
 	@Autowired
 	private UserDao daoUser;
 	
+
+
 	
 	@Transactional(readOnly = true)
 	public User findByUsername(String username){
@@ -60,7 +63,15 @@ public class UserServiceImp implements UserService {
 	
 	@Transactional(readOnly = false)
 	public boolean addUser(User user){
-		return daoUser.addUser(user);
+		
+		Role role = new Role();
+		role.setUser(user);
+		role.setRole(2);
+		user.setRole(role);
+		StringSHA sha = new StringSHA();
+		String pass = sha.getStringMessageDigest(user.getPassword());
+		user.setPassword(pass);
+		return (daoUser.addUser(user));
 	}
 	
 	@Transactional(readOnly = true)
@@ -68,7 +79,7 @@ public class UserServiceImp implements UserService {
 		return daoUser.existInCourse(id, id_course);
 	}
 
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+	@Transactional(readOnly = false)//, propagation = Propagation.REQUIRED)
 	public boolean uploadCVS(UploadForm upload) {
 		CsvPreference prefers =
 				// new CsvPreference.Builder('"', ';',"\n").build();
@@ -79,19 +90,25 @@ public class UserServiceImp implements UserService {
 				List<User> list = null;
 				try {
 					FileItem fileItem = upload.getFileData().getFileItem();
-					list = UserUpload.readCSVUserToBean(fileItem.getInputStream(),
+					UserUpload userUpload = new UserUpload();
+					list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
 							upload.getCharset(), prefers);// getInputStream().toString()
 
-					for (User u : list) {
+					return daoUser.persistALotUsers(list);
+					/*for (User u : list) {
 						User user =  u;
 						System.out.println(user.getFirstName());
 						Role role = new Role();
-						role.setRole(2);
 						role.setUser(user);
+						role.setRole(2);
 						user.setRole(role);
+						
+						StringSHA sha = new StringSHA();
+						String pass = sha.getStringMessageDigest(user.getPassword());
+						user.setPassword(pass);
+						
 						daoUser.addUser(user);
-					}
-					return true;
+					}*/
 
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -100,5 +117,5 @@ public class UserServiceImp implements UserService {
 
 	}
 	
-
+	
 }

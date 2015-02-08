@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.supercsv.cellprocessor.constraint.StrRegEx;
 
 import com.example.tfg.classes.CharsetString;
 import com.example.tfg.classes.UploadForm;
-
+import com.example.tfg.classes.ValidatorUtil;
+import com.example.tfg.domain.AcademicTerm;
 import com.example.tfg.domain.User;
 import com.example.tfg.service.UserService;
 
@@ -71,6 +73,43 @@ public class UserController {
 
 		return new ModelAndView("user/view", "model", myModel); //Admin view
 	}
+	
+	/**
+	 * Methods for add a single user
+	 */
+	@RequestMapping(value = "/user/add.htm", method = RequestMethod.GET)
+	protected String getAddNewUserForm(Model model) {
+
+		User user = new User();
+		model.addAttribute("addUser", user);
+		return "user/add";
+
+	}
+
+	@RequestMapping(value = "/user/add.htm", method = RequestMethod.POST)
+	// Every Post have to return redirect
+	public String processAddNewUser(
+			@ModelAttribute("addUser") @Valid User user,
+			BindingResult result, Model model) {
+
+	     ValidatorUtil validator = new ValidatorUtil();
+		if (!validator.validateEmail(user.getEmail()))
+			return "redirect://user/add.htm";
+
+		if (!result.hasErrors()) {
+
+			//@OneToOne
+		
+			boolean created = serviceUser.addUser(user);
+			if (created)
+				return "redirect:/user/page/0.htm";
+			else
+				return "redirect:/user/add.htm";
+		}
+		return "redirect:/error.htm";
+	}
+	
+	/** Method method to insert users massively*/
 	
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/upload/User.htm", method = RequestMethod.GET)

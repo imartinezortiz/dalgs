@@ -22,9 +22,11 @@ public class Role {
 	@OneToOne(optional = false, fetch = FetchType.LAZY)
 	private User user;
 
-	@Column(name="role",columnDefinition = "int default 2")
+	@Column(name="role",columnDefinition = "INTEGER default 2")
 	private Integer role;
 
+
+	
 	public Long getId() {
 		return id;
 	}
@@ -33,6 +35,7 @@ public class Role {
 		super();
 
 	}
+	
 
 	public void setId(Long id) {
 		this.id = id;
@@ -53,5 +56,7 @@ public class Role {
 	public void setRole(Integer role) {
 		this.role = role;
 	}
+
+
 
 }

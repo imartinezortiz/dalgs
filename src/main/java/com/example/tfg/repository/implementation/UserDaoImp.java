@@ -15,7 +15,10 @@ import org.springframework.stereotype.Repository;
 
 
 
+
+import com.example.tfg.classes.StringSHA;
 import com.example.tfg.domain.Course;
+import com.example.tfg.domain.Role;
 import com.example.tfg.domain.User;
 import com.example.tfg.repository.UserDao;
 
@@ -50,9 +53,7 @@ public class UserDaoImp implements UserDao {// extends JpaRepository<User, Long>
 	
 	public boolean addUser(User user) {
 		try {
-			 PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		      String hashedPassword = passwordEncoder.encode(user.getPassword());
-		       user.setPassword(hashedPassword);
+
 			em.persist(user);
 		} catch (ConstraintViolationException e) {
 			logger.error(e.getMessage());
@@ -147,6 +148,38 @@ public class UserDaoImp implements UserDao {// extends JpaRepository<User, Long>
 
 	public User getUser(Long id_user) {
 		return em.find(User.class, id_user);
+	}
+
+	public boolean persistALotUsers(List<User> users){
+		int i = 0;
+		for(User u : users) {
+			try{
+				Role role = new Role();
+				role.setUser(u);
+				role.setRole(2);
+				u.setRole(role);
+				
+				//In this case we have to hash the password (SHA-256)
+				StringSHA sha = new StringSHA();
+				String pass = sha.getStringMessageDigest(u.getPassword());
+				u.setPassword(pass);
+				
+				u.setId(null); //If not  a detached entity is passed to persist
+				em.persist(u);
+		    	//em.flush();
+
+
+		    if(++i % 20 == 0) {
+		    	em.flush();
+		    }
+			}catch(Exception e){
+				logger.error(e.getMessage());
+				return false;
+			}
+		}
+		
+		return true;
+
 	}
 
 

@@ -20,4 +20,5 @@ public interface UserService {
 	public boolean uploadCVS(UploadForm upload);
 	public Integer numberOfPages() ;
 	public User getUser(Long id_user);
+	
 }
