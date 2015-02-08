@@ -6,7 +6,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 
 @Embeddable
-public class CompetenceStatus {
+public class LearningGoalStatus {
 
 	@ManyToOne
 	private Competence competence;

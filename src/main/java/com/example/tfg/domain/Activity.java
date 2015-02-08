@@ -40,10 +40,10 @@ public class Activity {
 	private String code;
 
 	@ElementCollection(fetch = FetchType.LAZY)
-	@CollectionTable(name = "activity_competencestatus", joinColumns = @JoinColumn(name = "id_activity"))
+	@CollectionTable(name = "activity_learninggoalstatus", joinColumns = @JoinColumn(name = "id_activity"))
 	@Column(nullable = false)
 	// @OrderColumn(insertable=true,updatable=true,name="competencestatus")
-	private Collection<CompetenceStatus> competenceStatus;
+	private Collection<LearningGoalStatus> learningGoalStatus;
 
 	public Activity() {
 		super();
@@ -97,14 +97,15 @@ public class Activity {
 		this.code = code;
 	}
 
-	public Collection<CompetenceStatus> getCompetenceStatus() {
-		return competenceStatus;
+	public Collection<LearningGoalStatus> getLearningGoalStatus() {
+		return learningGoalStatus;
 	}
 
-	public void setCompetenceStatus(
-			Collection<CompetenceStatus> competenceStatus) {
-		this.competenceStatus = competenceStatus;
+	public void setLearningGoalStatus(
+			Collection<LearningGoalStatus> learningGoalStatus) {
+		this.learningGoalStatus = learningGoalStatus;
 	}
+
 
 
 }

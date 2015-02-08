@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.tfg.domain.Activity;
-import com.example.tfg.domain.CompetenceStatus;
+import com.example.tfg.domain.LearningGoalStatus;
 import com.example.tfg.domain.Course;
 import com.example.tfg.repository.ActivityDao;
 import com.example.tfg.service.ActivityService;
@@ -44,8 +44,8 @@ public class ActivityServiceImp implements ActivityService {
 			Long id_course) {
 		activity.setId(id_activity);
 		activity.setCourse(serviceCourse.getCourse(id_course));
-		activity.setCompetenceStatus(daoActivity.getActivity(id_activity)
-				.getCompetenceStatus());
+		activity.setLearningGoalStatus(daoActivity.getActivity(id_activity)
+				.getLearningGoalStatus());
 		return daoActivity.saveActivity(activity);
 
 	}
@@ -91,14 +91,14 @@ public class ActivityServiceImp implements ActivityService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteCompetenceActivity(Long id_competenceStatus,
+	public boolean deleteCompetenceActivity(Long id_learningGoalStatus,
 			Long id_Activity) {
 		Activity a = daoActivity.getActivity(id_Activity);
-		Collection<CompetenceStatus> c = a.getCompetenceStatus();
+		Collection<LearningGoalStatus> c = a.getLearningGoalStatus();
 		try {
-			for (CompetenceStatus aux : c) {
-				if (aux.getCompetence().getId() == id_competenceStatus) {
-					a.getCompetenceStatus().remove(aux);
+			for (LearningGoalStatus aux : c) {
+				if (aux.getCompetence().getId() == id_learningGoalStatus) {
+					a.getLearningGoalStatus().remove(aux);
 					break;
 
 				}
@@ -113,21 +113,21 @@ public class ActivityServiceImp implements ActivityService {
 	}
 
 	// @Transactional(readOnly = true)
-	// public boolean existsCompetenceStatus(Long id_activity, Long
+	// public boolean existsLearningGoalStatus(Long id_activity, Long
 	// id_competence) {
-	// return daoActivity.existsCompetenceStatus(id_activity, id_competence);
+	// return daoActivity.existsLearningGoalStatus(id_activity, id_competence);
 	// }
 
 	@Transactional(readOnly = false)
-	public boolean addCompetences(Long id, CompetenceStatus competencestatus) {
+	public boolean addCompetences(Long id, LearningGoalStatus learningGoalStatus) {
 		Activity p = daoActivity.getActivity(id);
-		if (daoActivity.existsCompetenceStatus(id, competencestatus
+		if (daoActivity.existsLearningGoalStatus(id, learningGoalStatus
 				.getCompetence().getId()))
 			return false;
-		if (competencestatus.getPercentage() <= 0.0
-				|| competencestatus.getPercentage() > 100.0)
+		if (learningGoalStatus.getPercentage() <= 0.0
+				|| learningGoalStatus.getPercentage() > 100.0)
 			return false;
-		p.getCompetenceStatus().add(competencestatus);
+		p.getLearningGoalStatus().add(learningGoalStatus);
 		return daoActivity.saveActivity(p);
 	}
 

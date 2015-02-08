@@ -131,9 +131,9 @@ public class ActivityDaoImp implements ActivityDao {
 
 	}
 
-	public boolean existsCompetenceStatus(Long id_activity, Long id_competence) {
+	public boolean existsLearningGoalStatus(Long id_activity, Long id_competence) {
 		Query query = em
-				.createNativeQuery("select * from activity_competencestatus   where id_activity=?1 and competence_id_competence=?2 ");
+				.createNativeQuery("select * from activity_learninggoalstatus   where id_activity=?1 and competence_id_competence=?2 ");
 		query.setParameter(1, id_activity);
 		query.setParameter(2, id_competence);
 

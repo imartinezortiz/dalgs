@@ -15,7 +15,7 @@
 		<class>com.example.tfg.domain.AcademicTerm</class>
  		<class>com.example.tfg.domain.Activity</class>
 		<class>com.example.tfg.domain.Competence</class>
-		<class>com.example.tfg.domain.CompetenceStatus</class>
+		<class>com.example.tfg.domain.LearningGoalStatus</class>
 		<class>com.example.tfg.domain.Course</class> 
 		<class>com.example.tfg.domain.Degree</class>
 		<class>com.example.tfg.domain.Subject</class>

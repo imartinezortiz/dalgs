@@ -24,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.tfg.domain.Activity;
 import com.example.tfg.domain.Competence;
-import com.example.tfg.domain.CompetenceStatus;
+import com.example.tfg.domain.LearningGoalStatus;
 import com.example.tfg.service.AcademicTermService;
 import com.example.tfg.service.ActivityService;
 import com.example.tfg.service.CompetenceService;
@@ -106,12 +106,12 @@ public class ActivityController {
 		Activity p = serviceActivity.getActivity(id_activity);
 		model.addAttribute("courseId", id_course);
 
-		model.addAttribute("competenceStatus", p.getCompetenceStatus());
+		model.addAttribute("competenceStatus", p.getLearningGoalStatus());
 		model.addAttribute("modifyactivity", p);
 		model.addAttribute("competences", p.getCourse().getSubject()
 				.getCompetences());
 
-		CompetenceStatus cs = new CompetenceStatus();
+		LearningGoalStatus cs = new LearningGoalStatus();
 		model.addAttribute("addcompetencestatus", cs);
 
 		return "activity/modifyChoose";
@@ -147,7 +147,7 @@ public class ActivityController {
 			@PathVariable("academicId") Long id_academicTerm,
 			@PathVariable("idCourse") Long id_course,
 			@PathVariable("activityId") Long id,
-			@ModelAttribute("addcompetencestatus") @Valid CompetenceStatus competencestatus,
+			@ModelAttribute("addcompetencestatus") @Valid LearningGoalStatus competencestatus,
 			BindingResult result, Model model) throws ServletException {
 
 		// Activity p = serviceActivity.getActivity(id);
@@ -228,7 +228,7 @@ public class ActivityController {
 		model.put("activity", a);
 		model.put("activityId", id_activity);
 
-		model.put("competenceStatus", a.getCompetenceStatus());
+		model.put("competenceStatus", a.getLearningGoalStatus());
 
 		return new ModelAndView("activity/view", "model", model);
 	}

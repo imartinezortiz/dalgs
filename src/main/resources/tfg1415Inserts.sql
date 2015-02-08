@@ -59,11 +59,11 @@ INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALU
 INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (5,'ACT3','Elaborar scripts en c','Lenguaje c',3);
 
 -- Activity Inserts 
-INSERT INTO activity_competencestatus (id_activity, competence_id_competence, percentage) VALUES ('1', 1,'10');
-INSERT INTO activity_competencestatus (id_activity, competence_id_competence, percentage) VALUES ('2', 3,'20');
-INSERT INTO activity_competencestatus (id_activity, competence_id_competence, percentage) VALUES ('3', 1,'30');
-INSERT INTO activity_competencestatus (id_activity, competence_id_competence, percentage) VALUES ('4', 3, '40');
-INSERT INTO activity_competencestatus (id_activity, competence_id_competence, percentage) VALUES ('5', 5,'20');
+INSERT INTO activity_learninggoalstatus (id_activity, competence_id_competence, percentage) VALUES ('1', 1,'10');
+INSERT INTO activity_learninggoalstatus (id_activity, competence_id_competence, percentage) VALUES ('2', 3,'20');
+INSERT INTO activity_learninggoalstatus (id_activity, competence_id_competence, percentage) VALUES ('3', 1,'30');
+INSERT INTO activity_learninggoalstatus (id_activity, competence_id_competence, percentage) VALUES ('4', 3, '40');
+INSERT INTO activity_learninggoalstatus (id_activity, competence_id_competence, percentage) VALUES ('5', 5,'20');
 
 -- Subject_Competence Inserts 
 INSERT INTO subject_competence(id_subject,id_competence) VALUES (1,1)

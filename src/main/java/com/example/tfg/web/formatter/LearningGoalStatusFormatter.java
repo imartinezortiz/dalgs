@@ -7,11 +7,11 @@ import org.springframework.expression.ParseException;
 import org.springframework.format.Formatter;
 import org.springframework.stereotype.Component;
 
-import com.example.tfg.domain.CompetenceStatus;
+import com.example.tfg.domain.LearningGoalStatus;
 import com.example.tfg.repository.CompetenceDao;
 
 @Component
-public class CompetenceStatusFormatter implements Formatter<CompetenceStatus> {
+public class LearningGoalStatusFormatter implements Formatter<LearningGoalStatus> {
 
 	@Autowired
 	private CompetenceDao competenceDao;
@@ -19,13 +19,13 @@ public class CompetenceStatusFormatter implements Formatter<CompetenceStatus> {
 	// Some service class which can give the Actor after
 	// fetching from Database
 
-	public String print(CompetenceStatus competencestatus, Locale arg1) {
+	public String print(LearningGoalStatus competencestatus, Locale arg1) {
 		return competencestatus.getCompetence().getName();
 	}
 
-	public CompetenceStatus parse(String competenceId, Locale arg1)
+	public LearningGoalStatus parse(String competenceId, Locale arg1)
 			throws ParseException {
-		CompetenceStatus competencestatus = new CompetenceStatus();
+		LearningGoalStatus competencestatus = new LearningGoalStatus();
 		competencestatus.setCompetence(competenceDao.getCompetence(Long
 				.parseLong(competenceId)));
 		return competencestatus;

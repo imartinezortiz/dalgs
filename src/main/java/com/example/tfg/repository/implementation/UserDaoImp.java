@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 
+
 import com.example.tfg.domain.Course;
 import com.example.tfg.domain.User;
 import com.example.tfg.repository.UserDao;
@@ -135,10 +136,11 @@ public class UserDaoImp implements UserDao {// extends JpaRepository<User, Long>
 	}
 
 	public Integer numberOfPages() {
-		double dou = (double) (em.createQuery(
-				"select count (a) from User a order by a.lastName ASC")
-				.getResultList().size())
-				/ ((double) noOfRecords);
+
+		Query query =em.createNativeQuery(
+				"select count(*) from user where isDeleted='false'");
+		logger.info(query.getSingleResult().toString());
+		double dou = Double.parseDouble(query.getSingleResult().toString())/ ((double) noOfRecords);
 		return (int) Math.ceil(dou);
 
 	}

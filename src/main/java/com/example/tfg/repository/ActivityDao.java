@@ -27,7 +27,7 @@ public interface ActivityDao {
 
 	public Activity getActivityByName(String string);
 
-	public boolean existsCompetenceStatus(Long id_activity, Long id_competence);
+	public boolean existsLearningGoalStatus(Long id_activity, Long id_competence);
 
 	public boolean deleteActivitiesFromCourse(Course course);
 
