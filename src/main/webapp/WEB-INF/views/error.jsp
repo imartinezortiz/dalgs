@@ -16,6 +16,8 @@
 		<div class="inlineImage">
 			<h3 class="error">There has been an error during operation.</h3>
 		</div>
+		
+	
 	</div>
 
 

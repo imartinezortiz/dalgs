@@ -24,7 +24,7 @@ public class MainController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@Secured({"ROLE_USER","ROLE_ADMIN"})
+	@Secured({ "ROLE_USER", "ROLE_ADMIN" })
 	@RequestMapping(value = "/home.htm", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
@@ -40,10 +40,27 @@ public class MainController {
 		return "home";
 	}
 
-
 	@RequestMapping(value = "/error.htm", method = RequestMethod.GET)
 	public String error() {
 		return "error";
+	}
+
+	@RequestMapping(value = "/pageNotFound.htm")
+	public String handlePageNotFound() {
+		// do something
+		return "exception/notFound";
+	}
+	
+	@RequestMapping(value = "/badRequest.htm")
+	public String handleBadRequest() {
+		// do something
+		return "exception/badRequest";
+	}
+	
+	@RequestMapping(value = "/serverError.htm")
+	public String handlePageServerError() {
+		// do something
+		return "exception/serverError";
 	}
 
 }
