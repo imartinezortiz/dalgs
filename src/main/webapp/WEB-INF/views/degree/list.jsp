@@ -27,9 +27,9 @@
 			</tr>
 			<c:forEach items="${model.degrees}" var="degree">
 				<tr align="center">
-					<td><c:out value="${degree.code}" /></td>
-					<td><c:out value="${degree.name}" /></td>
-					<td><c:out value="${degree.description}" /></td>
+					<td><c:out value="${degree.infoDegree.code}" /></td>
+					<td><c:out value="${degree.infoDegree.name}" /></td>
+					<td><c:out value="${degree.infoDegree.description}" /></td>
 
 					<td><a class="btn list-btn btn-success"
 						href="<c:url value='/degree/${degree.id}.htm'/>">View</a> <!-- <a href="modify.html"  class="btn list-btn btn-warning">Modify</a>-->

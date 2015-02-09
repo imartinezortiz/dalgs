@@ -34,15 +34,15 @@
 			<div class="form-group">
 				<div class="form-group view">
 					<label>Code: </label>
-					<p class="details">${model.degree.code}</p>
+					<p class="details">${model.degree.infoDegree.code}</p>
 				</div>
 				<div class="form-group view">
 					<label>Name: </label>
-					<p class="details">${model.degree.name}</p>
+					<p class="details">${model.degree.infoDegree.name}</p>
 				</div>
 				<div class="form-group view">
 					<label>Description: </label>
-					<p class="details">${model.degree.description}</p>
+					<p class="details">${model.degree.infoDegree.description}</p>
 				</div>
 			</div>
 

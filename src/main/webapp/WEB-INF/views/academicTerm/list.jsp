@@ -35,8 +35,8 @@
 
 				<tr align="center">
 					<td><c:out value="${academicTerm.term}" /></td>
-					<td><c:out value="${academicTerm.degree.code}" /></td>
-					<td><c:out value="${academicTerm.degree.name}" /></td>
+					<td><c:out value="${academicTerm.degree.infoDegree.code}" /></td>
+					<td><c:out value="${academicTerm.degree.infoDegree.name}" /></td>
 					<!-- <td><c:out value="${activity.name}" /></td>
 				<td><c:out value="${activity.description}" /></td>
 				<td><c:out value="${activity.subject.name}" /></td>

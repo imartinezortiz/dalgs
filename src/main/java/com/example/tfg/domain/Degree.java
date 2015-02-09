@@ -2,8 +2,8 @@ package com.example.tfg.domain;
 
 import java.util.Collection;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.example.tfg.domain.info.DegreeInfo;
 
 
 @Entity
@@ -22,13 +24,16 @@ public class Degree {
 	@Column(name = "id_degree")
 	private Long id;
 
-	@Basic(optional = false)
-	@Column(name = "name", length = 50, nullable = false)
-	private String name;
-
-	@Basic(optional = false)
-	@Column(name = "description", length = 250, nullable = false)
-	private String description;
+//	@Basic(optional = false)
+//	@Column(name = "name", length = 50, nullable = false)
+//	private String name;
+//
+//	@Basic(optional = false)
+//	@Column(name = "description", length = 250, nullable = false)
+//	private String description;
+	
+	@Embedded
+	private DegreeInfo infoDegree;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
 	// , cascade= CascadeType.ALL)//, orphanRemoval=true)
@@ -41,8 +46,8 @@ public class Degree {
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private boolean isDeleted;
 
-	@Column(name = "code_degree", nullable = false)
-	private String code;
+//	@Column(name = "code_degree", nullable = false)
+//	private String code;
 
 	public Degree() {
 		super();
@@ -56,20 +61,28 @@ public class Degree {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+//	public String getName() {
+//		return name;
+//	}
+//
+//	public void setName(String name) {
+//		this.name = name;
+//	}
+//
+//	public String getDescription() {
+//		return description;
+//	}
+//
+//	public void setDescription(String description) {
+//		this.description = description;
+//	}
+
+	public DegreeInfo getInfoDegree() {
+		return infoDegree;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
+	public void setInfoDegree(DegreeInfo infoDegree) {
+		this.infoDegree = infoDegree;
 	}
 
 	public Collection<Subject> getSubjects() {
@@ -96,12 +109,12 @@ public class Degree {
 		this.isDeleted = isDeleted;
 	}
 
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
+//	public String getCode() {
+//		return code;
+//	}
+//
+//	public void setCode(String code) {
+//		this.code = code;
+//	}
 
 }

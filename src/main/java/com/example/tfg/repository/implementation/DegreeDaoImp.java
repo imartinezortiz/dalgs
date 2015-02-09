@@ -53,7 +53,7 @@ public class DegreeDaoImp implements DegreeDao {
 	@Override
 	public List<Degree> getAll() {
 
-		return em.createQuery("select d from Degree d order by d.id")
+		return em.createQuery("select d from Degree d where d.isDeleted = false order by d.id ")
 				.getResultList();
 
 	}
@@ -89,14 +89,14 @@ public class DegreeDaoImp implements DegreeDao {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Degree> getDegreeByName(Degree degree) {
-		Query query = em.createQuery("select d from Degree d where d.name=?1 and d.isDeleted='false'");
-		query.setParameter(1, degree.getName());
-
-		return query.getResultList();
-	}
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public List<Degree> getDegreeByName(Degree degree) {
+//		Query query = em.createQuery("select d from Degree d where d.name=?1 and d.isDeleted='false'");
+//		query.setParameter(1, degree.getInfoDegree().getName());
+//
+//		return query.getResultList();
+//	}
 
 	@Override
 	public Degree getDegreeSubject(Subject p) {
@@ -122,7 +122,7 @@ public class DegreeDaoImp implements DegreeDao {
 	}
 
 	public boolean existByCode(String code) {
-		Query query = em.createQuery("from Degree d where d.code=?1");
+		Query query = em.createQuery("from Degree d where d.infoDegree.code=?1");
 		query.setParameter(1, code);
 
 		if (query.getResultList().isEmpty())
@@ -137,9 +137,11 @@ public class DegreeDaoImp implements DegreeDao {
 //	public Degree getDegreeAll(Long id) {
 //		Degree degree = em.getReference(Degree.class, id);
 //		Query query =
-//				em.createQuery("select d from Degree d join d.subjects s join d.competences c where d=?1");
+//				em.createQuery("select d from Degree d join d.subjects s join d.competences c where d=?1 "
+//						+ "and s in (from Subject x where x.isDeleted = false) and c in (from Competence z where z.isDeleted = false)");
 //		query.setParameter(1, degree);
 //
+//		List<Object> d = query.getResultList();
 //
 //		return (Degree) query.getSingleResult();
 //	}

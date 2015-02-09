@@ -80,7 +80,7 @@ public class DegreeController {
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/modify.htm", method = RequestMethod.GET)
-	protected ModelAndView formModifyDegrees(@PathVariable("degreeId") long id)
+	protected ModelAndView formModifyDegrees(@PathVariable("degreeId") Long id)
 			throws ServletException {
 		ModelAndView model = new ModelAndView();
 		Degree p = serviceDegree.getDegree(id);
@@ -95,7 +95,7 @@ public class DegreeController {
 	 */
 
 	@RequestMapping(value = "/degree/delete/{degreeId}.htm", method = RequestMethod.GET)
-	public String formDeleteDegrees(@PathVariable("degreeId") long id)
+	public String formDeleteDegrees(@PathVariable("degreeId") Long id)
 			throws ServletException {
 
 		if (serviceDegree.deleteDegree(id)) {
