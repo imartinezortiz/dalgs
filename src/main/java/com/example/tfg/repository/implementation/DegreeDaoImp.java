@@ -121,14 +121,17 @@ public class DegreeDaoImp implements DegreeDao {
 
 	}
 
-	public boolean existByCode(String code) {
-		Query query = em.createQuery("from Degree d where d.infoDegree.code=?1");
+	public Degree existByCode(String code) {
+		Query query = em.createQuery("select d from Degree d where d.infoDegree.code=?1");
 		query.setParameter(1, code);
-
-		if (query.getResultList().isEmpty())
-			return false;
-		else
-			return true;
+		List<Object> d = query.getResultList();
+		 if (query.getResultList().isEmpty())
+		 	return null;
+		 else return (Degree) query.getSingleResult();
+//		if (query.getResultList().isEmpty())
+//			return false;
+//		else
+//			return true;
 	}
 
 

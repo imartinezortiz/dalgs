@@ -26,7 +26,7 @@ public interface DegreeDao {
 
 	public String getNextCode();
 
-	public boolean existByCode(String code);
+	public Degree existByCode(String code);
 //	 public Degree getDegreeAll(Long id);
 
 

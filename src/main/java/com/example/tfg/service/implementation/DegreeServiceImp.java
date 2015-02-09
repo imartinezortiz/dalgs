@@ -32,10 +32,21 @@ public class DegreeServiceImp implements DegreeService {
 
 	@Transactional(readOnly = false)
 	public boolean addDegree(Degree degree) {
-		if (!daoDegree.existByCode(degree.getInfoDegree().getCode()))
+		
+		Degree existDegree = daoDegree.existByCode(degree.getInfoDegree().getCode());
+		if (existDegree == null)
 			return daoDegree.addDegree(degree);
-		else
-			return false;
+		else if(existDegree.isDeleted()==true) {
+			existDegree.setInfoDegree(degree.getInfoDegree());
+			existDegree.setDeleted(false);
+			return daoDegree.saveSubject(existDegree);
+			
+		}
+		else return false;
+//		if (!daoDegree.existByCode(degree.getInfoDegree().getCode()))
+//			return daoDegree.addDegree(degree);
+//		else
+//			return false;
 
 	}
 
