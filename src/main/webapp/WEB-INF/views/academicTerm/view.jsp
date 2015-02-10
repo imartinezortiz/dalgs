@@ -34,7 +34,7 @@
 					</div>
 					<div class="form-group view">
 						<label>Degree:</label>
-						<p class="details">${model.academicTerm.degree.name}</p>
+						<p class="details">${model.academicTerm.degree.info.name}</p>
 					</div>
 
 				</div>
@@ -62,11 +62,11 @@
 					<c:forEach items="${model.courses}" var="course">
 						<tr align="center">
 							<td><div class="td-content">
-									<c:out value="${course.subject.code}" />
+									<c:out value="${course.subject.info.code}" />
 								</div></td>
 							<td>
 								<div class="td-content">
-									<c:out value="${course.subject.name}" />
+									<c:out value="${course.subject.info.name}" />
 								</div>
 							</td>
 

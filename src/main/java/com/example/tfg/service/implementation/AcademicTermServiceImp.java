@@ -25,15 +25,24 @@ public class AcademicTermServiceImp implements AcademicTermService {
 	@Transactional(readOnly = false)
 	public boolean addAcademicTerm(AcademicTerm academicTerm) {
 
-		Long a = daoAcademicTerm.isDisabled(academicTerm.getTerm(),
-				academicTerm.getDegree());
-		if (a != null) {
-			academicTerm.setId(a);
-			return daoAcademicTerm.saveAcademicTerm(academicTerm);
-		} else if (!daoAcademicTerm.exists(academicTerm))
-			return daoAcademicTerm.addAcademicTerm(academicTerm);
-
-		return daoAcademicTerm.saveAcademicTerm(academicTerm);
+		AcademicTerm existAcademic = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
+		if (existAcademic == null){
+			return daoAcademicTerm.addAcademicTerm(academicTerm);			
+		}
+		else if(existAcademic.isDeleted()){
+			existAcademic.setDeleted(false);
+			return daoAcademicTerm.saveAcademicTerm(existAcademic);			
+		}
+		else return false;
+//		Long a = daoAcademicTerm.isDisabled(academicTerm.getTerm(),
+//				academicTerm.getDegree());
+//		if (a != null) {
+//			academicTerm.setId(a);
+//			return daoAcademicTerm.saveAcademicTerm(academicTerm);
+//		} else if (!daoAcademicTerm.exists(academicTerm))
+//			return daoAcademicTerm.addAcademicTerm(academicTerm);
+//
+//		return daoAcademicTerm.saveAcademicTerm(academicTerm);
 		// return false;
 
 	}
@@ -41,10 +50,12 @@ public class AcademicTermServiceImp implements AcademicTermService {
 	@Transactional(readOnly = false)
 	public boolean modifyAcademicTerm(AcademicTerm academicTerm,
 			Long id_academic) {
-		academicTerm.setId(id_academic);
+//		academicTerm.setId(id_academic);
 		AcademicTerm ac = daoAcademicTerm.getAcademicTermById(id_academic);
-		academicTerm.setDegree(ac.getDegree());
-		if (!daoAcademicTerm.exists(academicTerm))
+		ac.setTerm(academicTerm.getTerm());
+//		academicTerm.setDegree(ac.getDegree());
+//		if (!daoAcademicTerm.exists(academicTerm))
+		if(daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree()) == null)
 			return daoAcademicTerm.saveAcademicTerm(academicTerm);
 		return false;
 	}
@@ -83,12 +94,12 @@ public class AcademicTermServiceImp implements AcademicTermService {
 		return daoAcademicTerm.getAcademicTermById(id_academic);
 	}
 
-	@Transactional(readOnly = false)
-	public boolean modifyTerm(String term, String newTerm) {
-		if (!daoAcademicTerm.existTerm(newTerm))
-			return daoAcademicTerm.modifyTerm(term, newTerm);
-		return false;
-	}
+//	@Transactional(readOnly = false)
+//	public boolean modifyTerm(String term, String newTerm) {
+//		if (!daoAcademicTerm.existTerm(newTerm))
+//			return daoAcademicTerm.modifyTerm(term, newTerm);
+//		return false;
+//	}
 
 	@Transactional(readOnly = false)
 	public List<AcademicTerm> getAcademicTermsByDegree(Long id_degree) {

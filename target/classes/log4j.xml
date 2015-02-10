@@ -40,10 +40,7 @@
 		<level value="debug" />
 
 	</logger>
-	<category name="org.hibernate.type" additivity="false">
-		<priority value="TRACE" />
-		<appender-ref ref="hbn_log" />
-	</category>
+	
 
 	<!-- Root Logger -->
 	<root>

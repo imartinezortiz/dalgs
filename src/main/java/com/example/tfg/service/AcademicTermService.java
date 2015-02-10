@@ -21,7 +21,7 @@ public interface AcademicTermService {
 
 	public AcademicTerm getAcademicTerm(Long id_academic);
 
-	public boolean modifyTerm(String term, String newTerm);
+//	public boolean modifyTerm(String term, String newTerm);
 
 	public Integer numberOfPages();
 

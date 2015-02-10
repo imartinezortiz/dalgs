@@ -27,7 +27,7 @@
 
 				<div class="form-group">
 					<label>Academic Term</label> 
-					<p>${academicTerm.term} &nbsp; ${academicTerm.degree.name}</p>
+					<p>${academicTerm.term} &nbsp; ${academicTerm.degree.info.name}</p>
 					
 					
 				</div>
@@ -38,7 +38,7 @@
 						id="subjectSelect">
 						<form:option value="">-- Select an option --</form:option>
 						<c:forEach items="${subjects}" var="subject">
-							<form:option value="${subject.id}">${subject.code} - ${subject.name}</form:option>
+							<form:option value="${subject.id}">${subject.info.code} - ${subject.info.name}</form:option>
 						</c:forEach>
 					</form:select>
 

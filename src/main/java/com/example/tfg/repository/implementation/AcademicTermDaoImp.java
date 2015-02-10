@@ -129,53 +129,53 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 
 	}
 
-	@Override
+//	@Override
 	/*
 	 * public AcademicTerm getAcademicTerm(Long id_academic) { return
 	 * em.getReference(AcademicTerm.class, id_academic); }
 	 */
-	public boolean exists(AcademicTerm academicTerm) {
-		// Degree degree = em.getReference(Degree.class,
-		// academicTerm.getDegree().getId());
+//	public boolean exists(AcademicTerm academicTerm) {
+//		// Degree degree = em.getReference(Degree.class,
+//		// academicTerm.getDegree().getId());
+//
+//		Query query = em
+//				.createQuery("select a from AcademicTerm a where a.degree=?1 and a.term=?2");
+//		query.setParameter(1, academicTerm.getDegree());
+//		query.setParameter(2, academicTerm.getTerm());
+//
+//		if (query.getResultList().isEmpty())
+//			return false;
+//
+//		return true;
+//	}
 
-		Query query = em
-				.createQuery("select a from AcademicTerm a where a.degree=?1 and a.term=?2");
-		query.setParameter(1, academicTerm.getDegree());
-		query.setParameter(2, academicTerm.getTerm());
+//	public Long isDisabled(String term, Degree degree) {
+//		// Degree degree = em.getReference(Degree.class, id_degree);
+//
+//		Query query = em
+//				.createQuery("select a from AcademicTerm a where a.degree=?1 and a.term=?2 and a.isDeleted='true'");
+//		query.setParameter(1, degree);
+//		query.setParameter(2, term);
+//
+//		if (query.getResultList().isEmpty())
+//			return null;
+//
+//		AcademicTerm aux = (AcademicTerm) query.getSingleResult();
+//		return aux.getId();
+//	}
 
-		if (query.getResultList().isEmpty())
-			return false;
-
-		return true;
-	}
-
-	public Long isDisabled(String term, Degree degree) {
-		// Degree degree = em.getReference(Degree.class, id_degree);
-
-		Query query = em
-				.createQuery("select a from AcademicTerm a where a.degree=?1 and a.term=?2 and a.isDeleted='true'");
-		query.setParameter(1, degree);
-		query.setParameter(2, term);
-
-		if (query.getResultList().isEmpty())
-			return null;
-
-		AcademicTerm aux = (AcademicTerm) query.getSingleResult();
-		return aux.getId();
-	}
-
-	@Override
-	public boolean existTerm(String term) {
-
-		Query query = em
-				.createQuery("select a from AcademicTerm a where  a.term=?1");
-		query.setParameter(1, term);
-
-		if (query.getResultList().isEmpty())
-			return false;
-
-		return true;
-	}
+//	@Override
+//	public boolean existTerm(String term) {
+//
+//		Query query = em
+//				.createQuery("select a from AcademicTerm a where  a.term=?1");
+//		query.setParameter(1, term);
+//
+//		if (query.getResultList().isEmpty())
+//			return false;
+//
+//		return true;
+//	}
 
 	@Override
 	public boolean modifyTerm(String term, String newTerm) {
@@ -209,5 +209,18 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 
 		return query.getResultList();
 
+	}
+
+	@Override
+	public AcademicTerm exists(String term, Degree degree) {
+		Query query = em
+				.createQuery("select a from AcademicTerm a where  a.term=?1 and a.degree = ?2");
+		query.setParameter(1, term);
+		query.setParameter(2, degree);
+
+		if (query.getResultList().isEmpty())
+			return null;
+		else return (AcademicTerm)query.getSingleResult();
+		
 	}
 }

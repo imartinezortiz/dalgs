@@ -49,7 +49,7 @@
 		<div class="panel-body">
 		<div class="form-group view">
 				<label>Subject: </label> 
-					<p class="details">${model.course.subject.code} - ${model.course.subject.name}</p>
+					<p class="details">${model.course.subject.info.code} - ${model.course.subject.info.name}</p>
 				</div>
 		</div>
 	</div>

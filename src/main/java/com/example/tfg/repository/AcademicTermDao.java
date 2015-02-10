@@ -26,13 +26,15 @@ public interface AcademicTermDao {
 	// spublic AcademicTerm getAcademicTerm(Long id_academic);
 	// public AcademicTerm getAcademicTermDegree(String term, Long id_degree);
 
-	public boolean exists(AcademicTerm academicTerm);
+//	public boolean exists(AcademicTerm academicTerm);
 
-	public boolean existTerm(String term);
+//	public boolean existTerm(String term);
 
 	public boolean modifyTerm(String term, String newTerm);
 
-	public Long isDisabled(String term, Degree degree);
+//	public Long isDisabled(String term, Degree degree);
 
 	public Integer numberOfPages();
+
+	public AcademicTerm exists(String term, Degree degree);
 }

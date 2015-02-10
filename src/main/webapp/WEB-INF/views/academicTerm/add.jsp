@@ -37,7 +37,7 @@
 					<form:select class="form-control 2" path="degree" id="degreeSelect">
 						<form:option value=""> --Select an option-- </form:option>
 						<c:forEach items="${degrees}" var="degree">
-							<form:option value="${degree.id}">${degree.infoDegree.code}-${degree.infoDegree.name}</form:option>
+							<form:option value="${degree.id}">${degree.info.code}-${degree.info.name}</form:option>
 						</c:forEach>
 					</form:select>
 

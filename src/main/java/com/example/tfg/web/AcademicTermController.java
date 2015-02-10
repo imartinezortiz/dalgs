@@ -116,13 +116,13 @@ public class AcademicTermController {
 	 */
 
 	@RequestMapping(value = "/academicTerm/{academicId}/modify.htm", method = RequestMethod.GET)
-	protected String formModifyActivities(
+	protected String formModifyAcademics(
 			@PathVariable("academicId") Long id_academic, Model model)
 			throws ServletException {
 
 		AcademicTerm aT = serviceAcademicTerm.getAcademicTerm(id_academic);
 		model.addAttribute("academicTerm", aT);
-		model.addAttribute("degree", aT.getDegree());
+//		model.addAttribute("degree", aT.getDegree());
 
 		return "academicTerm/modify";
 	}
