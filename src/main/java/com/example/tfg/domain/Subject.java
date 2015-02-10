@@ -2,7 +2,6 @@ package com.example.tfg.domain;
 
 import java.util.Collection;
 
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +15,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.example.tfg.domain.info.SubjectInfo;
+
 
 @Entity
 @Table(name = "subject")
@@ -25,13 +26,15 @@ public class Subject {
 	@Column(name = "id_subject")
 	private Long id;
 
-	@Basic(optional = false)
-	@Column(name = "name", length = 50, nullable = false)
-	private String name;
-
-	@Basic(optional = false)
-	@Column(name = "description", length = 250, nullable = false)
-	private String description;
+//	@Basic(optional = false)
+//	@Column(name = "name", length = 50, nullable = false)
+//	private String name;
+//
+//	@Basic(optional = false)
+//	@Column(name = "description", length = 250, nullable = false)
+//	private String description;
+	
+	private SubjectInfo info;
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private boolean isDeleted;
@@ -45,8 +48,8 @@ public class Subject {
 	@JoinTable(name = "subject_competence", joinColumns = { @JoinColumn(name = "id_subject") }, inverseJoinColumns = { @JoinColumn(name = "id_competence") })
 	private Collection<Competence> competences;
 
-	@Column(name = "code_subject", nullable = false)
-	private String code;
+//	@Column(name = "code_subject", nullable = false)
+//	private String code;
 
 	public Subject() {
 		super();
@@ -68,21 +71,21 @@ public class Subject {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
+//	public String getName() {
+//		return name;
+//	}
+//
+//	public void setName(String name) {
+//		this.name = name;
+//	}
+//
+//	public String getDescription() {
+//		return description;
+//	}
+//
+//	public void setDescription(String description) {
+//		this.description = description;
+//	}
 
 	public Collection<Competence> getCompetences() {
 		return competences;
@@ -100,12 +103,21 @@ public class Subject {
 		this.isDeleted = isDeleted;
 	}
 
-	public String getCode() {
-		return code;
+	public SubjectInfo getInfo() {
+		return info;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setInfo(SubjectInfo info) {
+		this.info = info;
 	}
 
+//	public String getCode() {
+//		return code;
+//	}
+//
+//	public void setCode(String code) {
+//		this.code = code;
+//	}
+
+	
 }

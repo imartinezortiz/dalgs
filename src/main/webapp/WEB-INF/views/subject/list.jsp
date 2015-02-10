@@ -28,16 +28,16 @@
 				<tr align="center">
 					<td>
 						<div class="td-content">
-							<c:out value="${subject.code}" />
+							<c:out value="${subject.info.code}" />
 						</div>
 					</td>
 
 					<td><div class="td-content">
-							<c:out value="${subject.name}" />
+							<c:out value="${subject.info.name}" />
 						</div></td>
 					<td>
 						<div class="td-content">
-							<c:out value="${subject.degree.name}" />
+							<c:out value="${subject.degree.infoDegree.name}" />
 						</div>
 					</td>
 

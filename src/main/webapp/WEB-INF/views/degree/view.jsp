@@ -34,15 +34,15 @@
 			<div class="form-group">
 				<div class="form-group view">
 					<label>Code: </label>
-					<p class="details">${model.degree.infoDegree.code}</p>
+					<p class="details">${model.degree.info.code}</p>
 				</div>
 				<div class="form-group view">
 					<label>Name: </label>
-					<p class="details">${model.degree.infoDegree.name}</p>
+					<p class="details">${model.degree.info.name}</p>
 				</div>
 				<div class="form-group view">
 					<label>Description: </label>
-					<p class="details">${model.degree.infoDegree.description}</p>
+					<p class="details">${model.degree.info.description}</p>
 				</div>
 			</div>
 
@@ -72,11 +72,11 @@
 				<c:forEach items="${model.subjects}" var="subject">
 					<tr align="center">
 						<td><div class="td-content">
-								<c:out value="${subject.name}" />
+								<c:out value="${subject.info.name}" />
 							</div></td>
 						<td>
 							<div class="td-content">
-								<c:out value="${subject.description}" />
+								<c:out value="${subject.info.description}" />
 							</div>
 						</td>
 

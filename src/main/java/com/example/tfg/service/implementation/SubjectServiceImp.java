@@ -11,6 +11,7 @@ import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Subject;
 import com.example.tfg.repository.SubjectDao;
 import com.example.tfg.service.CompetenceService;
+import com.example.tfg.service.CourseService;
 import com.example.tfg.service.DegreeService;
 import com.example.tfg.service.SubjectService;
 
@@ -25,16 +26,35 @@ public class SubjectServiceImp implements SubjectService {
 
 	@Autowired
 	private CompetenceService serviceCompetence;
+	
+	@Autowired
+	private CourseService serviceCourse;
 
 	@Transactional(readOnly = false)
 	public boolean addSubject(Subject subject, Long id_degree) {
-		if (!daoSubject.existByCode(subject.getCode())) {
-
-			Degree degree = serviceDegree.getDegree(id_degree);
+		
+		Subject existSubject = daoSubject.existByCode(subject.getInfo().getCode());
+		Degree degree = serviceDegree.getDegree(id_degree);
+		if(existSubject == null){
 			subject.setDegree(degree);
+			degree.getSubjects().add(subject);
 			return daoSubject.addSubject(subject);
-		} else
-			return false;
+				
+		}else if(existSubject.isDeleted()==true){
+			existSubject.setInfo(subject.getInfo());
+			existSubject.setDeleted(false);
+			degree.getSubjects().add(existSubject);
+			return daoSubject.saveSubject(existSubject);				
+		}
+		else return false;		
+		
+//		if (!daoSubject.existByCode(subject.getInfo().getCode())) {
+//
+//			Degree degree = serviceDegree.getDegree(id_degree);
+//			subject.setDegree(degree);
+//			return daoSubject.addSubject(subject);
+//		} else
+//			return false;
 
 	}
 
@@ -73,17 +93,30 @@ public class SubjectServiceImp implements SubjectService {
 	public boolean modifySubject(Subject modify, Long id_subject) {
 
 		Subject subject = daoSubject.getSubject(id_subject);
-		if (modify.getCode() != null)
-			subject.setCode(modify.getCode());
-		if (modify.getName() != null)
-			subject.setName(modify.getName());
-		if (modify.getDescription() != null)
-			subject.setDescription(modify.getDescription());
-		if (modify.getCompetences() != null)
-			subject.setCompetences(modify.getCompetences());
+		subject.setInfo(modify.getInfo());
+//		if (modify.getCompetences() != null)
+//			subject.setCompetences(modify.getCompetences());
+//		if (modify.getCode() != null)
+//			subject.setCode(modify.getCode());
+//		if (modify.getName() != null)
+//			subject.setName(modify.getName());
+//		if (modify.getDescription() != null)
+//			subject.setDescription(modify.getDescription());
+		
 
 		return daoSubject.saveSubject(subject);
 	}
+	
+	@Transactional(readOnly = false)
+	public boolean addCompetences(Subject modify, Long id_subject) {
+
+		Subject subject = daoSubject.getSubject(id_subject);
+		subject.setInfo(modify.getInfo());
+		subject.setCompetences(modify.getCompetences());		
+
+		return daoSubject.saveSubject(subject);
+	}
+	
 
 	@Transactional(readOnly = true)
 	public String getNextCode() {
@@ -115,7 +148,7 @@ public class SubjectServiceImp implements SubjectService {
 		// Degree degree = serviceDegree.getDegree(id_degree);
 
 		// Subject s = daoSubject.getSubject(id_subject);
-
+		
 		return daoSubject.deleteSubject(id_subject);
 
 	}

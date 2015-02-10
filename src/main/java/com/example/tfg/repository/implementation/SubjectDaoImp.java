@@ -127,14 +127,14 @@ public class SubjectDaoImp implements SubjectDao {
 
 	}
 
-	public boolean existByCode(String code) {
-		Query query = em.createQuery("from Subject s where s.code=?1");
+	public Subject existByCode(String code) {
+		Query query = em.createQuery("Select s from Subject s where s.info.code=?1");
 		query.setParameter(1, code);
 
 		if (query.getResultList().isEmpty())
-			return false;
+			return null;
 		else
-			return true;
+			return (Subject) query.getSingleResult();
 	}
 
 	public Subject getSubjectForCourse(Long id_course) {

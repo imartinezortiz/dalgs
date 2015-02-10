@@ -33,7 +33,7 @@ public class Degree {
 //	private String description;
 	
 	@Embedded
-	private DegreeInfo infoDegree;
+	private DegreeInfo info;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
 	// , cascade= CascadeType.ALL)//, orphanRemoval=true)
@@ -77,12 +77,12 @@ public class Degree {
 //		this.description = description;
 //	}
 
-	public DegreeInfo getInfoDegree() {
-		return infoDegree;
+	public DegreeInfo getInfo() {
+		return info;
 	}
 
-	public void setInfoDegree(DegreeInfo infoDegree) {
-		this.infoDegree = infoDegree;
+	public void setInfo(DegreeInfo infoDegree) {
+		this.info = infoDegree;
 	}
 
 	public Collection<Subject> getSubjects() {

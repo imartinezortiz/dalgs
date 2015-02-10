@@ -200,7 +200,7 @@ public class SubjectController {
 		// subject.setDegree(aux.getDegree());
 
 		try {
-			serviceSubject.modifySubject(subject, id_subject);
+			serviceSubject.addCompetences(subject, id_subject);
 			return "redirect:/degree/" + id_degree + "/subject/" + id_subject
 					+ ".htm";
 		} catch (Exception e) {

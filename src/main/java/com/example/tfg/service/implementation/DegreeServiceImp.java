@@ -33,11 +33,11 @@ public class DegreeServiceImp implements DegreeService {
 	@Transactional(readOnly = false)
 	public boolean addDegree(Degree degree) {
 		
-		Degree existDegree = daoDegree.existByCode(degree.getInfoDegree().getCode());
+		Degree existDegree = daoDegree.existByCode(degree.getInfo().getCode());
 		if (existDegree == null)
 			return daoDegree.addDegree(degree);
 		else if(existDegree.isDeleted()==true) {
-			existDegree.setInfoDegree(degree.getInfoDegree());
+			existDegree.setInfo(degree.getInfo());
 			existDegree.setDeleted(false);
 			return daoDegree.saveSubject(existDegree);
 			
@@ -64,7 +64,7 @@ public class DegreeServiceImp implements DegreeService {
 	public boolean modifyDegree(Degree degree, Long id_degree) {
 
 		Degree modifydegree = daoDegree.getDegree(id_degree);
-		modifydegree.setInfoDegree(degree.getInfoDegree());
+		modifydegree.setInfo(degree.getInfo());
 //		if (degree.getCode() != null)
 //			Modifydegree.setCode(degree.getCode());
 //		if (degree.getName() != null)

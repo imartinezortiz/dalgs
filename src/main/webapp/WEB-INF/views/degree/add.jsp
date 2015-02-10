@@ -25,16 +25,16 @@
 			<form:form method="post" commandName="addDegree" role="form">
 				<div class="form-group">
 					<label>Code: </label>
-					<form:input path="infoDegree.code" class="form-control" placeholder="Code of the degree" required="true"/>
+					<form:input path="info.code" class="form-control" placeholder="Code of the degree" required="true"/>
 				</div>
 				<div class="form-group">
 					<label>Name: </label>
-					<form:input path="infoDegree.name" class="form-control"
+					<form:input path="info.name" class="form-control"
 						placeholder="Name of the degree" required="true" />
 				</div>
 				<div class="form-group">
 					<label>Description: </label>
-					<form:input path="infoDegree.description" class="form-control"
+					<form:input path="info.description" class="form-control"
 						placeholder="Description of the degree" required="true"/>
 				</div>
 

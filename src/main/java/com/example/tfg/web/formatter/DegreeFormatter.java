@@ -21,7 +21,7 @@ public class DegreeFormatter implements Formatter<Degree> {
 	// fetching from Database
 
 	public String print(Degree degree, Locale arg1) {
-		return degree.getInfoDegree().getName();
+		return degree.getInfo().getName();
 	}
 
 	public Degree parse(String degreeId, Locale arg1) throws ParseException {

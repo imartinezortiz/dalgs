@@ -32,19 +32,19 @@
 			<div class="form-group">
 				<div class="form-group view">
 					<label>Code: </label> 
-					<p class="details">${model.subject.code}</p>
+					<p class="details">${model.subject.info.code}</p>
 				</div>
 				<div class="form-group view">
 					<label>Name: </label> 
-					<p class="details">${model.subject.name}</p>
+					<p class="details">${model.subject.info.name}</p>
 				</div>
 				<div class="form-group view">
 					<label>Description: </label> 
-					<p class="details">${model.subject.description}</p>
+					<p class="details">${model.subject.info.description}</p>
 				</div>
 				<div class="form-group view">
 					<label>Degree: </label> 
-					<p class="details">${model.subject.degree.name}</p>
+					<p class="details">${model.subject.degree.info.name}</p>
 				</div>
 			</div>
 

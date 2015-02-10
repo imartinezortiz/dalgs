@@ -25,16 +25,16 @@
 				
 				<div class="form-group">
 					<label>Code: </label>
-					<form:input path="code" class="form-control" readonly="true" required="true"/>
+					<form:input path="info.code" class="form-control" readonly="true" required="true"/>
 				</div>
 				<div class="form-group">
 					<label>Name: </label>
-					<form:input path="name" class="form-control" id="name" readonly="true" required="true"/>
+					<form:input path="info.name" class="form-control" id="name" readonly="true" required="true"/>
 
 				</div>
 				<div class="form-group">
 					<label>Description: </label>
-					<form:input class="form-control" path="description"
+					<form:input class="form-control" path="info.description"
 						id="description" readonly="true" required="true"/>
 				</div>
 

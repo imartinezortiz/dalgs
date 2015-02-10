@@ -22,6 +22,8 @@ public interface SubjectService {
 	public String getNextCode();
 
 	public boolean modifySubject(Subject modify, Long id_subject);
+	
+	public boolean addCompetences(Subject modify, Long id_subject);
 
 	// public List<Subject> getSubjectsForCompetence(Long id);
 

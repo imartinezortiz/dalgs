@@ -25,7 +25,7 @@ public interface SubjectDao {
 	// public List<Subject> getSubjectsForCompetence(Long id);
 	public String getNextCode();
 
-	public boolean existByCode(String code);
+	public Subject existByCode(String code);
 
 	public Subject getSubjectForCourse(Long id);
 

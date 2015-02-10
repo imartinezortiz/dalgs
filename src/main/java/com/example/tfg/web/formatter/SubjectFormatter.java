@@ -21,7 +21,7 @@ public class SubjectFormatter implements Formatter<Subject> {
 
 	@Override
 	public String print(Subject subject, Locale arg1) {
-		return subject.getName();
+		return subject.getInfo().getName();
 	}
 
 	@Override
