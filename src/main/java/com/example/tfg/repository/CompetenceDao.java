@@ -23,7 +23,7 @@ public interface CompetenceDao {
 
 	public List<Competence> getCompetencesForDegree(Long id_degree);
 
-	public boolean existByCode(String code, Degree degree);
+	public Competence existByCode(String code, Degree degree);
 
 	public Competence getCompetenceByName(String name);
 

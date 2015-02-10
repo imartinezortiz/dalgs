@@ -95,8 +95,8 @@ public class CompetenceController {
 
 	{
 
-		modify.setId(id_competence);
-		serviceCompetence.modifyCompetence(modify);
+		
+		serviceCompetence.modifyCompetence(modify, id_competence);
 		return "redirect:/degree/" + id_degree + ".htm";
 	}
 

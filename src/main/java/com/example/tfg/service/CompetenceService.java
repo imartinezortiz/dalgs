@@ -21,7 +21,7 @@ public interface CompetenceService {
 
 	public List<Competence> getCompetencesForDegree(Long id_degree);
 
-	public boolean modifyCompetence(Competence modify);
+	public boolean modifyCompetence(Competence competence, Long id_competence);
 
 	// public List<Competence> getCompetencesDontExistOnSubject(Long
 	// id_subject);

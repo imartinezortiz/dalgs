@@ -23,16 +23,16 @@
 			<form:form method="post" commandName="modifyCompetence" role="form">
 				<div class="form-group">
 					<label>Code: </label>
-					<form:input path="code" class="form-control" required="true"/>
+					<form:input path="info.code" class="form-control" required="true"/>
 				</div>
 				<div class="form-group">
 					<label>Name: </label>
-					<form:input path="name" class="form-control" required="true"/>
+					<form:input path="info.name" class="form-control" required="true"/>
 				</div>
 
 				<div class="form-group">
 					<label>Description: </label>
-					<form:input path="description" class="form-control" required="true"/>
+					<form:input path="info.description" class="form-control" required="true"/>
 				</div>
 
 

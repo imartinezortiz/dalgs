@@ -38,36 +38,46 @@ public class CompetenceDaoImp implements CompetenceDao {
 		}
 	}
 
-	public boolean existByCode(String code, Degree degree) {
+	public Competence existByCode(String code, Degree degree) {
 		Query query = em
-				.createQuery("from Competence a where a.code=?1 and a.degree=?2");
+				.createQuery("Select c from Competence c where c.info.code=?1 and c.degree=?2");
 		query.setParameter(1, code);
 		query.setParameter(2, degree);
 
 		if (query.getResultList().isEmpty())
-			return false;
+			return null;
 		else
-			return true;
+			return (Competence) query.getSingleResult();
 	}
 
 	public boolean addCompetence(Competence competence) {
-		Query query = em
-				.createQuery("select p from Competence p where p.name=?1");
-		query.setParameter(1, competence.getName());
-
-		@SuppressWarnings("unchecked")
-		List<Subject> p = query.getResultList();
-		if (p.isEmpty()) {
-			try {
-				em.persist(competence);
-			} catch (ConstraintViolationException e) {
-				logger.error(e.getMessage());
-				return false;
-			}
-
-		} else
+		
+		try {
+			em.persist(competence);
+			return true;
+		} catch (ConstraintViolationException e) {
+			logger.error(e.getMessage());
 			return false;
-		return true;
+		}
+		
+		
+//		Query query = em
+//				.createQuery("select p from Competence p where p.name=?1");
+//		query.setParameter(1, competence.getInfo().getName());
+//
+//		@SuppressWarnings("unchecked")
+//		List<Subject> p = query.getResultList();
+//		if (p.isEmpty()) {
+//			try {
+//				em.persist(competence);
+//			} catch (ConstraintViolationException e) {
+//				logger.error(e.getMessage());
+//				return false;
+//			}
+//
+//		} else
+//			return false;
+//		return true;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -20,7 +20,7 @@ public class CompetenceFormatter implements Formatter<Competence> {
 	// fetching from Database
 
 	public String print(Competence competence, Locale arg1) {
-		return competence.getName();
+		return competence.getInfo().getName();
 	}
 
 	public Competence parse(String competenceId, Locale arg1)

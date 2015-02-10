@@ -29,13 +29,27 @@ public class CompetenceServiceImp implements CompetenceService {
 	@Transactional(readOnly = false)
 	public boolean addCompetence(Competence competence, Long id_degree) {
 		Degree degree = serviceDegree.getDegree(id_degree);
-
-		if (!daoCompetence.existByCode(competence.getCode(), degree)) {
-
+		Competence existCompetence = daoCompetence.existByCode(competence.getInfo().getCode(), degree);
+		if(existCompetence == null){
 			competence.setDegree(degree);
-			return daoCompetence.addCompetence(competence);
+			degree.getCompetences().add(competence);
+			return daoCompetence.addCompetence(competence);			
 		}
-		return false;
+		else if (existCompetence.isDeleted() == true) {
+			existCompetence.setDegree(degree);
+			existCompetence.setDeleted(false);
+			degree.getCompetences().add(existCompetence);
+			return daoCompetence.saveCompetence(existCompetence);
+			
+		}
+		else return false;
+			
+//		if (!daoCompetence.existByCode(competence.getInfo().getCode(), degree)) {
+//
+//			competence.setDegree(degree);
+//			return daoCompetence.addCompetence(competence);
+//		}
+		
 
 	}
 
@@ -73,8 +87,10 @@ public class CompetenceServiceImp implements CompetenceService {
 	}
 
 	@Transactional(readOnly = false)
-	public boolean modifyCompetence(Competence modify) {
-		return daoCompetence.saveCompetence(modify);
+	public boolean modifyCompetence(Competence competence, Long id_competence) {
+		Competence modifyCompetence = daoCompetence.getCompetence(id_competence);
+		modifyCompetence.setInfo(competence.getInfo());
+		return daoCompetence.saveCompetence(modifyCompetence);
 	}
 
 	// ----

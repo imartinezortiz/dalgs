@@ -20,7 +20,7 @@ public class LearningGoalStatusFormatter implements Formatter<LearningGoalStatus
 	// fetching from Database
 
 	public String print(LearningGoalStatus competencestatus, Locale arg1) {
-		return competencestatus.getCompetence().getName();
+		return competencestatus.getCompetence().getInfo().getName();
 	}
 
 	public LearningGoalStatus parse(String competenceId, Locale arg1)

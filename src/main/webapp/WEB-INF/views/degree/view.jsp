@@ -118,11 +118,11 @@
 				<c:forEach items="${model.competences}" var="competence">
 					<tr align="center">
 						<td><div class="td-content">
-								<c:out value="${competence.name}" />
+								<c:out value="${competence.info.name}" />
 							</div></td>
 						<td>
 							<div class="td-content">
-								<c:out value="${competence.description}" />
+								<c:out value="${competence.info.description}" />
 							</div>
 						</td>
 
