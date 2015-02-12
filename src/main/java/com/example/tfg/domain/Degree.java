@@ -2,6 +2,7 @@ package com.example.tfg.domain;
 
 import java.util.Collection;
 
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -35,9 +36,13 @@ public class Degree {
 	@Embedded
 	private DegreeInfo info;
 
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
+//	// , cascade= CascadeType.ALL)//, orphanRemoval=true)
+//	private Collection<Subject> subjects;
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
 	// , cascade= CascadeType.ALL)//, orphanRemoval=true)
-	private Collection<Subject> subjects;
+	private Collection<Module> modules;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
 	// , cascade= CascadeType.ALL)//, orphanRemoval=true)
@@ -85,13 +90,13 @@ public class Degree {
 		this.info = infoDegree;
 	}
 
-	public Collection<Subject> getSubjects() {
-		return subjects;
-	}
-
-	public void setSubjects(Collection<Subject> subjects) {
-		this.subjects = subjects;
-	}
+//	public Collection<Subject> getSubjects() {
+//		return subjects;
+//	}
+//
+//	public void setSubjects(Collection<Subject> subjects) {
+//		this.subjects = subjects;
+//	}
 
 	public Collection<Competence> getCompetences() {
 		return competences;

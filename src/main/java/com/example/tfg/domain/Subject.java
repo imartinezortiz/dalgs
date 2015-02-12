@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -33,16 +34,20 @@ public class Subject {
 //	@Basic(optional = false)
 //	@Column(name = "description", length = 250, nullable = false)
 //	private String description;
-	
+	@Embedded
 	private SubjectInfo info;
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private boolean isDeleted;
 
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	// , optional = false)//cascade= CascadeType.ALL)
+//	@JoinColumn(name = "id_degree")
+//	private Degree degree;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
-	// , optional = false)//cascade= CascadeType.ALL)
-	@JoinColumn(name = "id_degree")
-	private Degree degree;
+	@JoinColumn(name = "id_topic")
+	private Topic topic;
 
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "subject_competence", joinColumns = { @JoinColumn(name = "id_subject") }, inverseJoinColumns = { @JoinColumn(name = "id_competence") })
@@ -55,13 +60,13 @@ public class Subject {
 		super();
 	}
 
-	public Degree getDegree() {
-		return degree;
-	}
-
-	public void setDegree(Degree degree) {
-		this.degree = degree;
-	}
+//	public Degree getDegree() {
+//		return degree;
+//	}
+//
+//	public void setDegree(Degree degree) {
+//		this.degree = degree;
+//	}
 
 	public Long getId() {
 		return id;
@@ -109,6 +114,14 @@ public class Subject {
 
 	public void setInfo(SubjectInfo info) {
 		this.info = info;
+	}
+
+	public Topic getTopic() {
+		return topic;
+	}
+
+	public void setTopic(Topic topic) {
+		this.topic = topic;
 	}
 
 //	public String getCode() {
