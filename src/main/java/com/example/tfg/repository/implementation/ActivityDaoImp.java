@@ -101,13 +101,13 @@ public class ActivityDaoImp implements ActivityDao {
 	}
 
 	public boolean existByCode(String code) {
-		Query query = em.createQuery("from Activity a where a.code=?1");
+		Query query = em.createQuery("Select a from Activity a where a.info.code=?1");
 		query.setParameter(1, code);
 
 		if (query.getResultList().isEmpty())
 			return false;
 		else
-			return true;
+			return true;//(Activity) query.getSingleResult();
 	}
 
 	public String getNextCode() {
@@ -124,7 +124,7 @@ public class ActivityDaoImp implements ActivityDao {
 
 	public Activity getActivityByName(String name) {
 		Query query = em
-				.createQuery("select c from Activity c where c.name=?1");
+				.createQuery("select a from Activity a where a.info.name=?1");
 		query.setParameter(1, name);
 
 		return (Activity) query.getResultList().get(0);

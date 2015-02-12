@@ -9,8 +9,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.tfg.domain.Activity;
+import com.example.tfg.domain.Competence;
+import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.LearningGoalStatus;
 import com.example.tfg.domain.Course;
+import com.example.tfg.domain.info.ActivityInfo;
 import com.example.tfg.repository.ActivityDao;
 import com.example.tfg.service.ActivityService;
 import com.example.tfg.service.CourseService;
@@ -26,8 +29,27 @@ public class ActivityServiceImp implements ActivityService {
 
 	@Transactional(readOnly = false)
 	public boolean addActivity(Activity activity, Long id_course) {
+		
+
+//		Course course = serviceCourse.getCourse(id_course);
+//		Activity existActivity = daoActivity.existByCode(activity.getInfo().getCode());
+//		if(existActivity == null){
+//			course.getActivities().add(activity);
+//			activity.setCourse(course);
+//			return daoActivity.addActivity(activity);			
+//		}
+//		else if (existActivity.isDeleted()){
+//			existActivity.setCourse(course);
+//			existActivity.setDeleted(false);
+//			course.getActivities().add(existActivity);
+//			boolean r = daoActivity.saveActivity(existActivity);	
+//			return daoActivity.saveActivity(existActivity);	
+//			
+//		}
+//		else return false;
+		
 		activity.setCourse(serviceCourse.getCourse(id_course));
-		if (!daoActivity.existByCode(activity.getCode()))
+		if (!daoActivity.existByCode(activity.getInfo().getCode()))
 			return daoActivity.addActivity(activity);
 		else
 			return false;
@@ -42,11 +64,17 @@ public class ActivityServiceImp implements ActivityService {
 	@Transactional(readOnly = false)
 	public boolean modifyActivity(Activity activity, Long id_activity,
 			Long id_course) {
-		activity.setId(id_activity);
-		activity.setCourse(serviceCourse.getCourse(id_course));
-		activity.setLearningGoalStatus(daoActivity.getActivity(id_activity)
-				.getLearningGoalStatus());
-		return daoActivity.saveActivity(activity);
+		
+	Activity activityModify =  daoActivity.getActivity(id_activity);
+	activityModify.setInfo(activity.getInfo());
+//	activityModify.setLearningGoalStatus(activity.getLearningGoalStatus());
+	return daoActivity.saveActivity(activityModify);
+	
+//		activity.setId(id_activity);
+//		activity.setCourse(serviceCourse.getCourse(id_course));
+//		activity.setLearningGoalStatus(daoActivity.getActivity(id_activity)
+//				.getLearningGoalStatus());
+//		return daoActivity.saveActivity(activity);
 
 	}
 

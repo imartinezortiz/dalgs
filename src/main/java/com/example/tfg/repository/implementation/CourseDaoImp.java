@@ -88,16 +88,16 @@ public class CourseDaoImp implements CourseDao {
 
 
 
-	public boolean exist(Course course) {
+	public Course exist(Course course) {
 		Query query = em
 				.createQuery("select c from Course c  where c.academicTerm=?1 and c.subject=?2");
 		query.setParameter(1, course.getAcademicTerm());
 		query.setParameter(2, course.getSubject());
 
 		if (query.getResultList().isEmpty())
-			return false;
+			return null;
 		else
-			return true;
+			return (Course)query.getSingleResult();
 	}
 
 	@SuppressWarnings("unchecked")

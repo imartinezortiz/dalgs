@@ -24,7 +24,7 @@ public interface CourseDao {
 	// public boolean existByAcademicTerm(AcademicTerm aT);
 	// public Course getCourseByName(String name);
 	// public boolean exist(Course course);
-	public boolean exist(Course course);
+	public Course exist(Course course);
 
 	public List<Course> getCoursesByAcademicTerm(Long id_academic);
 

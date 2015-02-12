@@ -33,19 +33,19 @@
 				<div class="form-group view">
 					<label>Code: </label>
 					<p class="details">
-						${model.activity.code}
+						${model.activity.info.code}
 					</p>
 					</div>
 					<div class="form-group view">
 					<label>Name:</label>
 					<p class="details">
-						${model.activity.name}
+						${model.activity.info.name}
 					</p>
 				</div>
 					<div class="form-group view">
 					<label>Description:</label>
 					<p class="details">
-						${model.activity.description}
+						${model.activity.info.description}
 					</p>
 				</div>
 					
@@ -71,7 +71,7 @@
 				<c:forEach items="${model.competenceStatus}" var="cs">
 					<tr align="center">
 						<td><div class="td-content">
-								<c:out value="${cs.competence.name}" />
+								<c:out value="${cs.competence.info.name}" />
 							</div></td>
 						<td>
 							<div class="td-content">

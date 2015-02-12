@@ -13,7 +13,7 @@ public interface CourseService {
 
 	public List<Course> getAll();
 
-	public boolean modifyCourse(Course course, Long id_academic);
+	public boolean modifyCourse(Course course, Long id_academic, Long id_course);
 
 	public Course getCourse(Long id);
 

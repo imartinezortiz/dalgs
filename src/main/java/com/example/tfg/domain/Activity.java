@@ -5,6 +5,7 @@ import java.util.Collection;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.example.tfg.domain.info.ActivityInfo;
 
 
 @Entity
@@ -23,10 +26,15 @@ public class Activity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_activity")
 	private Long id;
-	@Column(name = "name")
-	private String name;
-	@Column(name = "description")
-	private String description;
+//	@Column(name = "name")
+//	private String name;
+//	@Column(name = "description")
+//	private String description;
+	
+	@Embedded
+	private ActivityInfo info;
+	
+
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "id_course")
@@ -36,8 +44,8 @@ public class Activity {
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private boolean isDeleted;
 
-	@Column(name = "code_activity", nullable = false)
-	private String code;
+//	@Column(name = "code_activity", nullable = false)
+//	private String code;
 
 	@ElementCollection(fetch = FetchType.LAZY)
 	@CollectionTable(name = "activity_learninggoalstatus", joinColumns = @JoinColumn(name = "id_activity"))
@@ -57,21 +65,21 @@ public class Activity {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
+//	public String getName() {
+//		return name;
+//	}
+//
+//	public void setName(String name) {
+//		this.name = name;
+//	}
+//
+//	public String getDescription() {
+//		return description;
+//	}
+//
+//	public void setDescription(String description) {
+//		this.description = description;
+//	}
 
 	public Course getCourse() {
 		return course;
@@ -89,13 +97,13 @@ public class Activity {
 		this.isDeleted = isDeleted;
 	}
 
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
+//	public String getCode() {
+//		return code;
+//	}
+//
+//	public void setCode(String code) {
+//		this.code = code;
+//	}
 
 	public Collection<LearningGoalStatus> getLearningGoalStatus() {
 		return learningGoalStatus;
@@ -106,6 +114,12 @@ public class Activity {
 		this.learningGoalStatus = learningGoalStatus;
 	}
 
+	public ActivityInfo getInfo() {
+		return info;
+	}
 
+	public void setInfo(ActivityInfo info) {
+		this.info = info;
+	}
 
 }

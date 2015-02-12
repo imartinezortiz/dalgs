@@ -54,9 +54,9 @@ INSERT INTO competence (id_competence,code_competence,description,name,id_degree
 --Activity Inserts 
 INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (1,'ACT1','Desarrollar diagramas de casos de uso','Casos de Uso',1);
 INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (2,'ACT2','Elaborar un diagrama Entidad-Relacion','Entidad-Relacion',1);
-INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (3,'ACT1','Desarrollar diagramas de casos de uso','Casos de Uso',2);
-INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (4,'ACT2','Elaborar un diagrama Entidad-Relacion','Entidad-Relacion',2);
-INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (5,'ACT3','Elaborar scripts en c','Lenguaje c',3);
+INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (3,'ACT3','Diagramas de secuencia','Secuencia',2);
+INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (4,'ACT4','Diagramas de activitidades','actividades',2);
+INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (5,'ACT5','Diagrama de clases','clases',3);
 
 -- Activity Inserts 
 INSERT INTO activity_learninggoalstatus (id_activity, competence_id_competence, percentage) VALUES ('1', 1,'10');

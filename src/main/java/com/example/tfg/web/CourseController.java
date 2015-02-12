@@ -158,9 +158,9 @@ public class CourseController {
 		// "redirect:/academicTerm/"+id_academic+"/course/"+id_course+"/modify.htm";
 
 		if (!result.hasErrors()) {
-			modify.setId(id_course);
+//			modify.setId(id_course);
 			// modify.setAcademicTerm(serviceAcademic.getAcademicTerm(id_academic));
-			boolean success = serviceCourse.modifyCourse(modify, id_academic);
+			boolean success = serviceCourse.modifyCourse(modify, id_academic, id_course);
 			if (success)
 				return "redirect:/academicTerm/" + id_academic + "/course/"
 						+ id_course + ".htm";

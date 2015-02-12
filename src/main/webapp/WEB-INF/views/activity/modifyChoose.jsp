@@ -25,18 +25,18 @@
 			<form:form method="post"  action="modify.htm" commandName="modifyactivity">
 				<div class="form-group">
 					<label>Code: </label>
-					<form:input path="code" class="form-control"
+					<form:input path="info.code" class="form-control"
 						placeholder="Code of the activity" required="true" />
 				</div>
 				<div class="form-group">
 					<label>Name: </label>
-					<form:input path="name" class="form-control" id="name"
+					<form:input path="info.name" class="form-control" id="name"
 						required="true" />
 
 				</div>
 				<div class="form-group">
 					<label>Description: </label>
-					<form:input class="form-control" path="description"
+					<form:input class="form-control" path="info.description"
 						id="description" required="true" />
 				</div>
 
@@ -54,7 +54,7 @@
 						<c:forEach items="${competenceStatus}" var="compStatus" varStatus="status">		
 							<tr align="center">
 								<td><div class="td-content">
-										<c:out value="${compStatus.competence.name}" />
+										<c:out value="${compStatus.competence.info.name}" />
 								
 									</div></td>
 								<td>
@@ -92,7 +92,7 @@
 						id="competence">
 						<form:option value=""> --Select an option-- </form:option>
 						<c:forEach items="${competences}" var="comp">
-							<form:option value="${comp.id}">${comp.name}</form:option>
+							<form:option value="${comp.id}">${comp.info.name}</form:option>
 						</c:forEach>
 					</form:select>
 					<br>

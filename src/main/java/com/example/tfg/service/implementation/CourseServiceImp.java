@@ -31,31 +31,61 @@ public class CourseServiceImp implements CourseService {
 
 	@Transactional(readOnly = false)
 	public boolean addCourse(Course course, Long id_academic) {
+		
 		AcademicTerm academic = serviceAcademicTerm
 				.getAcademicTerm(id_academic);
-
 		course.setAcademicTerm(academic);
-		Long aux = daoCourse.isDisabled(course.getAcademicTerm().getId(),
-				course.getSubject().getId());
-		if (aux != null) {
-			course.setId(aux);
-			course.setDeleted(false);
-			return daoCourse.saveCourse(course);
-		} else if (!daoCourse.exist(course))
-			return daoCourse.addCourse(course);
-
-		return false;
+		Course existCourse = daoCourse.exist(course);
+		if(existCourse == null){
+//			course.setAcademicTerm(academic);
+			academic.getCourses().add(course);
+			return daoCourse.addCourse(course);				
+		}
+		else if(existCourse.isDeleted()){
+			existCourse.setAcademicTerm(academic);
+			academic.getCourses().add(existCourse);
+			existCourse.setDeleted(false);
+			existCourse.setSubject(course.getSubject());
+			return daoCourse.saveCourse(existCourse);
+		}
+		else return false;
+		
+//		AcademicTerm academic = serviceAcademicTerm
+//				.getAcademicTerm(id_academic);
+//
+//		course.setAcademicTerm(academic);
+//		Long aux = daoCourse.isDisabled(course.getAcademicTerm().getId(),
+//				course.getSubject().getId());
+//		if (aux != null) {
+//			course.setId(aux);
+//			course.setDeleted(false);
+//			return daoCourse.saveCourse(course);
+//		} else if (!daoCourse.exist(course))
+//			return daoCourse.addCourse(course);
+//
+//		return false;
 	}
 
 	@Transactional(readOnly = true)
 	public List<Course> getAll() {
 		return daoCourse.getAll();
 	}
-
+//yo lo borraria no tiene sentido en este caso el modify
 	@Transactional(readOnly = false)
-	public boolean modifyCourse(Course course, Long id_academic) {
+	public boolean modifyCourse(Course course, Long id_academic, Long id_course) {
+		Course courseModify = daoCourse.getCourse(id_course);
+		
 		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic));
-		return daoCourse.saveCourse(course);
+		Course existModify = daoCourse.exist(course);
+		
+		
+		if (existModify == null){
+				courseModify.setSubject(course.getSubject());
+				return daoCourse.saveCourse(courseModify);
+		}
+
+			
+		else return false;
 	}
 
 	@Transactional(readOnly = false)
@@ -77,10 +107,10 @@ public class CourseServiceImp implements CourseService {
 	 * daoCourse.getCoursesByAcademicTerm(term); }
 	 */
 
-	@Transactional(readOnly = false)
-	public boolean exists(Course course) {
-		return daoCourse.exist(course);
-	}
+//	@Transactional(readOnly = false)
+//	public boolean exists(Course course) {
+//		return daoCourse.exist(course);
+//	}
 
 	@Transactional(readOnly = true)
 	public List<Course> getCoursesByAcademicTerm(Long id_academic) {

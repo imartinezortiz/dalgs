@@ -25,15 +25,15 @@
 			<form:form method="post" commandName="addactivity" role="form">
 				<div class="form-group">
 					<label>Code: </label>
-					<form:input path="code" class="form-control" placeholder="Code of the activity" required="true"/>
+					<form:input path="info.code" class="form-control" placeholder="Code of the activity" required="true"/>
 				</div>
 				<div class="form-group">
 					<label>Name: </label>
-					<form:input path="name" class="form-control" placeholder="Name of the activity" required="true"/>
+					<form:input path="info.name" class="form-control" placeholder="Name of the activity" required="true"/>
 				</div>
 				<div class="form-group">
 					<label>Description: </label>
-					<form:input path="description" class="form-control"  placeholder="Description of the activity" required="true"/>
+					<form:input path="info.description" class="form-control"  placeholder="Description of the activity" required="true"/>
 				</div>
 
 				

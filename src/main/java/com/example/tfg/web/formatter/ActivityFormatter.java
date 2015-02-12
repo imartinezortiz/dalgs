@@ -20,7 +20,7 @@ public class ActivityFormatter implements Formatter<Activity> {
 	// fetching from Database
 
 	public String print(Activity activity, Locale arg1) {
-		return activity.getName();
+		return activity.getInfo().getName();
 	}
 
 	public Activity parse(String activityId, Locale arg1) throws ParseException {

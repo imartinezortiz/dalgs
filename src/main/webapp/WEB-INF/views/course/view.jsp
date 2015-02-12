@@ -75,11 +75,11 @@
 				<c:forEach items="${model.activities}" var="activity">
 					<tr align="center">
 						<td><div class="td-content">
-								<c:out value="${activity.name}" />
+								<c:out value="${activity.info.name}" />
 							</div></td>
 						<td>
 							<div class="td-content">
-								<c:out value="${activity.description}" />
+								<c:out value="${activity.info.description}" />
 							</div>
 						</td>
 
