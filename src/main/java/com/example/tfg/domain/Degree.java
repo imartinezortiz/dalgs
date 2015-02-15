@@ -114,6 +114,14 @@ public class Degree {
 		this.isDeleted = isDeleted;
 	}
 
+	public Collection<Module> getModules() {
+		return modules;
+	}
+
+	public void setModules(Collection<Module> modules) {
+		this.modules = modules;
+	}
+
 //	public String getCode() {
 //		return code;
 //	}

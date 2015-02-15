@@ -1,10 +1,12 @@
 package com.example.tfg.service;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.example.tfg.domain.Degree;
+import com.example.tfg.domain.Module;
 import com.example.tfg.domain.Subject;
 
 @Service
@@ -39,4 +41,5 @@ public interface SubjectService {
 	public boolean deleteSubjectsForDegree(Degree d);
 
 	public Subject getSubjectAndDegree(Long id_subject, Long id_degree);
+
 }

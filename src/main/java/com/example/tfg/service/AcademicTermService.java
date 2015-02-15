@@ -1,5 +1,6 @@
 package com.example.tfg.service;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -17,7 +18,9 @@ public interface AcademicTermService {
 	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex);// String
 																	// term);
 
-	public boolean deleteAcademicTerm(Long id);
+	public boolean deleteAcademicTerm(Collection<AcademicTerm> academicList);
+	
+	public boolean deleteAcademicTerm(Long id_academic);
 
 	public AcademicTerm getAcademicTerm(Long id_academic);
 

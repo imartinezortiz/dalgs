@@ -1,5 +1,6 @@
 package com.example.tfg.repository.implementation;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -143,11 +144,28 @@ public class ActivityDaoImp implements ActivityDao {
 			return true;
 	}
 
+	public boolean deleteActivitiesFromCourses(Collection<Course> courses) {
+
+		try {
+			Query query = em
+					.createQuery("UPDATE Activity a SET a.isDeleted = true where a.course in ?1");
+
+			query.setParameter(1, courses);
+			query.executeUpdate();
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+
+			return false;
+		}
+		return true;
+	}
+	
 	public boolean deleteActivitiesFromCourse(Course course) {
 
 		try {
 			Query query = em
-					.createQuery("UPDATE Activity a SET a.isDeleted = true where a.course=?1");
+					.createQuery("UPDATE Activity a SET a.isDeleted = true where a.course = ?1");
 
 			query.setParameter(1, course);
 			query.executeUpdate();

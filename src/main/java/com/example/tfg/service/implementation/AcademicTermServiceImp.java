@@ -1,5 +1,6 @@
 package com.example.tfg.service.implementation;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.tfg.domain.AcademicTerm;
+import com.example.tfg.domain.Course;
 import com.example.tfg.repository.AcademicTermDao;
 import com.example.tfg.service.AcademicTermService;
 import com.example.tfg.service.CourseService;
@@ -111,6 +113,14 @@ public class AcademicTermServiceImp implements AcademicTermService {
 		AcademicTerm aT= daoAcademicTerm.getAcademicTermById(id_academic);
 		aT.setCourses(serviceCourse.getCoursesByAcademicTerm(id_academic));
 		return aT;
+	}
+	
+	public boolean deleteAcademicTerm(Collection<AcademicTerm> academicList) {
+		
+		boolean deleteCourses = serviceCourse.deleteCourses(academicList);
+		if (deleteCourses)
+		return daoAcademicTerm.deleteAcademicTerm(academicList);
+		else return false;
 	}
 
 }

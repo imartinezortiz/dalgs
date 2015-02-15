@@ -1,5 +1,6 @@
 package com.example.tfg.service.implementation;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,25 +120,46 @@ public class CourseServiceImp implements CourseService {
 	}
 
 	public boolean deleteCoursesFromAcademic(AcademicTerm academic) {
-		boolean deleted = false;
-		for (Course course : academic.getCourses()) {
-			deleted = serviceActivity.deleteActivitiesFromCourse(course);
-			if (!deleted)
-				break;
-		}
+		boolean deleted = serviceActivity.deleteActivitiesFromCourses(academic.getCourses());
+		
 		if (deleted)
-			if (daoCourse.deleteCoursesFromAcademic(academic))
-				return true;
-		return deleted;
+			return daoCourse.deleteCoursesFromAcademic(academic);
+		else return false;
+//		boolean deleted = false;
+//		for (Course course : academic.getCourses()) {
+//			deleted = serviceActivity.deleteActivitiesFromCourse(course);
+//			if (!deleted)
+//				break;
+//		}
+//		if (deleted)
+//			if (daoCourse.deleteCoursesFromAcademic(academic))
+//				return true;
+//		return deleted;
 	}
 	
 
 
-	@Override
+	
 	public Course getCourseAll(Long id) {
 		Course c = daoCourse.getCourse(id);
 		c.setActivities(serviceActivity.getActivitiesForCourse(id));
 		return c;
+	}
+
+	
+	public Collection<Course> getCoursesfromListAcademic(
+			Collection<AcademicTerm> academicList) {
+			
+		return daoCourse.getCoursesFromListAcademic(academicList);
+	}
+
+	
+	public boolean deleteCourses(Collection<AcademicTerm> academicList) {
+		Collection<Course> coursesList = daoCourse.getCoursesFromListAcademic(academicList);
+		boolean deleteActivities = serviceActivity.deleteActivitiesFromCourses(coursesList);
+		if (deleteActivities)
+		return daoCourse.deleteCourses(academicList);
+		else return false;
 	}
 
 }

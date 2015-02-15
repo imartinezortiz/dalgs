@@ -118,8 +118,8 @@ public class DegreeController {
 		Degree p = serviceDegree.getDegreeAll(id);
 
 		myModel.put("degree", p);
-		if (p.getSubjects() != null)
-			myModel.put("subjects", p.getSubjects());
+		if (p.getModules() != null)
+			myModel.put("modules", p.getModules());
 		if (p.getCompetences() != null)
 			myModel.put("competences", p.getCompetences());
 

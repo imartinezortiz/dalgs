@@ -1,5 +1,6 @@
 package com.example.tfg.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -29,6 +30,8 @@ public interface ActivityDao {
 
 	public boolean existsLearningGoalStatus(Long id_activity, Long id_competence);
 
+	public boolean deleteActivitiesFromCourses(Collection<Course> courses);
+	
 	public boolean deleteActivitiesFromCourse(Course course);
 
 }

@@ -14,7 +14,7 @@ public interface DegreeDao {
 
 	public List<Degree> getAll();
 
-	public boolean saveSubject(Degree degree);
+	public boolean saveDegree(Degree degree);
 
 	public Degree getDegree(Long id);
 
@@ -27,7 +27,8 @@ public interface DegreeDao {
 	public String getNextCode();
 
 	public Degree existByCode(String code);
-//	 public Degree getDegreeAll(Long id);
+
+//	public Degree getDegreeAll(Long id);
 
 
 }

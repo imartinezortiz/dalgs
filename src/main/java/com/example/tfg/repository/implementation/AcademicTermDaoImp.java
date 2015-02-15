@@ -1,5 +1,6 @@
 package com.example.tfg.repository.implementation;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -222,5 +223,14 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 			return null;
 		else return (AcademicTerm)query.getSingleResult();
 		
+	}
+
+
+	public boolean deleteAcademicTerm(Collection<AcademicTerm> academicList) {
+		Query query = em.createQuery("UPDATE AcademicTerm a SET isDeleted = true WHERE a in ?1");
+		query.setParameter(1, academicList);
+		int n = query.executeUpdate();
+		if (n > 0) return true;
+		return false;
 	}
 }

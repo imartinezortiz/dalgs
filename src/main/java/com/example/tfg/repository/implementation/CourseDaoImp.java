@@ -1,5 +1,6 @@
 package com.example.tfg.repository.implementation;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -148,6 +149,34 @@ public class CourseDaoImp implements CourseDao {
 		}
 		return true;
 
+	}
+
+
+	@SuppressWarnings("unchecked")
+	public Collection<Course> getCoursesFromListAcademic(
+			Collection<AcademicTerm> academicList) {
+		Query query = em.createQuery("SELECT c  FROM Course c WHERE c.isDeleted = false  AND c.academicTerm in ?1");
+		query.setParameter(1, academicList);
+		
+		if (query.getResultList().isEmpty()) return null;
+		else return (Collection<Course>) query.getResultList();
+	}
+
+	
+	public boolean deleteCourses(Collection<AcademicTerm> academicList) {
+		
+		try{
+			Query query = em.createQuery("UPDATE Course c SET c.isDeleted = true WHERE c.academicTerm in ?1");
+			query.setParameter(1, academicList);
+			int n = query.executeUpdate();
+			if (n>0)return true;
+			else return false;	
+			
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			return false;
+		}
+		
 	}
 
 }

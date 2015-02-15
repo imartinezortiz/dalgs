@@ -1,5 +1,6 @@
 package com.example.tfg.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -31,5 +32,10 @@ public interface CourseDao {
 	public Long isDisabled(Long id_academic, Long id_subject);
 
 	public boolean deleteCoursesFromAcademic(AcademicTerm academic);
+
+	public Collection<Course> getCoursesFromListAcademic(
+			Collection<AcademicTerm> academicList);
+
+	public boolean deleteCourses(Collection<AcademicTerm> academicList);
 
 }

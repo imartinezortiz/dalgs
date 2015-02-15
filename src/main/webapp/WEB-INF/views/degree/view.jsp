@@ -53,10 +53,10 @@
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 
-				Subject List
+				Module List
 			</h3>
 			<a class="btn list-btn btn-warning2"
-				href="<c:url value='/degree/${degreeId}/subject/add.htm'/>"> <span
+				href="<c:url value='/degree/${degreeId}/module/add.htm'/>"> <span
 				class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 				Add
 			</a>
@@ -66,19 +66,18 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label">Name</div></td>
-					<td width="50%"><div class="td-label">Description</div></td>
+					<td width="20%"><div class="td-label">Code</div></td>
+					<td width="50%"><div class="td-label">Name</div></td>
 				</tr>
-				<c:forEach items="${model.subjects}" var="subject">
+				<c:forEach items="${model.modules}" var="module">
 					<tr align="center">
 						<td><div class="td-content">
-								<c:out value="${subject.info.name}" />
+								<c:out value="${module.info.code}" />
 							</div></td>
-						<td>
-							<div class="td-content">
-								<c:out value="${subject.info.description}" />
-							</div>
-						</td>
+						<td><div class="td-content">
+								<c:out value="${module.info.name}" />
+							</div></td>
+
 
 						<td><a class="btn list-btn btn-success"
 							href="<c:url value='/degree/${degreeId}/subject/${subject.id}.htm'/>">View</a>

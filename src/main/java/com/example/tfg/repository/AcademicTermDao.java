@@ -1,5 +1,6 @@
 package com.example.tfg.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.example.tfg.domain.AcademicTerm;
@@ -37,4 +38,6 @@ public interface AcademicTermDao {
 	public Integer numberOfPages();
 
 	public AcademicTerm exists(String term, Degree degree);
+
+	public boolean deleteAcademicTerm(Collection<AcademicTerm> academicList);
 }

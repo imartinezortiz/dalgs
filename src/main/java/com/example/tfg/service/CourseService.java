@@ -1,5 +1,6 @@
 package com.example.tfg.service;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -26,5 +27,10 @@ public interface CourseService {
 	public boolean deleteCoursesFromAcademic(AcademicTerm academic);
 
 	public Course getCourseAll(Long id);
+
+	public Collection<Course> getCoursesfromListAcademic(
+			Collection<AcademicTerm> academicList);
+
+	public boolean deleteCourses(Collection<AcademicTerm> academicList);
 
 }

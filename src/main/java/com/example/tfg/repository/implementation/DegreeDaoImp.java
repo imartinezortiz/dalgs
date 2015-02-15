@@ -59,7 +59,7 @@ public class DegreeDaoImp implements DegreeDao {
 	}
 
 	@Override
-	public boolean saveSubject(Degree degree) {
+	public boolean saveDegree(Degree degree) {
 		try {
 			em.merge(degree);
 		} catch (ConstraintViolationException e) {
@@ -135,13 +135,15 @@ public class DegreeDaoImp implements DegreeDao {
 
 
 
-//	@Override
+	
 //	public Degree getDegreeAll(Long id) {
-//		Degree degree = em.getReference(Degree.class, id);
+////		Degree degree = em.getReference(Degree.class, id);
+//
+//		
 //		Query query =
-//				em.createQuery("select d from Degree d join d.subjects s join d.competences c where d=?1 "
-//						+ "and s in (from Subject x where x.isDeleted = false) and c in (from Competence z where z.isDeleted = false)");
-//		query.setParameter(1, degree);
+//				em.createQuery("select d from Degree d join d.modules m join d.competences c where d.id=?1 "
+//						+ "and m in(Select x from Module x where x.isDeleted = false and x = m) and c in (Select z from Competence z where z.isDeleted = false and z = c)");
+//		query.setParameter(1, id);
 //
 //		List<Object> d = query.getResultList();
 //

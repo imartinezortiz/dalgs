@@ -1,5 +1,6 @@
 package com.example.tfg.service;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -31,6 +32,8 @@ public interface ActivityService {
 			Long id_Activity);
 
 	public boolean addCompetences(Long id, LearningGoalStatus learningGoalStatus);
+
+	public boolean deleteActivitiesFromCourses(Collection<Course> courses);
 
 	public boolean deleteActivitiesFromCourse(Course course);
 

@@ -68,7 +68,7 @@ public class CourseController {
 		// List<Subject> subjects =
 		// serviceSubject.getSubjectsForDegree(academic.getDegree().getId());
 		model.addAttribute("academicTerm", academic);
-		model.addAttribute("subjects", academic.getDegree().getSubjects());
+	//__	model.addAttribute("subjects", academic.getDegree());
 		return "course/add";
 	}
 

@@ -9,11 +9,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.tfg.domain.Activity;
-import com.example.tfg.domain.Competence;
-import com.example.tfg.domain.Degree;
+
 import com.example.tfg.domain.LearningGoalStatus;
 import com.example.tfg.domain.Course;
-import com.example.tfg.domain.info.ActivityInfo;
+
 import com.example.tfg.repository.ActivityDao;
 import com.example.tfg.service.ActivityService;
 import com.example.tfg.service.CourseService;
@@ -159,7 +158,13 @@ public class ActivityServiceImp implements ActivityService {
 		return daoActivity.saveActivity(p);
 	}
 
+	public boolean deleteActivitiesFromCourses(Collection<Course> courses) {
+		return daoActivity.deleteActivitiesFromCourses(courses);
+	}
+
+
 	public boolean deleteActivitiesFromCourse(Course course) {
+		
 		return daoActivity.deleteActivitiesFromCourse(course);
 	}
 

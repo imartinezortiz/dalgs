@@ -55,11 +55,11 @@ public class Module {
 		this.info = info;
 	}
 
-	public Boolean getIsDeleted() {
+	public Boolean isDeleted() {
 		return isDeleted;
 	}
 
-	public void setIsDeleted(Boolean isDeleted) {
+	public void setDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
 
