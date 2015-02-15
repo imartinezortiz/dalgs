@@ -29,7 +29,7 @@ public class Topic {
 	private TopicInfo info;
 	
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
-	private Boolean isDeleted;
+	private boolean isDeleted;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_module")
@@ -55,11 +55,11 @@ public class Topic {
 		this.info = info;
 	}
 
-	public Boolean getIsDeleted() {
+	public Boolean isDeleted() {
 		return isDeleted;
 	}
 
-	public void setIsDeleted(Boolean isDeleted) {
+	public void setDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
 

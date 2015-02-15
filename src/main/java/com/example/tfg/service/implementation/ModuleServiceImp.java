@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Module;
-import com.example.tfg.domain.Module;
 import com.example.tfg.repository.ModuleDao;
 import com.example.tfg.service.DegreeService;
 import com.example.tfg.service.ModuleService;
@@ -30,15 +29,19 @@ public class ModuleServiceImp implements ModuleService {
 		if(existModule == null){
 			module.setDegree(degree);
 			degree.getModules().add(module);
-			return daoModule.addModule(module);
+			if(daoModule.addModule(module))
+				return serviceDegree.modifyDegree(degree);
+		
 				
 		}else if(existModule.isDeleted()==true){
 			existModule.setInfo(module.getInfo());
 			existModule.setDeleted(false);
 			degree.getModules().add(existModule);
-			return daoModule.saveModule(existModule);				
+			if(daoModule.saveModule(existModule))
+				return serviceDegree.modifyDegree(degree);
+	
 		}
-		else return false;		
+		return false;		
 	}
 
 	@Transactional(readOnly=true)
@@ -69,7 +72,6 @@ public class ModuleServiceImp implements ModuleService {
 	@Transactional(readOnly=true)
 	public Module getModuleAll(Long id_module, Long id_degree) {
 		
-		
 		Module p = daoModule.getModule(id_module);
 		Degree d = serviceDegree.getDegree(id_degree);
 		p.setDegree(d);
@@ -78,8 +80,13 @@ public class ModuleServiceImp implements ModuleService {
 
 	@Override
 	public Collection<Module> getModulesForDegree(Long id) {
-		// TODO Auto-generated method stub
+		
 		return daoModule.getModulesForDegree(id);
+	}
+
+	
+	public boolean modifyModule(Module module) {
+		return modifyModule(module);
 	}
 
 

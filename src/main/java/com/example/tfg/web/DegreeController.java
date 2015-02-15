@@ -28,7 +28,7 @@ public class DegreeController {
 	private DegreeService serviceDegree;
 
 	@RequestMapping(value = "/degree/add.htm", method = RequestMethod.GET)
-	protected String getAddNewDegreeForm(Model model) {
+	public String getAddNewDegreeForm(Model model) {
 		Degree newDegree = new Degree();
 		// newDegree.setCode(serviceDegree.getNextCode());
 

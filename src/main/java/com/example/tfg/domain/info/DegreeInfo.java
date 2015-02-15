@@ -6,9 +6,9 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class DegreeInfo {
-	
+
 	@Basic(optional = false)
-	@Column(name = "code_degree", nullable = false)
+	@Column(name = "code_degree", nullable = false, unique = true)
 	private String code;
 	
 	@Basic(optional = false)

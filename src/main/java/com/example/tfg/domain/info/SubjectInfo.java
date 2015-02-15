@@ -15,7 +15,7 @@ public class SubjectInfo {
 	@Column(name = "description", length = 250, nullable = false)
 	private String description;
 	
-	@Column(name = "code_subject", nullable = false)
+	@Column(name = "code_subject", nullable = false, unique = true)
 	private String code;
 
 	public String getName() {

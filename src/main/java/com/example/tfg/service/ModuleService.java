@@ -24,4 +24,8 @@ public interface ModuleService {
 
 	public Collection<Module> getModulesForDegree(Long id);
 
+	public boolean modifyModule(Module module);
+
+	
+
 }

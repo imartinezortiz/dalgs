@@ -22,14 +22,14 @@ public class Module {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id_module")
-	
+	@Column(name = "id_module")	
 	private Long id;
+	
 	@Embedded
 	private ModuleInfo info;
 	
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
-	private Boolean isDeleted;
+	private boolean isDeleted;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_degree")

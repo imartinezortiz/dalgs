@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Module;
-import com.example.tfg.domain.Subject;
 import com.example.tfg.repository.ModuleDao;
 
 @Repository
@@ -94,7 +93,7 @@ public class ModuleDaoImp implements ModuleDao {
 		return null;
 	}
 
-	@Override
+
 	public Module existByCode(String code) {
 		Query query = em.createQuery("select m from Module m where m.info.code=?1");
 		query.setParameter(1, code);
@@ -104,7 +103,7 @@ public class ModuleDaoImp implements ModuleDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
+
 	public Collection<Module> getModulesForDegree(Long id) {
 		Degree degree = em.getReference(Degree.class, id);
 

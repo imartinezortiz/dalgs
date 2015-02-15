@@ -47,7 +47,7 @@ public class CompetenceController {
 	 */
 
 	@RequestMapping(value = "/degree/{degreeId}/competence/add.htm", method = RequestMethod.GET)
-	protected String getAddNewCompetenceForm2(Model model,
+	public String getAddNewCompetenceForm2(Model model,
 			@PathVariable("degreeId") Long id) {
 		Competence newCompetence = new Competence();
 

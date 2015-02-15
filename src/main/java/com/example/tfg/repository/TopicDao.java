@@ -1,5 +1,6 @@
 package com.example.tfg.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -23,5 +24,7 @@ public interface TopicDao {
 	public String getNextCode();
 
 	public Topic existByCode(String code);
+
+	public Collection<Topic> getTopicsForModule(Long id);
 
 }

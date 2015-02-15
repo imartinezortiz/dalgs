@@ -80,9 +80,9 @@
 
 
 						<td><a class="btn list-btn btn-success"
-							href="<c:url value='/degree/${degreeId}/subject/${subject.id}.htm'/>">View</a>
+							href="<c:url value='/degree/${degreeId}/module/${module.id}.htm'/>">View</a>
 							<a class="btn btn-danger"
-							href="<c:url value='/degree/${degreeId}/subject/${subject.id}/delete.htm'/>">
+							href="<c:url value='/degree/${degreeId}/module/${module.id}/delete.htm'/>">
 								Delete
 						</a></td>
 
