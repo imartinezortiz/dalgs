@@ -22,4 +22,6 @@ public interface TopicService {
 	public Topic getTopicAll(Long id_topic);
 
 	public Collection<Topic> getTopicsForModule(Long id);
+
+	public boolean modifyTopic(Topic topic);
 }

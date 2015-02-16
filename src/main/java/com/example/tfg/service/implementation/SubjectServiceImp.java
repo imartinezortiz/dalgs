@@ -7,22 +7,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.tfg.domain.Degree;
+import com.example.tfg.domain.Topic;
 import com.example.tfg.domain.Subject;
 import com.example.tfg.repository.SubjectDao;
 import com.example.tfg.service.CompetenceService;
 import com.example.tfg.service.CourseService;
 import com.example.tfg.service.DegreeService;
 import com.example.tfg.service.SubjectService;
+import com.example.tfg.service.TopicService;
 
 @Service
 public class SubjectServiceImp implements SubjectService {
 
 	@Autowired
 	private SubjectDao daoSubject;
-
+	
 	@Autowired
-	private DegreeService serviceDegree;
+	private TopicService serviceTopic;
 
 	@Autowired
 	private CompetenceService serviceCompetence;
@@ -31,22 +32,24 @@ public class SubjectServiceImp implements SubjectService {
 	private CourseService serviceCourse;
 
 	@Transactional(readOnly = false)
-	public boolean addSubject(Subject subject, Long id_degree) {
+	public boolean addSubject(Subject subject, Long id_topic) {
 		
 		Subject existSubject = daoSubject.existByCode(subject.getInfo().getCode());
-		Degree degree = serviceDegree.getDegree(id_degree);
+		Topic topic = serviceTopic.getTopic(id_topic);
 		if(existSubject == null){
-			subject.setDegree(degree);
-			degree.getSubjects().add(subject);
-			return daoSubject.addSubject(subject);
+			subject.setTopic(topic);
+			topic.getSubjects().add(subject);
+			if(daoSubject.addSubject(subject))
+				return serviceTopic.modifyTopic(topic);
 				
 		}else if(existSubject.isDeleted()==true){
 			existSubject.setInfo(subject.getInfo());
 			existSubject.setDeleted(false);
-			degree.getSubjects().add(existSubject);
-			return daoSubject.saveSubject(existSubject);				
+			topic.getSubjects().add(existSubject);
+			if (daoSubject.saveSubject(existSubject))
+				return serviceTopic.modifyTopic(topic);
 		}
-		else return false;		
+		return false;		
 		
 //		if (!daoSubject.existByCode(subject.getInfo().getCode())) {
 //
@@ -137,33 +140,32 @@ public class SubjectServiceImp implements SubjectService {
 	 * false; } }
 	 */
 
-	@Transactional(readOnly = true)
-	public Subject getSubjectByName(String string) {
-		return daoSubject.getSubjectByName(string);
-	}
+//	@Transactional(readOnly = true)
+//	public Subject getSubjectByName(String string) {
+//		return daoSubject.getSubjectByName(string);
+//	}
 
-	@Transactional(readOnly = false)
-	public boolean deleteSubject(Long id_subject, Long id_degree) {
+//	@Transactional(readOnly = false)
+//	public boolean deleteSubject(Long id_subject, Long id_degree) {
+//
+//		// Degree degree = serviceDegree.getDegree(id_degree);
+//
+//		// Subject s = daoSubject.getSubject(id_subject);
+//		
+//		return daoSubject.deleteSubject(id_subject);
+//
+//	}
 
-		// Degree degree = serviceDegree.getDegree(id_degree);
-
-		// Subject s = daoSubject.getSubject(id_subject);
-		
-		return daoSubject.deleteSubject(id_subject);
-
-	}
-
-	public boolean deleteSubjectsForDegree(Degree degree) {
+	public boolean deleteSubjectsForDegree(Topic degree) {
 
 		return daoSubject.deleteSubjectsForDegree(degree);
 	}
 
 	@Transactional(readOnly = true)
-	public Subject getSubjectAndDegree(Long id_subject, Long id_degree) {
+	public Subject getSubjectAll(Long id_subject) {
 
-		Subject p = daoSubject.getSubject(id_subject);
-		Degree d = serviceDegree.getDegree(id_degree);
-		p.setDegree(d);
+		Subject p = daoSubject.getSubject(id_subject);;
+		p.setCompetences(serviceCompetence.getCompetencesForSubject(id_subject));
 		return p;
 	}
 }

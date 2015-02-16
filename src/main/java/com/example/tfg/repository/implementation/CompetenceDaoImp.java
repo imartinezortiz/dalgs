@@ -123,10 +123,10 @@ public class CompetenceDaoImp implements CompetenceDao {
 		Subject subject = em.getReference(Subject.class, id_subject);
 
 		Query query = em
-				.createQuery("select c from Subject s.competences c where s = ?1 and c.isDeleted='false'");
+				.createQuery("select c from Subject s join s.competences c where s = ?1 and c.isDeleted='false'");
 		query.setParameter(1, subject);
 
-		return query.getResultList();
+		return (List<Competence>)query.getResultList();
 	}
 
 	@SuppressWarnings("unchecked")

@@ -58,13 +58,15 @@ public class SubjectController {
 	 * Methods for delete subjects
 	 */
 
-	@RequestMapping(value = "/degree/{degreeId}/subject/{subjectId}/delete.htm", method = RequestMethod.GET)
-	public String formDeleteSubjectFromDegree(
+	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/delete.htm", method = RequestMethod.GET)
+	public String formDeleteSubjectFromTopic(
 			@PathVariable("degreeId") Long id_degree,
+			@PathVariable("moduleId") Long id_module,
+			@PathVariable("topicId") Long id_topic,
 			@PathVariable("subjectId") Long id_subject) throws ServletException {
 
-		if (serviceSubject.deleteSubject(id_subject, id_degree)) {
-			return "redirect:/degree/" + id_degree + ".htm";
+		if (serviceSubject.deleteSubject(id_subject)) {
+			return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
 		} else
 			return "redirect:/error.htm";
 	}
@@ -74,7 +76,7 @@ public class SubjectController {
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/add.htm", method = RequestMethod.GET)
 	protected String getAddNewActivityForm(Model model,
-			@PathVariable("degreeId") Long id) {
+			@PathVariable("degreeId") Long id_degree) {
 		Subject newSubject = new Subject();
 		// newSubject.setCode(serviceSubject.getNextCode());
 
@@ -87,12 +89,14 @@ public class SubjectController {
 	// Every Post have to return redirect
 	public String processAddNewSubject(
 			@ModelAttribute("addsubject") Subject newSubject,
-			@PathVariable("degreeId") Long id_degree) {
+			@PathVariable("degreeId") Long id_degree,
+			@PathVariable("moduleId") Long id_module,
+			@PathVariable("topicId") Long id_topic) {
 
-		boolean created = serviceSubject.addSubject(newSubject, id_degree);
+		boolean created = serviceSubject.addSubject(newSubject, id_topic);
 
 		if (created)
-			return "redirect:/degree/" + id_degree + ".htm";
+			return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
 		else
 			return "redirect:/error.htm";
 	}
@@ -133,17 +137,17 @@ public class SubjectController {
 	/**
 	 * Methods for view subjects
 	 */
-	@RequestMapping(value = "/degree/{degreeId}/subject/{subjectId}.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}.htm", method = RequestMethod.GET)
 	protected ModelAndView formViewSubject(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("subjectId") Long id_subject) throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		Subject p = serviceSubject.getSubjectAndDegree(id_subject, id_degree);
+		Subject p = serviceSubject.getSubjectAll(id_subject);
 
 		myModel.put("subject", p);
-		myModel.put("degree", p.getDegree());
+		myModel.put("topic", p.getTopic());
 
 		if (p.getCompetences() != null)
 			myModel.put("competences", p.getCompetences());

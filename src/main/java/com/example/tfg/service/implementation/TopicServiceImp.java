@@ -84,4 +84,10 @@ public class TopicServiceImp implements TopicService {
 		
 		return daoTopic.getTopicsForModule(id);
 	}
+
+
+	public boolean modifyTopic(Topic topic) {
+		
+		return daoTopic.saveTopic(topic);
+	}
 }
