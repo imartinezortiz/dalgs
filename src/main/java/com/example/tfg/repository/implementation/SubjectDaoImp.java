@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import com.example.tfg.domain.Course;
 import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Subject;
+import com.example.tfg.domain.Topic;
 import com.example.tfg.repository.SubjectDao;
 
 @Repository
@@ -89,12 +90,12 @@ public class SubjectDaoImp implements SubjectDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Subject> getSubjectsForDegree(Long id_degree) {
-		Degree degree = em.getReference(Degree.class, id_degree);
+	public List<Subject> getSubjectsForTopic(Long id_topic) {
+		Topic topic = em.getReference(Topic.class, id_topic);
 
 		Query query = em
-				.createQuery("select s from Subject s where s.degree=?1 and s.isDeleted='false'");
-		query.setParameter(1, degree);
+				.createQuery("select s from Subject s where s.topic=?1 and s.isDeleted='false'");
+		query.setParameter(1, topic);
 
 		if (query.getResultList().isEmpty())
 			return null;

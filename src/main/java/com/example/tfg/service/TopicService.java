@@ -19,7 +19,7 @@ public interface TopicService {
 
 	public boolean deleteTopic(Long id);
 
-	public Topic getTopicAll(Long id_topic, Long id_module);
+	public Topic getTopicAll(Long id_topic);
 
 	public Collection<Topic> getTopicsForModule(Long id);
 }

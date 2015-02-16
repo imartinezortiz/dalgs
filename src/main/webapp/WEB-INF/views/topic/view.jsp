@@ -41,7 +41,7 @@
 			
 				<div class="form-group view">
 					<label>Degree: </label> 
-					<p class="details">${model.topic.degree.info.name}</p>
+					<p class="details">${model.topic.module.info.name}</p>
 				</div>
 			</div>
 
@@ -53,7 +53,7 @@
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 
-				Topics List
+				Subjects List
 			</h3>
 			<a class="btn list-btn btn-warning2"
 				href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topicId}/subject/add.htm'/>"> <span

@@ -75,9 +75,9 @@ public class TopicDaoImp implements TopicDao {
 
 	public boolean deleteTopic(Long id_topic) {
 		try {
-			Module module = em.getReference(Module.class, id_topic);
-			module.setDeleted(true);
-			em.merge(module);
+			Topic topic = em.getReference(Topic.class, id_topic);
+			topic.setDeleted(true);
+			em.merge(topic);
 
 			return true;
 		} catch (Exception e) {

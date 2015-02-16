@@ -11,6 +11,7 @@ import com.example.tfg.domain.Module;
 import com.example.tfg.domain.Topic;
 import com.example.tfg.repository.TopicDao;
 import com.example.tfg.service.ModuleService;
+import com.example.tfg.service.SubjectService;
 import com.example.tfg.service.TopicService;
 
 @Service
@@ -20,6 +21,9 @@ public class TopicServiceImp implements TopicService {
 	
 	@Autowired
 	private ModuleService serviceModule;
+	
+	@Autowired
+	private SubjectService serviceSubject;
 	
 	@Transactional(readOnly=false)
 	public boolean addTopic(Topic topic, Long id_module) {
@@ -49,13 +53,11 @@ public class TopicServiceImp implements TopicService {
 	}
 
 	@Transactional(readOnly=false)
-	public boolean modifyTopic(Topic modify, Long id) {
-		Topic topic = daoTopic.getTopic(id);
-		topic.setInfo(modify.getInfo());
+	public boolean modifyTopic(Topic topic, Long id) {
+		Topic topicModify = daoTopic.getTopic(id);
+		topicModify.setInfo(topic.getInfo());		
 
-		
-
-		return daoTopic.saveTopic(topic);
+		return daoTopic.saveTopic(topicModify);
 	}
 
 	@Transactional(readOnly=true)
@@ -69,11 +71,11 @@ public class TopicServiceImp implements TopicService {
 	}
 
 	@Transactional(readOnly=true)
-	public Topic getTopicAll(Long id_topic, Long id_module) {
+	public Topic getTopicAll(Long id_topic) {
 		
 		Topic p = daoTopic.getTopic(id_topic);
-		Module d = serviceModule.getModule(id_module);
-		p.setModule(d);
+		p.setSubjects(serviceSubject.getSubjectsForTopic(id_topic));
+
 		return p;
 	}
 

@@ -20,7 +20,7 @@ public interface SubjectDao {
 
 	public boolean deleteSubject(Long id);
 
-	public List<Subject> getSubjectsForDegree(Long id_degree);
+	public List<Subject> getSubjectsForTopic(Long id_topic);
 
 	// public List<Subject> getSubjectsForCompetence(Long id);
 	public String getNextCode();

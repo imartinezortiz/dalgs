@@ -12,6 +12,7 @@ import com.example.tfg.domain.Module;
 import com.example.tfg.repository.ModuleDao;
 import com.example.tfg.service.DegreeService;
 import com.example.tfg.service.ModuleService;
+import com.example.tfg.service.TopicService;
 
 @Service
 public class ModuleServiceImp implements ModuleService {
@@ -21,6 +22,9 @@ public class ModuleServiceImp implements ModuleService {
 	
 	@Autowired
 	private DegreeService serviceDegree;
+	
+	@Autowired
+	private TopicService serviceTopic; 
 	
 	@Transactional(readOnly=false)
 	public boolean addModule(Module module, Long id_degree) {
@@ -73,8 +77,7 @@ public class ModuleServiceImp implements ModuleService {
 	public Module getModuleAll(Long id_module, Long id_degree) {
 		
 		Module p = daoModule.getModule(id_module);
-		Degree d = serviceDegree.getDegree(id_degree);
-		p.setDegree(d);
+		p.setTopics(serviceTopic.getTopicsForModule(id_module));
 		return p;
 	}
 
@@ -86,7 +89,7 @@ public class ModuleServiceImp implements ModuleService {
 
 	
 	public boolean modifyModule(Module module) {
-		return modifyModule(module);
+		return daoModule.saveModule(module);
 	}
 
 

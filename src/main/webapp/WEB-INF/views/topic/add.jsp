@@ -22,7 +22,7 @@
 			Add Topic</h3>
 		</div>
 		<div class="panel-body">
-			<form:form method="post" commandName="addtopic" role="form">
+			<form:form method="post" commandName="addTopic" role="form">
 				<div class="form-group">
 					<label>Code: </label>
 					<form:input path="info.code" class="form-control"
@@ -33,13 +33,7 @@
 					<form:input path="info.name" class="form-control"
 						placeholder="Name of the topic" required="true" />
 				</div>
-				<div class="form-group">
-					<label>Description: </label>
-					<form:input path="info.description" class="form-control"
-						placeholder="Description of the topic" required="true" />
-				</div>
 
-								<br>
 				<input type="submit" class="btn btn-success" value="Add" />
 			</form:form>
 		</div>

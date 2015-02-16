@@ -72,7 +72,7 @@ public class SubjectController {
 	/**
 	 * Methods for adding subjects
 	 */
-	@RequestMapping(value = "/degree/{degreeId}/subject/add.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/add.htm", method = RequestMethod.GET)
 	protected String getAddNewActivityForm(Model model,
 			@PathVariable("degreeId") Long id) {
 		Subject newSubject = new Subject();
@@ -83,7 +83,7 @@ public class SubjectController {
 		return "subject/add";
 	}
 
-	@RequestMapping(value = "/degree/{degreeId}/subject/add.htm", method = RequestMethod.POST)
+	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/add", method = RequestMethod.POST)
 	// Every Post have to return redirect
 	public String processAddNewSubject(
 			@ModelAttribute("addsubject") Subject newSubject,

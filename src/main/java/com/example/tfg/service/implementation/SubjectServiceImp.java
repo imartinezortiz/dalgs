@@ -85,8 +85,8 @@ public class SubjectServiceImp implements SubjectService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Subject> getSubjectsForDegree(Long id_degree) {
-		return daoSubject.getSubjectsForDegree(id_degree);
+	public List<Subject> getSubjectsForTopic(Long id_topic) {
+		return daoSubject.getSubjectsForTopic(id_topic);
 	}
 
 	@Transactional(readOnly = false)

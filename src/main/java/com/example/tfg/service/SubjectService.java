@@ -19,7 +19,7 @@ public interface SubjectService {
 
 	public boolean deleteSubject(Long id);
 
-	public List<Subject> getSubjectsForDegree(Long id_degree);
+	public List<Subject> getSubjectsForTopic(Long id_topic);
 
 	public String getNextCode();
 

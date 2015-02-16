@@ -65,11 +65,14 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label">Name</div></td>
-					<td width="50%"><div class="td-label">Description</div></td>
+					<td width="20%"><div class="td-label">Code</div></td>
+					<td width="50%"><div class="td-label">Name</div></td>
 				</tr>
 				<c:forEach items="${model.topics}" var="topic">
 					<tr align="center">
+						<td><div class="td-content">
+								<c:out value="${topic.info.code}" />
+							</div></td>
 						<td><div class="td-content">
 								<c:out value="${topic.info.name}" />
 							</div></td>

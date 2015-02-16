@@ -44,9 +44,9 @@ public class TopicController {
 			@PathVariable("moduleId") Long id_module,
 			@ModelAttribute("addTopic") Topic newTopic) {
 		
-		boolean created = serviceTopic.addTopic(newTopic, id_degree);
+		boolean created = serviceTopic.addTopic(newTopic, id_module);
 		if (created)
-			return "redirect:/degree/" +id_degree+ ".htm";
+			return "redirect:/degree/" +id_degree+ "/module/"+ id_module +".htm";
 		else
 			return "redirect:/error.htm";
 	}
@@ -67,7 +67,7 @@ public class TopicController {
 		// modify.setId(id);
 		boolean modified = serviceTopic.modifyTopic(modify, id_topic);
 		if (modified)
-			return "redirect:/degree/" + id_degree + ".htm";
+			return "redirect:/degree/" + id_degree + "/module/" + id_module + ".htm";
 		else
 			return "redirect:/error.htm";
 	}
@@ -98,7 +98,7 @@ public class TopicController {
 						throws ServletException {
 
 		if (serviceTopic.deleteTopic(id_topic)) {
-			return "redirect:/degree/" + id_degree + ".htm";
+			return "redirect:/degree/" + id_degree + "/module/"+ id_module + ".htm";
 		} else
 			return "redirect:/error.htm";
 	}
@@ -116,11 +116,11 @@ public class TopicController {
 
 		// Degree p = serviceDegree.getDegree(id);
 
-		Topic p = serviceTopic.getTopicAll(id_topic, id_degree);
+		Topic p = serviceTopic.getTopicAll(id_topic);
 
 		myModel.put("topic", p);
 		if (p.getSubjects() != null)
-			myModel.put("topics", p.getSubjects());
+			myModel.put("subjects", p.getSubjects());
 		
 
 		return new ModelAndView("topic/view", "model", myModel);
