@@ -123,7 +123,7 @@ public class ModuleController {
 		myModel.put("module", p);
 		if (p.getTopics() != null)
 			myModel.put("topics", p.getTopics());
-		
+//		myModel.put("moduleId", p.getId());
 
 		return new ModelAndView("module/view", "model", myModel);
 	}

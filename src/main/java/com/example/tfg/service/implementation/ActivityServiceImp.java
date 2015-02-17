@@ -4,18 +4,21 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.acls.model.NotFoundException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.tfg.domain.Activity;
-
 import com.example.tfg.domain.LearningGoalStatus;
 import com.example.tfg.domain.Course;
-
+import com.example.tfg.domain.User;
 import com.example.tfg.repository.ActivityDao;
 import com.example.tfg.service.ActivityService;
 import com.example.tfg.service.CourseService;
+import com.example.tfg.service.UserService;
 
 @Service
 public class ActivityServiceImp implements ActivityService {
@@ -25,11 +28,12 @@ public class ActivityServiceImp implements ActivityService {
 
 	@Autowired
 	private CourseService serviceCourse;
+	@Autowired
+	private UserService serviceUser;
 
 	@Transactional(readOnly = false)
 	public boolean addActivity(Activity activity, Long id_course) {
 		
-
 //		Course course = serviceCourse.getCourse(id_course);
 //		Activity existActivity = daoActivity.existByCode(activity.getInfo().getCode());
 //		if(existActivity == null){
@@ -47,13 +51,29 @@ public class ActivityServiceImp implements ActivityService {
 //		}
 //		else return false;
 		
+		
+		
 		activity.setCourse(serviceCourse.getCourse(id_course));
+		
+//		try{
+//			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		
+//		User u =  serviceUser.findByUsername(((User) auth.getPrincipal()).getUsername()); //domain tfg
+//		
+//		if  ((u.getRole().getRole()==1) ||//ROLE_ADMIN
+//				((u.getRole().getRole()==3) && serviceCourse.isPermitted(u.getId(), id_course)))
 		if (!daoActivity.existByCode(activity.getInfo().getCode()))
 			return daoActivity.addActivity(activity);
-		else
-			return false;
-
+		
+		
+		
+//		}
+//		catch (NotFoundException nfe){
+//		//logger
+		return false;
 	}
+
+	
 
 	@Transactional(readOnly = true)
 	public List<Activity> getAll() {

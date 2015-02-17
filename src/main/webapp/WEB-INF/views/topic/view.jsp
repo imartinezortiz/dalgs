@@ -74,12 +74,14 @@
 						<td><div class="td-content">
 								<c:out value="${subject.info.name}" />
 							</div></td>
-
+						<td><div class="td-content">
+								<c:out value="${subject.info.description}" />
+							</div></td>
 
 						<td><a class="btn list-btn btn-success"
-							href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topicId}/subject/${subject.id}.htm'/>">View</a>
+							href="<c:url value='/degree/${degreeId}/module/${subject.topic.module.id}/topic/${subject.topic.id}/subject/${subject.id}.htm'/>">View</a>
 							<a class="btn btn-danger"
-							href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topicId}/subject/${subject.id}/delete.htm'/>">
+							href="<c:url value='/degree/${degreeId}/module/${subject.topic.module.id}/topic/${subject.topic.id}/subject/${subject.id}/delete.htm'/>">
 								Delete
 						</a></td>
 

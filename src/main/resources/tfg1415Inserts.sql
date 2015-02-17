@@ -119,10 +119,16 @@ INSERT INTO user (id_user, email,firstName, lastName, password, username) VALUES
 INSERT INTO role (id, role, user_id_user) VALUES (NULL, '2', '2');
 
 
+INSERT INTO user (id_user, email, firstName, lastName, password, username) VALUES ('3', 'prof@gmail.com','first', 'last', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'profe');
+INSERT INTO role (id, role, user_id_user) VALUES (NULL, '2', '3');
+
 --User Courses
 INSERT INTO course_user (id_course, id_user) VALUES ('1', '2');
 INSERT INTO course_user (id_course, id_user) VALUES ('2', '2');
 INSERT INTO course_user (id_course, id_user) VALUES ('3', '2');
+
+INSERT INTO course_user (id_course, id_user) VALUES ('1', '3');
+INSERT INTO course_user (id_course, id_user) VALUES ('2', '3');
 
 
 

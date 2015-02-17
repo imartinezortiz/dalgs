@@ -82,7 +82,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 		} else if (role.intValue() == 2) {
 			roles.add("ROLE_USER");
-		}
+			roles.add("ROLE_STUDENT");
+
+		
+		} else if (role.intValue() == 3) {
+			roles.add("ROLE_PROFESSOR");
+	}
 
 		return roles;
 	}

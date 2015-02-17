@@ -2,6 +2,7 @@ package com.example.tfg.web;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.tfg.domain.Competence;
+import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Subject;
 import com.example.tfg.service.AcademicTermService;
 import com.example.tfg.service.ActivityService;
@@ -50,6 +52,11 @@ public class SubjectController {
 
 	@Autowired
 	private AcademicTermService serviceAcademicTerm;
+
+	//	@ModelAttribute("competences")
+	//	public List<Competence> competence() {
+	//		return serviceCompetence.getAll();
+	//	}
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(SubjectController.class);
@@ -104,9 +111,11 @@ public class SubjectController {
 	/**
 	 * Methods for modify subjects
 	 */
-	@RequestMapping(value = "/degree/{degreeId}/subject/{subjectId}/modify.htm", method = RequestMethod.POST)
+	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/modify.htm", method = RequestMethod.POST)
 	public String formModifySubjectFromDegree(
 			@PathVariable("degreeId") Long id_degree,
+			@PathVariable("moduleId") Long id_module,
+			@PathVariable("topicId") Long id_topic,
 			@PathVariable("subjectId") Long id_subject,
 			@ModelAttribute("modifySubject") Subject modify)
 
@@ -114,15 +123,17 @@ public class SubjectController {
 		// modify.setId(id_subject);
 
 		if (serviceSubject.modifySubject(modify, id_subject))
-			return "redirect:/degree/" + id_degree + ".htm";
+			return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
 		else
 			return "redirect:/error.htm";
 
 	}
 
-	@RequestMapping(value = "/degree/{degreeId}/subject/{subjectId}/modify.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/modify.htm", method = RequestMethod.GET)
 	protected ModelAndView formModifySubjectFromDegree(
 			@PathVariable("degreeId") Long id_degree,
+			@PathVariable("moduleId") Long id_module,
+			@PathVariable("topicId") Long id_topic,
 			@PathVariable("subjectId") Long id_subject) throws ServletException {
 		ModelAndView model = new ModelAndView();
 		Subject p = serviceSubject.getSubject(id_subject);
@@ -162,19 +173,20 @@ public class SubjectController {
 	@RequestMapping(value = "/degree/{degreeId}/subject/{subjectId}/competence/{competenceId}/delete.htm", method = RequestMethod.GET)
 	public String formDeleteCompetenceFromSubject(
 			@PathVariable("degreeId") Long id_degree,
+			@PathVariable("moduleId") Long id_module,
+			@PathVariable("moduleId") Long id_topic,
 			@PathVariable("subjectId") Long id_subject,
 			@PathVariable("competenceId") Long id_competence)
-			throws ServletException {
+					throws ServletException {
 
 		if (serviceCompetence.deleteCompetenceFromSubject(id_competence,
 				id_subject)) {
-			return "redirect:/degree/" + id_degree + "/subject/" + id_subject
-					+ ".htm";
+			return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
 		} else
 			return "redirect:/error.htm";
 	}
 
-	@RequestMapping(value = "/degree/{degreeId}/subject/{subjectId}/addCompetences.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/addCompetences.htm", method = RequestMethod.GET)
 	protected String getAddNewCompetenceForm(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("subjectId") Long id_subject, Model model) {
@@ -189,10 +201,12 @@ public class SubjectController {
 		return "subject/addCompetences";
 	}
 
-	@RequestMapping(value = "/degree/{degreeId}/subject/{subjectId}/addCompetences.htm", method = RequestMethod.POST)
+	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/addCompetences.htm", method = RequestMethod.POST)
 	// Every Post have to return redirect
 	public String processAddNewCompetence(
 			@PathVariable("degreeId") Long id_degree,
+			@PathVariable("moduleId") Long id_module,
+			@PathVariable("moduleId") Long id_topic,
 			@PathVariable("subjectId") Long id_subject,
 			@ModelAttribute("subject") Subject subject, BindingResult result,
 			Model model) {
@@ -203,13 +217,15 @@ public class SubjectController {
 
 		// subject.setDegree(aux.getDegree());
 
-		try {
-			serviceSubject.addCompetences(subject, id_subject);
-			return "redirect:/degree/" + id_degree + "/subject/" + id_subject
-					+ ".htm";
-		} catch (Exception e) {
-			return "redirect:/competence/add.htm";
+		if (!result.hasErrors()){
+			try {
+				serviceSubject.addCompetences(subject, id_subject);
+				return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
+			} catch (Exception e) {
+				return "redirect:/competence/add.htm";
+			}
 		}
+		else return "redirect:/error.htm";
 
 	}
 
@@ -220,24 +236,24 @@ public class SubjectController {
 	protected void initBinder(WebDataBinder binder) throws Exception {
 		binder.registerCustomEditor(Set.class, "competences",
 				new CustomCollectionEditor(Set.class) {
-					protected Object convertElement(Object element) {
-						if (element instanceof Competence) {
-							logger.info("Converting...{}", element);
-							return element;
-						}
-						if (element instanceof String) {
-							Competence competence = serviceCompetence
-									.getCompetenceByName(element.toString());
-							logger.info("Loking up {} to {}", element,
-									competence);
+			protected Object convertElement(Object element) {
+				if (element instanceof Competence) {
+					logger.info("Converting...{}", element);
+					return element;
+				}
+				if (element instanceof String) {
+					Competence competence = serviceCompetence
+							.getCompetenceByName(element.toString());
+					logger.info("Loking up {} to {}", element,
+							competence);
 
-							return competence;
-						}
-						System.out.println("Don't know what to do with: "
-								+ element);
-						return null;
-					}
-				});
+					return competence;
+				}
+				System.out.println("Don't know what to do with: "
+						+ element);
+				return null;
+			}
+		});
 	}
 
 }

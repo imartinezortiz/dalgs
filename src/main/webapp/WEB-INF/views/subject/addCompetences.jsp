@@ -42,7 +42,7 @@
 					<label>Available Competences:</label>
 					<div class="checkbox">
 						<form:checkboxes items="${competences}" path="competences"
-							itemLabel="name" />
+							itemLabel="info.name" />
 						<br> <br>
 						<br>
 			

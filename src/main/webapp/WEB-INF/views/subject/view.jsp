@@ -20,7 +20,7 @@
 			<h3 class="panel-title list">
 			Subject Details</h3>
 			<a class="btn list-btn btn-warning"
-				href="<c:url value='/degree/${degreeId}/module/{moduleId}/topic/{topicId}/subject/${subjectId}/modify.htm'/>">				
+				href="<c:url value='/degree/${degreeId}/module/${model.subject.topic.module.id}/topic/${model.subject.topic.id}/subject/${subjectId}/modify.htm'/>">				
 				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
 				Edit</a>
 
@@ -57,7 +57,7 @@
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 			Competence List </h3>
 			<a class="btn list-btn btn-warning2"
-				href="<c:url value='/degree/${degreeId}/module/{moduleId}/topic/{topicId}/subject/${subjectId}/addCompetences.htm'/>">
+				href="<c:url value='/degree/${degreeId}/module/${model.subject.topic.module.id}/topic/${model.subject.topic.id}/subject/${subjectId}/addCompetences.htm'/>">
 								<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 				Add</a>
 
@@ -84,7 +84,7 @@
 						<a class="btn list-btn btn-success"
 						href="<c:url value='/degree/${degreeId}/competence/${competence.id}.htm'/>">View</a>
 							<a class="btn btn-danger"
-							href="<c:url value='/degree/${degreeId}/module/{moduleId}/topic/{topicId}/subject/${subjectId}/competence/${competence.id}/delete.htm'/>">
+							href="<c:url value='/degree/${degreeId}/module/${model.module}/topic/${model.topic}/subject/${subjectId}/competence/${competence.id}/delete.htm'/>">
 							Delete
 							</a></td>
 

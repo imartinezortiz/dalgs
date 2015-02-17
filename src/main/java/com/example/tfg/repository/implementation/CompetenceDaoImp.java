@@ -84,7 +84,7 @@ public class CompetenceDaoImp implements CompetenceDao {
 	public List<Competence> getAll() {
 		return em
 				.createQuery(
-						"select c from Competence c inner join c.degree where c.isDeleted='false' d order by c.id")
+						"select c from Competence c inner join c.degree where c.isDeleted='false' order by c.id")
 
 				.getResultList();
 	}
@@ -142,7 +142,7 @@ public class CompetenceDaoImp implements CompetenceDao {
 
 	public Competence getCompetenceByName(String name) {
 		Query query = em
-				.createQuery("select c from Competence c where c.name=?1");
+				.createQuery("select c from Competence c where c.info.name=?1");
 		query.setParameter(1, name);
 
 		return (Competence) query.getResultList().get(0);

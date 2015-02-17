@@ -3,6 +3,7 @@ package com.example.tfg.service;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.example.tfg.domain.AcademicTerm;
@@ -14,7 +15,7 @@ public interface AcademicTermService {
 
 	public boolean modifyAcademicTerm(AcademicTerm academicTerm,
 			Long id_academic);
-
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex);// String
 																	// term);
 
