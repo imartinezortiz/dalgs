@@ -112,23 +112,23 @@ public class CompetenceController {
 
 	}
 
-	/**
-	 * Delete Subject of a Competence
-	 */
-
-	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/subject/{subjectId}/delete.htm", method = RequestMethod.GET)
-	public String formDeleteSubjectForCompetence(
-			@PathVariable("degreeId") Long id_degree,
-			@PathVariable("competenceId") Long id_competence,
-			@PathVariable("subjectId") Long id_subject) throws ServletException {
-
-		if (serviceCompetence.deleteCompetenceFromSubject(id_competence,
-				id_subject)) {
-			return "redirect:/degree/" + id_degree + "/competence/"
-					+ id_competence + ".htm";
-		} else
-			return "redirect:/error.htm";
-	}
+//	/**
+//	 * Delete Subject of a Competence
+//	 */
+//
+//	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/subject/{subjectId}/delete.htm", method = RequestMethod.GET)
+//	public String formDeleteSubjectForCompetence(
+//			@PathVariable("degreeId") Long id_degree,
+//			@PathVariable("competenceId") Long id_competence,
+//			@PathVariable("subjectId") Long id_subject) throws ServletException {
+//
+//		if (serviceCompetence.deleteCompetenceFromSubject(id_competence,
+//				id_subject)) {
+//			return "redirect:/degree/" + id_degree + "/competence/"
+//					+ id_competence + ".htm";
+//		} else
+//			return "redirect:/error.htm";
+//	}
 
 	/**
 	 * Methods for view competence
@@ -141,14 +141,16 @@ public class CompetenceController {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		Competence p = serviceCompetence.getCompetence(id_competence);
+//		Competence p = serviceCompetence.getCompetence(id_competence);
+		
+		Competence p = serviceCompetence.getCompetenceAll(id_competence);
 
 		// List<Subject> subjects =
 		// serviceSubject.getSubjectsForCompetence(id_competence);
 
 		myModel.put("competence", p);
 		// if(subjects != null)
-		myModel.put("subjects", p.getSubjects());
+		myModel.put("learningGoals", p.getLearningGoals());
 
 		return new ModelAndView("competence/view", "model", myModel);
 	}

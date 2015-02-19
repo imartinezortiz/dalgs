@@ -9,18 +9,20 @@ import javax.persistence.ManyToOne;
 public class LearningGoalStatus {
 
 	@ManyToOne
-	private Competence competence;
+	private LearningGoal learningGoal;
 
 	@Basic
 	@Column(name = "percentage", nullable = false, columnDefinition = "INTEGER DEFAULT 0")
 	private Integer percentage;
 
-	public Competence getCompetence() {
-		return competence;
+
+
+	public LearningGoal getLearningGoal() {
+		return learningGoal;
 	}
 
-	public void setCompetence(Competence competence) {
-		this.competence = competence;
+	public void setLearningGoal(LearningGoal learningGoal) {
+		this.learningGoal = learningGoal;
 	}
 
 	public Integer getPercentage() {

@@ -30,4 +30,6 @@ public interface CompetenceDao {
 	// public String getNextCode();
 	public boolean deleteCompetencesForDegree(Degree degree);
 
+//	public Competence getCompetenceAll(Long id_competence);
+
 }

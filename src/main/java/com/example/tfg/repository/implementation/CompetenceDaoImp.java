@@ -1,5 +1,6 @@
 package com.example.tfg.repository.implementation;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -104,7 +105,8 @@ public class CompetenceDaoImp implements CompetenceDao {
 	}
 
 	public boolean deleteCompetence(Long id) {
-		Competence competence = this.getCompetence(id);
+		Competence competence = em.getReference(Competence.class, id);
+//		Competence competence = this.getCompetence(id);
 		competence.setDeleted(true);
 
 		try {
@@ -160,6 +162,18 @@ public class CompetenceDaoImp implements CompetenceDao {
 	//
 	// }
 
+	
+//	public Competence getCompetenceAll(Long id_competence) {
+//		
+//		Competence c = em.getReference(Competence.class, id_competence);
+//		
+//		Query query = em.createQuery("SELECT c FROM Competence c JOIN c.learningGoals l WHERE l.isDeleted = false AND c = ?1 ");
+//		
+//		query.setParameter(1, c);
+//	
+//		Collection <Object> d = query.getResultList();
+//		return (Competence) query.getSingleResult();
+//	}
 	public boolean deleteCompetencesForDegree(Degree degree) {
 
 		try {
@@ -175,4 +189,7 @@ public class CompetenceDaoImp implements CompetenceDao {
 		}
 		return true;
 	}
+
+	
+	
 }

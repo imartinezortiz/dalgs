@@ -51,20 +51,20 @@
 							<td width="50%"><div class="td-label">Percentage</div></td>
 						</tr>
 						
-						<c:forEach items="${competenceStatus}" var="compStatus" varStatus="status">		
+						<c:forEach items="${learningGoalStatus}" var="learnStatus" varStatus="status">		
 							<tr align="center">
 								<td><div class="td-content">
-										<c:out value="${compStatus.competence.info.name}" />
+										<c:out value="${learnStatus.learningGoal.info.name}" />
 								
 									</div></td>
 								<td>
 									<div class="td-content">
-										<c:out value="${compStatus.percentage}" />
+										<c:out value="${learnStatus.percentage}" />
 										
 									</div>
 								</td>
 								<td>
-									<a href="<c:url value='competenceStatus/${compStatus.competence.id}/delete.htm'/>">
+									<a href="<c:url value='competenceStatus/${learnStatus.learningGoal.id}/delete.htm'/>">
 										<img style="width: 25px; height: 10px; margin-top: 3%;" border="0" src="<c:url value="/resources/images/delete.png" /> " > 
 									</a>
 							</td>
@@ -81,29 +81,29 @@
 				<input type="submit" class="btn btn-primary btn-lg addActivity" value="Modify Activity" />
 
 			</form:form >
-			<div class="addComeptenceStatus">
-			<form:form method="post" action="addCompetenceStatus.htm" commandName="addcompetencestatus">
+			<div class="addLearningStatus">
+			<form:form method="post" action="addLearningStatus.htm" commandName="addlearningstatus">
 					<h4 style=" color: forestgreen;">   		
 					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-					New Competence Status</h4>
+					New Learning Goal Status</h4>
 					<br>
 					<label>Competence:</label>
-					<form:select class="form-control 2" path="competence"
-						id="competence">
+					<form:select class="form-control 2" path="learningGoal"
+						id="learningGoal">
 						<form:option value=""> --Select an option-- </form:option>
-						<c:forEach items="${competences}" var="comp">
-							<form:option value="${comp.id}">${comp.info.name}</form:option>
+						<c:forEach items="${learningGoals}" var="learning">
+							<form:option value="${learning.id}">${learning.info.name}</form:option>
 						</c:forEach>
 					</form:select>
 					<br>
-					<label>Competence Percentage:</label>
+					<label>Learning Goal Percentage:</label>
 					<form:input class="form-control" path="percentage" id="percentage"
 						required="true" />
 
 
 				
 					 <input type="submit" class="btn btn-success CompSta" name="button1"
-						value="Add Competence Status" /> 
+						value="Add Learning Goal Status" /> 
 
 			</form:form>
 			</div>

@@ -29,7 +29,7 @@ public interface SubjectDao {
 
 	public Subject getSubjectForCourse(Long id);
 
-//	public Subject getSubjectByName(String string);
+	public Subject getSubjectByName(String string);
 
 	public boolean deleteSubjectsForDegree(Degree degree);
 

@@ -151,13 +151,13 @@ public class SubjectDaoImp implements SubjectDao {
 		return (Subject) query.getSingleResult();
 	}
 
-//	public Subject getSubjectByName(String name) {
-//		Query query = em.createQuery("select c from Subject c where c.name=?1");
-//		query.setParameter(1, name);
-//
-//		return (Subject) query.getResultList().get(0);
-//
-//	}
+	public Subject getSubjectByName(String name) {
+		Query query = em.createQuery("select c from Subject c where c.name=?1");
+		query.setParameter(1, name);
+
+		return (Subject) query.getResultList().get(0);
+
+	}
 
 	public boolean deleteSubjectsForDegree(Degree degree) {
 

@@ -25,13 +25,20 @@ public interface CompetenceService {
 
 	// public List<Competence> getCompetencesDontExistOnSubject(Long
 	// id_subject);
-	public boolean deleteCompetenceFromSubject(Long id_competence,
-			Long id_subject);
+//	public boolean deleteCompetenceFromSubject(Long id_competence,
+//			Long id_subject);
 
 	public Competence getCompetenceByName(String name);
 
 	// public String getNextCode();
 	public boolean deleteCompetencesForDegree(Degree d);
+
+	public boolean modifyCompetence(Competence competence);
+
+	public Competence getCompetenceAll(Long id_competence);
+
+	public boolean deleteCompetenceFromSubject(Long id_competence,
+			Long id_subject);
 
 	// public boolean existsInSubject(Long id_subject, Competence c);
 

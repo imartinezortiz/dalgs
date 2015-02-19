@@ -86,6 +86,16 @@ INSERT INTO competence (id_competence,code_competence,description,name,id_degree
 INSERT INTO competence (id_competence,code_competence,description,name,id_degree) VALUES (4,'COMP4','Adquirir conocimientos en consultas contra una base de datos','Consultas SQL',2);
 INSERT INTO competence (id_competence,code_competence,description,name,id_degree) VALUES (5,'COMP5','Aprendizaje de sincronizacion y comunicacion de procesos','Sincronizacion de Procesos',3);
 
+--LearningGoal Inserts
+INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (1, 'LEA1', 'learning 1','descripcion learning 1', 1);
+INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (2, 'LEA2', 'learning 2','descripcion learning 2', 1);
+INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (3, 'LEA3', 'learning 3','descripcion learning 3', 2);
+INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (4, 'LEA4', 'learning 4','descripcion learning 4', 2);
+INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (5, 'LEA5', 'learning 5','descripcion learning 5', 2);
+INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (6, 'LEA6', 'learning 6','descripcion learning 6', 3);
+INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (7, 'LEA7', 'learning 7','descripcion learning 7', 4);
+INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (8, 'LEA8', 'learning 8','descripcion learning 8', 5);
+
 
 --Activity Inserts 
 INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (1,'ACT1','Desarrollar diagramas de casos de uso','Casos de Uso',1);
@@ -95,11 +105,11 @@ INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALU
 INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (5,'ACT5','Diagrama de clases','clases',3);
 
 -- Activity Inserts 
-INSERT INTO activity_learninggoalstatus (id_activity, competence_id_competence, percentage) VALUES ('1', 1,'10');
-INSERT INTO activity_learninggoalstatus (id_activity, competence_id_competence, percentage) VALUES ('2', 3,'20');
-INSERT INTO activity_learninggoalstatus (id_activity, competence_id_competence, percentage) VALUES ('3', 1,'30');
-INSERT INTO activity_learninggoalstatus (id_activity, competence_id_competence, percentage) VALUES ('4', 3, '40');
-INSERT INTO activity_learninggoalstatus (id_activity, competence_id_competence, percentage) VALUES ('5', 5,'20');
+INSERT INTO activity_learninggoalstatus (id_activity, learninggoal_id_learninggoal, percentage) VALUES ('1', 1,'10');
+INSERT INTO activity_learninggoalstatus (id_activity, learninggoal_id_learninggoal, percentage) VALUES ('2', 3,'20');
+INSERT INTO activity_learninggoalstatus (id_activity, learninggoal_id_learninggoal, percentage) VALUES ('3', 1,'30');
+INSERT INTO activity_learninggoalstatus (id_activity, learninggoal_id_learninggoal, percentage) VALUES ('4', 3, '40');
+INSERT INTO activity_learninggoalstatus (id_activity, learninggoal_id_learninggoal, percentage) VALUES ('5', 5,'20');
 
 -- Subject_Competence Inserts 
 INSERT INTO subject_competence(id_subject,id_competence) VALUES (1,1)

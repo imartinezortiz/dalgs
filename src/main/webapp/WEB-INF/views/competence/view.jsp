@@ -40,6 +40,10 @@
 					<label>Description: </label> 
 					<p class="details">${model.competence.info.description}</p>
 				</div>
+					<div class="form-group view">
+					<label>Degree: </label> 
+					<p class="details">${model.competence.degree.info.name}</p>
+				</div>
 			</div>
 
 		</div>
@@ -50,7 +54,12 @@
 		
 			<h3 class="panel-title list">						
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-			Subject List</h3>
+			Learning List</h3>
+				<a class="btn list-btn btn-warning2"
+				href="<c:url value='/degree/${degreeId}/competence/${competenceId}/add.htm'/>"> <span
+				class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
+				Add
+			</a>
 			
 		</div>
 		<div class="panel-body">
@@ -60,22 +69,22 @@
 					<td width="50%"><div class="td-label">Description</div></td>
 			
 				</tr>
-				<c:forEach items="${model.subjects}" var="subject">
+				<c:forEach items="${model.learningGoals}" var="learningGoal">
 					<tr align="center">
 						<td><div class="td-content">
-								<c:out value="${subject.info.name}" />
+								<c:out value="${learningGoal.info.name}" />
 							</div></td>
 						<td>
 							<div class="td-content">
-								<c:out value="${subject.info.description}" />
+								<c:out value="${learningGoal.info.description}" />
 							</div>
 						</td>
 
 						<td>
 						<a class="btn list-btn btn-success"
-						href="<c:url value='/degree/${degreeId}/subject/${subject.id}.htm'/>">View</a>
+						href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}.htm'/>">View</a>
 						<a class="btn btn-danger"
-							href="<c:url value='/degree/${model.competence.degree.id}/competence/${competenceId}/subject/${subject.id}/delete.htm'/>">
+							href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}/delete.htm'/>">
 							
 							Delete
 						

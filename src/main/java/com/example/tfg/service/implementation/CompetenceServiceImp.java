@@ -13,6 +13,7 @@ import com.example.tfg.domain.Degree;
 import com.example.tfg.repository.CompetenceDao;
 import com.example.tfg.service.CompetenceService;
 import com.example.tfg.service.DegreeService;
+import com.example.tfg.service.LearningGoalService;
 import com.example.tfg.service.SubjectService;
 
 @Service
@@ -25,6 +26,9 @@ public class CompetenceServiceImp implements CompetenceService {
 
 	@Autowired
 	private DegreeService serviceDegree;
+	
+	@Autowired 
+	private LearningGoalService serviceLearning;
 
 	@Transactional(readOnly = false)
 	public boolean addCompetence(Competence competence, Long id_degree) {
@@ -119,6 +123,20 @@ public class CompetenceServiceImp implements CompetenceService {
 	public boolean deleteCompetencesForDegree(Degree degree) {
 
 		return daoCompetence.deleteCompetencesForDegree(degree);
+	}
+
+	
+	public boolean modifyCompetence(Competence competence) {
+		return daoCompetence.saveCompetence(competence);
+	}
+
+	@Transactional(readOnly = true)
+	public Competence getCompetenceAll(Long id_competence) {
+		Competence competence = daoCompetence.getCompetence(id_competence);
+//		Competence c = daoCompetence.getCompetenceAll(id_competence);
+		competence.setLearningGoals(serviceLearning.getLearningGoalsFromCompetence(competence));
+		
+		return competence;
 	}
 
 	// @Transactional(readOnly = true)

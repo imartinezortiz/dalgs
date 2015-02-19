@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -41,8 +42,11 @@ public class Competence {
 
 	@ManyToMany(mappedBy = "competences", fetch = FetchType.LAZY)
 	private Collection<Subject> subjects;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "competence")
+	private Collection<LearningGoal> learningGoals;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	// , optional = false)
 	@JoinColumn(name = "id_degree")
 	private Degree degree;
@@ -111,6 +115,14 @@ public class Competence {
 
 	public void setInfo(CompetenceInfo info) {
 		this.info = info;
+	}
+
+	public Collection<LearningGoal> getLearningGoals() {
+		return learningGoals;
+	}
+
+	public void setLearningGoals(Collection<LearningGoal> learningGoals) {
+		this.learningGoals = learningGoals;
 	}
 
 //	public String getCode() {

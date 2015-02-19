@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.tfg.domain.Activity;
+import com.example.tfg.domain.LearningGoal;
 import com.example.tfg.domain.LearningGoalStatus;
 import com.example.tfg.domain.Course;
 
@@ -28,13 +29,17 @@ public interface ActivityService {
 
 	public Activity getActivityByName(String string);
 
-	public boolean deleteCompetenceActivity(Long id_learningGoalStatus,
+	public boolean deleteLearningActivity(Long id_learningGoalStatus,
 			Long id_Activity);
 
-	public boolean addCompetences(Long id, LearningGoalStatus learningGoalStatus);
+	public boolean addLearningGoals(Long id, LearningGoalStatus learningGoalStatus);
 
 	public boolean deleteActivitiesFromCourses(Collection<Course> courses);
 
 	public boolean deleteActivitiesFromCourse(Course course);
+
+	public boolean deleteLearningActivities(LearningGoal learningGoal);
+
+	
 
 }

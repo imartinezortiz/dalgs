@@ -59,23 +59,23 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">						
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-			Competence Status List </h3>
+			Learning Goal Status List </h3>
 		</div>
 		<div class="panel-body">
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label">Competence</div></td>
+					<td width="20%"><div class="td-label">Learning Goal</div></td>
 					<td width="50%"><div class="td-label">Percentage</div></td>
 				
 				</tr>
-				<c:forEach items="${model.competenceStatus}" var="cs">
+				<c:forEach items="${model.learningStatus}" var="ls">
 					<tr align="center">
 						<td><div class="td-content">
-								<c:out value="${cs.competence.info.name}" />
+								<c:out value="${ls.learningGoal.info.name}" />
 							</div></td>
 						<td>
 							<div class="td-content">
-								<c:out value="${cs.percentage}" />
+								<c:out value="${ls.percentage}" />
 							</div>
 						</td>
 

@@ -1,5 +1,6 @@
 package com.example.tfg.web;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -23,12 +24,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.tfg.domain.Activity;
-import com.example.tfg.domain.Competence;
+import com.example.tfg.domain.LearningGoal;
 import com.example.tfg.domain.LearningGoalStatus;
-import com.example.tfg.service.AcademicTermService;
 import com.example.tfg.service.ActivityService;
-import com.example.tfg.service.CompetenceService;
 import com.example.tfg.service.CourseService;
+import com.example.tfg.service.LearningGoalService;
 
 @Controller
 public class ActivityController {
@@ -43,10 +43,12 @@ public class ActivityController {
 	private CourseService serviceCourse;
 
 	@Autowired
-	private CompetenceService serviceCompetence;
-
-	@Autowired
-	private AcademicTermService serviceAcademicTerm;
+	private LearningGoalService serviceLearningGoal;
+//	@Autowired
+//	private CompetenceService serviceCompetence;
+//
+//	@Autowired
+//	private AcademicTermService serviceAcademicTerm;
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ActivityController.class);
@@ -100,19 +102,20 @@ public class ActivityController {
 	protected String formModifyActivities(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
-			@PathVariable("activityId") long id_activity, Model model)
+			@PathVariable("activityId") Long id_activity, Model model)
 			throws ServletException {
 
 		Activity p = serviceActivity.getActivity(id_activity);
 		model.addAttribute("courseId", id_course);
-
-		model.addAttribute("competenceStatus", p.getLearningGoalStatus());
+		
+		Collection<LearningGoal> lg = serviceLearningGoal.getLearningGoalsFromCourse(id_course, p);
+		
+		model.addAttribute("learningGoalStatus", p.getLearningGoalStatus());
 		model.addAttribute("modifyactivity", p);
-		model.addAttribute("competences", p.getCourse().getSubject()
-				.getCompetences());
+		model.addAttribute("learningGoals", lg);
 
 		LearningGoalStatus cs = new LearningGoalStatus();
-		model.addAttribute("addcompetencestatus", cs);
+		model.addAttribute("addlearningstatus", cs);
 
 		return "activity/modifyChoose";
 	}
@@ -142,18 +145,18 @@ public class ActivityController {
 		return "redirect:/error.htm";
 	}
 
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{idCourse}/activity/{activityId}/addCompetenceStatus.htm", method = RequestMethod.POST)
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{idCourse}/activity/{activityId}/addLearningStatus.htm", method = RequestMethod.POST)
 	protected String formModifyActivitiesCompetenceStatus(
 			@PathVariable("academicId") Long id_academicTerm,
 			@PathVariable("idCourse") Long id_course,
 			@PathVariable("activityId") Long id,
-			@ModelAttribute("addcompetencestatus") @Valid LearningGoalStatus competencestatus,
+			@ModelAttribute("addlearningstatus") @Valid LearningGoalStatus learningGoalStatus,
 			BindingResult result, Model model) throws ServletException {
 
 		// Activity p = serviceActivity.getActivity(id);
 		if (!result.hasErrors())
 
-			if (serviceActivity.addCompetences(id, competencestatus))
+			if (serviceActivity.addLearningGoals(id, learningGoalStatus))
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
 						+ id_course + "/activity/" + id + "/modify.htm";
 		// if(serviceActivity.existsCompetenceStatus(id,
@@ -200,10 +203,10 @@ public class ActivityController {
 			@PathVariable("academicId") Long id_AcademicTerm,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("activityId") long id_Activity,
-			@PathVariable("compStatusId") Long id_competenceStatus)
+			@PathVariable("compStatusId") Long id_learningStatus)
 			throws ServletException {
 
-		if (serviceActivity.deleteCompetenceActivity(id_competenceStatus,
+		if (serviceActivity.deleteLearningActivity(id_learningStatus,
 				id_Activity)) {
 			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
 					+ id_course + "/activity/" + id_Activity + "/modify.htm";
@@ -228,7 +231,7 @@ public class ActivityController {
 		model.put("activity", a);
 		model.put("activityId", id_activity);
 
-		model.put("competenceStatus", a.getLearningGoalStatus());
+		model.put("learningStatus", a.getLearningGoalStatus());
 
 		return new ModelAndView("activity/view", "model", model);
 	}
@@ -238,20 +241,20 @@ public class ActivityController {
 	 */
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) throws Exception {
-		binder.registerCustomEditor(Set.class, "competences",
+		binder.registerCustomEditor(Set.class, "learningGoals",
 				new CustomCollectionEditor(Set.class) {
 					protected Object convertElement(Object element) {
-						if (element instanceof Competence) {
+						if (element instanceof LearningGoal) {
 							logger.info("Converting...{}", element);
 							return element;
 						}
 						if (element instanceof String) {
-							Competence competence = serviceCompetence
-									.getCompetenceByName(element.toString());
+							LearningGoal learning = serviceLearningGoal
+									.getLearningGoalByName(element.toString());
 							logger.info("Loking up {} to {}", element,
-									competence);
+									learning);
 
-							return competence;
+							return learning;
 						}
 						System.out.println("Don't know what to do with: "
 								+ element);

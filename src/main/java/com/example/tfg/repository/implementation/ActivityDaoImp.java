@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.tfg.domain.Activity;
 import com.example.tfg.domain.Course;
+import com.example.tfg.domain.LearningGoal;
 import com.example.tfg.repository.ActivityDao;
 
 @Repository
@@ -132,18 +133,32 @@ public class ActivityDaoImp implements ActivityDao {
 
 	}
 
-	public boolean existsLearningGoalStatus(Long id_activity, Long id_competence) {
-		Query query = em
-				.createNativeQuery("select * from activity_learninggoalstatus   where id_activity=?1 and competence_id_competence=?2 ");
-		query.setParameter(1, id_activity);
-		query.setParameter(2, id_competence);
+//	public boolean existsLearningGoalStatus(Long id_activity, LearningGoal learniningGoal) {
+////		Query query = em
+////				.createNativeQuery("select * from activity_learninggoalstatus   where id_activity=?1 and competence_id_competence=?2 ");
+//		
+//	Activity a = em.getReference(Activity.class, id_activity);
+//	//Competence c = em.getReference(Competence.class, id_competence);
+//	Query query = em.createQuery("SELECT l FROM Activity a JOIN a.learningGoalStatus l WHERE a = ?1 AND  l.learningGoal = ?2");
+//		query.setParameter(1, a);
+//		query.setParameter(2, learniningGoal);
+//
+//		if (query.getResultList().isEmpty())
+//			return false;
+//		else
+//			return true;
+//	}
 
-		if (query.getResultList().isEmpty())
-			return false;
-		else
-			return true;
+	
+	@SuppressWarnings("unchecked")
+	public Collection<Activity> getActivitiesForLearningGoal(
+			LearningGoal learningGoal) {
+//		LearningGoal learning =em.getReference(LearningGoal.class, id_learningGoal);
+		Query query = em.createQuery("SELECT a FROM Activity a JOIN a.learningGoalStatus l WHERE l.learningGoal = ?1");
+		query.setParameter(1, learningGoal);
+		
+		return (Collection<Activity>)query.getResultList();
 	}
-
 	public boolean deleteActivitiesFromCourses(Collection<Course> courses) {
 
 		try {
@@ -177,5 +192,9 @@ public class ActivityDaoImp implements ActivityDao {
 		}
 		return true;
 	}
+
+
+
+	
 
 }

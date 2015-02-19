@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Topic;
 import com.example.tfg.domain.Subject;
 import com.example.tfg.repository.SubjectDao;
@@ -168,4 +169,6 @@ public class SubjectServiceImp implements SubjectService {
 		p.setCompetences(serviceCompetence.getCompetencesForSubject(id_subject));
 		return p;
 	}
+
+	
 }
