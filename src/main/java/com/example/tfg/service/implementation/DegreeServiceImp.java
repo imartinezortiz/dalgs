@@ -15,7 +15,6 @@ import com.example.tfg.service.AcademicTermService;
 import com.example.tfg.service.CompetenceService;
 import com.example.tfg.service.DegreeService;
 import com.example.tfg.service.ModuleService;
-import com.example.tfg.service.SubjectService;
 
 @Service
 public class DegreeServiceImp implements DegreeService {
@@ -23,8 +22,8 @@ public class DegreeServiceImp implements DegreeService {
 	@Autowired
 	private DegreeDao daoDegree;
 
-	@Autowired
-	private SubjectService serviceSubject;
+//	@Autowired
+//	private SubjectService serviceSubject;
 	
 	@Autowired
 	private ModuleService serviceModule;
@@ -87,13 +86,13 @@ public class DegreeServiceImp implements DegreeService {
 	@Transactional(readOnly = false)
 	public boolean deleteDegree(Long id) {
 		Degree d = daoDegree.getDegree(id);
-		boolean deleteSubjects = serviceSubject.deleteSubjectsForDegree(d);
+		boolean deleteModules = serviceModule.deleteModulesForDegree(d);
 		boolean deleteCompetences = serviceCompetence
 				.deleteCompetencesForDegree(d);
 		Collection<AcademicTerm> academicList = serviceAcademicTerm.getAcademicTermsByDegree(id);
 		
 		boolean deleteAcademic = serviceAcademicTerm.deleteAcademicTerm(academicList);
-		if (deleteSubjects && deleteCompetences && deleteAcademic) {
+		if (deleteModules && deleteCompetences && deleteAcademic) {
 			
 
 //			for (AcademicTerm a : serviceAcademicTerm

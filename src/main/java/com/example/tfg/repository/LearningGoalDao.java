@@ -34,4 +34,6 @@ public interface LearningGoalDao {
 	Collection<LearningGoal> getLearningGoalsFromCompetence(
 			Competence competence);
 
+	boolean deleteLearningGoalsForCompetences(Collection<Competence> competences);
+
 }

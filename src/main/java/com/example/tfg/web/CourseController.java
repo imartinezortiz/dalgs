@@ -1,5 +1,6 @@
 package com.example.tfg.web;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,14 +62,14 @@ public class CourseController {
 		Course newCourse = new Course();
 
 		AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic);
-
+		Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree());
 		//model.addAttribute("activities", serviceActivity.getAll());
 		model.addAttribute("addcourse", newCourse);
 
 		// List<Subject> subjects =
 		// serviceSubject.getSubjectsForDegree(academic.getDegree().getId());
 		model.addAttribute("academicTerm", academic);
-	//__	model.addAttribute("subjects", academic.getDegree());
+		model.addAttribute("subjects", subjects);
 		return "course/add";
 	}
 
@@ -132,12 +133,14 @@ public class CourseController {
 		Course p = serviceCourse.getCourse(id);
 
 		AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic);
+		
+		Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree());
 		model.addAttribute("idSubject", p.getSubject().getId());
 
 		//Collection<Activity> activities  =serviceActivity.getAll();
 		// serviceSubject.getSubjectsForDegree(academic.getDegree().getId());
 		model.addAttribute("academicTerm", academic);
-		model.addAttribute("subjects", academic.getDegree().getSubjects());
+		model.addAttribute("subjects", subjects);
 
 		//model.addAttribute("activities", activities);
 		model.addAttribute("modifyCourse", p);

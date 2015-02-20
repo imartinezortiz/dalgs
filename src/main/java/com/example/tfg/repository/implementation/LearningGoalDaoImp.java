@@ -176,6 +176,23 @@ public class LearningGoalDaoImp implements LearningGoalDao {
 
 	}
 
+	@Override
+	public boolean deleteLearningGoalsForCompetences(
+			Collection<Competence> competences) {
+		try {
+			Query query = em
+					.createQuery("UPDATE LearningGoal l SET l.isDeleted = true where l.competence IN ?1");
+
+			query.setParameter(1, competences);
+			query.executeUpdate();
+			
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return false;
+		}
+		return true;
+	}
+
 
 
 	

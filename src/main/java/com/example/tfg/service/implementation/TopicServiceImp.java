@@ -1,5 +1,6 @@
 package com.example.tfg.service.implementation;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,13 +19,13 @@ import com.example.tfg.service.TopicService;
 public class TopicServiceImp implements TopicService {
 	@Autowired
 	private TopicDao daoTopic;
-	
+
 	@Autowired
 	private ModuleService serviceModule;
-	
+
 	@Autowired
 	private SubjectService serviceSubject;
-	
+
 	@Transactional(readOnly=false)
 	public boolean addTopic(Topic topic, Long id_module) {
 		Topic existTopic = daoTopic.existByCode(topic.getInfo().getCode());
@@ -34,15 +35,15 @@ public class TopicServiceImp implements TopicService {
 			module.getTopics().add(topic);
 			if(daoTopic.addTopic(topic))
 				return serviceModule.modifyModule(module);
-		
-				
+
+
 		}else if(existTopic.isDeleted()==true){
 			existTopic.setInfo(topic.getInfo());
 			existTopic.setDeleted(false);
 			module.getTopics().add(existTopic);
 			if(daoTopic.saveTopic(existTopic))
 				return serviceModule.modifyModule(module);
-	
+
 		}
 		return false;		
 	}
@@ -67,12 +68,17 @@ public class TopicServiceImp implements TopicService {
 
 	@Transactional(readOnly=false)
 	public boolean deleteTopic(Long id) {
-		return daoTopic.deleteTopic(id);
+		Topic topic = daoTopic.getTopic(id);
+		Collection<Topic> topics = new ArrayList<Topic>();
+		topics.add(topic);
+		if (serviceSubject.deleteSubjectsForTopic(topics))
+			return daoTopic.deleteTopic(topic);
+		return false;
 	}
 
 	@Transactional(readOnly=true)
 	public Topic getTopicAll(Long id_topic) {
-		
+
 		Topic p = daoTopic.getTopic(id_topic);
 		p.setSubjects(serviceSubject.getSubjectsForTopic(id_topic));
 
@@ -81,13 +87,33 @@ public class TopicServiceImp implements TopicService {
 
 	@Override
 	public Collection<Topic> getTopicsForModule(Long id) {
-		
+
 		return daoTopic.getTopicsForModule(id);
 	}
 
 
 	public boolean modifyTopic(Topic topic) {
-		
+
 		return daoTopic.saveTopic(topic);
 	}
+
+
+	public boolean deleteTopicsForModules(Collection<Module> modules) {
+		Collection<Topic> topics = daoTopic.getTopicsForModules(modules);
+		if(serviceSubject.deleteSubjectsForTopic(topics))
+			return daoTopic.deleteTopicsForModules(modules);
+		return false;
+	}
+
+
+	public boolean deleteTopicsForModule(Module module) {
+
+		if(serviceSubject.deleteSubjectsForTopic(module.getTopics()))
+			return daoTopic.deleteTopicsForModule(module);
+		return false;
+	}
+
+
+
+
 }

@@ -1,5 +1,6 @@
 package com.example.tfg.service.implementation;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class CompetenceServiceImp implements CompetenceService {
 
 	@Autowired
 	private DegreeService serviceDegree;
-	
+
 	@Autowired 
 	private LearningGoalService serviceLearning;
 
@@ -44,16 +45,16 @@ public class CompetenceServiceImp implements CompetenceService {
 			existCompetence.setDeleted(false);
 			degree.getCompetences().add(existCompetence);
 			return daoCompetence.saveCompetence(existCompetence);
-			
+
 		}
 		else return false;
-			
-//		if (!daoCompetence.existByCode(competence.getInfo().getCode(), degree)) {
-//
-//			competence.setDegree(degree);
-//			return daoCompetence.addCompetence(competence);
-//		}
-		
+
+		//		if (!daoCompetence.existByCode(competence.getInfo().getCode(), degree)) {
+		//
+		//			competence.setDegree(degree);
+		//			return daoCompetence.addCompetence(competence);
+		//		}
+
 
 	}
 
@@ -74,8 +75,12 @@ public class CompetenceServiceImp implements CompetenceService {
 
 	@Transactional(propagation = Propagation.REQUIRED)
 	public boolean deleteCompetence(Long id) {
-		// Subject subject = daoSubject.getSubject(id);
-		return daoCompetence.deleteCompetence(id);
+		Competence competence = daoCompetence.getCompetence(id);
+		Collection <Competence> competences= new ArrayList<Competence>();
+		competences.add(competence);
+		if(serviceLearning.deleteLearningGoalForCompetences(competences))
+			return daoCompetence.deleteCompetence(id);
+		return false;
 	}
 
 	@Transactional(readOnly = false)
@@ -121,11 +126,12 @@ public class CompetenceServiceImp implements CompetenceService {
 	}
 
 	public boolean deleteCompetencesForDegree(Degree degree) {
-
-		return daoCompetence.deleteCompetencesForDegree(degree);
+		if(serviceLearning.deleteLearningGoalForCompetences(degree.getCompetences()))
+			return daoCompetence.deleteCompetencesForDegree(degree);
+		else return false;
 	}
 
-	
+
 	public boolean modifyCompetence(Competence competence) {
 		return daoCompetence.saveCompetence(competence);
 	}
@@ -133,9 +139,9 @@ public class CompetenceServiceImp implements CompetenceService {
 	@Transactional(readOnly = true)
 	public Competence getCompetenceAll(Long id_competence) {
 		Competence competence = daoCompetence.getCompetence(id_competence);
-//		Competence c = daoCompetence.getCompetenceAll(id_competence);
+		//		Competence c = daoCompetence.getCompetenceAll(id_competence);
 		competence.setLearningGoals(serviceLearning.getLearningGoalsFromCompetence(competence));
-		
+
 		return competence;
 	}
 

@@ -16,21 +16,21 @@ import com.example.tfg.service.LearningGoalService;
 
 @Service
 public class LearningGoalServiceImp implements LearningGoalService {
-	
-	
+
+
 	@Autowired
 	CompetenceService serviceCompetence;
-	
+
 	@Autowired
 	LearningGoalDao daoLearningGoal;
-	
+
 	@Autowired
 	ActivityService serviceActivity;
-	
+
 	@Transactional(readOnly = false)
 	public boolean addLearningGoal(LearningGoal newLearningGoal,
 			Long id_competence) {
-	
+
 		Competence competence = serviceCompetence.getCompetence(id_competence);
 		LearningGoal existLearning = daoLearningGoal.existByCode(newLearningGoal.getInfo().getCode(), competence);
 		if(existLearning == null){
@@ -45,12 +45,12 @@ public class LearningGoalServiceImp implements LearningGoalService {
 			competence.getLearningGoals().add(existLearning);
 			if(daoLearningGoal.saveLearningGoal(existLearning))
 				return serviceCompetence.modifyCompetence(competence);
-			
+
 		}
-	
+
 		return false;
 	}
-	
+
 	@Transactional(readOnly = true)
 	public LearningGoal getLearningGoal(Long id_learningGoal) {
 		return daoLearningGoal.getLearningGoal(id_learningGoal);
@@ -81,7 +81,7 @@ public class LearningGoalServiceImp implements LearningGoalService {
 	public Collection<LearningGoal> getLearningGoalsFromCourse(Long id_course, Activity activity) {
 		Collection<LearningGoal> learningGoals = daoLearningGoal.getLearningGoalsFromActivity(activity);
 		if(!learningGoals.isEmpty())
-		return daoLearningGoal.getLearningGoalsFromCourse(id_course, learningGoals);
+			return daoLearningGoal.getLearningGoalsFromCourse(id_course, learningGoals);
 		else return daoLearningGoal.getLearningGoalsFromCourse(id_course);
 	}
 
@@ -93,8 +93,15 @@ public class LearningGoalServiceImp implements LearningGoalService {
 
 	public Collection<LearningGoal> getLearningGoalsFromCompetence(
 			Competence competence) {
-		
+
 		return daoLearningGoal.getLearningGoalsFromCompetence(competence);
+	}
+
+
+	public boolean deleteLearningGoalForCompetences(
+			Collection<Competence> competences) {
+
+		return daoLearningGoal.deleteLearningGoalsForCompetences(competences);
 	}
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Module;
 
 @Repository
@@ -17,7 +18,7 @@ public interface ModuleDao {
 
 	public Module getModule(Long id);
 
-	public boolean deleteModule(Long id_module);
+	public boolean deleteModule(Module module);
 
 
 	public String getNextCode();
@@ -25,4 +26,6 @@ public interface ModuleDao {
 	public Module existByCode(String code);
 
 	public Collection<Module> getModulesForDegree(Long id);
+
+	public boolean deleteModulesForDegree(Degree d);
 }

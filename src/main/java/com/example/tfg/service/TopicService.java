@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.tfg.domain.Module;
 import com.example.tfg.domain.Topic;
 
 @Service
@@ -24,4 +25,8 @@ public interface TopicService {
 	public Collection<Topic> getTopicsForModule(Long id);
 
 	public boolean modifyTopic(Topic topic);
+
+	public boolean deleteTopicsForModules(Collection<Module> modules);
+
+	public boolean deleteTopicsForModule(Module module);
 }

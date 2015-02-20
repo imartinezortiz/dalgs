@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.example.tfg.domain.Module;
 import com.example.tfg.domain.Topic;
 
 @Repository
@@ -18,7 +19,7 @@ public interface TopicDao {
 
 	public Topic getTopic(Long id);
 
-	public boolean deleteTopic(Long id_topic);
+	public boolean deleteTopic(Topic topic);
 
 
 	public String getNextCode();
@@ -26,5 +27,11 @@ public interface TopicDao {
 	public Topic existByCode(String code);
 
 	public Collection<Topic> getTopicsForModule(Long id);
+
+	public Collection<Topic> getTopicsForModules(Collection<Module> modules);
+
+	public boolean deleteTopicsForModules(Collection<Module> modules);
+
+	public boolean deleteTopicsForModule(Module module);
 
 }

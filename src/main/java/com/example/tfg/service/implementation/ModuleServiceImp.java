@@ -19,13 +19,13 @@ public class ModuleServiceImp implements ModuleService {
 
 	@Autowired
 	private ModuleDao daoModule;
-	
+
 	@Autowired
 	private DegreeService serviceDegree;
-	
+
 	@Autowired
 	private TopicService serviceTopic; 
-	
+
 	@Transactional(readOnly=false)
 	public boolean addModule(Module module, Long id_degree) {
 		Module existModule = daoModule.existByCode(module.getInfo().getCode());
@@ -35,15 +35,15 @@ public class ModuleServiceImp implements ModuleService {
 			degree.getModules().add(module);
 			if(daoModule.addModule(module))
 				return serviceDegree.modifyDegree(degree);
-		
-				
+
+
 		}else if(existModule.isDeleted()==true){
 			existModule.setInfo(module.getInfo());
 			existModule.setDeleted(false);
 			degree.getModules().add(existModule);
 			if(daoModule.saveModule(existModule))
 				return serviceDegree.modifyDegree(degree);
-	
+
 		}
 		return false;		
 	}
@@ -58,7 +58,7 @@ public class ModuleServiceImp implements ModuleService {
 		Module module = daoModule.getModule(id);
 		module.setInfo(modify.getInfo());
 
-		
+
 
 		return daoModule.saveModule(module);
 	}
@@ -70,12 +70,15 @@ public class ModuleServiceImp implements ModuleService {
 
 	@Transactional(readOnly=false)
 	public boolean deleteModule(Long id) {
-		return daoModule.deleteModule(id);
+		Module module = daoModule.getModule(id);
+		if(serviceTopic.deleteTopicsForModule(module))
+			return daoModule.deleteModule(module);
+		return false;
 	}
 
 	@Transactional(readOnly=true)
 	public Module getModuleAll(Long id_module, Long id_degree) {
-		
+
 		Module p = daoModule.getModule(id_module);
 		p.setTopics(serviceTopic.getTopicsForModule(id_module));
 		return p;
@@ -83,13 +86,20 @@ public class ModuleServiceImp implements ModuleService {
 
 	@Override
 	public Collection<Module> getModulesForDegree(Long id) {
-		
+
 		return daoModule.getModulesForDegree(id);
 	}
 
-	
+
 	public boolean modifyModule(Module module) {
 		return daoModule.saveModule(module);
+	}
+
+
+	public boolean deleteModulesForDegree(Degree d) {
+		if(serviceTopic.deleteTopicsForModules(d.getModules()))
+			return daoModule.deleteModulesForDegree(d);
+		return false;
 	}
 
 

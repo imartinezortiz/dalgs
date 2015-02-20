@@ -26,6 +26,8 @@ public interface LearningGoalService {
 	Collection<LearningGoal> getLearningGoalsFromCompetence(
 			Competence competence);
 
+	boolean deleteLearningGoalForCompetences(Collection<Competence> competences);
+
 
 
 }

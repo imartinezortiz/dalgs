@@ -1,11 +1,13 @@
 package com.example.tfg.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Subject;
+import com.example.tfg.domain.Topic;
 
 @Repository
 public interface SubjectDao {
@@ -31,8 +33,10 @@ public interface SubjectDao {
 
 	public Subject getSubjectByName(String string);
 
-	public boolean deleteSubjectsForDegree(Degree degree);
+	public boolean deleteSubjectsForTopics(Collection<Topic> topics );
 
 	public boolean addSubjects(List<Subject> s);
+
+	public Collection<Subject> getSubjectForDegree(Degree degree);
 
 }

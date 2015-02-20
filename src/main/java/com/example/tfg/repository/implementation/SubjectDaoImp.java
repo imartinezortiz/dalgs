@@ -1,5 +1,6 @@
 package com.example.tfg.repository.implementation;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -159,21 +160,21 @@ public class SubjectDaoImp implements SubjectDao {
 
 	}
 
-	public boolean deleteSubjectsForDegree(Degree degree) {
-
-		try {
-
-			Query query = em
-					.createQuery("UPDATE Subject c SET c.isDeleted = true where c.degree=?1");
-			query.setParameter(1, degree);
-			query.executeUpdate();
-			return true;
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			return false;
-		}
-
-	}
+//	public boolean deleteSubjectsForDegree(Degree degree) {
+//
+//		try {
+//
+//			Query query = em
+//					.createQuery("UPDATE Subject s SET s.isDeleted = true where s.degree=?1");
+//			query.setParameter(1, degree);
+//			query.executeUpdate();
+//			return true;
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			return false;
+//		}
+//
+//	}
 
 	@Override
 	public boolean addSubjects(List<Subject> s) {
@@ -186,5 +187,32 @@ public class SubjectDaoImp implements SubjectDao {
 			return false;
 		}
 	}
+
+	
+	@SuppressWarnings("unchecked")
+	public Collection<Subject> getSubjectForDegree(Degree degree) {
+		Query query = em.createQuery("SELECT s FROM Subject s JOIN s.topic t "
+				+ "JOIN t.module m JOIN m.degree d WHERE d = ?1");
+		query.setParameter(1, degree);
+		
+		return (Collection<Subject>) query.getResultList();
+	}
+
+
+	public boolean deleteSubjectsForTopics(Collection<Topic> topics) {
+		try {
+
+			Query query = em
+					.createQuery("UPDATE Subject s SET s.isDeleted = true where s.topic IN ?1");
+			query.setParameter(1, topics);
+			query.executeUpdate();
+			return true;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return false;
+		}
+	}
+
+	
 
 }

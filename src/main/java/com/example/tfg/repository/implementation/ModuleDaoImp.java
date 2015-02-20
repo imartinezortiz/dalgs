@@ -74,9 +74,9 @@ public class ModuleDaoImp implements ModuleDao {
 	}
 
 	
-	public boolean deleteModule(Long id_module) {
+	public boolean deleteModule(Module module) {
 		try {
-			Module module = em.getReference(Module.class, id_module);
+//			Module module = em.getReference(Module.class, id_module);
 			module.setDeleted(true);
 			em.merge(module);
 
@@ -115,6 +115,22 @@ public class ModuleDaoImp implements ModuleDao {
 			return null;
 		return (List<Module>) query.getResultList();
 		
+	}
+
+	@Override
+	public boolean deleteModulesForDegree(Degree d) {
+		try {
+			Query query = em
+					.createQuery("UPDATE Module m SET m.isDeleted = true where m.degree=?1");
+
+			query.setParameter(1, d);
+			query.executeUpdate();
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	

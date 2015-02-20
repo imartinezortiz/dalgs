@@ -73,9 +73,9 @@ public class TopicDaoImp implements TopicDao {
 	}
 
 
-	public boolean deleteTopic(Long id_topic) {
+	public boolean deleteTopic(Topic topic) {
 		try {
-			Topic topic = em.getReference(Topic.class, id_topic);
+//			Topic topic = em.getReference(Topic.class, id_topic);
 			topic.setDeleted(true);
 			em.merge(topic);
 
@@ -113,5 +113,49 @@ public class TopicDaoImp implements TopicDao {
 			return null;
 		return (List<Topic>) query.getResultList();
 	}
+
+
+	@SuppressWarnings("unchecked")
+	public Collection<Topic> getTopicsForModules(Collection<Module> modules) {
+		Query query = em.createQuery("SELECT t  FROM Topic t WHERE t.isDeleted = false  AND t.module in ?1");
+		query.setParameter(1, modules);
+		
+		if (query.getResultList().isEmpty()) return null;
+		else return (Collection<Topic>) query.getResultList();
+		
+	}
+
+
+	public boolean deleteTopicsForModules(Collection<Module> modules) {
+		try {
+
+			Query query = em
+					.createQuery("UPDATE Topic t SET t.isDeleted = true where t.module IN ?1");
+			query.setParameter(1, modules);
+			query.executeUpdate();
+			return true;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return false;
+		}
+		
+	}
+
+	
+	public boolean deleteTopicsForModule(Module module) {
+		try {
+
+			Query query = em
+					.createQuery("UPDATE Topic t SET t.isDeleted = true where t.module = ?1");
+			query.setParameter(1, module);
+			query.executeUpdate();
+			return true;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return false;
+		}
+	}
+
+	
 
 }

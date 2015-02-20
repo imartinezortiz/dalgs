@@ -1,5 +1,6 @@
 package com.example.tfg.service.implementation;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +9,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.tfg.domain.Degree;
-import com.example.tfg.domain.Topic;
 import com.example.tfg.domain.Subject;
+import com.example.tfg.domain.Topic;
 import com.example.tfg.repository.SubjectDao;
 import com.example.tfg.service.CompetenceService;
 import com.example.tfg.service.CourseService;
-import com.example.tfg.service.DegreeService;
 import com.example.tfg.service.SubjectService;
 import com.example.tfg.service.TopicService;
 
@@ -141,10 +141,10 @@ public class SubjectServiceImp implements SubjectService {
 	 * false; } }
 	 */
 
-//	@Transactional(readOnly = true)
-//	public Subject getSubjectByName(String string) {
-//		return daoSubject.getSubjectByName(string);
-//	}
+	@Transactional(readOnly = true)
+	public Subject getSubjectByName(String string) {
+		return daoSubject.getSubjectByName(string);
+	}
 
 //	@Transactional(readOnly = false)
 //	public boolean deleteSubject(Long id_subject, Long id_degree) {
@@ -157,10 +157,7 @@ public class SubjectServiceImp implements SubjectService {
 //
 //	}
 
-	public boolean deleteSubjectsForDegree(Topic degree) {
-
-		return daoSubject.deleteSubjectsForDegree(degree);
-	}
+	
 
 	@Transactional(readOnly = true)
 	public Subject getSubjectAll(Long id_subject) {
@@ -168,6 +165,19 @@ public class SubjectServiceImp implements SubjectService {
 		Subject p = daoSubject.getSubject(id_subject);;
 		p.setCompetences(serviceCompetence.getCompetencesForSubject(id_subject));
 		return p;
+	}
+
+
+
+	
+	public Collection<Subject> getSubjectForDegree(Degree degree) {
+		return daoSubject.getSubjectForDegree(degree);
+	}
+
+
+	public boolean deleteSubjectsForTopic(Collection<Topic> topics) {
+		
+		return daoSubject.deleteSubjectsForTopics(topics);
 	}
 
 	
