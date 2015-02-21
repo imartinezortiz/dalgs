@@ -61,7 +61,7 @@
 			<h3 class="panel-title list">						
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 			 Activity List</h3>
-				<sec:authorize access="hasAnyRole('ADMIN', 'PERM_WRITE')">
+				<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')">
 			 
 			<a  class="btn list-btn btn-warning2" href="<c:url value='/academicTerm/${academicId}/course/${courseId}/add.htm'/>">
 								<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
@@ -90,7 +90,7 @@
 						<td><a class="btn btn-success" 
 							href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}.htm'/>">
 									View </a> 
-													<sec:authorize access="hasAnyRole('ADMIN', 'PERM_WRITE')">
+													<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')">
 									
 									<a class="btn btn-danger"
 								href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}/delete.htm'/>">

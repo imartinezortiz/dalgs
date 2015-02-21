@@ -110,9 +110,11 @@
 
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
+					<sec:authorize access="hasRole('ROLE_ADMIN')">
 					<li><a href="${uploadUrl}"> <span
 							class="glyphicon glyphicon-upload" aria-hidden="true"></span> CVS
 							<span class="sr-only">(current)</span></a></li>
+							</sec:authorize>
 					<p class="navbar-text navbar-right" style="font-size: 15px;">
 
 						<span class="glyphicon glyphicon-eye-open" aria-hidden="true">
