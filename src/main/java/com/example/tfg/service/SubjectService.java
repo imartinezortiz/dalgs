@@ -11,10 +11,9 @@ import com.example.tfg.domain.Topic;
 
 @Service
 public interface SubjectService {
-	// public boolean addSubject(Subject subject);
+
 	public List<Subject> getAll();
 
-	// public void modifySubject(Long id, String name, String description);
 	public Subject getSubject(Long id);
 
 	public boolean deleteSubject(Long id);
@@ -27,18 +26,11 @@ public interface SubjectService {
 	
 	public boolean addCompetences(Subject modify, Long id_subject);
 
-	// public List<Subject> getSubjectsForCompetence(Long id);
-
 	public Subject getSubjectForCourse(Long id_course);
 
-	// public boolean deleteSubjectFromCourse(Long id_course, Long id_subject);
 	public Subject getSubjectByName(String string);
 
-//	public boolean deleteSubject(Long id_subject, Long id_degree);
-
 	public boolean addSubject(Subject newSubject, Long id_topic);
-
-//	public boolean deleteSubjectsForDegree(Degree d);
 
 	public Subject getSubjectAll(Long id_subject);
 

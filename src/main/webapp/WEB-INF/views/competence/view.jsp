@@ -19,9 +19,10 @@
 			<h3 class="panel-title list">
 			<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
 			Competence Details </h3>
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
 			<a class="btn list-btn btn-warning"
 				href="<c:url value='/degree/${degreeId}/competence/${competenceId}/modify.htm'/>">Edit</a>
-
+			</sec:authorize>
 		</div>
 
 		<div class="panel-body">
@@ -55,11 +56,12 @@
 			<h3 class="panel-title list">						
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 			Learning List</h3>
+			 	<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<a class="btn list-btn btn-warning2"
 				href="<c:url value='/degree/${degreeId}/competence/${competenceId}/add.htm'/>"> <span
 				class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				Add
-			</a>
+				Add</a>
+				</sec:authorize>
 			
 		</div>
 		<div class="panel-body">
@@ -83,12 +85,16 @@
 						<td>
 						<a class="btn list-btn btn-success"
 						href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}.htm'/>">View</a>
+						<sec:authorize access="hasRole('ROLE_ADMIN')">
+						
 						<a class="btn btn-danger"
 							href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}/delete.htm'/>">
 							
 							Delete
 						
-						</a></td>
+						</a>
+						</sec:authorize>
+						</td>
 
 					</tr>
 				</c:forEach>

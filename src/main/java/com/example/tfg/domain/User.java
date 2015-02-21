@@ -1,24 +1,34 @@
 package com.example.tfg.domain;
 
 import java.util.Collection;
+import java.util.Collections;
 
-import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.UniqueConstraint;
 
-import com.example.tfg.domain.Role;
+import org.springframework.security.core.CredentialsContainer;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 
 @Entity
-// (name="user")
 @Table(name = "user")
-public class User {
+public class User implements UserDetails, CredentialsContainer{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,14 +50,42 @@ public class User {
 	@Column(name="email", unique = true)
 	private String email;
 	
-	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
-	private boolean isDeleted;
+
 	
-	@OneToOne(mappedBy="user",optional=false,fetch=FetchType.LAZY,cascade=CascadeType.ALL)
-	private Role role;
+
 
 	@ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
 	private Collection<Course> courses;
+	
+	
+	//  User Credentials
+	
+	private String salt;
+
+	private boolean enabled;
+
+	private boolean accountNonExpired;
+
+	private boolean accountNonLocked;
+
+	private boolean credentialsNonExpired;
+	
+	
+	// User Roles
+
+	@ElementCollection(fetch=FetchType.EAGER)
+	@CollectionTable(name="user_roles", joinColumns=@JoinColumn(name="user"),  uniqueConstraints=@UniqueConstraint(columnNames={"user", "role"}))
+	private Collection<UserRole> roles;
+	
+	//Constructor
+	public User() {
+		this.accountNonExpired = true;
+		this.credentialsNonExpired = true;
+		this.enabled = false;
+		this.accountNonLocked = true;
+	}
+	
+
 	
 	public Long getId() {
 		return id;
@@ -89,13 +127,6 @@ public class User {
 		this.password = password;
 	}
 
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
 
 	public String getEmail() {
 		return email;
@@ -105,13 +136,7 @@ public class User {
 		this.email = email;
 	}
 
-	public boolean isDeleted() {
-		return isDeleted;
-	}
 
-	public void setDeleted(boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
 
 	public Collection<Course> getCourses() {
 		return courses;
@@ -119,6 +144,111 @@ public class User {
 
 	public void setCourses(Collection<Course> courses) {
 		this.courses = courses;
+	}
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", email=" + email + "]";
+	}
+
+	@Override
+	public void eraseCredentials() {
+		this.password = null;
+		this.setSalt(null);
+	}
+	@Override
+	public boolean isAccountNonExpired() {
+		return this.accountNonExpired;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return this.accountNonLocked;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return this.credentialsNonExpired;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return this.enabled;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return Collections.unmodifiableCollection(this.roles);
+	}
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
+
+
+	public Collection<UserRole> getRoles() {
+		return roles;
+	}
+
+
+
+	public void setRoles(Collection<UserRole> roles) {
+		this.roles = roles;
+	}
+
+
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+
+
+	public void setAccountNonExpired(boolean accountNonExpired) {
+		this.accountNonExpired = accountNonExpired;
+	}
+
+
+
+	public void setAccountNonLocked(boolean accountNonLocked) {
+		this.accountNonLocked = accountNonLocked;
+	}
+
+
+
+	public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+		this.credentialsNonExpired = credentialsNonExpired;
 	}
 
 }

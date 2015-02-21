@@ -2,7 +2,6 @@ package com.example.tfg.web;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.tfg.domain.Competence;
-import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Subject;
 import com.example.tfg.service.AcademicTermService;
 import com.example.tfg.service.ActivityService;
@@ -53,10 +51,6 @@ public class SubjectController {
 	@Autowired
 	private AcademicTermService serviceAcademicTerm;
 
-	//	@ModelAttribute("competences")
-	//	public List<Competence> competence() {
-	//		return serviceCompetence.getAll();
-	//	}
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(SubjectController.class);

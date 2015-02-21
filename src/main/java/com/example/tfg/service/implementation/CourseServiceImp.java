@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,7 @@ public class CourseServiceImp implements CourseService {
 	@Autowired
 	private AcademicTermService serviceAcademicTerm;
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public boolean addCourse(Course course, Long id_academic) {
 		
@@ -50,28 +52,17 @@ public class CourseServiceImp implements CourseService {
 			return daoCourse.saveCourse(existCourse);
 		}
 		else return false;
-		
-//		AcademicTerm academic = serviceAcademicTerm
-//				.getAcademicTerm(id_academic);
-//
-//		course.setAcademicTerm(academic);
-//		Long aux = daoCourse.isDisabled(course.getAcademicTerm().getId(),
-//				course.getSubject().getId());
-//		if (aux != null) {
-//			course.setId(aux);
-//			course.setDeleted(false);
-//			return daoCourse.saveCourse(course);
-//		} else if (!daoCourse.exist(course))
-//			return daoCourse.addCourse(course);
-//
-//		return false;
+
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public List<Course> getAll() {
 		return daoCourse.getAll();
 	}
-//yo lo borraria no tiene sentido en este caso el modify
+
+	//yo lo borraria no tiene sentido en este caso el modify
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public boolean modifyCourse(Course course, Long id_academic, Long id_course) {
 		Course courseModify = daoCourse.getCourse(id_course);
@@ -89,11 +80,13 @@ public class CourseServiceImp implements CourseService {
 		else return false;
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
 	public Course getCourse(Long id) {
 		return daoCourse.getCourse(id);
 	}
-
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(propagation = Propagation.REQUIRED)
 	public boolean deleteCourse(Long id) {
 		Course course = daoCourse.getCourse(id);
@@ -102,58 +95,41 @@ public class CourseServiceImp implements CourseService {
 		return false;
 	}
 
-	/*
-	 * @Transactional(readOnly = true) public List<Course>
-	 * getCoursesByAcademicTerm(String term) { return
-	 * daoCourse.getCoursesByAcademicTerm(term); }
-	 */
-
-//	@Transactional(readOnly = false)
-//	public boolean exists(Course course) {
-//		return daoCourse.exist(course);
-//	}
-
+	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public List<Course> getCoursesByAcademicTerm(Long id_academic) {
 
 		return daoCourse.getCoursesByAcademicTerm(id_academic);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	public boolean deleteCoursesFromAcademic(AcademicTerm academic) {
 		boolean deleted = serviceActivity.deleteActivitiesFromCourses(academic.getCourses());
 		
 		if (deleted)
 			return daoCourse.deleteCoursesFromAcademic(academic);
 		else return false;
-//		boolean deleted = false;
-//		for (Course course : academic.getCourses()) {
-//			deleted = serviceActivity.deleteActivitiesFromCourse(course);
-//			if (!deleted)
-//				break;
-//		}
-//		if (deleted)
-//			if (daoCourse.deleteCoursesFromAcademic(academic))
-//				return true;
-//		return deleted;
+
 	}
 	
 
 
-	
+	@PreAuthorize("hasRole('ROLE_USER')")	
 	public Course getCourseAll(Long id) {
 		Course c = daoCourse.getCourse(id);
 		c.setActivities(serviceActivity.getActivitiesForCourse(id));
 		return c;
 	}
 
-	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public Collection<Course> getCoursesfromListAcademic(
 			Collection<AcademicTerm> academicList) {
 			
 		return daoCourse.getCoursesFromListAcademic(academicList);
 	}
 
-	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	public boolean deleteCourses(Collection<AcademicTerm> academicList) {
 		Collection<Course> coursesList = daoCourse.getCoursesFromListAcademic(academicList);
 		boolean deleteActivities = serviceActivity.deleteActivitiesFromCourses(coursesList);

@@ -60,24 +60,6 @@ public class CompetenceDaoImp implements CompetenceDao {
 			return false;
 		}
 		
-		
-//		Query query = em
-//				.createQuery("select p from Competence p where p.name=?1");
-//		query.setParameter(1, competence.getInfo().getName());
-//
-//		@SuppressWarnings("unchecked")
-//		List<Subject> p = query.getResultList();
-//		if (p.isEmpty()) {
-//			try {
-//				em.persist(competence);
-//			} catch (ConstraintViolationException e) {
-//				logger.error(e.getMessage());
-//				return false;
-//			}
-//
-//		} else
-//			return false;
-//		return true;
 	}
 
 	@SuppressWarnings("unchecked")

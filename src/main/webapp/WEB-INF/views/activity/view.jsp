@@ -20,9 +20,11 @@
 				<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
 				Activity Details
 			</h3>
-			<a class="btn list-btn btn-warning"
+				<sec:authorize access="hasAnyRole('ADMIN', 'PERM_WRITE')">
+				<a class="btn list-btn btn-warning"
 				href="<c:url value='${activityId}/modify.htm'/>">			
 				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>Edit</a>
+				</sec:authorize>
 
 		</div>
 

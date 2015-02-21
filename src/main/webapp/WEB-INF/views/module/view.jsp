@@ -19,11 +19,12 @@
 			<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
 			<h3 class="panel-title list">
 			Module Details</h3>
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
 			<a class="btn list-btn btn-warning"
 				href="<c:url value='/degree/${model.module.degree.id}/module/${moduleId}/modify.htm'/>">				
 				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
 				Edit</a>
-
+			</sec:authorize>
 		</div>
 
 		<div class="panel-body">
@@ -80,10 +81,10 @@
 
 						<td><a class="btn list-btn btn-success"
 							href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topic.id}.htm'/>">View</a>
-							<a class="btn btn-danger"
+							<sec:authorize access="hasRole('ROLE_ADMIN')"><a class="btn btn-danger"
 							href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topic.id}/delete.htm'/>">
 								Delete
-						</a></td>
+						</a></sec:authorize></td>
 
 					</tr>
 				</c:forEach>

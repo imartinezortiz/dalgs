@@ -11,18 +11,22 @@
 			<h4>  
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 			 Users</h4>
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+			
 			<a class="btn list-btn btn-warning2"
 				href="<c:url value='/user/add.htm'/>"> 
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 				
 				Add User
 			</a>
+			</sec:authorize>
 		</div>
 		<table class="table table-striped table-bordered">
 					<tr align="center">
 						<td width="30%"><div class="td-label">Last Name</div></td>
 						<td width="30%"><div class="td-label">First Name</div></td>
 						<td width="40%"><div class="td-label">Email</div></td>
+						<td width="40%"><div class="td-label">Status</div></td>
 
 					</tr>
 					<c:forEach items="${model.users}" var="user">
@@ -40,12 +44,38 @@
 									<c:out value="${user.email}" />
 								</div>
 							</td>
+								<td>
+								<div class="td-content">
+									<c:choose>
+      									<c:when test="${user.enabled}">Enabled
+      									<br />
+      									</c:when>
+
+      									<c:otherwise>Disabled.
+      									<br />
+      									</c:otherwise>
+									</c:choose>
+								</div>
+							</td>
 
 							<td><a class="btn btn-success"
-								href="<c:url value='/user/${user.id}.htm'/>"> View </a> <a
-								class="btn btn-danger"
-								href="<c:url value='/user/${user.id}/delete.htm'/>"> Delete
-							</a></td>
+								href="<c:url value='/user/${user.id}.htm'/>"> View </a> 
+						<sec:authorize access="hasRole('ROLE_ADMIN')">
+									
+									<a class="btn btn-danger"
+										href="<c:url value='/user/${user.id}/status.htm'/>">
+									<c:choose>
+      									<c:when test="${user.enabled}">
+      									 Disabled
+				
+      									</c:when>
+
+      									<c:otherwise>
+										Enabled
+      									</c:otherwise>
+									</c:choose>
+									</a>
+								</sec:authorize></td>
 
 						</tr>
 					</c:forEach>

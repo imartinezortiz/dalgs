@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +23,6 @@ public class DegreeServiceImp implements DegreeService {
 	@Autowired
 	private DegreeDao daoDegree;
 
-//	@Autowired
-//	private SubjectService serviceSubject;
 	
 	@Autowired
 	private ModuleService serviceModule;
@@ -34,6 +33,7 @@ public class DegreeServiceImp implements DegreeService {
 	@Autowired
 	private AcademicTermService serviceAcademicTerm;
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public boolean addDegree(Degree degree) {
 		
@@ -47,42 +47,35 @@ public class DegreeServiceImp implements DegreeService {
 			
 		}
 		else return false;
-//		if (!daoDegree.existByCode(degree.getInfoDegree().getCode()))
-//			return daoDegree.addDegree(degree);
-//		else
-//			return false;
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public List<Degree> getAll() {
 		return daoDegree.getAll();
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	public boolean modifyDegree(Degree degree) {
-
 		return daoDegree.saveDegree(degree);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public boolean modifyDegree(Degree degree, Long id_degree) {
-
 		Degree modifydegree = daoDegree.getDegree(id_degree);
 		modifydegree.setInfo(degree.getInfo());
-//		if (degree.getCode() != null)
-//			Modifydegree.setCode(degree.getCode());
-//		if (degree.getName() != null)
-//			Modifydegree.setName(degree.getName());
-//		if (degree.getDescription() != null)
-//			Modifydegree.setDescription(degree.getDescription());
 		return daoDegree.saveDegree(modifydegree);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
 	public Degree getDegree(Long id) {
 		return daoDegree.getDegree(id);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public boolean deleteDegree(Long id) {
 		Degree d = daoDegree.getDegree(id);
@@ -93,29 +86,25 @@ public class DegreeServiceImp implements DegreeService {
 		
 		boolean deleteAcademic = serviceAcademicTerm.deleteAcademicTerm(academicList);
 		if (deleteModules && deleteCompetences && deleteAcademic) {
-			
-
-//			for (AcademicTerm a : serviceAcademicTerm
-//					.getAcademicTermsByDegree(id)) {
-//				serviceAcademicTerm.deleteAcademicTerm(a.getId());
-//			}
-		return daoDegree.deleteDegree(d);
-		} else
-			return false;
+			return daoDegree.deleteDegree(d);
+		} else	return false;
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public Degree getDegreeSubject(Subject p) {
 
 		return daoDegree.getDegreeSubject(p);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public String getNextCode() {
 		return daoDegree.getNextCode();
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public Degree getDegreeAll(Long id) {
 	

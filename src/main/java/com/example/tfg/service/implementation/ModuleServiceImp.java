@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ public class ModuleServiceImp implements ModuleService {
 	@Autowired
 	private TopicService serviceTopic; 
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly=false)
 	public boolean addModule(Module module, Long id_degree) {
 		Module existModule = daoModule.existByCode(module.getInfo().getCode());
@@ -48,26 +50,27 @@ public class ModuleServiceImp implements ModuleService {
 		return false;		
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
 	public List<Module> getAll() {
 		return daoModule.getAll();
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly=false)
 	public boolean modifyModule(Module modify, Long id) {
 		Module module = daoModule.getModule(id);
 		module.setInfo(modify.getInfo());
-
-
-
 		return daoModule.saveModule(module);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
 	public Module getModule(Long id) {
 		return daoModule.getModule(id);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly=false)
 	public boolean deleteModule(Long id) {
 		Module module = daoModule.getModule(id);
@@ -76,6 +79,7 @@ public class ModuleServiceImp implements ModuleService {
 		return false;
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
 	public Module getModuleAll(Long id_module, Long id_degree) {
 
@@ -84,18 +88,21 @@ public class ModuleServiceImp implements ModuleService {
 		return p;
 	}
 
-	@Override
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@Transactional(readOnly=true)
 	public Collection<Module> getModulesForDegree(Long id) {
 
 		return daoModule.getModulesForDegree(id);
 	}
 
-
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly=false)
 	public boolean modifyModule(Module module) {
 		return daoModule.saveModule(module);
 	}
 
-
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly=false)
 	public boolean deleteModulesForDegree(Degree d) {
 		if(serviceTopic.deleteTopicsForModules(d.getModules()))
 			return daoModule.deleteModulesForDegree(d);

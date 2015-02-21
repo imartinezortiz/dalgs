@@ -4,12 +4,11 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.tfg.domain.AcademicTerm;
-import com.example.tfg.domain.Course;
 import com.example.tfg.repository.AcademicTermDao;
 import com.example.tfg.service.AcademicTermService;
 import com.example.tfg.service.CourseService;
@@ -23,7 +22,7 @@ public class AcademicTermServiceImp implements AcademicTermService {
 	@Autowired
 	private CourseService serviceCourse;
 	
-	@Secured("ROLE_ADMIN")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public boolean addAcademicTerm(AcademicTerm academicTerm) {
 
@@ -36,19 +35,9 @@ public class AcademicTermServiceImp implements AcademicTermService {
 			return daoAcademicTerm.saveAcademicTerm(existAcademic);			
 		}
 		else return false;
-//		Long a = daoAcademicTerm.isDisabled(academicTerm.getTerm(),
-//				academicTerm.getDegree());
-//		if (a != null) {
-//			academicTerm.setId(a);
-//			return daoAcademicTerm.saveAcademicTerm(academicTerm);
-//		} else if (!daoAcademicTerm.exists(academicTerm))
-//			return daoAcademicTerm.addAcademicTerm(academicTerm);
-//
-//		return daoAcademicTerm.saveAcademicTerm(academicTerm);
-		// return false;
-
 	}
-	@Secured("ROLE_ADMIN")
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public boolean modifyAcademicTerm(AcademicTerm academicTerm,
 			Long id_academic) {
@@ -62,18 +51,13 @@ public class AcademicTermServiceImp implements AcademicTermService {
 		return false;
 	}
 
-	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
-	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex) {// String
-																	// term) {
-		return daoAcademicTerm.getAcademicsTerm(pageIndex);// term);
+	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex) {
+		return daoAcademicTerm.getAcademicsTerm(pageIndex);
 	}
 
-	/*
-	 * @Transactional(propagation = Propagation.REQUIRED) public boolean
-	 * deleteTerm(String term) { return daoAcademicTerm.deleteTerm(term); }
-	 */
-
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	// propagation = Propagation.REQUIRED)
 	public boolean deleteAcademicTerm(Long id_academic) {
@@ -86,11 +70,13 @@ public class AcademicTermServiceImp implements AcademicTermService {
 		return false;
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
 	public Integer numberOfPages() {
 		return daoAcademicTerm.numberOfPages();
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public AcademicTerm getAcademicTerm(Long id_academic) {
 		return daoAcademicTerm.getAcademicTermById(id_academic);
@@ -102,12 +88,13 @@ public class AcademicTermServiceImp implements AcademicTermService {
 //			return daoAcademicTerm.modifyTerm(term, newTerm);
 //		return false;
 //	}
-
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
 	public List<AcademicTerm> getAcademicTermsByDegree(Long id_degree) {
 		return daoAcademicTerm.getAcademicTermsByDegree(id_degree);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public AcademicTerm getAcademicTermAll(Long id_academic) {
 		AcademicTerm aT= daoAcademicTerm.getAcademicTermById(id_academic);
@@ -115,6 +102,9 @@ public class AcademicTermServiceImp implements AcademicTermService {
 		return aT;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = false)
+	// propagation = Propagation.REQUIRED)
 	public boolean deleteAcademicTerm(Collection<AcademicTerm> academicList) {
 		
 		boolean deleteCourses = serviceCourse.deleteCourses(academicList);

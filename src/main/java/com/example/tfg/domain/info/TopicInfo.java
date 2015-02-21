@@ -12,7 +12,7 @@ public class TopicInfo {
 	private String code;
 	
 	@Basic(optional = false)
-	@Column(name = "name", length = 50, nullable = false)
+	@Column(name = "name", length = 100, nullable = false)
 	private String name;
 
 //	@Basic(optional = false)

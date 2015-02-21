@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,8 @@ public class CompetenceServiceImp implements CompetenceService {
 
 	@Autowired 
 	private LearningGoalService serviceLearning;
-
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public boolean addCompetence(Competence competence, Long id_degree) {
 		Degree degree = serviceDegree.getDegree(id_degree);
@@ -48,31 +50,27 @@ public class CompetenceServiceImp implements CompetenceService {
 
 		}
 		else return false;
-
-		//		if (!daoCompetence.existByCode(competence.getInfo().getCode(), degree)) {
-		//
-		//			competence.setDegree(degree);
-		//			return daoCompetence.addCompetence(competence);
-		//		}
-
-
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public List<Competence> getAll() {
 		return daoCompetence.getAll();
 	}
-
+	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
 	public Competence getCompetence(Long id) {
 		return daoCompetence.getCompetence(id);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
 	public Competence getCompetenceByName(String name) {
 		return daoCompetence.getCompetenceByName(name);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(propagation = Propagation.REQUIRED)
 	public boolean deleteCompetence(Long id) {
 		Competence competence = daoCompetence.getCompetence(id);
@@ -83,18 +81,21 @@ public class CompetenceServiceImp implements CompetenceService {
 		return false;
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
 	public List<Competence> getCompetencesForSubject(Long id_subject) {
 
 		return daoCompetence.getCompetencesForSubject(id_subject);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public List<Competence> getCompetencesForDegree(Long id_degree) {
 		// TODO Auto-generated method stub
 		return daoCompetence.getCompetencesForDegree(id_degree);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public boolean modifyCompetence(Competence competence, Long id_competence) {
 		Competence modifyCompetence = daoCompetence.getCompetence(id_competence);
@@ -102,13 +103,7 @@ public class CompetenceServiceImp implements CompetenceService {
 		return daoCompetence.saveCompetence(modifyCompetence);
 	}
 
-	// ----
-	/*
-	 * @Transactional(readOnly = true) public boolean existsInSubject(Long
-	 * id_subject, Competence c) { // TODO Auto-generated method stub return
-	 * daoCompetence.existsInSubject(id_subject, c); }
-	 */
-
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(propagation = Propagation.REQUIRED)
 	public boolean deleteCompetenceFromSubject(Long id_competence,
 			Long id_subject) {
@@ -125,17 +120,19 @@ public class CompetenceServiceImp implements CompetenceService {
 		}
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	public boolean deleteCompetencesForDegree(Degree degree) {
 		if(serviceLearning.deleteLearningGoalForCompetences(degree.getCompetences()))
 			return daoCompetence.deleteCompetencesForDegree(degree);
 		else return false;
 	}
 
-
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	public boolean modifyCompetence(Competence competence) {
 		return daoCompetence.saveCompetence(competence);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public Competence getCompetenceAll(Long id_competence) {
 		Competence competence = daoCompetence.getCompetence(id_competence);
@@ -145,9 +142,5 @@ public class CompetenceServiceImp implements CompetenceService {
 		return competence;
 	}
 
-	// @Transactional(readOnly = true)
-	// public String getNextCode(){
-	// return daoCompetence.getNextCode();
-	//
-	// }
+
 }

@@ -19,11 +19,12 @@
 			<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
 			<h3 class="panel-title list">
 			Subject Details</h3>
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
 			<a class="btn list-btn btn-warning"
 				href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${model.learningGoal.id}/modify.htm'/>">				
 				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
 				Edit</a>
-
+			</sec:authorize>
 		</div>
 
 		<div class="panel-body">

@@ -12,7 +12,7 @@ import com.example.tfg.domain.Course;
 
 @Service
 public interface ActivityService {
-	public boolean addActivity(Activity activity, Long id_course);
+	public boolean addActivity(Activity activity, Long id_course) ;//throws NotOwnerException;
 
 	public List<Activity> getAll();
 

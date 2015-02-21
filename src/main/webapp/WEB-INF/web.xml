@@ -3,7 +3,9 @@
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
+
 	<display-name>Tfg</display-name>
+
 	<servlet>
 		<servlet-name>tfg</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -17,6 +19,7 @@
 		<servlet-name>tfg</servlet-name>
 		<url-pattern>*.htm</url-pattern>
 	</servlet-mapping>
+
 	<filter>
 		<filter-name>SpringOpenEntityManagerInViewFilter</filter-name>
 		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
@@ -25,6 +28,7 @@
 		<filter-name>SpringOpenEntityManagerInViewFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+
 	<!-- Security -->
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
@@ -34,35 +38,86 @@
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 		/WEB-INF/spring/spring-security.xml
 		/WEB-INF/spring/applicationContext.xml
-	</param-value>
+		</param-value>
 	</context-param>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-	
-	<!-- Handler errors -->
-	<error-page>
-		<error-code>400</error-code>
-		<location>/badRequest.htm</location>
-	</error-page>
 
+	<!-- Handler errors -->
+	
+	<!-- error-code related error pages -->
 	<error-page>
 		<error-code>404</error-code>
 		<location>/pageNotFound.htm</location>
 	</error-page>
+
 	<error-page>
-		<error-code>500</error-code>
-		<location>/serverError.htm</location>
+		<error-code>403</error-code>
+		<location>/error.htm</location>
 	</error-page>
 	
-	 <error-page>
-	<exception-type>java.lang.Exception</exception-type>
-	<location>/error.htm</location>
-  </error-page>
+	<error-page> 
+		<error-code>405</error-code> 
+		<location>/methodNotAllowed.htm</location> 
+	</error-page> 
+
+	<error-page>
+		<error-code>500</error-code>
+		<location>/methodNotAllowed.htm</location>
+	</error-page>
+	
+	<!-- Unsupported servlet method -->
+	
+	<error-page>
+    	<error-code>503</error-code>
+   		<location>/error.htm</location>
+	</error-page>
+	
+	<!-- exception-type related error pages -->
+	<error-page>
+    	<exception-type>java.lang.ClassCastException</exception-type >
+    	<location>/error.htm</location>
+	</error-page>
+	
+	
+	<error-page>
+   		<exception-type>java.io.IOException</exception-type >
+    	<location>/error.htm</location>
+	</error-page>
+	
+	<error-page>
+		<exception-type>java.lang.Exception</exception-type>
+		<location>/error.htm</location>
+	</error-page>
+	
+	<!-- generic-type related error pages -->
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/error.htm</location>
+	</error-page>
+	
+
+	<!-- UTF-8 encoding configuration -->
+
+	<filter>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 </web-app>

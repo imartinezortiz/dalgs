@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,112 +33,68 @@ public class ActivityServiceImp implements ActivityService {
 	@Autowired
 	private LearningGoalService serviceLearningGoal;
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
 	@Transactional(readOnly = false)
-	public boolean addActivity(Activity activity, Long id_course) {
-
-		//		Course course = serviceCourse.getCourse(id_course);
-		//		Activity existActivity = daoActivity.existByCode(activity.getInfo().getCode());
-		//		if(existActivity == null){
-		//			course.getActivities().add(activity);
-		//			activity.setCourse(course);
-		//			return daoActivity.addActivity(activity);			
-		//		}
-		//		else if (existActivity.isDeleted()){
-		//			existActivity.setCourse(course);
-		//			existActivity.setDeleted(false);
-		//			course.getActivities().add(existActivity);
-		//			boolean r = daoActivity.saveActivity(existActivity);	
-		//			return daoActivity.saveActivity(existActivity);	
-		//			
-		//		}
-		//		else return false;
-
-
+	public boolean addActivity(Activity activity, Long id_course){//throws NotOwnerException {
 
 		activity.setCourse(serviceCourse.getCourse(id_course));
 
-		//		try{
-		//			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		//		
-		//		User u =  serviceUser.findByUsername(((User) auth.getPrincipal()).getUsername()); //domain tfg
-		//		
-		//		if  ((u.getRole().getRole()==1) ||//ROLE_ADMIN
-		//				((u.getRole().getRole()==3) && serviceCourse.isPermitted(u.getId(), id_course)))
-		if (!daoActivity.existByCode(activity.getInfo().getCode()))
-			return daoActivity.addActivity(activity);
+			if (!daoActivity.existByCode(activity.getInfo().getCode()))
+				return daoActivity.addActivity(activity);
+			
 
-
-
-		//		}
-		//		catch (NotFoundException nfe){
-		//		//logger
 		return false;
 	}
 
-
-
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public List<Activity> getAll() {
 		return daoActivity.getAll();
 	}
-
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
 	@Transactional(readOnly = false)
 	public boolean modifyActivity(Activity activity, Long id_activity,
 			Long id_course) {
 
 		Activity activityModify =  daoActivity.getActivity(id_activity);
 		activityModify.setInfo(activity.getInfo());
-		//	activityModify.setLearningGoalStatus(activity.getLearningGoalStatus());
 		return daoActivity.saveActivity(activityModify);
 
-		//		activity.setId(id_activity);
-		//		activity.setCourse(serviceCourse.getCourse(id_course));
-		//		activity.setLearningGoalStatus(daoActivity.getActivity(id_activity)
-		//				.getLearningGoalStatus());
-		//		return daoActivity.saveActivity(activity);
-
 	}
-
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
 	public Activity getActivity(Long id) {
 		return daoActivity.getActivity(id);
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
 	@Transactional(propagation = Propagation.REQUIRED)
 	public boolean deleteActivity(Long id) {
 
 		return daoActivity.deleteActivity(id);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public List<Activity> getActivitiesForCourse(Long id_course) {
 		return daoActivity.getActivitiesForCourse(id_course);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = true)
 	public String getNextCode() {
 		return daoActivity.getNextCode();
 
 	}
 
-	/*
-	 * @Transactional(propagation = Propagation.REQUIRED) public boolean
-	 * deleteActivityFromCourse(Long id_course, Long id_activity) {
-	 * 
-	 * Collection<Activity> c = daoCourse.getCourse(id_course).getActivities();
-	 * try { c.remove(daoActivity.getActivity(id_activity)); return true;
-	 * 
-	 * } catch (Exception e) { return false; }
-	 * 
-	 * return daoActivity.deleteActivity(id_activity); }
-	 */
-
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public Activity getActivityByName(String string) {
-		// TODO Auto-generated method stub
 		return daoActivity.getActivityByName(string);
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
 	@Transactional(propagation = Propagation.REQUIRED)
 	public boolean deleteLearningActivity(Long id_learningGoalStatus,
 			Long id_Activity) {
@@ -164,36 +121,25 @@ public class ActivityServiceImp implements ActivityService {
 
 	}
 
-	// @Transactional(readOnly = true)
-	// public boolean existsLearningGoalStatus(Long id_activity, Long
-	// id_competence) {
-	// return daoActivity.existsLearningGoalStatus(id_activity, id_competence);
-	// }
-
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
 	@Transactional(readOnly = false)
 	public boolean addLearningGoals(Long id, LearningGoalStatus learningGoalStatus) {
 		Activity p = daoActivity.getActivity(id);
-		//		if (daoActivity.existsLearningGoalStatus(id, learningGoalStatus.getLearningGoal()))
-		//			return false;
+
 		if (learningGoalStatus.getPercentage() <= 0.0
 				|| learningGoalStatus.getPercentage() > 100.0)
 			return false;
 		p.getLearningGoalStatus().add(learningGoalStatus);
-		//		if (daoActivity.existsLearningGoalStatus(id, learningGoalStatus
-		//				.getLearningGoal().getId()))
-		//			return false;
-		//		if (learningGoalStatus.getPercentage() <= 0.0
-		//				|| learningGoalStatus.getPercentage() > 100.0)
-		//			return false;
-		//		p.getLearningGoalStatus().add(learningGoalStatus);
+		
 		return daoActivity.saveActivity(p);
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
 	public boolean deleteActivitiesFromCourses(Collection<Course> courses) {
 		return daoActivity.deleteActivitiesFromCourses(courses);
 	}
 
-
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
 	public boolean deleteActivitiesFromCourse(Course course) {
 
 		return daoActivity.deleteActivitiesFromCourse(course);
@@ -201,7 +147,7 @@ public class ActivityServiceImp implements ActivityService {
 
 
 
-	@Override
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
 	public boolean deleteLearningActivities(LearningGoal learningGoal) {
 		Collection <Activity> activities = daoActivity.getActivitiesForLearningGoal(learningGoal);
 		try{

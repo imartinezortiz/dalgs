@@ -104,18 +104,6 @@ public class SubjectDaoImp implements SubjectDao {
 		return s;
 	}
 
-	// @SuppressWarnings("unchecked")
-	// public List<Subject> getSubjectsForCompetence(Long id) {
-	// Competence competence = em.getReference(Competence.class, id);
-	// Query query = em.createQuery
-	// //
-	// createQuery("select c from Subject s join s.competences c where c=?1");
-	// ("select s from Subject s JOIN s.competences c where c = ?1");
-	// query.setParameter(1, competence);
-	//
-	// Competence c = (Competence)query.getSingleResult();
-	// return query.getResultList();
-	// }
 
 	public String getNextCode() {
 		Query query = em.createQuery("Select MAX(e.id ) from Subject e");
