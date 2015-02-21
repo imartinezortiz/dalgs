@@ -55,11 +55,14 @@
 
 				Topics List
 			</h3>
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+			
 			<a class="btn list-btn btn-warning2"
 				href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/add.htm'/>"> <span
 				class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 				Add
 			</a>
+			</sec:authorize>
 
 		</div>
 		<div class="panel-body">
