@@ -13,10 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "group")
+@Table(name = "_group")
 public class Group {
 
 	@Id
@@ -26,7 +27,11 @@ public class Group {
 	
 	@Basic(optional = false)
 	@Column(name = "name", length = 50, nullable = false)
-	private String group;
+	private String name;
+	
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "id_course")
+	private Course course;
 	
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "group_teacher", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_user") })
@@ -47,12 +52,12 @@ public class Group {
 		this.id = id;
 	}
 
-	public String getGroup() {
-		return group;
+	public String getName() {
+		return name;
 	}
 
-	public void setGroup(String group) {
-		this.group = group;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Collection<User> getTeachers() {
@@ -77,6 +82,14 @@ public class Group {
 
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
 	}
 	
 	

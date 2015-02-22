@@ -162,4 +162,11 @@ public class CourseServiceImp implements CourseService {
 		else return false;
 	}
 
+
+	public boolean modifyCourse(Course course) {
+
+		return daoCourse.saveCourse(course);
+	}
+
+
 }

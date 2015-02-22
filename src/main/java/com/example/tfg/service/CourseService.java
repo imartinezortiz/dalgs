@@ -33,4 +33,8 @@ public interface CourseService {
 
 	public boolean deleteCourses(Collection<AcademicTerm> academicList);
 
+	public boolean modifyCourse(Course course);
+
+	
+
 }

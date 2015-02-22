@@ -38,6 +38,12 @@ public class Course {
 	// , orphanRemoval=true)
 	private Collection<Activity> activities;
 
+	
+	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+	// , orphanRemoval=true)
+	private Collection<Group> groups;
+
+	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "id_academicterm")
 	// , insertable=false, updatable=false)
@@ -91,6 +97,14 @@ public class Course {
 
 	public void setActivities(Collection<Activity> activities) {
 		this.activities = activities;
+	}
+
+	public Collection<Group> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(Collection<Group> groups) {
+		this.groups = groups;
 	}
 
 }

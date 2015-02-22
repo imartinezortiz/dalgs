@@ -120,6 +120,11 @@ INSERT INTO subject_competence(id_subject,id_competence) VALUES (2,4)
 INSERT INTO subject_competence(id_subject,id_competence) VALUES (3,5)
 INSERT INTO subject_competence(id_subject,id_competence) VALUES (5,5)
 
+INSERT INTO _group (id_group, name, id_course) VALUES (1, 'group 1', 1);
+INSERT INTO _group (id_group, name, id_course) VALUES (2, 'group 1', 1);
+INSERT INTO _group (id_group, name, id_course) VALUES (3, 'group 1', 2);
+INSERT INTO _group (id_group, name, id_course) VALUES (4, 'group 1', 2);
+INSERT INTO _group (id_group, name, id_course) VALUES (5, 'group 1', 3);
 
 -- User - Role Inserts  ROLE_USER(2) ROLE_ADMIN(1)
 INSERT INTO user (id_user, email, firstName, lastName, password, username) VALUES ('1', 'user1@gmail.com','first', 'last', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'admin');
