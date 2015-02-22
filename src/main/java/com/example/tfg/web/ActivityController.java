@@ -57,7 +57,7 @@ public class ActivityController {
 	 * Methods for adding activities
 	 */
 
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/add.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/add.htm", method = RequestMethod.GET)
 	protected String getAddNewActivityForm(
 			@PathVariable("academicId") Long id_Long,
 			@PathVariable("courseId") Long id_course, Model model) {
@@ -70,7 +70,7 @@ public class ActivityController {
 
 	}
 
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/add.htm", method = RequestMethod.POST)
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/add.htm", method = RequestMethod.POST)
 	// Every Post have to return redirect
 	public String processAddNewCompetence(
 			@PathVariable("academicId") Long id_academicTerm,

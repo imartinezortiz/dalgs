@@ -36,7 +36,7 @@ public class GroupController {
 		Group newGroup = new Group();
 		// newGroup.setCode(serviceGroup.getNextCode());
 		
-		model.addAttribute("addgroup", newGroup);
+		model.addAttribute("addGroup", newGroup);
 
 		return "group/add";
 
@@ -47,7 +47,7 @@ public class GroupController {
 	public String processAddNewCompetence(
 			@PathVariable("academicId") Long id_academicTerm,
 			@PathVariable("courseId") Long id_course,
-			@ModelAttribute("addgroup") @Valid Group newgroup,
+			@ModelAttribute("addGroup") @Valid Group newgroup,
 			BindingResult result, Model model) {
 
 		if (!result.hasErrors()) {
@@ -58,8 +58,7 @@ public class GroupController {
 			if (created) {
 
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
-						+ id_course + "/group/" + newgroup.getId()
-						+ "/modify.htm";
+						+ id_course + ".htm";
 			} else
 				return "redirect:/group/add.htm";
 		}
@@ -81,10 +80,10 @@ public class GroupController {
 		model.addAttribute("courseId", id_course);
 		
 		
-		model.addAttribute("modifygroup", p);
+		model.addAttribute("modifyGroup", p);
 		
 
-		return "group/modifyChoose";
+		return "group/modify";
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/modify.htm", method = RequestMethod.POST)
@@ -92,7 +91,7 @@ public class GroupController {
 			@PathVariable("academicId") Long id_academicTerm,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
-			@ModelAttribute("modifygroup") @Valid Group group,
+			@ModelAttribute("modifyGroup") @Valid Group group,
 			BindingResult result, Model model)
 
 	{
@@ -102,7 +101,7 @@ public class GroupController {
 			// group.setCourse(serviceCourse.getCourse(id_course));
 			// group.setCompetenceStatus(serviceGroup.getGroup(id_group).getCompetenceStatus());
 			boolean success = serviceGroup.modifyGroup(group,
-					id_group, id_course);
+					id_group);
 			if (success) {
 
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"

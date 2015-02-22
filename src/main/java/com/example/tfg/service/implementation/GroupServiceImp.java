@@ -1,5 +1,7 @@
 package com.example.tfg.service.implementation;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +52,7 @@ public class GroupServiceImp implements GroupService {
 	}
 
 	@Transactional(readOnly = false)
-	public boolean modifyGroup(Group group, Long id_group, Long id_course) {
+	public boolean modifyGroup(Group group, Long id_group) {
 		Group groupModify = daoGroup.getGroup(id_group);
 		groupModify.setName(group.getName());
 		return daoGroup.saveGroup(groupModify);
@@ -60,6 +62,18 @@ public class GroupServiceImp implements GroupService {
 	public boolean deleteGroup(Long id_group) {
 	
 		return daoGroup.deleteGroup(id_group);
+	}
+
+	@Override
+	public Collection<Group> getGroupsForCourse(Long id) {
+		// TODO Auto-generated method stub
+		return daoGroup.getGroupsForCourse(id);
+	}
+
+	@Override
+	public boolean deleteGroupsFromCourses(Collection<Course> coursesList) {
+		// TODO Auto-generated method stub
+		return daoGroup.deleteGroupsFromCourses(coursesList);
 	}
 
 }

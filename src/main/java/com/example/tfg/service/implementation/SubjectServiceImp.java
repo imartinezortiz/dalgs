@@ -40,15 +40,15 @@ public class SubjectServiceImp implements SubjectService {
 		if(existSubject == null){
 			subject.setTopic(topic);
 			topic.getSubjects().add(subject);
-			if(daoSubject.addSubject(subject))
-				return serviceTopic.modifyTopic(topic);
+			return daoSubject.addSubject(subject);
+			
 				
 		}else if(existSubject.isDeleted()==true){
 			existSubject.setInfo(subject.getInfo());
 			existSubject.setDeleted(false);
 			topic.getSubjects().add(existSubject);
-			if (daoSubject.saveSubject(existSubject))
-				return serviceTopic.modifyTopic(topic);
+			return daoSubject.saveSubject(existSubject);
+				
 		}
 		return false;		
 		

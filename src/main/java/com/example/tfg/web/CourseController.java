@@ -112,10 +112,14 @@ public class CourseController {
 		Course p = serviceCourse.getCourseAll(id);
 		myModel.put("course", p);
 
-		List<Activity> activities = serviceActivity.getActivitiesForCourse(id);
+//		List<Activity> activities = serviceActivity.getActivitiesForCourse(id);
 
-		if (activities != null)
+		if (p.getActivities() != null)
 			myModel.put("activities", p.getActivities());
+		
+		if (p.getGroups() != null)
+			myModel.put("groups", p.getGroups());
+		
 
 		return new ModelAndView("course/view", "model", myModel);
 	}

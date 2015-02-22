@@ -38,4 +38,6 @@ public interface CourseDao {
 
 	public boolean deleteCourses(Collection<AcademicTerm> academicList);
 
+//	public Course getCourseAll(Long id);
+
 }

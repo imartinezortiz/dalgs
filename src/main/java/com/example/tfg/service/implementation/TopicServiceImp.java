@@ -33,16 +33,14 @@ public class TopicServiceImp implements TopicService {
 		if(existTopic == null){
 			topic.setModule(module);
 			module.getTopics().add(topic);
-			if(daoTopic.addTopic(topic))
-				return serviceModule.modifyModule(module);
+			return daoTopic.addTopic(topic);
 
 
 		}else if(existTopic.isDeleted()==true){
 			existTopic.setInfo(topic.getInfo());
 			existTopic.setDeleted(false);
 			module.getTopics().add(existTopic);
-			if(daoTopic.saveTopic(existTopic))
-				return serviceModule.modifyModule(module);
+			return daoTopic.saveTopic(existTopic);
 
 		}
 		return false;		
@@ -92,10 +90,10 @@ public class TopicServiceImp implements TopicService {
 	}
 
 
-	public boolean modifyTopic(Topic topic) {
-
-		return daoTopic.saveTopic(topic);
-	}
+//	public boolean modifyTopic(Topic topic) {
+//
+//		return daoTopic.saveTopic(topic);
+//	}
 
 
 	public boolean deleteTopicsForModules(Collection<Module> modules) {

@@ -13,7 +13,7 @@ public interface DegreeService {
 
 	public List<Degree> getAll();
 
-	public boolean modifyDegree(Degree degree);
+//	public boolean modifyDegree(Degree degree);
 
 	public boolean modifyDegree(Degree degree, Long id);
 

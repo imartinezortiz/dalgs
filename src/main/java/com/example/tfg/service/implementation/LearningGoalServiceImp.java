@@ -36,15 +36,15 @@ public class LearningGoalServiceImp implements LearningGoalService {
 		if(existLearning == null){
 			newLearningGoal.setCompetence(competence);
 			competence.getLearningGoals().add(newLearningGoal);
-			if(daoLearningGoal.addLearningGoal(newLearningGoal))
-				return serviceCompetence.modifyCompetence(competence);
+			return daoLearningGoal.addLearningGoal(newLearningGoal);
+		
 		}
 		else if (existLearning.isDeleted()) {
 			existLearning.setCompetence(competence);
 			existLearning.setDeleted(false);
 			competence.getLearningGoals().add(existLearning);
-			if(daoLearningGoal.saveLearningGoal(existLearning))
-				return serviceCompetence.modifyCompetence(competence);
+			return daoLearningGoal.saveLearningGoal(existLearning);
+		
 
 		}
 
@@ -66,10 +66,10 @@ public class LearningGoalServiceImp implements LearningGoalService {
 
 	@Transactional(readOnly = false)
 	public boolean deleteLearningGoal(Long id_learningGoal) {
-		boolean deleteFromActivities = serviceActivity.deleteLearningActivities(daoLearningGoal.getLearningGoal(id_learningGoal));;
-		if (deleteFromActivities)
+//		boolean deleteFromActivities = serviceActivity.deleteLearningActivities(daoLearningGoal.getLearningGoal(id_learningGoal));;
+//		if (deleteFromActivities)
 			return daoLearningGoal.deleteLearningGoal(id_learningGoal);
-		return false;
+//		return false;
 	}
 
 	public boolean deleteLearningGoalForCompetence(Competence competence) {

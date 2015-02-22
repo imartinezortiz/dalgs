@@ -201,28 +201,28 @@ public class ActivityServiceImp implements ActivityService {
 
 
 
-	@Override
-	public boolean deleteLearningActivities(LearningGoal learningGoal) {
-		Collection <Activity> activities = daoActivity.getActivitiesForLearningGoal(learningGoal);
-		try{
-			for (Activity a : activities)
-			{
-				for(LearningGoalStatus lg : a.getLearningGoalStatus())
-				{
-					if (lg.getLearningGoal().equals(learningGoal)) {
-						a.getLearningGoalStatus().remove(lg);
-						break;
-					}
-				}
-				daoActivity.saveActivity(a);
-			}
-			return true;
-		}
-		catch(Exception e){
-			return false;
-		}
-		
-	}
+//	@Override
+//	public boolean deleteLearningActivities(LearningGoal learningGoal) {
+//		Collection <Activity> activities = daoActivity.getActivitiesForLearningGoal(learningGoal);
+//		try{
+//			for (Activity a : activities)
+//			{
+//				for(LearningGoalStatus lg : a.getLearningGoalStatus())
+//				{
+//					if (lg.getLearningGoal().equals(learningGoal)) {
+//						a.getLearningGoalStatus().remove(lg);
+//						break;
+//					}
+//				}
+//				daoActivity.saveActivity(a);
+//			}
+//			return true;
+//		}
+//		catch(Exception e){
+//			return false;
+//		}
+//		
+//	}
 
 
 

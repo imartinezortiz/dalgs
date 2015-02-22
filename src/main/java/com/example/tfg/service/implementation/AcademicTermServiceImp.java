@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.tfg.domain.AcademicTerm;
-import com.example.tfg.domain.Course;
 import com.example.tfg.repository.AcademicTermDao;
 import com.example.tfg.service.AcademicTermService;
 import com.example.tfg.service.CourseService;
@@ -57,9 +56,9 @@ public class AcademicTermServiceImp implements AcademicTermService {
 		ac.setTerm(academicTerm.getTerm());
 //		academicTerm.setDegree(ac.getDegree());
 //		if (!daoAcademicTerm.exists(academicTerm))
-		if(daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree()) == null)
-			return daoAcademicTerm.saveAcademicTerm(academicTerm);
-		return false;
+//		if(daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree()) == null)
+		return daoAcademicTerm.saveAcademicTerm(academicTerm);
+//		return false;
 	}
 
 	

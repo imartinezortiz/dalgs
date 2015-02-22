@@ -59,10 +59,10 @@ public class DegreeServiceImp implements DegreeService {
 		return daoDegree.getAll();
 	}
 
-	public boolean modifyDegree(Degree degree) {
-
-		return daoDegree.saveDegree(degree);
-	}
+//	public boolean modifyDegree(Degree degree) {
+//
+//		return daoDegree.saveDegree(degree);
+//	}
 
 	@Transactional(readOnly = false)
 	public boolean modifyDegree(Degree degree, Long id_degree) {

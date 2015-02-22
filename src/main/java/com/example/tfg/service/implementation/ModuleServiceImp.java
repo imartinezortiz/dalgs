@@ -33,16 +33,16 @@ public class ModuleServiceImp implements ModuleService {
 		if(existModule == null){
 			module.setDegree(degree);
 			degree.getModules().add(module);
-			if(daoModule.addModule(module))
-				return serviceDegree.modifyDegree(degree);
+			return daoModule.addModule(module);
+				
 
 
 		}else if(existModule.isDeleted()==true){
 			existModule.setInfo(module.getInfo());
 			existModule.setDeleted(false);
 			degree.getModules().add(existModule);
-			if(daoModule.saveModule(existModule))
-				return serviceDegree.modifyDegree(degree);
+			return daoModule.saveModule(existModule);
+			
 
 		}
 		return false;		

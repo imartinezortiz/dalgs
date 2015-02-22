@@ -24,7 +24,7 @@ public interface TopicService {
 
 	public Collection<Topic> getTopicsForModule(Long id);
 
-	public boolean modifyTopic(Topic topic);
+//	public boolean modifyTopic(Topic topic);
 
 	public boolean deleteTopicsForModules(Collection<Module> modules);
 

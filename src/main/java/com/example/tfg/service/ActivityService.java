@@ -38,7 +38,7 @@ public interface ActivityService {
 
 	public boolean deleteActivitiesFromCourse(Course course);
 
-	public boolean deleteLearningActivities(LearningGoal learningGoal);
+//	public boolean deleteLearningActivities(LearningGoal learningGoal);
 
 	
 

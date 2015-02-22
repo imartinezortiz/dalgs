@@ -21,7 +21,7 @@
 				Degree Details
 			</h3>
 			<a class="btn list-btn btn-warning"
-				href="<c:url value='/degree/${degreeId}/modify.htm'/>"> <span
+				href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/modify.htm'/>"> <span
 				class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
 				Edit
 			</a>
@@ -33,16 +33,8 @@
 
 			<div class="form-group">
 				<div class="form-group view">
-					<label>Code: </label>
-					<p class="details">${model.degree.info.code}</p>
-				</div>
-				<div class="form-group view">
 					<label>Name: </label>
-					<p class="details">${model.degree.info.name}</p>
-				</div>
-				<div class="form-group view">
-					<label>Description: </label>
-					<p class="details">${model.degree.info.description}</p>
+					<p class="details">${model.group.name}</p>
 				</div>
 			</div>
 
@@ -53,7 +45,7 @@
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 
-				Module List
+				Teachers List
 			</h3>
 			<a class="btn list-btn btn-warning2"
 				href="<c:url value='/degree/${degreeId}/module/add.htm'/>"> <span
@@ -66,16 +58,16 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label">Name</div></td>
-					<td width="50%"><div class="td-label">Description</div></td>
+					<td width="20%"><div class="td-label">Code</div></td>
+					<td width="50%"><div class="td-label">Name</div></td>
 				</tr>
 				<c:forEach items="${model.modules}" var="module">
 					<tr align="center">
 						<td><div class="td-content">
-								<c:out value="${module.info.name}" />
+								<c:out value="${module.info.code}" />
 							</div></td>
 						<td><div class="td-content">
-								<c:out value="${module.info.description}" />
+								<c:out value="${module.info.name}" />
 							</div></td>
 
 
@@ -98,7 +90,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">			
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-			Competence List</h3>
+			Students List</h3>
 			<a class="btn list-btn btn-warning2"
 				href="<c:url value='/degree/${degreeId}/competence/add.htm'/>">
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
