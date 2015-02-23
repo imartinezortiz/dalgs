@@ -1,5 +1,6 @@
 package com.example.tfg.service.implementation;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.AcademicTerm;
 import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Subject;
@@ -22,9 +24,9 @@ public class DegreeServiceImp implements DegreeService {
 	@Autowired
 	private DegreeDao daoDegree;
 
-//	@Autowired
-//	private SubjectService serviceSubject;
-	
+	//	@Autowired
+	//	private SubjectService serviceSubject;
+
 	@Autowired
 	private ModuleService serviceModule;
 
@@ -34,24 +36,32 @@ public class DegreeServiceImp implements DegreeService {
 	@Autowired
 	private AcademicTermService serviceAcademicTerm;
 
-	@Transactional(readOnly = false)
-	public boolean addDegree(Degree degree) {
-		
-		Degree existDegree = daoDegree.existByCode(degree.getInfo().getCode());
-		if (existDegree == null)
-			return daoDegree.addDegree(degree);
-		else if(existDegree.isDeleted()==true) {
-			existDegree.setInfo(degree.getInfo());
-			existDegree.setDeleted(false);
-			return daoDegree.saveDegree(existDegree);
-			
-		}
-		else return false;
-//		if (!daoDegree.existByCode(degree.getInfoDegree().getCode()))
-//			return daoDegree.addDegree(degree);
-//		else
-//			return false;
+	@Transactional(readOnly=false)
+	public ResultClass<Boolean> addDegree(Degree degree) {
 
+		Degree degreeExists = daoDegree.existByCode(degree.getInfo().getCode());
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		if( degreeExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Code already exists");
+			if (degreeExists.isDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
+				
+			}
+			result.setErrorsList(errors);
+		}
+		else{
+			boolean r = daoDegree.addDegree(degree);
+			if (r) 
+				result.setE(true);
+		}
+		return result;
+
+		
+
+	
 	}
 
 	@Transactional(readOnly = true)
@@ -59,22 +69,22 @@ public class DegreeServiceImp implements DegreeService {
 		return daoDegree.getAll();
 	}
 
-//	public boolean modifyDegree(Degree degree) {
-//
-//		return daoDegree.saveDegree(degree);
-//	}
+	//	public boolean modifyDegree(Degree degree) {
+	//
+	//		return daoDegree.saveDegree(degree);
+	//	}
 
 	@Transactional(readOnly = false)
 	public boolean modifyDegree(Degree degree, Long id_degree) {
 
 		Degree modifydegree = daoDegree.getDegree(id_degree);
 		modifydegree.setInfo(degree.getInfo());
-//		if (degree.getCode() != null)
-//			Modifydegree.setCode(degree.getCode());
-//		if (degree.getName() != null)
-//			Modifydegree.setName(degree.getName());
-//		if (degree.getDescription() != null)
-//			Modifydegree.setDescription(degree.getDescription());
+		//		if (degree.getCode() != null)
+		//			Modifydegree.setCode(degree.getCode());
+		//		if (degree.getName() != null)
+		//			Modifydegree.setName(degree.getName());
+		//		if (degree.getDescription() != null)
+		//			Modifydegree.setDescription(degree.getDescription());
 		return daoDegree.saveDegree(modifydegree);
 	}
 
@@ -90,16 +100,16 @@ public class DegreeServiceImp implements DegreeService {
 		boolean deleteCompetences = serviceCompetence
 				.deleteCompetencesForDegree(d);
 		Collection<AcademicTerm> academicList = serviceAcademicTerm.getAcademicTermsByDegree(id);
-		
+
 		boolean deleteAcademic = serviceAcademicTerm.deleteAcademicTerm(academicList);
 		if (deleteModules && deleteCompetences && deleteAcademic) {
-			
 
-//			for (AcademicTerm a : serviceAcademicTerm
-//					.getAcademicTermsByDegree(id)) {
-//				serviceAcademicTerm.deleteAcademicTerm(a.getId());
-//			}
-		return daoDegree.deleteDegree(d);
+
+			//			for (AcademicTerm a : serviceAcademicTerm
+			//					.getAcademicTermsByDegree(id)) {
+			//				serviceAcademicTerm.deleteAcademicTerm(a.getId());
+			//			}
+			return daoDegree.deleteDegree(d);
 		} else
 			return false;
 	}
@@ -118,12 +128,18 @@ public class DegreeServiceImp implements DegreeService {
 
 	@Transactional(readOnly = true)
 	public Degree getDegreeAll(Long id) {
-	
+
 
 		Degree d = daoDegree.getDegree(id);
 		d.setModules(serviceModule.getModulesForDegree(id));
 		d.setCompetences(serviceCompetence.getCompetencesForDegree(id));
 		return d;
+	}
+
+	@Override
+	public void unDeleteDegree(Degree degree) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

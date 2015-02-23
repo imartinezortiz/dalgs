@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Degree;
 import com.example.tfg.service.DegreeService;
 
@@ -31,20 +33,34 @@ public class DegreeController {
 	public String getAddNewDegreeForm(Model model) {
 		Degree newDegree = new Degree();
 		// newDegree.setCode(serviceDegree.getNextCode());
-
 		model.addAttribute("addDegree", newDegree);
 		return "degree/add";
 	}
 
-	@RequestMapping(value = "/degree/add.htm", method = RequestMethod.POST)
+	@RequestMapping(value = "/degree/add.htm", method = RequestMethod.POST, params="Add")
 	// Every Post have to return redirect
 	public String processAddNewDegree(
-			@ModelAttribute("addDegree") Degree newDegree) {
-		boolean created = serviceDegree.addDegree(newDegree);
-		if (created)
+			@ModelAttribute("addDegree") Degree newDegree, Model model) {
+		ResultClass<Boolean> result = serviceDegree.addDegree(newDegree);
+		if (!result.hasErrors())
+//		if (created)
 			return "redirect:/degree/list.htm";
-		else
-			return "redirect:/degree/add.htm";
+		else{
+			model.addAttribute("addDegree", newDegree);
+			if (result.isElementDeleted())
+				model.addAttribute("unDelete", result.isElementDeleted()); 
+			model.addAttribute("errors", result.getErrorsList());
+			return "degree/add";
+		}
+			
+	}
+	
+	@RequestMapping(value = "/degree/add.htm", method = RequestMethod.POST, params="Undelete")
+	// Every Post have to return redirect
+	public String undeleteDegree(
+			@ModelAttribute("addDegree") Degree degree, Model model) {
+		boolean undeleted = serviceDegree.unDeleteDegree(degree);
+		if
 	}
 
 	/**

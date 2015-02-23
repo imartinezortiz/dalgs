@@ -2,8 +2,10 @@ package com.example.tfg.repository.implementation;
 
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
 import org.slf4j.Logger;
@@ -41,7 +43,7 @@ public class DegreeDaoImp implements DegreeDao {
 	public boolean addDegree(Degree degree) {
 		try {
 			em.persist(degree);
-		} catch (ConstraintViolationException e) {
+		} catch (PersistenceException e) {
 			logger.error(e.getMessage());
 			return false;
 		}
