@@ -14,6 +14,7 @@ public interface AcademicTermService {
 
 	public boolean modifyAcademicTerm(AcademicTerm academicTerm,
 			Long id_academic);
+	
 	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex);
 
 	public boolean deleteAcademicTerm(Collection<AcademicTerm> academicList);
