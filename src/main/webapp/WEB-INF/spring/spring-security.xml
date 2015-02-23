@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/security"
 
-	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 		http://www.springframework.org/schema/security 
@@ -11,12 +13,13 @@
 		http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
 
-
-
+ 	<!-- Loads ACL related configurations -->
+<!--  	<import resource="/WEB-INF/spring/acl-context.xml" />
+ -->
 	<!--This contains the core Spring Security configuration. -->
 	
-	<global-method-security secured-annotations="enabled" pre-post-annotations="enabled"  proxy-target-class="true"/>
-<!-- 		proxy-target-class="true" access-decision-manager-ref="customAccessDecisionManager" />
+<!-- 	<global-method-security secured-annotations="enabled" pre-post-annotations="enabled"  proxy-target-class="true"/>
+ --><!-- 		proxy-target-class="true" access-decision-manager-ref="customAccessDecisionManager" />
  -->
 
 	<!-- the http tag This means the path /resources should be ignored by Spring 
