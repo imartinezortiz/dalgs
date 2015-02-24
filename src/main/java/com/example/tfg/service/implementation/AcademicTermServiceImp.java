@@ -182,7 +182,7 @@ public class AcademicTermServiceImp implements AcademicTermService {
 		return aT;
 	}
 	
-	//@PreAuthorize("hasRole('ROLE_ADMIN')")
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)
 	public boolean deleteAcademicTerm(Collection<AcademicTerm> academicList) {

@@ -131,8 +131,9 @@ public class DegreeServiceImp implements DegreeService {
 		Collection<AcademicTerm> academicList = serviceAcademicTerm.getAcademicTermsByDegree(id);
 
 		if(!academicList.isEmpty()) deleteAcademic = serviceAcademicTerm.deleteAcademicTerm(academicList);
-		if ((deleteModules && deleteCompetences && deleteAcademic) || 
-				(d.getModules().isEmpty() && d.getCompetences().isEmpty() && academicList.isEmpty())){
+		if ((deleteModules || d.getModules().isEmpty()) && (deleteCompetences || d.getCompetences().isEmpty())
+				&& (deleteAcademic || academicList.isEmpty())){
+				
 			return daoDegree.deleteDegree(d);
 		} else
 			return false;
@@ -163,6 +164,7 @@ public class DegreeServiceImp implements DegreeService {
 		return d;
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> unDeleteDegree(Degree degree) {
 		Degree d = daoDegree.existByCode(degree.getInfo().getCode());
