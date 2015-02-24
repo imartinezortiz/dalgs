@@ -13,7 +13,7 @@
 			
 			User Details</h3>
 			<a class="btn list-btn btn-warning"
-				href="<c:url value='/user/${userId}/modify.htm'/>">
+				href="<c:url value='/user/${model.userDetails.id}/modify.htm'/>">
 				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>Edit</a>
 
 		</div>
@@ -50,7 +50,7 @@
 				<c:forEach items="${model.userDetails.courses}" var="course">
 					<tr align="center">
 						<td><div class="td-content">
-								<c:out value="${course.subject.name}" />
+								<c:out value="${course.subject.info.name}" />
 							</div></td>
 						<td>
 							<div class="td-content">
@@ -60,7 +60,12 @@
 
 						<td><a class="btn btn-success" 
 							href="<c:url value='/academicTerm/${course.academicTerm.id}/course/${course.id}.htm'/>">
-									View </a> 						
+									View </a> 	
+									<sec:authorize access="hasRole('ROLE_ADMIN')">
+								<a class="btn btn-danger"
+									href="<c:url value='/academicTerm/${model.academicTerm.id}/course/${course.id}/user/${model.userDetails.id}delete.htm'/>">
+									Delete </a>
+								</sec:authorize>					
 							</td>
 
 					</tr>

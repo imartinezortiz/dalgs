@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ public class TopicServiceImp implements TopicService {
 	@Autowired
 	private SubjectService serviceSubject;
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly=false)
 	public boolean addTopic(Topic topic, Long id_module) {
 		Topic existTopic = daoTopic.existByCode(topic.getInfo().getCode());
@@ -46,11 +48,13 @@ public class TopicServiceImp implements TopicService {
 		return false;		
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
 	public List<Topic> getAll() {
 		return daoTopic.getAll();
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly=false)
 	public boolean modifyTopic(Topic topic, Long id) {
 		Topic topicModify = daoTopic.getTopic(id);
@@ -59,11 +63,13 @@ public class TopicServiceImp implements TopicService {
 		return daoTopic.saveTopic(topicModify);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
 	public Topic getTopic(Long id) {
 		return daoTopic.getTopic(id);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly=false)
 	public boolean deleteTopic(Long id) {
 		Topic topic = daoTopic.getTopic(id);
@@ -74,6 +80,7 @@ public class TopicServiceImp implements TopicService {
 		return false;
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
 	public Topic getTopicAll(Long id_topic) {
 
@@ -83,19 +90,26 @@ public class TopicServiceImp implements TopicService {
 		return p;
 	}
 
-	@Override
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@Transactional(readOnly=true)
 	public Collection<Topic> getTopicsForModule(Long id) {
 
 		return daoTopic.getTopicsForModule(id);
 	}
 
 
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+//	@Transactional(readOnly=false)
+////	public boolean modifyTopic(Topic topic) {
+////
+////		return daoTopic.saveTopic(topic);
+////	}
 //	public boolean modifyTopic(Topic topic) {
-//
 //		return daoTopic.saveTopic(topic);
 //	}
 
-
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly=false)
 	public boolean deleteTopicsForModules(Collection<Module> modules) {
 		Collection<Topic> topics = daoTopic.getTopicsForModules(modules);
 		if(serviceSubject.deleteSubjectsForTopic(topics))
@@ -103,7 +117,8 @@ public class TopicServiceImp implements TopicService {
 		return false;
 	}
 
-
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly=false)
 	public boolean deleteTopicsForModule(Module module) {
 
 		if(serviceSubject.deleteSubjectsForTopic(module.getTopics()))

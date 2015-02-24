@@ -9,23 +9,21 @@ import javax.persistence.Query;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Repository;
+
 
 
 
 
 import com.example.tfg.classes.StringSHA;
 import com.example.tfg.domain.Course;
-import com.example.tfg.domain.Role;
 import com.example.tfg.domain.User;
 import com.example.tfg.repository.UserDao;
 
-//import org.springframework.data.jpa.repository.JpaRepository;
 @Repository
-public class UserDaoImp implements UserDao {// extends JpaRepository<User, Long>
-											// {
+public class UserDaoImp implements UserDao {
+
 	private static final Integer noOfRecords = 20;
 
 	protected static final Logger logger = LoggerFactory
@@ -42,14 +40,6 @@ public class UserDaoImp implements UserDao {// extends JpaRepository<User, Long>
 		this.em = entityManager;
 	}
 	
-
-	public User findByUsername(String username) {
-		Query query = em
-				.createQuery("select s from User s where s.username=?1");
-		query.setParameter(1, username);
-
-		return (User) query.getSingleResult();
-	}
 	
 	public boolean addUser(User user) {
 		try {
@@ -65,7 +55,7 @@ public class UserDaoImp implements UserDao {// extends JpaRepository<User, Long>
 
 	@SuppressWarnings("unchecked")
 	public List<User> getAll(Integer pageIndex) {
-		Query query = em.createQuery("select u from User u where u.isDeleted='false' order by u.id");
+		Query query = em.createQuery("select u from User u  order by u.id");
 		
 		return query.setMaxResults(noOfRecords)
 				.setFirstResult(pageIndex * noOfRecords).getResultList();
@@ -75,7 +65,7 @@ public class UserDaoImp implements UserDao {// extends JpaRepository<User, Long>
 	public boolean deleteUser(Long id) {
 		User user = em.getReference(User.class, id);
 		try {
-			user.setDeleted(true);
+			user.setEnabled(false);
 			em.merge(user);
 
 			return true;
@@ -96,23 +86,12 @@ public class UserDaoImp implements UserDao {// extends JpaRepository<User, Long>
 		return true;
 	}
 
-	/*	Copetneces @SuppressWarnings("unchecked")
-	public List<Competence> getCompetencesForSubject(Long id_subject) {
-		Subject subject = em.getReference(Subject.class, id_subject);
-
-		Query query = em
-				.createQuery("select c from Subject s.competences c where s = ?1 and c.isDeleted='false'");
-		query.setParameter(1, subject);
-
-		return query.getResultList();
-	}*/
-
 	@SuppressWarnings("unchecked")
 	public List<User> getAllByCourse(Long id_course,Integer pageIndex) {
 		Course course = em.getReference(Course.class, id_course);
 
 		Query query = em
-				.createQuery("select u from Course c.users  where c = ?1 and u.isDeleted='false'");
+				.createQuery("select u from Course c.users  where c = ?1 and u.isEnabled='true'");
 
 		query.setParameter(1, course);
 
@@ -139,7 +118,7 @@ public class UserDaoImp implements UserDao {// extends JpaRepository<User, Long>
 	public Integer numberOfPages() {
 
 		Query query =em.createNativeQuery(
-				"select count(*) from user where isDeleted='false'");
+				"select count(*) from user");
 		logger.info(query.getSingleResult().toString());
 		double dou = Double.parseDouble(query.getSingleResult().toString())/ ((double) noOfRecords);
 		return (int) Math.ceil(dou);
@@ -154,10 +133,10 @@ public class UserDaoImp implements UserDao {// extends JpaRepository<User, Long>
 		int i = 0;
 		for(User u : users) {
 			try{
-				Role role = new Role();
+				/*Role role = new Role();
 				role.setUser(u);
 				role.setRole(2);
-				u.setRole(role);
+				u.setRole(role);*/
 				
 				//In this case we have to hash the password (SHA-256)
 				StringSHA sha = new StringSHA();
@@ -180,6 +159,32 @@ public class UserDaoImp implements UserDao {// extends JpaRepository<User, Long>
 		
 		return true;
 
+	}
+	
+	// Logging
+	public User findByUsername(String username) {
+		Query query = em
+				.createQuery("select s from User s where s.username=?1");
+		query.setParameter(1, username);
+		
+		if(query.getResultList().isEmpty()){
+			logger.error("User not found by username " + username);
+			return null;
+		}
+
+		return (User) query.getSingleResult();
+	}
+
+	public User findByEmail(String email) {
+		Query query = em
+				.createQuery("select s from User s where s.email=?1");
+		query.setParameter(1, email);
+
+		if(query.getResultList().isEmpty()) {
+			logger.error("User not found by email " + email);
+			return null;
+		}
+		return (User) query.getSingleResult();
 	}
 
 

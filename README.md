@@ -1,5 +1,11 @@
 Proyecto TFG
-	CSV
-	/upload/nombre_de_la_entity.htm (User/Subject/...)
-
+ -- TO DO --
+ View an academicTerm -->  
+ 		Filter target must be a collection or array type 	
+ 		@PostAuthorize("hasPermission(returnObject, 'WRITE')")
+ 
+ Delete an academicTerm -->
+		Unauthorized
+		@PreAuthorize("hasPermission(#post, 'WRITE')")
+	
 / Almudena

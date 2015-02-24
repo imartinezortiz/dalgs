@@ -14,8 +14,8 @@
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 
 			<h4>Subjects</h4>
-			<a class="btn btn-add2" href="<c:url value='/subject/add.htm'/>">
-				Add Subject </a>
+			<sec:authorize access="hasRole('ROLE_ADMIN')"><a class="btn btn-add2" href="<c:url value='/subject/add.htm'/>">
+				Add Subject </a></sec:authorize>
 		</div>
 		<table class="table table-striped table-bordered">
 			<tr align="center">
@@ -43,8 +43,8 @@
 
 					<td><a class="btn list-btn btn-success"
 						href="<c:url value='view/${subject.id}.htm'/>">View</a> <!-- <a href="modify.html"  class="btn list-btn btn-warning">Modify</a>-->
-						<a class="btn list-btn btn-danger"
-						href="<c:url value='delete/${subject.id}.htm'/>">Delete</a></td>
+						<sec:authorize access="hasRole('ROLE_ADMIN')"><a class="btn list-btn btn-danger"
+						href="<c:url value='delete/${subject.id}.htm'/>">Delete</a></sec:authorize></td>
 
 				</tr>
 			</c:forEach>

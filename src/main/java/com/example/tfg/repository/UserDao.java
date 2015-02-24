@@ -9,7 +9,6 @@ import com.example.tfg.domain.User;
 @Repository
 public interface UserDao {// extends JpaRepository<User, Long> {
 
-	public User findByUsername(String username);
 	public List<User> getAll(Integer pageIndex);
 	public boolean deleteUser(Long id);
 	public boolean saveUser(User user);
@@ -21,4 +20,8 @@ public interface UserDao {// extends JpaRepository<User, Long> {
 
 	public boolean persistALotUsers(List<User> users);
 	public Integer numberOfPages();
+	
+	public User findByEmail(String username);
+	public User findByUsername(String username);
+
 }

@@ -11,12 +11,14 @@
 			<h4>  
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 			 Academic Terms</h4>
+ 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 			<a class="btn list-btn btn-warning2"
 				href="<c:url value='/academicTerm/add.htm'/>"> 
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 				
 				Add Academic Term
 			</a>
+			 </sec:authorize> 
 		</div>
 		<table class="table table-striped table-bordered">
 			<tr align="center">
@@ -45,14 +47,19 @@
 
 					<td><a
 						href="<c:url value='/academicTerm/${academicTerm.id}.htm'/>"
-						class="btn btn-success">View</a> <a
+						class="btn btn-success">View</a> 
+ 						<sec:authorize access="hasRole('ROLE_ADMIN')">
+						<a
 						href="<c:url value='/academicTerm/${academicTerm.id}/delete.htm'/>"
-						class="btn btn-danger">Delete</a></td>
+						class="btn btn-danger">Delete</a>
+						</sec:authorize>
+				</td>
 
 				</tr>
 
 			</c:forEach>
 		</table>
+
 
 		<nav>
 			<ul class="pagination">

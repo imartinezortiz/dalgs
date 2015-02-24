@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,7 @@ public class SubjectServiceImp implements SubjectService {
 	@Autowired
 	private CourseService serviceCourse;
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public boolean addSubject(Subject subject, Long id_topic) {
 		
@@ -51,66 +53,42 @@ public class SubjectServiceImp implements SubjectService {
 				
 		}
 		return false;		
-		
-//		if (!daoSubject.existByCode(subject.getInfo().getCode())) {
-//
-//			Degree degree = serviceDegree.getDegree(id_degree);
-//			subject.setDegree(degree);
-//			return daoSubject.addSubject(subject);
-//		} else
-//			return false;
-
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public List<Subject> getAll() {
 		return daoSubject.getAll();
 	}
 
-	// @Transactional(readOnly = false)
-	// public void modifySubject(Long id, String name, String description){
-	// Subject aux = daoSubject.getSubject(id);
-	// aux.setName(name);
-	// aux.setDescription(description);
-	// daoSubject.saveSubject(aux);
-	// }
-
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
 	public Subject getSubject(Long id) {
 		return daoSubject.getSubject(id);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(propagation = Propagation.REQUIRED)
 	public boolean deleteSubject(Long id) {
-
 		daoSubject.getSubject(id).getCompetences().clear();
-		// serviceDegree.getDegreeSubject(daoSubject.getSubject(id));
 		return daoSubject.deleteSubject(id);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public List<Subject> getSubjectsForTopic(Long id_topic) {
 		return daoSubject.getSubjectsForTopic(id_topic);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public boolean modifySubject(Subject modify, Long id_subject) {
-
 		Subject subject = daoSubject.getSubject(id_subject);
 		subject.setInfo(modify.getInfo());
-//		if (modify.getCompetences() != null)
-//			subject.setCompetences(modify.getCompetences());
-//		if (modify.getCode() != null)
-//			subject.setCode(modify.getCode());
-//		if (modify.getName() != null)
-//			subject.setName(modify.getName());
-//		if (modify.getDescription() != null)
-//			subject.setDescription(modify.getDescription());
-		
-
 		return daoSubject.saveSubject(subject);
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public boolean addCompetences(Subject modify, Long id_subject) {
 
@@ -121,62 +99,43 @@ public class SubjectServiceImp implements SubjectService {
 		return daoSubject.saveSubject(subject);
 	}
 	
-
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public String getNextCode() {
 		return daoSubject.getNextCode();
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public Subject getSubjectForCourse(Long id) {
 		return daoSubject.getSubjectForCourse(id);
 	}
 
-	/*
-	 * @Transactional(propagation = Propagation.REQUIRED) public boolean
-	 * deleteSubjectFromCourse(Long id_course, Long id_subject) { Subject c =
-	 * daoCourse.getCourse(id_course).getSubject(); try { return
-	 * daoSubject.deleteSubject(c.getId()); } catch (Exception e) { return
-	 * false; } }
-	 */
-
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public Subject getSubjectByName(String string) {
 		return daoSubject.getSubjectByName(string);
 	}
-
-//	@Transactional(readOnly = false)
-//	public boolean deleteSubject(Long id_subject, Long id_degree) {
-//
-//		// Degree degree = serviceDegree.getDegree(id_degree);
-//
-//		// Subject s = daoSubject.getSubject(id_subject);
-//		
-//		return daoSubject.deleteSubject(id_subject);
-//
-//	}
-
 	
-
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public Subject getSubjectAll(Long id_subject) {
-
 		Subject p = daoSubject.getSubject(id_subject);;
 		p.setCompetences(serviceCompetence.getCompetencesForSubject(id_subject));
 		return p;
 	}
 
 
-
-	
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@Transactional(readOnly = true)
 	public Collection<Subject> getSubjectForDegree(Degree degree) {
 		return daoSubject.getSubjectForDegree(degree);
 	}
 
-
-	public boolean deleteSubjectsForTopic(Collection<Topic> topics) {
-		
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = false)
+	public boolean deleteSubjectsForTopic(Collection<Topic> topics) {	
 		return daoSubject.deleteSubjectsForTopics(topics);
 	}
 

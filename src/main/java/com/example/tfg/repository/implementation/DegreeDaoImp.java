@@ -91,15 +91,6 @@ public class DegreeDaoImp implements DegreeDao {
 		}
 	}
 
-//	@SuppressWarnings("unchecked")
-//	@Override
-//	public List<Degree> getDegreeByName(Degree degree) {
-//		Query query = em.createQuery("select d from Degree d where d.name=?1 and d.isDeleted='false'");
-//		query.setParameter(1, degree.getInfoDegree().getName());
-//
-//		return query.getResultList();
-//	}
-
 	@Override
 	public Degree getDegreeSubject(Subject p) {
 		Query query = em
@@ -129,26 +120,5 @@ public class DegreeDaoImp implements DegreeDao {
 		 if (query.getResultList().isEmpty())
 		 	return null;
 		 else return (Degree) query.getSingleResult();
-//		if (query.getResultList().isEmpty())
-//			return false;
-//		else
-//			return true;
 	}
-
-
-
-	
-//	public Degree getDegreeAll(Long id) {
-////		Degree degree = em.getReference(Degree.class, id);
-//
-//		
-//		Query query =
-//				em.createQuery("select d from Degree d join d.modules m join d.competences c where d.id=?1 "
-//						+ "and m in(Select x from Module x where x.isDeleted = false and x = m) and c in (Select z from Competence z where z.isDeleted = false and z = c)");
-//		query.setParameter(1, id);
-//
-//		List<Object> d = query.getResultList();
-//
-//		return (Degree) query.getSingleResult();
-//	}
 }

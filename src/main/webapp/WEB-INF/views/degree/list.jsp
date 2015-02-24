@@ -14,9 +14,11 @@
 
 			<h4>			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 			Degrees</h4>
+						<sec:authorize access="hasRole('ROLE_ADMIN')">
+			
 			<a class="btn btn-add2" href="<c:url value='/degree/add.htm'/>">
 							<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				Add Degree </a>
+				Add Degree </a></sec:authorize>
 		</div>
 		<table class="table table-striped table-bordered">
 			<tr align="center">
@@ -33,8 +35,9 @@
 
 					<td><a class="btn list-btn btn-success"
 						href="<c:url value='/degree/${degree.id}.htm'/>">View</a> <!-- <a href="modify.html"  class="btn list-btn btn-warning">Modify</a>-->
+												<sec:authorize access="hasRole('ROLE_ADMIN')">
 						<a class="btn list-btn btn-danger"
-						href="<c:url value='delete/${degree.id}.htm'/>">Delete</a></td>
+						href="<c:url value='delete/${degree.id}.htm'/>">Delete</a></sec:authorize></td>
 
 				</tr>
 			</c:forEach>

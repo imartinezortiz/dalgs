@@ -1,5 +1,6 @@
 package com.example.tfg.web;
 
+import java.security.acl.NotOwnerException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -56,7 +58,7 @@ public class ActivityController {
 	/**
 	 * Methods for adding activities
 	 */
-
+	@Secured({"ROLE_ADMIN", "ROLE_PROFESSOR"})
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/add.htm", method = RequestMethod.GET)
 	protected String getAddNewActivityForm(
 			@PathVariable("academicId") Long id_Long,
@@ -76,7 +78,7 @@ public class ActivityController {
 			@PathVariable("academicId") Long id_academicTerm,
 			@PathVariable("courseId") Long id_course,
 			@ModelAttribute("addactivity") @Valid Activity newactivity,
-			BindingResult result, Model model) {
+			BindingResult result, Model model) throws NotOwnerException {
 
 		if (!result.hasErrors()) {
 			// newactivity.setCourse(serviceCourse.getCourse(id_course));
@@ -89,7 +91,8 @@ public class ActivityController {
 						+ id_course + "/activity/" + newactivity.getId()
 						+ "/modify.htm";
 			} else
-				return "redirect:/activity/add.htm";
+				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
+						+ id_course + "/add.htm";
 		}
 		return "redirect:/error.htm";
 	}

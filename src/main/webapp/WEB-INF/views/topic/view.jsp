@@ -19,10 +19,11 @@
 			<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
 			<h3 class="panel-title list">
 			Subject Details</h3>
+									<sec:authorize access="hasRole('ROLE_ADMIN')">
 			<a class="btn list-btn btn-warning"
 				href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topicId}/modify.htm'/>">				
 				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
-				Edit</a>
+				Edit</a></sec:authorize>
 
 		</div>
 
@@ -60,11 +61,12 @@
 
 				Subjects List
 			</h3>
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
 			<a class="btn list-btn btn-warning2"
 				href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topicId}/subject/add.htm'/>"> <span
 				class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 				Add
-			</a>
+			</a></sec:authorize>
 
 		</div>
 		<div class="panel-body">
@@ -85,10 +87,11 @@
 
 						<td><a class="btn list-btn btn-success"
 							href="<c:url value='/degree/${degreeId}/module/${subject.topic.module.id}/topic/${subject.topic.id}/subject/${subject.id}.htm'/>">View</a>
+							<sec:authorize access="hasRole('ROLE_ADMIN')">
 							<a class="btn btn-danger"
 							href="<c:url value='/degree/${degreeId}/module/${subject.topic.module.id}/topic/${subject.topic.id}/subject/${subject.id}/delete.htm'/>">
 								Delete
-						</a></td>
+						</a></sec:authorize></td>
 
 					</tr>
 				</c:forEach>

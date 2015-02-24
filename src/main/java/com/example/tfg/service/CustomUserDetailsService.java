@@ -1,15 +1,11 @@
 package com.example.tfg.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
+
+import com.example.tfg.domain.User;
 import com.example.tfg.repository.UserDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
  * A custom {@link UserDetailsService} where user information is retrieved from
  * a JPA repository
  */
-@Service
+@Service (value="customUserDetailsService")
 @Transactional(readOnly = true)
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -34,11 +30,24 @@ public class CustomUserDetailsService implements UserDetailsService {
 	 */
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
+		
 		try {
-			com.example.tfg.domain.User domainUser = userRepository
-					.findByUsername(username);
+			
+			User domainUser = userRepository.findByUsername(username);			
 
-			boolean enabled = true;
+
+			if (domainUser == null) {
+				domainUser = userRepository.findByEmail(username);
+			
+			}
+			
+			if (domainUser == null) {
+				throw new UsernameNotFoundException(String.format("User %s not found", username));
+			}
+			
+			return domainUser;
+			
+			/*boolean enabled = true;
 			boolean accountNonExpired = true;
 			boolean credentialsNonExpired = true;
 			boolean accountNonLocked = true;
@@ -46,38 +55,39 @@ public class CustomUserDetailsService implements UserDetailsService {
 			return new User(domainUser.getUsername(), domainUser.getPassword()
 					.toLowerCase(), enabled, accountNonExpired,
 					credentialsNonExpired, accountNonLocked,
-					getAuthorities(domainUser.getRole().getRole()));
-
+					domainUser.getAuthorities());
+*/
+			
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	/**
+/*	*//**
 	 * Retrieves a collection of {@link GrantedAuthority} based on a numerical
 	 * role
 	 * 
 	 * @param role
 	 *            the numerical role
 	 * @return a collection of {@link GrantedAuthority
-	 */
+	 *//*
 	public Collection<? extends GrantedAuthority> getAuthorities(Integer role) {
 		List<GrantedAuthority> authList = getGrantedAuthorities(getRoles(role));
 		return authList;
 	}
 
-	/**
+	*//**
 	 * Converts a numerical role to an equivalent list of roles
 	 * 
 	 * @param role
 	 *            the numerical role
 	 * @return list of roles as as a list of {@link String}
-	 */
+	 *//*
 	public List<String> getRoles(Integer role) {
 		List<String> roles = new ArrayList<String>();
 
 		if (role.intValue() == 1) {
-			//roles.add("ROLE_USER");
+			roles.add("ROLE_USER");
 			roles.add("ROLE_ADMIN");
 
 		} else if (role.intValue() == 2) {
@@ -87,18 +97,20 @@ public class CustomUserDetailsService implements UserDetailsService {
 		
 		} else if (role.intValue() == 3) {
 			roles.add("ROLE_PROFESSOR");
+			roles.add("ROLE_USER");
+
 	}
 
 		return roles;
 	}
 
-	/**
+	*//**
 	 * Wraps {@link String} roles to {@link SimpleGrantedAuthority} objects
 	 * 
 	 * @param roles
 	 *            {@link String} of roles
 	 * @return list of granted authorities
-	 */
+	 *//*
 	public static List<GrantedAuthority> getGrantedAuthorities(
 			List<String> roles) {
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
@@ -106,5 +118,5 @@ public class CustomUserDetailsService implements UserDetailsService {
 			authorities.add(new SimpleGrantedAuthority(role));
 		}
 		return authorities;
-	}
+	}*/
 }

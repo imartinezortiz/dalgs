@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ public class DegreeServiceImp implements DegreeService {
 	//	@Autowired
 	//	private SubjectService serviceSubject;
 
+	
 	@Autowired
 	private ModuleService serviceModule;
 
@@ -36,6 +38,7 @@ public class DegreeServiceImp implements DegreeService {
 	@Autowired
 	private AcademicTermService serviceAcademicTerm;
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly=false)
 	public ResultClass<Boolean> addDegree(Degree degree) {
 
@@ -63,6 +66,7 @@ public class DegreeServiceImp implements DegreeService {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public List<Degree> getAll() {
 		return daoDegree.getAll();
@@ -73,6 +77,7 @@ public class DegreeServiceImp implements DegreeService {
 	//		return daoDegree.saveDegree(degree);
 	//	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyDegree(Degree degree, Long id_degree) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -105,11 +110,13 @@ public class DegreeServiceImp implements DegreeService {
 		
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
 	public Degree getDegree(Long id) {
 		return daoDegree.getDegree(id);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public boolean deleteDegree(Long id) {
 		boolean deleteModules = false;
@@ -131,18 +138,21 @@ public class DegreeServiceImp implements DegreeService {
 			return false;
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public Degree getDegreeSubject(Subject p) {
 
 		return daoDegree.getDegreeSubject(p);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public String getNextCode() {
 		return daoDegree.getNextCode();
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public Degree getDegreeAll(Long id) {
 

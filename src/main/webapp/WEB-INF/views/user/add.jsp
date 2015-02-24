@@ -47,6 +47,16 @@
   					<label>Email: </label>
 					<form:input path="email" class="form-control" placeholder="Valid email" required="true"/>
 				</div>
+				
+				<div class="form-group">
+  					<label>Roles: </label>
+						<div class="checkbox">
+						<form:checkboxes items="${roles}" path="roles"/>
+						<br> <br>
+						<br>
+						</div>
+				</div>
+				
 
 				<input type="submit" class="btn btn-success" value="Add" />
 

@@ -3,6 +3,7 @@ package com.example.tfg.service.implementation;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +27,8 @@ public class LearningGoalServiceImp implements LearningGoalService {
 
 	@Autowired
 	ActivityService serviceActivity;
-
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public boolean addLearningGoal(LearningGoal newLearningGoal,
 			Long id_competence) {
@@ -51,11 +53,13 @@ public class LearningGoalServiceImp implements LearningGoalService {
 		return false;
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public LearningGoal getLearningGoal(Long id_learningGoal) {
 		return daoLearningGoal.getLearningGoal(id_learningGoal);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public boolean modifyLearningGoal(LearningGoal learningGoal, Long id_learningGoal) {
 		LearningGoal modifyLearningGoal = daoLearningGoal.getLearningGoal(id_learningGoal);
@@ -64,6 +68,7 @@ public class LearningGoalServiceImp implements LearningGoalService {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public boolean deleteLearningGoal(Long id_learningGoal) {
 //		boolean deleteFromActivities = serviceActivity.deleteLearningActivities(daoLearningGoal.getLearningGoal(id_learningGoal));;
@@ -72,11 +77,12 @@ public class LearningGoalServiceImp implements LearningGoalService {
 //		return false;
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	public boolean deleteLearningGoalForCompetence(Competence competence) {
-
 		return daoLearningGoal.deleteLearningGoalForCompetence(competence);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
 	public Collection<LearningGoal> getLearningGoalsFromCourse(Long id_course, Activity activity) {
 		Collection<LearningGoal> learningGoals = daoLearningGoal.getLearningGoalsFromActivity(activity);
@@ -85,19 +91,20 @@ public class LearningGoalServiceImp implements LearningGoalService {
 		else return daoLearningGoal.getLearningGoalsFromCourse(id_course);
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public LearningGoal getLearningGoalByName(String name) {
 		return daoLearningGoal.getLearningGoalByName(name);
 	}
 
-
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public Collection<LearningGoal> getLearningGoalsFromCompetence(
 			Competence competence) {
 
 		return daoLearningGoal.getLearningGoalsFromCompetence(competence);
 	}
 
-
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	public boolean deleteLearningGoalForCompetences(
 			Collection<Competence> competences) {
 

@@ -1,32 +1,38 @@
 package com.example.tfg.web;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.validation.Valid;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.supercsv.cellprocessor.constraint.StrRegEx;
 
 import com.example.tfg.classes.CharsetString;
 import com.example.tfg.classes.UploadForm;
 import com.example.tfg.classes.ValidatorUtil;
-import com.example.tfg.domain.AcademicTerm;
+import com.example.tfg.domain.Competence;
 import com.example.tfg.domain.User;
+import com.example.tfg.service.CourseService;
 import com.example.tfg.service.UserService;
 
 @Controller
@@ -38,11 +44,12 @@ public class UserController {
 	@Autowired
 	private UserService serviceUser;
 
+	@Autowired
+	private CourseService serviceCourse;
 
 	/**
 	 * Methods for list academic terms of a term
 	 */
-	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/user/page/{pageIndex}.htm")
 	protected ModelAndView formViewAUsers(
 			@PathVariable("pageIndex") Integer pageIndex)
@@ -59,7 +66,6 @@ public class UserController {
 		return new ModelAndView("user/list", "model", myModel);
 	}
 	
-	@Secured({"ROLE_USER","ROLE_ADMIN"})
 	@RequestMapping(value = "/user/{userId}.htm", method = RequestMethod.GET)
 	protected ModelAndView formViewAUser(@PathVariable("userId") Long id_user)
 			throws ServletException {
@@ -81,6 +87,20 @@ public class UserController {
 	protected String getAddNewUserForm(Model model) {
 
 		User user = new User();
+		
+		// 			Test
+		
+		List<String> roles = new ArrayList<String>();
+		roles.add("ROLE_ADMIN");
+		roles.add("ROLE_USER");
+		roles.add("ROLE_STUDENT");
+		roles.add("ROLE_PROFESSOR");
+
+		model.addAttribute("roles",roles);
+		
+
+		// ----------------------
+		
 		model.addAttribute("addUser", user);
 		return "user/add";
 
@@ -98,8 +118,6 @@ public class UserController {
 
 		if (!result.hasErrors()) {
 
-			//@OneToOne
-		
 			boolean created = serviceUser.addUser(user);
 			if (created)
 				return "redirect:/user/page/0.htm";
@@ -111,7 +129,6 @@ public class UserController {
 	
 	/** Method method to insert users massively*/
 	
-	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/upload/User.htm", method = RequestMethod.GET)
 	public String uploadGet(Model model) {
 		CharsetString charsets = new CharsetString() ;
@@ -122,8 +139,7 @@ public class UserController {
 		return "upload";
 	}
 	
-	@Secured("ROLE_ADMIN")
-	@RequestMapping(value = "/upload/User.htm", method = RequestMethod.POST)
+ 	@RequestMapping(value = "/upload/User.htm", method = RequestMethod.POST)
 	public String uploadPost(@ModelAttribute("newUpload") @Valid UploadForm upload,
 			BindingResult result, Model model) {
 
@@ -139,6 +155,22 @@ public class UserController {
 		 else return "upload";
 	}
 
+	
+ 	@RequestMapping(value = "/user/{userId}/status.htm", method = RequestMethod.GET)
+	protected String disabledUser(@PathVariable("userId") Long id_user)
+			throws ServletException {
+ 		
+ 		User user = serviceUser.getUser(id_user);
+ 		if(user.isEnabled())user.setEnabled(false);
+ 		else user.setEnabled(true);
+ 		
+ 		if (serviceUser.saveUser(user)) {
+			return "redirect:/user/page/0.htm";
+		} else
+			return "redirect:/error.htm";
+	}
+ 	
+ 
 	
 
 }

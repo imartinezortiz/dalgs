@@ -112,13 +112,17 @@ INSERT INTO activity_learninggoalstatus (id_activity, learninggoal_id_learninggo
 INSERT INTO activity_learninggoalstatus (id_activity, learninggoal_id_learninggoal, percentage) VALUES ('5', 5,'20');
 
 -- Subject_Competence Inserts 
-INSERT INTO subject_competence(id_subject,id_competence) VALUES (1,1)
-INSERT INTO subject_competence(id_subject,id_competence) VALUES (1,2)
-INSERT INTO subject_competence(id_subject,id_competence) VALUES (2,1)
-INSERT INTO subject_competence(id_subject,id_competence) VALUES (2,3)
-INSERT INTO subject_competence(id_subject,id_competence) VALUES (2,4)
-INSERT INTO subject_competence(id_subject,id_competence) VALUES (3,5)
-INSERT INTO subject_competence(id_subject,id_competence) VALUES (5,5)
+INSERT INTO subject_competence(id_subject,id_competence) VALUES (1,1);
+INSERT INTO subject_competence(id_subject,id_competence) VALUES (1,2);
+INSERT INTO subject_competence(id_subject,id_competence) VALUES (2,1);
+INSERT INTO subject_competence(id_subject,id_competence) VALUES (2,3);
+INSERT INTO subject_competence(id_subject,id_competence) VALUES (2,4);
+INSERT INTO subject_competence(id_subject,id_competence) VALUES (3,5);
+INSERT INTO subject_competence(id_subject,id_competence) VALUES (5,5);
+
+
+
+
 
 --Group Inserts
 INSERT INTO _group (id_group, name, id_course) VALUES (1, 'group 1', 1);
@@ -128,15 +132,27 @@ INSERT INTO _group (id_group, name, id_course) VALUES (4, 'group 4', 2);
 INSERT INTO _group (id_group, name, id_course) VALUES (5, 'group 5', 3);
 
 -- User - Role Inserts  ROLE_USER(2) ROLE_ADMIN(1)
-INSERT INTO user (id_user, email, firstName, lastName, password, username) VALUES ('1', 'user1@gmail.com','first', 'last', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'admin');
-INSERT INTO role (id, role, user_id_user) VALUES (NULL, '1', '1');
 
-INSERT INTO user (id_user, email,firstName, lastName, password, username) VALUES ('2', 'user2@gmail.com','first', 'last', '04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb', 'user');
-INSERT INTO role (id, role, user_id_user) VALUES (NULL, '2', '2');
+INSERT INTO user (id_user, accountNonExpired, accountNonLocked, credentialsNonExpired, email, enabled, firstname, lastname, password, salt, username) VALUES (1, true, true, true, 'admin@ucm.es', true, 'adminFirst', 'adminLast', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', null, 'admin');
+
+INSERT INTO user_roles (user, role) VALUES(1, 'ROLE_USER');
+INSERT INTO user_roles (user, role) VALUES(1, 'ROLE_ADMIN');
 
 
-INSERT INTO user (id_user, email, firstName, lastName, password, username) VALUES ('3', 'prof@gmail.com','first', 'last', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'profe');
-INSERT INTO role (id, role, user_id_user) VALUES (NULL, '2', '3');
+INSERT INTO user (id_user, accountNonExpired, accountNonLocked, credentialsNonExpired, email, enabled, firstname, lastname, password, salt, username) VALUES (2, true, true, true, 'student@ucm.es', true, 'studentFirst', 'studentLast', '264c8c381bf16c982a4e59b0dd4c6f7808c51a05f64c35db42cc78a2a72875bb', null, 'student');
+
+INSERT INTO user_roles (user, role) VALUES(2, 'ROLE_USER');
+INSERT INTO user_roles (user, role) VALUES(2, 'ROLE_STUDENT');
+
+INSERT INTO user (id_user, accountNonExpired, accountNonLocked, credentialsNonExpired, email, enabled, firstname, lastname, password, salt, username) VALUES (3, true, true, true, 'professor@ucm.es', true, 'professorFirst', 'professorLast', '17c1532ca6cff8f6a3a8200028af6c2580bf37f39e10cb0966e8a573e3b24a1f', null, 'professor');
+
+INSERT INTO user_roles (user, role) VALUES(3, 'ROLE_USER');
+INSERT INTO user_roles (user, role) VALUES(3, 'ROLE_PROFESSOR');
+
+INSERT INTO user (id_user, accountNonExpired, accountNonLocked, credentialsNonExpired, email, enabled, firstname, lastname, password, salt, username) VALUES (4, true, true, true, 'user@ucm.es', true, 'userFirst', 'userLast', '04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb', null, 'user');
+
+INSERT INTO user_roles (user, role) VALUES(4, 'ROLE_USER');
+
 
 --User Courses
 INSERT INTO course_user (id_course, id_user) VALUES ('1', '2');
