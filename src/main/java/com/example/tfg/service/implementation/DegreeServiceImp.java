@@ -41,14 +41,16 @@ public class DegreeServiceImp implements DegreeService {
 
 		Degree degreeExists = daoDegree.existByCode(degree.getInfo().getCode());
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
+
 		if( degreeExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("Code already exists");
+
 			if (degreeExists.isDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
-				
+
 			}
 			result.setErrorsList(errors);
 		}
@@ -59,9 +61,6 @@ public class DegreeServiceImp implements DegreeService {
 		}
 		return result;
 
-		
-
-	
 	}
 
 	@Transactional(readOnly = true)
@@ -75,17 +74,35 @@ public class DegreeServiceImp implements DegreeService {
 	//	}
 
 	@Transactional(readOnly = false)
-	public boolean modifyDegree(Degree degree, Long id_degree) {
+	public ResultClass<Boolean> modifyDegree(Degree degree, Long id_degree) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
 		Degree modifydegree = daoDegree.getDegree(id_degree);
-		modifydegree.setInfo(degree.getInfo());
-		//		if (degree.getCode() != null)
-		//			Modifydegree.setCode(degree.getCode());
-		//		if (degree.getName() != null)
-		//			Modifydegree.setName(degree.getName());
-		//		if (degree.getDescription() != null)
-		//			Modifydegree.setDescription(degree.getDescription());
-		return daoDegree.saveDegree(modifydegree);
+		
+		Degree degreeExists = daoDegree.existByCode(degree.getInfo().getCode());
+		
+		if(!degree.getInfo().getCode().equalsIgnoreCase(modifydegree.getInfo().getCode()) && 
+				degreeExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("New code already exists");
+
+			if (degreeExists.isDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
+
+			}
+			result.setErrorsList(errors);
+		}
+		else{
+			modifydegree.setInfo(degree.getInfo());
+			boolean r = daoDegree.saveDegree(modifydegree);
+			if (r) 
+				result.setE(true);
+		}
+		return result;
+
+		
 	}
 
 	@Transactional(readOnly = false)
@@ -95,20 +112,20 @@ public class DegreeServiceImp implements DegreeService {
 
 	@Transactional(readOnly = false)
 	public boolean deleteDegree(Long id) {
+		boolean deleteModules = false;
+		boolean deleteCompetences = false;
+		boolean deleteAcademic = false;
+
 		Degree d = daoDegree.getDegree(id);
-		boolean deleteModules = serviceModule.deleteModulesForDegree(d);
-		boolean deleteCompetences = serviceCompetence
-				.deleteCompetencesForDegree(d);
+		if (!d.getModules().isEmpty())
+			deleteModules = serviceModule.deleteModulesForDegree(d);
+		if (!d.getCompetences().isEmpty())
+			deleteCompetences = serviceCompetence.deleteCompetencesForDegree(d);
 		Collection<AcademicTerm> academicList = serviceAcademicTerm.getAcademicTermsByDegree(id);
 
-		boolean deleteAcademic = serviceAcademicTerm.deleteAcademicTerm(academicList);
-		if (deleteModules && deleteCompetences && deleteAcademic) {
-
-
-			//			for (AcademicTerm a : serviceAcademicTerm
-			//					.getAcademicTermsByDegree(id)) {
-			//				serviceAcademicTerm.deleteAcademicTerm(a.getId());
-			//			}
+		if(!academicList.isEmpty()) deleteAcademic = serviceAcademicTerm.deleteAcademicTerm(academicList);
+		if ((deleteModules && deleteCompetences && deleteAcademic) || 
+				(d.getModules().isEmpty() && d.getCompetences().isEmpty() && academicList.isEmpty())){
 			return daoDegree.deleteDegree(d);
 		} else
 			return false;
@@ -136,10 +153,30 @@ public class DegreeServiceImp implements DegreeService {
 		return d;
 	}
 
-	@Override
-	public void unDeleteDegree(Degree degree) {
-		// TODO Auto-generated method stub
-		
-	}
+	@Transactional(readOnly = false)
+	public ResultClass<Boolean> unDeleteDegree(Degree degree) {
+		Degree d = daoDegree.existByCode(degree.getInfo().getCode());
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		if(d == null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Code doesn't exist");
+			result.setErrorsList(errors);
 
+		}
+		else{
+			if(!d.isDeleted()){
+				Collection<String> errors = new ArrayList<String>();
+				errors.add("Code is not deleted");
+				result.setErrorsList(errors);
+			}
+
+			d.setDeleted(false);
+			d.setInfo(degree.getInfo());
+			daoDegree.saveDegree(d);
+			result.setE(true);	
+
+		}
+		return result;
+	}
 }

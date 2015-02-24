@@ -16,7 +16,7 @@ public interface DegreeService {
 
 //	public boolean modifyDegree(Degree degree);
 
-	public boolean modifyDegree(Degree degree, Long id);
+	public ResultClass<Boolean> modifyDegree(Degree degree, Long id);
 
 	public Degree getDegree(Long id);
 
@@ -28,6 +28,6 @@ public interface DegreeService {
 
 	public Degree getDegreeAll(Long id);
 
-	public void unDeleteDegree(Degree degree);
+	public ResultClass<Boolean> unDeleteDegree(Degree degree);
 
 }

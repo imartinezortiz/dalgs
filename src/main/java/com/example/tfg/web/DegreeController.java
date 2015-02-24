@@ -59,8 +59,18 @@ public class DegreeController {
 	// Every Post have to return redirect
 	public String undeleteDegree(
 			@ModelAttribute("addDegree") Degree degree, Model model) {
-		boolean undeleted = serviceDegree.unDeleteDegree(degree);
-		if
+		ResultClass<Boolean> result = serviceDegree.unDeleteDegree(degree);
+		
+		if (!result.hasErrors())
+//		if (created)
+			return "redirect:/degree/list.htm";
+		else{
+			model.addAttribute("addDegree", degree);
+			if (result.isElementDeleted())
+				model.addAttribute("unDelete", true); 
+			model.addAttribute("errors", result.getErrorsList());
+			return "degree/add";
+		}
 	}
 
 	/**
@@ -84,15 +94,25 @@ public class DegreeController {
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/modify.htm", method = RequestMethod.POST)
 	public String formModifyDegree(@PathVariable("degreeId") Long id,
-			@ModelAttribute("modifyDegree") Degree modify)
+			@ModelAttribute("modifyDegree") Degree modify, Model model)
 
 	{
 		// modify.setId(id);
-		boolean modified = serviceDegree.modifyDegree(modify, id);
-		if (modified)
-			return "redirect:/degree/list.htm";
-		else
-			return "redirect:/error.htm";
+		ResultClass<Boolean> result = serviceDegree.modifyDegree(modify, id);
+		if (!result.hasErrors())
+//			if (created)
+				return "redirect:/degree/list.htm";
+			else{
+				model.addAttribute("modifyDegree", modify);
+				if (result.isElementDeleted()){
+					model.addAttribute("addDegree", modify);
+					model.addAttribute("unDelete", true); 
+					model.addAttribute("errors", result.getErrorsList());
+					return "degree/add";
+				}	
+				model.addAttribute("errors", result.getErrorsList());
+				return "degree/modify";
+			}
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/modify.htm", method = RequestMethod.GET)
