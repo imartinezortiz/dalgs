@@ -110,7 +110,7 @@ public class AcademicTermServiceImp implements AcademicTermService {
 	}
 	
 	//@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, admin)")
+	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public boolean modifyAcademicTerm(AcademicTerm academicTerm,
 			Long id_academic) {
@@ -136,7 +136,10 @@ public class AcademicTermServiceImp implements AcademicTermService {
 	}
 
 	//@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, admin)" )
+	//@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, admin)" )
+	//@PreAuthorize("hasPermission(returnObject, 'DELETE') or hasPermission(returnObject, 'ADMINISTRATION')" )
+	@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')" )
+
 	@Transactional(readOnly = false)// propagation = Propagation.REQUIRED)
 	public boolean deleteAcademicTerm(Long id_academic) {
 		AcademicTerm academic = daoAcademicTerm
@@ -155,7 +158,7 @@ public class AcademicTermServiceImp implements AcademicTermService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ')")
+	@PostAuthorize("hasPermission(returnObject, 'READ')")
 	@Transactional(readOnly = true)
 	public AcademicTerm getAcademicTerm(Long id_academic) {
 		return daoAcademicTerm.getAcademicTermById(id_academic);
@@ -178,8 +181,7 @@ public class AcademicTermServiceImp implements AcademicTermService {
 	}
 	
 	//@PreAuthorize("hasRole('ROLE_ADMIN')")
-
-	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, admin)" )
+	@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)
 	public boolean deleteAcademicTerm(Collection<AcademicTerm> academicList) {
 		
