@@ -23,7 +23,7 @@ public interface ActivityDao {
 
 	public List<Activity> getActivitiesForCourse(Long id_subject);
 
-	public boolean existByCode(String code);
+	public Activity existByCode(String code);
 
 	public String getNextCode();
 

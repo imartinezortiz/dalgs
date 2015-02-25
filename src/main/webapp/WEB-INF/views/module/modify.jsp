@@ -33,12 +33,33 @@
 					<form:input path="info.name" class="form-control"
 						placeholder="Name of the module" required="true"/>
 				</div>
+				
+				<div class="form-group">
+					<label>Description: </label>
+					<form:input path="info.description" class="form-control"
+						placeholder="Description of the module" required="true"/>
+				</div>
+				
 
 
 				<input type="submit" class="btn btn-success" value="Update">
 
 			</form:form>
 		</div>
+	</div>
+		<div align="center">
+		<h3 class="panel-title list">	Errors: </h3>	
+			<br/>
+			<c:forEach items="${errors}" var="error">
+
+				
+					<c:out  value="${error}" /><br/>
+				
+
+
+
+			</c:forEach>
+		
 	</div>
 
 </body>

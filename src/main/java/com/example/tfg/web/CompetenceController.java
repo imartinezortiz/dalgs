@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Competence;
 import com.example.tfg.domain.Degree;
 import com.example.tfg.service.CompetenceService;
 import com.example.tfg.service.DegreeService;
-import com.example.tfg.service.SubjectService;
 
 @Controller
 public class CompetenceController {
@@ -27,8 +27,8 @@ public class CompetenceController {
 	@Autowired
 	private CompetenceService serviceCompetence;
 
-	@Autowired
-	private SubjectService serviceSubject;
+//	@Autowired
+//	private SubjectService serviceSubject;
 
 	@Autowired
 	private DegreeService serviceDegree;
@@ -55,18 +55,25 @@ public class CompetenceController {
 		return "competence/add";
 	}
 
-	@RequestMapping(value = "/degree/{degreeId}/competence/add.htm", method = RequestMethod.POST)
+	@RequestMapping(value = "/degree/{degreeId}/competence/add.htm", method = RequestMethod.POST, params="Add")
 	// Every Post have to return redirect
 	public String processAddNewCompetence2(
 			@ModelAttribute("addcompetence") Competence newCompetence,
-			@PathVariable("degreeId") Long id_degree) {
-
-		boolean created = serviceCompetence.addCompetence(newCompetence,
-				id_degree);
-		if (created)
+			@PathVariable("degreeId") Long id_degree,
+			Model model) {
+		
+		ResultClass<Boolean> result = serviceCompetence.addCompetence(newCompetence, id_degree);
+		if (!result.hasErrors())
 			return "redirect:/degree/" + id_degree + ".htm";
-		else
-			return "redirect:/error.htm";
+		else{
+			model.addAttribute("addcompetence", newCompetence);
+			if (result.isElementDeleted())
+				model.addAttribute("unDelete", result.isElementDeleted()); 
+			model.addAttribute("errors", result.getErrorsList());
+			return "competence/add";
+		}
+			
+	
 	}
 
 	/**
@@ -84,6 +91,25 @@ public class CompetenceController {
 			return "redirect:/error.htm";
 	}
 
+	
+	@RequestMapping(value = "/degree/{degreeId}/competence/add.htm", method = RequestMethod.POST, params="Undelete")
+	// Every Post have to return redirect
+	public String undeleteDegree(
+			@PathVariable("degreeId") Long id_degree,
+			@ModelAttribute("addcompetence") Competence competence, Model model) {
+		
+		ResultClass<Boolean> result = serviceCompetence.unDeleteCompetence(competence, id_degree);
+		
+		if (!result.hasErrors())
+			return "redirect:/degree/" + id_degree + ".htm";
+		else{
+			model.addAttribute("addcompetence", competence);
+			if (result.isElementDeleted())
+				model.addAttribute("unDelete", true); 
+			model.addAttribute("errors", result.getErrorsList());
+			return "competence/add";
+		}
+	}
 	/**
 	 * Methods for modify competences
 	 */
@@ -91,13 +117,27 @@ public class CompetenceController {
 	public String formModifyCompetenceFromDegree(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence,
-			@ModelAttribute("modifyCompetence") Competence modify)
+			@ModelAttribute("modifyCompetence") Competence modify,
+			Model model)
 
 	{
-
+		ResultClass<Boolean> result = serviceCompetence.addCompetence(modify, id_competence);
+		if (!result.hasErrors())
+			return "redirect:/degree/" + id_degree + ".htm";
+			else{
+				model.addAttribute("modifyCompetence", modify);
+				if (result.isElementDeleted()){
+					model.addAttribute("addcompetence", modify);
+					model.addAttribute("unDelete", true); 
+					model.addAttribute("errors", result.getErrorsList());
+					return "competence/add";
+				}	
+				model.addAttribute("errors", result.getErrorsList());
+				return "competence/modify";
+			}
 		
-		serviceCompetence.modifyCompetence(modify, id_competence);
-		return "redirect:/degree/" + id_degree + ".htm";
+	
+
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/modify.htm", method = RequestMethod.GET)

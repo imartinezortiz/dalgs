@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.AcademicTerm;
 import com.example.tfg.domain.Course;
 import com.example.tfg.repository.CourseDao;
@@ -38,40 +39,33 @@ public class CourseServiceImp implements CourseService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public boolean addCourse(Course course, Long id_academic) {
+	public ResultClass<Boolean> addCourse(Course course, Long id_academic) {
 		
-		AcademicTerm academic = serviceAcademicTerm
-				.getAcademicTerm(id_academic);
-		course.setAcademicTerm(academic);
-		Course existCourse = daoCourse.exist(course);
-		if(existCourse == null){
-//			course.setAcademicTerm(academic);
-			academic.getCourses().add(course);
-			return daoCourse.addCourse(course);				
+		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic));
+		Course courseExists = daoCourse.exist(course);
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+
+		if( courseExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Code already exists");
+
+			if (courseExists.isDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
+
+			}
+			result.setE(false);
+			result.setErrorsList(errors);
 		}
-		else if(existCourse.isDeleted()){
-			existCourse.setAcademicTerm(academic);
-			academic.getCourses().add(existCourse);
-			existCourse.setDeleted(false);
-			existCourse.setSubject(course.getSubject());
-			return daoCourse.saveCourse(existCourse);
-		}
-		else return false;
+		else{
 		
-//		AcademicTerm academic = serviceAcademicTerm
-//				.getAcademicTerm(id_academic);
-//
-//		course.setAcademicTerm(academic);
-//		Long aux = daoCourse.isDisabled(course.getAcademicTerm().getId(),
-//				course.getSubject().getId());
-//		if (aux != null) {
-//			course.setId(aux);
-//			course.setDeleted(false);
-//			return daoCourse.saveCourse(course);
-//		} else if (!daoCourse.exist(course))
-//			return daoCourse.addCourse(course);
-//
-//		return false;
+			boolean r = daoCourse.addCourse(course);
+			if (r) 
+				result.setE(true);
+		}
+		return result;		
+	
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -84,12 +78,36 @@ public class CourseServiceImp implements CourseService {
 	//yo lo borraria no tiene sentido en este caso el modify
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public boolean modifyCourse(Course course, Long id_academic, Long id_course) {
-		Course courseModify = daoCourse.getCourse(id_course);
+	public ResultClass<Boolean> modifyCourse(Course course, Long id_academic, Long id_course) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		
-		courseModify.setSubject(course.getSubject());
+		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic));
 		
-		return daoCourse.saveCourse(courseModify);
+		Course modifyCourse = daoCourse.getCourse(id_course);
+		
+		Course courseExists = daoCourse.exist(course);
+		
+		if(!course.getSubject().equals(modifyCourse.getSubject()) && 
+				courseExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("New code already exists");
+
+			if (courseExists.isDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
+
+			}
+			result.setErrorsList(errors);
+			result.setE(false);
+		}
+		else{
+			modifyCourse.setSubject(course.getSubject());
+			boolean r = daoCourse.saveCourse(modifyCourse);
+			if (r) 
+				result.setE(true);
+		}
+		return result;
 
 			
 
@@ -164,5 +182,32 @@ public class CourseServiceImp implements CourseService {
 		return daoCourse.saveCourse(course);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@Transactional(readOnly = false)
+	public ResultClass<Boolean> unDeleteCourse(Course course) {
+		Course c = daoCourse.exist(course);
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		if(c == null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Code doesn't exist");
+			result.setErrorsList(errors);
 
+		}
+		else{
+			if(!c.isDeleted()){
+				Collection<String> errors = new ArrayList<String>();
+				errors.add("Code is not deleted");
+				result.setErrorsList(errors);
+			}
+
+			c.setDeleted(false);
+			c.setSubject(course.getSubject());
+			boolean r = daoCourse.saveCourse(c);
+			if(r) 
+				result.setE(true);	
+
+		}
+		return result;
+	}
 }

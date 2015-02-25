@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Module;
 import com.example.tfg.domain.Topic;
 import com.example.tfg.repository.TopicDao;
@@ -28,24 +29,32 @@ public class TopicServiceImp implements TopicService {
 	private SubjectService serviceSubject;
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@Transactional(readOnly=false)
-	public boolean addTopic(Topic topic, Long id_module) {
-		Topic existTopic = daoTopic.existByCode(topic.getInfo().getCode());
-		Module module = serviceModule.getModule(id_module);
-		if(existTopic == null){
-			topic.setModule(module);
-			module.getTopics().add(topic);
-			return daoTopic.addTopic(topic);
+	@Transactional(readOnly=false)	
+	public ResultClass<Boolean> addTopic(Topic topic, Long id_module) {
+		
+		Topic topicExists = daoTopic.existByCode(topic.getInfo().getCode());
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
+		if( topicExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Code already exists");
 
-		}else if(existTopic.isDeleted()==true){
-			existTopic.setInfo(topic.getInfo());
-			existTopic.setDeleted(false);
-			module.getTopics().add(existTopic);
-			return daoTopic.saveTopic(existTopic);
+			if (topicExists.isDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
 
+			}
+			result.setE(false);
+			result.setErrorsList(errors);
 		}
-		return false;		
+		else{
+			topic.setModule(serviceModule.getModule(id_module));
+			boolean r = daoTopic.addTopic(topic);
+			if (r) 
+				result.setE(true);
+		}
+		return result;		
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -56,11 +65,34 @@ public class TopicServiceImp implements TopicService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly=false)
-	public boolean modifyTopic(Topic topic, Long id) {
-		Topic topicModify = daoTopic.getTopic(id);
-		topicModify.setInfo(topic.getInfo());		
+	public ResultClass<Boolean> modifyTopic(Topic topic, Long id) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
-		return daoTopic.saveTopic(topicModify);
+		Topic modifyTopic = daoTopic.getTopic(id);
+		
+		Topic topicExists = daoTopic.existByCode(topic.getInfo().getCode());
+		
+		if(!topic.getInfo().getCode().equalsIgnoreCase(modifyTopic.getInfo().getCode()) && 
+				topicExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("New code already exists");
+
+			if (topicExists.isDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
+
+			}
+			result.setErrorsList(errors);
+			result.setE(false);
+		}
+		else{
+			modifyTopic.setInfo(topic.getInfo());
+			boolean r = daoTopic.saveTopic(modifyTopic);
+			if (r) 
+				result.setE(true);
+		}
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -126,6 +158,34 @@ public class TopicServiceImp implements TopicService {
 		return false;
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@Transactional(readOnly = false)
+	public ResultClass<Boolean> unDeleteTopic(Topic topic) {
+		Topic t = daoTopic.existByCode(topic.getInfo().getCode());
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		if(t == null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Code doesn't exist");
+			result.setErrorsList(errors);
+
+		}
+		else{
+			if(!t.isDeleted()){
+				Collection<String> errors = new ArrayList<String>();
+				errors.add("Code is not deleted");
+				result.setErrorsList(errors);
+			}
+
+			t.setDeleted(false);
+			t.setInfo(topic.getInfo());
+			boolean r = daoTopic.saveTopic(t);
+			if(r) 
+				result.setE(true);	
+
+		}
+		return result;
+	}
 
 
 

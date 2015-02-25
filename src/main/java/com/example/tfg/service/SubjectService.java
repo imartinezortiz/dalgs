@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Subject;
 import com.example.tfg.domain.Topic;
@@ -22,7 +23,7 @@ public interface SubjectService {
 
 	public String getNextCode();
 
-	public boolean modifySubject(Subject modify, Long id_subject);
+	public ResultClass<Boolean> modifySubject(Subject modify, Long id_subject);
 	
 	public boolean addCompetences(Subject modify, Long id_subject);
 
@@ -30,12 +31,14 @@ public interface SubjectService {
 
 	public Subject getSubjectByName(String string);
 
-	public boolean addSubject(Subject newSubject, Long id_topic);
+	public ResultClass<Boolean> addSubject(Subject newSubject, Long id_topic);
 
 	public Subject getSubjectAll(Long id_subject);
 
 	public Collection<Subject> getSubjectForDegree(Degree degree);
 
 	public boolean deleteSubjectsForTopic(Collection<Topic> topics);
+	
+	public ResultClass<Boolean> unDeleteSubject(Subject subject);
 
 }

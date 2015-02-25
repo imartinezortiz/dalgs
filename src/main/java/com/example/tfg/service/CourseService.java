@@ -5,16 +5,17 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.AcademicTerm;
 import com.example.tfg.domain.Course;
 
 @Service
 public interface CourseService {
-	public boolean addCourse(Course course, Long id_academic);
+	public ResultClass<Boolean> addCourse(Course course, Long id_academic);
 
 	public List<Course> getAll();
 
-	public boolean modifyCourse(Course course, Long id_academic, Long id_course);
+	public ResultClass<Boolean> modifyCourse(Course course, Long id_academic, Long id_course);
 
 	public Course getCourse(Long id);
 
@@ -32,6 +33,8 @@ public interface CourseService {
 	public boolean deleteCourses(Collection<AcademicTerm> academicList);
 
 	public boolean modifyCourse(Course course);
+	
+	public ResultClass<Boolean> unDeleteCourse(Course course);
 
 	
 

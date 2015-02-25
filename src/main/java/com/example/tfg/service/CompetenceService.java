@@ -4,12 +4,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Competence;
 import com.example.tfg.domain.Degree;
 
 @Service
 public interface CompetenceService {
-	public boolean addCompetence(Competence competence, Long id_degree);
+	public ResultClass<Boolean> addCompetence(Competence competence, Long id_degree);
 
 	public List<Competence> getAll();
 
@@ -21,7 +22,7 @@ public interface CompetenceService {
 
 	public List<Competence> getCompetencesForDegree(Long id_degree);
 
-	public boolean modifyCompetence(Competence competence, Long id_competence);
+	public ResultClass<Boolean> modifyCompetence(Competence competence, Long id_competence, Long id_degree);
 
 	public Competence getCompetenceByName(String name);
 
@@ -33,5 +34,5 @@ public interface CompetenceService {
 
 	public boolean deleteCompetenceFromSubject(Long id_competence,
 			Long id_subject);
-
+	public ResultClass<Boolean> unDeleteCompetence(Competence competence, Long id_degree);
 }

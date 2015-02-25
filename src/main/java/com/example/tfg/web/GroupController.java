@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Group;
 import com.example.tfg.service.GroupService;
 
@@ -42,7 +43,7 @@ public class GroupController {
 
 	}
 
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/add.htm", method = RequestMethod.POST)
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/add.htm", method = RequestMethod.POST, params="Add")
 	// Every Post have to return redirect
 	public String processAddNewCompetence(
 			@PathVariable("academicId") Long id_academicTerm,
@@ -50,19 +51,46 @@ public class GroupController {
 			@ModelAttribute("addGroup") @Valid Group newgroup,
 			BindingResult result, Model model) {
 
-		if (!result.hasErrors()) {
-			// newgroup.setCourse(serviceCourse.getCourse(id_course));
+		
+		
+		ResultClass<Boolean> results = serviceGroup.addGroup(newgroup, id_course);
+		if (!results.hasErrors())
+			return "redirect:/academicTerm/" + id_academicTerm + "/course/"
+			+ id_course + ".htm";		
+		else{
+			model.addAttribute("addGroup", newgroup);
+			if (results.isElementDeleted())
+				model.addAttribute("unDelete", results.isElementDeleted()); 
+			model.addAttribute("errors", results.getErrorsList());
+			return "group/add";
 
-			boolean created = serviceGroup.addGroup(newgroup,
-					id_course);
-			if (created) {
-
-				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
-						+ id_course + ".htm";
-			} else
-				return "redirect:/group/add.htm";
 		}
-		return "redirect:/error.htm";
+
+		
+	}
+	
+	
+	
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/add.htm", method = RequestMethod.POST, params="Undelete")
+	// Every Post have to return redirect
+	public String undeleteDegree(
+			@PathVariable("academicId") Long id_academicTerm,
+			@PathVariable("courseId") Long id_course,
+			@ModelAttribute("addGroup") @Valid Group group, Model model) {
+		
+		ResultClass<Boolean> result = serviceGroup.unDeleteGroup(group);
+		
+		if (!result.hasErrors())
+
+			return "redirect:/academicTerm/" + id_academicTerm + "/course/"
+			+ id_course + ".htm";		
+		else{
+			model.addAttribute("addGroup", group);
+			if (result.isElementDeleted())
+				model.addAttribute("unDelete", true); 
+			model.addAttribute("errors", result.getErrorsList());
+			return "group/add";
+		}
 	}
 
 	/**
@@ -70,7 +98,7 @@ public class GroupController {
 	 */
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/modify.htm", method = RequestMethod.GET)
-	protected String formModifyActivities(
+	protected String formModifyGroup(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group, Model model)
@@ -87,7 +115,7 @@ public class GroupController {
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/modify.htm", method = RequestMethod.POST)
-	public String formModifySystem(
+	public String formModifyGroup(
 			@PathVariable("academicId") Long id_academicTerm,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
@@ -97,18 +125,29 @@ public class GroupController {
 	{
 
 		if (!result.hasErrors()) {
-			// group.setId(id_group);
-			// group.setCourse(serviceCourse.getCourse(id_course));
-			// group.setCompetenceStatus(serviceGroup.getGroup(id_group).getCompetenceStatus());
-			boolean success = serviceGroup.modifyGroup(group,
-					id_group);
-			if (success) {
+			ResultClass<Boolean> results = serviceGroup.modifyGroup(group, id_group);
+			if (!result.hasErrors())
 
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
-						+ id_course + ".htm";
+				+ id_course + ".htm";
+			else{
+					model.addAttribute("modifyGroup", group);
+					if (results.isElementDeleted()){
+						model.addAttribute("addModule", group);
+						model.addAttribute("unDelete", true); 
+						model.addAttribute("errors", results.getErrorsList());
+						return "module/add";
+					}	
+					model.addAttribute("errors", results.getErrorsList());
+					return "module/modify";
+				}
+				
 			}
+		else{
+			
+			return "group/add";
 		}
-		return "redirect:/error.htm";
+		
 	}
 
 

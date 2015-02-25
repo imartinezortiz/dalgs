@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import com.example.tfg.domain.AcademicTerm;
 import com.example.tfg.domain.Course;
+import com.example.tfg.domain.Subject;
+import com.example.tfg.domain.Topic;
 
 @Repository
 public interface CourseDao {
@@ -38,5 +40,7 @@ public interface CourseDao {
 
 	public boolean deleteCourses(Collection<AcademicTerm> academicList);
 //	public Course getCourseAll(Long id);
+
+
 
 }

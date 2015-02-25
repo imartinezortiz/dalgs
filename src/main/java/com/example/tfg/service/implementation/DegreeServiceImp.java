@@ -185,8 +185,9 @@ public class DegreeServiceImp implements DegreeService {
 
 			d.setDeleted(false);
 			d.setInfo(degree.getInfo());
-			daoDegree.saveDegree(d);
-			result.setE(true);	
+			boolean r = daoDegree.saveDegree(d);
+			if (r)
+				result.setE(true);	
 
 		}
 		return result;

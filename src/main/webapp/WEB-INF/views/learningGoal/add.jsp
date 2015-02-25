@@ -39,10 +39,27 @@
 						placeholder="Description of the learning goal" required="true" />
 				</div>
 
-								<br>
-				<input type="submit" class="btn btn-success" value="Add" />
+					
+				<input type="submit" class="btn btn-success" value="Add" name="Add" />
+				<c:if test="${unDelete == true}">
+					<input type="submit" class="btn btn-success" value="Undelete" name="Undelete"/>
+				</c:if>
 			</form:form>
 		</div>
+	</div>
+	<div align="center">
+		<h3 class="panel-title list">	Errors: </h3>	
+			<br/>
+			<c:forEach items="${errors}" var="error">
+
+				
+					<c:out  value="${error}" /><br/>
+				
+
+
+
+			</c:forEach>
+		
 	</div>
 </body>
 </html>

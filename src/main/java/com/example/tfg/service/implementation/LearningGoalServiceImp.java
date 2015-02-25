@@ -1,5 +1,6 @@
 package com.example.tfg.service.implementation;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Activity;
 import com.example.tfg.domain.Competence;
 import com.example.tfg.domain.LearningGoal;
@@ -30,27 +32,32 @@ public class LearningGoalServiceImp implements LearningGoalService {
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public boolean addLearningGoal(LearningGoal newLearningGoal,
+	public ResultClass<Boolean> addLearningGoal(LearningGoal learningGoal,
 			Long id_competence) {
 
-		Competence competence = serviceCompetence.getCompetence(id_competence);
-		LearningGoal existLearning = daoLearningGoal.existByCode(newLearningGoal.getInfo().getCode(), competence);
-		if(existLearning == null){
-			newLearningGoal.setCompetence(competence);
-			competence.getLearningGoals().add(newLearningGoal);
-			return daoLearningGoal.addLearningGoal(newLearningGoal);
-		
-		}
-		else if (existLearning.isDeleted()) {
-			existLearning.setCompetence(competence);
-			existLearning.setDeleted(false);
-			competence.getLearningGoals().add(existLearning);
-			return daoLearningGoal.saveLearningGoal(existLearning);
-		
+		LearningGoal learningExists = daoLearningGoal.existByCode(learningGoal.getInfo().getCode());
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
-		}
+		if( learningExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Code already exists");
 
-		return false;
+			if (learningExists.isDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
+
+			}
+			result.setE(false);
+			result.setErrorsList(errors);
+		}
+		else{
+			learningGoal.setCompetence(serviceCompetence.getCompetence(id_competence));
+			boolean r = daoLearningGoal.addLearningGoal(learningGoal);
+			if (r) 
+				result.setE(true);
+		}
+		return result;		
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -61,10 +68,34 @@ public class LearningGoalServiceImp implements LearningGoalService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public boolean modifyLearningGoal(LearningGoal learningGoal, Long id_learningGoal) {
-		LearningGoal modifyLearningGoal = daoLearningGoal.getLearningGoal(id_learningGoal);
-		modifyLearningGoal.setInfo(learningGoal.getInfo());
-		return daoLearningGoal.saveLearningGoal(modifyLearningGoal);
+	public ResultClass<Boolean> modifyLearningGoal(LearningGoal learningGoal, Long id_learningGoal) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+
+		LearningGoal modifyLearning = daoLearningGoal.getLearningGoal(id_learningGoal);
+		
+		LearningGoal learningExists = daoLearningGoal.existByCode(learningGoal.getInfo().getCode());
+		
+		if(!learningGoal.getInfo().getCode().equalsIgnoreCase(modifyLearning.getInfo().getCode()) && 
+				learningExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("New code already exists");
+
+			if (learningExists.isDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
+
+			}
+			result.setErrorsList(errors);
+			result.setE(false);
+		}
+		else{
+			modifyLearning.setInfo(learningGoal.getInfo());
+			boolean r = daoLearningGoal.saveLearningGoal(modifyLearning);
+			if (r) 
+				result.setE(true);
+		}
+		return result;
 
 	}
 
@@ -110,5 +141,35 @@ public class LearningGoalServiceImp implements LearningGoalService {
 
 		return daoLearningGoal.deleteLearningGoalsForCompetences(competences);
 	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@Transactional(readOnly = false)
+	public ResultClass<Boolean> unDeleteLearningGoal(LearningGoal learning) {
+		LearningGoal l = daoLearningGoal.existByCode(learning.getInfo().getCode());
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		if(l == null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Code doesn't exist");
+			result.setErrorsList(errors);
+
+		}
+		else{
+			if(!l.isDeleted()){
+				Collection<String> errors = new ArrayList<String>();
+				errors.add("Code is not deleted");
+				result.setErrorsList(errors);
+			}
+
+			l.setDeleted(false);
+			l.setInfo(learning.getInfo());
+			boolean r = daoLearningGoal.saveLearningGoal(l);
+			if(r) 
+				result.setE(true);	
+
+		}
+		return result;
+	}
+
 
 }

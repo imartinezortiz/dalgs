@@ -5,16 +5,17 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Module;
 import com.example.tfg.domain.Topic;
 
 @Service
 public interface TopicService {
-	public boolean addTopic(Topic newTopic, Long id_module);
+	public ResultClass<Boolean> addTopic(Topic newTopic, Long id_module);
 
 	public List<Topic> getAll();
 
-	public boolean modifyTopic(Topic modify, Long id);
+	public ResultClass<Boolean> modifyTopic(Topic modify, Long id);
 
 	public Topic getTopic(Long id);
 
@@ -29,4 +30,6 @@ public interface TopicService {
 	public boolean deleteTopicsForModules(Collection<Module> modules);
 
 	public boolean deleteTopicsForModule(Module module);
+	
+	public ResultClass<Boolean> unDeleteTopic(Topic topic);
 }

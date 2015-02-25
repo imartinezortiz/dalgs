@@ -2,11 +2,11 @@ package com.example.tfg.web;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletException;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +23,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.AcademicTerm;
-import com.example.tfg.domain.Activity;
 import com.example.tfg.domain.Course;
 import com.example.tfg.domain.Subject;
 import com.example.tfg.service.AcademicTermService;
-import com.example.tfg.service.ActivityService;
 import com.example.tfg.service.CourseService;
 import com.example.tfg.service.SubjectService;
 
@@ -44,8 +43,8 @@ public class CourseController {
 	@Autowired
 	private SubjectService serviceSubject;
 
-	@Autowired
-	private ActivityService serviceActivity;
+//	@Autowired
+//	private ActivityService serviceActivity;
 
 	@Autowired
 	private AcademicTermService serviceAcademic;
@@ -73,32 +72,57 @@ public class CourseController {
 		return "course/add";
 	}
 
-	@RequestMapping(value = "/academicTerm/{academicId}/course/add.htm", method = RequestMethod.POST)
+	@RequestMapping(value = "/academicTerm/{academicId}/course/add.htm", method = RequestMethod.POST, params="Add")
 	// Every Post have to return redirect
 	public String processAddNewCourse(
 			@PathVariable("academicId") Long id_academic,
 			@ModelAttribute("addcourse") Course newCourse,
 			BindingResult result, Model model) {
 
-		// AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic);
-		// academic.setId(id_academic);
-		// newCourse.setAcademicTerm(academic);
+		
 
 		if (newCourse.getSubject() == null)
 			return "redirect:/academicTerm/" + id_academic + "/course/add.htm";
 
 		if (!result.hasErrors()) {
-			boolean created = serviceCourse.addCourse(newCourse, id_academic);
+			ResultClass<Boolean> results = serviceCourse.addCourse(newCourse, id_academic);
+			if (!results.hasErrors())
+				return "redirect:/academicTerm/" + id_academic + ".htm";	
+			else{
+				model.addAttribute("addCourse", newCourse);
+				if (results.isElementDeleted())
+					model.addAttribute("unDelete", results.isElementDeleted()); 
+				model.addAttribute("errors", results.getErrorsList());
+				return "course/add";
 
-			if (created)
-				return "redirect:/academicTerm/" + id_academic + ".htm";
-			else
-				return "redirect:/academicTerm/" + id_academic
-						+ "/course/add.htm";
+			}
+			
 		}
 		return "redirect:/error.htm";
 	}
 
+	
+	
+	@RequestMapping(value ="/academicTerm/{academicId}/course/add.htm", method = RequestMethod.POST, params="Undelete")
+	// Every Post have to return redirect
+	public String undeleteDegree(
+			@PathVariable("academicId") Long id_academicTerm,
+			@PathVariable("courseId") Long id_course,
+			@ModelAttribute("addCourse") @Valid Course course, Model model) {
+		
+		ResultClass<Boolean> result = serviceCourse.unDeleteCourse(course);
+		
+		if (!result.hasErrors())
+
+			return "redirect:/academicTerm/" + id_academicTerm + ".htm";		
+		else{
+			model.addAttribute("addCourse", course);
+			if (result.isElementDeleted())
+				model.addAttribute("unDelete", true); 
+			model.addAttribute("errors", result.getErrorsList());
+			return "course/add";
+		}
+	}
 	/**
 	 * Methods for view courses
 	 */
@@ -160,18 +184,28 @@ public class CourseController {
 			BindingResult result, Model model)
 
 	{
-		// if(modify.getAcademicTerm() == null)
-		// return
-		// "redirect:/academicTerm/"+id_academic+"/course/"+id_course+"/modify.htm";
+
 
 		if (!result.hasErrors()) {
-//			modify.setId(id_course);
-			// modify.setAcademicTerm(serviceAcademic.getAcademicTerm(id_academic));
-			boolean success = serviceCourse.modifyCourse(modify, id_academic, id_course);
-			if (success)
-				return "redirect:/academicTerm/" + id_academic + "/course/"
-						+ id_course + ".htm";
-		}
+			ResultClass<Boolean> results = serviceCourse.modifyCourse(modify, id_academic, id_course);
+			if (!result.hasErrors())
+
+				return "redirect:/academicTerm/" + id_academic + ".htm";	
+			else{
+					model.addAttribute("modifyCourse", modify);
+					if (results.isElementDeleted()){
+						model.addAttribute("addCourse", modify);
+						model.addAttribute("unDelete", true); 
+						model.addAttribute("errors", results.getErrorsList());
+						return "course/add";
+					}	
+					model.addAttribute("errors", results.getErrorsList());
+					return "course/modify";
+				}
+				
+			}
+			
+		
 
 		return "redirect:/error.htm";
 

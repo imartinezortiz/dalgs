@@ -129,11 +129,12 @@ public class AcademicTermServiceImp implements AcademicTermService {
 	  *  Access-control will be evaluated after this method is invoked.
 	  *  filterObject refers to the returned object list.
 	  */
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ')")
-	@Transactional(readOnly = false)
+//	@PreAuthorize("hasRole('ROLE_USER')")
+//	@PostFilter("hasPermission(filterObject, 'READ')")
+	@Transactional(readOnly = true)
 	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex) {
-		return daoAcademicTerm.getAcademicsTerm(pageIndex);
+		List<AcademicTerm> a = daoAcademicTerm.getAcademicsTerm(pageIndex);
+		return a;
 	}
 
 	//@PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -173,8 +174,8 @@ public class AcademicTermServiceImp implements AcademicTermService {
 		return daoAcademicTerm.getAcademicTermsByDegree(id_degree);
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ')")
+//	@PreAuthorize("hasRole('ROLE_USER')")
+//	@PostFilter("hasPermission(filterObject, 'READ')")
 	@Transactional(readOnly = true)
 	public AcademicTerm getAcademicTermAll(Long id_academic) {
 		AcademicTerm aT= daoAcademicTerm.getAcademicTermById(id_academic);
