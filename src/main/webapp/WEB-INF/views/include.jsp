@@ -8,6 +8,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
+<!-- Contains Function -->
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
 <!-- spring:out formatea la salida -->
 
 
@@ -60,8 +63,28 @@
 <c:url value="/user.htm" var="userUrl" />
 <c:url value="/admin.htm" var="adminUrl" />
 <c:url value="/logout.htm" var="logoutUrl" />
-<c:url value="/upload/User.htm" var="uploadUrl" />
 
+<c:set var="contextPath" value="${requestScope['javax.servlet.forward.request_uri']}"/> <!-- Get URI -->
+<c:set value="enabled" var="upload"/>   <!-- Location Boolean  -->  
+
+	<!-- Hacer lo mismo con el resto -->
+
+<c:choose>
+    <c:when  test="${fn:contains(contextPath, 'academicTerm')}">
+		<c:url value="/upload/academicTerm.htm" var="uploadUrl" />
+    </c:when>
+    
+    
+    <c:when  test="${fn:contains(contextPath, 'module')}">
+         <c:url value="/upload/module.htm" var="uploadUrl" />
+    </c:when>
+    <c:otherwise>
+    	<c:set value="disabled" var="upload"/>
+    </c:otherwise>
+</c:choose>
+<%-- <c:out value="${upload}"></c:out>
+<c:out value="${contextPath}"></c:out>
+ --%>
 <div class="list-group index">
 
 	<nav class="navbar navbar-default">
@@ -109,20 +132,24 @@
 					</sec:authorize>
 
 				</ul>
+				
 				<ul class="nav navbar-nav navbar-right">
+					<c:if test="${upload == 'enabled'}">
 					<sec:authorize access="hasRole('ROLE_ADMIN')">
+					
 					<li><a href="${uploadUrl}"> <span
 							class="glyphicon glyphicon-upload" aria-hidden="true"></span> CVS
 							<span class="sr-only">(current)</span></a></li>
 							</sec:authorize>
+						</c:if>
 					<p class="navbar-text navbar-right" style="font-size: 15px;">
 
 						<span class="glyphicon glyphicon-eye-open" aria-hidden="true">
 						</span> Signed in as <a href="#" class="navbar-link"><%=SecurityContextHolder.getContext().getAuthentication()
 					.getName()%></a>&nbsp&nbsp
 					</p>
-
 				</ul>
+			
 			</div>
 		</div>
 	</nav>
