@@ -8,6 +8,8 @@ public class BasePermission extends AbstractPermission {
 	/**
 	 * 
 	 */
+	
+	/*Default  permissions to use in the ACL system*/
 	private static final long serialVersionUID = 1L;
 	public static final Permission READ = new BasePermission(1 << 0, 'R'); // 1
 	public static final Permission WRITE = new BasePermission(1 << 1, 'W'); // 2

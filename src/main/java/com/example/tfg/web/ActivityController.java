@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Activity;
 import com.example.tfg.domain.LearningGoal;
 import com.example.tfg.domain.LearningGoalStatus;
@@ -59,7 +60,7 @@ public class ActivityController {
 	 * Methods for adding activities
 	 */
 	@Secured({"ROLE_ADMIN", "ROLE_PROFESSOR"})
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/add.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/add.htm", method = RequestMethod.GET)
 	protected String getAddNewActivityForm(
 			@PathVariable("academicId") Long id_Long,
 			@PathVariable("courseId") Long id_course, Model model) {
@@ -72,7 +73,7 @@ public class ActivityController {
 
 	}
 
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/add.htm", method = RequestMethod.POST)
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/add.htm", method = RequestMethod.POST)
 	// Every Post have to return redirect
 	public String processAddNewCompetence(
 			@PathVariable("academicId") Long id_academicTerm,
@@ -81,21 +82,48 @@ public class ActivityController {
 			BindingResult result, Model model) throws NotOwnerException {
 
 		if (!result.hasErrors()) {
-			// newactivity.setCourse(serviceCourse.getCourse(id_course));
-
-			boolean created = serviceActivity.addActivity(newactivity,	id_course);
-			if (created) {
-
+			ResultClass<Boolean> results = serviceActivity.addActivity(newactivity, id_course);
+			if (!results.hasErrors())
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
-						+ id_course + "/activity/" + newactivity.getId()
-						+ "/modify.htm";
-			} else
-				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
-						+ id_course + "/add.htm";
+				+ id_course + "/activity/"+ newactivity.getId()+"/modify.htm";		
+			else{
+				model.addAttribute("addActivity", newactivity);
+				if (results.isElementDeleted())
+					model.addAttribute("unDelete", results.isElementDeleted()); 
+				model.addAttribute("errors", results.getErrorsList());
+				return "activity/add";
+
+			}
 		}
 		return "redirect:/error.htm";
 	}
 
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/add.htm", method = RequestMethod.POST, params="Undelete")
+	// Every Post have to return redirect
+	public String undeleteDegree(
+			@PathVariable("academicId") Long id_academicTerm,
+			@PathVariable("courseId") Long id_course,
+			@ModelAttribute("addActivity") @Valid Activity activity, Model model) {
+		
+		ResultClass<Boolean> result = serviceActivity.unDeleteActivity(activity);
+		
+		if (!result.hasErrors())
+
+			return "redirect:/academicTerm/" + id_academicTerm + "/course/"
+			+ id_course + ".htm";		
+		else{
+			model.addAttribute("addActivity", activity);
+			if (result.isElementDeleted())
+				model.addAttribute("unDelete", true); 
+			model.addAttribute("errors", result.getErrorsList());
+			return "group/add";
+		}
+	}
+	
+	
+	
+	
+	
 	/**
 	 * Methods for modifying activities
 	 */
@@ -133,17 +161,26 @@ public class ActivityController {
 	{
 
 		if (!result.hasErrors()) {
-			// activity.setId(id_activity);
-			// activity.setCourse(serviceCourse.getCourse(id_course));
-			// activity.setCompetenceStatus(serviceActivity.getActivity(id_activity).getCompetenceStatus());
-			boolean success = serviceActivity.modifyActivity(activity,
-					id_activity, id_course);
-			if (success) {
+			ResultClass<Boolean> results = serviceActivity.modifyActivity(activity, id_activity, id_course);
+			if (!result.hasErrors())
 
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
-						+ id_course + ".htm";
+				+ id_course + ".htm";
+			else{
+					model.addAttribute("modifyActivity", activity);
+					if (results.isElementDeleted()){
+						model.addAttribute("addActivity", activity);
+						model.addAttribute("unDelete", true); 
+						model.addAttribute("errors", results.getErrorsList());
+						return "module/add";
+					}	
+					model.addAttribute("errors", results.getErrorsList());
+					return "module/modify";
+				}
+				
 			}
-		}
+
+		
 		return "redirect:/error.htm";
 	}
 

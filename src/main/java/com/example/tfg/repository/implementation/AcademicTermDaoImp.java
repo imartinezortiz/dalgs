@@ -208,7 +208,7 @@ public class AcademicTermDaoImp implements AcademicTermDao {
 				.createQuery("select a from AcademicTerm a where a.isDeleted='false' and  a.degree=?1");
 		query.setParameter(1, degree);
 
-		return query.getResultList();
+		return (List<AcademicTerm>) query.getResultList();
 
 	}
 

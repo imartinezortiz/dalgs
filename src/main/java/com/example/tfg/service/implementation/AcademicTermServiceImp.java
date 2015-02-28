@@ -29,7 +29,6 @@ import com.example.tfg.domain.User;
 import com.example.tfg.repository.AcademicTermDao;
 import com.example.tfg.service.AcademicTermService;
 import com.example.tfg.service.CourseService;
-import com.example.tfg.web.UserController;
 
 @Service
 public class AcademicTermServiceImp implements AcademicTermService {
@@ -54,22 +53,7 @@ public class AcademicTermServiceImp implements AcademicTermService {
 		this.mutableAclService = mutableAclService;
 	}
 
-	/*
-	 * // Prepare the information we'd like in our access control entry (ACE)
-	 * ObjectIdentity oi = new ObjectIdentityImpl(Foo.class, new Long(44)); Sid
-	 * sid = new PrincipalSid("Samantha"); Permission p =
-	 * BasePermission.ADMINISTRATION;
-	 * 
-	 * // Create or update the relevant ACL MutableAcl acl = null; try { acl =
-	 * (MutableAcl) aclService.readAclById(oi); } catch (NotFoundException nfe)
-	 * { acl = aclService.createAcl(oi); }
-	 * 
-	 * // Now grant some permissions via an access control entry (ACE)
-	 * acl.insertAce(acl.getEntries().length, p, sid, true);
-	 * aclService.updateAcl(acl);
-	 */
 
-	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public boolean addAcademicTerm(AcademicTerm academicTerm) {
@@ -114,17 +98,10 @@ public class AcademicTermServiceImp implements AcademicTermService {
 		return success;
 	}
 	
-	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public boolean modifyAcademicTerm(AcademicTerm academicTerm,
-			Long id_academic) {
-		AcademicTerm ac = daoAcademicTerm.getAcademicTermById(id_academic);
-		ac.setTerm(academicTerm.getTerm());
-
-		if(daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree()) == null)
-			return daoAcademicTerm.saveAcademicTerm(academicTerm);
-		return false;
+	public boolean modifyAcademicTerm(AcademicTerm academicTerm) {
+		return daoAcademicTerm.saveAcademicTerm(academicTerm);
 	}
 
 	 /**
@@ -135,24 +112,22 @@ public class AcademicTermServiceImp implements AcademicTermService {
 	  */
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ')")
-	@Transactional(readOnly = false)
+	@Transactional(readOnly = true)
 	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex) {
-		return daoAcademicTerm.getAcademicsTerm(pageIndex);
+		List<AcademicTerm> a = daoAcademicTerm.getAcademicsTerm(pageIndex);
+		return a;
 	}
 
 	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	//@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, admin)" )
 
 	@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')" )
-
-	//@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)// propagation = Propagation.REQUIRED)
 	public boolean deleteAcademicTerm(AcademicTerm academicTerm) {
-		boolean sucess = false;
+		boolean success = false;
 		//AcademicTerm academic = daoAcademicTerm.getAcademicTermById(id_academic);
-		if (academicTerm.getCourses().isEmpty()
-				|| serviceCourse.deleteCoursesFromAcademic(academicTerm)){
-			sucess =  daoAcademicTerm.deleteAcademicTerm(academicTerm.getId());
+		if (academicTerm.getCourses()==null	|| serviceCourse.deleteCoursesFromAcademic(academicTerm)){
+			success =  daoAcademicTerm.deleteAcademicTerm(academicTerm.getId());
 
 			// Delete the ACL information as well
 	        ObjectIdentity oid = new ObjectIdentityImpl(AcademicTerm.class, academicTerm.getId());
@@ -162,7 +137,7 @@ public class AcademicTermServiceImp implements AcademicTermService {
 	        }
 			
 		}
-		return sucess;
+		return success;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -171,12 +146,6 @@ public class AcademicTermServiceImp implements AcademicTermService {
 		return daoAcademicTerm.numberOfPages();
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostAuthorize("hasPermission(returnObject, 'READ')") //Single: returnObject
-	@Transactional(readOnly = true)
-	public AcademicTerm getAcademicTerm(Long id_academic) {
-		return daoAcademicTerm.getAcademicTermById(id_academic);
-	}
  
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ')") // Collection: filterObject
@@ -185,17 +154,18 @@ public class AcademicTermServiceImp implements AcademicTermService {
 		return daoAcademicTerm.getAcademicTermsByDegree(id_degree);
 	}
 
+
 	// WORKING 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostAuthorize("hasPermission(returnObject, 'READ')")
 	@Transactional(readOnly = true)
-	public AcademicTerm getAcademicTermAll(Long id_academic) {
+	public AcademicTerm getAcademicTerm(Long id_academic) {
 		AcademicTerm aT= daoAcademicTerm.getAcademicTermById(id_academic);
 		aT.setCourses(serviceCourse.getCoursesByAcademicTerm(id_academic));
 		return aT;
 	}
 	
-	//@PreAuthorize("hasRole('ROLE_ADMIN')")
+
 	@PreAuthorize("hasPermission(returnObject, 'DELETE') or hasPermission(returnObject, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)
 	public boolean deleteAcademicTermCollection(Collection<AcademicTerm> academicList) {
@@ -205,5 +175,6 @@ public class AcademicTermServiceImp implements AcademicTermService {
 		return daoAcademicTerm.deleteAcademicTerm(academicList);
 		else return false;
 	}
+	
 
 }

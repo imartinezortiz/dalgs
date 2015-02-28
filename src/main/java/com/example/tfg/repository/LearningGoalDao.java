@@ -15,7 +15,7 @@ public interface LearningGoalDao {
 
 	boolean saveLearningGoal(LearningGoal existLearning);
 
-	LearningGoal existByCode(String code, Competence competence);
+	LearningGoal existByCode(String code);
 
 	LearningGoal getLearningGoal(Long id_learningGoal);
 

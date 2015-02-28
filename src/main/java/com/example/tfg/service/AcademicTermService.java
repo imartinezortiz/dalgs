@@ -12,8 +12,7 @@ public interface AcademicTermService {
 
 	public boolean addAcademicTerm(AcademicTerm academicTerm);
 
-	public boolean modifyAcademicTerm(AcademicTerm academicTerm,
-			Long id_academic);
+	public boolean modifyAcademicTerm(AcademicTerm academicTerm);
 	
 	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex);
 
@@ -21,12 +20,10 @@ public interface AcademicTermService {
 	
 	public boolean deleteAcademicTerm(AcademicTerm academicTerm);
 
-	public AcademicTerm getAcademicTerm(Long id_academic);
-
 	public Integer numberOfPages();
 
 	public List<AcademicTerm> getAcademicTermsByDegree(Long id_degree);
 
-	public AcademicTerm getAcademicTermAll(Long id_academic);
+	public AcademicTerm getAcademicTerm(Long id_academic);
 
 }

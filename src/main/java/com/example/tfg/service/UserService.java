@@ -14,7 +14,6 @@ public interface UserService {
 	public List<User> getAll(Integer pageIndex);
 	public boolean deleteUser(Long id);
 	public boolean saveUser(User user);
-	public List<User> getAllByCourse(Long id_course,Integer pageIndex);
 
 	public boolean addUser(User user);
 	public boolean uploadCVS(UploadForm upload);
@@ -23,5 +22,5 @@ public interface UserService {
 	
 	public User findByEmail(String email);
 
-	
+	boolean hasRole(User user, String role);
 }

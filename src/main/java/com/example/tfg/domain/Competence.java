@@ -1,5 +1,6 @@
 package com.example.tfg.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.Column;
@@ -20,8 +21,7 @@ import com.example.tfg.domain.info.CompetenceInfo;
 
 
 @Entity
-@Table(name = "competence", uniqueConstraints = @UniqueConstraint(columnNames = {
-		"code_competence", "id_degree" }))
+@Table(name = "competence", uniqueConstraints = @UniqueConstraint(columnNames = {"code_competence", "id_degree" }))
 public class Competence {
 
 	@Id
@@ -32,22 +32,14 @@ public class Competence {
 	@Embedded
 	private CompetenceInfo info;
 
-//	@Basic(optional = false)
-//	@Column(name = "name", length = 50, nullable = false)
-//	private String name;
-//
-//	@Basic(optional = false)
-//	@Column(name = "description", length = 250, nullable = false)
-//	private String description;
 
 	@ManyToMany(mappedBy = "competences", fetch = FetchType.LAZY)
-	private Collection<Subject> subjects;
+	private Collection<Subject> subjects = new ArrayList<Subject>();
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "competence")
-	private Collection<LearningGoal> learningGoals;
+	private Collection<LearningGoal> learningGoals = new ArrayList<LearningGoal>();
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	// , optional = false)
 	@JoinColumn(name = "id_degree")
 	private Degree degree;
 

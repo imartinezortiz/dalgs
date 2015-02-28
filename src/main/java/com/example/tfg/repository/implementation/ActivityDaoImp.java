@@ -102,14 +102,14 @@ public class ActivityDaoImp implements ActivityDao {
 		return query.getResultList();
 	}
 
-	public boolean existByCode(String code) {
+	public Activity existByCode(String code) {
 		Query query = em.createQuery("Select a from Activity a where a.info.code=?1");
 		query.setParameter(1, code);
 
 		if (query.getResultList().isEmpty())
-			return false;
+			return null;
 		else
-			return true;//(Activity) query.getSingleResult();
+			return (Activity) query.getSingleResult();
 	}
 
 	public String getNextCode() {

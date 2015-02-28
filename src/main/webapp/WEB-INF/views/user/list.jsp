@@ -23,10 +23,10 @@
 		</div>
 		<table class="table table-striped table-bordered">
 					<tr align="center">
-						<td width="30%"><div class="td-label">Last Name</div></td>
-						<td width="30%"><div class="td-label">First Name</div></td>
-						<td width="40%"><div class="td-label">Email</div></td>
-						<td width="40%"><div class="td-label">Status</div></td>
+						<td><div class="td-label">Last Name</div></td>
+						<td><div class="td-label">First Name</div></td>
+						<td><div class="td-label">Email</div></td>
+						<td><div class="td-label">Status</div></td>
 
 					</tr>
 					<c:forEach items="${model.users}" var="user">

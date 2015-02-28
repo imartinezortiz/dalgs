@@ -1,5 +1,6 @@
 package com.example.tfg.service.implementation;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Module;
 import com.example.tfg.repository.ModuleDao;
@@ -29,26 +31,33 @@ public class ModuleServiceImp implements ModuleService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly=false)
-	public boolean addModule(Module module, Long id_degree) {
-		Module existModule = daoModule.existByCode(module.getInfo().getCode());
-		Degree degree = serviceDegree.getDegree(id_degree);
-		if(existModule == null){
-			module.setDegree(degree);
-			degree.getModules().add(module);
-			if(daoModule.addModule(module))
-				return serviceDegree.modifyDegree(degree);
+	public ResultClass<Boolean> addModule(Module module, Long id_degree) {
+		
+		Module moduleExists = daoModule.existByCode(module.getInfo().getCode());
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
+		if( moduleExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Code already exists");
 
-		}else if(existModule.isDeleted()==true){
-			existModule.setInfo(module.getInfo());
-			existModule.setDeleted(false);
-			degree.getModules().add(existModule);
-			if(daoModule.saveModule(existModule))
-				return serviceDegree.modifyDegree(degree);
+			if (moduleExists.isDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
 
+			}
+			result.setE(false);
+			result.setErrorsList(errors);
 		}
-		return false;		
+		else{
+			module.setDegree(serviceDegree.getDegree(id_degree));
+			boolean r = daoModule.addModule(module);
+			if (r) 
+				result.setE(true);
+		}
+		return result;		
 	}
+	
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
@@ -56,12 +65,36 @@ public class ModuleServiceImp implements ModuleService {
 		return daoModule.getAll();
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly=false)
-	public boolean modifyModule(Module modify, Long id) {
-		Module module = daoModule.getModule(id);
-		module.setInfo(modify.getInfo());
-		return daoModule.saveModule(module);
+	public ResultClass<Boolean> modifyModule(Module module, Long id) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+
+		Module modifyModule = daoModule.getModule(id);
+		
+		Module moduleExists = daoModule.existByCode(module.getInfo().getCode());
+		
+		if(!module.getInfo().getCode().equalsIgnoreCase(modifyModule.getInfo().getCode()) && 
+				moduleExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("New code already exists");
+
+			if (moduleExists.isDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
+
+			}
+			result.setErrorsList(errors);
+			result.setE(false);
+		}
+		else{
+			modifyModule.setInfo(module.getInfo());
+			boolean r = daoModule.saveModule(modifyModule);
+			if (r) 
+				result.setE(true);
+		}
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -109,6 +142,36 @@ public class ModuleServiceImp implements ModuleService {
 		return false;
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@Transactional(readOnly = false)
+	public ResultClass<Boolean> unDeleteModule(Module module) {
+		Module m = daoModule.existByCode(module.getInfo().getCode());
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		if(m == null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Code doesn't exist");
+			result.setErrorsList(errors);
+
+		}
+		else{
+			if(!m.isDeleted()){
+				Collection<String> errors = new ArrayList<String>();
+				errors.add("Code is not deleted");
+				result.setErrorsList(errors);
+			}
+
+			m.setDeleted(false);
+			m.setInfo(module.getInfo());
+			boolean r = daoModule.saveModule(m);
+			if(r) 
+				result.setE(true);	
+
+		}
+		return result;
+	}
+
+	
 
 
 }

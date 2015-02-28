@@ -1,5 +1,6 @@
 package com.example.tfg.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.Basic;
@@ -13,10 +14,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
 @Entity
-@Table(name = "group")
+@Table(name = "_group")
 public class Group {
 
 	@Id
@@ -25,16 +28,20 @@ public class Group {
 	private Long id;
 	
 	@Basic(optional = false)
-	@Column(name = "name", length = 50, nullable = false)
-	private String group;
+	@Column(name = "name", length = 50, nullable = false, unique=true)
+	private String name;
+	
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "id_course")
+	private Course course;
 	
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	@JoinTable(name = "group_teacher", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_user") })
-	private Collection<User> teachers;
+	@JoinTable(name = "group_professor", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_user") })
+	private Collection<User> professors = new ArrayList<User>();
 	
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "group_student", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_user") })
-	private Collection<User> students;
+	private Collection<User> students = new ArrayList<User>();
 	
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private boolean isDeleted;
@@ -47,20 +54,20 @@ public class Group {
 		this.id = id;
 	}
 
-	public String getGroup() {
-		return group;
+	public String getName() {
+		return name;
 	}
 
-	public void setGroup(String group) {
-		this.group = group;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public Collection<User> getTeachers() {
-		return teachers;
+	public Collection<User> getProfessor() {
+		return professors;
 	}
 
-	public void setTeachers(Collection<User> teachers) {
-		this.teachers = teachers;
+	public void setTeachers(Collection<User> professors) {
+		this.professors = professors;
 	}
 
 	public Collection<User> getStudents() {
@@ -77,6 +84,14 @@ public class Group {
 
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
 	}
 	
 	

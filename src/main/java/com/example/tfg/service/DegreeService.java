@@ -4,18 +4,19 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Subject;
 
 @Service
 public interface DegreeService {
-	public boolean addDegree(Degree degree);
+	public ResultClass<Boolean> addDegree(Degree degree);
 
 	public List<Degree> getAll();
 
-	public boolean modifyDegree(Degree degree);
+//	public boolean modifyDegree(Degree degree);
 
-	public boolean modifyDegree(Degree degree, Long id);
+	public ResultClass<Boolean> modifyDegree(Degree degree, Long id);
 
 	public Degree getDegree(Long id);
 
@@ -26,5 +27,7 @@ public interface DegreeService {
 	public String getNextCode();
 
 	public Degree getDegreeAll(Long id);
+
+	public ResultClass<Boolean> unDeleteDegree(Degree degree);
 
 }

@@ -1,11 +1,15 @@
 package com.example.tfg.service.implementation;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.fileupload.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.acls.model.NotFoundException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,12 +57,7 @@ public class UserServiceImp implements UserService {
 	public boolean saveUser(User user){
 		return daoUser.saveUser(user);
 	}
-	
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@Transactional(readOnly = true)
-	public List<User> getAllByCourse(Long id_course,Integer pageIndex){
-		return daoUser.getAllByCourse(id_course,pageIndex);
-	}
+
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
@@ -81,12 +80,6 @@ public class UserServiceImp implements UserService {
 		return (daoUser.addUser(user));
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@Transactional(readOnly = true)
-	public boolean existInCourse(Long id, Long id_course){
-		return daoUser.existInCourse(id, id_course);
-	}
-
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)//, propagation = Propagation.REQUIRED)
 	public boolean uploadCVS(UploadForm upload) {
@@ -112,5 +105,25 @@ public class UserServiceImp implements UserService {
 
 	}
 	
+	@SuppressWarnings("unchecked")
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@Transactional(readOnly = true)
+	 public final boolean hasRole(User user, String role) {
+		    boolean hasRole = false;
+		    try {
+		 
+				Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>) user.getAuthorities();
+				for (GrantedAuthority grantedAuthority : authorities) {
+				      hasRole = grantedAuthority.getAuthority().equals(role);
+				      if (hasRole){
+				    	  break;
+				      }
+				 }
+				
+		    }catch(NotFoundException nfe) {
+		    }
+		   
+		    return hasRole;
+		  }
 	
 }

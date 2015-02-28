@@ -5,18 +5,18 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Activity;
-import com.example.tfg.domain.LearningGoal;
 import com.example.tfg.domain.LearningGoalStatus;
 import com.example.tfg.domain.Course;
 
 @Service
 public interface ActivityService {
-	public boolean addActivity(Activity activity, Long id_course) ;//throws NotOwnerException;
+	public ResultClass<Boolean> addActivity(Activity activity, Long id_course) ;//throws NotOwnerException;
 
 	public List<Activity> getAll();
 
-	public boolean modifyActivity(Activity activity, Long id_activity,
+	public ResultClass<Boolean> modifyActivity(Activity activity, Long id_activity,
 			Long id_course);
 
 	public Activity getActivity(Long id);
@@ -37,8 +37,10 @@ public interface ActivityService {
 	public boolean deleteActivitiesFromCourses(Collection<Course> courses);
 
 	public boolean deleteActivitiesFromCourse(Course course);
+	
+	public ResultClass<Boolean> unDeleteActivity(Activity activity);
 
-	public boolean deleteLearningActivities(LearningGoal learningGoal);
+//	public boolean deleteLearningActivities(LearningGoal learningGoal);
 
 	
 

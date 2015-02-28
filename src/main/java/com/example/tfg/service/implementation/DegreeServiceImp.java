@@ -1,5 +1,6 @@
 package com.example.tfg.service.implementation;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.AcademicTerm;
 import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Subject;
@@ -23,6 +25,9 @@ public class DegreeServiceImp implements DegreeService {
 	@Autowired
 	private DegreeDao daoDegree;
 
+	//	@Autowired
+	//	private SubjectService serviceSubject;
+
 	
 	@Autowired
 	private ModuleService serviceModule;
@@ -34,19 +39,30 @@ public class DegreeServiceImp implements DegreeService {
 	private AcademicTermService serviceAcademicTerm;
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
-	@Transactional(readOnly = false)
-	public boolean addDegree(Degree degree) {
-		
-		Degree existDegree = daoDegree.existByCode(degree.getInfo().getCode());
-		if (existDegree == null)
-			return daoDegree.addDegree(degree);
-		else if(existDegree.isDeleted()==true) {
-			existDegree.setInfo(degree.getInfo());
-			existDegree.setDeleted(false);
-			return daoDegree.saveDegree(existDegree);
-			
+	@Transactional(readOnly=false)
+	public ResultClass<Boolean> addDegree(Degree degree) {
+
+		Degree degreeExists = daoDegree.existByCode(degree.getInfo().getCode());
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+
+		if( degreeExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Code already exists");
+
+			if (degreeExists.isDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
+
+			}
+			result.setErrorsList(errors);
 		}
-		else return false;
+		else{
+			boolean r = daoDegree.addDegree(degree);
+			if (r) 
+				result.setE(true);
+		}
+		return result;
 
 	}
 
@@ -56,17 +72,42 @@ public class DegreeServiceImp implements DegreeService {
 		return daoDegree.getAll();
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
-	public boolean modifyDegree(Degree degree) {
-		return daoDegree.saveDegree(degree);
-	}
+	//	public boolean modifyDegree(Degree degree) {
+	//
+	//		return daoDegree.saveDegree(degree);
+	//	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public boolean modifyDegree(Degree degree, Long id_degree) {
+	public ResultClass<Boolean> modifyDegree(Degree degree, Long id_degree) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+
 		Degree modifydegree = daoDegree.getDegree(id_degree);
-		modifydegree.setInfo(degree.getInfo());
-		return daoDegree.saveDegree(modifydegree);
+		
+		Degree degreeExists = daoDegree.existByCode(degree.getInfo().getCode());
+		
+		if(!degree.getInfo().getCode().equalsIgnoreCase(modifydegree.getInfo().getCode()) && 
+				degreeExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("New code already exists");
+
+			if (degreeExists.isDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
+
+			}
+			result.setErrorsList(errors);
+		}
+		else{
+			modifydegree.setInfo(degree.getInfo());
+			boolean r = daoDegree.saveDegree(modifydegree);
+			if (r) 
+				result.setE(true);
+		}
+		return result;
+
+		
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -78,16 +119,25 @@ public class DegreeServiceImp implements DegreeService {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public boolean deleteDegree(Long id) {
+		boolean deleteModules = false;
+		boolean deleteCompetences = false;
+		boolean deleteAcademic = false;
+
 		Degree d = daoDegree.getDegree(id);
-		boolean deleteModules = serviceModule.deleteModulesForDegree(d);
-		boolean deleteCompetences = serviceCompetence
-				.deleteCompetencesForDegree(d);
+		if (!d.getModules().isEmpty())
+			deleteModules = serviceModule.deleteModulesForDegree(d);
+		if (!d.getCompetences().isEmpty())
+			deleteCompetences = serviceCompetence.deleteCompetencesForDegree(d);
 		Collection<AcademicTerm> academicList = serviceAcademicTerm.getAcademicTermsByDegree(id);
-		
-		boolean deleteAcademic = serviceAcademicTerm.deleteAcademicTermCollection(academicList);
-		if (deleteModules && deleteCompetences && deleteAcademic) {
+
+
+		if(!academicList.isEmpty()) deleteAcademic = serviceAcademicTerm.deleteAcademicTermCollection(academicList);
+		if ((deleteModules || d.getModules().isEmpty()) && (deleteCompetences || d.getCompetences().isEmpty())
+				&& (deleteAcademic || academicList.isEmpty())){
+				
 			return daoDegree.deleteDegree(d);
-		} else	return false;
+		} else
+			return false;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -107,7 +157,7 @@ public class DegreeServiceImp implements DegreeService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public Degree getDegreeAll(Long id) {
-	
+
 
 		Degree d = daoDegree.getDegree(id);
 		d.setModules(serviceModule.getModulesForDegree(id));
@@ -115,4 +165,32 @@ public class DegreeServiceImp implements DegreeService {
 		return d;
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@Transactional(readOnly = false)
+	public ResultClass<Boolean> unDeleteDegree(Degree degree) {
+		Degree d = daoDegree.existByCode(degree.getInfo().getCode());
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		if(d == null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Code doesn't exist");
+			result.setErrorsList(errors);
+
+		}
+		else{
+			if(!d.isDeleted()){
+				Collection<String> errors = new ArrayList<String>();
+				errors.add("Code is not deleted");
+				result.setErrorsList(errors);
+			}
+
+			d.setDeleted(false);
+			d.setInfo(degree.getInfo());
+			boolean r = daoDegree.saveDegree(d);
+			if (r)
+				result.setE(true);	
+
+		}
+		return result;
+	}
 }

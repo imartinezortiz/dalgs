@@ -5,22 +5,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.validation.Valid;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomCollectionEditor;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
+
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,9 +26,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.tfg.classes.CharsetString;
 import com.example.tfg.classes.UploadForm;
 import com.example.tfg.classes.ValidatorUtil;
-import com.example.tfg.domain.Competence;
 import com.example.tfg.domain.User;
-import com.example.tfg.service.CourseService;
+import com.example.tfg.service.GroupService;
 import com.example.tfg.service.UserService;
 
 @Controller
@@ -45,7 +40,7 @@ public class UserController {
 	private UserService serviceUser;
 
 	@Autowired
-	private CourseService serviceCourse;
+	private GroupService serviceGroup;
 
 	/**
 	 * Methods for list academic terms of a term
@@ -73,11 +68,18 @@ public class UserController {
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
 		User user = serviceUser.getUser(id_user);
+		if (user != null){
 		myModel.put("user", user);
 
-		myModel.put("courses", user.getCourses());
+		if(serviceUser.hasRole(user,"ROLE_PROFESSOR"))
+			myModel.put("groups", serviceGroup.getGroupsForProfessor(id_user));
+		else if(serviceUser.hasRole(user,"ROLE_STUDENT"))
+			myModel.put("groups", serviceGroup.getGroupsForStudent(id_user));
 
+	
 		return new ModelAndView("user/view", "model", myModel); //Admin view
+		}
+		return new ModelAndView("error", "model", myModel);
 	}
 	
 	/**

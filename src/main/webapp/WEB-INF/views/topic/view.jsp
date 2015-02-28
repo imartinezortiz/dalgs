@@ -39,6 +39,11 @@
 					<label>Name: </label> 
 					<p class="details">${model.topic.info.name}</p>
 				</div>
+				
+				<div class="form-group view">
+					<label>Description: </label> 
+					<p class="details">${model.topic.info.description}</p>
+				</div>
 			
 				<div class="form-group view">
 					<label>Degree: </label> 

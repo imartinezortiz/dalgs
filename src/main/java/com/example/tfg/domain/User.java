@@ -1,5 +1,6 @@
 package com.example.tfg.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -53,10 +54,10 @@ public class User implements UserDetails, CredentialsContainer{
 
 	
 
-
+/*
 	@ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
-	private Collection<Course> courses;
-	
+	private Collection<Group> groups = new ArrayList<Group>();
+	*/
 	
 	//  User Credentials
 	
@@ -137,15 +138,15 @@ public class User implements UserDetails, CredentialsContainer{
 	}
 
 
-
-	public Collection<Course> getCourses() {
-		return courses;
+/*
+	public Collection<Group> getGroups() {
+		return groups;
 	}
 
-	public void setCourses(Collection<Course> courses) {
-		this.courses = courses;
+	public void setGroups(Collection<Group> groups) {
+		this.groups = groups;
 	}
-	
+	*/
 
 	@Override
 	public int hashCode() {

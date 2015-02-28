@@ -1,7 +1,7 @@
 package com.example.tfg.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
-
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -25,34 +25,21 @@ public class Degree {
 	@Column(name = "id_degree")
 	private Long id;
 
-//	@Basic(optional = false)
-//	@Column(name = "name", length = 50, nullable = false)
-//	private String name;
-//
-//	@Basic(optional = false)
-//	@Column(name = "description", length = 250, nullable = false)
-//	private String description;
 	
 	@Embedded
 	private DegreeInfo info;
 
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
-//	// , cascade= CascadeType.ALL)//, orphanRemoval=true)
-//	private Collection<Subject> subjects;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
-	// , cascade= CascadeType.ALL)//, orphanRemoval=true)
-	private Collection<Module> modules;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
-	// , cascade= CascadeType.ALL)//, orphanRemoval=true)
-	private Collection<Competence> competences;
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private boolean isDeleted;
 
-//	@Column(name = "code_degree", nullable = false)
-//	private String code;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
+	private Collection<Module> modules = new ArrayList<Module>();
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
+	private Collection<Competence> competences = new ArrayList<Competence>();
 
 	public Degree() {
 		super();
@@ -66,22 +53,6 @@ public class Degree {
 		this.id = id;
 	}
 
-//	public String getName() {
-//		return name;
-//	}
-//
-//	public void setName(String name) {
-//		this.name = name;
-//	}
-//
-//	public String getDescription() {
-//		return description;
-//	}
-//
-//	public void setDescription(String description) {
-//		this.description = description;
-//	}
-
 	public DegreeInfo getInfo() {
 		return info;
 	}
@@ -90,13 +61,7 @@ public class Degree {
 		this.info = infoDegree;
 	}
 
-//	public Collection<Subject> getSubjects() {
-//		return subjects;
-//	}
-//
-//	public void setSubjects(Collection<Subject> subjects) {
-//		this.subjects = subjects;
-//	}
+
 
 	public Collection<Competence> getCompetences() {
 		return competences;

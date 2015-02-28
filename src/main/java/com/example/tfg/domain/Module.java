@@ -1,5 +1,6 @@
 package com.example.tfg.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.Column;
@@ -36,8 +37,7 @@ public class Module {
 	private Degree degree;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "module")
-	// , cascade= CascadeType.ALL)//, orphanRemoval=true)
-	private Collection<Topic> topics;
+	private Collection<Topic> topics = new ArrayList<Topic>();
 
 	public Long getId() {
 		return id;

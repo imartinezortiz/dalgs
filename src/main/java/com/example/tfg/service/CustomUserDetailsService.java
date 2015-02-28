@@ -63,6 +63,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 		}
 	}
 
+	
+	
 /*	*//**
 	 * Retrieves a collection of {@link GrantedAuthority} based on a numerical
 	 * role
@@ -119,4 +121,5 @@ public class CustomUserDetailsService implements UserDetailsService {
 		}
 		return authorities;
 	}*/
+	
 }

@@ -1,5 +1,6 @@
 package com.example.tfg.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.CascadeType;
@@ -51,7 +52,7 @@ public class Subject {
 
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "subject_competence", joinColumns = { @JoinColumn(name = "id_subject") }, inverseJoinColumns = { @JoinColumn(name = "id_competence") })
-	private Collection<Competence> competences;
+	private Collection<Competence> competences = new ArrayList<Competence>();
 
 //	@Column(name = "code_subject", nullable = false)
 //	private String code;
@@ -60,13 +61,7 @@ public class Subject {
 		super();
 	}
 
-//	public Degree getDegree() {
-//		return degree;
-//	}
-//
-//	public void setDegree(Degree degree) {
-//		this.degree = degree;
-//	}
+
 
 	public Long getId() {
 		return id;
@@ -76,21 +71,7 @@ public class Subject {
 		this.id = id;
 	}
 
-//	public String getName() {
-//		return name;
-//	}
-//
-//	public void setName(String name) {
-//		this.name = name;
-//	}
-//
-//	public String getDescription() {
-//		return description;
-//	}
-//
-//	public void setDescription(String description) {
-//		this.description = description;
-//	}
+
 
 	public Collection<Competence> getCompetences() {
 		return competences;

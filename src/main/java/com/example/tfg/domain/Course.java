@@ -1,5 +1,6 @@
 package com.example.tfg.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.CascadeType;
@@ -10,8 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -36,18 +36,23 @@ public class Course {
 
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
 	// , orphanRemoval=true)
-	private Collection<Activity> activities;
+	private Collection<Activity> activities = new ArrayList<Activity>();
 
+	
+	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+	// , orphanRemoval=true)
+	private Collection<Group> groups = new ArrayList<Group>();
+
+	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "id_academicterm")
-	// , insertable=false, updatable=false)
 	private AcademicTerm academicTerm;
 	
-
+/*
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "course_user", joinColumns = { @JoinColumn(name = "id_course") }, inverseJoinColumns = { @JoinColumn(name = "id_user") })
-	private Collection<User> users;
-	
+	private Collection<User> users = new ArrayList<User>();
+*/	
 
 	public Course() {
 		super();
@@ -91,6 +96,14 @@ public class Course {
 
 	public void setActivities(Collection<Activity> activities) {
 		this.activities = activities;
+	}
+
+	public Collection<Group> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(Collection<Group> groups) {
+		this.groups = groups;
 	}
 
 }

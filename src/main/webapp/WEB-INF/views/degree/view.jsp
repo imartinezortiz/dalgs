@@ -72,16 +72,16 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label">Code</div></td>
-					<td width="50%"><div class="td-label">Name</div></td>
+					<td width="20%"><div class="td-label">Name</div></td>
+					<td width="50%"><div class="td-label">Description</div></td>
 				</tr>
 				<c:forEach items="${model.modules}" var="module">
 					<tr align="center">
 						<td><div class="td-content">
-								<c:out value="${module.info.code}" />
+								<c:out value="${module.info.name}" />
 							</div></td>
 						<td><div class="td-content">
-								<c:out value="${module.info.name}" />
+								<c:out value="${module.info.description}" />
 							</div></td>
 
 

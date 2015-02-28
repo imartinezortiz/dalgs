@@ -32,16 +32,19 @@
 
 			<div class="form-group">
 				<div class="form-group view">
-					<label>Code: </label> 
+					<label>Code: </label>
 					<p class="details">${model.module.info.code}</p>
 				</div>
 				<div class="form-group view">
-					<label>Name: </label> 
+					<label>Name: </label>
 					<p class="details">${model.module.info.name}</p>
 				</div>
-
 				<div class="form-group view">
-					<label>Degree: </label> 
+					<label>Description: </label>
+					<p class="details">${model.module.info.description}</p>
+				</div>
+				<div class="form-group view">
+					<label>Degree: </label>
 					<p class="details">${model.module.degree.info.name}</p>
 				</div>
 			</div>
@@ -58,8 +61,8 @@
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 			
 			<a class="btn list-btn btn-warning2"
-				href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/add.htm'/>"> <span
-				class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
+				href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/add.htm'/>">
+				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 				Add
 			</a>
 			</sec:authorize>
@@ -69,16 +72,16 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label">Code</div></td>
-					<td width="50%"><div class="td-label">Name</div></td>
+					<td width="20%"><div class="td-label">Name</div></td>
+					<td width="50%"><div class="td-label">Description</div></td>
 				</tr>
 				<c:forEach items="${model.topics}" var="topic">
 					<tr align="center">
 						<td><div class="td-content">
-								<c:out value="${topic.info.code}" />
+								<c:out value="${topic.info.name}" />
 							</div></td>
 						<td><div class="td-content">
-								<c:out value="${topic.info.name}" />
+								<c:out value="${topic.info.description}" />
 							</div></td>
 
 
@@ -86,6 +89,7 @@
 							href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topic.id}.htm'/>">View</a>
 							<sec:authorize access="hasRole('ROLE_ADMIN')"><a class="btn btn-danger"
 							href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topic.id}/delete.htm'/>">
+								
 								Delete
 						</a></sec:authorize></td>
 
@@ -97,7 +101,7 @@
 		</div>
 	</div>
 
-		
+
 
 
 </body>

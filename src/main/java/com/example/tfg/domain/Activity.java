@@ -1,5 +1,6 @@
 package com.example.tfg.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.CollectionTable;
@@ -26,10 +27,7 @@ public class Activity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_activity")
 	private Long id;
-//	@Column(name = "name")
-//	private String name;
-//	@Column(name = "description")
-//	private String description;
+
 	
 	@Embedded
 	private ActivityInfo info;
@@ -38,20 +36,16 @@ public class Activity {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "id_course")
-	// , insertable=false, updatable=false)
 	private Course course;
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private boolean isDeleted;
 
-//	@Column(name = "code_activity", nullable = false)
-//	private String code;
 
 	@ElementCollection(fetch = FetchType.LAZY)
 	@CollectionTable(name = "activity_learninggoalstatus", joinColumns = @JoinColumn(name = "id_activity"))
 	@Column(nullable = false)
-	// @OrderColumn(insertable=true,updatable=true,name="competencestatus")
-	private Collection<LearningGoalStatus> learningGoalStatus;
+	private Collection<LearningGoalStatus> learningGoalStatus =  new ArrayList<LearningGoalStatus>();
 
 	public Activity() {
 		super();
@@ -65,21 +59,6 @@ public class Activity {
 		this.id = id;
 	}
 
-//	public String getName() {
-//		return name;
-//	}
-//
-//	public void setName(String name) {
-//		this.name = name;
-//	}
-//
-//	public String getDescription() {
-//		return description;
-//	}
-//
-//	public void setDescription(String description) {
-//		this.description = description;
-//	}
 
 	public Course getCourse() {
 		return course;
@@ -97,13 +76,6 @@ public class Activity {
 		this.isDeleted = isDeleted;
 	}
 
-//	public String getCode() {
-//		return code;
-//	}
-//
-//	public void setCode(String code) {
-//		this.code = code;
-//	}
 
 	public Collection<LearningGoalStatus> getLearningGoalStatus() {
 		return learningGoalStatus;

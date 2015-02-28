@@ -37,4 +37,8 @@ public interface CourseDao {
 			Collection<AcademicTerm> academicList);
 
 	public boolean deleteCourses(Collection<AcademicTerm> academicList);
+//	public Course getCourseAll(Long id);
+
+
+
 }

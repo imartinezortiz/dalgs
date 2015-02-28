@@ -99,7 +99,7 @@ public class AcademicTermController {
 			throws ServletException {
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		AcademicTerm a = serviceAcademicTerm.getAcademicTermAll(id_academic);
+		AcademicTerm a = serviceAcademicTerm.getAcademicTerm(id_academic);
 		myModel.put("academicTerm", a);
 
 		// List<Course> courses =
@@ -133,9 +133,9 @@ public class AcademicTermController {
 			BindingResult result, Model model) {
 
 		if (!result.hasErrors()) {
-
-			boolean success = serviceAcademicTerm.modifyAcademicTerm(newTerm,
-					academicId);
+			AcademicTerm at = serviceAcademicTerm.getAcademicTerm(academicId);
+			at.setTerm(newTerm.getTerm());
+			boolean success = serviceAcademicTerm.modifyAcademicTerm(at);
 			if (success)
 				return "redirect:/academicTerm/page/0.htm";
 

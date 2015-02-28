@@ -15,9 +15,9 @@ public class TopicInfo {
 	@Column(name = "name", length = 100, nullable = false)
 	private String name;
 
-//	@Basic(optional = false)
-//	@Column(name = "description", length = 250, nullable = false)
-//	private String description;
+	@Basic(optional = false)
+	@Column(name = "description", length = 250, nullable = false)
+	private String description;
 
 	public String getCode() {
 		return code;
@@ -35,13 +35,13 @@ public class TopicInfo {
 		this.name = name;
 	}
 
-//	public String getDescription() {
-//		return description;
-//	}
-//
-//	public void setDescription(String description) {
-//		this.description = description;
-//	}
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	
 	
 }

@@ -54,11 +54,20 @@
 	<h1 class="logo">
 		Badges for Subjects <small>TFG 2014/ 2015</small>
 	</h1>
-	<img alt="tfg" class="img-rounded logo"
-		src="<c:url value="/resources/images/logo.png" /> ">
+	<img alt="tfg" class="img-rounded logo" style=" margin-top: 0.25%;"
+		src="<c:url value="/resources/images/theme/ucm-ws.png" /> ">
+		<img alt="tfg" class="img-rounded logo" 
+		src="<c:url value="/resources/images/theme/ucm.png" /> " >
 </div>
 
-
+<!-- 
+<div id="logo">
+				<a href="http://www.ucm.es/" title="Universidad Complutense de Madrid - Portada">
+				<img src="/nodes/web/00media/img/ucm-ws.png" alt="Universidad Complutense de Madrid"></a>
+				<a href="/"><img src="/nodes/web/centros/informatica/media/img/ucm.png" alt="Facultad de Informática" title="Facultad de Informática - Portada">
+				</a>
+			</div>
+ -->
 <c:url value="/" var="homeUrl" />
 <c:url value="/user.htm" var="userUrl" />
 <c:url value="/admin.htm" var="adminUrl" />
@@ -67,7 +76,7 @@
 <c:set var="contextPath" value="${requestScope['javax.servlet.forward.request_uri']}"/> <!-- Get URI -->
 <c:set value="enabled" var="upload"/>   <!-- Location Boolean  -->  
 
-	<!-- Hacer lo mismo con el resto -->
+	<!-- To do the same with the other entities -->
 
 <c:choose>
     <c:when  test="${fn:contains(contextPath, 'academicTerm')}">

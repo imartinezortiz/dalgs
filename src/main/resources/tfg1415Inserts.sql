@@ -13,39 +13,39 @@ INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (6, '2015-2016
 
 --Module Inserts
 
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (1, 'MOD1', 'Materias Básicas', 1);
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (2, 'MOD2', 'Materias comunes a la informatica', 1);
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (3, 'MOD3', 'Tecnologia especifica', 1);
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (4, 'MOD4', 'Complementario', 1);
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (5, 'MOD5', 'Optativo', 1);
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (6, 'MOD6', 'Trabajo fin de grado', 1);
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (7, 'MOD7', 'Materias comunes a la informatica', 1);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (1, 'MOD1', 'Materias Básicas', 'description1', 1);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (2, 'MOD2', 'Materias comunes a la informatica','description2', 1);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (3, 'MOD3', 'Tecnologia especifica','description3', 1);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (4, 'MOD4', 'Complementario', 'description4',1);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (5, 'MOD5', 'Optativo', 'description5',1);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (6, 'MOD6', 'Trabajo fin de grado','description6', 1);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (7, 'MOD7', 'Materias comunes a la informatica','description7', 1);
 
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (8, 'MOD8', 'Materias Básicas', 2);
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (9, 'MOD9', 'Materias comunes a la informatica', 2);
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (10, 'MOD10', 'Tecnologia especifica', 2);
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (11, 'MOD11', 'Complementario', 2);
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (12, 'MOD12', 'Optativo', 2);
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (13, 'MOD13', 'Trabajo fin de grado', 2);
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (14, 'MOD14', 'Materias comunes a la informatica', 2);
+INSERT INTO module (id_module, code_module, name, description, id_degree) VALUES (8, 'MOD8', 'Materias Básicas','description8', 2);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (9, 'MOD9', 'Materias comunes a la informatica','description9', 2);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (10, 'MOD10', 'Tecnologia especifica', 'description10',2);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (11, 'MOD11', 'Complementario', 'description11',2);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (12, 'MOD12', 'Optativo','description12', 2);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (13, 'MOD13', 'Trabajo fin de grado','description13', 2);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (14, 'MOD14', 'Materias comunes a la informatica','description14', 2);
 
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (15, 'MOD15', 'Materias Básicas', 3);
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (16, 'MOD16', 'Materias comunes a la informatica', 3);
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (17, 'MOD17', 'Tecnologia especifica', 3);
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (18, 'MOD18', 'Complementario', 3);
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (19, 'MOD19', 'Optativo', 3);
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (20, 'MOD20', 'Trabajo fin de grado', 3);
-INSERT INTO module (id_module, code_module, name, id_degree) VALUES (21, 'MOD21', 'Materias comunes a la informatica', 3);
+INSERT INTO module (id_module, code_module, name, description, id_degree) VALUES (15, 'MOD15', 'Materias Básicas','description15', 3);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (16, 'MOD16', 'Materias comunes a la informatica','description16', 3);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (17, 'MOD17', 'Tecnologia especifica','description17', 3);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (18, 'MOD18', 'Complementario','description18', 3);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (19, 'MOD19', 'Optativo', 'description19',3);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (20, 'MOD20', 'Trabajo fin de grado','description20', 3);
+INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (21, 'MOD21', 'Materias comunes a la informatica','description21',  3);
 
 --Topic Inserts
 
-INSERT INTO topic (id_topic, code_topic, name, id_module) VALUES (1, 'TOP1', 'Fisica', 1);
-INSERT INTO topic (id_topic, code_topic, name, id_module) VALUES (2, 'TOP2', 'Empresa', 2);
-INSERT INTO topic (id_topic, code_topic, name, id_module) VALUES (3, 'TOP3', 'Informatica', 3);
-INSERT INTO topic (id_topic, code_topic, name, id_module) VALUES (4, 'TOP4', 'Matematicas', 1);
-INSERT INTO topic (id_topic, code_topic, name, id_module) VALUES (5, 'TOP5', 'Sistemas operativos y redes fundamentales', 3);
-INSERT INTO topic (id_topic, code_topic, name, id_module) VALUES (6, 'TOP6', 'Métodos Estadísticos y de Investigación Operativa', 15);
-INSERT INTO topic (id_topic, code_topic, name, id_module) VALUES (7, 'TOP7', 'Desarrollo del software fundamental', 21);
+INSERT INTO topic (id_topic, code_topic, name, description,id_module) VALUES (1, 'TOP1', 'Fisica', 'description1',1);
+INSERT INTO topic (id_topic, code_topic, name, description,id_module) VALUES (2, 'TOP2', 'Empresa', 'description2',2);
+INSERT INTO topic (id_topic, code_topic, name, description,id_module) VALUES (3, 'TOP3', 'Informatica','description3', 3);
+INSERT INTO topic (id_topic, code_topic, name, description,id_module) VALUES (4, 'TOP4', 'Matematicas','description4', 1);
+INSERT INTO topic (id_topic, code_topic, name, description,id_module) VALUES (5, 'TOP5', 'Sistemas operativos y redes fundamentales','description5', 3);
+INSERT INTO topic (id_topic, code_topic, name, description,id_module) VALUES (6, 'TOP6', 'Métodos Estadísticos y de Investigación Operativa','description6', 15);
+INSERT INTO topic (id_topic, code_topic, name, description,id_module) VALUES (7, 'TOP7', 'Desarrollo del software fundamental','description7', 21);
 
 -- Subject Inserts
 INSERT INTO subject (id_subject,code_subject,description,name, id_topic) VALUES (1,'SUB1','Ingenieria Software','IS',7);
@@ -124,6 +124,12 @@ INSERT INTO subject_competence(id_subject,id_competence) VALUES (5,5);
 
 
 
+--Group Inserts
+INSERT INTO _group (id_group, name, id_course) VALUES (1, 'group 1', 1);
+INSERT INTO _group (id_group, name, id_course) VALUES (2, 'group 2', 1);
+INSERT INTO _group (id_group, name, id_course) VALUES (3, 'group 3', 2);
+INSERT INTO _group (id_group, name, id_course) VALUES (4, 'group 4', 2);
+INSERT INTO _group (id_group, name, id_course) VALUES (5, 'group 5', 3);
 
 -- User - Role Inserts  ROLE_USER(2) ROLE_ADMIN(1)
 

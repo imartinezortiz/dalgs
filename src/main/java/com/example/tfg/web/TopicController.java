@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Topic;
 import com.example.tfg.service.TopicService;
 
@@ -42,15 +43,42 @@ public class TopicController {
 	public String processAddNewTopic(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
-			@ModelAttribute("addTopic") Topic newTopic) {
+			@ModelAttribute("addTopic") Topic newTopic,
+			Model model) {
 		
-		boolean created = serviceTopic.addTopic(newTopic, id_module);
-		if (created)
-			return "redirect:/degree/" +id_degree+ "/module/"+ id_module +".htm";
-		else
-			return "redirect:/error.htm";
+		ResultClass<Boolean> result = serviceTopic.addTopic(newTopic, id_module);
+		if (!result.hasErrors())
+//		if (created)
+			return "redirect:/degree/" + id_degree + "/module/" + id_module + ".htm";
+		else{
+			model.addAttribute("addTopic", newTopic);
+			if (result.isElementDeleted())
+				model.addAttribute("unDelete", result.isElementDeleted()); 
+			model.addAttribute("errors", result.getErrorsList());
+			return "topic/add";
+		}
 	}
-
+	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/add.htm", method = RequestMethod.POST, params="Undelete")
+	// Every Post have to return redirect
+	public String undeleteDegree(
+			@ModelAttribute("addTopic") Topic topic, 
+			Model model,
+			@PathVariable("degreeId") Long id_degree,
+			@PathVariable("moduleId") Long id_module) {
+		
+		ResultClass<Boolean> result = serviceTopic.unDeleteTopic(topic);
+		
+		if (!result.hasErrors())
+//		if (created)
+			return "redirect:/degree/" + id_degree + "/module/" + id_module + ".htm";
+		else{
+			model.addAttribute("addTopic", topic);
+			if (result.isElementDeleted())
+				model.addAttribute("unDelete", true); 
+			model.addAttribute("errors", result.getErrorsList());
+			return "topic/add";
+		}
+	}
 
 
 	/**
@@ -61,15 +89,27 @@ public class TopicController {
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
-			@ModelAttribute("modifyTopic") Topic modify)
+			@ModelAttribute("modifyTopic") Topic modify,
+			Model model)
 
 	{
-		// modify.setId(id);
-		boolean modified = serviceTopic.modifyTopic(modify, id_topic);
-		if (modified)
-			return "redirect:/degree/" + id_degree + "/module/" + id_module + ".htm";
-		else
-			return "redirect:/error.htm";
+		ResultClass<Boolean> result = serviceTopic.modifyTopic(modify, id_topic);
+		if (!result.hasErrors())
+//			if (created)
+				return "redirect:/degree/" + id_degree + "/module/" + id_module + ".htm";
+			else{
+				model.addAttribute("modifyTopic", modify);
+				if (result.isElementDeleted()){
+					model.addAttribute("addTopic", modify);
+					model.addAttribute("unDelete", true); 
+					model.addAttribute("errors", result.getErrorsList());
+					return "topic/add";
+				}	
+				model.addAttribute("errors", result.getErrorsList());
+				return "topic/modify";
+			}
+			
+		
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/modify.htm", method = RequestMethod.GET)

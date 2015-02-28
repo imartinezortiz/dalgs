@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Competence;
 import com.example.tfg.domain.Degree;
 import com.example.tfg.repository.CompetenceDao;
@@ -34,22 +35,32 @@ public class CompetenceServiceImp implements CompetenceService {
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public boolean addCompetence(Competence competence, Long id_degree) {
-		Degree degree = serviceDegree.getDegree(id_degree);
-		Competence existCompetence = daoCompetence.existByCode(competence.getInfo().getCode(), degree);
-		if(existCompetence == null){
-			competence.setDegree(degree);
-			degree.getCompetences().add(competence);
-			return daoCompetence.addCompetence(competence);			
-		}
-		else if (existCompetence.isDeleted() == true) {
-			existCompetence.setDegree(degree);
-			existCompetence.setDeleted(false);
-			degree.getCompetences().add(existCompetence);
-			return daoCompetence.saveCompetence(existCompetence);
+	public ResultClass<Boolean> addCompetence(Competence competence, Long id_degree) {
+		competence.setDegree(serviceDegree.getDegree(id_degree));
+		
+		Competence competenceExists = daoCompetence.existByCode(competence.getInfo().getCode(), competence.getDegree());
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
+		if( competenceExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Code already exists");
+
+			if (competenceExists.isDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
+
+			}
+			result.setE(false);
+			result.setErrorsList(errors);
 		}
-		else return false;
+		else{
+			
+			boolean r = daoCompetence.addCompetence(competence);
+			if (r) 
+				result.setE(true);
+		}
+		return result;	
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -97,10 +108,35 @@ public class CompetenceServiceImp implements CompetenceService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public boolean modifyCompetence(Competence competence, Long id_competence) {
+	public ResultClass<Boolean> modifyCompetence(Competence competence, Long id_competence, Long id_degree) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		
+		competence.setDegree(serviceDegree.getDegree(id_degree));
 		Competence modifyCompetence = daoCompetence.getCompetence(id_competence);
-		modifyCompetence.setInfo(competence.getInfo());
-		return daoCompetence.saveCompetence(modifyCompetence);
+		
+		Competence competenceExists = daoCompetence.existByCode(competence.getInfo().getCode(),competence.getDegree() );
+		
+		if(!competence.getInfo().getCode().equalsIgnoreCase(modifyCompetence.getInfo().getCode()) && 
+				competenceExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("New code already exists");
+
+			if (competenceExists.isDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
+
+			}
+			result.setErrorsList(errors);
+			result.setE(false);
+		}
+		else{
+			modifyCompetence.setInfo(competence.getInfo());
+			boolean r = daoCompetence.saveCompetence(modifyCompetence);
+			if (r) 
+				result.setE(true);
+		}
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
@@ -141,6 +177,38 @@ public class CompetenceServiceImp implements CompetenceService {
 
 		return competence;
 	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@Transactional(readOnly = false)
+	public ResultClass<Boolean> unDeleteCompetence(Competence competence, Long id_degree) {
+		
+		competence.setDegree(serviceDegree.getDegree(id_degree));
+		Competence c = daoCompetence.existByCode(competence.getInfo().getCode(), competence.getDegree());
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		if(c == null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Code doesn't exist");
+			result.setErrorsList(errors);
+
+		}
+		else{
+			if(!c.isDeleted()){
+				Collection<String> errors = new ArrayList<String>();
+				errors.add("Code is not deleted");
+				result.setErrorsList(errors);
+			}
+
+			c.setDeleted(false);
+			c.setInfo(competence.getInfo());
+			boolean r = daoCompetence.saveCompetence(c);
+			if(r) 
+				result.setE(true);	
+
+		}
+		return result;
+	}
+
 
 
 }

@@ -1,5 +1,6 @@
 package com.example.tfg.service.implementation;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Degree;
 import com.example.tfg.domain.Subject;
 import com.example.tfg.domain.Topic;
@@ -35,24 +37,31 @@ public class SubjectServiceImp implements SubjectService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public boolean addSubject(Subject subject, Long id_topic) {
+	public ResultClass<Boolean> addSubject(Subject subject, Long id_topic) {
 		
-		Subject existSubject = daoSubject.existByCode(subject.getInfo().getCode());
-		Topic topic = serviceTopic.getTopic(id_topic);
-		if(existSubject == null){
-			subject.setTopic(topic);
-			topic.getSubjects().add(subject);
-			if(daoSubject.addSubject(subject))
-				return serviceTopic.modifyTopic(topic);
-				
-		}else if(existSubject.isDeleted()==true){
-			existSubject.setInfo(subject.getInfo());
-			existSubject.setDeleted(false);
-			topic.getSubjects().add(existSubject);
-			if (daoSubject.saveSubject(existSubject))
-				return serviceTopic.modifyTopic(topic);
+		Subject subjectExists = daoSubject.existByCode(subject.getInfo().getCode());
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+
+		if( subjectExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Code already exists");
+
+			if (subjectExists.isDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
+
+			}
+			result.setE(false);
+			result.setErrorsList(errors);
 		}
-		return false;		
+		else{
+			subject.setTopic(serviceTopic.getTopic(id_topic));
+			boolean r = daoSubject.addSubject(subject);
+			if (r) 
+				result.setE(true);
+		}
+		return result;		
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -82,10 +91,34 @@ public class SubjectServiceImp implements SubjectService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public boolean modifySubject(Subject modify, Long id_subject) {
-		Subject subject = daoSubject.getSubject(id_subject);
-		subject.setInfo(modify.getInfo());
-		return daoSubject.saveSubject(subject);
+	public ResultClass<Boolean> modifySubject(Subject subject, Long id_subject) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+
+		Subject modifySubject = daoSubject.getSubject(id_subject);
+		
+		Subject subjectExists = daoSubject.existByCode(subject.getInfo().getCode());
+		
+		if(!subject.getInfo().getCode().equalsIgnoreCase(modifySubject.getInfo().getCode()) && 
+				subjectExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("New code already exists");
+
+			if (subjectExists.isDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
+
+			}
+			result.setErrorsList(errors);
+			result.setE(false);
+		}
+		else{
+			modifySubject.setInfo(subject.getInfo());
+			boolean r = daoSubject.saveSubject(modifySubject);
+			if (r) 
+				result.setE(true);
+		}
+		return result;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -137,6 +170,34 @@ public class SubjectServiceImp implements SubjectService {
 	@Transactional(readOnly = false)
 	public boolean deleteSubjectsForTopic(Collection<Topic> topics) {	
 		return daoSubject.deleteSubjectsForTopics(topics);
+	}
+
+	public ResultClass<Boolean> unDeleteSubject(Subject subject){
+		Subject s = daoSubject.existByCode(subject.getInfo().getCode());
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		if(s == null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Code doesn't exist");
+			result.setErrorsList(errors);
+
+		}
+		else{
+			if(!s.isDeleted()){
+				Collection<String> errors = new ArrayList<String>();
+				errors.add("Code is not deleted");
+				result.setErrorsList(errors);
+			}
+
+			s.setDeleted(false);
+			s.setInfo(subject.getInfo());
+			boolean r = daoSubject.saveSubject(s);
+			if(r) 
+				result.setE(true);	
+
+		}
+		return result;
+		
 	}
 
 	

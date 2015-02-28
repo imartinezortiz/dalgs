@@ -179,4 +179,15 @@ public class CourseDaoImp implements CourseDao {
 		
 	}
 
+
+//	public Course getCourseAll(Long id) {
+////		Course course = em.getReference(Course.class, id);
+//		Query query = em.createQuery("SELECT c FROM Course c JOIN c.activities a JOIN c.groups g "
+//				+ "WHERE a.isDeleted = false AND g.isDeleted = false AND c.id = ?1");
+//		query.setParameter(1, id);
+//		
+//		return (Course)query.getSingleResult();
+//				
+//	}
+
 }

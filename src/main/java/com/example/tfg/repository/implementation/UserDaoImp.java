@@ -17,7 +17,6 @@ import org.springframework.stereotype.Repository;
 
 
 import com.example.tfg.classes.StringSHA;
-import com.example.tfg.domain.Course;
 import com.example.tfg.domain.User;
 import com.example.tfg.repository.UserDao;
 
@@ -86,34 +85,6 @@ public class UserDaoImp implements UserDao {
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<User> getAllByCourse(Long id_course,Integer pageIndex) {
-		Course course = em.getReference(Course.class, id_course);
-
-		Query query = em
-				.createQuery("select u from Course c.users  where c = ?1 and u.isEnabled='true'");
-
-		query.setParameter(1, course);
-
-		return query.setMaxResults(noOfRecords)
-				.setFirstResult(pageIndex * noOfRecords).getResultList();
-	}
-
-	@Override
-	public boolean existInCourse(Long id, Long id_course) {
-		Course course = em.getReference(Course.class, id_course);
-
-		Query query = em
-				.createQuery("select u from Course c.users  where c = ?1 and u.id=?2 ");
-
-		query.setParameter(1, course);
-		query.setParameter(2, id);
-		
-		if (query.getResultList().isEmpty())
-			return false;
-		else
-			return true;
-	}
 
 	public Integer numberOfPages() {
 

@@ -62,12 +62,12 @@ public class LearningGoalDaoImp implements LearningGoalDao {
 	}
 
 
-	public LearningGoal existByCode(String code, Competence competence) {
+	public LearningGoal existByCode(String code) {
 		
 		Query query = em
-				.createQuery("Select l from LearningGoal l where l.info.code=?1 and l.competence=?2");
+				.createQuery("Select l from LearningGoal l where l.info.code=?1");
 		query.setParameter(1, code);
-		query.setParameter(2, competence);
+		
 
 		if (query.getResultList().isEmpty())
 			return null;

@@ -55,6 +55,7 @@
      	      	 <ref bean="moduleFormatter"/>
                  <ref bean="topicFormatter"/>
                  <ref bean="learningGoalFormatter"/>
+                 <ref bean="groupFormatter"/>
            </set>
       </property>
 </bean>
