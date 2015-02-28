@@ -20,6 +20,10 @@
 		<class>com.example.tfg.domain.Degree</class>
 		<class>com.example.tfg.domain.Subject</class>
 		<class>com.example.tfg.domain.User</class>
+		<class>com.example.tfg.domain.acl.AclClass</class>
+		<class>com.example.tfg.domain.acl.AclEntry</class>
+		<class>com.example.tfg.domain.acl.AclObjectIdentity</class>
+		<class>com.example.tfg.domain.acl.AclSid</class>
 		
 		
 	</persistence-unit>

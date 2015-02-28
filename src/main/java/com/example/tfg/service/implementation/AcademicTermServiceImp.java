@@ -3,6 +3,7 @@ package com.example.tfg.service.implementation;
 import java.util.Collection;
 import java.util.List;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
@@ -28,10 +29,14 @@ import com.example.tfg.domain.User;
 import com.example.tfg.repository.AcademicTermDao;
 import com.example.tfg.service.AcademicTermService;
 import com.example.tfg.service.CourseService;
+import com.example.tfg.web.UserController;
 
 @Service
 public class AcademicTermServiceImp implements AcademicTermService {
 
+	private static final org.slf4j.Logger logger = LoggerFactory
+			.getLogger(AcademicTermServiceImp.class);
+	
 	private SidRetrievalStrategy sidRetrievalStrategy = new SidRetrievalStrategyImpl();
 
 	@Autowired
@@ -137,18 +142,27 @@ public class AcademicTermServiceImp implements AcademicTermService {
 
 	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	//@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, admin)" )
-	//@PreAuthorize("hasPermission(returnObject, 'DELETE') or hasPermission(returnObject, 'ADMINISTRATION')" )
+
 	@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')" )
 
+	//@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)// propagation = Propagation.REQUIRED)
-	public boolean deleteAcademicTerm(Long id_academic) {
-		AcademicTerm academic = daoAcademicTerm
-				.getAcademicTermById(id_academic);
-		if (academic.getCourses().isEmpty()
-				|| serviceCourse.deleteCoursesFromAcademic(academic))
+	public boolean deleteAcademicTerm(AcademicTerm academicTerm) {
+		boolean sucess = false;
+		//AcademicTerm academic = daoAcademicTerm.getAcademicTermById(id_academic);
+		if (academicTerm.getCourses().isEmpty()
+				|| serviceCourse.deleteCoursesFromAcademic(academicTerm)){
+			sucess =  daoAcademicTerm.deleteAcademicTerm(academicTerm.getId());
 
-			return daoAcademicTerm.deleteAcademicTerm(id_academic);
-		return false;
+			// Delete the ACL information as well
+	        ObjectIdentity oid = new ObjectIdentityImpl(AcademicTerm.class, academicTerm.getId());
+			mutableAclService.deleteAcl(oid, false);
+			if (logger.isDebugEnabled()) {
+	            logger.debug("Deleted academicTerm " + academicTerm.getId() + " including ACL permissions");
+	        }
+			
+		}
+		return sucess;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -158,21 +172,22 @@ public class AcademicTermServiceImp implements AcademicTermService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostAuthorize("hasPermission(returnObject, 'READ')")
+	@PostAuthorize("hasPermission(returnObject, 'READ')") //Single: returnObject
 	@Transactional(readOnly = true)
 	public AcademicTerm getAcademicTerm(Long id_academic) {
 		return daoAcademicTerm.getAcademicTermById(id_academic);
 	}
  
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ')")
+	@PostFilter("hasPermission(filterObject, 'READ')") // Collection: filterObject
 	@Transactional(readOnly = false)
 	public List<AcademicTerm> getAcademicTermsByDegree(Long id_degree) {
 		return daoAcademicTerm.getAcademicTermsByDegree(id_degree);
 	}
 
+	// WORKING 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ')")
+	@PostAuthorize("hasPermission(returnObject, 'READ')")
 	@Transactional(readOnly = true)
 	public AcademicTerm getAcademicTermAll(Long id_academic) {
 		AcademicTerm aT= daoAcademicTerm.getAcademicTermById(id_academic);
@@ -181,9 +196,9 @@ public class AcademicTermServiceImp implements AcademicTermService {
 	}
 	
 	//@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')" )
+	@PreAuthorize("hasPermission(returnObject, 'DELETE') or hasPermission(returnObject, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)
-	public boolean deleteAcademicTerm(Collection<AcademicTerm> academicList) {
+	public boolean deleteAcademicTermCollection(Collection<AcademicTerm> academicList) {
 		
 		boolean deleteCourses = serviceCourse.deleteCourses(academicList);
 		if (deleteCourses)

@@ -153,7 +153,7 @@ public class AcademicTermController {
 			@PathVariable("academicId") Long id_academic)
 			throws ServletException {
 
-		if (serviceAcademicTerm.deleteAcademicTerm(id_academic)) {
+		if (serviceAcademicTerm.deleteAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic))) {
 			return "redirect:/academicTerm/page/0.htm";
 		} else
 			return "redirect:/error.htm";

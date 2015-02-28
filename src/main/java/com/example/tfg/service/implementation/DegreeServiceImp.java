@@ -84,7 +84,7 @@ public class DegreeServiceImp implements DegreeService {
 				.deleteCompetencesForDegree(d);
 		Collection<AcademicTerm> academicList = serviceAcademicTerm.getAcademicTermsByDegree(id);
 		
-		boolean deleteAcademic = serviceAcademicTerm.deleteAcademicTerm(academicList);
+		boolean deleteAcademic = serviceAcademicTerm.deleteAcademicTermCollection(academicList);
 		if (deleteModules && deleteCompetences && deleteAcademic) {
 			return daoDegree.deleteDegree(d);
 		} else	return false;
