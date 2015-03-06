@@ -26,15 +26,19 @@
 			<input class="form-control" placeholder="Password" required id="j_password" name="j_password" size="20" maxlength="50" type="password"/>
 		
 			<br>
-			 <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+			 <button class="btn btn-lg btn-primary btn-block" 
+			 style=" background: rgb(192, 192, 192);  border: white 2px outset;  font-weight: bolder;  font-size: 18px;  padding: 5px;"
+			 type="submit">Sign in</button>
 		
 	</form>
-	<div class="alert alert-error">
-	<a href="#" class="close" data-dismiss="alert">&times;</a>
-    <strong>Error!</strong> A problem has been occurred while submitting
-    ${message}
-    
-</div>
+	<c:if test="${not empty message}">
+		<div class="alert alert-error">
+		<a href="#" class="close" data-dismiss="alert">&times;</a>
+    	<strong>Error!</strong> A problem has been occurred while submitting
+    	${message}
+		</div> 
+   </c:if>
+
 	</div>
 </body>
 </html>

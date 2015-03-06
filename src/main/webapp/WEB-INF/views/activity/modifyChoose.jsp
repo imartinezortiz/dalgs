@@ -65,7 +65,11 @@
 								</td>
 								<td>
 									<a href="<c:url value='competenceStatus/${learnStatus.learningGoal.id}/delete.htm'/>">
-										<img style="width: 25px; height: 10px; margin-top: 3%;" border="0" src="<c:url value="/resources/images/delete.png" /> " > 
+										
+										<button type="button" class="btn btn-default btn-lg" 
+										style=" padding: 2px; margin-top: 1.2%;  background: rgb(236, 236, 236);">
+  										<span class="glyphicon glyphicon-remove" aria-hidden="true" ></span> 
+										</button>
 									</a>
 							</td>
 								
@@ -83,7 +87,7 @@
 			</form:form >
 			<div class="addLearningStatus">
 			<form:form method="post" action="addLearningStatus.htm" commandName="addlearningstatus">
-					<h4 style=" color: forestgreen;">   		
+					<h4 style=" color: forestgreen; text-decoration: underline; cursor: default;">   		
 					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 					New Learning Goal Status</h4>
 					<br>
@@ -103,7 +107,7 @@
 
 				
 					 <input type="submit" class="btn btn-success CompSta" name="button1"
-						value="Add Learning Goal Status" /> 
+						style="  cursor: copy;" value="Add Learning Goal Status" /> 
 
 			</form:form>
 			</div>

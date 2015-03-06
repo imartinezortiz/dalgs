@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import es.ucm.fdi.dalgs.subject.web.SubjectController;
 
 /**
  * Handles requests for the application home page.
@@ -20,8 +19,7 @@ import es.ucm.fdi.dalgs.subject.web.SubjectController;
 @Controller
 public class MainController {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(SubjectController.class);
+	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -51,18 +49,6 @@ public class MainController {
 	public String handlePageNotFound() {
 		// do something
 		return "exception/notFound";
-	}
-	
-	@RequestMapping(value = "/badRequest.htm")
-	public String handleBadRequest() {
-		// do something
-		return "exception/badRequest";
-	}
-	
-	@RequestMapping(value = "/serverError.htm")
-	public String handlePageServerError() {
-		// do something
-		return "exception/serverError";
 	}
 
 }

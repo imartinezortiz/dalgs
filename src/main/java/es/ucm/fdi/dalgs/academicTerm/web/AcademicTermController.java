@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import es.ucm.fdi.dalgs.academicTerm.service.AcademicTermService;
@@ -77,14 +78,17 @@ public class AcademicTermController {
 	 * Methods for list academic terms of a term
 	 */
 	@RequestMapping(value = "/academicTerm/page/{pageIndex}.htm")
-	protected ModelAndView formViewAcademicTerm(
-			@PathVariable("pageIndex") Integer pageIndex)
+	protected ModelAndView formViewAcademicTerm(@PathVariable("pageIndex") Integer pageIndex, 
+			@RequestParam(value = "showAll", defaultValue="") String showAll)
 			throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
-
+		
+		if (showAll.equalsIgnoreCase("")) showAll="true";
+		else showAll="";
+			
 		List<AcademicTerm> p = serviceAcademicTerm.getAcademicsTerm(pageIndex);
-
+		myModel.put("showAll", showAll);
 		myModel.put("academicTerms", p);
 		Integer numberOfPages = serviceAcademicTerm.numberOfPages();
 		myModel.put("numberOfPages",numberOfPages );

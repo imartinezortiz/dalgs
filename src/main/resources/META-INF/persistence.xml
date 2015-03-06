@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- la configuración del bean entityManager requerirá la creación de un 
-	fichero donde se defina la unidad de persistencia. Por defecto, este fichero 
-	se deberá llamar 'persistence.xml' y deberá crearse bajo el directorio 'META-INF' 
-	dentro del directorio de recursos de la aplicación 'src/main/resources' -->
 
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -15,9 +11,12 @@
 		<class>es.ucm.fdi.dalgs.domain.AcademicTerm</class>
  		<class>es.ucm.fdi.dalgs.domain.Activity</class>
 		<class>es.ucm.fdi.dalgs.domain.Competence</class>
-		<class>es.ucm.fdi.dalgs.domain.LearningGoalStatus</class>
+		<class>es.ucm.fdi.dalgs.domain.LearningGoal</class>
 		<class>es.ucm.fdi.dalgs.domain.Course</class> 
 		<class>es.ucm.fdi.dalgs.domain.Degree</class>
+		<class>es.ucm.fdi.dalgs.domain.Group</class>
+		<class>es.ucm.fdi.dalgs.domain.Module</class>
+		<class>es.ucm.fdi.dalgs.domain.Topic</class>
 		<class>es.ucm.fdi.dalgs.domain.Subject</class>
 		<class>es.ucm.fdi.dalgs.domain.User</class>
 		<class>es.ucm.fdi.dalgs.domain.acl.AclClass</class>

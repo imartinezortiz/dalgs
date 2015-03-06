@@ -41,42 +41,22 @@
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
+  
   <error-page>
     <error-code>404</error-code>
     <location>/pageNotFound.htm</location>
   </error-page>
-  <error-page>
-    <error-code>403</error-code>
-    <location>/error.htm</location>
-  </error-page>
-  <error-page>
-    <error-code>405</error-code>
-    <location>/methodNotAllowed.htm</location>
-  </error-page>
-  <error-page>
-    <error-code>500</error-code>
-    <location>/methodNotAllowed.htm</location>
-  </error-page>
-  <error-page>
-    <error-code>503</error-code>
-    <location>/error.htm</location>
-  </error-page>
-  <error-page>
-    <exception-type>java.lang.ClassCastException</exception-type>
-    <location>/error.htm</location>
-  </error-page>
-  <error-page>
-    <exception-type>java.io.IOException</exception-type>
-    <location>/error.htm</location>
-  </error-page>
+  
   <error-page>
     <exception-type>java.lang.Exception</exception-type>
     <location>/error.htm</location>
   </error-page>
+  
   <error-page>
     <exception-type>java.lang.Throwable</exception-type>
     <location>/error.htm</location>
   </error-page>
+  
   <filter>
     <filter-name>CharacterEncodingFilter</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
