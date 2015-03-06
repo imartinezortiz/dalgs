@@ -47,10 +47,10 @@
 
 				Professor List
 			</h3>
-			<a class="btn list-btn btn-warning2"
+			<a style="cursor:copy;" class="btn list-btn btn-warning2"
 				href="<c:url value='/degree/${degreeId}/module/add.htm'/>"> <span
 				class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				Add
+				Add 
 			</a>
 
 		</div>
@@ -90,8 +90,8 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">			
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-			Students List</h3>
-			<a class="btn list-btn btn-warning2"
+			Student List</h3>
+			<a style="cursor:copy;" class="btn list-btn btn-warning2"
 				href="<c:url value='/degree/${degreeId}/competence/add.htm'/>">
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 				Add

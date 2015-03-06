@@ -13,12 +13,12 @@
 		<div class="panel-heading list">
 
 			<h4>			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-			Degrees</h4>
+			Degree List</h4>
 						<sec:authorize access="hasRole('ROLE_ADMIN')">
 			
-			<a class="btn btn-add2" href="<c:url value='/degree/add.htm'/>">
+			<a  style="cursor:copy;" class="btn btn-add2" href="<c:url value='/degree/add.htm'/>">
 							<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				Add Degree </a></sec:authorize>
+				Add  </a></sec:authorize>
 		</div>
 		<table class="table table-striped table-bordered">
 			<tr align="center">

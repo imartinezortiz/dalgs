@@ -9,10 +9,11 @@
 <div class="table-responsive list">
     <div class="panel-heading list">
   		<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-        <h4>Activities</h4>
+        <h4>Activity List</h4>
 		
 		<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')">
-        <a  class="btn list-btn btn-warning2" href="<c:url value='/activity/add.htm'/>"> Add Activity </a>
+        <a  style="cursor:copy;" class="btn list-btn btn-warning2" href="<c:url value='/activity/add.htm'/>"> 
+        Add  </a>
         </sec:authorize>
         
     </div>

@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.example</groupId>
-	<artifactId>tfg</artifactId>
-	<name>SpringMVCMaven</name>
+	<groupId>es.ucm.fdi.dalgs</groupId>
+	<artifactId>dalgs</artifactId>
+	<name>D.A.L.G.S</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
@@ -336,4 +336,5 @@
 			<url>http://repository.jboss.org/maven2/</url>
 		</repository>
 	</repositories>
+	<description>Degrees and Learning Goals System</description>
 </project>

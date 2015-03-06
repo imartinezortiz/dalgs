@@ -36,11 +36,7 @@
 			the use of SPEL hasRole and permitAll (see more) -->
 		<intercept-url pattern="/login.htm" access="permitAll" />
 		<intercept-url pattern="/logout.htm" access="permitAll" />
-		<intercept-url pattern="/denied.htm" access="hasRole('ROLE_USER')" />
-		<intercept-url pattern="/" access="hasRole('ROLE_USER')" />
-		
-		<intercept-url pattern="/user.htm" access="hasRole('ROLE_USER')" />
-		<intercept-url pattern="/admin.htm" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/*" access="hasRole('ROLE_USER')" />
 
 
 		<!-- form login This declares our login settings: login-page: the URL path 

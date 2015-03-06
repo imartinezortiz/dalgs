@@ -40,7 +40,7 @@
 				
 				<div class="form-group">
   					<label>Password: </label>
-					<form:input path="password" class="form-control" placeholder="Password" required="true"/>
+					<form:input type="password" path="password" class="form-control" placeholder="Password" required="true"/>
 				</div>
 				
 				<div class="form-group">

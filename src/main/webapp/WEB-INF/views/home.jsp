@@ -14,7 +14,7 @@
 <body>
 	<div class="list-group index">
 		<a class="list-group-item "
-			href="<c:url value='/academicTerm/page/0.htm'/>">
+			href="<c:url value='/academicTerm/page/0.htm?showAll'/>">
 			<h4 class="list-group-item-heading">				
 			<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
 			Academic Term</h4>

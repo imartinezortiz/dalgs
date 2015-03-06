@@ -9,20 +9,33 @@ fieldset {
 }
 
 }
+/*
 img.img-rounded.logo {
 	float: right;
 	margin-top: -0.5%;
+}*/
+img.img-rounded.logo {
+	float: right;
+	max-width: 200px;
+	margin-top: 1%;
 }
 
 h1.logo {
 	display: inline-block;
 	margin-left: 5%;
 }
-
+/*
 .page-header.logo {
 	background-color: rgb(218, 237, 255);
 	margin: 0.75%;
 	border-radius: 12%;
+}*/
+.page-header.logo {
+	background: rgba(18, 37, 98, 0.6) url('../images/theme/cabecera-1.png')
+		top left no-repeat;
+	margin: 0.75%;
+	border-radius: 10%;
+	color: white;
 }
 
 .list-group.index {
@@ -101,6 +114,13 @@ a.btn.home {
 	width: 95%;
 	margin-left: auto;
 	margin-right: auto;
+	border-color: #E3E4E7;
+}
+
+.panel-primary>.panel-heading {
+	color: #fff;
+	background-color: rgba(111, 123, 159, 0.78);
+	border-color: #FFFFFF;
 }
 /*
 .panel.panel-primary.group.category {

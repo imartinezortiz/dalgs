@@ -10,23 +10,22 @@
 		<div class="panel-heading list">
 			<h4>  
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-			 Users</h4>
+			 User List</h4>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 			
-			<a class="btn list-btn btn-warning2"
+			<a style="cursor:copy;" class="btn list-btn btn-warning2"
 				href="<c:url value='/user/add.htm'/>"> 
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				
-				Add User
+				Add 
 			</a>
 			</sec:authorize>
 		</div>
 		<table class="table table-striped table-bordered">
 					<tr align="center">
-						<td width="30%"><div class="td-label">Last Name</div></td>
-						<td width="30%"><div class="td-label">First Name</div></td>
-						<td width="40%"><div class="td-label">Email</div></td>
-						<td width="40%"><div class="td-label">Status</div></td>
+						<td><div class="td-label">Last Name</div></td>
+						<td><div class="td-label">First Name</div></td>
+						<td><div class="td-label">Email</div></td>
+						<td><div class="td-label">Status</div></td>
 
 					</tr>
 					<c:forEach items="${model.users}" var="user">

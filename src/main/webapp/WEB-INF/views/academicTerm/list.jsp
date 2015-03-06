@@ -9,16 +9,35 @@
 	<div class="table-responsive list">
 		<div class="panel-heading list">
 			<h4>  
+			
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-			 Academic Terms</h4>
+			 Academic Term List</h4>
+			 
+	
+			
  			<sec:authorize access="hasRole('ROLE_ADMIN')">
-			<a class="btn list-btn btn-warning2"
+			<a class="btn list-btn btn-warning2" style="cursor:copy;"
 				href="<c:url value='/academicTerm/add.htm'/>"> 
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				
-				Add Academic Term
+				Add 
 			</a>
 			 </sec:authorize> 
+			<c:choose>
+   				<c:when  test="${model.showAll eq true}">
+   					<a href="<c:url value='/academicTerm/page/${model.currentPage}.htm'>
+   					   				<c:param name="showAll" value="false"/>
+    						</c:url>">
+   					<img src="<c:url value="/resources/images/trash_open.png" /> "  
+			 		style=" float: right;  margin-top: -1;  margin-right: 1%;"></a> 
+    			</c:when>
+    			<c:otherwise>
+    					<a href="<c:url value='/academicTerm/page/${model.currentPage}.htm'> 
+    					   			<c:param name="showAll" value="true"/>
+    							</c:url>">
+			 			<img src="<c:url value="/resources/images/trash_close.png" /> " 
+			 			 style="float: right; margin-right: 1%;margin-top: 3;"></a> 
+				</c:otherwise>
+			</c:choose>
 		</div>
 		<table class="table table-striped table-bordered">
 			<tr align="center">
@@ -33,28 +52,33 @@
 			</tr>
 
 
-			<c:forEach items="${model.academicTerms}" var="academicTerm">
+			<c:forEach items="${model.academicTerms}" var="academic">
 
 				<tr align="center">
-					<td><c:out value="${academicTerm.term}" /></td>
-					<td><c:out value="${academicTerm.degree.info.code}" /></td>
-					<td><c:out value="${academicTerm.degree.info.name}" /></td>
+					<td><c:out value="${academic.term}" /></td>
+					<td><c:out value="${academic.degree.info.code}" /></td>
+					<td><c:out value="${academic.degree.info.name}" /></td>
 					<!-- <td><c:out value="${activity.name}" /></td>
 				<td><c:out value="${activity.description}" /></td>
 				<td><c:out value="${activity.subject.name}" /></td>
 				-->
 
-
-					<td><a
-						href="<c:url value='/academicTerm/${academicTerm.id}.htm'/>"
-						class="btn btn-success">View</a> 
- 						<sec:authorize access="hasRole('ROLE_ADMIN')">
-						<a
-						href="<c:url value='/academicTerm/${academicTerm.id}/delete.htm'/>"
-						class="btn btn-danger">Delete</a>
-						</sec:authorize>
+					<td>
+					<c:choose>
+   						<c:when  test="${academic.isDeleted eq false}">
+   							<a	href="<c:url value='/academicTerm/${academic.id}.htm'/>"
+								class="btn btn-success">View</a> 
+ 							<sec:authorize access="hasRole('ROLE_ADMIN')">
+							<a href="<c:url value='/academicTerm/${academic.id}/delete.htm'/>"
+								class="btn btn-danger">Delete</a>
+							</sec:authorize>
+					</c:when>
+					<c:otherwise>
+						<a	href="<c:url value='/academicTerm/${academic.id}/restore.htm'/>"
+								class="btn btn-success">Restore</a> 
+					</c:otherwise>
+				</c:choose>
 				</td>
-
 				</tr>
 
 			</c:forEach>
