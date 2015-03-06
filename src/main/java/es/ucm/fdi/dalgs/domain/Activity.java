@@ -39,7 +39,7 @@ public class Activity {
 	private Course course;
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
-	private boolean isDeleted;
+	private Boolean isDeleted;
 
 
 	@ElementCollection(fetch = FetchType.LAZY)
@@ -68,7 +68,7 @@ public class Activity {
 		this.course = course;
 	}
 
-	public boolean isDeleted() {
+	public Boolean getIsDeleted() {
 		return isDeleted;
 	}
 

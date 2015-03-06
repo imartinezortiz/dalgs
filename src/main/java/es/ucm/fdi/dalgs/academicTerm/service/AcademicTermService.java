@@ -46,7 +46,7 @@ public class AcademicTermService {
 		if (academicAux == null){
 			success = daoAcademicTerm.addAcademicTerm(academicTerm);			
 		}
-		else if(academicAux.isDeleted()){
+		else if(academicAux.getIsDeleted()){
 			academicAux.setDeleted(false);
 			success =  daoAcademicTerm.saveAcademicTerm(academicAux);			
 		}
@@ -99,8 +99,8 @@ public class AcademicTermService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
-	public Integer numberOfPages() {
-		return daoAcademicTerm.numberOfPages();
+	public Integer numberOfPages(Boolean showAll) {
+		return daoAcademicTerm.numberOfPages(showAll);
 	}
 
  

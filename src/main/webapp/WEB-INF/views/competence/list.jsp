@@ -10,10 +10,10 @@
 		<div class="panel-heading list">
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 
-			<h4>Competences</h4>
+			<h4>Competence List</h4>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 			
-			<a class="btn list-btn btn-warning2"
+			<a class="btn list-btn btn-warning2" style="cursor:copy;"
 				href="<c:url value='/competence/add.htm'/>"> Add </a>
 				</sec:authorize>
 		</div>

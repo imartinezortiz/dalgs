@@ -40,7 +40,7 @@ public class ModuleService {
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("Code already exists");
 
-			if (moduleExists.isDeleted()){
+			if (moduleExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
 
@@ -79,7 +79,7 @@ public class ModuleService {
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("New code already exists");
 
-			if (moduleExists.isDeleted()){
+			if (moduleExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
 
@@ -154,7 +154,7 @@ public class ModuleService {
 
 		}
 		else{
-			if(!m.isDeleted()){
+			if(!m.getIsDeleted()){
 				Collection<String> errors = new ArrayList<String>();
 				errors.add("Code is not deleted");
 				result.setErrorsList(errors);

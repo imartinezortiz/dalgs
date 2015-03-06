@@ -41,7 +41,7 @@ public class LearningGoalService {
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("Code already exists");
 
-			if (learningExists.isDeleted()){
+			if (learningExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
 
@@ -79,7 +79,7 @@ public class LearningGoalService {
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("New code already exists");
 
-			if (learningExists.isDeleted()){
+			if (learningExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
 
@@ -153,7 +153,7 @@ public class LearningGoalService {
 
 		}
 		else{
-			if(!l.isDeleted()){
+			if(!l.getIsDeleted()){
 				Collection<String> errors = new ArrayList<String>();
 				errors.add("Code is not deleted");
 				result.setErrorsList(errors);

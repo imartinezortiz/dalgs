@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -28,7 +27,7 @@ public class Course {
 	private Long id;
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
-	private boolean isDeleted;
+	private Boolean isDeleted;
 
 	@ManyToOne
 	@JoinColumn(name = "id_subject")
@@ -47,12 +46,7 @@ public class Course {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "id_academicterm")
 	private AcademicTerm academicTerm;
-	
-/*
-	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	@JoinTable(name = "course_user", joinColumns = { @JoinColumn(name = "id_course") }, inverseJoinColumns = { @JoinColumn(name = "id_user") })
-	private Collection<User> users = new ArrayList<User>();
-*/	
+
 
 	public Course() {
 		super();
@@ -74,7 +68,7 @@ public class Course {
 		this.id = id;
 	}
 
-	public boolean isDeleted() {
+	public Boolean getIsDeleted() {
 		return isDeleted;
 	}
 

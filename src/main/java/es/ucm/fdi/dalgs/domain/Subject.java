@@ -28,24 +28,12 @@ public class Subject {
 	@Column(name = "id_subject")
 	private Long id;
 
-//	@Basic(optional = false)
-//	@Column(name = "name", length = 50, nullable = false)
-//	private String name;
-//
-//	@Basic(optional = false)
-//	@Column(name = "description", length = 250, nullable = false)
-//	private String description;
 	@Embedded
 	private SubjectInfo info;
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
-	private boolean isDeleted;
+	private Boolean isDeleted;
 
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	// , optional = false)//cascade= CascadeType.ALL)
-//	@JoinColumn(name = "id_degree")
-//	private Degree degree;
-	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_topic")
 	private Topic topic;
@@ -81,7 +69,7 @@ public class Subject {
 		this.competences = competences;
 	}
 
-	public boolean isDeleted() {
+	public Boolean getIsDeleted() {
 		return isDeleted;
 	}
 

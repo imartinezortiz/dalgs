@@ -57,7 +57,7 @@
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 			Competence List </h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
-			<a class="btn list-btn btn-warning2"
+			<a style="cursor:copy;" class="btn list-btn btn-warning2"
 				href="<c:url value='/degree/${degreeId}/module/${model.subject.topic.module.id}/topic/${model.subject.topic.id}/subject/${subjectId}/addCompetences.htm'/>">
 								<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 				Add</a></sec:authorize>

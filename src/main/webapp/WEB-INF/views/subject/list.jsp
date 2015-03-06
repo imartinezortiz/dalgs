@@ -13,9 +13,10 @@
 		<div class="panel-heading list">
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 
-			<h4>Subjects</h4>
-			<sec:authorize access="hasRole('ROLE_ADMIN')"><a class="btn btn-add2" href="<c:url value='/subject/add.htm'/>">
-				Add Subject </a></sec:authorize>
+			<h4>Subject List</h4>
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+			<a style="cursor:copy;" class="btn btn-add2" href="<c:url value='/subject/add.htm'/>">
+				Add  </a></sec:authorize>
 		</div>
 		<table class="table table-striped table-bordered">
 			<tr align="center">

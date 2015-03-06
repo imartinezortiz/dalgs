@@ -44,7 +44,7 @@ public class Competence {
 	private Degree degree;
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
-	private boolean isDeleted;
+	private Boolean isDeleted;
 
 //	@Column(name = "code_competence", nullable = false)
 //	private String code;
@@ -69,21 +69,6 @@ public class Competence {
 		this.id = id;
 	}
 
-//	public String getName() {
-//		return name;
-//	}
-//
-//	public void setName(String name) {
-//		this.name = name;
-//	}
-//
-//	public String getDescription() {
-//		return description;
-//	}
-//
-//	public void setDescription(String description) {
-//		this.description = description;
-//	}
 
 	public Collection<Subject> getSubjects() {
 		return subjects;
@@ -93,7 +78,7 @@ public class Competence {
 		this.subjects = subjects;
 	}
 
-	public boolean isDeleted() {
+	public Boolean getIsDeleted() {
 		return isDeleted;
 	}
 

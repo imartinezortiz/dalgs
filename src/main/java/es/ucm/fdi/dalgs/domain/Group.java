@@ -44,7 +44,7 @@ public class Group {
 	private Collection<User> students = new ArrayList<User>();
 	
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
-	private boolean isDeleted;
+	private Boolean isDeleted;
 
 	public Long getId() {
 		return id;
@@ -78,7 +78,7 @@ public class Group {
 		this.students = students;
 	}
 
-	public boolean isDeleted() {
+	public Boolean getIsDeleted() {
 		return isDeleted;
 	}
 

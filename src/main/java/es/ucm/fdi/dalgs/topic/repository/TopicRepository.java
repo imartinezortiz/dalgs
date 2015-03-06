@@ -16,7 +16,7 @@ import es.ucm.fdi.dalgs.domain.Module;
 import es.ucm.fdi.dalgs.domain.Topic;
 
 @Repository
-public class TopicDaoImp implements TopicDao {
+public class TopicRepository {
 
 	protected EntityManager em;
 
@@ -25,7 +25,7 @@ public class TopicDaoImp implements TopicDao {
 	}
 
 	protected static final Logger logger = LoggerFactory
-			.getLogger(TopicDaoImp.class);
+			.getLogger(TopicRepository.class);
 
 	@PersistenceContext
 	public void setEntityManager(EntityManager entityManager) {
@@ -156,5 +156,4 @@ public class TopicDaoImp implements TopicDao {
 	}
 
 	
-
 }

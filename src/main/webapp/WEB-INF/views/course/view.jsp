@@ -63,10 +63,10 @@
 			 Activity List</h3>
 				<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')">
 			 
-			<a  class="btn list-btn btn-warning2" href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/add.htm'/>">
+			<a  style="cursor:copy;" class="btn list-btn btn-warning2" href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/add.htm'/>">
 								<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 			
-			 Add Activity </a>
+			 Add  </a>
 			</sec:authorize>
 		</div>
 		<div class="panel-body">
@@ -111,10 +111,10 @@
 			<h3 class="panel-title list">						
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 			 Groups List</h3>
-			<a  class="btn list-btn btn-warning2" href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/add.htm'/>">
+			<a style="cursor:copy;"  class="btn list-btn btn-warning2" href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/add.htm'/>">
 								<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 			
-			 Add Group </a>
+			 Add </a>
 			
 		</div>
 		<div class="panel-body">

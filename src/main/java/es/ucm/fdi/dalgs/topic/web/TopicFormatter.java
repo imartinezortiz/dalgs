@@ -8,13 +8,13 @@ import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Component;
 
 import es.ucm.fdi.dalgs.domain.Topic;
-import es.ucm.fdi.dalgs.topic.repository.TopicDao;
+import es.ucm.fdi.dalgs.topic.repository.TopicRepository;
 
 @Component
 public class TopicFormatter implements Formatter<Topic>{
 
 	@Autowired
-	private TopicDao topicDao;
+	private TopicRepository topicDao;
 
 	// Some service class which can give the Actor after
 	// fetching from Database

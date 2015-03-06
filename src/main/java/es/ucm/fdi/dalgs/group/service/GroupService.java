@@ -36,7 +36,7 @@ public class GroupService {
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("Code already exists");
 
-			if (groupExists.isDeleted()){
+			if (groupExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
 
@@ -73,7 +73,7 @@ public class GroupService {
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("New code already exists");
 
-			if (groupExists.isDeleted()){
+			if (groupExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
 
@@ -119,7 +119,7 @@ public class GroupService {
 
 		}
 		else{
-			if(!g.isDeleted()){
+			if(!g.getIsDeleted()){
 				Collection<String> errors = new ArrayList<String>();
 				errors.add("Code is not deleted");
 				result.setErrorsList(errors);

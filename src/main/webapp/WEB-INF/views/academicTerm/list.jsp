@@ -11,7 +11,7 @@
 			<h4>  
 			
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-			 Academic Terms</h4>
+			 Academic Term List</h4>
 			 
 	
 			
@@ -19,8 +19,7 @@
 			<a class="btn list-btn btn-warning2" style="cursor:copy;"
 				href="<c:url value='/academicTerm/add.htm'/>"> 
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				${showAll}
-				Add Academic Term
+				Add 
 			</a>
 			 </sec:authorize> 
 			<c:choose>

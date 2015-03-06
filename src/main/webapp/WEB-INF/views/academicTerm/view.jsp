@@ -50,10 +50,10 @@
 
 			<h3 class="panel-title list">Course List</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
-				<a class="btn list-btn btn-warning2" style="margin-top: 5px;"
+				<a class="btn list-btn btn-warning2" style="margin-top: 5px; cursor:copy;"
 					href="<c:url value='/academicTerm/${model.academicTerm.id}/course/add.htm'/>">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					ADD COURSE
+					Add
 				</a>
 			</sec:authorize>
 		</div>

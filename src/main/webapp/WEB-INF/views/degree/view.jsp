@@ -60,10 +60,10 @@
 			</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 			
-			<a class="btn list-btn btn-warning2"
+			<a style="cursor:copy;" class="btn list-btn btn-warning2"
 				href="<c:url value='/degree/${degreeId}/module/add.htm'/>"> <span
 				class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				Add
+				Add 
 			</a>
 			</sec:authorize>
 
@@ -110,10 +110,10 @@
 			Competence List</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 			
-			<a class="btn list-btn btn-warning2"
+			<a style="cursor:copy;" class="btn list-btn btn-warning2"
 				href="<c:url value='/degree/${degreeId}/competence/add.htm'/>">
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				Add
+				Add 
 			</a></sec:authorize>
 
 		</div>

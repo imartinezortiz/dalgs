@@ -90,7 +90,7 @@ public class AcademicTermController {
 		List<AcademicTerm> p = serviceAcademicTerm.getAcademicsTerm(pageIndex, showAll);
 		myModel.put("showAll", showAll);
 		myModel.put("academicTerms", p);
-		Integer numberOfPages = serviceAcademicTerm.numberOfPages();
+		Integer numberOfPages = serviceAcademicTerm.numberOfPages(showAll);
 		myModel.put("numberOfPages",numberOfPages );
 		myModel.put("currentPage", pageIndex);
 

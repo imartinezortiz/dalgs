@@ -30,7 +30,7 @@ public class Module {
 	private ModuleInfo info;
 	
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
-	private boolean isDeleted;
+	private Boolean isDeleted;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_degree")
@@ -55,10 +55,10 @@ public class Module {
 		this.info = info;
 	}
 
-	public Boolean isDeleted() {
+	public Boolean getIsDeleted() {
 		return isDeleted;
 	}
-
+	
 	public void setDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}

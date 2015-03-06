@@ -52,13 +52,13 @@
 		<div class="panel-heading">
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 
-			<h3 class="panel-title list">Course List</h3>
+			<h3 class="panel-title list">Group List</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 
-				<a class="btn list-btn btn-warning2" style="margin-top: 5px;"
+				<a style="cursor:copy;" class="btn list-btn btn-warning2" style="margin-top: 5px;"
 					href="<c:url value='/user/${model.user.id}/group/add.htm'/>"><span
 					class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					ADD GROUP
+					Add
 				</a>
 			</sec:authorize>
 		</div>

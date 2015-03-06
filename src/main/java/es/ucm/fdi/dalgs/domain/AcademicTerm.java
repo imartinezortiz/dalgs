@@ -70,9 +70,7 @@ public class AcademicTerm {
 		this.term = term;
 	}
 
-	public Boolean isDeleted() {
-		return isDeleted;
-	}
+	
 	public Boolean getIsDeleted() {
 		return isDeleted;
 	}

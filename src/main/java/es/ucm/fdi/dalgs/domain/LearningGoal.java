@@ -30,7 +30,7 @@ public class LearningGoal {
 	private Competence competence;
 	
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
-	private boolean isDeleted;
+	private Boolean isDeleted;
 
 	public Long getId() {
 		return id;
@@ -56,7 +56,7 @@ public class LearningGoal {
 		this.competence = competence;
 	}
 
-	public boolean isDeleted() {
+	public Boolean getIsDeleted() {
 		return isDeleted;
 	}
 

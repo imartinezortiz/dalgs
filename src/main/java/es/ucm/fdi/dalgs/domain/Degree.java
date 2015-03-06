@@ -32,7 +32,7 @@ public class Degree {
 	
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
-	private boolean isDeleted;
+	private Boolean isDeleted;
 
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
@@ -71,7 +71,7 @@ public class Degree {
 		this.competences = competences;
 	}
 
-	public boolean isDeleted() {
+	public Boolean getIsDeleted() {
 		return isDeleted;
 	}
 

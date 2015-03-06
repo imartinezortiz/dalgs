@@ -146,9 +146,15 @@ public class AcademicTermRepository {
 		return false;
 	}
 
-	public Integer numberOfPages() {
-		Query query =em.createNativeQuery(
+	public Integer numberOfPages(Boolean showAll) {
+		
+		Query query =null;
+		if (showAll)
+			query = em.createNativeQuery(
+				"select count(*) from academicterm");
+		else query = em.createNativeQuery(
 				"select count(*) from academicterm where isDeleted='false'");
+		
 		logger.info(query.getSingleResult().toString());
 		double dou = Double.parseDouble(query.getSingleResult().toString())/ ((double) noOfRecords);
 		return (int) Math.ceil(dou);

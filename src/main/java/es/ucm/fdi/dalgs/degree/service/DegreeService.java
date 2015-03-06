@@ -44,7 +44,7 @@ public class DegreeService {
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("Code already exists");
 
-			if (degreeExists.isDeleted()){
+			if (degreeExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
 
@@ -81,7 +81,7 @@ public class DegreeService {
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("New code already exists");
 
-			if (degreeExists.isDeleted()){
+			if (degreeExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
 
@@ -167,7 +167,7 @@ public class DegreeService {
 
 		}
 		else{
-			if(!d.isDeleted()){
+			if(!d.getIsDeleted()){
 				Collection<String> errors = new ArrayList<String>();
 				errors.add("Code is not deleted");
 				result.setErrorsList(errors);
