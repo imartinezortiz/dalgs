@@ -76,10 +76,13 @@ public class AcademicTermRepository {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex) {// String
+	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex, Boolean showAll) {// String
 																	// term) {
-		Query query = em
-				.createQuery("select a from AcademicTerm a  where a.isDeleted='false' order by a.term DESC");
+		Query query = null;
+		
+		if (showAll) query =em.createQuery("select a from AcademicTerm a  order by a.term DESC");
+		else query =em.createQuery("select a from AcademicTerm a  where a.isDeleted='false' order by a.term DESC");
+
 
 		// query.setParameter(1, term);
 

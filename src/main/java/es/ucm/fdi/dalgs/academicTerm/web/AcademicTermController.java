@@ -67,7 +67,7 @@ public class AcademicTermController {
 			boolean created = serviceAcademicTerm
 					.addAcademicTerm(newAcademicTerm);
 			if (created)
-				return "redirect:/academicTerm/page/0.htm";
+				return "redirect:/academicTerm/page/0.htm?showAll";
 			else
 				return "redirect:/academicTerm/add.htm";
 		}
@@ -79,15 +79,15 @@ public class AcademicTermController {
 	 */
 	@RequestMapping(value = "/academicTerm/page/{pageIndex}.htm")
 	protected ModelAndView formViewAcademicTerm(@PathVariable("pageIndex") Integer pageIndex, 
-			@RequestParam(value = "showAll", defaultValue="") String showAll)
+			@RequestParam(value = "showAll", defaultValue="false") Boolean showAll)
 			throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 		
-		if (showAll.equalsIgnoreCase("")) showAll="true";
-		else showAll="";
+		/*if (showAll== false) showAll=true;
+		else showAll= false;*/
 			
-		List<AcademicTerm> p = serviceAcademicTerm.getAcademicsTerm(pageIndex);
+		List<AcademicTerm> p = serviceAcademicTerm.getAcademicsTerm(pageIndex, showAll);
 		myModel.put("showAll", showAll);
 		myModel.put("academicTerms", p);
 		Integer numberOfPages = serviceAcademicTerm.numberOfPages();
@@ -141,7 +141,7 @@ public class AcademicTermController {
 			at.setTerm(newTerm.getTerm());
 			boolean success = serviceAcademicTerm.modifyAcademicTerm(at);
 			if (success)
-				return "redirect:/academicTerm/page/0.htm";
+				return "redirect:/academicTerm/page/0.htm?showAll";
 
 		}
 		return "redirect:/error.htm";
@@ -158,7 +158,7 @@ public class AcademicTermController {
 			throws ServletException {
 
 		if (serviceAcademicTerm.deleteAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic))) {
-			return "redirect:/academicTerm/page/0.htm";
+			return "redirect:/academicTerm/page/0.htm?showAll";
 		} else
 			return "redirect:/error.htm";
 	}

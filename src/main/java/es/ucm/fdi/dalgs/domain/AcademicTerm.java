@@ -32,7 +32,7 @@ public class AcademicTerm {
 	private String term;
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
-	private boolean isDeleted;
+	private Boolean isDeleted;
 
 	@ManyToOne
 	@JoinColumn(name = "id_degree")
@@ -71,6 +71,9 @@ public class AcademicTerm {
 	}
 
 	public Boolean isDeleted() {
+		return isDeleted;
+	}
+	public Boolean getIsDeleted() {
 		return isDeleted;
 	}
 

@@ -76,8 +76,8 @@ public class AcademicTermService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ')")
 	@Transactional(readOnly = true)
-	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex) {
-		List<AcademicTerm> a = daoAcademicTerm.getAcademicsTerm(pageIndex);
+	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex, Boolean showAll) {
+		List<AcademicTerm> a = daoAcademicTerm.getAcademicsTerm(pageIndex, showAll);
 		return a;
 	}
 
@@ -87,8 +87,12 @@ public class AcademicTermService {
 		boolean success = false;
 
 		if (academicTerm.getCourses() == null || serviceCourse.deleteCoursesFromAcademic(academicTerm)){
-			success = ( manageAclService.removeAclFromObject(academicTerm.getId(), academicTerm.getClass().getName()) &&
+			
+			/* COMENTADO PARA LA PAPELERA DE LA VISTA
+			 success = ( manageAclService.removeAclFromObject(academicTerm.getId(), academicTerm.getClass().getName()) &&
 						daoAcademicTerm.deleteAcademicTerm(academicTerm.getId()) );
+			*/
+			success = 	daoAcademicTerm.deleteAcademicTerm(academicTerm.getId());
 		}
 		return success;
 	}
