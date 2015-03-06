@@ -70,7 +70,7 @@ public class ModuleController {
 			@ModelAttribute("addModule") Module module, Model model,
 			@PathVariable("degreeId") Long id_degree) {
 		
-		ResultClass<Boolean> result = serviceModule.unDeleteModule(module);
+		ResultClass<Boolean> result = serviceModule.unDeleteModule(module, id_degree);
 		
 		if (!result.hasErrors())
 
@@ -96,7 +96,7 @@ public class ModuleController {
 
 	{
 		
-		ResultClass<Boolean> result = serviceModule.modifyModule(modify, id_module);
+		ResultClass<Boolean> result = serviceModule.modifyModule(modify, id_module, id_degree);
 		if (!result.hasErrors())
 
 			return "redirect:/degree/" + id_degree + ".htm";

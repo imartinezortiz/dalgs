@@ -60,7 +60,7 @@
 <c:url value="/user.htm" var="userUrl" />
 <c:url value="/admin.htm" var="adminUrl" />
 <c:url value="/logout.htm" var="logoutUrl" />
-<c:url value="/upload/User.htm" var="uploadUrl" />
+	<c:url value="/upload/User.htm" var="uploadUrl" />
 
 <div class="list-group index">
 

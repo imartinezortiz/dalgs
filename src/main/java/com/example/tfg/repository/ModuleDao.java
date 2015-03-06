@@ -23,7 +23,7 @@ public interface ModuleDao {
 
 	public String getNextCode();
 
-	public Module existByCode(String code);
+	public Module existByCode(String code, Long id_degree);
 
 	public Collection<Module> getModulesForDegree(Long id);
 

@@ -13,6 +13,7 @@ import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Module;
 import com.example.tfg.domain.Topic;
 import com.example.tfg.repository.TopicDao;
+import com.example.tfg.service.DegreeService;
 import com.example.tfg.service.ModuleService;
 import com.example.tfg.service.SubjectService;
 import com.example.tfg.service.TopicService;
@@ -28,11 +29,15 @@ public class TopicServiceImp implements TopicService {
 	@Autowired
 	private SubjectService serviceSubject;
 
+	@Autowired
+	private DegreeService serviceDegree;
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly=false)	
 	public ResultClass<Boolean> addTopic(Topic topic, Long id_module) {
-		
-		Topic topicExists = daoTopic.existByCode(topic.getInfo().getCode());
+		//		Degree degree = serviceDegree.getDegree(id_degree);
+
+		Topic topicExists = daoTopic.existByCode(topic.getInfo().getCode(), id_module);
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
 		if( topicExists != null){
@@ -65,13 +70,13 @@ public class TopicServiceImp implements TopicService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly=false)
-	public ResultClass<Boolean> modifyTopic(Topic topic, Long id) {
+	public ResultClass<Boolean> modifyTopic(Topic topic, Long id_topic, Long id_module) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
-		Topic modifyTopic = daoTopic.getTopic(id);
-		
-		Topic topicExists = daoTopic.existByCode(topic.getInfo().getCode());
-		
+		Topic modifyTopic = daoTopic.getTopic(id_topic);
+
+		Topic topicExists = daoTopic.existByCode(topic.getInfo().getCode(), id_module);
+
 		if(!topic.getInfo().getCode().equalsIgnoreCase(modifyTopic.getInfo().getCode()) && 
 				topicExists != null){
 			result.setHasErrors(true);
@@ -130,15 +135,15 @@ public class TopicServiceImp implements TopicService {
 	}
 
 
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
-//	@Transactional(readOnly=false)
-////	public boolean modifyTopic(Topic topic) {
-////
-////		return daoTopic.saveTopic(topic);
-////	}
-//	public boolean modifyTopic(Topic topic) {
-//		return daoTopic.saveTopic(topic);
-//	}
+	//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	//	@Transactional(readOnly=false)
+	////	public boolean modifyTopic(Topic topic) {
+	////
+	////		return daoTopic.saveTopic(topic);
+	////	}
+	//	public boolean modifyTopic(Topic topic) {
+	//		return daoTopic.saveTopic(topic);
+	//	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly=false)
@@ -152,16 +157,16 @@ public class TopicServiceImp implements TopicService {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly=false)
 	public boolean deleteTopicsForModule(Module module) {
-
-		if(serviceSubject.deleteSubjectsForTopic(module.getTopics()))
-			return daoTopic.deleteTopicsForModule(module);
-		return false;
+		if (!module.getTopics().isEmpty())
+			if(serviceSubject.deleteSubjectsForTopic(module.getTopics()))
+				return daoTopic.deleteTopicsForModule(module);
+		return true;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> unDeleteTopic(Topic topic) {
-		Topic t = daoTopic.existByCode(topic.getInfo().getCode());
+	public ResultClass<Boolean> unDeleteTopic(Topic topic, Long id_module) {
+		Topic t = daoTopic.existByCode(topic.getInfo().getCode(), id_module);
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		if(t == null){
 			result.setHasErrors(true);

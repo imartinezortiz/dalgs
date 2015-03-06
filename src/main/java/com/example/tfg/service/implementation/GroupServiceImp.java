@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Course;
 import com.example.tfg.domain.Group;
-import com.example.tfg.domain.Group;
 import com.example.tfg.repository.GroupDao;
 import com.example.tfg.service.CourseService;
 import com.example.tfg.service.GroupService;

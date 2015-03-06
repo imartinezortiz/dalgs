@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Competence;
 import com.example.tfg.domain.Degree;
-import com.example.tfg.domain.Competence;
 import com.example.tfg.repository.CompetenceDao;
 import com.example.tfg.service.CompetenceService;
 import com.example.tfg.service.DegreeService;

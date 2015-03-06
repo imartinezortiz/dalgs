@@ -157,7 +157,8 @@ public class DegreeController {
 			myModel.put("modules", p.getModules());
 		if (p.getCompetences() != null)
 			myModel.put("competences", p.getCompetences());
-
+		
+		
 		return new ModelAndView("degree/view", "model", myModel);
 	}
 

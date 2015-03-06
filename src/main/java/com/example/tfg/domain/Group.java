@@ -34,8 +34,8 @@ public class Group {
 	private Course course;
 	
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	@JoinTable(name = "group_teacher", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_user") })
-	private Collection<User> teachers;
+	@JoinTable(name = "group_professor", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_user") })
+	private Collection<User> professor;
 	
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "group_student", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_user") })
@@ -60,12 +60,12 @@ public class Group {
 		this.name = name;
 	}
 
-	public Collection<User> getTeachers() {
-		return teachers;
+	public Collection<User> getProfessor() {
+		return professor;
 	}
 
-	public void setTeachers(Collection<User> teachers) {
-		this.teachers = teachers;
+	public void setProfessor(Collection<User> professor) {
+		this.professor = professor;
 	}
 
 	public Collection<User> getStudents() {

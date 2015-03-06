@@ -92,9 +92,11 @@ public class TopicDaoImp implements TopicDao {
 	}
 
 
-	public Topic existByCode(String code) {
-		Query query = em.createQuery("select p from Topic p where p.info.code=?1");
+	public Topic existByCode(String code, Long id_module) {
+		Module module = em.getReference(Module.class, id_module);
+		Query query = em.createQuery("select t from Topic t where t.info.code=?1 and t.module = ?2");
 		query.setParameter(1, code);
+		query.setParameter(2, module);
 		 if (query.getResultList().isEmpty())
 		 	return null;
 		 else return (Topic) query.getSingleResult();

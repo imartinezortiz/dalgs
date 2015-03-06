@@ -24,7 +24,7 @@ public interface TopicDao {
 
 	public String getNextCode();
 
-	public Topic existByCode(String code);
+	public Topic existByCode(String code, Long id_degree);
 
 	public Collection<Topic> getTopicsForModule(Long id);
 

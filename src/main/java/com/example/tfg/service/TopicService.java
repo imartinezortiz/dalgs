@@ -15,7 +15,7 @@ public interface TopicService {
 
 	public List<Topic> getAll();
 
-	public ResultClass<Boolean> modifyTopic(Topic modify, Long id);
+	public ResultClass<Boolean> modifyTopic(Topic modify, Long id_topic, Long id_module);
 
 	public Topic getTopic(Long id);
 
@@ -31,5 +31,5 @@ public interface TopicService {
 
 	public boolean deleteTopicsForModule(Module module);
 	
-	public ResultClass<Boolean> unDeleteTopic(Topic topic);
+	public ResultClass<Boolean> unDeleteTopic(Topic topic, Long id_module);
 }

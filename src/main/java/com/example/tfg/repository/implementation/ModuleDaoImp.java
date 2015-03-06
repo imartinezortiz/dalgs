@@ -94,9 +94,11 @@ public class ModuleDaoImp implements ModuleDao {
 	}
 
 
-	public Module existByCode(String code) {
-		Query query = em.createQuery("select m from Module m where m.info.code=?1");
+	public Module existByCode(String code, Long id_degree) {
+		Degree d = em.getReference(Degree.class, id_degree);
+		Query query = em.createQuery("select m from Module m where m.info.code=?1 and m.degree = ?2");
 		query.setParameter(1, code);
+		query.setParameter(2, d);
 		 if (query.getResultList().isEmpty())
 		 	return null;
 		 else return (Module) query.getSingleResult();

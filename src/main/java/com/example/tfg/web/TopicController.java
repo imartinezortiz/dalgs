@@ -66,7 +66,7 @@ public class TopicController {
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module) {
 		
-		ResultClass<Boolean> result = serviceTopic.unDeleteTopic(topic);
+		ResultClass<Boolean> result = serviceTopic.unDeleteTopic(topic, id_module);
 		
 		if (!result.hasErrors())
 //		if (created)
@@ -93,7 +93,7 @@ public class TopicController {
 			Model model)
 
 	{
-		ResultClass<Boolean> result = serviceTopic.modifyTopic(modify, id_topic);
+		ResultClass<Boolean> result = serviceTopic.modifyTopic(modify, id_topic, id_module);
 		if (!result.hasErrors())
 //			if (created)
 				return "redirect:/degree/" + id_degree + "/module/" + id_module + ".htm";

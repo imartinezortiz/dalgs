@@ -45,7 +45,7 @@
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 
-				Teachers List
+				Professor List
 			</h3>
 			<a class="btn list-btn btn-warning2"
 				href="<c:url value='/degree/${degreeId}/module/add.htm'/>"> <span

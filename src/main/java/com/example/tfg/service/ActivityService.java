@@ -7,9 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.tfg.classes.ResultClass;
 import com.example.tfg.domain.Activity;
-import com.example.tfg.domain.LearningGoal;
-import com.example.tfg.domain.LearningGoalStatus;
 import com.example.tfg.domain.Course;
+import com.example.tfg.domain.LearningGoalStatus;
 
 @Service
 public interface ActivityService {

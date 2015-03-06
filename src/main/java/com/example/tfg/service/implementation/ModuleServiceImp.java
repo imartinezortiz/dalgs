@@ -33,7 +33,7 @@ public class ModuleServiceImp implements ModuleService {
 	@Transactional(readOnly=false)
 	public ResultClass<Boolean> addModule(Module module, Long id_degree) {
 		
-		Module moduleExists = daoModule.existByCode(module.getInfo().getCode());
+		Module moduleExists = daoModule.existByCode(module.getInfo().getCode(), id_degree);
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
 		if( moduleExists != null){
@@ -67,12 +67,12 @@ public class ModuleServiceImp implements ModuleService {
 
 //	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly=false)
-	public ResultClass<Boolean> modifyModule(Module module, Long id) {
+	public ResultClass<Boolean> modifyModule(Module module, Long id_module, Long id_degree) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
-		Module modifyModule = daoModule.getModule(id);
+		Module modifyModule = daoModule.getModule(id_degree);
 		
-		Module moduleExists = daoModule.existByCode(module.getInfo().getCode());
+		Module moduleExists = daoModule.existByCode(module.getInfo().getCode(), id_degree);
 		
 		if(!module.getInfo().getCode().equalsIgnoreCase(modifyModule.getInfo().getCode()) && 
 				moduleExists != null){
@@ -144,8 +144,8 @@ public class ModuleServiceImp implements ModuleService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> unDeleteModule(Module module) {
-		Module m = daoModule.existByCode(module.getInfo().getCode());
+	public ResultClass<Boolean> unDeleteModule(Module module, Long id_degree) {
+		Module m = daoModule.existByCode(module.getInfo().getCode(), id_degree);
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		if(m == null){
 			result.setHasErrors(true);

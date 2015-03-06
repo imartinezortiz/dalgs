@@ -16,7 +16,7 @@ public interface ModuleService {
 
 	public List<Module> getAll();
 
-	public ResultClass<Boolean> modifyModule(Module modify, Long id);
+	public ResultClass<Boolean> modifyModule(Module modify, Long id_module, Long id_degree);
 
 	public Module getModule(Long id);
 
@@ -26,11 +26,11 @@ public interface ModuleService {
 
 	public Collection<Module> getModulesForDegree(Long id);
 
-	public boolean modifyModule(Module module);
+//	public boolean modifyModule(Module module);
 
 	public boolean deleteModulesForDegree(Degree d);
 	
-	public ResultClass<Boolean> unDeleteModule(Module module);
+	public ResultClass<Boolean> unDeleteModule(Module module, Long id_degree);
 
 	
 

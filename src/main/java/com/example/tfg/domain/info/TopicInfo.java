@@ -8,7 +8,7 @@ import javax.persistence.Embeddable;
 public class TopicInfo {
 
 	@Basic(optional = false)
-	@Column(name = "code_topic", nullable = false, unique=true)
+	@Column(name = "code_topic", nullable = false)
 	private String code;
 	
 	@Basic(optional = false)

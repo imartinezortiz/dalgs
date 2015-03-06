@@ -8,7 +8,7 @@ import javax.persistence.Embeddable;
 public class LearningGoalInfo {
 	
 	@Basic(optional = false)
-	@Column(name = "code_learning", nullable = false)
+	@Column(name = "code_learning", nullable = false, unique=true)
 	private String code;
 	
 	@Basic(optional = false)

@@ -8,7 +8,7 @@ import javax.persistence.Embeddable;
 public class ModuleInfo {
 	
 	@Basic(optional = false)
-	@Column(name = "code_module", nullable = false, unique= true)
+	@Column(name = "code_module", nullable = false)
 	private String code;
 	
 	@Basic(optional = false)

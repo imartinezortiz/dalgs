@@ -13,11 +13,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.example.tfg.domain.info.ModuleInfo;
 
 @Entity
-@Table(name = "module")
+//@Table(name = "module")
+@Table(name = "module", uniqueConstraints = @UniqueConstraint(columnNames = {
+		"code_module", "id_degree" }))
 public class Module {
 	
 	@Id
