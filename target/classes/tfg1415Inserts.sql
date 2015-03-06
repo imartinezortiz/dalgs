@@ -1,15 +1,15 @@
 -- ACL Classes -- The name of the class of the domain objects we have in the ACL system
-INSERT INTO acl_class (id, class) VALUES (1,'com.example.tfg.domain.AcademicTerm');
-INSERT INTO acl_class (id, class) VALUES (2,'com.example.tfg.domain.Activity');
-INSERT INTO acl_class (id, class) VALUES (3,'com.example.tfg.domain.Competence');
-INSERT INTO acl_class (id, class) VALUES (4,'com.example.tfg.domain.Course');
-INSERT INTO acl_class (id, class) VALUES (5,'com.example.tfg.domain.Degree');
-INSERT INTO acl_class (id, class) VALUES (6,'com.example.tfg.domain.Group');
-INSERT INTO acl_class (id, class) VALUES (7,'com.example.tfg.domain.LearningGoal');
-INSERT INTO acl_class (id, class) VALUES (8,'com.example.tfg.domain.Module');
-INSERT INTO acl_class (id, class) VALUES (9,'com.example.tfg.domain.Subject');
-INSERT INTO acl_class (id, class) VALUES (10,'com.example.tfg.domain.Topic');
-INSERT INTO acl_class (id, class) VALUES (11,'com.example.tfg.domain.User');
+INSERT INTO acl_class (id, class) VALUES (1,'es.ucm.fdi.dalgs.domain.AcademicTerm');
+INSERT INTO acl_class (id, class) VALUES (2,'es.ucm.fdi.dalgs.domain.Activity');
+INSERT INTO acl_class (id, class) VALUES (3,'es.ucm.fdi.dalgs.domain.Competence');
+INSERT INTO acl_class (id, class) VALUES (4,'es.ucm.fdi.dalgs.domain.Course');
+INSERT INTO acl_class (id, class) VALUES (5,'es.ucm.fdi.dalgs.domain.Degree');
+INSERT INTO acl_class (id, class) VALUES (6,'es.ucm.fdi.dalgs.domain.Group');
+INSERT INTO acl_class (id, class) VALUES (7,'es.ucm.fdi.dalgs.domain.LearningGoal');
+INSERT INTO acl_class (id, class) VALUES (8,'es.ucm.fdi.dalgs.domain.Module');
+INSERT INTO acl_class (id, class) VALUES (9,'es.ucm.fdi.dalgs.domain.Subject');
+INSERT INTO acl_class (id, class) VALUES (10,'es.ucm.fdi.dalgs.domain.Topic');
+INSERT INTO acl_class (id, class) VALUES (11,'es.ucm.fdi.dalgs.domain.User');
 -- ---------------------------------------------------
 
 -- ACL Sid -- Authorizations - Roles

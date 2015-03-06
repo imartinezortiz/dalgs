@@ -21,11 +21,21 @@
     </bean>
 
     <!-- Scans the classpath of this application for @Components to deploy as beans -->
-    <context:component-scan base-package="com.example.tfg.web" />
-
-    <!-- Configures the @Controller programming model -->
-    
+    <context:component-scan base-package="es.ucm.fdi.dalgs.web" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.academicTerm.web" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.activity.web" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.competence.web" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.course.web" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.degree.web" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.group.web" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.learningGoal.web" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.module.web" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.subject.web" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.topic.web" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.user.web" />
 	
+    <!-- Configures the @Controller programming model -->
+   
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
         <property name="prefix" value="/WEB-INF/views/"></property>

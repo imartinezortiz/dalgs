@@ -60,13 +60,37 @@
 
 	<!-- Scans the classpath of this application for @Components to deploy as 
 		beans -->
-	<context:component-scan base-package="com.example.tfg.repository" />
-	<context:component-scan base-package="com.example.tfg.service" />
-
+	<context:component-scan base-package="es.ucm.fdi.dalgs.academicTerm.repository" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.activity.repository" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.competence.repository" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.course.repository" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.degree.repository" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.group.repository" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.learningGoal.repository" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.module.repository" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.subject.repository" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.topic.repository" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.user.repository" />
+	
+	
+	
+	<context:component-scan base-package="es.ucm.fdi.dalgs.academicTerm.service" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.acl.service" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.activity.service" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.competence.service" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.course.service" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.degree.service" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.group.service" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.learningGoal.service" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.module.service" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.subject.service" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.topic.service" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.user.service" />
 
  <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
      <constructor-arg value="256"/>
  </bean>
+ 
 
 
 <!-- <security:global-method-security 

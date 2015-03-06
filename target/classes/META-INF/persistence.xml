@@ -12,18 +12,18 @@
 
 	<persistence-unit name="tfgPU" transaction-type="RESOURCE_LOCAL">
 	
-		<class>com.example.tfg.domain.AcademicTerm</class>
- 		<class>com.example.tfg.domain.Activity</class>
-		<class>com.example.tfg.domain.Competence</class>
-		<class>com.example.tfg.domain.LearningGoalStatus</class>
-		<class>com.example.tfg.domain.Course</class> 
-		<class>com.example.tfg.domain.Degree</class>
-		<class>com.example.tfg.domain.Subject</class>
-		<class>com.example.tfg.domain.User</class>
-		<class>com.example.tfg.domain.acl.AclClass</class>
-		<class>com.example.tfg.domain.acl.AclEntry</class>
-		<class>com.example.tfg.domain.acl.AclObjectIdentity</class>
-		<class>com.example.tfg.domain.acl.AclSid</class>
+		<class>es.ucm.fdi.dalgs.domain.AcademicTerm</class>
+ 		<class>es.ucm.fdi.dalgs.domain.Activity</class>
+		<class>es.ucm.fdi.dalgs.domain.Competence</class>
+		<class>es.ucm.fdi.dalgs.domain.LearningGoalStatus</class>
+		<class>es.ucm.fdi.dalgs.domain.Course</class> 
+		<class>es.ucm.fdi.dalgs.domain.Degree</class>
+		<class>es.ucm.fdi.dalgs.domain.Subject</class>
+		<class>es.ucm.fdi.dalgs.domain.User</class>
+		<class>es.ucm.fdi.dalgs.domain.acl.AclClass</class>
+		<class>es.ucm.fdi.dalgs.domain.acl.AclEntry</class>
+		<class>es.ucm.fdi.dalgs.domain.acl.AclObjectIdentity</class>
+		<class>es.ucm.fdi.dalgs.domain.acl.AclSid</class>
 		
 		
 	</persistence-unit>
