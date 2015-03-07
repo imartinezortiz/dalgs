@@ -120,5 +120,11 @@ public class UserService {
 		   
 		    return hasRole;
 		  }
+
+	@PreAuthorize("hasRole('ROLE_USER')")
+	public List<String> getAllByRole(String user_role) {
+		return daoUser.getAllByRole(user_role);
+
+	}
 	
 }

@@ -69,11 +69,11 @@ public class Group {
 		this.name = name;
 	}
 
-	public Collection<User> getProfessor() {
+	public Collection<User> getProfessors() {
 		return professors;
 	}
 
-	public void setTeachers(Collection<User> professors) {
+	public void setProfessors(Collection<User> professors) {
 		this.professors = professors;
 	}
 

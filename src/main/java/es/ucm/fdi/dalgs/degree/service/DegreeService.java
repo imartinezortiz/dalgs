@@ -46,7 +46,7 @@ public class DegreeService {
 		Degree degreeExists = daoDegree.existByCode(degree.getInfo().getCode());
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		Collection<String> errors =new ArrayList<String>();
-		if( degreeExists != null){
+		if(degreeExists != null){
 			result.setHasErrors(true);
 			errors.add("Code already exists");
 
@@ -56,6 +56,10 @@ public class DegreeService {
 
 			}
 			result.setErrorsList(errors);
+		}
+		else if ( degree.getInfo().getCode()!=null){
+			errors.add("Code necessary");
+
 		}
 		else{
 			boolean r = daoDegree.addDegree(degree);

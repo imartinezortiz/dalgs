@@ -37,6 +37,14 @@
 			<p class="list-group-item-text">Manage each of the badges which
 				belong to a Competence or to an Activity</p>
 		</a>
+		
+		
+		</a> <a  class="list-group-item disabled" 
+			href="<c:url value='/academicTerm/1/course/1/group/1.htm'/>">
+			<h4 class="list-group-item-heading">
+				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+				Group Professor (Admin)</h4>
+		</a>
 
 	</div>
 </body>

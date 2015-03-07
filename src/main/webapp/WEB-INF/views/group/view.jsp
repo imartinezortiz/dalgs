@@ -48,7 +48,7 @@
 				Professor List
 			</h3>
 			<a style="cursor:copy;" class="btn list-btn btn-warning2"
-				href="<c:url value='/degree/${degreeId}/module/add.htm'/>"> <span
+				href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/professor/add.htm'/>"> <span
 				class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 				Add 
 			</a>

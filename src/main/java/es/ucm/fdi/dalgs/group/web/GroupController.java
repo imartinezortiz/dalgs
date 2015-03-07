@@ -1,15 +1,22 @@
 package es.ucm.fdi.dalgs.group.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +25,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.domain.Group;
+import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.group.service.GroupService;
+import es.ucm.fdi.dalgs.user.service.UserService;
 
 @Controller
 public class GroupController {
@@ -26,12 +35,17 @@ public class GroupController {
 	@Autowired
 	private GroupService serviceGroup;
 	
+	@Autowired
+	private UserService serviceUser;
+	private static final Logger logger = LoggerFactory
+			.getLogger(GroupController.class);
+
 	/**
 	 * Methods for adding activities
 	 */
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/add.htm", method = RequestMethod.GET)
-	protected String getAddNewGroupForm(
+	protected String addGroupGET(
 			@PathVariable("academicId") Long id_Long,
 			@PathVariable("courseId") Long id_course, Model model) {
 		Group newGroup = new Group();
@@ -45,7 +59,7 @@ public class GroupController {
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/add.htm", method = RequestMethod.POST, params="Add")
 	// Every Post have to return redirect
-	public String processAddNewCompetence(
+	public String addGroupPOST(
 			@PathVariable("academicId") Long id_academicTerm,
 			@PathVariable("courseId") Long id_course,
 			@ModelAttribute("addGroup") @Valid Group newgroup,
@@ -73,7 +87,7 @@ public class GroupController {
 	
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/add.htm", method = RequestMethod.POST, params="Undelete")
 	// Every Post have to return redirect
-	public String undeleteDegree(
+	public String undeleteGroupAdd(
 			@PathVariable("academicId") Long id_academicTerm,
 			@PathVariable("courseId") Long id_course,
 			@ModelAttribute("addGroup") @Valid Group group, Model model) {
@@ -98,7 +112,7 @@ public class GroupController {
 	 */
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/modify.htm", method = RequestMethod.GET)
-	protected String formModifyGroup(
+	protected String modifyGroupGET(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group, Model model)
@@ -115,7 +129,7 @@ public class GroupController {
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/modify.htm", method = RequestMethod.POST)
-	public String formModifyGroup(
+	public String modifyGroupPOST(
 			@PathVariable("academicId") Long id_academicTerm,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
@@ -125,15 +139,18 @@ public class GroupController {
 	{
 
 		if (!result.hasErrors()) {
-			ResultClass<Boolean> results = serviceGroup.modifyGroup(group, id_group);
+			Group aux = serviceGroup.getGroup(id_group);
+			aux.setName(group.getName());
+			
+			ResultClass<Boolean> results = serviceGroup.modifyGroup(aux);
 			if (!result.hasErrors())
 
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
 				+ id_course + ".htm";
 			else{
-					model.addAttribute("modifyGroup", group);
+					model.addAttribute("modifyGroup", aux);
 					if (results.isElementDeleted()){
-						model.addAttribute("addModule", group);
+						model.addAttribute("addModule", aux);
 						model.addAttribute("unDelete", true); 
 						model.addAttribute("errors", results.getErrorsList());
 						return "module/add";
@@ -151,9 +168,8 @@ public class GroupController {
 	}
 
 
-
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/delete.htm", method = RequestMethod.GET)
-	public String formDeleteGroup(
+	public String deleteGroupGET(
 			@PathVariable("academicId") Long id_AcademicTerm,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group)
@@ -172,7 +188,7 @@ public class GroupController {
 	 * Methods for view activities
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}.htm", method = RequestMethod.GET)
-	protected ModelAndView formViewGroup(
+	protected ModelAndView groupGET(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") long id_group)
@@ -188,4 +204,70 @@ public class GroupController {
 
 		return new ModelAndView("group/view", "model", model);
 	}
+	
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/professor/add.htm", method = RequestMethod.GET)
+	public String addProfessorToGroupGET(@PathVariable("groupId") Long id_group, Model model) {
+		
+		Group group = serviceGroup.getGroup(id_group);
+		List<String> professors = serviceUser.getAllByRole("ROLE_PROFESSOR");
+		
+		model.addAttribute("group",group);
+		model.addAttribute("professors", professors);
+		
+		return "group/addUsers";
+
+	}
+	
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/professor/add.htm", method = RequestMethod.POST)
+	// Every Post have to return redirect
+	public String addProfessorToGroupPOST(
+			@PathVariable("academicId") Long academicId,
+			@PathVariable("courseId") Long courseId,
+			@PathVariable("groupId") Long id_group,
+			@ModelAttribute("group") @Valid Group group,
+			BindingResult result, Model model) {
+
+		if (!result.hasErrors()){
+			return "redirect:/academicTerm/" + academicId + "/course/"
+			+ courseId + "/group/"+ id_group + "/professor/add.htm";		
+		}
+		else{
+			Group aux = serviceGroup.getGroup(id_group);
+			aux.setProfessors(group.getProfessors());
+			
+			serviceGroup.modifyGroup(aux);
+			
+			return "redirect:/academicTerm/" + academicId + "/course/"
+			+ courseId + "/group/"+ id_group + ".htm";
+
+		}
+
+		
+	}
+	/**
+	 * For binding the professor of the subject.
+	 */
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) throws Exception {
+		binder.registerCustomEditor(Set.class, "professors",
+				new CustomCollectionEditor(Set.class) {
+			protected Object convertElement(Object element) {
+				if (element instanceof User) {
+					logger.info("Converting...{}", element);
+					return element;
+				}
+				if (element instanceof String) {
+					User user = serviceUser.findByUsername(element.toString());
+					logger.info("Loking up {} to {}", element,
+							user);
+
+					return user;
+				}
+				System.out.println("Don't know what to do with: "
+						+ element);
+				return null;
+			}
+		});
+	}
+
 }

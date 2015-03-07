@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.acls.model.MutableAclService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,8 +37,6 @@ public class AcademicTermService {
 	public boolean addAcademicTerm(AcademicTerm academicTerm) {
 
 		boolean success  =false;
-		Integer id = new Integer(Math.abs(academicTerm.hashCode()));
-		//academicTerm.setId(id.longValue());
 		AcademicTerm academicAux = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
 		if (academicAux == null){
 			success = daoAcademicTerm.addAcademicTerm(academicTerm);			

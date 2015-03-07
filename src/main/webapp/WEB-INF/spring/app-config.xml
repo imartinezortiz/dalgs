@@ -66,6 +66,7 @@
                  <ref bean="topicFormatter"/>
                  <ref bean="learningGoalFormatter"/>
                  <ref bean="groupFormatter"/>
+                 <ref bean="userFormatter"/>
            </set>
       </property>
 </bean>
