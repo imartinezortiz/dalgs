@@ -65,7 +65,7 @@
 				<c:if test="${model.currentPage > 0}">
 
 					<li><a
-						href="<c:url value='/degree/page/${model.currentPage - 1}.htm?showAll=${showAll}'/>"
+						href="<c:url value='/degree/page/${model.currentPage - 1}.htm?showAll=${model.showAll}'/>"
 						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 					</a></li>
 				</c:if>
@@ -75,7 +75,7 @@
 
 
 
-					<li><a href="<c:url value='/degree/page/${index}.htm?showAll=${showAll}'/>">
+					<li><a href="<c:url value='/degree/page/${index}.htm?showAll=${model.showAll}'/>">
 							${index + 1} </a></li>
 
 
@@ -85,7 +85,7 @@
 				<c:if test="${model.currentPage < model.numberOfPages -1}">
 
 					<li><a
-						href="<c:url value='/degree/page/${model.currentPage + 1}.htm?showAll=${showAll}'/>"
+						href="<c:url value='/degree/page/${model.currentPage + 1}.htm?showAll=${model.showAll}'/>"
 						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 					</a></li>
 				</c:if>
