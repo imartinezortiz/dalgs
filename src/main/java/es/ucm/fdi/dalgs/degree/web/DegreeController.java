@@ -81,6 +81,21 @@ public class DegreeController {
 		}
 	}
 
+	
+	@RequestMapping(value = "/degree/{id_degree}/restore.htm")
+	// Every Post have to return redirect
+	public String restoreDegree(@PathVariable("id_degree") Long id_degree) {
+		ResultClass<Boolean> result = serviceDegree.unDeleteDegree(serviceDegree.getDegree(id_degree));
+		if (!result.hasErrors())
+//			if (created)
+				return "redirect:/degree/page/0.htm?showAll="+showAll;
+			else{
+				return "redirect:/error.htm";
+
+			}
+		
+	}
+	
 	/**
 	 * Methods for listing degrees
 	 */
@@ -114,7 +129,11 @@ public class DegreeController {
 
 	{
 		// modify.setId(id);
-		ResultClass<Boolean> result = serviceDegree.modifyDegree(modify, id);
+		Degree modifyDegree = serviceDegree.getDegree(id);
+		
+		modifyDegree.setInfo(modify.getInfo());
+
+		ResultClass<Boolean> result = serviceDegree.modifyDegree(modifyDegree);
 		if (!result.hasErrors())
 //			if (created)
 				return "redirect:/degree/page/0.htm?showAll="+showAll;

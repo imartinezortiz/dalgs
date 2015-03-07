@@ -47,12 +47,23 @@
 					<td><c:out value="${degree.info.name}" /></td>
 					<td><c:out value="${degree.info.description}" /></td>
 
-					<td><a class="btn list-btn btn-success"
+					<td>
+					
+					<c:choose>
+   						<c:when  test="${degree.isDeleted eq false}">
+   						<a class="btn list-btn btn-success"
 						href="<c:url value='/degree/${degree.id}.htm'/>">View</a> <!-- <a href="modify.html"  class="btn list-btn btn-warning">Modify</a>-->
 						<sec:authorize access="hasRole('ROLE_ADMIN')">
 						<a class="btn list-btn btn-danger"
 						href="<c:url value='/degree/${degree.id}/delete.htm'/>">Delete</a>
-						</sec:authorize></td>
+						</sec:authorize>
+					</c:when>
+					<c:otherwise>
+						<a	href="<c:url value='/degree/${degree.id}/restore.htm'/>"
+								class="btn btn-success">Restore</a> 
+					</c:otherwise>
+				</c:choose>
+				</td>
 
 				</tr>
 			</c:forEach>

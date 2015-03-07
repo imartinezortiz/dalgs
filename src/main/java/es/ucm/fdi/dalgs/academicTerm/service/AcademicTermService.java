@@ -121,7 +121,8 @@ public class AcademicTermService {
 	}
 	
 
-	@PreAuthorize("hasPermission(returnObject, 'DELETE') or hasPermission(returnObject, 'ADMINISTRATION')" )
+	@PreAuthorize("hasRole('ROLE_USER')")
+	//@PreAuthorize("hasPermission(returnObject, 'DELETE') or hasPermission(returnObject, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)
 	public boolean deleteAcademicTermCollection(Collection<AcademicTerm> academicList) {
 		

@@ -95,14 +95,13 @@ public class DegreeService {
 
 	@PreAuthorize("hasPermission(#degree, 'WRITE') or hasPermission(#degree, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifyDegree(Degree degree, Long id_degree) {
+	public ResultClass<Boolean> modifyDegree(Degree degree) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
-		Degree modifydegree = daoDegree.getDegree(id_degree);
 		
 		Degree degreeExists = daoDegree.existByCode(degree.getInfo().getCode());
 		
-		if(!degree.getInfo().getCode().equalsIgnoreCase(modifydegree.getInfo().getCode()) && 
+		if(!degree.getInfo().getCode().equalsIgnoreCase(degree.getInfo().getCode()) && 
 				degreeExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
@@ -116,8 +115,7 @@ public class DegreeService {
 			result.setErrorsList(errors);
 		}
 		else{
-			modifydegree.setInfo(degree.getInfo());
-			boolean r = daoDegree.saveDegree(modifydegree);
+			boolean r = daoDegree.saveDegree(degree);
 			if (r) 
 				result.setE(true);
 		}
