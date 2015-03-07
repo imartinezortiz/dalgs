@@ -104,7 +104,7 @@ public class GroupController {
 			@PathVariable("groupId") Long id_group, Model model)
 			throws ServletException {
 
-		Group p = serviceGroup.getGroup(id_group);
+		Group p = serviceGroup.getGroup(id_group).getE();
 		model.addAttribute("courseId", id_course);
 		
 		
@@ -159,7 +159,7 @@ public class GroupController {
 			@PathVariable("groupId") Long id_group)
 			throws ServletException {
 
-		if (serviceGroup.deleteGroup(id_group)) {
+		if (serviceGroup.deleteGroup(id_group).getE()) {
 			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
 					+ id_course + ".htm";
 		} else
@@ -180,7 +180,7 @@ public class GroupController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		Group a = serviceGroup.getGroup(id_group);
+		Group a = serviceGroup.getGroup(id_group).getE();
 
 		model.put("group", a);
 		model.put("groupId", id_group);

@@ -54,7 +54,7 @@ public class ActivityService {
 			result.setErrorsList(errors);
 		}
 		else{
-			activity.setCourse(serviceCourse.getCourse(id_course));
+			activity.setCourse(serviceCourse.getCourse(id_course).getE());
 			boolean r = daoActivity.addActivity(activity);
 			if (r) 
 				result.setE(true);
@@ -64,8 +64,10 @@ public class ActivityService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public List<Activity> getAll() {
-		return daoActivity.getAll();
+	public ResultClass<List<Activity>> getAll() {
+		ResultClass<List<Activity>> result = new ResultClass<List<Activity>>();
+		result.setE(daoActivity.getAll());
+		return result;
 	}
 	
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
@@ -104,47 +106,57 @@ public class ActivityService {
 	}
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
-	public Activity getActivity(Long id) {
-		return daoActivity.getActivity(id);
+	public ResultClass<Activity> getActivity(Long id) {
+		ResultClass<Activity> result = new ResultClass<Activity>();
+		result.setE(daoActivity.getActivity(id));
+		return result;
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteActivity(Long id) {
-
-		return daoActivity.deleteActivity(id);
+	public ResultClass<Boolean> deleteActivity(Long id) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		result.setE(daoActivity.deleteActivity(id));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public List<Activity> getActivitiesForCourse(Long id_course) {
-		return daoActivity.getActivitiesForCourse(id_course);
+	public ResultClass<List<Activity>> getActivitiesForCourse(Long id_course) {
+		ResultClass<List<Activity>> result = new ResultClass<List<Activity>>();
+		result.setE(daoActivity.getActivitiesForCourse(id_course));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = true)
-	public String getNextCode() {
-		return daoActivity.getNextCode();
+	public ResultClass<String> getNextCode() {
+		ResultClass<String> result = new ResultClass<String>();
+		result.setE(daoActivity.getNextCode());
+		return result;
 
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public Activity getActivityByName(String string) {
-		// TODO Auto-generated method stub
-		return daoActivity.getActivityByName(string);
+	public ResultClass<Activity> getActivityByName(String string) {
+		ResultClass<Activity> result = new ResultClass<Activity>();
+		result.setE(daoActivity.getActivityByName(string));
+		return result;
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteLearningActivity(Long id_learningGoalStatus,
+	public ResultClass<Boolean> deleteLearningActivity(Long id_learningGoalStatus,
 			Long id_Activity) {
+		
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		Activity a = daoActivity.getActivity(id_Activity);
 
 
 
 		Collection<LearningGoalStatus> c = a.getLearningGoalStatus();
-		LearningGoal learningGoal = serviceLearningGoal.getLearningGoal(id_learningGoalStatus);
+		LearningGoal learningGoal = serviceLearningGoal.getLearningGoal(id_learningGoalStatus).getE();
 		try {
 			for (LearningGoalStatus aux : c) {
 				if (aux.getLearningGoal().equals(learningGoal)) {
@@ -154,36 +166,46 @@ public class ActivityService {
 				}
 
 			}
-			return daoActivity.saveActivity(a);
+			result.setE(daoActivity.saveActivity(a));
+			
 
 		} catch (Exception e) {
-			return false;
+			result.setE(false);
 		}
-
+		return result;
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
 	@Transactional(readOnly = false)
-	public boolean addLearningGoals(Long id, LearningGoalStatus learningGoalStatus) {
+	public ResultClass<Boolean> addLearningGoals(Long id, LearningGoalStatus learningGoalStatus) {
 		Activity p = daoActivity.getActivity(id);
-
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		if (learningGoalStatus.getPercentage() <= 0.0
-				|| learningGoalStatus.getPercentage() > 100.0)
-			return false;
-		p.getLearningGoalStatus().add(learningGoalStatus);
+				|| learningGoalStatus.getPercentage() > 100.0){
+			result.setE(false);
+			
+		}
+		else {
+			p.getLearningGoalStatus().add(learningGoalStatus);
+			result.setE(daoActivity.saveActivity(p));
+		}
 		
-		return daoActivity.saveActivity(p);
+		
+		return result;
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
-	public boolean deleteActivitiesFromCourses(Collection<Course> courses) {
-		return daoActivity.deleteActivitiesFromCourses(courses);
+	public ResultClass<Boolean> deleteActivitiesFromCourses(Collection<Course> courses) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		result.setE(daoActivity.deleteActivitiesFromCourses(courses));
+		return result;
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
-	public boolean deleteActivitiesFromCourse(Course course) {
-
-		return daoActivity.deleteActivitiesFromCourse(course);
+	public ResultClass<Boolean> deleteActivitiesFromCourse(Course course) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		result.setE(daoActivity.deleteActivitiesFromCourse(course));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	

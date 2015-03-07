@@ -30,7 +30,7 @@ public class TopicService {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly=false)	
 	public ResultClass<Boolean> addTopic(Topic topic, Long id_module) {
-		
+
 		Topic topicExists = daoTopic.existByCode(topic.getInfo().getCode(), id_module);
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
@@ -48,7 +48,7 @@ public class TopicService {
 			result.setErrorsList(errors);
 		}
 		else{
-			topic.setModule(serviceModule.getModule(id_module));
+			topic.setModule(serviceModule.getModule(id_module).getE());
 			boolean r = daoTopic.addTopic(topic);
 			if (r) 
 				result.setE(true);
@@ -58,8 +58,10 @@ public class TopicService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
-	public List<Topic> getAll() {
-		return daoTopic.getAll();
+	public ResultClass<List<Topic>> getAll() {
+		ResultClass<List<Topic>> result = new ResultClass<List<Topic>>();
+		result.setE(daoTopic.getAll());
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -68,9 +70,9 @@ public class TopicService {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
 		Topic modifyTopic = daoTopic.getTopic(id_topic);
-		
+
 		Topic topicExists = daoTopic.existByCode(topic.getInfo().getCode(), id_module);
-		
+
 		if(!topic.getInfo().getCode().equalsIgnoreCase(modifyTopic.getInfo().getCode()) && 
 				topicExists != null){
 			result.setHasErrors(true);
@@ -96,65 +98,84 @@ public class TopicService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
-	public Topic getTopic(Long id) {
-		return daoTopic.getTopic(id);
+	public ResultClass<Topic> getTopic(Long id) {
+		ResultClass<Topic> result = new ResultClass<Topic>();
+		result.setE(daoTopic.getTopic(id));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly=false)
-	public boolean deleteTopic(Long id) {
+	public ResultClass<Boolean> deleteTopic(Long id) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		Topic topic = daoTopic.getTopic(id);
 		Collection<Topic> topics = new ArrayList<Topic>();
 		topics.add(topic);
-		if (serviceSubject.deleteSubjectsForTopic(topics))
-			return daoTopic.deleteTopic(topic);
-		return false;
+		if (serviceSubject.deleteSubjectsForTopic(topics).getE()){
+			result.setE(daoTopic.deleteTopic(topic));
+			return result;
+		}
+		result.setE(false);
+
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
-	public Topic getTopicAll(Long id_topic) {
-
+	public ResultClass<Topic> getTopicAll(Long id_topic) {
+		ResultClass<Topic> result = new ResultClass<Topic>();
 		Topic p = daoTopic.getTopic(id_topic);
-		p.setSubjects(serviceSubject.getSubjectsForTopic(id_topic));
-
-		return p;
+		p.setSubjects(serviceSubject.getSubjectsForTopic(id_topic).getE());
+		result.setE(p);
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
-	public Collection<Topic> getTopicsForModule(Long id) {
-
-		return daoTopic.getTopicsForModule(id);
+	public ResultClass<Collection<Topic>> getTopicsForModule(Long id) {
+		ResultClass<Collection<Topic>> result = new ResultClass<Collection<Topic>>();
+		result.setE(daoTopic.getTopicsForModule(id));
+		return result;
 	}
 
 
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
-//	@Transactional(readOnly=false)
-////	public boolean modifyTopic(Topic topic) {
-////
-////		return daoTopic.saveTopic(topic);
-////	}
-//	public boolean modifyTopic(Topic topic) {
-//		return daoTopic.saveTopic(topic);
-//	}
+	//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	//	@Transactional(readOnly=false)
+	////	public boolean modifyTopic(Topic topic) {
+	////
+	////		return daoTopic.saveTopic(topic);
+	////	}
+	//	public boolean modifyTopic(Topic topic) {
+	//		return daoTopic.saveTopic(topic);
+	//	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly=false)
-	public boolean deleteTopicsForModules(Collection<Module> modules) {
+	public ResultClass<Boolean> deleteTopicsForModules(Collection<Module> modules) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		Collection<Topic> topics = daoTopic.getTopicsForModules(modules);
-		if(serviceSubject.deleteSubjectsForTopic(topics))
-			return daoTopic.deleteTopicsForModules(modules);
-		return false;
+
+		if(serviceSubject.deleteSubjectsForTopic(topics).getE()){
+			result.setE(daoTopic.deleteTopicsForModules(modules));
+			return result;
+		}
+		result.setE(false);
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly=false)
-	public boolean deleteTopicsForModule(Module module) {
-
-		if(serviceSubject.deleteSubjectsForTopic(module.getTopics()))
-			return daoTopic.deleteTopicsForModule(module);
-		return false;
+	public ResultClass<Boolean> deleteTopicsForModule(Module module) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		if(!module.getTopics().isEmpty())
+			if(serviceSubject.deleteSubjectsForTopic(module.getTopics()).getE()){
+				result.setE(daoTopic.deleteTopicsForModule(module));
+				return result;
+			}
+			else result.setE(false);
+		else result.setE(true);
+		
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	

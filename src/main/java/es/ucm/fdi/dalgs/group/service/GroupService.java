@@ -45,7 +45,7 @@ public class GroupService {
 			result.setErrorsList(errors);
 		}
 		else{
-			group.setCourse(serviceCourse.getCourse(id_course));
+			group.setCourse(serviceCourse.getCourse(id_course).getE());
 			boolean r = daoGroup.addGroup(group);
 			if (r) 
 				result.setE(true);
@@ -54,9 +54,10 @@ public class GroupService {
 	}
 
 	@Transactional(readOnly = true)
-	public Group getGroup(Long id_group) {
-
-		return daoGroup.getGroup(id_group);
+	public ResultClass<Group> getGroup(Long id_group) {
+		ResultClass<Group> result = new ResultClass<Group>();
+		result.setE(daoGroup.getGroup(id_group));
+		return result;
 	}
 
 	@Transactional(readOnly = false)
@@ -91,19 +92,24 @@ public class GroupService {
 	}
 
 	@Transactional(readOnly = false)
-	public boolean deleteGroup(Long id_group) {
-	
-		return daoGroup.deleteGroup(id_group);
+	public ResultClass<Boolean> deleteGroup(Long id_group) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		result.setE(daoGroup.deleteGroup(id_group));
+		return result;
 	}
 
 
-	public Collection<Group> getGroupsForCourse(Long id) {
-		return daoGroup.getGroupsForCourse(id);
+	public ResultClass<Collection<Group>> getGroupsForCourse(Long id) {
+		ResultClass<Collection<Group>> result = new ResultClass<Collection<Group>>();
+		result.setE(daoGroup.getGroupsForCourse(id));
+		return result;
 	}
 
 	
-	public boolean deleteGroupsFromCourses(Collection<Course> coursesList) {
-		return daoGroup.deleteGroupsFromCourses(coursesList);
+	public ResultClass<Boolean> deleteGroupsFromCourses(Collection<Course> coursesList) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		result.setE(daoGroup.deleteGroupsFromCourses(coursesList));
+		return result;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
@@ -137,14 +143,18 @@ public class GroupService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostAuthorize("hasPermission(returnObject, 'READ')")
-	public Collection<Group> getGroupsForStudent(Long id_student){
-		return daoGroup.getGroupsForStudent(id_student);
+	public ResultClass<Collection<Group>> getGroupsForStudent(Long id_student){
+		ResultClass<Collection<Group>> result = new ResultClass<Collection<Group>>();
+		result.setE(daoGroup.getGroupsForStudent(id_student));
+		return result;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostAuthorize("hasPermission(returnObject, 'READ')")
-	public Collection<Group> getGroupsForProfessor(Long id_professor){
-		return daoGroup.getGroupsForProfessor(id_professor);
+	public ResultClass<Collection<Group>> getGroupsForProfessor(Long id_professor){
+		ResultClass<Collection<Group>> result = new ResultClass<Collection<Group>>();
+		result.setE(daoGroup.getGroupsForProfessor(id_professor));
+		return result;
 	}
 
 }

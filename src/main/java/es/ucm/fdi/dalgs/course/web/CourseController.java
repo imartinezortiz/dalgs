@@ -60,8 +60,8 @@ public class CourseController {
 			@PathVariable("academicId") Long id_academic, Model model) {
 		Course newCourse = new Course();
 
-		AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic);
-		Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree());
+		AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic).getE();
+		Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree()).getE();
 		//model.addAttribute("activities", serviceActivity.getAll());
 		model.addAttribute("addcourse", newCourse);
 
@@ -158,11 +158,11 @@ public class CourseController {
 			@PathVariable("courseId") Long id, Model model)
 			throws ServletException {
 
-		Course p = serviceCourse.getCourse(id);
+		Course p = serviceCourse.getCourse(id).getE();
 
-		AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic);
+		AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic).getE();
 		
-		Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree());
+		Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree()).getE();
 		model.addAttribute("idSubject", p.getSubject().getId());
 
 		//Collection<Activity> activities  =serviceActivity.getAll();
@@ -219,7 +219,7 @@ public class CourseController {
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course) throws ServletException {
 
-		if (serviceCourse.deleteCourse(id_course)) {
+		if (serviceCourse.deleteCourse(id_course).getE()) {
 			return "redirect:/academicTerm/" + id_academic + ".htm";
 		} else
 			return "redirect:/error.htm";
@@ -240,7 +240,7 @@ public class CourseController {
 
 						if (element instanceof String) {
 							Subject subject = serviceSubject
-									.getSubjectByName(element.toString());
+									.getSubjectByName(element.toString()).getE();
 							logger.info("Loking up {} to {}", element, subject);
 							return subject;
 						}

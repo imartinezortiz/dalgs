@@ -82,7 +82,7 @@ public class DegreeController {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		List<Degree> result = serviceDegree.getAll();
+		List<Degree> result = serviceDegree.getAll().getE();
 		myModel.put("degrees", result);
 
 		return new ModelAndView("degree/list", "model", myModel);
@@ -119,7 +119,7 @@ public class DegreeController {
 	protected ModelAndView formModifyDegrees(@PathVariable("degreeId") Long id)
 			throws ServletException {
 		ModelAndView model = new ModelAndView();
-		Degree p = serviceDegree.getDegree(id);
+		Degree p = serviceDegree.getDegree(id).getE();
 		model.addObject("modifyDegree", p);
 		model.setViewName("degree/modify");
 
@@ -134,7 +134,7 @@ public class DegreeController {
 	public String formDeleteDegrees(@PathVariable("degreeId") Long id)
 			throws ServletException {
 
-		if (serviceDegree.deleteDegree(id)) {
+		if (serviceDegree.deleteDegree(id).getE()) {
 			return "redirect:/degree/list.htm";
 		} else
 			return "redirect:/error.htm";
@@ -151,7 +151,7 @@ public class DegreeController {
 
 		// Degree p = serviceDegree.getDegree(id);
 
-		Degree p = serviceDegree.getDegreeAll(id);
+		Degree p = serviceDegree.getDegreeAll(id).getE();
 
 		myModel.put("degree", p);
 		if (p.getModules() != null)

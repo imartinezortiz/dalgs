@@ -49,7 +49,7 @@ public class ModuleService {
 			result.setErrorsList(errors);
 		}
 		else{
-			module.setDegree(serviceDegree.getDegree(id_degree));
+			module.setDegree(serviceDegree.getDegree(id_degree).getE());
 			boolean r = daoModule.addModule(module);
 			if (r) 
 				result.setE(true);
@@ -60,8 +60,10 @@ public class ModuleService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
-	public List<Module> getAll() {
-		return daoModule.getAll();
+	public ResultClass<List<Module>> getAll() {
+		ResultClass<List<Module>> result = new ResultClass<List<Module>>();
+		result.setE(daoModule.getAll());
+		return result;
 	}
 
 //	@PreAuthorize("hasRole('ROLE_ADMIN')")	
@@ -98,47 +100,60 @@ public class ModuleService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
-	public Module getModule(Long id) {
-		return daoModule.getModule(id);
+	public ResultClass<Module> getModule(Long id) {
+		ResultClass<Module> result = new ResultClass<Module>();
+		result.setE(daoModule.getModule(id));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly=false)
-	public boolean deleteModule(Long id) {
+	public ResultClass<Boolean> deleteModule(Long id) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		Module module = daoModule.getModule(id);
-		if(serviceTopic.deleteTopicsForModule(module))
-			return daoModule.deleteModule(module);
-		return false;
+		if(serviceTopic.deleteTopicsForModule(module).getE()){
+			result.setE(daoModule.deleteModule(module));
+			return result;
+		}
+		result.setE(false);
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
-	public Module getModuleAll(Long id_module, Long id_degree) {
-
+	public ResultClass<Module> getModuleAll(Long id_module) {
+		ResultClass<Module> result = new ResultClass<Module>();
 		Module p = daoModule.getModule(id_module);
-		p.setTopics(serviceTopic.getTopicsForModule(id_module));
-		return p;
+		p.setTopics(serviceTopic.getTopicsForModule(id_module).getE());
+		result.setE(p);
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
-	public Collection<Module> getModulesForDegree(Long id) {
-
-		return daoModule.getModulesForDegree(id);
+	public ResultClass<Collection<Module>> getModulesForDegree(Long id) {
+		ResultClass<Collection<Module>> result = new ResultClass<Collection<Module>>();
+		result.setE(daoModule.getModulesForDegree(id));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly=false)
-	public boolean modifyModule(Module module) {
-		return daoModule.saveModule(module);
+	public ResultClass<Boolean> modifyModule(Module module) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		result.setE(daoModule.saveModule(module));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly=false)
-	public boolean deleteModulesForDegree(Degree d) {
-		if(serviceTopic.deleteTopicsForModules(d.getModules()))
-			return daoModule.deleteModulesForDegree(d);
-		return false;
+	public ResultClass<Boolean> deleteModulesForDegree(Degree d) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		if(serviceTopic.deleteTopicsForModules(d.getModules()).getE()){
+			result.setE(daoModule.deleteModulesForDegree(d));
+		}
+		result.setE(false);	
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	

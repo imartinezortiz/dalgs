@@ -62,8 +62,10 @@ public class DegreeService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public List<Degree> getAll() {
-		return daoDegree.getAll();
+	public ResultClass<List<Degree>> getAll() {
+		ResultClass<List<Degree>> result = new ResultClass<List<Degree>>();
+		result.setE(daoDegree.getAll());
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
@@ -101,57 +103,66 @@ public class DegreeService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
-	public Degree getDegree(Long id) {
-		return daoDegree.getDegree(id);
+	public ResultClass<Degree> getDegree(Long id) {
+		ResultClass<Degree> result = new ResultClass<Degree>();
+		result.setE(daoDegree.getDegree(id));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public boolean deleteDegree(Long id) {
+	public ResultClass<Boolean> deleteDegree(Long id) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		boolean deleteModules = false;
 		boolean deleteCompetences = false;
 		boolean deleteAcademic = false;
 
 		Degree d = daoDegree.getDegree(id);
 		if (!d.getModules().isEmpty())
-			deleteModules = serviceModule.deleteModulesForDegree(d);
+			deleteModules = serviceModule.deleteModulesForDegree(d).getE();
 		if (!d.getCompetences().isEmpty())
-			deleteCompetences = serviceCompetence.deleteCompetencesForDegree(d);
-		Collection<AcademicTerm> academicList = serviceAcademicTerm.getAcademicTermsByDegree(id);
+			deleteCompetences = serviceCompetence.deleteCompetencesForDegree(d).getE();
+		Collection<AcademicTerm> academicList = serviceAcademicTerm.getAcademicTermsByDegree(id).getE();
 
 
-		if(!academicList.isEmpty()) deleteAcademic = serviceAcademicTerm.deleteAcademicTermCollection(academicList);
+		if(!academicList.isEmpty()) deleteAcademic = serviceAcademicTerm.deleteAcademicTermCollection(academicList).getE();
 		if ((deleteModules || d.getModules().isEmpty()) && (deleteCompetences || d.getCompetences().isEmpty())
 				&& (deleteAcademic || academicList.isEmpty())){
-				
-			return daoDegree.deleteDegree(d);
-		} else
-			return false;
+			result.setE(daoDegree.deleteDegree(d));	
+			return result;
+		} else{
+			result.setE(false);
+			return result;
+		}
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public Degree getDegreeSubject(Subject p) {
-
-		return daoDegree.getDegreeSubject(p);
+	public ResultClass<Degree> getDegreeSubject(Subject p) {
+		ResultClass<Degree> result = new ResultClass<Degree>();
+		result.setE(daoDegree.getDegreeSubject(p));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public String getNextCode() {
-		return daoDegree.getNextCode();
+	public ResultClass<String> getNextCode() {
+		ResultClass<String> result = new ResultClass<String>();
+		result.setE(daoDegree.getNextCode());
+		return result;
 
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public Degree getDegreeAll(Long id) {
-
-
+	public ResultClass<Degree> getDegreeAll(Long id) {
+		ResultClass<Degree> result = new ResultClass<Degree>();
+		
 		Degree d = daoDegree.getDegree(id);
-		d.setModules(serviceModule.getModulesForDegree(id));
+		d.setModules(serviceModule.getModulesForDegree(id).getE());
 		d.setCompetences(serviceCompetence.getCompetencesForDegree(id));
-		return d;
+		result.setE(d);
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	

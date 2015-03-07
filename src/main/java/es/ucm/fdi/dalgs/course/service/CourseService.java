@@ -39,7 +39,7 @@ public class CourseService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> addCourse(Course course, Long id_academic) {
 		
-		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic));
+		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic).getE());
 		Course courseExists = daoCourse.exist(course);
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
@@ -79,7 +79,7 @@ public class CourseService {
 	public ResultClass<Boolean> modifyCourse(Course course, Long id_academic, Long id_course) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		
-		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic));
+		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic).getE());
 		
 		Course modifyCourse = daoCourse.getCourse(id_course);
 		
@@ -113,31 +113,38 @@ public class CourseService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
-	public Course getCourse(Long id) {
-		return daoCourse.getCourse(id);
+	public ResultClass<Course> getCourse(Long id) {
+		ResultClass<Course> result = new ResultClass<Course>();
+		result.setE(daoCourse.getCourse(id));
+		return result;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteCourse(Long id) {
+	public ResultClass<Boolean> deleteCourse(Long id) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		Course course = daoCourse.getCourse(id);
-		if (serviceActivity.deleteActivitiesFromCourse(course))
-			return daoCourse.deleteCourse(id);
-		return false;
+		if (serviceActivity.deleteActivitiesFromCourse(course).getE()){
+			result.setE(daoCourse.deleteCourse(id));
+			return result;
+		}
+		result.setE(false);
+		return result;
 	}
 
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public List<Course> getCoursesByAcademicTerm(Long id_academic) {
-
-		return daoCourse.getCoursesByAcademicTerm(id_academic);
+	public ResultClass<List<Course>> getCoursesByAcademicTerm(Long id_academic) {
+		ResultClass<List<Course>> result = new ResultClass<List<Course>>();
+		result.setE(daoCourse.getCoursesByAcademicTerm(id_academic));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	public boolean deleteCoursesFromAcademic(AcademicTerm academic) {
-		boolean deleteActivities = serviceActivity.deleteActivitiesFromCourses(academic.getCourses());
-		boolean deleteGroups = serviceGroup.deleteGroupsFromCourses(academic.getCourses());
+		boolean deleteActivities = serviceActivity.deleteActivitiesFromCourses(academic.getCourses()).getE();
+		boolean deleteGroups = serviceGroup.deleteGroupsFromCourses(academic.getCourses()).getE();
 		if (deleteActivities && deleteGroups)
 			return daoCourse.deleteCoursesFromAcademic(academic);
 		else return false;
@@ -150,8 +157,8 @@ public class CourseService {
 	@PreAuthorize("hasRole('ROLE_USER')")	
 	public Course getCourseAll(Long id) {
 		Course c = daoCourse.getCourse(id);
-		c.setActivities(serviceActivity.getActivitiesForCourse(id));
-		c.setGroups(serviceGroup.getGroupsForCourse(id));
+		c.setActivities(serviceActivity.getActivitiesForCourse(id).getE());
+		c.setGroups(serviceGroup.getGroupsForCourse(id).getE());
 		
 	
 		return c;
@@ -167,17 +174,18 @@ public class CourseService {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	public boolean deleteCourses(Collection<AcademicTerm> academicList) {
 		Collection<Course> coursesList = daoCourse.getCoursesFromListAcademic(academicList);
-		boolean deleteActivities = serviceActivity.deleteActivitiesFromCourses(coursesList);
-		boolean deleteGroups = serviceGroup.deleteGroupsFromCourses(coursesList);
+		boolean deleteActivities = serviceActivity.deleteActivitiesFromCourses(coursesList).getE();
+		boolean deleteGroups = serviceGroup.deleteGroupsFromCourses(coursesList).getE();
 		if (deleteActivities && deleteGroups)
 		return daoCourse.deleteCourses(academicList);
 		else return false;
 	}
 
 
-	public boolean modifyCourse(Course course) {
-
-		return daoCourse.saveCourse(course);
+	public ResultClass<Boolean> modifyCourse(Course course) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		result.setE(daoCourse.saveCourse(course));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	

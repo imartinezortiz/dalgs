@@ -55,7 +55,7 @@ public class SubjectService {
 			result.setErrorsList(errors);
 		}
 		else{
-			subject.setTopic(serviceTopic.getTopic(id_topic));
+			subject.setTopic(serviceTopic.getTopic(id_topic).getE());
 			boolean r = daoSubject.addSubject(subject);
 			if (r) 
 				result.setE(true);
@@ -65,27 +65,37 @@ public class SubjectService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public List<Subject> getAll() {
-		return daoSubject.getAll();
+	public ResultClass<List<Subject>> getAll() {
+		
+		
+		ResultClass<List<Subject>> result = new ResultClass<List<Subject>>();
+		result.setE(daoSubject.getAll());
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
-	public Subject getSubject(Long id) {
-		return daoSubject.getSubject(id);
+	public ResultClass<Subject> getSubject(Long id) {
+		ResultClass<Subject> result = new ResultClass<Subject>();
+		result.setE(daoSubject.getSubject(id));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteSubject(Long id) {
+	public ResultClass<Boolean>deleteSubject(Long id) {
 		daoSubject.getSubject(id).getCompetences().clear();
-		return daoSubject.deleteSubject(id);
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		result.setE(daoSubject.deleteSubject(id));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public List<Subject> getSubjectsForTopic(Long id_topic) {
-		return daoSubject.getSubjectsForTopic(id_topic);
+	public ResultClass<List<Subject>> getSubjectsForTopic(Long id_topic) {
+		ResultClass<List<Subject>> result = new ResultClass<List<Subject>>();
+		result.setE(daoSubject.getSubjectsForTopic(id_topic));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -122,53 +132,65 @@ public class SubjectService {
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public boolean addCompetences(Subject modify, Long id_subject) {
-
+	public ResultClass<Boolean> addCompetences(Subject modify, Long id_subject) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		Subject subject = daoSubject.getSubject(id_subject);
 		subject.setInfo(modify.getInfo());
 		subject.setCompetences(modify.getCompetences());		
-
-		return daoSubject.saveSubject(subject);
+		result.setE(daoSubject.saveSubject(subject));
+		return result;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public String getNextCode() {
-		return daoSubject.getNextCode();
+	public ResultClass<String> getNextCode() {
+		ResultClass<String> result = new ResultClass<String>();
+		result.setE(daoSubject.getNextCode());
+		return result;
 
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public Subject getSubjectForCourse(Long id) {
-		return daoSubject.getSubjectForCourse(id);
+	public ResultClass<Subject> getSubjectForCourse(Long id) {
+		ResultClass<Subject> result = new ResultClass<Subject>();
+		result.setE(daoSubject.getSubjectForCourse(id));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public Subject getSubjectByName(String string) {
-		return daoSubject.getSubjectByName(string);
+	public ResultClass<Subject> getSubjectByName(String string) {
+		ResultClass<Subject> result = new ResultClass<Subject>();
+		result.setE(daoSubject.getSubjectByName(string));
+		return result;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public Subject getSubjectAll(Long id_subject) {
+	public ResultClass<Subject> getSubjectAll(Long id_subject) {
+		ResultClass<Subject> result = new ResultClass<Subject>();
 		Subject p = daoSubject.getSubject(id_subject);;
 		p.setCompetences(serviceCompetence.getCompetencesForSubject(id_subject));
-		return p;
+		result.setE(p);
+		return result;
 	}
 
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public Collection<Subject> getSubjectForDegree(Degree degree) {
-		return daoSubject.getSubjectForDegree(degree);
+	public ResultClass<Collection<Subject>> getSubjectForDegree(Degree degree) {
+		ResultClass<Collection<Subject>> result = new ResultClass<Collection<Subject>>();
+		result.setE(daoSubject.getSubjectForDegree(degree));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public boolean deleteSubjectsForTopic(Collection<Topic> topics) {	
-		return daoSubject.deleteSubjectsForTopics(topics);
+	public ResultClass<Boolean> deleteSubjectsForTopic(Collection<Topic> topics) {	
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		result.setE(daoSubject.deleteSubjectsForTopics(topics));
+		return result;
 	}
 
 	public ResultClass<Boolean> unDeleteSubject(Subject subject){

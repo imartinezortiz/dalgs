@@ -121,7 +121,7 @@ public class ModuleController {
 			throws ServletException {
 		
 		ModelAndView model = new ModelAndView();
-		Module p = serviceModule.getModule(id_module);
+		Module p = serviceModule.getModule(id_module).getE();
 		model.addObject("modifyModule", p);
 		model.setViewName("module/modify");
 
@@ -137,7 +137,7 @@ public class ModuleController {
 						@PathVariable("degreeId") Long id_degree)
 						throws ServletException {
 
-		if (serviceModule.deleteModule(id_module)) {
+		if (serviceModule.deleteModule(id_module).getE()) {
 			return "redirect:/degree/" + id_degree + ".htm";
 		} else
 			return "redirect:/error.htm";
@@ -155,7 +155,7 @@ public class ModuleController {
 
 		// Degree p = serviceDegree.getDegree(id);
 
-		Module p = serviceModule.getModuleAll(id_module, id_degree);
+		Module p = serviceModule.getModuleAll(id_module).getE();
 
 		myModel.put("module", p);
 		if (p.getTopics() != null)

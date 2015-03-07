@@ -35,7 +35,7 @@ public class CompetenceService {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> addCompetence(Competence competence, Long id_degree) {
-		competence.setDegree(serviceDegree.getDegree(id_degree));
+		competence.setDegree(serviceDegree.getDegree(id_degree).getE());
 		
 		Competence competenceExists = daoCompetence.existByCode(competence.getInfo().getCode(), competence.getDegree());
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -64,20 +64,26 @@ public class CompetenceService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public List<Competence> getAll() {
-		return daoCompetence.getAll();
+	public ResultClass<List<Competence>> getAll() {
+		ResultClass<List<Competence>> result = new ResultClass<List<Competence>>();
+		result.setE(daoCompetence.getAll());
+		return result;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
-	public Competence getCompetence(Long id) {
-		return daoCompetence.getCompetence(id);
+	public ResultClass<Competence> getCompetence(Long id) {
+		ResultClass<Competence> result = new ResultClass<Competence>();
+		result.setE(daoCompetence.getCompetence(id));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
-	public Competence getCompetenceByName(String name) {
-		return daoCompetence.getCompetenceByName(name);
+	public ResultClass<Competence> getCompetenceByName(String name) {
+		ResultClass<Competence> result = new ResultClass<Competence>();
+		result.setE(daoCompetence.getCompetenceByName(name));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
@@ -86,7 +92,7 @@ public class CompetenceService {
 		Competence competence = daoCompetence.getCompetence(id);
 		Collection <Competence> competences= new ArrayList<Competence>();
 		competences.add(competence);
-		if(serviceLearning.deleteLearningGoalForCompetences(competences))
+		if(serviceLearning.deleteLearningGoalForCompetences(competences).getE())
 			return daoCompetence.deleteCompetence(id);
 		return false;
 	}
@@ -109,7 +115,7 @@ public class CompetenceService {
 	public ResultClass<Boolean> modifyCompetence(Competence competence, Long id_competence, Long id_degree) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		
-		competence.setDegree(serviceDegree.getDegree(id_degree));
+		competence.setDegree(serviceDegree.getDegree(id_degree).getE());
 		Competence modifyCompetence = daoCompetence.getCompetence(id_competence);
 		
 		Competence competenceExists = daoCompetence.existByCode(competence.getInfo().getCode(),competence.getDegree() );
@@ -139,48 +145,57 @@ public class CompetenceService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteCompetenceFromSubject(Long id_competence,
+	public ResultClass<Boolean> deleteCompetenceFromSubject(Long id_competence,
 			Long id_subject) {
 		// Subject subject = daoSubject.getSubject(id);
-
-		Collection<Competence> c = serviceSubject.getSubject(id_subject)
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		Collection<Competence> c = serviceSubject.getSubject(id_subject).getE()
 				.getCompetences();
 		try {
 			c.remove(daoCompetence.getCompetence(id_competence));
-			return true;
+			result.setE(true);
+			
 
 		} catch (Exception e) {
-			return false;
+			result.setE(false);;
 		}
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
-	public boolean deleteCompetencesForDegree(Degree degree) {
-		if(serviceLearning.deleteLearningGoalForCompetences(degree.getCompetences()))
-			return daoCompetence.deleteCompetencesForDegree(degree);
-		else return false;
+	public ResultClass<Boolean> deleteCompetencesForDegree(Degree degree) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+
+		if(serviceLearning.deleteLearningGoalForCompetences(degree.getCompetences()).getE()){
+			result.setE(daoCompetence.deleteCompetencesForDegree(degree));
+		}
+			
+		else result.setE(false);
+		
+		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
-	public boolean modifyCompetence(Competence competence) {
-		return daoCompetence.saveCompetence(competence);
-	}
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+//	public boolean modifyCompetence(Competence competence) {
+//		return daoCompetence.saveCompetence(competence);
+//	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public Competence getCompetenceAll(Long id_competence) {
+	public ResultClass<Competence> getCompetenceAll(Long id_competence) {
+		ResultClass<Competence> result = new ResultClass<Competence>();
 		Competence competence = daoCompetence.getCompetence(id_competence);
 		//		Competence c = daoCompetence.getCompetenceAll(id_competence);
-		competence.setLearningGoals(serviceLearning.getLearningGoalsFromCompetence(competence));
-
-		return competence;
+		competence.setLearningGoals(serviceLearning.getLearningGoalsFromCompetence(competence).getE());
+		result.setE(competence);
+		return result;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> unDeleteCompetence(Competence competence, Long id_degree) {
 		
-		competence.setDegree(serviceDegree.getDegree(id_degree));
+		competence.setDegree(serviceDegree.getDegree(id_degree).getE());
 		Competence c = daoCompetence.existByCode(competence.getInfo().getCode(), competence.getDegree());
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		if(c == null){

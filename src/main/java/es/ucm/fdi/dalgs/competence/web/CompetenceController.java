@@ -1,7 +1,6 @@
 package es.ucm.fdi.dalgs.competence.web;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -19,7 +18,6 @@ import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.competence.service.CompetenceService;
 import es.ucm.fdi.dalgs.degree.service.DegreeService;
 import es.ucm.fdi.dalgs.domain.Competence;
-import es.ucm.fdi.dalgs.domain.Degree;
 
 @Controller
 public class CompetenceController {
@@ -37,10 +35,10 @@ public class CompetenceController {
 	 * private static final Logger logger = LoggerFactory
 	 * .getLogger(CompetenceController.class);
 	 */
-	@ModelAttribute("degrees")
-	public List<Degree> degrees() {
-		return serviceDegree.getAll();
-	}
+//	@ModelAttribute("degrees")
+//	public List<Degree> degrees() {
+//		return serviceDegree.getAll().getE();
+//	}
 
 	/**
 	 * Methods for adding competences
@@ -146,7 +144,7 @@ public class CompetenceController {
 			@PathVariable("competenceId") Long id_competence, Model model)
 			throws ServletException {
 
-		Competence p = serviceCompetence.getCompetence(id_competence);
+		Competence p = serviceCompetence.getCompetence(id_competence).getE();
 		model.addAttribute("modifyCompetence", p);
 		return "/competence/modify";
 
@@ -183,7 +181,7 @@ public class CompetenceController {
 
 //		Competence p = serviceCompetence.getCompetence(id_competence);
 		
-		Competence p = serviceCompetence.getCompetenceAll(id_competence);
+		Competence p = serviceCompetence.getCompetenceAll(id_competence).getE();
 
 		// List<Subject> subjects =
 		// serviceSubject.getSubjectsForCompetence(id_competence);

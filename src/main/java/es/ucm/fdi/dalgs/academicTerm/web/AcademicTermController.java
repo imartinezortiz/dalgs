@@ -22,7 +22,6 @@ import es.ucm.fdi.dalgs.academicTerm.service.AcademicTermService;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.degree.service.DegreeService;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
-import es.ucm.fdi.dalgs.domain.Degree;
 
 @Controller
 public class AcademicTermController {
@@ -36,10 +35,10 @@ public class AcademicTermController {
 	@Autowired
 	private CourseService serviceCourse;
 
-	@ModelAttribute("degrees")
-	public List<Degree> degree() {
-		return serviceDegree.getAll();
-	}
+//	@ModelAttribute("degrees")
+//	public List<Degree> degree() {
+//		return serviceDegree.getAll();
+//	}
 
 	/**
 	 * Methods for adding academicTerms
@@ -65,7 +64,7 @@ public class AcademicTermController {
 		if (!result.hasErrors()) {
 
 			boolean created = serviceAcademicTerm
-					.addAcademicTerm(newAcademicTerm);
+					.addAcademicTerm(newAcademicTerm).getE();
 			if (created)
 				return "redirect:/academicTerm/page/0.htm?showAll";
 			else
@@ -87,10 +86,10 @@ public class AcademicTermController {
 		/*if (showAll== false) showAll=true;
 		else showAll= false;*/
 			
-		List<AcademicTerm> p = serviceAcademicTerm.getAcademicsTerm(pageIndex, showAll);
+		List<AcademicTerm> p = serviceAcademicTerm.getAcademicsTerm(pageIndex, showAll).getE();
 		myModel.put("showAll", showAll);
 		myModel.put("academicTerms", p);
-		Integer numberOfPages = serviceAcademicTerm.numberOfPages(showAll);
+		Integer numberOfPages = serviceAcademicTerm.numberOfPages(showAll).getE();
 		myModel.put("numberOfPages",numberOfPages );
 		myModel.put("currentPage", pageIndex);
 
@@ -103,7 +102,7 @@ public class AcademicTermController {
 			throws ServletException {
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		AcademicTerm a = serviceAcademicTerm.getAcademicTerm(id_academic);
+		AcademicTerm a = serviceAcademicTerm.getAcademicTerm(id_academic).getE();
 		myModel.put("academicTerm", a);
 
 		// List<Course> courses =
@@ -124,7 +123,7 @@ public class AcademicTermController {
 			@PathVariable("academicId") Long id_academic, Model model)
 			throws ServletException {
 
-		AcademicTerm aT = serviceAcademicTerm.getAcademicTerm(id_academic);
+		AcademicTerm aT = serviceAcademicTerm.getAcademicTerm(id_academic).getE();
 		model.addAttribute("academicTerm", aT);
 //		model.addAttribute("degree", aT.getDegree());
 
@@ -137,7 +136,7 @@ public class AcademicTermController {
 			BindingResult result, Model model) {
 
 		if (!result.hasErrors()) {
-			AcademicTerm at = serviceAcademicTerm.getAcademicTerm(academicId);
+			AcademicTerm at = serviceAcademicTerm.getAcademicTerm(academicId).getE();
 			at.setTerm(newTerm.getTerm());
 			boolean success = serviceAcademicTerm.modifyAcademicTerm(at);
 			if (success)
@@ -157,7 +156,7 @@ public class AcademicTermController {
 			@PathVariable("academicId") Long id_academic)
 			throws ServletException {
 
-		if (serviceAcademicTerm.deleteAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic))) {
+		if (serviceAcademicTerm.deleteAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic).getE()).getE()) {
 			return "redirect:/academicTerm/page/0.htm?showAll";
 		} else
 			return "redirect:/error.htm";

@@ -120,7 +120,7 @@ public class TopicController {
 			throws ServletException {
 		
 		ModelAndView model = new ModelAndView();
-		Topic p = serviceTopic.getTopic(id_topic);
+		Topic p = serviceTopic.getTopic(id_topic).getE();
 		model.addObject("modifyTopic", p);
 		model.setViewName("topic/modify");
 
@@ -137,7 +137,7 @@ public class TopicController {
 						@PathVariable("degreeId") Long id_degree)
 						throws ServletException {
 
-		if (serviceTopic.deleteTopic(id_topic)) {
+		if (serviceTopic.deleteTopic(id_topic).getE()) {
 			return "redirect:/degree/" + id_degree + "/module/"+ id_module + ".htm";
 		} else
 			return "redirect:/error.htm";
@@ -156,7 +156,7 @@ public class TopicController {
 
 		// Degree p = serviceDegree.getDegree(id);
 
-		Topic p = serviceTopic.getTopicAll(id_topic);
+		Topic p = serviceTopic.getTopicAll(id_topic).getE();
 
 		myModel.put("topic", p);
 		if (p.getSubjects() != null)
