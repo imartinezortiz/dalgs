@@ -82,6 +82,7 @@ public class User implements UserDetails, CredentialsContainer{
 		this.credentialsNonExpired = true;
 		this.enabled = false;
 		this.accountNonLocked = true;
+		
 	}
 	
 

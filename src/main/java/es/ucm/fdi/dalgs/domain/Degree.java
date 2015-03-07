@@ -43,6 +43,7 @@ public class Degree {
 
 	public Degree() {
 		super();
+		this.isDeleted=false;
 	}
 
 	public Long getId() {

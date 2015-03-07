@@ -40,12 +40,23 @@ public class AcademicTermController {
 	public List<Degree> degree() {
 		return serviceDegree.getAll();
 	}
+	
+	private Boolean showAll;
+	
+	public Boolean getShowAll() {
+		return showAll;
+	}
+
+	public void setShowAll(Boolean showAll) {
+		this.showAll = showAll;
+	}
+
 
 	/**
 	 * Methods for adding academicTerms
 	 */
 	@RequestMapping(value = "/academicTerm/add.htm", method = RequestMethod.GET)
-	protected String getAddNewAcademicTermForm(Model model) {
+	protected String addAcademicTermGET(Model model) {
 
 		AcademicTerm newAcademicTerm = new AcademicTerm();
 		model.addAttribute("addAcademicTerm", newAcademicTerm);
@@ -55,7 +66,7 @@ public class AcademicTermController {
 
 	@RequestMapping(value = "/academicTerm/add.htm", method = RequestMethod.POST)
 	// Every Post have to return redirect
-	public String processAddNewAcademicTerm(
+	public String addAcademicTermPOST(
 			@ModelAttribute("addacademicTerm") @Valid AcademicTerm newAcademicTerm,
 			BindingResult result, Model model) {
 
@@ -67,7 +78,7 @@ public class AcademicTermController {
 			boolean created = serviceAcademicTerm
 					.addAcademicTerm(newAcademicTerm);
 			if (created)
-				return "redirect:/academicTerm/page/0.htm?showAll";
+				return "redirect:/academicTerm/page/0.htm?showAll="+showAll;
 			else
 				return "redirect:/academicTerm/add.htm";
 		}
@@ -78,7 +89,7 @@ public class AcademicTermController {
 	 * Methods for list academic terms of a term
 	 */
 	@RequestMapping(value = "/academicTerm/page/{pageIndex}.htm")
-	protected ModelAndView formViewAcademicTerm(@PathVariable("pageIndex") Integer pageIndex, 
+	protected ModelAndView academicTermsGET(@PathVariable("pageIndex") Integer pageIndex, 
 			@RequestParam(value = "showAll", defaultValue="false") Boolean showAll)
 			throws ServletException {
 
@@ -93,12 +104,14 @@ public class AcademicTermController {
 		Integer numberOfPages = serviceAcademicTerm.numberOfPages(showAll);
 		myModel.put("numberOfPages",numberOfPages );
 		myModel.put("currentPage", pageIndex);
+		
+		setShowAll(showAll);
 
 		return new ModelAndView("academicTerm/list", "model", myModel);
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}.htm", method = RequestMethod.GET)
-	protected ModelAndView formViewAcademicTermDegree(
+	protected ModelAndView academicTermGET(
 			@PathVariable("academicId") Long id_academic)
 			throws ServletException {
 		Map<String, Object> myModel = new HashMap<String, Object>();
@@ -120,7 +133,7 @@ public class AcademicTermController {
 	 */
 
 	@RequestMapping(value = "/academicTerm/{academicId}/modify.htm", method = RequestMethod.GET)
-	protected String formModifyAcademics(
+	protected String modifyAcademictermGET(
 			@PathVariable("academicId") Long id_academic, Model model)
 			throws ServletException {
 
@@ -132,7 +145,7 @@ public class AcademicTermController {
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/modify.htm", method = RequestMethod.POST)
-	public String formModifySystem(@PathVariable("academicId") Long academicId,
+	public String modifyAcademicTermPOST(@PathVariable("academicId") Long academicId,
 			@ModelAttribute("academicTerm") AcademicTerm newTerm,
 			BindingResult result, Model model) {
 
@@ -141,7 +154,7 @@ public class AcademicTermController {
 			at.setTerm(newTerm.getTerm());
 			boolean success = serviceAcademicTerm.modifyAcademicTerm(at);
 			if (success)
-				return "redirect:/academicTerm/page/0.htm?showAll";
+				return "redirect:/academicTerm/page/0.htm?showAll="+showAll;
 
 		}
 		return "redirect:/error.htm";
@@ -153,14 +166,15 @@ public class AcademicTermController {
 	 */
 
 	@RequestMapping(value = "/academicTerm/{academicId}/delete.htm", method = RequestMethod.GET)
-	public String formDeleteAcademicTerm(
+	public String deleteAcademicTermGET(
 			@PathVariable("academicId") Long id_academic)
 			throws ServletException {
 
 		if (serviceAcademicTerm.deleteAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic))) {
-			return "redirect:/academicTerm/page/0.htm?showAll";
+			return "redirect:/academicTerm/page/0.htm?showAll="+showAll;
 		} else
 			return "redirect:/error.htm";
 	}
 
+	
 }

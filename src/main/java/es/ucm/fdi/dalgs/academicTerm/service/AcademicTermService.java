@@ -19,8 +19,7 @@ import es.ucm.fdi.dalgs.domain.AcademicTerm;
 @Service
 public class AcademicTermService {
 
-	@Autowired
-	private MutableAclService mutableAclService;
+
 
 	@Autowired
 	private AclObjectService manageAclService;
@@ -31,9 +30,7 @@ public class AcademicTermService {
 	@Autowired
 	private CourseService serviceCourse;
 	
-	public void setMutableAclService(MutableAclService mutableAclService) {
-		this.mutableAclService = mutableAclService;
-	}
+
 
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -41,7 +38,8 @@ public class AcademicTermService {
 	public boolean addAcademicTerm(AcademicTerm academicTerm) {
 
 		boolean success  =false;
-		
+		Integer id = new Integer(Math.abs(academicTerm.hashCode()));
+		//academicTerm.setId(id.longValue());
 		AcademicTerm academicAux = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
 		if (academicAux == null){
 			success = daoAcademicTerm.addAcademicTerm(academicTerm);			

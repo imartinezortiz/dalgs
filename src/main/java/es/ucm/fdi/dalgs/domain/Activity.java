@@ -49,6 +49,8 @@ public class Activity {
 
 	public Activity() {
 		super();
+		this.isDeleted=false;
+
 	}
 
 	public Long getId() {

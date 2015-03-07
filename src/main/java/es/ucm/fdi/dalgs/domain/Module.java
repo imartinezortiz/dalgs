@@ -39,6 +39,12 @@ public class Module {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "module")
 	private Collection<Topic> topics = new ArrayList<Topic>();
 
+	
+	public Module() {
+		super();
+		this.isDeleted=false;
+	}
+
 	public Long getId() {
 		return id;
 	}

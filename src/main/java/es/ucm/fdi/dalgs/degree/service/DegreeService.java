@@ -5,11 +5,14 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.ucm.fdi.dalgs.academicTerm.service.AcademicTermService;
+import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.competence.service.CompetenceService;
 import es.ucm.fdi.dalgs.degree.repository.DegreeRepository;
@@ -20,6 +23,10 @@ import es.ucm.fdi.dalgs.module.service.ModuleService;
 
 @Service
 public class DegreeService {
+	
+	@Autowired
+	private AclObjectService manageAclService;
+	
 	@Autowired
 	private DegreeRepository daoDegree;
 
@@ -38,10 +45,9 @@ public class DegreeService {
 
 		Degree degreeExists = daoDegree.existByCode(degree.getInfo().getCode());
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-
+		Collection<String> errors =new ArrayList<String>();
 		if( degreeExists != null){
 			result.setHasErrors(true);
-			Collection<String> errors = new ArrayList<String>();
 			errors.add("Code already exists");
 
 			if (degreeExists.getIsDeleted()){
@@ -53,20 +59,41 @@ public class DegreeService {
 		}
 		else{
 			boolean r = daoDegree.addDegree(degree);
-			if (r) 
-				result.setE(true);
+			
+			degreeExists = daoDegree.existByCode(degree.getInfo().getCode());
+			if( degreeExists != null){
+				manageAclService.addAclToObject(degreeExists.getId(), degreeExists.getClass().getName());
+			} else {
+				errors.add("Cannot create ACL. Object not set");
+			}
+			
+			if (r) result.setE(true);
 		}
+		
+
+		
+		
+		
 		return result;
 
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ')")
+	@Transactional(readOnly = true)
+	public List<Degree> getDegrees(Integer pageIndex, Boolean showAll) {
+		return daoDegree.getDegrees(pageIndex, showAll);
+	}
+	
+
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ')")
 	@Transactional(readOnly = true)
 	public List<Degree> getAll() {
 		return daoDegree.getAll();
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@PreAuthorize("hasPermission(#degree, 'WRITE') or hasPermission(#degree, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyDegree(Degree degree, Long id_degree) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -99,32 +126,26 @@ public class DegreeService {
 		
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@Transactional(readOnly = false)
-	public Degree getDegree(Long id) {
-		return daoDegree.getDegree(id);
-	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@PreAuthorize("hasPermission(#degree, 'DELETE') or hasPermission(#degree, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)
-	public boolean deleteDegree(Long id) {
+	public boolean deleteDegree(Degree degree) {
 		boolean deleteModules = false;
 		boolean deleteCompetences = false;
 		boolean deleteAcademic = false;
 
-		Degree d = daoDegree.getDegree(id);
-		if (!d.getModules().isEmpty())
-			deleteModules = serviceModule.deleteModulesForDegree(d);
-		if (!d.getCompetences().isEmpty())
-			deleteCompetences = serviceCompetence.deleteCompetencesForDegree(d);
-		Collection<AcademicTerm> academicList = serviceAcademicTerm.getAcademicTermsByDegree(id);
+		if (!degree.getModules().isEmpty())
+			deleteModules = serviceModule.deleteModulesForDegree(degree);
+		if (!degree.getCompetences().isEmpty())
+			deleteCompetences = serviceCompetence.deleteCompetencesForDegree(degree);
+		Collection<AcademicTerm> academicList = serviceAcademicTerm.getAcademicTermsByDegree(degree.getId());
 
 
 		if(!academicList.isEmpty()) deleteAcademic = serviceAcademicTerm.deleteAcademicTermCollection(academicList);
-		if ((deleteModules || d.getModules().isEmpty()) && (deleteCompetences || d.getCompetences().isEmpty())
+		if ((deleteModules || degree.getModules().isEmpty()) && (deleteCompetences || degree.getCompetences().isEmpty())
 				&& (deleteAcademic || academicList.isEmpty())){
 				
-			return daoDegree.deleteDegree(d);
+			return daoDegree.deleteDegree(degree);
 		} else
 			return false;
 	}
@@ -144,17 +165,16 @@ public class DegreeService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostAuthorize("hasPermission(returnObject, 'READ')")
 	@Transactional(readOnly = true)
-	public Degree getDegreeAll(Long id) {
-
-
+	public Degree getDegree(Long id) {
 		Degree d = daoDegree.getDegree(id);
 		d.setModules(serviceModule.getModulesForDegree(id));
 		d.setCompetences(serviceCompetence.getCompetencesForDegree(id));
 		return d;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@PreAuthorize("hasPermission(#degree, 'DELETE') or hasPermission(#degree, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> unDeleteDegree(Degree degree) {
 		Degree d = daoDegree.existByCode(degree.getInfo().getCode());
@@ -181,6 +201,11 @@ public class DegreeService {
 
 		}
 		return result;
+	}
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@Transactional(readOnly = true)
+	public Integer numberOfPages(Boolean showAll) {
+		return daoDegree.numberOfPages(showAll);
 	}
 
 }

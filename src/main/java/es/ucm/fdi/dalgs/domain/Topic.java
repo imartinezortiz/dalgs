@@ -39,6 +39,12 @@ public class Topic {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "topic")
 	private Collection<Subject> subjects = new ArrayList<Subject>();
 
+	
+	public Topic() {
+		super();
+		this.isDeleted=false;
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -18,6 +18,9 @@ import es.ucm.fdi.dalgs.domain.Subject;
 @Repository
 public class DegreeRepository {
 	protected EntityManager em;
+	
+	private static final Integer noOfRecords = 5;
+
 
 	public EntityManager getEntityManager() {
 		return em;
@@ -115,5 +118,32 @@ public class DegreeRepository {
 		 if (query.getResultList().isEmpty())
 		 	return null;
 		 else return (Degree) query.getSingleResult();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Degree> getDegrees(Integer pageIndex, Boolean showAll) {
+		Query query = null;
+		
+		if (showAll) query =em.createQuery("select a from Degree a  order by a.id DESC");
+		else query =em.createQuery("select a from Degree a  where a.isDeleted='false' order by a.id DESC");
+
+		if (query.getResultList().isEmpty())
+			return null;
+
+		return query.setMaxResults(noOfRecords).setFirstResult(pageIndex * noOfRecords).getResultList();
+
+	}
+
+	public Integer numberOfPages(Boolean showAll) {
+		Query query =null;
+		if (showAll)
+			query = em.createNativeQuery(
+				"select count(*) from degree");
+		else query = em.createNativeQuery(
+				"select count(*) from degree where isDeleted='false'");
+		
+		logger.info(query.getSingleResult().toString());
+		double dou = Double.parseDouble(query.getSingleResult().toString())/ ((double) noOfRecords);
+		return (int) Math.ceil(dou);
 	}
 }

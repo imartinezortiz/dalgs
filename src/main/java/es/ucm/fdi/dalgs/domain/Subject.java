@@ -47,6 +47,8 @@ public class Subject {
 
 	public Subject() {
 		super();
+		this.isDeleted=false;
+
 	}
 
 

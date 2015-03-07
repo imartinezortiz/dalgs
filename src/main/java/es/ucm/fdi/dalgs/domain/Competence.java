@@ -51,6 +51,7 @@ public class Competence {
 
 	public Competence() {
 		super();
+		this.isDeleted=false;
 	}
 
 	public Degree getDegree() {

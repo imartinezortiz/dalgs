@@ -46,6 +46,13 @@ public class Group {
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
+	
+	
+	public Group() {
+		super();
+		this.isDeleted=false;
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -50,6 +50,8 @@ public class Course {
 
 	public Course() {
 		super();
+		this.isDeleted=false;
+
 	}
 
 	public AcademicTerm getAcademicTerm() {

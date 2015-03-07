@@ -32,6 +32,13 @@ public class LearningGoal {
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
+	
+	
+	public LearningGoal() {
+		super();
+		this.isDeleted=false;
+	}
+
 	public Long getId() {
 		return id;
 	}

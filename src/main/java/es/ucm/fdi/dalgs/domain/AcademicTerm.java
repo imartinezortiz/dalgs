@@ -44,6 +44,7 @@ public class AcademicTerm {
 	
 	public AcademicTerm() {
 		super();
+		this.isDeleted = false;
 	}
 
 	public Collection<Course> getCourses() {
@@ -87,5 +88,5 @@ public class AcademicTerm {
 		this.degree = degree;
 	}
 	
-
+	
 }
