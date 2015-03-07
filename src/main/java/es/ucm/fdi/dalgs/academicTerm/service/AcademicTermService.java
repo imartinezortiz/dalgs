@@ -92,8 +92,38 @@ public class AcademicTermService {
 
 	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public boolean modifyAcademicTerm(AcademicTerm academicTerm) {
-		return daoAcademicTerm.saveAcademicTerm(academicTerm);
+//	public boolean modifyAcademicTerm(AcademicTerm academicTerm) {
+//		return daoAcademicTerm.saveAcademicTerm(academicTerm);
+//	}
+	public ResultClass<Boolean> modifyAcademicTerm(AcademicTerm academic, Long id_academic) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+
+		AcademicTerm modifyAcademic = daoAcademicTerm.getAcademicTermById(id_academic);
+		
+		AcademicTerm academicExists = daoAcademicTerm.exists(academic.getTerm(), academic.getDegree());
+		
+		if(!academic.getTerm().equalsIgnoreCase(modifyAcademic.getTerm()) && (!academic.getDegree().equals(modifyAcademic.getDegree())) && 
+				academicExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("New code already exists");
+
+			if (academicExists.getIsDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
+
+			}
+			result.setErrorsList(errors);
+		}
+		else{
+			modifyAcademic.setTerm(academic.getTerm());
+			boolean r = daoAcademicTerm.saveAcademicTerm(modifyAcademic);
+			if (r) 
+				result.setE(true);
+		}
+		return result;
+
+		
 	}
 
 	/**
@@ -171,5 +201,34 @@ public class AcademicTermService {
 		else result.setE(false);
 
 		return result;
+	}
+
+
+	public ResultClass<Boolean> undeleteAcademic(AcademicTerm academicTerm) {
+		AcademicTerm a = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		if(a == null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Code doesn't exist");
+			result.setErrorsList(errors);
+
+		}
+		else{
+			if(!a.getIsDeleted()){
+				Collection<String> errors = new ArrayList<String>();
+				errors.add("Code is not deleted");
+				result.setErrorsList(errors);
+			}
+
+			a.setDeleted(false);
+			a.setTerm(academicTerm.getTerm());
+			boolean r = daoAcademicTerm.saveAcademicTerm(a);
+			if (r)
+				result.setE(true);	
+
+		}
+		return result;
+		
 	}
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import es.ucm.fdi.dalgs.academicTerm.service.AcademicTermService;
+import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.degree.service.DegreeService;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
@@ -35,10 +36,10 @@ public class AcademicTermController {
 	@Autowired
 	private CourseService serviceCourse;
 
-//	@ModelAttribute("degrees")
-//	public List<Degree> degree() {
-//		return serviceDegree.getAll();
-//	}
+	//	@ModelAttribute("degrees")
+	//	public List<Degree> degree() {
+	//		return serviceDegree.getAll();
+	//	}
 
 	/**
 	 * Methods for adding academicTerms
@@ -63,14 +64,39 @@ public class AcademicTermController {
 
 		if (!result.hasErrors()) {
 
-			boolean created = serviceAcademicTerm
-					.addAcademicTerm(newAcademicTerm).getE();
-			if (created)
-				return "redirect:/academicTerm/page/0.htm?showAll";
-			else
-				return "redirect:/academicTerm/add.htm";
+			ResultClass<Boolean> resultReturned = serviceAcademicTerm.addAcademicTerm(newAcademicTerm);
+			if (!result.hasErrors())
+				model.addAttribute("addacademicTerm", newAcademicTerm);
+			if (resultReturned.isElementDeleted())
+				model.addAttribute("unDelete", resultReturned.isElementDeleted()); 
+			model.addAttribute("errors", resultReturned.getErrorsList());
+			return "redirect:/academicTerm/page/0.htm?showAll";
+			//			boolean created = serviceAcademicTerm
+			//					.addAcademicTerm(newAcademicTerm).getE();
+			//			if (created)
+			//				return "redirect:/academicTerm/page/0.htm?showAll";
+			//			else
+			//				return "redirect:/academicTerm/add.htm";
 		}
 		return "redirect:/error.htm";
+	}
+
+	@RequestMapping(value = "/academicTerm/add.htm", method = RequestMethod.POST, params="Undelete")
+	// Every Post have to return redirect
+	public String undeleteDegree(
+			@ModelAttribute("addacademicTerm") AcademicTerm academicTerm, Model model) {
+		ResultClass<Boolean> result = serviceAcademicTerm.undeleteAcademic(academicTerm);
+
+		if (!result.hasErrors())
+			//		if (created)
+			return "redirect:/aca/list.htm";
+		else{
+			model.addAttribute("addacademicTerm", academicTerm);
+			if (result.isElementDeleted())
+				model.addAttribute("unDelete", true); 
+			model.addAttribute("errors", result.getErrorsList());
+			return "degree/add";
+		}
 	}
 
 	/**
@@ -79,13 +105,13 @@ public class AcademicTermController {
 	@RequestMapping(value = "/academicTerm/page/{pageIndex}.htm")
 	protected ModelAndView formViewAcademicTerm(@PathVariable("pageIndex") Integer pageIndex, 
 			@RequestParam(value = "showAll", defaultValue="false") Boolean showAll)
-			throws ServletException {
+					throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
-		
+
 		/*if (showAll== false) showAll=true;
 		else showAll= false;*/
-			
+
 		List<AcademicTerm> p = serviceAcademicTerm.getAcademicsTerm(pageIndex, showAll).getE();
 		myModel.put("showAll", showAll);
 		myModel.put("academicTerms", p);
@@ -99,7 +125,7 @@ public class AcademicTermController {
 	@RequestMapping(value = "/academicTerm/{academicId}.htm", method = RequestMethod.GET)
 	protected ModelAndView formViewAcademicTermDegree(
 			@PathVariable("academicId") Long id_academic)
-			throws ServletException {
+					throws ServletException {
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
 		AcademicTerm a = serviceAcademicTerm.getAcademicTerm(id_academic).getE();
@@ -121,11 +147,11 @@ public class AcademicTermController {
 	@RequestMapping(value = "/academicTerm/{academicId}/modify.htm", method = RequestMethod.GET)
 	protected String formModifyAcademics(
 			@PathVariable("academicId") Long id_academic, Model model)
-			throws ServletException {
+					throws ServletException {
 
 		AcademicTerm aT = serviceAcademicTerm.getAcademicTerm(id_academic).getE();
 		model.addAttribute("academicTerm", aT);
-//		model.addAttribute("degree", aT.getDegree());
+		//		model.addAttribute("degree", aT.getDegree());
 
 		return "academicTerm/modify";
 	}
@@ -136,11 +162,22 @@ public class AcademicTermController {
 			BindingResult result, Model model) {
 
 		if (!result.hasErrors()) {
-			AcademicTerm at = serviceAcademicTerm.getAcademicTerm(academicId).getE();
-			at.setTerm(newTerm.getTerm());
-			boolean success = serviceAcademicTerm.modifyAcademicTerm(at);
-			if (success)
+			//			AcademicTerm at = serviceAcademicTerm.getAcademicTerm(academicId).getE();
+			//			at.setTerm(newTerm.getTerm());
+			ResultClass<Boolean> resultReturned = serviceAcademicTerm.modifyAcademicTerm(newTerm, academicId);
+			if (!resultReturned.hasErrors())
 				return "redirect:/academicTerm/page/0.htm?showAll";
+			else{
+				model.addAttribute("academicTerm", newTerm);
+				if (resultReturned.isElementDeleted()){
+					model.addAttribute("addAcademicTerm", newTerm);
+					model.addAttribute("unDelete", true); 
+					model.addAttribute("errors", resultReturned.getErrorsList());
+					return "academicTerm/add";
+				}	
+				model.addAttribute("errors", resultReturned.getErrorsList());
+				return "academicTerm/modify";
+			}
 
 		}
 		return "redirect:/error.htm";
@@ -154,7 +191,7 @@ public class AcademicTermController {
 	@RequestMapping(value = "/academicTerm/{academicId}/delete.htm", method = RequestMethod.GET)
 	public String formDeleteAcademicTerm(
 			@PathVariable("academicId") Long id_academic)
-			throws ServletException {
+					throws ServletException {
 
 		if (serviceAcademicTerm.deleteAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic).getE()).getE()) {
 			return "redirect:/academicTerm/page/0.htm?showAll";
