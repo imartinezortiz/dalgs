@@ -23,6 +23,7 @@ import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.degree.service.DegreeService;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
+import es.ucm.fdi.dalgs.domain.Degree;
 
 @Controller
 public class AcademicTermController {
@@ -36,10 +37,10 @@ public class AcademicTermController {
 	@Autowired
 	private CourseService serviceCourse;
 
-	//	@ModelAttribute("degrees")
-	//	public List<Degree> degree() {
-	//		return serviceDegree.getAll();
-	//	}
+	@ModelAttribute("degrees")
+	public List<Degree> degree() {
+		return serviceDegree.getAll().getE();
+	}
 
 	/**
 	 * Methods for adding academicTerms
