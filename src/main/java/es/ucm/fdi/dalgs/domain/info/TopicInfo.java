@@ -3,18 +3,29 @@ package es.ucm.fdi.dalgs.domain.info;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Embeddable
 public class TopicInfo {
 
+	@NotEmpty @NotNull @NotBlank
+	@Size(min=1, max=20)
 	@Basic(optional = false)
 	@Column(name = "code_topic", nullable = false)
 	private String code;
 	
+	@NotEmpty @NotNull @NotBlank
+	@Size(min=1, max=50)
 	@Basic(optional = false)
-	@Column(name = "name", length = 100, nullable = false)
+	@Column(name = "name", length = 50, nullable = false)
 	private String name;
 
+	@NotEmpty @NotNull @NotBlank
+	@Size(min=1, max=250)
 	@Basic(optional = false)
 	@Column(name = "description", length = 250, nullable = false)
 	private String description;

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.acls.model.MutableAclService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,21 +20,19 @@ import es.ucm.fdi.dalgs.domain.AcademicTerm;
 @Service
 public class AcademicTermService {
 
-	@Autowired
-	private MutableAclService mutableAclService;
+
 
 	@Autowired
 	private AclObjectService manageAclService;
-
+	
 	@Autowired
 	private AcademicTermRepository daoAcademicTerm;
 
 	@Autowired
 	private CourseService serviceCourse;
 
-	public void setMutableAclService(MutableAclService mutableAclService) {
-		this.mutableAclService = mutableAclService;
-	}
+
+
 
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")

@@ -146,5 +146,10 @@ public class UserRepository {
 		return (User) query.getSingleResult();
 	}
 
-
+	@SuppressWarnings("unchecked")
+	public List<String> getAllByRole(String user_role) {
+		Query query = em.createQuery("select u from User u join u.roles ur where ur.role = ?1 order by u.id");
+		query.setParameter(1, user_role);
+		return query.getResultList();
+	}
 }

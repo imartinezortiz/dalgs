@@ -41,6 +41,17 @@ public class AcademicTermController {
 	public List<Degree> degree() {
 		return serviceDegree.getAll().getE();
 	}
+	
+	private Boolean showAll;
+	
+	public Boolean getShowAll() {
+		return showAll;
+	}
+
+	public void setShowAll(Boolean showAll) {
+		this.showAll = showAll;
+	}
+
 
 	/**
 	 * Methods for adding academicTerms
@@ -60,6 +71,7 @@ public class AcademicTermController {
 			@ModelAttribute("addacademicTerm") @Valid AcademicTerm newAcademicTerm,
 			BindingResult result, Model model) {
 
+		
 		if (newAcademicTerm.getDegree() == null)
 			return "redirect://academicTerm/add.htm";
 
@@ -79,7 +91,14 @@ public class AcademicTermController {
 			//			else
 			//				return "redirect:/academicTerm/add.htm";
 		}
-		return "redirect:/error.htm";
+		else{
+			// Write the binding result errors on the view
+			
+			// ----
+			
+			return "redirect:/academicTerm/add.htm";
+		}
+		//return "redirect:/error.htm";
 	}
 
 	@RequestMapping(value = "/academicTerm/add.htm", method = RequestMethod.POST, params="Undelete")
@@ -119,12 +138,14 @@ public class AcademicTermController {
 		Integer numberOfPages = serviceAcademicTerm.numberOfPages(showAll).getE();
 		myModel.put("numberOfPages",numberOfPages );
 		myModel.put("currentPage", pageIndex);
+		
+		setShowAll(showAll);
 
 		return new ModelAndView("academicTerm/list", "model", myModel);
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}.htm", method = RequestMethod.GET)
-	protected ModelAndView formViewAcademicTermDegree(
+	protected ModelAndView academicTermGET(
 			@PathVariable("academicId") Long id_academic)
 					throws ServletException {
 		Map<String, Object> myModel = new HashMap<String, Object>();
@@ -146,7 +167,7 @@ public class AcademicTermController {
 	 */
 
 	@RequestMapping(value = "/academicTerm/{academicId}/modify.htm", method = RequestMethod.GET)
-	protected String formModifyAcademics(
+	protected String modifyAcademictermGET(
 			@PathVariable("academicId") Long id_academic, Model model)
 					throws ServletException {
 
@@ -190,12 +211,12 @@ public class AcademicTermController {
 	 */
 
 	@RequestMapping(value = "/academicTerm/{academicId}/delete.htm", method = RequestMethod.GET)
-	public String formDeleteAcademicTerm(
+	public String deleteAcademicTermGET(
 			@PathVariable("academicId") Long id_academic)
 					throws ServletException {
 
 		if (serviceAcademicTerm.deleteAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic).getE()).getE()) {
-			return "redirect:/academicTerm/page/0.htm?showAll";
+			return "redirect:/academicTerm/page/0.htm?showAll="+showAll;
 		} else
 			return "redirect:/error.htm";
 	}

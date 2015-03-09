@@ -47,6 +47,11 @@
     <location>/pageNotFound.htm</location>
   </error-page>
   
+    <error-page>
+    <error-code>400</error-code>
+    <location>/error.htm</location>
+  </error-page>
+  
   <error-page>
     <exception-type>java.lang.Exception</exception-type>
     <location>/error.htm</location>

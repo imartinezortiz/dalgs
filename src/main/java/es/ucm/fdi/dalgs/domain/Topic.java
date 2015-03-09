@@ -15,6 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.Valid;
+import javax.validation.constraints.AssertFalse;
+import javax.validation.constraints.NotNull;
 
 import es.ucm.fdi.dalgs.domain.info.TopicInfo;
 
@@ -32,15 +35,25 @@ public class Topic {
 	@Embedded
 	private TopicInfo info;
 	
+	@AssertFalse
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 	
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_module")
 	private Module module;
 	
+	@NotNull
+	@Valid
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "topic")
 	private Collection<Subject> subjects = new ArrayList<Subject>();
+
+	
+	public Topic() {
+		super();
+		this.isDeleted=false;
+	}
 
 	public Long getId() {
 		return id;

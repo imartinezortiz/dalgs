@@ -49,19 +49,14 @@
 		</div>
 	</div>
 	
-		<div align="center">
+	<c:if test="${not empty errors}">
+	<div align="center">
 		<h3 class="panel-title list">	Errors: </h3>	
 			<br/>
 			<c:forEach items="${errors}" var="error">
-
-				
-					<c:out  value="${error}" /><br/>
-				
-
-
-
+				<c:out  value="${error}" /><br/>
 			</c:forEach>
-		
 	</div>
+	</c:if>
 </body>
 </html>

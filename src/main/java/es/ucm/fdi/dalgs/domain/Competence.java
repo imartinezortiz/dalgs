@@ -16,6 +16,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.Valid;
+import javax.validation.constraints.AssertFalse;
+import javax.validation.constraints.NotNull;
 
 import es.ucm.fdi.dalgs.domain.info.CompetenceInfo;
 
@@ -32,17 +35,22 @@ public class Competence {
 	@Embedded
 	private CompetenceInfo info;
 
-
+	@NotNull
+	@Valid
 	@ManyToMany(mappedBy = "competences", fetch = FetchType.LAZY)
 	private Collection<Subject> subjects = new ArrayList<Subject>();
 	
+	@NotNull
+	@Valid
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "competence")
 	private Collection<LearningGoal> learningGoals = new ArrayList<LearningGoal>();
 
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_degree")
 	private Degree degree;
 
+	@AssertFalse
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
@@ -51,6 +59,7 @@ public class Competence {
 
 	public Competence() {
 		super();
+		this.isDeleted=false;
 	}
 
 	public Degree getDegree() {

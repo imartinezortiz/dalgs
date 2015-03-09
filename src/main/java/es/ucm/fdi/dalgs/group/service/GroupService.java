@@ -24,7 +24,7 @@ public class GroupService {
 	@Autowired
 	private CourseService serviceCourse;
 	
-	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> addGroup(Group group, Long id_course) {
 		
@@ -52,29 +52,27 @@ public class GroupService {
 		}
 		return result;		
 	}
-
+	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<Group> getGroup(Long id_group) {
 		ResultClass<Group> result = new ResultClass<Group>();
 		result.setE(daoGroup.getGroup(id_group));
 		return result;
 	}
-
+	
+	//@PreAuthorize("hasPermission(#degree, 'WRITE') or hasPermission(#degree, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifyGroup(Group group, Long id_group) {
+	public ResultClass<Boolean> modifyGroup(Group group) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-
-		Group modifyGroup = daoGroup.getGroup(id_group);
 		
-		Group groupExists = daoGroup.existByName(group.getName());
-		
-		if(!group.getName().equalsIgnoreCase(modifyGroup.getName()) && 
-				groupExists != null){
+		if(daoGroup.existByName(group.getName()) != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("New code already exists");
 
-			if (groupExists.getIsDeleted()){
+			if (group.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
 
@@ -83,14 +81,27 @@ public class GroupService {
 			result.setE(false);
 		}
 		else{
-			modifyGroup.setName(group.getName());;
-			boolean r = daoGroup.saveGroup(modifyGroup);
-			if (r) 
-				result.setE(true);
+			boolean r = daoGroup.saveGroup(group);
+			if (r) 	result.setE(true);
 		}
 		return result;
 	}
+	
+	//-----
+	@PreAuthorize("hasPermission(#degree, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
+	@Transactional(readOnly = false)
+	public ResultClass<Boolean> modifyGroupActivities(Group group) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
+			boolean r = daoGroup.saveGroup(group);
+			if (r) 	result.setE(true);
+		
+		return result;
+	}
+	
+	//----
+
+	@PreAuthorize("hasPermission(#degree, 'DELETE') or hasPermission(#group, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteGroup(Long id_group) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();

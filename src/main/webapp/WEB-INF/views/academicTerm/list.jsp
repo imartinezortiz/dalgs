@@ -24,15 +24,13 @@
 			 </sec:authorize> 
 			<c:choose>
    				<c:when  test="${model.showAll eq true}">
-   					<a href="<c:url value='/academicTerm/page/${model.currentPage}.htm'>
-   					   				<c:param name="showAll" value="false"/>
+   					<a href="<c:url value='/academicTerm/page/${model.currentPage}.htm?showAll=false'>
     						</c:url>">
    					<img src="<c:url value="/resources/images/trash_open.png" /> "  
 			 		style=" float: right;  margin-top: -1;  margin-right: 1%;"></a> 
     			</c:when>
     			<c:otherwise>
-    					<a href="<c:url value='/academicTerm/page/${model.currentPage}.htm'> 
-    					   			<c:param name="showAll" value="true"/>
+    					<a href="<c:url value='/academicTerm/page/${model.currentPage}.htm?showAll=true'> 
     							</c:url>">
 			 			<img src="<c:url value="/resources/images/trash_close.png" /> " 
 			 			 style="float: right; margin-right: 1%;margin-top: 3;"></a> 
@@ -90,7 +88,7 @@
 				<c:if test="${model.currentPage > 0}">
 
 					<li><a
-						href="<c:url value='/academicTerm/page/${model.currentPage - 1}.htm'/>"
+						href="<c:url value='/academicTerm/page/${model.currentPage - 1}.htm?showAll=${model.showAll}'/>"
 						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 					</a></li>
 				</c:if>
@@ -100,7 +98,7 @@
 
 
 
-					<li><a href="<c:url value='/academicTerm/page/${index}.htm'/>">
+					<li><a href="<c:url value='/academicTerm/page/${index}.htm?showAll=${model.showAll}'/>">
 							${index + 1} </a></li>
 
 
@@ -109,8 +107,7 @@
 
 				<c:if test="${model.currentPage < model.numberOfPages -1}">
 
-					<li><a
-						href="<c:url value='/academicTerm/page/${model.currentPage + 1}.htm'/>"
+					<li><a	href="<c:url value='/academicTerm/page/${model.currentPage + 1}.htm?showAll=${model.showAll}'/>"
 						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 					</a></li>
 				</c:if>

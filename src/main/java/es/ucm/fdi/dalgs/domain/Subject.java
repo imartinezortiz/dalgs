@@ -16,6 +16,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.AssertFalse;
+import javax.validation.constraints.NotNull;
 
 import es.ucm.fdi.dalgs.domain.info.SubjectInfo;
 
@@ -31,22 +34,26 @@ public class Subject {
 	@Embedded
 	private SubjectInfo info;
 
+	@AssertFalse
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_topic")
 	private Topic topic;
 
+	@NotNull
+	@Valid
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "subject_competence", joinColumns = { @JoinColumn(name = "id_subject") }, inverseJoinColumns = { @JoinColumn(name = "id_competence") })
 	private Collection<Competence> competences = new ArrayList<Competence>();
 
-//	@Column(name = "code_subject", nullable = false)
-//	private String code;
 
 	public Subject() {
 		super();
+		this.isDeleted=false;
+
 	}
 
 
