@@ -14,6 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.AssertFalse;
+import javax.validation.constraints.NotNull;
 
 import es.ucm.fdi.dalgs.domain.info.ModuleInfo;
 
@@ -29,13 +32,17 @@ public class Module {
 	@Embedded
 	private ModuleInfo info;
 	
+	@AssertFalse
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 	
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_degree")
 	private Degree degree;
 	
+	@NotNull
+	@Valid
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "module")
 	private Collection<Topic> topics = new ArrayList<Topic>();
 

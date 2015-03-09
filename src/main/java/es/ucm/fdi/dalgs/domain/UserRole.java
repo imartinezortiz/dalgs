@@ -6,6 +6,10 @@ import javax.persistence.Basic;
 import javax.persistence.Embeddable;
 
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 
 @Embeddable
@@ -16,6 +20,7 @@ public class UserRole implements GrantedAuthority, Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@NotEmpty @NotNull @NotBlank
 	@Basic
 	private String role;
 	

@@ -14,7 +14,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
 import javax.persistence.UniqueConstraint;
+import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,44 +39,45 @@ public class User implements UserDetails, CredentialsContainer{
 	@Column(name = "id_user")
 	private Long id;
 
+	@NotEmpty @NotNull @NotBlank
 	@Column(name = "firstname")
 	private String firstName;
 	
+	@NotEmpty @NotNull @NotBlank
 	@Column(name = "lastname")
 	private String lastName;
 
+	@NotEmpty @NotNull @NotBlank
 	@Column(name="username", unique = true)
 	private String username;
 	
+	@NotEmpty @NotNull @NotBlank
 	@Column(name = "password")
 	private String password;
 
+	@NotEmpty @NotNull @NotBlank
 	@Column(name="email", unique = true)
 	private String email;
 	
-
-	
-
-/*
-	@ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
-	private Collection<Group> groups = new ArrayList<Group>();
-	*/
-	
 	//  User Credentials
-	
 	private String salt;
 
+	@AssertTrue
 	private boolean enabled;
 
+	@AssertTrue
 	private boolean accountNonExpired;
-
+	
+	@AssertTrue
 	private boolean accountNonLocked;
-
+	
+	@AssertTrue
 	private boolean credentialsNonExpired;
 	
 	
 	// User Roles
-
+	@NotNull
+	@Valid
 	@ElementCollection(fetch=FetchType.EAGER)
 	@CollectionTable(name="user_roles", joinColumns=@JoinColumn(name="user"),  uniqueConstraints=@UniqueConstraint(columnNames={"user", "role"}))
 	private Collection<UserRole> roles;

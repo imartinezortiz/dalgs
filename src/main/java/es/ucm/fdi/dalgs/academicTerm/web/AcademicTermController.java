@@ -70,6 +70,7 @@ public class AcademicTermController {
 			@ModelAttribute("addacademicTerm") @Valid AcademicTerm newAcademicTerm,
 			BindingResult result, Model model) {
 
+		
 		if (newAcademicTerm.getDegree() == null)
 			return "redirect://academicTerm/add.htm";
 
@@ -82,7 +83,14 @@ public class AcademicTermController {
 			else
 				return "redirect:/academicTerm/add.htm";
 		}
-		return "redirect:/error.htm";
+		else{
+			// Write the binding result errors on the view
+			
+			// ----
+			
+			return "redirect:/academicTerm/add.htm";
+		}
+		//return "redirect:/error.htm";
 	}
 
 	/**
