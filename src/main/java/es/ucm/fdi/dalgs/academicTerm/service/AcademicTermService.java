@@ -77,10 +77,10 @@ public class AcademicTermService {
 //			success =  daoAcademicTerm.saveAcademicTerm(academicAux);			
 //		}
 //		academicAux =  daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
-
+		academicExists = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
 
 		if(result.getE()){ //&& academicAux != null){
-			result.setE(manageAclService.addAclToObject(academicTerm.getId(), academicTerm.getClass().getName()));
+			result.setE(manageAclService.addAclToObject(academicExists.getId(), academicExists.getClass().getName()));
 		} else {
 			throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
 		}
@@ -130,7 +130,7 @@ public class AcademicTermService {
 	 *  filterObject refers to the returned object list.
 	 */
 	@PreAuthorize("hasRole('ROLE_USER')")
-//	@PostFilter("hasPermission(filterObject, 'READ')")
+//	@PostAuthorize("hasPermission(returnObject, 'READ')")
 	@Transactional(readOnly = true)
 	public ResultClass<List<AcademicTerm>> getAcademicsTerm(Integer pageIndex, Boolean showAll) {
 		ResultClass<List<AcademicTerm>> result = new ResultClass<List<AcademicTerm>>();

@@ -1,5 +1,6 @@
 package es.ucm.fdi.dalgs.academicTerm.web;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,10 +123,11 @@ public class AcademicTermController {
 	/**
 	 * Methods for list academic terms of a term
 	 */
+	
 	@RequestMapping(value = "/academicTerm/page/{pageIndex}.htm")
 	protected ModelAndView formViewAcademicTerm(@PathVariable("pageIndex") Integer pageIndex, 
 			@RequestParam(value = "showAll", defaultValue="false") Boolean showAll)
-					throws ServletException {
+					throws ServletException, IOException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 

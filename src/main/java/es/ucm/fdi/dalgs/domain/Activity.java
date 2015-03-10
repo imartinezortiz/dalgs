@@ -16,7 +16,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
-import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.NotNull;
 
 import es.ucm.fdi.dalgs.domain.info.ActivityInfo;
@@ -41,7 +40,7 @@ public class Activity {
 	@JoinColumn(name = "id_course")
 	private Course course;
 
-	@AssertFalse
+	
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 

@@ -17,7 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
-import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.NotNull;
 
 import es.ucm.fdi.dalgs.domain.info.CompetenceInfo;
@@ -50,7 +49,7 @@ public class Competence {
 	@JoinColumn(name = "id_degree")
 	private Degree degree;
 
-	@AssertFalse
+
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 

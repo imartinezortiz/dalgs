@@ -84,10 +84,12 @@ public class DegreeService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ')")
+//	@PostAuthorize("hasPermission(returnObject, 'READ')")
 	@Transactional(readOnly = true)
-	public List<Degree> getDegrees(Integer pageIndex, Boolean showAll) {
-		return daoDegree.getDegrees(pageIndex, showAll);
+	public ResultClass<List<Degree>> getDegrees(Integer pageIndex, Boolean showAll) {
+		ResultClass<List<Degree>> result = new ResultClass<List<Degree>>();
+		result.setE(daoDegree.getDegrees(pageIndex, showAll));
+		return result;
 	}
 	
 
@@ -133,15 +135,15 @@ public class DegreeService {
 		
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@Transactional(readOnly = false)
-	public ResultClass<Degree> getDegree(Long id) {
-		ResultClass<Degree> result = new ResultClass<Degree>();
-		result.setE(daoDegree.getDegree(id));
-		return result;
-	}
+//	@PreAuthorize("hasRole('ROLE_USER')")
+//	@Transactional(readOnly = false)
+//	public ResultClass<Degree> getDegree(Long id) {
+//		ResultClass<Degree> result = new ResultClass<Degree>();
+//		result.setE(daoDegree.getDegree(id));
+//		return result;
+//	}
 
-	@PreAuthorize("hasPermission(#degree, 'DELETE') or hasPermission(#degree, 'ADMINISTRATION')" )
+//	@PreAuthorize("hasPermission(#degree, 'DELETE') or hasPermission(#degree, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteDegree(Long id) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -186,9 +188,9 @@ public class DegreeService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostAuthorize("hasPermission(returnObject, 'READ')")
+//	@PostAuthorize("hasPermission(returnObject, 'READ')")
 	@Transactional(readOnly = true)
-	public ResultClass<Degree> getDegreeAll(Long id) {
+	public ResultClass<Degree> getDegree(Long id) {
 		ResultClass<Degree> result = new ResultClass<Degree>();
 		
 		Degree d = daoDegree.getDegree(id);

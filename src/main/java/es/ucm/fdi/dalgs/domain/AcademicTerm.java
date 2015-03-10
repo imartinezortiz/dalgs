@@ -15,8 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.Valid;
-import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -40,17 +38,16 @@ public class AcademicTerm {
 	@Column(name = "term", nullable = false, columnDefinition = "varchar(32) default '2014/2015'")
 	private String term;
 
-	@AssertFalse
+	
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-	@NotNull 
+	
 	@ManyToOne
 	@JoinColumn(name = "id_degree")
 	private Degree degree;
 
-	@NotNull
-	@Valid
+	
 	@OneToMany(mappedBy = "academicTerm", cascade = CascadeType.ALL)
 	private Collection<Course> courses = new ArrayList<Course>();
 

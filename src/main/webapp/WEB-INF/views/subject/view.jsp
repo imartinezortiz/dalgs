@@ -85,7 +85,7 @@
 						<a class="btn list-btn btn-success"
 						href="<c:url value='/degree/${degreeId}/competence/${competence.id}.htm'/>">View</a>
 							<sec:authorize access="hasRole('ROLE_ADMIN')"><a class="btn btn-danger"
-							href="<c:url value='/degree/${degreeId}/module/${model.module}/topic/${model.topic}/subject/${subjectId}/competence/${competence.id}/delete.htm'/>">
+							href="<c:url value='/degree/${degreeId}/module/${model.topic.module.id}/topic/${model.topic.id}/subject/${subjectId}/competence/${competence.id}/delete.htm'/>">
 							Delete
 							</a></sec:authorize>
 							</td>

@@ -16,7 +16,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
-import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.NotNull;
 
 import es.ucm.fdi.dalgs.domain.info.ModuleInfo;
@@ -35,7 +34,7 @@ public class Module {
 	@Embedded
 	private ModuleInfo info;
 	
-	@AssertFalse
+
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 	

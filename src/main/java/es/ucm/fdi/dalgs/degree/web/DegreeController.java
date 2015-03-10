@@ -41,7 +41,8 @@ public class DegreeController {
 	public String addDegreeGET(Model model) {
 		Degree newDegree = new Degree();
 		// newDegree.setCode(serviceDegree.getNextCode());
-		model.addAttribute("addDegree", newDegree);
+		model.addAttribute("Degree", newDegree);
+		model.addAttribute("valueButton", "Add" );
 		return "degree/add";
 	}
 
@@ -108,7 +109,7 @@ public class DegreeController {
 
 //		List<Degree> result = serviceDegree.getAll().getE();
 //		myModel.put("degrees", result);
-		List<Degree> result = serviceDegree.getDegrees(pageIndex, showAll);
+		List<Degree> result = serviceDegree.getDegrees(pageIndex, showAll).getE();
 		Integer numberOfPages = serviceDegree.numberOfPages(showAll);
 		myModel.put("showAll", showAll);
 
@@ -130,7 +131,7 @@ public class DegreeController {
 			@ModelAttribute("modifyDegree") Degree modify, Model model)
 
 	{
-		// modify.setId(id);
+		modify.setId(id);
 		ResultClass<Boolean> result = serviceDegree.modifyDegree(modify, id);
 		if (!result.hasErrors())
 //			if (created)
@@ -149,14 +150,16 @@ public class DegreeController {
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/modify.htm", method = RequestMethod.GET)
-	protected ModelAndView modifyDegreeGET(@PathVariable("degreeId") Long id)
+	protected String modifyDegreeGET(@PathVariable("degreeId") Long id, Model model)
 			throws ServletException {
-		ModelAndView model = new ModelAndView();
+//		ModelAndView model = new ModelAndView();
 		Degree p = serviceDegree.getDegree(id).getE();
-		model.addObject("modifyDegree", p);
-		model.setViewName("degree/modify");
-
-		return model;
+		model.addAttribute("Degree", p);
+//		model.setViewName("degree/modify");
+		
+		model.addAttribute("valueButton", "Modify");
+//		return model;
+		return "degree/add";
 	}
 
 	/**

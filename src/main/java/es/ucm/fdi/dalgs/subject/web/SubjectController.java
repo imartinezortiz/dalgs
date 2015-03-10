@@ -203,7 +203,7 @@ public class SubjectController {
 		 * Method for manage competences of a subject
 		 */
 
-		@RequestMapping(value = "/degree/{degreeId}/subject/{subjectId}/competence/{competenceId}/delete.htm", method = RequestMethod.GET)
+		@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/competence/{competenceId}/delete.htm", method = RequestMethod.GET)
 		public String formDeleteCompetenceFromSubject(
 				@PathVariable("degreeId") Long id_degree,
 				@PathVariable("moduleId") Long id_module,
