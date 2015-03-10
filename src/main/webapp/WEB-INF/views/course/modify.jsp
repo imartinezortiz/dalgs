@@ -29,21 +29,21 @@
 				<div class="form-group">
 					<label>Academic Term:</label>
 					<p>${academicTerm.term} &nbsp; ${academicTerm.degree.info.name}</p>
-					
-					<!--<form:select class="form-control 2" path="academicTerm" id="termSelect">
+					<p><label>Course Coordinator: &nbsp;</label>
+					<form:select class="form-control 2" path="academicTerm" id="termSelect">
 						<form:option value="">-- Select an option --</form:option>
-						<c:forEach items="${academicTerms}" var="at">
+						<c:forEach items="${professors}" var="prof">
 							<c:choose>
-								<c:when test="${at.id == idAcademicTerm}">
-									<form:option value="${at.id}" selected='true'>${at.term}</form:option>
+								<c:when test="${prof.id == idCoordinator}">
+									<form:option value="${prof.id}" selected='true'>${prof.username}</form:option>
 								</c:when>
 								<c:otherwise>
-									<form:option value="${at.id}">${at.term}</form:option>
+									<form:option value="${prof.id}">${prof.username}</form:option>
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
 					</form:select>
-					-->
+					
 				</div>
 				
 				<div class="form-group">
@@ -62,8 +62,7 @@
 						</c:forEach>
 					</form:select>
 				</div>
-				
-				
+
 				<input type="submit" class="btn btn-success" value="Update" >
 
 			</form:form>

@@ -68,7 +68,8 @@
 					<td width="20%"><div class="td-label">Subject</div></td>
 					<td width="50%"><div class="td-label">Academic Term</div></td>
 				</tr>
-				<c:forEach items="${model.groups}" var="group">
+				<c:if test="studentGroup"><
+				<c:forEach items="${model.studentGroup}" var="group">
 					<tr align="center">
 						<td><div class="td-content">
 								<c:out value="${group.course.subject.info.name}" />
@@ -91,7 +92,32 @@
 					</tr>
 				</c:forEach>
 
+				</c:if>
+				<c:if test="professorGroup"><
+				<c:forEach items="${model.professorGroup}" var="group">
+					<tr align="center">
+						<td><div class="td-content">
+								<c:out value="${group.course.subject.info.name}" />
+							</div></td>
+						<td>
+							<div class="td-content">
+								<c:out value="${group.course.academicTerm.term}" />
+							</div>
+						</td>
 
+						<td><a class="btn btn-success"
+							href="<c:url value='/academicTerm/${group.course.academicTerm.id}/course/${group.course.id}/group/${group.id }.htm'/>">
+								View </a> <sec:authorize access="hasRole('ROLE_ADMIN')">
+								<a class="btn btn-danger"
+									href="<c:url 
+									value='/academicTerm/${group.course.academicTerm.id}/course/${group.course.id}/group/${group.id }/user/${model.userDetails.id}delete.htm'/>">
+									Delete </a>
+							</sec:authorize></td>
+
+					</tr>
+				</c:forEach>
+
+				</c:if>
 
 			</table>
 		</div>

@@ -34,8 +34,9 @@
 		<div class="panel-body">
 			<div class="form-group">
 				<div class="form-group view">
-					<label>Academic Term: </label> 
-					<p class="details">${model.course.academicTerm.term}</p>
+					<p class="details"><label>Academic Term: </label> ${model.course.academicTerm.term}</p>
+					
+					<p><label>Course Coordinator: &nbsp;</label>${model.course.coordinator}</p>
 
 				</div>
 				

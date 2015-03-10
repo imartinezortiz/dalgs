@@ -48,6 +48,22 @@ public class Course {
 	private AcademicTerm academicTerm;
 
 
+	@ManyToOne
+	@JoinColumn(name = "id_coordinator")
+	private User coordinator; 
+	
+	public User getCoordinator() {
+		return coordinator;
+	}
+
+	public void setCoordinator(User coordinator) {
+		this.coordinator = coordinator;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
 	public Course() {
 		super();
 		this.isDeleted=false;

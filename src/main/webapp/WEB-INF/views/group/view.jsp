@@ -18,7 +18,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
-				Degree Details
+				Group Details
 			</h3>
 			
 			<!-- If you are a professor who belongs to this course you can edit -->
@@ -38,13 +38,16 @@
 
 			<div class="form-group">
 				<div class="form-group view">
-					<label>Name: </label>
-					<p class="details">${model.group.name}</p>
+					<p><label>Name: &nbsp; </label>${model.group.name}</p>
+					
+					<p><label>Course Coordinator: &nbsp;</label>${model.group.course.coordinator}</p>
+ 
 				</div>
 			</div>
 
 		</div>
 	</div>
+	
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
 			<h3 class="panel-title list">
