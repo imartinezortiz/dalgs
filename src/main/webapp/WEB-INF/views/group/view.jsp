@@ -58,24 +58,24 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label">Code</div></td>
-					<td width="50%"><div class="td-label">Name</div></td>
+					<td width="20%"><div class="td-label">LastName</div></td>
+					<td width="50%"><div class="td-label">FirstName</div></td>
 				</tr>
-				<c:forEach items="${model.modules}" var="module">
+				<c:forEach items="${model.group.professors}" var="prof">
 					<tr align="center">
 						<td><div class="td-content">
-								<c:out value="${module.info.code}" />
+								<c:out value="${prof.lastName}" />
 							</div></td>
 						<td><div class="td-content">
-								<c:out value="${module.info.name}" />
+								<c:out value="${prof.firstName}" />
 							</div></td>
 
 
 						<td><a class="btn list-btn btn-success"
-							href="<c:url value='/degree/${degreeId}/module/${module.id}.htm'/>">View</a>
+							href="<c:url value='/professor/${prof.id}.htm'/>">View</a>
 							<a class="btn btn-danger"
-							href="<c:url value='/degree/${degreeId}/module/${module.id}/delete.htm'/>">
-								Delete
+							href="<c:url value='/professor/${prof.id}/disabled.htm'/>">
+								Disabled
 						</a></td>
 
 					</tr>
@@ -92,7 +92,7 @@
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 			Student List</h3>
 			<a style="cursor:copy;" class="btn list-btn btn-warning2"
-				href="<c:url value='/degree/${degreeId}/competence/add.htm'/>">
+				href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/student/add.htm'/>"> 
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 				Add
 			</a>
@@ -102,26 +102,24 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label">Name</div></td>
-					<td width="50%"><div class="td-label">Description</div></td>
-
+					<td width="20%"><div class="td-label">LastName</div></td>
+					<td width="50%"><div class="td-label">FirstName</div></td>
 				</tr>
-				<c:forEach items="${model.competences}" var="competence">
+				<c:forEach items="${model.group.students}" var="student">
 					<tr align="center">
 						<td><div class="td-content">
-								<c:out value="${competence.info.name}" />
+								<c:out value="${student.lastName}" />
 							</div></td>
-						<td>
-							<div class="td-content">
-								<c:out value="${competence.info.description}" />
-							</div>
-						</td>
+						<td><div class="td-content">
+								<c:out value="${student.firstName}" />
+							</div></td>
+
 
 						<td><a class="btn list-btn btn-success"
-							href="<c:url value='/degree/${degreeId}/competence/${competence.id}.htm'/>">View</a>
+							href="<c:url value='/professor/${student.id}.htm'/>">View</a>
 							<a class="btn btn-danger"
-							href="<c:url value='/degree/${degreeId}/competence/${competence.id}/delete.htm'/>">
-						Delete
+							href="<c:url value='/professor/${student.id}/disabled.htm'/>">
+								Disabled
 						</a></td>
 
 					</tr>

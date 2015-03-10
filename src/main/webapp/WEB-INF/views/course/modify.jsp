@@ -64,7 +64,7 @@
 				</div>
 				
 				
-				<input type="submit" class="btn btn-success" value="Update">
+				<input type="submit" class="btn btn-success" value="Update" >
 
 			</form:form>
 		</div>

@@ -1,5 +1,6 @@
 package es.ucm.fdi.dalgs.acl.service;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,36 @@ public class AclObjectService {
 		mutableAclService.deleteAcl(oid, false);
 
 		return true;
+	}
+
+	// Authorize professors to manage his course
+	public void addPermissionToAnObject(Collection<User> professors, Long id_object, String name_class) {
+		Authentication authentication = null;
+		ObjectIdentity objectIdentity = new ObjectIdentityImpl(	name_class, id_object);
+		 
+		// Create or update the relevant ACL 
+		MutableAcl acl = null; 
+		try { 
+			acl =(MutableAcl) mutableAclService.readAclById(objectIdentity); 
+		} 
+		catch (NotFoundException nfe) {
+			acl = mutableAclService.createAcl(objectIdentity); 
+		}
+		
+		try {
+			for(User u: professors){
+		
+			acl.insertAce(acl.getEntries().size(), BasePermission.ADMINISTRATION, new PrincipalSid(u.getUsername()), true);
+
+			}
+			
+		} catch (NotFoundException nfe) {
+			acl = mutableAclService.createAcl(objectIdentity);
+		}
+
+		
+		
+		
 	}
 
 	

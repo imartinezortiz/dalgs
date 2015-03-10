@@ -18,8 +18,6 @@ import es.ucm.fdi.dalgs.domain.AcademicTerm;
 @Service
 public class AcademicTermService {
 
-
-
 	@Autowired
 	private AclObjectService manageAclService;
 	
@@ -29,9 +27,6 @@ public class AcademicTermService {
 	@Autowired
 	private CourseService serviceCourse;
 	
-
-
-
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public boolean addAcademicTerm(AcademicTerm academicTerm) {

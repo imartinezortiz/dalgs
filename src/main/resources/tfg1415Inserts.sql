@@ -147,6 +147,17 @@ INSERT INTO subject (id_subject,code_subject,description,name, id_topic) VALUES 
 
 -- Course Inserts
 INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (1, '1', '1');
+
+-- Object Identity --
+INSERT INTO acl_object_identity (ID, ENTRIES_INHERITING, OBJECT_ID_IDENTITY, OBJECT_ID_CLASS, PARENT_OBJECT, OWNER_SID) VALUES (10,00000001,1,6,NULL,1);
+	
+-- Acl Entry
+INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (28,0,00000000,00000000,00000001,16,10,1);
+INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (29,1,00000000,00000000,00000001,8,10,2);
+INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (30,2,00000000,00000000,00000001,1,10,3);
+	
+
+
 INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (2, '1', '2');
 INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (3, '1', '3');
 INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (4, '2', '1');

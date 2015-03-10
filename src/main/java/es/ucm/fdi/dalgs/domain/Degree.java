@@ -12,9 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.Valid;
-import javax.validation.constraints.AssertFalse;
-import javax.validation.constraints.NotNull;
 
 import es.ucm.fdi.dalgs.domain.info.DegreeInfo;
 
@@ -33,17 +30,13 @@ public class Degree {
 	private DegreeInfo info;
 
 	
-	@AssertFalse
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-	@NotNull
-	@Valid
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
 	private Collection<Module> modules = new ArrayList<Module>();
 
-	@NotNull
-	@Valid
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
 	private Collection<Competence> competences = new ArrayList<Competence>();
 

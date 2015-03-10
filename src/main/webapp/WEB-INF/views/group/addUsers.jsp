@@ -19,11 +19,14 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">							
 			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-			Add Professors</h3>
+			Add Professors (${group.name} - ${model.group.course.subject.info.name} - ${model.group.academicTerm.term})
+			</h3>
 		</div>
 		<div class="panel-body">
 			<div class="form-group">
   				<div class="form-group">
+  					<form:form method="post" commandName="group" role="form">
+  				
 					<label>Available Professors:</label>
 					<div class="checkbox">
 						<form:checkboxes items="${professors}" path="professors"
@@ -32,10 +35,14 @@
 						<br>
 			
 					</div>
+					<input type="submit" class="btn btn-success" value="Add"  name="AddProfessors" />
+					</form:form>
 				</div>
 			</div>
-			<input type="submit" class="btn btn-success" value="Add" name="Add" />
+								
+				
 			</div>
+			
 		</div>
 		
 

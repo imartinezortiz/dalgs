@@ -23,7 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
+import es.ucm.fdi.dalgs.course.service.CourseService;
+import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.group.service.GroupService;
@@ -34,6 +37,12 @@ public class GroupController {
 
 	@Autowired
 	private GroupService serviceGroup;
+	
+	@Autowired
+	private CourseService serviceCourse;
+	
+	@Autowired
+	private AclObjectService manageAclService;
 	
 	@Autowired
 	private UserService serviceUser;
@@ -146,7 +155,7 @@ public class GroupController {
 			if (!result.hasErrors())
 
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
-				+ id_course + ".htm";
+				+ id_course + "/group/"+ id_group+".htm";
 			else{
 					model.addAttribute("modifyGroup", aux);
 					if (results.isElementDeleted()){
@@ -212,13 +221,15 @@ public class GroupController {
 		List<String> professors = serviceUser.getAllByRole("ROLE_PROFESSOR");
 		
 		model.addAttribute("group",group);
+		//model.addAttribute("group",true);
+
 		model.addAttribute("professors", professors);
 		
 		return "group/addUsers";
 
 	}
-	
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/professor/add.htm", method = RequestMethod.POST)
+
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/professor/add.htm", method = RequestMethod.POST, params="AddProfessors")
 	// Every Post have to return redirect
 	public String addProfessorToGroupPOST(
 			@PathVariable("academicId") Long academicId,
@@ -235,15 +246,18 @@ public class GroupController {
 			Group aux = serviceGroup.getGroup(id_group);
 			aux.setProfessors(group.getProfessors());
 			
+			Course course = serviceCourse.getCourse(courseId);
 			serviceGroup.modifyGroup(aux);
 			
-			return "redirect:/academicTerm/" + academicId + "/course/"
-			+ courseId + "/group/"+ id_group + ".htm";
+			manageAclService.addPermissionToAnObject(aux.getProfessors(), course.getId(), course.getClass().getName());
+			
+			return "redirect:/academicTerm/" + academicId + "/course/"	+ courseId + "/group/"+ id_group + ".htm";
 
 		}
 
 		
 	}
+	
 	/**
 	 * For binding the professor of the subject.
 	 */

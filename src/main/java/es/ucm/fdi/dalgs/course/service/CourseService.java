@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.ucm.fdi.dalgs.academicTerm.service.AcademicTermService;
+import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.activity.service.ActivityService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.repository.CourseRepository;
@@ -24,13 +25,13 @@ public class CourseService {
 	private CourseRepository daoCourse;
 
 	@Autowired
+	private AclObjectService manageAclService;
+	
+	@Autowired
 	ActivityService serviceActivity;
 	
 	@Autowired
 	GroupService serviceGroup;
-
-	// @Autowired
-	// private DegreeService serviceDegree;
 
 	@Autowired
 	private AcademicTermService serviceAcademicTerm;
@@ -58,9 +59,18 @@ public class CourseService {
 		}
 		else{
 		
-			boolean r = daoCourse.addCourse(course);
-			if (r) 
-				result.setE(true);
+			if (daoCourse.addCourse(course)){ 
+				courseExists = daoCourse.exist(course);
+
+				if(courseExists != null){
+					manageAclService.addAclToObject(courseExists.getId(), courseExists.getClass().getName());
+					result.setE(true);
+
+				} else {
+					throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
+				}
+			}
+			
 		}
 		return result;		
 	

@@ -92,10 +92,4 @@
  </bean>
  
 
-
-<!-- <security:global-method-security 
-        mode="aspectj"
-        secured-annotations="enabled"
-        jsr250-annotations="disabled"
-        pre-post-annotations="enabled"/> -->
 </beans>

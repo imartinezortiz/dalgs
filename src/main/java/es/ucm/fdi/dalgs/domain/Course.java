@@ -15,9 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.Valid;
-import javax.validation.constraints.AssertFalse;
-import javax.validation.constraints.NotNull;
 
 
 
@@ -31,26 +28,21 @@ public class Course {
 	@Column(name = "id_course")
 	private Long id;
 
-	@AssertFalse
+
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-	@NotNull 
+ 
 	@ManyToOne
 	@JoinColumn(name = "id_subject")
 	private Subject subject;
 
-	@NotNull
-	@Valid
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
 	private Collection<Activity> activities = new ArrayList<Activity>();
 
-	@NotNull
-	@Valid
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
 	private Collection<Group> groups = new ArrayList<Group>();
 
-	@NotNull 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "id_academicterm")
 	private AcademicTerm academicTerm;
