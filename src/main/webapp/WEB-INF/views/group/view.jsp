@@ -20,11 +20,16 @@
 				<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
 				Degree Details
 			</h3>
+			
+			<!-- If you are a professor who belongs to this course you can edit -->
+			<sec:accesscontrollist hasPermission="ADMINISTRATION" domainObject="${model.group}">
+			
 			<a class="btn list-btn btn-warning"
 				href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/modify.htm'/>"> <span
 				class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
 				Edit
 			</a>
+			</sec:accesscontrollist>
 
 		</div>
 
@@ -47,11 +52,15 @@
 
 				Professor List
 			</h3>
+			
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+			
 			<a style="cursor:copy;" class="btn list-btn btn-warning2"
 				href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/professor/add.htm'/>"> <span
 				class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 				Add 
 			</a>
+			</sec:authorize>
 
 		</div>
 		<div class="panel-body">
@@ -72,11 +81,14 @@
 
 
 						<td><a class="btn list-btn btn-success"
-							href="<c:url value='/professor/${prof.id}.htm'/>">View</a>
+							href="<c:url value='/user/${prof.id}.htm'/>">View</a>
+							<sec:authorize access="hasRole('ROLE_ADMIN')">
+							
 							<a class="btn btn-danger"
-							href="<c:url value='/professor/${prof.id}/disabled.htm'/>">
+							href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/user/${prof.id}/delete.htm'/>">
 								Disabled
-						</a></td>
+						</a>
+						</sec:authorize></td>
 
 					</tr>
 				</c:forEach>
@@ -91,11 +103,14 @@
 			<h3 class="panel-title list">			
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 			Student List</h3>
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+			
 			<a style="cursor:copy;" class="btn list-btn btn-warning2"
 				href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/student/add.htm'/>"> 
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 				Add
 			</a>
+			</sec:authorize>
 
 		</div>
 		<div class="panel-body">
@@ -116,9 +131,9 @@
 
 
 						<td><a class="btn list-btn btn-success"
-							href="<c:url value='/professor/${student.id}.htm'/>">View</a>
+							href="<c:url value='/user/${student.id}.htm'/>">View</a>
 							<a class="btn btn-danger"
-							href="<c:url value='/professor/${student.id}/disabled.htm'/>">
+							href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/user/${student.id}/delete.htm'/>">
 								Disabled
 						</a></td>
 

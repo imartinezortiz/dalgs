@@ -89,7 +89,10 @@ public class UserRepository {
 	}
 
 	public User getUser(Long id_user) {
-		return em.find(User.class, id_user);
+		//return em.find(User.class, id_user);
+		Query query =em.createQuery("select u from User u  where u.id =?1");
+		query.setParameter(1, id_user);
+		return (User) query.getSingleResult();
 	}
 
 	public boolean persistALotUsers(List<User> users){

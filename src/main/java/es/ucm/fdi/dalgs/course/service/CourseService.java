@@ -84,19 +84,14 @@ public class CourseService {
 
 
 	//yo lo borraria no tiene sentido en este caso el modify
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifyCourse(Course course, Long id_academic, Long id_course) {
+	public ResultClass<Boolean> modifyCourse(Course course) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		
-		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic));
-		
-		Course modifyCourse = daoCourse.getCourse(id_course);
 		
 		Course courseExists = daoCourse.exist(course);
 		
-		if(!course.getSubject().equals(modifyCourse.getSubject()) && 
-				courseExists != null){
+		if(!course.getSubject().equals(course.getSubject()) &&  courseExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("New code already exists");
@@ -110,8 +105,7 @@ public class CourseService {
 			result.setE(false);
 		}
 		else{
-			modifyCourse.setSubject(course.getSubject());
-			boolean r = daoCourse.saveCourse(modifyCourse);
+			boolean r = daoCourse.saveCourse(course);
 			if (r) 
 				result.setE(true);
 		}
@@ -127,7 +121,7 @@ public class CourseService {
 		return daoCourse.getCourse(id);
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(propagation = Propagation.REQUIRED)
 	public boolean deleteCourse(Long id) {
 		Course course = daoCourse.getCourse(id);
@@ -184,11 +178,10 @@ public class CourseService {
 		else return false;
 	}
 
-
+/*
 	public boolean modifyCourse(Course course) {
-
 		return daoCourse.saveCourse(course);
-	}
+	}*/
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)

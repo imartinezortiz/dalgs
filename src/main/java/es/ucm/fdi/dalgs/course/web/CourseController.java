@@ -186,9 +186,13 @@ public class CourseController {
 
 	{
 
-
+		//AcademicTerm y subject
 		if (!result.hasErrors()) {
-			ResultClass<Boolean> results = serviceCourse.modifyCourse(modify, id_academic, id_course);
+			Course course_aux = serviceCourse.getCourse(id_course);
+			course_aux.setAcademicTerm(modify.getAcademicTerm());
+			course_aux.setSubject(modify.getSubject());
+			
+			ResultClass<Boolean> results = serviceCourse.modifyCourse(course_aux);
 			if (!result.hasErrors())
 
 				return "redirect:/academicTerm/" + id_academic + ".htm";	

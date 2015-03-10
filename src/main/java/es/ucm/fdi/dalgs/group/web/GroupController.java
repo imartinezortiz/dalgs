@@ -23,10 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
-import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.group.service.GroupService;
@@ -40,9 +38,6 @@ public class GroupController {
 	
 	@Autowired
 	private CourseService serviceCourse;
-	
-	@Autowired
-	private AclObjectService manageAclService;
 	
 	@Autowired
 	private UserService serviceUser;
@@ -151,6 +146,7 @@ public class GroupController {
 			Group aux = serviceGroup.getGroup(id_group);
 			aux.setName(group.getName());
 			
+			
 			ResultClass<Boolean> results = serviceGroup.modifyGroup(aux);
 			if (!result.hasErrors())
 
@@ -246,11 +242,8 @@ public class GroupController {
 			Group aux = serviceGroup.getGroup(id_group);
 			aux.setProfessors(group.getProfessors());
 			
-			Course course = serviceCourse.getCourse(courseId);
 			serviceGroup.modifyGroup(aux);
-			
-			manageAclService.addPermissionToAnObject(aux.getProfessors(), course.getId(), course.getClass().getName());
-			
+
 			return "redirect:/academicTerm/" + academicId + "/course/"	+ courseId + "/group/"+ id_group + ".htm";
 
 		}
