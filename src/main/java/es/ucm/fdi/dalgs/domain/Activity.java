@@ -35,7 +35,6 @@ public class Activity {
 	private ActivityInfo info;
 	
 
-	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "id_course")
 	private Course course;
@@ -44,8 +43,7 @@ public class Activity {
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-	@NotNull
-	@Valid
+
 	@ElementCollection(fetch = FetchType.LAZY)
 	@CollectionTable(name = "activity_learninggoalstatus", joinColumns = @JoinColumn(name = "id_activity"))
 	@Column(nullable = false)

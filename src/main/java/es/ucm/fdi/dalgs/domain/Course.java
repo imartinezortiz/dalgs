@@ -34,26 +34,37 @@ public class Course {
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-	@NotNull 
+ 
 	@ManyToOne
 	@JoinColumn(name = "id_subject")
 	private Subject subject;
 
-	@NotNull
-	@Valid
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
 	private Collection<Activity> activities = new ArrayList<Activity>();
 
-	@NotNull
-	@Valid
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
 	private Collection<Group> groups = new ArrayList<Group>();
 
-	@NotNull 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "id_academicterm")
 	private AcademicTerm academicTerm;
 
+
+	@ManyToOne
+	@JoinColumn(name = "id_coordinator")
+	private User coordinator; 
+	
+	public User getCoordinator() {
+		return coordinator;
+	}
+
+	public void setCoordinator(User coordinator) {
+		this.coordinator = coordinator;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
 
 	public Course() {
 		super();

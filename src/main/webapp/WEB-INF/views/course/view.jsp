@@ -20,19 +20,23 @@
 							<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
 			
 			Course Details</h3>
+			
+			<!-- If you are a professor who belongs to this course you can edit -->
+			
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 			<a class="btn list-btn btn-warning"
 				href="<c:url value='/academicTerm/${academicId}/course/${courseId}/modify.htm'/>">
 				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>Edit</a>
-				</sec:authorize>
+			</sec:authorize>
 
 		</div>
 
 		<div class="panel-body">
 			<div class="form-group">
 				<div class="form-group view">
-					<label>Academic Term: </label> 
-					<p class="details">${model.course.academicTerm.term}</p>
+					<p class="details"><label>Academic Term: </label> ${model.course.academicTerm.term}</p>
+					
+					<p><label>Course Coordinator: &nbsp;</label>${model.course.coordinator}</p>
 
 				</div>
 				
@@ -61,13 +65,16 @@
 			<h3 class="panel-title list">						
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 			 Activity List</h3>
-				<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')">
+			
+			<!-- If you are a professor who belongs to this course you can edit -->
+			<sec:accesscontrollist hasPermission="ADMINISTRATION" domainObject="${model.course}">
+			
 			 
 			<a  style="cursor:copy;" class="btn list-btn btn-warning2" href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/add.htm'/>">
 								<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 			
 			 Add  </a>
-			</sec:authorize>
+			</sec:accesscontrollist>
 		</div>
 		<div class="panel-body">
 
@@ -90,11 +97,12 @@
 						<td><a class="btn btn-success" 
 							href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}.htm'/>">
 									View </a> 
-													<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')">
-									
+							<sec:accesscontrollist hasPermission="ADMINISTRATION" domainObject="${model.course}">
+
 									<a class="btn btn-danger"
 								href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}/delete.htm'/>">
-									Delete </a></sec:authorize>
+									Delete </a>
+							</sec:accesscontrollist>
 							
 							</td>
 
@@ -111,10 +119,13 @@
 			<h3 class="panel-title list">						
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 			 Groups List</h3>
+			<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+			 
 			<a style="cursor:copy;"  class="btn list-btn btn-warning2" href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/add.htm'/>">
 								<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 			
 			 Add </a>
+			 </sec:authorize>
 			
 		</div>
 		<div class="panel-body">
@@ -130,10 +141,14 @@
 							</div></td>
 						<td><a class="btn btn-success" 
 							href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${group.id}.htm'/>">
-									View </a> 
+									View </a>
+									
+							<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+							 
 									<a class="btn btn-danger"
 								href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${group.id}/delete.htm'/>">
 									Delete </a>
+							</sec:authorize>
 							
 							</td>
 

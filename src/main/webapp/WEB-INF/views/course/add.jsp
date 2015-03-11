@@ -47,7 +47,7 @@
 		
 
 				<br>
-				<input type="submit" class="btn btn-success" value="Add" />
+				<input type="submit" class="btn btn-success" value="Add" name="Add"/>
 			</form:form>
 		</div>
 	</div>

@@ -39,7 +39,7 @@
 		</a>
 		
 		
-		</a> <a  class="list-group-item disabled" 
+		</a> <a  class="list-group-item " 
 			href="<c:url value='/academicTerm/1/course/1/group/1.htm'/>">
 			<h4 class="list-group-item-heading">
 				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>

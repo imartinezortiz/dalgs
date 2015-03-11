@@ -33,7 +33,7 @@
 				</div>
 			</div>
 		
-		<div class="panel panel-primary group">
+		<%-- <div class="panel panel-primary group">
 		<div class="panel-heading">
 			<h3 class="panel-title list">						
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
@@ -75,7 +75,7 @@
 
 			</table>
 		</div>
-	</div>
+	</div> --%>
 		
 		</div>
 	</div>

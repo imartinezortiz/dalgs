@@ -14,8 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
 import javax.persistence.UniqueConstraint;
-import javax.validation.Valid;
-import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -62,22 +60,17 @@ public class User implements UserDetails, CredentialsContainer{
 	//  User Credentials
 	private String salt;
 
-	@AssertTrue
 	private boolean enabled;
 
-	@AssertTrue
 	private boolean accountNonExpired;
 	
-	@AssertTrue
 	private boolean accountNonLocked;
 	
-	@AssertTrue
 	private boolean credentialsNonExpired;
 	
 	
 	// User Roles
-	@NotNull
-	@Valid
+
 	@ElementCollection(fetch=FetchType.EAGER)
 	@CollectionTable(name="user_roles", joinColumns=@JoinColumn(name="user"),  uniqueConstraints=@UniqueConstraint(columnNames={"user", "role"}))
 	private Collection<UserRole> roles;

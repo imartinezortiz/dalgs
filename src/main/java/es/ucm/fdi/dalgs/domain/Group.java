@@ -39,19 +39,19 @@ public class Group {
 	@Column(name = "name", length = 50, nullable = false, unique=true)
 	private String name;
 	
-	@NotNull
+	//@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "id_course")
 	private Course course;
 	
-	@NotNull
-	@Valid
+	//@NotNull
+	//@Valid
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "group_professor", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_user") })
 	private Collection<User> professors = new ArrayList<User>();
 	
-	@NotNull
-	@Valid
+	//@NotNull
+	//@Valid
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "group_student", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_user") })
 	private Collection<User> students = new ArrayList<User>();

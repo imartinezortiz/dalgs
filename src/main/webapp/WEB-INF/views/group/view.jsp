@@ -18,13 +18,18 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
-				Degree Details
+				Group Details
 			</h3>
+			
+			<!-- If you are a professor who belongs to this course you can edit -->
+			<sec:accesscontrollist hasPermission="ADMINISTRATION" domainObject="${model.group}">
+			
 			<a class="btn list-btn btn-warning"
 				href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/modify.htm'/>"> <span
 				class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
 				Edit
 			</a>
+			</sec:accesscontrollist>
 
 		</div>
 
@@ -33,13 +38,16 @@
 
 			<div class="form-group">
 				<div class="form-group view">
-					<label>Name: </label>
-					<p class="details">${model.group.name}</p>
+					<p><label>Name: &nbsp; </label>${model.group.name}</p>
+					
+					<p><label>Course Coordinator: &nbsp;</label>${model.group.course.coordinator}</p>
+ 
 				</div>
 			</div>
 
 		</div>
 	</div>
+	
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
 			<h3 class="panel-title list">
@@ -47,36 +55,43 @@
 
 				Professor List
 			</h3>
+			
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+			
 			<a style="cursor:copy;" class="btn list-btn btn-warning2"
 				href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/professor/add.htm'/>"> <span
 				class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 				Add 
 			</a>
+			</sec:authorize>
 
 		</div>
 		<div class="panel-body">
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label">Code</div></td>
-					<td width="50%"><div class="td-label">Name</div></td>
+					<td width="20%"><div class="td-label">LastName</div></td>
+					<td width="50%"><div class="td-label">FirstName</div></td>
 				</tr>
-				<c:forEach items="${model.modules}" var="module">
+				<c:forEach items="${model.group.professors}" var="prof">
 					<tr align="center">
 						<td><div class="td-content">
-								<c:out value="${module.info.code}" />
+								<c:out value="${prof.lastName}" />
 							</div></td>
 						<td><div class="td-content">
-								<c:out value="${module.info.name}" />
+								<c:out value="${prof.firstName}" />
 							</div></td>
 
 
 						<td><a class="btn list-btn btn-success"
-							href="<c:url value='/degree/${degreeId}/module/${module.id}.htm'/>">View</a>
+							href="<c:url value='/user/${prof.id}.htm'/>">View</a>
+							<sec:authorize access="hasRole('ROLE_ADMIN')">
+							
 							<a class="btn btn-danger"
-							href="<c:url value='/degree/${degreeId}/module/${module.id}/delete.htm'/>">
-								Delete
-						</a></td>
+							href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/user/${prof.id}/delete.htm'/>">
+								Disabled
+						</a>
+						</sec:authorize></td>
 
 					</tr>
 				</c:forEach>
@@ -91,37 +106,38 @@
 			<h3 class="panel-title list">			
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 			Student List</h3>
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+			
 			<a style="cursor:copy;" class="btn list-btn btn-warning2"
-				href="<c:url value='/degree/${degreeId}/competence/add.htm'/>">
+				href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/student/add.htm'/>"> 
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 				Add
 			</a>
+			</sec:authorize>
 
 		</div>
 		<div class="panel-body">
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label">Name</div></td>
-					<td width="50%"><div class="td-label">Description</div></td>
-
+					<td width="20%"><div class="td-label">LastName</div></td>
+					<td width="50%"><div class="td-label">FirstName</div></td>
 				</tr>
-				<c:forEach items="${model.competences}" var="competence">
+				<c:forEach items="${model.group.students}" var="student">
 					<tr align="center">
 						<td><div class="td-content">
-								<c:out value="${competence.info.name}" />
+								<c:out value="${student.lastName}" />
 							</div></td>
-						<td>
-							<div class="td-content">
-								<c:out value="${competence.info.description}" />
-							</div>
-						</td>
+						<td><div class="td-content">
+								<c:out value="${student.firstName}" />
+							</div></td>
+
 
 						<td><a class="btn list-btn btn-success"
-							href="<c:url value='/degree/${degreeId}/competence/${competence.id}.htm'/>">View</a>
+							href="<c:url value='/user/${student.id}.htm'/>">View</a>
 							<a class="btn btn-danger"
-							href="<c:url value='/degree/${degreeId}/competence/${competence.id}/delete.htm'/>">
-						Delete
+							href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/user/${student.id}/delete.htm'/>">
+								Disabled
 						</a></td>
 
 					</tr>

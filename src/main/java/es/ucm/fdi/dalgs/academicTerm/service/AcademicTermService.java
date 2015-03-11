@@ -130,7 +130,7 @@ public class AcademicTermService {
 	 *  filterObject refers to the returned object list.
 	 */
 	@PreAuthorize("hasRole('ROLE_USER')")
-//	@PostAuthorize("hasPermission(returnObject, 'READ')")
+	@PostFilter("hasPermission(filterObject, 'READ')")
 	@Transactional(readOnly = true)
 	public ResultClass<List<AcademicTerm>> getAcademicsTerm(Integer pageIndex, Boolean showAll) {
 		ResultClass<List<AcademicTerm>> result = new ResultClass<List<AcademicTerm>>();

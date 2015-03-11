@@ -29,7 +29,9 @@ import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Subject;
+import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.subject.service.SubjectService;
+import es.ucm.fdi.dalgs.user.service.UserService;
 
 /**
  * Handles requests for the application home page.
@@ -42,6 +44,9 @@ public class CourseController {
 
 	@Autowired
 	private SubjectService serviceSubject;
+	
+	@Autowired
+	private UserService serviceUser;
 
 //	@Autowired
 //	private ActivityService serviceActivity;
@@ -69,6 +74,7 @@ public class CourseController {
 		// serviceSubject.getSubjectsForDegree(academic.getDegree().getId());
 		model.addAttribute("academicTerm", academic);
 		model.addAttribute("subjects", subjects);
+		model.addAttribute("add", true);
 		return "course/add";
 	}
 
@@ -169,6 +175,7 @@ public class CourseController {
 		// serviceSubject.getSubjectsForDegree(academic.getDegree().getId());
 		model.addAttribute("academicTerm", academic);
 		model.addAttribute("subjects", subjects);
+		model.addAttribute("professors", serviceUser.getAllByRole("ROLE_PROFESSOR"));
 
 		//model.addAttribute("activities", activities);
 		model.addAttribute("modifyCourse", p);
@@ -185,9 +192,13 @@ public class CourseController {
 
 	{
 
-
+		//AcademicTerm y subject
 		if (!result.hasErrors()) {
-			ResultClass<Boolean> results = serviceCourse.modifyCourse(modify, id_academic, id_course);
+			Course course_aux = serviceCourse.getCourse(id_course).getE();
+			course_aux.setAcademicTerm(modify.getAcademicTerm());
+			course_aux.setSubject(modify.getSubject());
+			
+			ResultClass<Boolean> results = serviceCourse.modifyCourse(course_aux);
 			if (!result.hasErrors())
 
 				return "redirect:/academicTerm/" + id_academic + ".htm";	
@@ -250,24 +261,24 @@ public class CourseController {
 					}
 				});
 
-		/*binder.registerCustomEditor(Set.class, "activities",
+		binder.registerCustomEditor(Set.class, "professors",
 				new CustomCollectionEditor(Set.class) {
 					protected Object convertElement(Object element) {
-						if (element instanceof Activity) {
+						if (element instanceof User) {
 							logger.info("Converting...{}", element);
 							return element;
 						}
 
 						if (element instanceof String) {
-							Activity activity = serviceActivity
-									.getActivityByName(element.toString());
-							logger.info("Loking up {} to {}", element, activity);
-							return activity;
+							User user = serviceUser.findByUsername(element.toString());
+								
+							logger.info("Loking up {} to {}", element, user);
+							return user;
 						}
 						System.out.println("Don't know what to do with: "
 								+ element);
 						return null;
 					}
-				});*/
+				});
 	}
 }

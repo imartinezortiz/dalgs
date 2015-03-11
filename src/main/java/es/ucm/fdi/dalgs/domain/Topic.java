@@ -38,13 +38,11 @@ public class Topic {
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 	
-	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_module")
 	private Module module;
 	
-	@NotNull
-	@Valid
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "topic")
 	private Collection<Subject> subjects = new ArrayList<Subject>();
 

@@ -43,11 +43,14 @@ public class AcademicTerm {
 	private Boolean isDeleted;
 
 	
+	//@NotNull 
 	@ManyToOne
 	@JoinColumn(name = "id_degree")
 	private Degree degree;
 
 	
+	//@NotNull
+	//@Valid
 	@OneToMany(mappedBy = "academicTerm", cascade = CascadeType.ALL)
 	private Collection<Course> courses = new ArrayList<Course>();
 

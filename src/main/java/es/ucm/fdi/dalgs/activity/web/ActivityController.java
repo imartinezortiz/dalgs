@@ -39,19 +39,11 @@ public class ActivityController {
 	@Autowired
 	private ActivityService serviceActivity;
 
-	// @Autowired
-	// private SubjectService serviceSubject;
-
 	@Autowired
 	private CourseService serviceCourse;
 
 	@Autowired
 	private LearningGoalService serviceLearningGoal;
-//	@Autowired
-//	private CompetenceService serviceCompetence;
-//
-//	@Autowired
-//	private AcademicTermService serviceAcademicTerm;
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ActivityController.class);

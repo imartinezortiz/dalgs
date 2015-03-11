@@ -68,9 +68,9 @@ public class UserController {
 		myModel.put("user", user);
 
 		if(serviceUser.hasRole(user,"ROLE_PROFESSOR"))
-			myModel.put("groups", serviceGroup.getGroupsForProfessor(id_user));
+			myModel.put("professorGroup", serviceGroup.getGroupsForProfessor(id_user));
 		else if(serviceUser.hasRole(user,"ROLE_STUDENT"))
-			myModel.put("groups", serviceGroup.getGroupsForStudent(id_user));
+			myModel.put("studentGroup", serviceGroup.getGroupsForStudent(id_user));
 
 	
 		return new ModelAndView("user/view", "model", myModel); //Admin view

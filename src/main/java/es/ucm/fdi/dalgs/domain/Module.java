@@ -38,13 +38,10 @@ public class Module {
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 	
-	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_degree")
 	private Degree degree;
-	
-	@NotNull
-	@Valid
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "module")
 	private Collection<Topic> topics = new ArrayList<Topic>();
 

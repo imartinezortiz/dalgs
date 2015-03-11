@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.ucm.fdi.dalgs.academicTerm.service.AcademicTermService;
+import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.activity.service.ActivityService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.repository.CourseRepository;
@@ -23,6 +24,9 @@ public class CourseService {
 	@Autowired
 	private CourseRepository daoCourse;
 
+	@Autowired
+	private AclObjectService manageAclService;
+	
 	@Autowired
 	ActivityService serviceActivity;
 	
@@ -58,9 +62,18 @@ public class CourseService {
 		}
 		else{
 		
-			boolean r = daoCourse.addCourse(course);
-			if (r) 
-				result.setE(true);
+			if (daoCourse.addCourse(course)){ 
+				courseExists = daoCourse.exist(course);
+
+				if(courseExists != null){
+					manageAclService.addAclToObject(courseExists.getId(), courseExists.getClass().getName());
+					result.setE(true);
+
+				} else {
+					throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
+				}
+			}
+			
 		}
 		return result;		
 	
@@ -74,7 +87,7 @@ public class CourseService {
 
 
 	//yo lo borraria no tiene sentido en este caso el modify
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyCourse(Course course, Long id_academic, Long id_course) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -119,7 +132,7 @@ public class CourseService {
 		return result;
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean> deleteCourse(Long id) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();

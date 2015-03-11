@@ -34,17 +34,15 @@ public class Competence {
 	@Embedded
 	private CompetenceInfo info;
 
-	@NotNull
-	@Valid
+
 	@ManyToMany(mappedBy = "competences", fetch = FetchType.LAZY)
 	private Collection<Subject> subjects = new ArrayList<Subject>();
 	
-	@NotNull
-	@Valid
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "competence")
 	private Collection<LearningGoal> learningGoals = new ArrayList<LearningGoal>();
 
-	@NotNull
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_degree")
 	private Degree degree;

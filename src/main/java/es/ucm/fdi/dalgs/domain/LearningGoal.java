@@ -26,7 +26,6 @@ public class LearningGoal {
 	@Embedded
 	private LearningGoalInfo info;
 	
-	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_competence")
 	private Competence competence;

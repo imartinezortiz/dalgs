@@ -40,10 +40,17 @@ public class GroupRepository {
 	}
 
 	
-	public Group existByName(String name) {
-		Query query = em
-				.createQuery("select g from Group g  where g.name = ?1");
-		query.setParameter(1, name);		
+	public Group existByName(String name, Long id) {
+		Query query = null;
+		if (id!=null){
+			query =em.createQuery("select g from Group g  where g.name = ?1 and g.id !=?2");
+			query.setParameter(1, name);		
+			query.setParameter(2, id);	
+		}
+		else{
+			query =em.createQuery("select g from Group g  where g.name = ?1");
+			query.setParameter(1, name);		
+		}
 
 		if (query.getResultList().isEmpty())
 			return null;
