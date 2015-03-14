@@ -67,6 +67,8 @@
    							<a	href="<c:url value='/academicTerm/${academic.id}.htm'/>"
 								class="btn btn-success">View</a> 
  							<sec:authorize access="hasRole('ROLE_ADMIN')">
+ 							<a	href="<c:url value='/academicTerm/${academic.id}/clone.htm'/>"
+								class="btn btn-success">Clone</a> 
 							<a href="<c:url value='/academicTerm/${academic.id}/delete.htm'/>"
 								class="btn btn-danger">Delete</a>
 							</sec:authorize>

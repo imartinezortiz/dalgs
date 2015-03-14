@@ -8,12 +8,14 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.ucm.fdi.dalgs.academicTerm.repository.AcademicTermRepository;
 import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
+
 
 @Service
 public class AcademicTermService {
@@ -121,6 +123,18 @@ public class AcademicTermService {
 		boolean deleteCourses = serviceCourse.deleteCourses(academicList);
 		if (deleteCourses)
 		return daoAcademicTerm.deleteAcademicTerm(academicList);
+		else return false;
+	}
+	
+	@PreAuthorize("hasRole('ROLE_USER')")
+	//@PreAuthorize("hasPermission(returnObject, 'DELETE') or hasPermission(returnObject, 'ADMINISTRATION')" )
+	@Transactional(propagation=Propagation.REQUIRED)
+	public boolean cloneAcademicTerm(AcademicTerm academic) {
+		
+		AcademicTerm cloneAcademic = academic.clone();
+		if (cloneAcademic!=null)
+		return this.addAcademicTerm(cloneAcademic);
+
 		else return false;
 	}
 }

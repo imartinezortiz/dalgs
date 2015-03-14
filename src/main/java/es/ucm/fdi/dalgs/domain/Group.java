@@ -25,7 +25,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "_group")
-public class Group {
+public class Group implements Cloneable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,7 +39,7 @@ public class Group {
 	private String name;
 	
 	//@NotNull
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false,cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_course")
 	private Course course;
 	
@@ -113,6 +113,16 @@ public class Group {
 		this.course = course;
 	}
 	
-	
+	public Group clone(){
+		Group clone = new Group();
+		clone.setId(null);
+
+		//clone.setCourse(this.course); clone.getCourse().setId(null);
+		
+		clone.setDeleted(this.isDeleted);
+		clone.setName(this.name);
+		
+		return clone;
+	}
 	
 }

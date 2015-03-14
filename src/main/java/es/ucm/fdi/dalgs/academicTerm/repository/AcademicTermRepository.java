@@ -17,7 +17,7 @@ import es.ucm.fdi.dalgs.domain.AcademicTerm;
 import es.ucm.fdi.dalgs.domain.Degree;
 
 @Repository
-public class AcademicTermRepository {
+public class AcademicTermRepository{
 
 	protected EntityManager em;
 

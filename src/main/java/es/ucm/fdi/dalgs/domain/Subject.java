@@ -2,6 +2,7 @@ package es.ucm.fdi.dalgs.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,10 +20,9 @@ import javax.persistence.Table;
 
 import es.ucm.fdi.dalgs.domain.info.SubjectInfo;
 
-
 @Entity
 @Table(name = "subject")
-public class Subject {
+public class Subject implements Cloneable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_subject")
@@ -34,23 +34,19 @@ public class Subject {
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_topic")
 	private Topic topic;
-
 
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "subject_competence", joinColumns = { @JoinColumn(name = "id_subject") }, inverseJoinColumns = { @JoinColumn(name = "id_competence") })
 	private Collection<Competence> competences = new ArrayList<Competence>();
 
-
 	public Subject() {
 		super();
-		this.isDeleted=false;
+		this.isDeleted = false;
 
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -59,8 +55,6 @@ public class Subject {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-
 
 	public Collection<Competence> getCompetences() {
 		return competences;
@@ -94,13 +88,24 @@ public class Subject {
 		this.topic = topic;
 	}
 
-//	public String getCode() {
-//		return code;
-//	}
-//
-//	public void setCode(String code) {
-//		this.code = code;
-//	}
+	public Subject clone() {
+		Subject clone = new Subject();
 
-	
+		clone.setId(null);
+
+		clone.setInfo(this.info);
+		clone.setDeleted(this.isDeleted);
+		
+//		clone.setTopic(this.topic); clone.getTopic().setId(null);
+
+		List<Competence> competencesClone = new ArrayList<Competence>();
+		if (this.competences != null) {
+			for (Competence c : this.competences) {
+				competencesClone.add(c.clone());
+			}
+		}
+		clone.setCompetences(competencesClone);
+
+		return clone;
+	}
 }

@@ -53,6 +53,21 @@ public class AcademicTermController {
 
 
 	/**
+	 * Method for clone an existing AcademicTerm
+	 */
+	
+	@RequestMapping(value = "/academicTerm/{academicId}/clone.htm", method = RequestMethod.GET)
+	public String cloneAcademicTermGET(
+			@PathVariable("academicId") Long id_academic)
+			throws ServletException {
+
+		if (serviceAcademicTerm.cloneAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic))) {
+			return "redirect:/academicTerm/page/0.htm?showAll="+showAll;
+		} else
+			return "redirect:/error.htm";
+	}
+	
+	/**
 	 * Methods for adding academicTerms
 	 */
 	@RequestMapping(value = "/academicTerm/add.htm", method = RequestMethod.GET)
