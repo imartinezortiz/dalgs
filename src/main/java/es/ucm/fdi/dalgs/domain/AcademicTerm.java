@@ -32,7 +32,9 @@ public class AcademicTerm {
 	@Column(name = "id_academicterm")
 	private Long id;
 
-	@NotEmpty @NotNull @NotBlank
+	@NotEmpty
+	@NotNull
+	@NotBlank
 	@Size(min=4, max=20)
 	@Basic(optional = false)
 	@Column(name = "term", nullable = false, columnDefinition = "varchar(32) default '2014/2015'")
@@ -43,7 +45,7 @@ public class AcademicTerm {
 	private Boolean isDeleted;
 
 	
-	//@NotNull 
+	@NotNull(message="field null")
 	@ManyToOne
 	@JoinColumn(name = "id_degree")
 	private Degree degree;

@@ -24,12 +24,15 @@
 			<%-- 	<form:form  method="post" modelAttribute="modifyProduct" > (ResquestParam)  --%>
 
 			<form:form method="post" commandName="addAcademicTerm" role="form">
+
+
+
 				<div class="form-group">
 					<label>Term: </label>
 					<form:input path="term" class="form-control"
 						placeholder="Code of the academicTerm" required="true" />
+					<form:errors path="term" cssStyle="color: #ff0000" />
 				</div>
-
 
 				<div class="form-group">
 					<label>Degrees List:</label>
@@ -38,13 +41,22 @@
 					<form:select class="form-control 2" path="degree" id="degreeSelect">
 						<form:option value=""> --Select an option-- </form:option>
 						<c:forEach items="${degrees}" var="degree">
-							<form:option value="${degree.id}">${degree.info.code}-${degree.info.name}</form:option>
+							<c:choose>
+								<c:when test="${degree.id == idDegree}">
+									<form:option value="${degree.id}" selected='true'>${degree.info.code} - ${degree.info.name}</form:option>
+								</c:when>
+								<c:otherwise>
+									<form:option value="${degree.id}">${degree.info.code}-${degree.info.name}</form:option>
+								</c:otherwise>
+							</c:choose>
 						</c:forEach>
 					</form:select>
+					<form:errors path="degree" cssStyle="color: #ff0000" />
 
 				</div>
 
-				<input type="submit" class="btn btn-success" value="Add" />
+
+				<input type="submit" class="btn btn-success" value="Add" name="Add" />
 				<c:if test="${unDelete == true}">
 					<input type="submit" class="btn btn-success" value="Undelete"
 						name="Undelete" />
@@ -52,21 +64,22 @@
 			</form:form>
 		</div>
 	</div>
-
-	<div align="center">
-		<h3 class="panel-title list">Errors:</h3>
-		<br />
-		<c:forEach items="${errors}" var="error">
-
-
-			<c:out value="${error}" />
+	<c:if test="${not empty errors}">
+		<div align="center">
+			<h3 class="panel-title list">Errors:</h3>
 			<br />
+			<c:forEach items="${errors}" var="error">
+
+
+				<c:out value="${error}" />
+				<br />
 
 
 
 
-		</c:forEach>
+			</c:forEach>
 
-	</div>
+		</div>
+	</c:if>
 </body>
 </html>

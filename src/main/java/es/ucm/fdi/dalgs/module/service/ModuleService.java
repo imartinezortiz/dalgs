@@ -30,30 +30,31 @@ public class ModuleService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly=false)
-	public ResultClass<Boolean> addModule(Module module, Long id_degree) {
+	public ResultClass<Module> addModule(Module module, Long id_degree) {
 		
 		Module moduleExists = daoModule.existByCode(module.getInfo().getCode(), id_degree);
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		ResultClass<Module> result = new ResultClass<Module>();
 
 		if( moduleExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("Code already exists");
-
+				
 			if (moduleExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
-
+				result.setE(moduleExists);
 			}
-			result.setE(false);
+			else result.setE(module);
 			result.setErrorsList(errors);
 		}
 		else{
 			module.setDegree(serviceDegree.getDegree(id_degree).getE());
-			boolean r = daoModule.addModule(module);
-			if (r) 
-				result.setE(true);
+			daoModule.addModule(module);
+			result.setE(module);
+				
 		}
+		
 		return result;		
 	}
 	
@@ -71,7 +72,7 @@ public class ModuleService {
 	public ResultClass<Boolean> modifyModule(Module module, Long id_module, Long id_degree) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
-		Module modifyModule = daoModule.getModule(id_degree);
+		Module modifyModule = daoModule.getModule(id_module);
 		
 		Module moduleExists = daoModule.existByCode(module.getInfo().getCode(), id_degree);
 		
@@ -152,34 +153,35 @@ public class ModuleService {
 		if(serviceTopic.deleteTopicsForModules(d.getModules()).getE()){
 			result.setE(daoModule.deleteModulesForDegree(d));
 		}
-		result.setE(false);	
+		else result.setE(false);	
 		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> unDeleteModule(Module module, Long id_degree) {
+	public ResultClass<Module> unDeleteModule(Module module, Long id_degree) {
 		Module m = daoModule.existByCode(module.getInfo().getCode(), id_degree);
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		ResultClass<Module> result = new ResultClass<Module>();
 		if(m == null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("Code doesn't exist");
 			result.setErrorsList(errors);
-
+			result.setE(module);
 		}
 		else{
 			if(!m.getIsDeleted()){
 				Collection<String> errors = new ArrayList<String>();
 				errors.add("Code is not deleted");
 				result.setErrorsList(errors);
+				result.setE(module);
 			}
 
 			m.setDeleted(false);
 			m.setInfo(module.getInfo());
 			boolean r = daoModule.saveModule(m);
 			if(r) 
-				result.setE(true);	
+				result.setE(m);	
 
 		}
 		return result;

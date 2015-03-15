@@ -2,7 +2,6 @@ package es.ucm.fdi.dalgs.degree.web;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -109,7 +108,7 @@ public class DegreeController {
 
 //		List<Degree> result = serviceDegree.getAll().getE();
 //		myModel.put("degrees", result);
-		List<Degree> result = serviceDegree.getDegrees(pageIndex, showAll).getE();
+		ResultClass<Degree> result = serviceDegree.getDegrees(pageIndex, showAll);
 		Integer numberOfPages = serviceDegree.numberOfPages(showAll);
 		myModel.put("showAll", showAll);
 

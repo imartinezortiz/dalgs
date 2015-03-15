@@ -2,10 +2,8 @@ package es.ucm.fdi.dalgs.degree.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -74,9 +72,7 @@ public class DegreeService {
 			
 			if (r) result.setE(true);
 		}
-		
-
-		
+			
 		
 		
 		return result;
@@ -84,11 +80,11 @@ public class DegreeService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-//	@PostAuthorize("hasPermission(returnObject, 'READ')")
+	@PostFilter("hasPermission(filterObject, 'READ')")
 	@Transactional(readOnly = true)
-	public ResultClass<List<Degree>> getDegrees(Integer pageIndex, Boolean showAll) {
-		ResultClass<List<Degree>> result = new ResultClass<List<Degree>>();
-		result.setE(daoDegree.getDegrees(pageIndex, showAll));
+	public ResultClass<Degree> getDegrees(Integer pageIndex, Boolean showAll) {
+		ResultClass<Degree> result = new ResultClass<>();
+		result.addAll(daoDegree.getDegrees(pageIndex, showAll));
 		return result;
 	}
 	
@@ -96,10 +92,12 @@ public class DegreeService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ')")
 	@Transactional(readOnly = true)
-	public ResultClass<List<Degree>> getAll() {
-		ResultClass<List<Degree>> result = new ResultClass<List<Degree>>();
-		result.setE(daoDegree.getAll());
+	public ResultClass<Degree> getAll() {
+		ResultClass<Degree> result = new ResultClass<>();
+		result.addAll(daoDegree.getAll());
+//		result.setE(daoDegree.getAll());
 		return result;
+	
 	}
 
 	@PreAuthorize("hasPermission(#degree, 'WRITE') or hasPermission(#degree, 'ADMINISTRATION')")
@@ -142,11 +140,11 @@ public class DegreeService {
 //		result.setE(daoDegree.getDegree(id));
 //		return result;
 //	}
-
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 //	@PreAuthorize("hasPermission(#degree, 'DELETE') or hasPermission(#degree, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteDegree(Long id) {
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		ResultClass<Boolean> result = new ResultClass<>();
 		boolean deleteModules = false;
 		boolean deleteCompetences = false;
 		boolean deleteAcademic = false;
@@ -156,8 +154,7 @@ public class DegreeService {
 			deleteModules = serviceModule.deleteModulesForDegree(d).getE();
 		if (!d.getCompetences().isEmpty())
 			deleteCompetences = serviceCompetence.deleteCompetencesForDegree(d).getE();
-		Collection<AcademicTerm> academicList = serviceAcademicTerm.getAcademicTermsByDegree(id).getE();
-
+		ResultClass<AcademicTerm> academicList = serviceAcademicTerm.getAcademicTermsByDegree(id);
 
 		if(!academicList.isEmpty()) deleteAcademic = serviceAcademicTerm.deleteAcademicTermCollection(academicList).getE();
 		if ((deleteModules || d.getModules().isEmpty()) && (deleteCompetences || d.getCompetences().isEmpty())

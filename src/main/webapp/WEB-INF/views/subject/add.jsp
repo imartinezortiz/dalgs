@@ -19,7 +19,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 							<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-			Add Subject</h3>
+			"${valueButton}" Subject</h3>
 		</div>
 		<div class="panel-body">
 			<form:form method="post" commandName="addsubject" role="form">
@@ -40,7 +40,7 @@
 				</div>
 
 								<br>
-				<input type="submit" class="btn btn-success" value="Add" />
+				<input type="submit" class="btn btn-success" value="${valueButton}" name="${valueButton}"/>
 				
 				<c:if test="${unDelete == true}">
 					<input type="submit" class="btn btn-success" value="Undelete" name="Undelete"/>
