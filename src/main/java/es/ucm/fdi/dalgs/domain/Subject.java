@@ -18,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
 import es.ucm.fdi.dalgs.domain.info.SubjectInfo;
 
 @Entity
@@ -30,6 +31,7 @@ public class Subject implements Cloneable {
 
 	@Embedded
 	private SubjectInfo info;
+
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;

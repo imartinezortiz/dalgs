@@ -19,49 +19,50 @@ import es.ucm.fdi.dalgs.group.repository.GroupRepository;
 @Service
 public class GroupService {
 
-
 	@Autowired
 	private AclObjectService manageAclService;
 
 	@Autowired
 	private GroupRepository daoGroup;
-
+	
 	@Autowired
 	private CourseService serviceCourse;
-
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> addGroup(Group group, Long id_course) {
-
+		
 		Group groupExists = daoGroup.existByName(group.getName(), null);
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
-		if (groupExists != null) {
+		if( groupExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("Code already exists");
 
-			if (groupExists.getIsDeleted()) {
+			if (groupExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
 
 			}
-			result.setE(false);
+			result.setSingleElement(false);
 			result.setErrorsList(errors);
-		} else {
-			group.setCourse(serviceCourse.getCourse(id_course));
-			boolean r = daoGroup.addGroup(group);
-			if (r)
-				result.setE(true);
 		}
-		return result;
+		else{
+			group.setCourse(serviceCourse.getCourse(id_course).getSingleElement());
+			boolean r = daoGroup.addGroup(group);
+			if (r) 
+				result.setSingleElement(true);
+		}
+		return result;		
 	}
-
+	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public Group getGroup(Long id_group) {
-
-		return daoGroup.getGroup(id_group);
+	public ResultClass<Group> getGroup(Long id_group) {
+		ResultClass<Group> result = new ResultClass<Group>();
+		result.setSingleElement(daoGroup.getGroup(id_group));
+		return result;
 	}
 
 	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
@@ -75,17 +76,18 @@ public class GroupService {
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("New code already exists");
 
-			if (group.getIsDeleted()) {
+			if (group.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
 
 			}
 			result.setErrorsList(errors);
-			result.setE(false);
-		} else {
+			result.setSingleElement(false);
+		}
+		else{
 			boolean r = daoGroup.saveGroup(group);
 			if (r) {
-				result.setE(true);
+				result.setSingleElement(true);
 
 				// Adding the authorities to the professor list
 				manageAclService.addPermissionToAnObject(group.getProfessors(),group.getCourse().getId(), group.getCourse().getClass().getName());
@@ -94,51 +96,59 @@ public class GroupService {
 		}
 		return result;
 	}
-
-	// //-----
-	// @PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
-	// @Transactional(readOnly = false)
-	// public ResultClass<Boolean> modifyGroupActivities(Group group) {
-	// ResultClass<Boolean> result = new ResultClass<Boolean>();
-	//
-	// boolean r = daoGroup.saveGroup(group);
-	// if (r) result.setE(true);
-	//
-	// return result;
-	// }
-	//
-	// //----
-
-	@PreAuthorize("hasPermission(#group, 'DELETE') or hasPermission(#group, 'ADMINISTRATION')")
+	
+	//-----
+	@PreAuthorize("hasPermission(#degree, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public boolean deleteGroup(Long id_group) {
+	public ResultClass<Boolean> modifyGroupActivities(Group group) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
-		return daoGroup.deleteGroup(id_group);
+			boolean r = daoGroup.saveGroup(group);
+			if (r) 	result.setSingleElement(true);
+		
+		return result;
+	}
+	
+	//----
+
+	@PreAuthorize("hasPermission(#degree, 'DELETE') or hasPermission(#group, 'ADMINISTRATION')" )
+	@Transactional(readOnly = false)
+	public ResultClass<Boolean> deleteGroup(Long id_group) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		result.setSingleElement(daoGroup.deleteGroup(id_group));
+		return result;
 	}
 
-	public Collection<Group> getGroupsForCourse(Long id) {
-		return daoGroup.getGroupsForCourse(id);
+
+	public ResultClass<Collection<Group>> getGroupsForCourse(Long id) {
+		ResultClass<Collection<Group>> result = new ResultClass<Collection<Group>>();
+		result.setSingleElement(daoGroup.getGroupsForCourse(id));
+		return result;
 	}
 
-	public boolean deleteGroupsFromCourses(Collection<Course> coursesList) {
-		return daoGroup.deleteGroupsFromCourses(coursesList);
+	
+	public ResultClass<Boolean> deleteGroupsFromCourses(Collection<Course> coursesList) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		result.setSingleElement(daoGroup.deleteGroupsFromCourses(coursesList));
+		return result;
 	}
-
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> unDeleteGroup(Group group) {
 		
 		Group g = daoGroup.existByName(group.getName(),null);
 		
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		if (g == null) {
+		if(g == null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("Code doesn't exist");
 			result.setErrorsList(errors);
 
-		} else {
-			if (!g.getIsDeleted()) {
+		}
+		else{
+			if(!g.getIsDeleted()){
 				Collection<String> errors = new ArrayList<String>();
 				errors.add("Code is not deleted");
 				result.setErrorsList(errors);
@@ -147,8 +157,8 @@ public class GroupService {
 			g.setDeleted(false);
 			g.setName(group.getName());
 			boolean r = daoGroup.saveGroup(g);
-			if (r)
-				result.setE(true);
+			if(r) 
+				result.setSingleElement(true);	
 
 		}
 		return result;
@@ -156,14 +166,19 @@ public class GroupService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostAuthorize("hasPermission(returnObject, 'READ')")
-	public Collection<Group> getGroupsForStudent(Long id_student) {
-		return daoGroup.getGroupsForStudent(id_student);
+	public ResultClass<Collection<Group>> getGroupsForStudent(Long id_student){
+		ResultClass<Collection<Group>> result = new ResultClass<Collection<Group>>();
+		result.setSingleElement(daoGroup.getGroupsForStudent(id_student));
+		return result;
 	}
-
+	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostAuthorize("hasPermission(returnObject, 'READ')")
-	public Collection<Group> getGroupsForProfessor(Long id_professor) {
-		return daoGroup.getGroupsForProfessor(id_professor);
+	public ResultClass<Collection<Group>> getGroupsForProfessor(Long id_professor){
+		ResultClass<Collection<Group>> result = new ResultClass<Collection<Group>>();
+		result.setSingleElement(daoGroup.getGroupsForProfessor(id_professor));
+		return result;
 	}
 
 }
+

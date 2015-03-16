@@ -92,7 +92,7 @@ public class LearningGoalController {
 			@PathVariable("learninggoalId") Long id_learningGoal)
 			throws ServletException {
 
-		if (serviceLearningGoal.deleteLearningGoal(id_learningGoal)) {
+		if (serviceLearningGoal.deleteLearningGoal(id_learningGoal).getSingleElement()) {
 			return "redirect:/degree/" + id_degree +"/competence/" +id_competence+ ".htm";
 		} else
 			return "redirect:/error.htm";
@@ -142,7 +142,7 @@ public class LearningGoalController {
 			Model model)
 			throws ServletException {
 
-		LearningGoal p = serviceLearningGoal.getLearningGoal(id_learningGoal);
+		LearningGoal p = serviceLearningGoal.getLearningGoal(id_learningGoal).getSingleElement();
 		model.addAttribute("modifyLearningGoal", p);
 		return "learningGoal/modify";
 
@@ -162,7 +162,7 @@ public class LearningGoalController {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		LearningGoal p = serviceLearningGoal.getLearningGoal(id_learningGoal);
+		LearningGoal p = serviceLearningGoal.getLearningGoal(id_learningGoal).getSingleElement();
 
 		// List<Subject> subjects =
 		// serviceSubject.getSubjectsForCompetence(id_competence);

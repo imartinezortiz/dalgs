@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "course", uniqueConstraints = { @UniqueConstraint(columnNames = {"id_subject", "id_academicterm" }) })
@@ -28,7 +29,8 @@ public class Course implements Cloneable {
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@NotNull
+	@ManyToOne
 	@JoinColumn(name = "id_subject")
 	private Subject subject;
 

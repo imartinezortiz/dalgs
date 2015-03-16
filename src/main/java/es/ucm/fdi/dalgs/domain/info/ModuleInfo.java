@@ -15,7 +15,7 @@ public class ModuleInfo {
 	@NotEmpty @NotNull @NotBlank
 	@Size(min=1, max=20)
 	@Basic(optional = false)
-	@Column(name = "code_module", nullable = false, unique= true)
+	@Column(name = "code_module", nullable = false)
 	private String code;
 	
 	@NotEmpty @NotNull @NotBlank

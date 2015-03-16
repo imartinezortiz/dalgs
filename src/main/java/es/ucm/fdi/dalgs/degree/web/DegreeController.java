@@ -2,7 +2,6 @@ package es.ucm.fdi.dalgs.degree.web;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -41,7 +40,8 @@ public class DegreeController {
 	public String addDegreeGET(Model model) {
 		Degree newDegree = new Degree();
 		// newDegree.setCode(serviceDegree.getNextCode());
-		model.addAttribute("addDegree", newDegree);
+		model.addAttribute("Degree", newDegree);
+		model.addAttribute("valueButton", "Add" );
 		return "degree/add";
 	}
 
@@ -85,7 +85,7 @@ public class DegreeController {
 	@RequestMapping(value = "/degree/{id_degree}/restore.htm")
 	// Every Post have to return redirect
 	public String restoreDegree(@PathVariable("id_degree") Long id_degree) {
-		ResultClass<Boolean> result = serviceDegree.unDeleteDegree(serviceDegree.getDegree(id_degree));
+		ResultClass<Boolean> result = serviceDegree.unDeleteDegree(serviceDegree.getDegree(id_degree).getSingleElement());
 		if (!result.hasErrors())
 //			if (created)
 				return "redirect:/degree/page/0.htm?showAll="+showAll;
@@ -106,7 +106,9 @@ public class DegreeController {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		List<Degree> result = serviceDegree.getDegrees(pageIndex, showAll);
+//		List<Degree> result = serviceDegree.getAll().getE();
+//		myModel.put("degrees", result);
+		ResultClass<Degree> result = serviceDegree.getDegrees(pageIndex, showAll);
 		Integer numberOfPages = serviceDegree.numberOfPages(showAll);
 		myModel.put("showAll", showAll);
 
@@ -128,12 +130,8 @@ public class DegreeController {
 			@ModelAttribute("modifyDegree") Degree modify, Model model)
 
 	{
-		// modify.setId(id);
-		Degree modifyDegree = serviceDegree.getDegree(id);
-		
-		modifyDegree.setInfo(modify.getInfo());
-
-		ResultClass<Boolean> result = serviceDegree.modifyDegree(modifyDegree);
+		modify.setId(id);
+		ResultClass<Boolean> result = serviceDegree.modifyDegree(modify, id);
 		if (!result.hasErrors())
 //			if (created)
 				return "redirect:/degree/page/0.htm?showAll="+showAll;
@@ -151,14 +149,16 @@ public class DegreeController {
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/modify.htm", method = RequestMethod.GET)
-	protected ModelAndView modifyDegreeGET(@PathVariable("degreeId") Long id)
+	protected String modifyDegreeGET(@PathVariable("degreeId") Long id, Model model)
 			throws ServletException {
-		ModelAndView model = new ModelAndView();
-		Degree p = serviceDegree.getDegree(id);
-		model.addObject("modifyDegree", p);
-		model.setViewName("degree/modify");
-
-		return model;
+//		ModelAndView model = new ModelAndView();
+		Degree p = serviceDegree.getDegree(id).getSingleElement();
+		model.addAttribute("Degree", p);
+//		model.setViewName("degree/modify");
+		
+		model.addAttribute("valueButton", "Modify");
+//		return model;
+		return "degree/add";
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class DegreeController {
 	public String deleteDegreeGET(@PathVariable("degreeId") Long id)
 			throws ServletException {
 
-		if (serviceDegree.deleteDegree(serviceDegree.getDegree(id))) {
+		if (serviceDegree.deleteDegree(id).getSingleElement()) {
 			return "redirect:/degree/page/0.htm?showAll="+showAll;
 		} else
 			return "redirect:/error.htm";
@@ -184,14 +184,17 @@ public class DegreeController {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		Degree p = serviceDegree.getDegree(id);
+		// Degree p = serviceDegree.getDegree(id);
+
+		Degree p = serviceDegree.getDegree(id).getSingleElement();
 
 		myModel.put("degree", p);
 		if (p.getModules() != null)
 			myModel.put("modules", p.getModules());
 		if (p.getCompetences() != null)
 			myModel.put("competences", p.getCompetences());
-
+		
+		
 		return new ModelAndView("degree/view", "model", myModel);
 	}
 

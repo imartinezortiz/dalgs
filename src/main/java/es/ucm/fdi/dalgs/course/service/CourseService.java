@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -33,16 +34,21 @@ public class CourseService {
 	@Autowired
 	GroupService serviceGroup;
 
+	// @Autowired
+	// private DegreeService serviceDegree;
+
 	@Autowired
 	private AcademicTermService serviceAcademicTerm;
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> addCourse(Course course, Long id_academic) {
+	public ResultClass<Course> addCourse(Course course, Long id_academic) {
 		
-		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic));
+		boolean success = false;
+		
+		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic).getSingleElement());
 		Course courseExists = daoCourse.exist(course);
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		ResultClass<Course> result = new ResultClass<Course>();
 
 		if( courseExists != null){
 			result.setHasErrors(true);
@@ -52,26 +58,27 @@ public class CourseService {
 			if (courseExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
+				result.setSingleElement(courseExists);
 
 			}
-			result.setE(false);
+			result.setSingleElement(course);
 			result.setErrorsList(errors);
 		}
 		else{
 		
-			if (daoCourse.addCourse(course)){ 
-				courseExists = daoCourse.exist(course);
+			success = daoCourse.addCourse(course);
+				
 
-				if(courseExists != null){
-					manageAclService.addAclToObject(courseExists.getId(), courseExists.getClass().getName());
-					result.setE(true);
+				if(success){
+					courseExists = daoCourse.exist(course);
+					success = manageAclService.addAclToObject(courseExists.getId(), courseExists.getClass().getName());
+					if (success)result.setSingleElement(course);
 
 				} else {
 					throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
 				}
 			}
-			
-		}
+					
 		return result;		
 	
 	}
@@ -83,15 +90,20 @@ public class CourseService {
 	}
 
 
-	//yo lo borraria no tiene sentido en este caso el modify
+
 	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifyCourse(Course course) {
+	public ResultClass<Boolean> modifyCourse(Course course, Long id_academic, Long id_course) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		
+		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic).getSingleElement());
+		
+		Course modifyCourse = daoCourse.getCourse(id_course);
 		
 		Course courseExists = daoCourse.exist(course);
 		
-		if(!course.getSubject().equals(course.getSubject()) &&  courseExists != null){
+		if(!course.getSubject().equals(modifyCourse.getSubject()) && 
+				courseExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("New code already exists");
@@ -102,12 +114,13 @@ public class CourseService {
 
 			}
 			result.setErrorsList(errors);
-			result.setE(false);
+			result.setSingleElement(false);
 		}
 		else{
-			boolean r = daoCourse.saveCourse(course);
+			modifyCourse.setSubject(course.getSubject());
+			boolean r = daoCourse.saveCourse(modifyCourse);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;
 
@@ -116,82 +129,113 @@ public class CourseService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@Transactional(readOnly = false)
-	public Course getCourse(Long id) {
-		return daoCourse.getCourse(id);
+	@PostFilter("hasPermission(filterObject, 'READ')")
+	@Transactional(readOnly = true)
+	public ResultClass<Course> getCourse(Long id) {
+		ResultClass<Course> result = new ResultClass<Course>();
+		result.setSingleElement(daoCourse.getCourse(id));
+		return result;
 	}
 	
-	@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+//	@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteCourse(Long id) {
+	public ResultClass<Boolean> deleteCourse(Long id) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		Course course = daoCourse.getCourse(id);
-		if (serviceActivity.deleteActivitiesFromCourse(course))
-			return daoCourse.deleteCourse(id);
-		return false;
+		if (serviceActivity.deleteActivitiesFromCourse(course).getSingleElement()){
+			result.setSingleElement(daoCourse.deleteCourse(id));
+			return result;
+		}
+		result.setSingleElement(false);
+		return result;
 	}
 
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@Transactional(readOnly = true)
-	public List<Course> getCoursesByAcademicTerm(Long id_academic) {
-
-		return daoCourse.getCoursesByAcademicTerm(id_academic);
+	@PostFilter("hasPermission(filterObject, 'READ')")
+	public ResultClass<Course> getCoursesByAcademicTerm(Long id_academic) {
+		ResultClass<Course> result = new ResultClass<>();
+		Collection<Course> courses =  daoCourse.getCoursesByAcademicTerm(id_academic);
+		if(courses != null) result.addAll(courses);
+		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
-	public boolean deleteCoursesFromAcademic(AcademicTerm academic) {
-		boolean deleteActivities = serviceActivity.deleteActivitiesFromCourses(academic.getCourses());
-		boolean deleteGroups = serviceGroup.deleteGroupsFromCourses(academic.getCourses());
-		if (deleteActivities && deleteGroups)
-			return daoCourse.deleteCoursesFromAcademic(academic);
-		else return false;
-
-	}
-	
-
-
-	@Transactional(readOnly = true)
-	@PreAuthorize("hasRole('ROLE_USER')")	
-	public Course getCourseAll(Long id) {
-		Course c = daoCourse.getCourse(id);
-		c.setActivities(serviceActivity.getActivitiesForCourse(id));
-		c.setGroups(serviceGroup.getGroupsForCourse(id));
-		
-	
-		return c;
-	}
-
-	@PreAuthorize("hasRole('ROLE_USER')")
-	public Collection<Course> getCoursesfromListAcademic(
-			Collection<AcademicTerm> academicList) {
+	@PreAuthorize("hasRole('ROLE_ADMIN')")		
+	public ResultClass<Boolean> deleteCoursesFromAcademic(AcademicTerm academic) {
+		ResultClass<Boolean> result = new ResultClass<>();
+		boolean deleteActivities = serviceActivity.deleteActivitiesFromCourses(academic.getCourses()).getSingleElement();
+		boolean deleteGroups = serviceGroup.deleteGroupsFromCourses(academic.getCourses()).getSingleElement();
+		if (deleteActivities && deleteGroups){
+				result.setSingleElement(daoCourse.deleteCoursesFromAcademic(academic));
+		}
+		else result.setSingleElement(false);
 			
-		return daoCourse.getCoursesFromListAcademic(academicList);
+		return result;
+
+	}
+	
+
+
+	
+	@PreAuthorize("hasRole('ROLE_USER')")	
+	@PostFilter("hasPermission(filterObject, 'READ')")
+	@Transactional(readOnly = true)
+	public ResultClass<Course> getCourseAll(Long id) {
+		ResultClass<Course> result = new ResultClass<>();
+		Course c = daoCourse.getCourse(id);
+		c.setActivities(serviceActivity.getActivitiesForCourse(id).getSingleElement());
+		c.setGroups(serviceGroup.getGroupsForCourse(id).getSingleElement());
+		
+		result.setSingleElement(c);
+	
+		return result;
+	}
+
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ')")
+	public ResultClass<Course> getCoursesfromListAcademic(
+			Collection<AcademicTerm> academicList) {
+		
+		ResultClass<Course> result = new ResultClass<>();
+		result.addAll(daoCourse.getCoursesFromListAcademic(academicList));
+		
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
-	public boolean deleteCourses(Collection<AcademicTerm> academicList) {
+	public ResultClass<Boolean> deleteCourses(Collection<AcademicTerm> academicList) {
+		
+		ResultClass<Boolean> result = new ResultClass<>();
+		
 		Collection<Course> coursesList = daoCourse.getCoursesFromListAcademic(academicList);
-		boolean deleteActivities = serviceActivity.deleteActivitiesFromCourses(coursesList);
-		boolean deleteGroups = serviceGroup.deleteGroupsFromCourses(coursesList);
-		if (deleteActivities && deleteGroups)
-		return daoCourse.deleteCourses(academicList);
-		else return false;
+		boolean deleteActivities = serviceActivity.deleteActivitiesFromCourses(coursesList).getSingleElement();
+		boolean deleteGroups = serviceGroup.deleteGroupsFromCourses(coursesList).getSingleElement();
+		if (deleteActivities && deleteGroups){
+			result.setSingleElement(daoCourse.deleteCourses(academicList));
+		}
+		else result.setSingleElement(false);
+		
+		return result;
 	}
 
-/*
-	public boolean modifyCourse(Course course) {
-		return daoCourse.saveCourse(course);
-	}*/
+
+//	public ResultClass<Boolean> modifyCourse(Course course) {
+//		ResultClass<Boolean> result = new ResultClass<Boolean>();
+//		result.setSingleElement(daoCourse.saveCourse(course));
+//		return result;
+//	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> unDeleteCourse(Course course) {
+	public ResultClass<Course> unDeleteCourse(Course course, Long id_academic) {
+		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic).getSingleElement());
 		Course c = daoCourse.exist(course);
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		ResultClass<Course> result = new ResultClass<>();
 		if(c == null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("Code doesn't exist");
+			errors.add("Element doesn't exist");
 			result.setErrorsList(errors);
 
 		}
@@ -206,7 +250,7 @@ public class CourseService {
 			c.setSubject(course.getSubject());
 			boolean r = daoCourse.saveCourse(c);
 			if(r) 
-				result.setE(true);	
+				result.setSingleElement(c);	
 
 		}
 		return result;

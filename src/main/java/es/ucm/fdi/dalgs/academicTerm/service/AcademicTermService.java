@@ -1,10 +1,9 @@
 package es.ucm.fdi.dalgs.academicTerm.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.ucm.fdi.dalgs.academicTerm.repository.AcademicTermRepository;
 import es.ucm.fdi.dalgs.acl.service.AclObjectService;
+import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
 
@@ -20,121 +20,223 @@ import es.ucm.fdi.dalgs.domain.AcademicTerm;
 @Service
 public class AcademicTermService {
 
+
+
 	@Autowired
 	private AclObjectService manageAclService;
-	
+
 	@Autowired
 	private AcademicTermRepository daoAcademicTerm;
 
 	@Autowired
 	private CourseService serviceCourse;
-	
+
+
+
+
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public boolean addAcademicTerm(AcademicTerm academicTerm) {
+	public ResultClass<AcademicTerm> addAcademicTerm(AcademicTerm academicTerm) {
 
 		boolean success  =false;
-		AcademicTerm academicAux = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
-		if (academicAux == null){
-			success = daoAcademicTerm.addAcademicTerm(academicTerm);			
+
+
+
+		AcademicTerm academicExists = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
+		ResultClass<AcademicTerm> result = new ResultClass<>();
+
+		if( academicExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Code already exists");
+
+			if (academicExists.getIsDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
+				result.setSingleElement(academicExists);
+				
+			}
+			else result.setSingleElement(academicTerm);
+			result.setErrorsList(errors);
+			
 		}
-		else if(academicAux.getIsDeleted()){
-			academicAux.setDeleted(false);
-			success =  daoAcademicTerm.saveAcademicTerm(academicAux);			
-		}
-		academicAux =  daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
+		else{
+			success = daoAcademicTerm.addAcademicTerm(academicTerm);
+			
+			
 
 		
-		if(success && academicAux != null){
-			success = manageAclService.addAclToObject(academicAux.getId(), academicAux.getClass().getName());
+
+		if(success){ //&& academicAux != null){
+			academicExists = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
+			success = manageAclService.addAclToObject(academicExists.getId(), academicExists.getClass().getName());
+			if (success) result.setSingleElement(academicTerm);
 		} else {
 			throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
 		}
-		return success;
-	}
+		
+		}
+		return result;
 	
-	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
-	@Transactional(readOnly = false)
-	public boolean modifyAcademicTerm(AcademicTerm academicTerm) {
-		return daoAcademicTerm.saveAcademicTerm(academicTerm);
 	}
 
-	 /**
-	  *  Retrieves all academic terms.
-	  *  <p>
-	  *  Access-control will be evaluated after this method is invoked.
-	  *  filterObject refers to the returned object list.
-	  */
+
+	
+	//	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
+	@Transactional(readOnly = false)
+	public ResultClass<Boolean> modifyAcademicTerm(AcademicTerm academic, Long id_academic) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+
+		AcademicTerm modifyAcademic = daoAcademicTerm.getAcademicTermById(id_academic);
+
+
+		AcademicTerm academicExists = daoAcademicTerm.exists(academic.getTerm(), modifyAcademic.getDegree());
+
+		if(!academic.getTerm().equalsIgnoreCase(modifyAcademic.getTerm())  && 
+				academicExists != null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("New code already exists");
+
+			if (academicExists.getIsDeleted()){
+				result.setElementDeleted(true);
+				errors.add("Element is deleted");
+
+			}
+			result.setErrorsList(errors);
+			result.setSingleElement(false);
+		}
+		else{
+			modifyAcademic.setTerm(academic.getTerm());
+			boolean r = daoAcademicTerm.saveAcademicTerm(modifyAcademic);
+			if (r) 
+				result.setSingleElement(true);
+		}
+		return result;
+
+
+	}
+
+	/**
+	 *  Retrieves all academic terms.
+	 *  <p>
+	 *  Access-control will be evaluated after this method is invoked.
+	 *  filterObject refers to the returned object list.
+	 */
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ')")
 	@Transactional(readOnly = true)
-	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex, Boolean showAll) {
-		List<AcademicTerm> a = daoAcademicTerm.getAcademicsTerm(pageIndex, showAll);
-		return a;
+	public ResultClass<AcademicTerm> getAcademicsTerm(Integer pageIndex, Boolean showAll) {
+		ResultClass<AcademicTerm> result = new ResultClass<>();
+		result.addAll(daoAcademicTerm.getAcademicsTerm(pageIndex, showAll));
+
+		return result;
 	}
 
-	@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')" )
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	//	@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)// propagation = Propagation.REQUIRED)
-	public boolean deleteAcademicTerm(AcademicTerm academicTerm) {
+	public ResultClass<Boolean> deleteAcademicTerm(AcademicTerm academicTerm) {
 		boolean success = false;
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		if (academicTerm.getCourses() == null || serviceCourse.deleteCoursesFromAcademic(academicTerm).getSingleElement()){
 
-		if (academicTerm.getCourses() == null || serviceCourse.deleteCoursesFromAcademic(academicTerm)){
-			
 			/* COMENTADO PARA LA PAPELERA DE LA VISTA
 			 success = ( manageAclService.removeAclFromObject(academicTerm.getId(), academicTerm.getClass().getName()) &&
 						daoAcademicTerm.deleteAcademicTerm(academicTerm.getId()) );
-			*/
+			 */
 			success = 	daoAcademicTerm.deleteAcademicTerm(academicTerm.getId());
 		}
-		return success;
+		result.setSingleElement(success);
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
-	public Integer numberOfPages(Boolean showAll) {
-		return daoAcademicTerm.numberOfPages(showAll);
+	public ResultClass<Integer> numberOfPages(Boolean showAll) {
+		ResultClass<Integer> result = new ResultClass<Integer>();
+		result.setSingleElement(daoAcademicTerm.numberOfPages(showAll));
+		return result;
 	}
 
- 
+
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ')") // Collection: filterObject
 	@Transactional(readOnly = false)
-	public List<AcademicTerm> getAcademicTermsByDegree(Long id_degree) {
-		return daoAcademicTerm.getAcademicTermsByDegree(id_degree);
+	public ResultClass<AcademicTerm> getAcademicTermsByDegree(Long id_degree) {
+		ResultClass<AcademicTerm> result = new ResultClass<>();
+		result.addAll(daoAcademicTerm.getAcademicTermsByDegree(id_degree));
+		return result;
 	}
 
 
 	// WORKING 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostAuthorize("hasPermission(returnObject, 'READ')")
+	@PostFilter("hasPermission(filterObject, 'READ')")
 	@Transactional(readOnly = true)
-	public AcademicTerm getAcademicTerm(Long id_academic) {
+	public ResultClass<AcademicTerm> getAcademicTerm(Long id_academic) {
+		ResultClass<AcademicTerm> result = new ResultClass<AcademicTerm>();
 		AcademicTerm aT= daoAcademicTerm.getAcademicTermById(id_academic);
 		aT.setCourses(serviceCourse.getCoursesByAcademicTerm(id_academic));
-		return aT;
+		result.setSingleElement(aT);
+		return result;
 	}
-	
 
-	@PreAuthorize("hasRole('ROLE_USER')")
-	//@PreAuthorize("hasPermission(returnObject, 'DELETE') or hasPermission(returnObject, 'ADMINISTRATION')" )
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	//	@PreAuthorize("hasPermission(returnObject, 'DELETE') or hasPermission(returnObject, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)
-	public boolean deleteAcademicTermCollection(Collection<AcademicTerm> academicList) {
-		
-		boolean deleteCourses = serviceCourse.deleteCourses(academicList);
+	public ResultClass<Boolean> deleteAcademicTermCollection(Collection<AcademicTerm> academicList) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		boolean deleteCourses = serviceCourse.deleteCourses(academicList).getSingleElement();
 		if (deleteCourses)
-		return daoAcademicTerm.deleteAcademicTerm(academicList);
-		else return false;
+			result.setSingleElement(daoAcademicTerm.deleteAcademicTerm(academicList));
+		else result.setSingleElement(false);
+
+		return result;
+	}
+
+	
+	//	@PreAuthorize("hasPermission(returnObject, 'WRITE') or hasPermission(returnObject, 'ADMINISTRATION')" )
+	@Transactional(readOnly = false)
+	public ResultClass<AcademicTerm> undeleteAcademic(AcademicTerm academicTerm) {
+		AcademicTerm a = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
+		ResultClass<AcademicTerm> result = new ResultClass<>();
+		
+		if(a == null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("element doesn't exist");
+			result.setErrorsList(errors);
+			
+		}
+		else{
+			if(!a.getIsDeleted()){
+				Collection<String> errors = new ArrayList<String>();
+				errors.add("Code is not deleted");
+				result.setErrorsList(errors);
+			}
+
+			a.setDeleted(false);
+			a.setTerm(academicTerm.getTerm());
+			boolean r = daoAcademicTerm.saveAcademicTerm(a);
+			if (r)
+				result.setSingleElement(a);	
+
+		}
+		return result;
+
 	}
 	
-	@PreAuthorize("hasRole('ROLE_USER')")
-	//@PreAuthorize("hasPermission(returnObject, 'DELETE') or hasPermission(returnObject, 'ADMINISTRATION')" )
-	@Transactional(propagation=Propagation.REQUIRED)
-	public boolean cloneAcademicTerm(AcademicTerm academic) {
-		
-		AcademicTerm cloneAcademic = academic.clone();
-		if (cloneAcademic!=null)
-		return this.addAcademicTerm(cloneAcademic);
-
-		else return false;
-	}
+//	@PreAuthorize("hasRole('ROLE_USER')")
+//	//@PreAuthorize("hasPermission(returnObject, 'DELETE') or hasPermission(returnObject, 'ADMINISTRATION')" )
+//	@Transactional(propagation=Propagation.REQUIRED)
+//	public ResultClass<AcademicTerm> cloneAcademicTerm(ResultClass<AcademicTerm> resultClass) {
+//		
+//		AcademicTerm cloneAcademic = (AcademicTerm) resultClass.clone();
+////		if (cloneAcademic!=null)
+//		return this.addAcademicTerm(cloneAcademic);
+//
+////		else return false;
+//	}
 }

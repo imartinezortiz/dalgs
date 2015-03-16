@@ -18,6 +18,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
+
 import es.ucm.fdi.dalgs.domain.info.ActivityInfo;
 
 @Entity

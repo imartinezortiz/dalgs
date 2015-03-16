@@ -55,6 +55,7 @@ public class Group implements Cloneable{
 	@JoinTable(name = "group_student", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_user") })
 	private Collection<User> students = new ArrayList<User>();
 	
+
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
@@ -126,3 +127,4 @@ public class Group implements Cloneable{
 	}
 	
 }
+

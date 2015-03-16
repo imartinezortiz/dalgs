@@ -16,13 +16,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import es.ucm.fdi.dalgs.domain.info.ModuleInfo;
 
 @Entity
-@Table(name = "module")
-public class Module implements Cloneable {
 
+//@Table(name = "module")
+@Table(name = "module", uniqueConstraints = @UniqueConstraint(columnNames = {
+		"code_module", "id_degree" }))
+public class Module {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_module")
@@ -30,6 +34,7 @@ public class Module implements Cloneable {
 
 	@Embedded
 	private ModuleInfo info;
+
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;

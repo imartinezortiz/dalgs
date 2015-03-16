@@ -122,7 +122,7 @@ public class GroupController {
 			@PathVariable("groupId") Long id_group, Model model)
 			throws ServletException {
 
-		Group p = serviceGroup.getGroup(id_group);
+		Group p = serviceGroup.getGroup(id_group).getSingleElement();
 		model.addAttribute("courseId", id_course);
 		
 		
@@ -143,7 +143,7 @@ public class GroupController {
 	{
 
 		if (!result.hasErrors()) {
-			Group aux = serviceGroup.getGroup(id_group);
+			Group aux = serviceGroup.getGroup(id_group).getSingleElement();
 			aux.setName(group.getName());
 			
 			
@@ -180,7 +180,7 @@ public class GroupController {
 			@PathVariable("groupId") Long id_group)
 			throws ServletException {
 
-		if (serviceGroup.deleteGroup(id_group)) {
+		if (serviceGroup.deleteGroup(id_group).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
 					+ id_course + ".htm";
 		} else
@@ -201,7 +201,7 @@ public class GroupController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		Group a = serviceGroup.getGroup(id_group);
+		Group a = serviceGroup.getGroup(id_group).getSingleElement();
 
 		model.put("group", a);
 		model.put("groupId", id_group);
@@ -213,7 +213,7 @@ public class GroupController {
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/professor/add.htm", method = RequestMethod.GET)
 	public String addProfessorToGroupGET(@PathVariable("groupId") Long id_group, Model model) {
 		
-		Group group = serviceGroup.getGroup(id_group);
+		Group group = serviceGroup.getGroup(id_group).getSingleElement();
 		List<String> professors = serviceUser.getAllByRole("ROLE_PROFESSOR");
 		
 		model.addAttribute("group",group);
@@ -239,7 +239,7 @@ public class GroupController {
 			+ courseId + "/group/"+ id_group + "/professor/add.htm";		
 		}
 		else{
-			Group aux = serviceGroup.getGroup(id_group);
+			Group aux = serviceGroup.getGroup(id_group).getSingleElement();
 			aux.setProfessors(group.getProfessors());
 			
 			serviceGroup.modifyGroup(aux);

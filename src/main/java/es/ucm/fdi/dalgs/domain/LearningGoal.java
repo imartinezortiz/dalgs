@@ -30,6 +30,7 @@ public class LearningGoal implements Cloneable{
 	@JoinColumn(name = "id_competence")
 	private Competence competence;
 	
+	
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 

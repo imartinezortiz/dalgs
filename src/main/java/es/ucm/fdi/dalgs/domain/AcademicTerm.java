@@ -40,13 +40,20 @@ public class AcademicTerm implements Cloneable {
 	@Column(name = "term", nullable = false, columnDefinition = "varchar(32) default '2014/2015'")
 	private String term;
 
+	
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
+	@NotNull(message="field null")
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_degree")
 	private Degree degree;
 
+
+
+	
+	//@NotNull
+	//@Valid
 	@OneToMany(mappedBy = "academicTerm", cascade = CascadeType.ALL)
 	private Collection<Course> courses = new ArrayList<Course>();
 

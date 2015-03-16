@@ -44,6 +44,8 @@ public class Competence implements Cloneable {
 	@JoinColumn(name = "id_degree")
 	private Degree degree;
 
+
+
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 

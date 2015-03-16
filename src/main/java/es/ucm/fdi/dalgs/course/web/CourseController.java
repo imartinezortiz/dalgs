@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import es.ucm.fdi.dalgs.academicTerm.service.AcademicTermService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
@@ -44,12 +45,12 @@ public class CourseController {
 
 	@Autowired
 	private SubjectService serviceSubject;
-	
+
 	@Autowired
 	private UserService serviceUser;
 
-//	@Autowired
-//	private ActivityService serviceActivity;
+	//	@Autowired
+	//	private ActivityService serviceActivity;
 
 	@Autowired
 	private AcademicTermService serviceAcademic;
@@ -63,18 +64,24 @@ public class CourseController {
 	@RequestMapping(value = "/academicTerm/{academicId}/course/add.htm", method = RequestMethod.GET)
 	protected String getAddNewCourseForm(
 			@PathVariable("academicId") Long id_academic, Model model) {
-		Course newCourse = new Course();
 
-		AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic);
-		Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree());
-		//model.addAttribute("activities", serviceActivity.getAll());
-		model.addAttribute("addcourse", newCourse);
 
-		// List<Subject> subjects =
-		// serviceSubject.getSubjectsForDegree(academic.getDegree().getId());
-		model.addAttribute("academicTerm", academic);
-		model.addAttribute("subjects", subjects);
-		model.addAttribute("add", true);
+		if(!model.containsAttribute("addCourse")){
+
+			AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic).getSingleElement();
+
+
+
+			model.addAttribute("addCourse", new Course());
+			model.addAttribute("academicTerm", academic);
+			Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree()).getSingleElement();
+			
+			model.addAttribute("subjects", subjects);
+		}
+		
+
+		//		model.addAttribute("add", true);
+
 		return "course/add";
 	}
 
@@ -82,52 +89,97 @@ public class CourseController {
 	// Every Post have to return redirect
 	public String processAddNewCourse(
 			@PathVariable("academicId") Long id_academic,
-			@ModelAttribute("addcourse") Course newCourse,
-			BindingResult result, Model model) {
+			@ModelAttribute("addCourse") @Valid Course newCourse,
+			BindingResult resultBinding,
+			RedirectAttributes attr) {
 
-		
 
-		if (newCourse.getSubject() == null)
-			return "redirect:/academicTerm/" + id_academic + "/course/add.htm";
 
-		if (!result.hasErrors()) {
-			ResultClass<Boolean> results = serviceCourse.addCourse(newCourse, id_academic);
-			if (!results.hasErrors())
+		//		if (newCourse.getSubject() == null)
+		//			return "redirect:/academicTerm/" + id_academic + "/course/add.htm";
+
+		if (!resultBinding.hasErrors()) {
+			ResultClass<Course> resultReturned = serviceCourse.addCourse(newCourse, id_academic);
+			if (!resultReturned.hasErrors())
 				return "redirect:/academicTerm/" + id_academic + ".htm";	
 			else{
-				model.addAttribute("addCourse", newCourse);
-				if (results.isElementDeleted())
-					model.addAttribute("unDelete", results.isElementDeleted()); 
-				model.addAttribute("errors", results.getErrorsList());
-				return "course/add";
+				//				AcademicTerm a = serviceAcademic.getAcademicTerm(id_academic).getSingleElement();
+				if (resultReturned.isElementDeleted()){
+					attr.addFlashAttribute("unDelete", resultReturned.isElementDeleted()); 
+					attr.addFlashAttribute("academicTerm", resultReturned.getSingleElement().getAcademicTerm());
+				}
+				//				else attr.addFlashAttribute("academicTerm", a);
+				attr.addFlashAttribute("subjects",serviceSubject.getSubjectForDegree(
+						resultReturned.getSingleElement().getAcademicTerm().getDegree()).getSingleElement());
+
+				attr.addFlashAttribute("errors", resultReturned.getErrorsList());
+					
+
 
 			}
-			
+
+		}else{
+			attr.addFlashAttribute("org.springframework.validation.BindingResult.addAcademicTerm", resultBinding);
+//			AcademicTerm a = serviceAcademic.getAcademicTerm(id_academic).getSingleElement();
+//			attr.addFlashAttribute("academicTerm", a);
+//			attr.addFlashAttribute("subjects",serviceSubject.getSubjectForDegree(a.getDegree()).getSingleElement());
+
+
+			//			return "redirect:/academicTerm/{academicId}/course/add.htm";
 		}
-		return "redirect:/error.htm";
+
+		
+		attr.addFlashAttribute("addCourse", newCourse );
+
+		if (newCourse.getSubject() != null)
+			attr.addFlashAttribute("idSubject", newCourse.getSubject().getId());
+
+		return "redirect:/academicTerm/{academicId}/course/add.htm";
 	}
 
-	
-	
+
+
 	@RequestMapping(value ="/academicTerm/{academicId}/course/add.htm", method = RequestMethod.POST, params="Undelete")
 	// Every Post have to return redirect
-	public String undeleteDegree(
-			@PathVariable("academicId") Long id_academicTerm,
-			@PathVariable("courseId") Long id_course,
-			@ModelAttribute("addCourse") @Valid Course course, Model model) {
-		
-		ResultClass<Boolean> result = serviceCourse.unDeleteCourse(course);
-		
-		if (!result.hasErrors())
+	public String undeleteCourse(
+			@PathVariable("academicId") Long id_academic,
+			@ModelAttribute("addCourse") @Valid Course course,
+			BindingResult resultBinding,
+			RedirectAttributes attr) {
 
-			return "redirect:/academicTerm/" + id_academicTerm + ".htm";		
-		else{
-			model.addAttribute("addCourse", course);
-			if (result.isElementDeleted())
-				model.addAttribute("unDelete", true); 
-			model.addAttribute("errors", result.getErrorsList());
-			return "course/add";
+
+
+		if(!resultBinding.hasErrors()){
+			ResultClass<Course> resultReturned = serviceCourse.unDeleteCourse(course, id_academic);
+			
+			if (!resultReturned.hasErrors()){
+				attr.addFlashAttribute("addCourse", resultReturned.getSingleElement());
+				return "redirect:/academicTerm/" + id_academic + "/course/"+ resultReturned.getSingleElement().getId() +"/modify.htm";		
+
+			}else{
+				//				attr.addFlashAttribute("addCourse", course);
+				if (resultReturned.isElementDeleted())
+					attr.addFlashAttribute("unDelete", true); 
+				attr.addFlashAttribute("errors", resultReturned.getErrorsList());
+				//				attr.addFlashAttribute("addCourse", course.getSubject().getId());
+
+
+//				return "redirect:/academicTerm/{academicId}/course/add.htm";
+			}
+		}else{
+			attr.addFlashAttribute("org.springframework.validation.BindingResult.addAcademicTerm", resultBinding);
+			//			attr.addFlashAttribute("addCourse", course);
+
 		}
+		AcademicTerm a = serviceAcademic.getAcademicTerm(id_academic).getSingleElement();
+		attr.addFlashAttribute("academicTerm", a);
+		attr.addFlashAttribute("subjects",serviceSubject.getSubjectForDegree(a.getDegree()).getSingleElement());
+
+		if (course.getSubject() != null)
+			attr.addFlashAttribute("idSubject", course.getSubject().getId());
+		return "redirect:/academicTerm/{academicId}/course/add.htm";
+
+
 	}
 	/**
 	 * Methods for view courses
@@ -139,17 +191,17 @@ public class CourseController {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		Course p = serviceCourse.getCourseAll(id);
+		Course p = serviceCourse.getCourseAll(id).getSingleElement();
 		myModel.put("course", p);
 
-//		List<Activity> activities = serviceActivity.getActivitiesForCourse(id);
+		//		List<Activity> activities = serviceActivity.getActivitiesForCourse(id);
 
 		if (p.getActivities() != null)
 			myModel.put("activities", p.getActivities());
-		
+
 		if (p.getGroups() != null)
 			myModel.put("groups", p.getGroups());
-		
+
 
 		return new ModelAndView("course/view", "model", myModel);
 	}
@@ -162,23 +214,26 @@ public class CourseController {
 	protected String formModifyCourses(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id, Model model)
-			throws ServletException {
+					throws ServletException {
 
-		Course p = serviceCourse.getCourse(id);
+		if(!model.containsAttribute("modifyCourse")){
+			Course p = serviceCourse.getCourse(id).getSingleElement();
 
-		AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic);
-		
-		Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree());
-		model.addAttribute("idSubject", p.getSubject().getId());
+			AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic).getSingleElement();
 
-		//Collection<Activity> activities  =serviceActivity.getAll();
-		// serviceSubject.getSubjectsForDegree(academic.getDegree().getId());
-		model.addAttribute("academicTerm", academic);
-		model.addAttribute("subjects", subjects);
+			Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree()).getSingleElement();
+			model.addAttribute("idSubject", p.getSubject().getId());
+
+			//Collection<Activity> activities  =serviceActivity.getAll();
+			// serviceSubject.getSubjectsForDegree(academic.getDegree().getId());
+			model.addAttribute("academicTerm", academic);
+			model.addAttribute("subjects", subjects);
+			
+
+			//model.addAttribute("activities", activities);
+			model.addAttribute("modifyCourse", p);
+		}
 		model.addAttribute("professors", serviceUser.getAllByRole("ROLE_PROFESSOR"));
-
-		//model.addAttribute("activities", activities);
-		model.addAttribute("modifyCourse", p);
 		return "course/modify";
 
 	}
@@ -194,29 +249,29 @@ public class CourseController {
 
 		//AcademicTerm y subject
 		if (!result.hasErrors()) {
-			Course course_aux = serviceCourse.getCourse(id_course);
-			course_aux.setAcademicTerm(modify.getAcademicTerm());
-			course_aux.setSubject(modify.getSubject());
-			
-			ResultClass<Boolean> results = serviceCourse.modifyCourse(course_aux);
+			//			Course course_aux = serviceCourse.getCourse(id_course).getSingleElement();
+			//			course_aux.setAcademicTerm(modify.getAcademicTerm());
+			//			course_aux.setSubject(modify.getSubject());
+
+			ResultClass<Boolean> results = serviceCourse.modifyCourse(modify, id_academic, id_course);
 			if (!result.hasErrors())
 
 				return "redirect:/academicTerm/" + id_academic + ".htm";	
 			else{
-					model.addAttribute("modifyCourse", modify);
-					if (results.isElementDeleted()){
-						model.addAttribute("addCourse", modify);
-						model.addAttribute("unDelete", true); 
-						model.addAttribute("errors", results.getErrorsList());
-						return "course/add";
-					}	
+				model.addAttribute("modifyCourse", modify);
+				if (results.isElementDeleted()){
+					model.addAttribute("addCourse", modify);
+					model.addAttribute("unDelete", true); 
 					model.addAttribute("errors", results.getErrorsList());
-					return "course/modify";
-				}
-				
+					return "course/add";
+				}	
+				model.addAttribute("errors", results.getErrorsList());
+				return "course/modify";
 			}
-			
-		
+
+		}
+
+
 
 		return "redirect:/error.htm";
 
@@ -230,7 +285,7 @@ public class CourseController {
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course) throws ServletException {
 
-		if (serviceCourse.deleteCourse(id_course)) {
+		if (serviceCourse.deleteCourse(id_course).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_academic + ".htm";
 		} else
 			return "redirect:/error.htm";
@@ -243,42 +298,42 @@ public class CourseController {
 	protected void initBinder(WebDataBinder binder) throws Exception {
 		binder.registerCustomEditor(Set.class, "subject",
 				new CustomCollectionEditor(Set.class) {
-					protected Object convertElement(Object element) {
-						if (element instanceof Subject) {
-							logger.info("Converting...{}", element);
-							return element;
-						}
+			protected Object convertElement(Object element) {
+				if (element instanceof Subject) {
+					logger.info("Converting...{}", element);
+					return element;
+				}
 
-						if (element instanceof String) {
-							Subject subject = serviceSubject
-									.getSubjectByName(element.toString());
-							logger.info("Loking up {} to {}", element, subject);
-							return subject;
-						}
-						System.out.println("Don't know what to do with: "
-								+ element);
-						return null;
-					}
-				});
+				if (element instanceof String) {
+					Subject subject = serviceSubject
+							.getSubjectByName(element.toString()).getSingleElement();
+					logger.info("Loking up {} to {}", element, subject);
+					return subject;
+				}
+				System.out.println("Don't know what to do with: "
+						+ element);
+				return null;
+			}
+		});
 
 		binder.registerCustomEditor(Set.class, "professors",
 				new CustomCollectionEditor(Set.class) {
-					protected Object convertElement(Object element) {
-						if (element instanceof User) {
-							logger.info("Converting...{}", element);
-							return element;
-						}
+			protected Object convertElement(Object element) {
+				if (element instanceof User) {
+					logger.info("Converting...{}", element);
+					return element;
+				}
 
-						if (element instanceof String) {
-							User user = serviceUser.findByUsername(element.toString());
-								
-							logger.info("Loking up {} to {}", element, user);
-							return user;
-						}
-						System.out.println("Don't know what to do with: "
-								+ element);
-						return null;
-					}
-				});
+				if (element instanceof String) {
+					User user = serviceUser.findByUsername(element.toString());
+
+					logger.info("Loking up {} to {}", element, user);
+					return user;
+				}
+				System.out.println("Don't know what to do with: "
+						+ element);
+				return null;
+			}
+		});
 	}
 }

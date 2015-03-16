@@ -38,6 +38,7 @@ public class ModuleController {
 		// newDegree.setCode(serviceDegree.getNextCode());
 
 		model.addAttribute("addModule", newModule);
+		model.addAttribute("valueButton", "Add");
 		return "module/add";
 	}
 
@@ -48,14 +49,15 @@ public class ModuleController {
 			@ModelAttribute("addModule") Module newModule,
 			Model model) {
 		
-		ResultClass<Boolean> result = serviceModule.addModule(newModule, id_degree);
+		ResultClass<Module> result = serviceModule.addModule(newModule, id_degree);
 		if (!result.hasErrors())
 			//		if (created)
 			return "redirect:/degree/" +id_degree+ ".htm";		
 		else{
-			model.addAttribute("addModule", newModule);
+			model.addAttribute("addModule", result.getSingleElement());
 			if (result.isElementDeleted())
 				model.addAttribute("unDelete", result.isElementDeleted()); 
+			model.addAttribute("valueButton", "Add");
 			model.addAttribute("errors", result.getErrorsList());
 			return "module/add";
 
@@ -70,15 +72,16 @@ public class ModuleController {
 			@ModelAttribute("addModule") Module module, Model model,
 			@PathVariable("degreeId") Long id_degree) {
 		
-		ResultClass<Boolean> result = serviceModule.unDeleteModule(module);
+		ResultClass<Module> result = serviceModule.unDeleteModule(module, id_degree);
 		
 		if (!result.hasErrors())
 
-			return "redirect:/degree/" + id_degree + ".htm";
+			return "redirect:/degree/" + id_degree +  "/module/" + result.getSingleElement().getId() + "/modify.htm";
 		else{
 			model.addAttribute("addModule", module);
 			if (result.isElementDeleted())
 				model.addAttribute("unDelete", true); 
+			model.addAttribute("valueButton", "Add");
 			model.addAttribute("errors", result.getErrorsList());
 			return "module/add";
 		}
@@ -96,16 +99,18 @@ public class ModuleController {
 
 	{
 		
-		ResultClass<Boolean> result = serviceModule.modifyModule(modify, id_module);
+		ResultClass<Boolean> result = serviceModule.modifyModule(modify, id_module, id_degree);
 		if (!result.hasErrors())
 
 			return "redirect:/degree/" + id_degree + ".htm";
 		else{
 				model.addAttribute("modifyModule", modify);
 				if (result.isElementDeleted()){
+					
 					model.addAttribute("addModule", modify);
-					model.addAttribute("unDelete", true); 
+//					model.addAttribute("unDelete", true); 
 					model.addAttribute("errors", result.getErrorsList());
+					model.addAttribute("valueButton", "Modify");
 					return "module/add";
 				}	
 				model.addAttribute("errors", result.getErrorsList());
@@ -115,17 +120,19 @@ public class ModuleController {
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/modify.htm", method = RequestMethod.GET)
-	protected ModelAndView formModifyModules(
+	protected String formModifyModules(
 			@PathVariable("degreeId") Long id_degree,
-			@PathVariable("moduleId") Long id_module)
+			@PathVariable("moduleId") Long id_module,
+			Model model)
 			throws ServletException {
 		
-		ModelAndView model = new ModelAndView();
-		Module p = serviceModule.getModule(id_module);
-		model.addObject("modifyModule", p);
-		model.setViewName("module/modify");
+//		ModelAndView model = new ModelAndView();
+		Module p = serviceModule.getModule(id_module).getSingleElement();
+		model.addAttribute("addModule", p);
+		model.addAttribute("valueButton", "Modify");
+//		model.setViewName("module/add");
 
-		return model;
+		return "module/add";
 	}
 
 	/**
@@ -137,7 +144,7 @@ public class ModuleController {
 						@PathVariable("degreeId") Long id_degree)
 						throws ServletException {
 
-		if (serviceModule.deleteModule(id_module)) {
+		if (serviceModule.deleteModule(id_module).getSingleElement()) {
 			return "redirect:/degree/" + id_degree + ".htm";
 		} else
 			return "redirect:/error.htm";
@@ -155,7 +162,7 @@ public class ModuleController {
 
 		// Degree p = serviceDegree.getDegree(id);
 
-		Module p = serviceModule.getModuleAll(id_module, id_degree);
+		Module p = serviceModule.getModuleAll(id_module).getSingleElement();
 
 		myModel.put("module", p);
 		if (p.getTopics() != null)

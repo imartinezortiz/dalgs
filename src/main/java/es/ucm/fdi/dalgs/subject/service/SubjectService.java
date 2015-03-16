@@ -51,41 +51,51 @@ public class SubjectService {
 				errors.add("Element is deleted");
 
 			}
-			result.setE(false);
+			result.setSingleElement(false);
 			result.setErrorsList(errors);
 		}
 		else{
-			subject.setTopic(serviceTopic.getTopic(id_topic));
+			subject.setTopic(serviceTopic.getTopic(id_topic).getSingleElement());
 			boolean r = daoSubject.addSubject(subject);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;		
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public List<Subject> getAll() {
-		return daoSubject.getAll();
+	public ResultClass<List<Subject>> getAll() {
+		
+		
+		ResultClass<List<Subject>> result = new ResultClass<List<Subject>>();
+		result.setSingleElement(daoSubject.getAll());
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
-	public Subject getSubject(Long id) {
-		return daoSubject.getSubject(id);
+	public ResultClass<Subject> getSubject(Long id) {
+		ResultClass<Subject> result = new ResultClass<Subject>();
+		result.setSingleElement(daoSubject.getSubject(id));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteSubject(Long id) {
+	public ResultClass<Boolean>deleteSubject(Long id) {
 		daoSubject.getSubject(id).getCompetences().clear();
-		return daoSubject.deleteSubject(id);
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		result.setSingleElement(daoSubject.deleteSubject(id));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public List<Subject> getSubjectsForTopic(Long id_topic) {
-		return daoSubject.getSubjectsForTopic(id_topic);
+	public ResultClass<List<Subject>> getSubjectsForTopic(Long id_topic) {
+		ResultClass<List<Subject>> result = new ResultClass<List<Subject>>();
+		result.setSingleElement(daoSubject.getSubjectsForTopic(id_topic));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -109,66 +119,78 @@ public class SubjectService {
 
 			}
 			result.setErrorsList(errors);
-			result.setE(false);
+			result.setSingleElement(false);
 		}
 		else{
 			modifySubject.setInfo(subject.getInfo());
 			boolean r = daoSubject.saveSubject(modifySubject);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public boolean addCompetences(Subject modify, Long id_subject) {
-
+	public ResultClass<Boolean> addCompetences(Subject modify, Long id_subject) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		Subject subject = daoSubject.getSubject(id_subject);
 		subject.setInfo(modify.getInfo());
 		subject.setCompetences(modify.getCompetences());		
-
-		return daoSubject.saveSubject(subject);
+		result.setSingleElement(daoSubject.saveSubject(subject));
+		return result;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public String getNextCode() {
-		return daoSubject.getNextCode();
+	public ResultClass<String> getNextCode() {
+		ResultClass<String> result = new ResultClass<String>();
+		result.setSingleElement(daoSubject.getNextCode());
+		return result;
 
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public Subject getSubjectForCourse(Long id) {
-		return daoSubject.getSubjectForCourse(id);
+	public ResultClass<Subject> getSubjectForCourse(Long id) {
+		ResultClass<Subject> result = new ResultClass<Subject>();
+		result.setSingleElement(daoSubject.getSubjectForCourse(id));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public Subject getSubjectByName(String string) {
-		return daoSubject.getSubjectByName(string);
+	public ResultClass<Subject> getSubjectByName(String string) {
+		ResultClass<Subject> result = new ResultClass<Subject>();
+		result.setSingleElement(daoSubject.getSubjectByName(string));
+		return result;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public Subject getSubjectAll(Long id_subject) {
+	public ResultClass<Subject> getSubjectAll(Long id_subject) {
+		ResultClass<Subject> result = new ResultClass<Subject>();
 		Subject p = daoSubject.getSubject(id_subject);;
 		p.setCompetences(serviceCompetence.getCompetencesForSubject(id_subject));
-		return p;
+		result.setSingleElement(p);
+		return result;
 	}
 
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public Collection<Subject> getSubjectForDegree(Degree degree) {
-		return daoSubject.getSubjectForDegree(degree);
+	public ResultClass<Collection<Subject>> getSubjectForDegree(Degree degree) {
+		ResultClass<Collection<Subject>> result = new ResultClass<Collection<Subject>>();
+		result.setSingleElement(daoSubject.getSubjectForDegree(degree));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public boolean deleteSubjectsForTopic(Collection<Topic> topics) {	
-		return daoSubject.deleteSubjectsForTopics(topics);
+	public ResultClass<Boolean> deleteSubjectsForTopic(Collection<Topic> topics) {	
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		result.setSingleElement(daoSubject.deleteSubjectsForTopics(topics));
+		return result;
 	}
 
 	public ResultClass<Boolean> unDeleteSubject(Subject subject){
@@ -192,7 +214,7 @@ public class SubjectService {
 			s.setInfo(subject.getInfo());
 			boolean r = daoSubject.saveSubject(s);
 			if(r) 
-				result.setE(true);	
+				result.setSingleElement(true);	
 
 		}
 		return result;

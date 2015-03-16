@@ -64,7 +64,7 @@ public class SubjectController {
 			@PathVariable("topicId") Long id_topic,
 			@PathVariable("subjectId") Long id_subject) throws ServletException {
 
-		if (serviceSubject.deleteSubject(id_subject)) {
+		if (serviceSubject.deleteSubject(id_subject).getSingleElement()) {
 			return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
 		} else
 			return "redirect:/error.htm";
@@ -169,7 +169,7 @@ public class SubjectController {
 				@PathVariable("topicId") Long id_topic,
 				@PathVariable("subjectId") Long id_subject) throws ServletException {
 			ModelAndView model = new ModelAndView();
-			Subject p = serviceSubject.getSubject(id_subject);
+			Subject p = serviceSubject.getSubject(id_subject).getSingleElement();
 
 			model.addObject("modifySubject", p);
 			model.addObject("competences", p.getCompetences());
@@ -188,7 +188,7 @@ public class SubjectController {
 
 			Map<String, Object> myModel = new HashMap<String, Object>();
 
-			Subject p = serviceSubject.getSubjectAll(id_subject);
+			Subject p = serviceSubject.getSubjectAll(id_subject).getSingleElement();
 
 			myModel.put("subject", p);
 			myModel.put("topic", p.getTopic());
@@ -203,7 +203,7 @@ public class SubjectController {
 		 * Method for manage competences of a subject
 		 */
 
-		@RequestMapping(value = "/degree/{degreeId}/subject/{subjectId}/competence/{competenceId}/delete.htm", method = RequestMethod.GET)
+		@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/competence/{competenceId}/delete.htm", method = RequestMethod.GET)
 		public String formDeleteCompetenceFromSubject(
 				@PathVariable("degreeId") Long id_degree,
 				@PathVariable("moduleId") Long id_module,
@@ -213,7 +213,7 @@ public class SubjectController {
 						throws ServletException {
 
 			if (serviceCompetence.deleteCompetenceFromSubject(id_competence,
-					id_subject)) {
+					id_subject).getSingleElement()) {
 				return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
 			} else
 				return "redirect:/error.htm";
@@ -224,7 +224,7 @@ public class SubjectController {
 				@PathVariable("degreeId") Long id_degree,
 				@PathVariable("subjectId") Long id_subject, Model model) {
 
-			Subject s = serviceSubject.getSubject(id_subject);
+			Subject s = serviceSubject.getSubject(id_subject).getSingleElement();
 			Collection<Competence> competences = serviceCompetence
 					.getCompetencesForDegree(id_degree);
 
@@ -276,7 +276,7 @@ public class SubjectController {
 					}
 					if (element instanceof String) {
 						Competence competence = serviceCompetence
-								.getCompetenceByName(element.toString());
+								.getCompetenceByName(element.toString()).getSingleElement();
 						logger.info("Loking up {} to {}", element,
 								competence);
 

@@ -15,7 +15,7 @@ public class LearningGoalInfo {
 	@NotEmpty @NotNull @NotBlank
 	@Size(min=1, max=20)
 	@Basic(optional = false)
-	@Column(name = "code_learning", nullable = false)
+	@Column(name = "code_learning", nullable = false, unique=true)
 	private String code;
 	
 	@NotEmpty @NotNull @NotBlank

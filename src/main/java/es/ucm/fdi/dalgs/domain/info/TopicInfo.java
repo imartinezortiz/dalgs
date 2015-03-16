@@ -15,7 +15,7 @@ public class TopicInfo {
 	@NotEmpty @NotNull @NotBlank
 	@Size(min=1, max=20)
 	@Basic(optional = false)
-	@Column(name = "code_topic", nullable = false, unique=true)
+	@Column(name = "code_topic", nullable = false)
 	private String code;
 	
 	@NotEmpty @NotNull @NotBlank

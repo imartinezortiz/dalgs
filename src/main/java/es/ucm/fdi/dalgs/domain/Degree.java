@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -29,13 +28,17 @@ public class Degree implements Cloneable {
 	@Embedded
 	private DegreeInfo info;
 
+
+
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree",cascade = CascadeType.ALL)
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
 	private Collection<Module> modules = new ArrayList<Module>();
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree",cascade = CascadeType.ALL)
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
 	private Collection<Competence> competences = new ArrayList<Competence>();
 
 	public Degree() {

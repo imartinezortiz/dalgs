@@ -23,7 +23,7 @@
 			</h3>
 		</div>
 		<div class="panel-body">
-			<form:form method="post" commandName="addDegree" role="form">
+			<form:form method="post" commandName="Degree" role="form">
 				<div class="form-group">
 					<label>Code: </label>
 					<form:input path="info.code" class="form-control"
@@ -41,7 +41,7 @@
 				</div>
 
 				<br>
-				<input type="submit" class="btn btn-success" value="Add" name="Add" />
+				<input type="submit" class="btn btn-success" value="${valueButton}" name="${valueButton}" />
 				<c:if test="${unDelete == true}">
 					<input type="submit" class="btn btn-success" value="Undelete" name="Undelete"/>
 				</c:if>

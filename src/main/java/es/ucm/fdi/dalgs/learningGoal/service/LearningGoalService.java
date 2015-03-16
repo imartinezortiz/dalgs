@@ -46,22 +46,24 @@ public class LearningGoalService {
 				errors.add("Element is deleted");
 
 			}
-			result.setE(false);
+			result.setSingleElement(false);
 			result.setErrorsList(errors);
 		}
 		else{
-			learningGoal.setCompetence(serviceCompetence.getCompetence(id_competence));
+			learningGoal.setCompetence(serviceCompetence.getCompetence(id_competence).getSingleElement());
 			boolean r = daoLearningGoal.addLearningGoal(learningGoal);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;		
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public LearningGoal getLearningGoal(Long id_learningGoal) {
-		return daoLearningGoal.getLearningGoal(id_learningGoal);
+	public ResultClass<LearningGoal> getLearningGoal(Long id_learningGoal) {
+		ResultClass<LearningGoal> result = new ResultClass<LearningGoal>();
+		result.setSingleElement(daoLearningGoal.getLearningGoal(id_learningGoal));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
@@ -85,13 +87,13 @@ public class LearningGoalService {
 
 			}
 			result.setErrorsList(errors);
-			result.setE(false);
+			result.setSingleElement(false);
 		}
 		else{
 			modifyLearning.setInfo(learningGoal.getInfo());
 			boolean r = daoLearningGoal.saveLearningGoal(modifyLearning);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;
 
@@ -99,45 +101,58 @@ public class LearningGoalService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public boolean deleteLearningGoal(Long id_learningGoal) {
-//		boolean deleteFromActivities = serviceActivity.deleteLearningActivities(daoLearningGoal.getLearningGoal(id_learningGoal));;
-//		if (deleteFromActivities)
-			return daoLearningGoal.deleteLearningGoal(id_learningGoal);
-//		return false;
+	public ResultClass<Boolean> deleteLearningGoal(Long id_learningGoal) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		result.setSingleElement(daoLearningGoal.deleteLearningGoal(id_learningGoal));
+		return result;
+
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
-	public boolean deleteLearningGoalForCompetence(Competence competence) {
-		return daoLearningGoal.deleteLearningGoalForCompetence(competence);
+	public ResultClass<Boolean> deleteLearningGoalForCompetence(Competence competence) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		result.setSingleElement(daoLearningGoal.deleteLearningGoalForCompetence(competence));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
-	public Collection<LearningGoal> getLearningGoalsFromCourse(Long id_course, Activity activity) {
+	public ResultClass<Collection<LearningGoal>> getLearningGoalsFromCourse(Long id_course, Activity activity) {
+		ResultClass<Collection<LearningGoal>> result = new ResultClass<Collection<LearningGoal>>();
 		Collection<LearningGoal> learningGoals = daoLearningGoal.getLearningGoalsFromActivity(activity);
-		if(!learningGoals.isEmpty())
-			return daoLearningGoal.getLearningGoalsFromCourse(id_course, learningGoals);
-		else return daoLearningGoal.getLearningGoalsFromCourse(id_course);
+		if(!learningGoals.isEmpty()){
+			result.setSingleElement(daoLearningGoal.getLearningGoalsFromCourse(id_course, learningGoals));
+			return result;
+		}
+			
+		else{
+			result.setSingleElement(daoLearningGoal.getLearningGoalsFromCourse(id_course));
+			return result;
+		}
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public LearningGoal getLearningGoalByName(String name) {
-		return daoLearningGoal.getLearningGoalByName(name);
+	public ResultClass<LearningGoal> getLearningGoalByName(String name) {
+		ResultClass<LearningGoal> result = new ResultClass<LearningGoal>();
+		result.setSingleElement(daoLearningGoal.getLearningGoalByName(name));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	public Collection<LearningGoal> getLearningGoalsFromCompetence(
+	public ResultClass<Collection<LearningGoal>> getLearningGoalsFromCompetence(
 			Competence competence) {
-
-		return daoLearningGoal.getLearningGoalsFromCompetence(competence);
+		ResultClass<Collection<LearningGoal>> result = new ResultClass<Collection<LearningGoal>>();
+		result.setSingleElement(daoLearningGoal.getLearningGoalsFromCompetence(competence));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
-	public boolean deleteLearningGoalForCompetences(
+	public ResultClass<Boolean> deleteLearningGoalForCompetences(
 			Collection<Competence> competences) {
-
-		return daoLearningGoal.deleteLearningGoalsForCompetences(competences);
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		result.setSingleElement(daoLearningGoal.deleteLearningGoalsForCompetences(competences));
+		return result;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
@@ -163,7 +178,7 @@ public class LearningGoalService {
 			l.setInfo(learning.getInfo());
 			boolean r = daoLearningGoal.saveLearningGoal(l);
 			if(r) 
-				result.setE(true);	
+				result.setSingleElement(true);	
 
 		}
 		return result;

@@ -16,12 +16,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import es.ucm.fdi.dalgs.domain.info.TopicInfo;
 
 @Entity
-@Table(name = "topic")
-public class Topic implements Cloneable {
+@Table(name = "topic", uniqueConstraints = @UniqueConstraint(columnNames = {
+		"code_topic", "id_module" }))
+public class Topic implements Cloneable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

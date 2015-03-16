@@ -58,7 +58,7 @@ public class ActivityController {
 			@PathVariable("courseId") Long id_course, Model model) {
 		Activity newActivity = new Activity();
 		// newActivity.setCode(serviceActivity.getNextCode());
-		newActivity.setCourse(serviceCourse.getCourse(id_course));
+		newActivity.setCourse(serviceCourse.getCourse(id_course).getSingleElement());
 		model.addAttribute("addactivity", newActivity);
 
 		return "activity/add";
@@ -127,10 +127,10 @@ public class ActivityController {
 			@PathVariable("activityId") Long id_activity, Model model)
 			throws ServletException {
 
-		Activity p = serviceActivity.getActivity(id_activity);
+		Activity p = serviceActivity.getActivity(id_activity).getSingleElement();
 		model.addAttribute("courseId", id_course);
 		
-		Collection<LearningGoal> lg = serviceLearningGoal.getLearningGoalsFromCourse(id_course, p);
+		Collection<LearningGoal> lg = serviceLearningGoal.getLearningGoalsFromCourse(id_course, p).getSingleElement();
 		
 		model.addAttribute("learningGoalStatus", p.getLearningGoalStatus());
 		model.addAttribute("modifyactivity", p);
@@ -187,7 +187,7 @@ public class ActivityController {
 		// Activity p = serviceActivity.getActivity(id);
 		if (!result.hasErrors())
 
-			if (serviceActivity.addLearningGoals(id, learningGoalStatus))
+			if (serviceActivity.addLearningGoals(id, learningGoalStatus).getSingleElement())
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
 						+ id_course + "/activity/" + id + "/modify.htm";
 		// if(serviceActivity.existsCompetenceStatus(id,
@@ -218,7 +218,7 @@ public class ActivityController {
 			@PathVariable("activityId") Long id_activity)
 			throws ServletException {
 
-		if (serviceActivity.deleteActivity(id_activity)) {
+		if (serviceActivity.deleteActivity(id_activity).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
 					+ id_course + ".htm";
 		} else
@@ -238,7 +238,7 @@ public class ActivityController {
 			throws ServletException {
 
 		if (serviceActivity.deleteLearningActivity(id_learningStatus,
-				id_Activity)) {
+				id_Activity).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
 					+ id_course + "/activity/" + id_Activity + "/modify.htm";
 		} else
@@ -257,7 +257,7 @@ public class ActivityController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		Activity a = serviceActivity.getActivity(id_activity);
+		Activity a = serviceActivity.getActivity(id_activity).getSingleElement();
 
 		model.put("activity", a);
 		model.put("activityId", id_activity);
@@ -281,7 +281,7 @@ public class ActivityController {
 						}
 						if (element instanceof String) {
 							LearningGoal learning = serviceLearningGoal
-									.getLearningGoalByName(element.toString());
+									.getLearningGoalByName(element.toString()).getSingleElement();
 							logger.info("Loking up {} to {}", element,
 									learning);
 
