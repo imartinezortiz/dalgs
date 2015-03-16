@@ -44,14 +44,14 @@ public class TopicService {
 				errors.add("Element is deleted");
 
 			}
-			result.setE(false);
+			result.setSingleElement(false);
 			result.setErrorsList(errors);
 		}
 		else{
-			topic.setModule(serviceModule.getModule(id_module).getE());
+			topic.setModule(serviceModule.getModule(id_module).getSingleElement());
 			boolean r = daoTopic.addTopic(topic);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;		
 	}
@@ -60,7 +60,7 @@ public class TopicService {
 	@Transactional(readOnly=true)
 	public ResultClass<List<Topic>> getAll() {
 		ResultClass<List<Topic>> result = new ResultClass<List<Topic>>();
-		result.setE(daoTopic.getAll());
+		result.setSingleElement(daoTopic.getAll());
 		return result;
 	}
 
@@ -85,13 +85,13 @@ public class TopicService {
 
 			}
 			result.setErrorsList(errors);
-			result.setE(false);
+			result.setSingleElement(false);
 		}
 		else{
 			modifyTopic.setInfo(topic.getInfo());
 			boolean r = daoTopic.saveTopic(modifyTopic);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;
 	}
@@ -100,7 +100,7 @@ public class TopicService {
 	@Transactional(readOnly=true)
 	public ResultClass<Topic> getTopic(Long id) {
 		ResultClass<Topic> result = new ResultClass<Topic>();
-		result.setE(daoTopic.getTopic(id));
+		result.setSingleElement(daoTopic.getTopic(id));
 		return result;
 	}
 
@@ -111,11 +111,11 @@ public class TopicService {
 		Topic topic = daoTopic.getTopic(id);
 		Collection<Topic> topics = new ArrayList<Topic>();
 		topics.add(topic);
-		if (serviceSubject.deleteSubjectsForTopic(topics).getE()){
-			result.setE(daoTopic.deleteTopic(topic));
+		if (serviceSubject.deleteSubjectsForTopic(topics).getSingleElement()){
+			result.setSingleElement(daoTopic.deleteTopic(topic));
 			return result;
 		}
-		result.setE(false);
+		result.setSingleElement(false);
 
 		return result;
 	}
@@ -125,8 +125,8 @@ public class TopicService {
 	public ResultClass<Topic> getTopicAll(Long id_topic) {
 		ResultClass<Topic> result = new ResultClass<Topic>();
 		Topic p = daoTopic.getTopic(id_topic);
-		p.setSubjects(serviceSubject.getSubjectsForTopic(id_topic).getE());
-		result.setE(p);
+		p.setSubjects(serviceSubject.getSubjectsForTopic(id_topic).getSingleElement());
+		result.setSingleElement(p);
 		return result;
 	}
 
@@ -134,7 +134,7 @@ public class TopicService {
 	@Transactional(readOnly=true)
 	public ResultClass<Collection<Topic>> getTopicsForModule(Long id) {
 		ResultClass<Collection<Topic>> result = new ResultClass<Collection<Topic>>();
-		result.setE(daoTopic.getTopicsForModule(id));
+		result.setSingleElement(daoTopic.getTopicsForModule(id));
 		return result;
 	}
 
@@ -155,11 +155,11 @@ public class TopicService {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		Collection<Topic> topics = daoTopic.getTopicsForModules(modules);
 
-		if(serviceSubject.deleteSubjectsForTopic(topics).getE()){
-			result.setE(daoTopic.deleteTopicsForModules(modules));
+		if(serviceSubject.deleteSubjectsForTopic(topics).getSingleElement()){
+			result.setSingleElement(daoTopic.deleteTopicsForModules(modules));
 			return result;
 		}
-		result.setE(false);
+		result.setSingleElement(false);
 		return result;
 	}
 
@@ -168,12 +168,12 @@ public class TopicService {
 	public ResultClass<Boolean> deleteTopicsForModule(Module module) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		if(!module.getTopics().isEmpty())
-			if(serviceSubject.deleteSubjectsForTopic(module.getTopics()).getE()){
-				result.setE(daoTopic.deleteTopicsForModule(module));
+			if(serviceSubject.deleteSubjectsForTopic(module.getTopics()).getSingleElement()){
+				result.setSingleElement(daoTopic.deleteTopicsForModule(module));
 				return result;
 			}
-			else result.setE(false);
-		else result.setE(true);
+			else result.setSingleElement(false);
+		else result.setSingleElement(true);
 		
 		return result;
 	}
@@ -201,7 +201,7 @@ public class TopicService {
 			t.setInfo(topic.getInfo());
 			boolean r = daoTopic.saveTopic(t);
 			if(r) 
-				result.setE(true);	
+				result.setSingleElement(true);	
 
 		}
 		return result;

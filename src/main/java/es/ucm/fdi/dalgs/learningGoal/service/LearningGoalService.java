@@ -46,14 +46,14 @@ public class LearningGoalService {
 				errors.add("Element is deleted");
 
 			}
-			result.setE(false);
+			result.setSingleElement(false);
 			result.setErrorsList(errors);
 		}
 		else{
-			learningGoal.setCompetence(serviceCompetence.getCompetence(id_competence).getE());
+			learningGoal.setCompetence(serviceCompetence.getCompetence(id_competence).getSingleElement());
 			boolean r = daoLearningGoal.addLearningGoal(learningGoal);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;		
 	}
@@ -62,7 +62,7 @@ public class LearningGoalService {
 	@Transactional(readOnly = true)
 	public ResultClass<LearningGoal> getLearningGoal(Long id_learningGoal) {
 		ResultClass<LearningGoal> result = new ResultClass<LearningGoal>();
-		result.setE(daoLearningGoal.getLearningGoal(id_learningGoal));
+		result.setSingleElement(daoLearningGoal.getLearningGoal(id_learningGoal));
 		return result;
 	}
 
@@ -87,13 +87,13 @@ public class LearningGoalService {
 
 			}
 			result.setErrorsList(errors);
-			result.setE(false);
+			result.setSingleElement(false);
 		}
 		else{
 			modifyLearning.setInfo(learningGoal.getInfo());
 			boolean r = daoLearningGoal.saveLearningGoal(modifyLearning);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;
 
@@ -103,7 +103,7 @@ public class LearningGoalService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteLearningGoal(Long id_learningGoal) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setE(daoLearningGoal.deleteLearningGoal(id_learningGoal));
+		result.setSingleElement(daoLearningGoal.deleteLearningGoal(id_learningGoal));
 		return result;
 
 	}
@@ -111,7 +111,7 @@ public class LearningGoalService {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	public ResultClass<Boolean> deleteLearningGoalForCompetence(Competence competence) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setE(daoLearningGoal.deleteLearningGoalForCompetence(competence));
+		result.setSingleElement(daoLearningGoal.deleteLearningGoalForCompetence(competence));
 		return result;
 	}
 
@@ -121,12 +121,12 @@ public class LearningGoalService {
 		ResultClass<Collection<LearningGoal>> result = new ResultClass<Collection<LearningGoal>>();
 		Collection<LearningGoal> learningGoals = daoLearningGoal.getLearningGoalsFromActivity(activity);
 		if(!learningGoals.isEmpty()){
-			result.setE(daoLearningGoal.getLearningGoalsFromCourse(id_course, learningGoals));
+			result.setSingleElement(daoLearningGoal.getLearningGoalsFromCourse(id_course, learningGoals));
 			return result;
 		}
 			
 		else{
-			result.setE(daoLearningGoal.getLearningGoalsFromCourse(id_course));
+			result.setSingleElement(daoLearningGoal.getLearningGoalsFromCourse(id_course));
 			return result;
 		}
 	}
@@ -135,7 +135,7 @@ public class LearningGoalService {
 	@Transactional(readOnly = true)
 	public ResultClass<LearningGoal> getLearningGoalByName(String name) {
 		ResultClass<LearningGoal> result = new ResultClass<LearningGoal>();
-		result.setE(daoLearningGoal.getLearningGoalByName(name));
+		result.setSingleElement(daoLearningGoal.getLearningGoalByName(name));
 		return result;
 	}
 
@@ -143,7 +143,7 @@ public class LearningGoalService {
 	public ResultClass<Collection<LearningGoal>> getLearningGoalsFromCompetence(
 			Competence competence) {
 		ResultClass<Collection<LearningGoal>> result = new ResultClass<Collection<LearningGoal>>();
-		result.setE(daoLearningGoal.getLearningGoalsFromCompetence(competence));
+		result.setSingleElement(daoLearningGoal.getLearningGoalsFromCompetence(competence));
 		return result;
 	}
 
@@ -151,7 +151,7 @@ public class LearningGoalService {
 	public ResultClass<Boolean> deleteLearningGoalForCompetences(
 			Collection<Competence> competences) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setE(daoLearningGoal.deleteLearningGoalsForCompetences(competences));
+		result.setSingleElement(daoLearningGoal.deleteLearningGoalsForCompetences(competences));
 		return result;
 	}
 	
@@ -178,7 +178,7 @@ public class LearningGoalService {
 			l.setInfo(learning.getInfo());
 			boolean r = daoLearningGoal.saveLearningGoal(l);
 			if(r) 
-				result.setE(true);	
+				result.setSingleElement(true);	
 
 		}
 		return result;

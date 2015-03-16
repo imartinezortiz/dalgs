@@ -20,14 +20,14 @@ public class ResultClass<E> implements Collection<E>{
 		
 	}
 	
-	public E getE() {
+	public E getSingleElement() {
 		if (this.e.size() == 0) {
 			return null;
 		}
 		return this.e.get(0);
 	}
 	
-	public void setE(E e) {
+	public void setSingleElement(E e) {
 		this.e.clear();
 		this.e.add(e);
 	}

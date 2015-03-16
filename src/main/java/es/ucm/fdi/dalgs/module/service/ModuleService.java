@@ -43,15 +43,15 @@ public class ModuleService {
 			if (moduleExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
-				result.setE(moduleExists);
+				result.setSingleElement(moduleExists);
 			}
-			else result.setE(module);
+			else result.setSingleElement(module);
 			result.setErrorsList(errors);
 		}
 		else{
-			module.setDegree(serviceDegree.getDegree(id_degree).getE());
+			module.setDegree(serviceDegree.getDegree(id_degree).getSingleElement());
 			daoModule.addModule(module);
-			result.setE(module);
+			result.setSingleElement(module);
 				
 		}
 		
@@ -63,7 +63,7 @@ public class ModuleService {
 	@Transactional(readOnly=true)
 	public ResultClass<List<Module>> getAll() {
 		ResultClass<List<Module>> result = new ResultClass<List<Module>>();
-		result.setE(daoModule.getAll());
+		result.setSingleElement(daoModule.getAll());
 		return result;
 	}
 
@@ -88,13 +88,13 @@ public class ModuleService {
 
 			}
 			result.setErrorsList(errors);
-			result.setE(false);
+			result.setSingleElement(false);
 		}
 		else{
 			modifyModule.setInfo(module.getInfo());
 			boolean r = daoModule.saveModule(modifyModule);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;
 	}
@@ -103,7 +103,7 @@ public class ModuleService {
 	@Transactional(readOnly=true)
 	public ResultClass<Module> getModule(Long id) {
 		ResultClass<Module> result = new ResultClass<Module>();
-		result.setE(daoModule.getModule(id));
+		result.setSingleElement(daoModule.getModule(id));
 		return result;
 	}
 
@@ -112,11 +112,11 @@ public class ModuleService {
 	public ResultClass<Boolean> deleteModule(Long id) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		Module module = daoModule.getModule(id);
-		if(serviceTopic.deleteTopicsForModule(module).getE()){
-			result.setE(daoModule.deleteModule(module));
+		if(serviceTopic.deleteTopicsForModule(module).getSingleElement()){
+			result.setSingleElement(daoModule.deleteModule(module));
 			return result;
 		}
-		result.setE(false);
+		result.setSingleElement(false);
 		return result;
 	}
 
@@ -125,8 +125,8 @@ public class ModuleService {
 	public ResultClass<Module> getModuleAll(Long id_module) {
 		ResultClass<Module> result = new ResultClass<Module>();
 		Module p = daoModule.getModule(id_module);
-		p.setTopics(serviceTopic.getTopicsForModule(id_module).getE());
-		result.setE(p);
+		p.setTopics(serviceTopic.getTopicsForModule(id_module).getSingleElement());
+		result.setSingleElement(p);
 		return result;
 	}
 
@@ -134,7 +134,7 @@ public class ModuleService {
 	@Transactional(readOnly=true)
 	public ResultClass<Collection<Module>> getModulesForDegree(Long id) {
 		ResultClass<Collection<Module>> result = new ResultClass<Collection<Module>>();
-		result.setE(daoModule.getModulesForDegree(id));
+		result.setSingleElement(daoModule.getModulesForDegree(id));
 		return result;
 	}
 
@@ -142,7 +142,7 @@ public class ModuleService {
 	@Transactional(readOnly=false)
 	public ResultClass<Boolean> modifyModule(Module module) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setE(daoModule.saveModule(module));
+		result.setSingleElement(daoModule.saveModule(module));
 		return result;
 	}
 
@@ -150,10 +150,10 @@ public class ModuleService {
 	@Transactional(readOnly=false)
 	public ResultClass<Boolean> deleteModulesForDegree(Degree d) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		if(serviceTopic.deleteTopicsForModules(d.getModules()).getE()){
-			result.setE(daoModule.deleteModulesForDegree(d));
+		if(serviceTopic.deleteTopicsForModules(d.getModules()).getSingleElement()){
+			result.setSingleElement(daoModule.deleteModulesForDegree(d));
 		}
-		else result.setE(false);	
+		else result.setSingleElement(false);	
 		return result;
 	}
 
@@ -167,21 +167,21 @@ public class ModuleService {
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("Code doesn't exist");
 			result.setErrorsList(errors);
-			result.setE(module);
+			result.setSingleElement(module);
 		}
 		else{
 			if(!m.getIsDeleted()){
 				Collection<String> errors = new ArrayList<String>();
 				errors.add("Code is not deleted");
 				result.setErrorsList(errors);
-				result.setE(module);
+				result.setSingleElement(module);
 			}
 
 			m.setDeleted(false);
 			m.setInfo(module.getInfo());
 			boolean r = daoModule.saveModule(m);
 			if(r) 
-				result.setE(m);	
+				result.setSingleElement(m);	
 
 		}
 		return result;

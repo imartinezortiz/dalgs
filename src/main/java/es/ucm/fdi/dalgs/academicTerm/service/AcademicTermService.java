@@ -52,10 +52,10 @@ public class AcademicTermService {
 			if (academicExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
-				result.setE(academicExists);
+				result.setSingleElement(academicExists);
 				
 			}
-			else result.setE(academicTerm);
+			else result.setSingleElement(academicTerm);
 			result.setErrorsList(errors);
 			
 		}
@@ -69,7 +69,7 @@ public class AcademicTermService {
 		if(success){ //&& academicAux != null){
 			academicExists = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
 			success = manageAclService.addAclToObject(academicExists.getId(), academicExists.getClass().getName());
-			if (success) result.setE(academicTerm);
+			if (success) result.setSingleElement(academicTerm);
 		} else {
 			throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
 		}
@@ -80,9 +80,7 @@ public class AcademicTermService {
 	}
 
 
-	//	public boolean modifyAcademicTerm(AcademicTerm academicTerm) {
-	//		return daoAcademicTerm.saveAcademicTerm(academicTerm);
-	//	}
+	
 	//	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyAcademicTerm(AcademicTerm academic, Long id_academic) {
@@ -105,12 +103,13 @@ public class AcademicTermService {
 
 			}
 			result.setErrorsList(errors);
+			result.setSingleElement(false);
 		}
 		else{
 			modifyAcademic.setTerm(academic.getTerm());
 			boolean r = daoAcademicTerm.saveAcademicTerm(modifyAcademic);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;
 
@@ -139,7 +138,7 @@ public class AcademicTermService {
 	public ResultClass<Boolean> deleteAcademicTerm(AcademicTerm academicTerm) {
 		boolean success = false;
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		if (academicTerm.getCourses() == null || serviceCourse.deleteCoursesFromAcademic(academicTerm)){
+		if (academicTerm.getCourses() == null || serviceCourse.deleteCoursesFromAcademic(academicTerm).getSingleElement()){
 
 			/* COMENTADO PARA LA PAPELERA DE LA VISTA
 			 success = ( manageAclService.removeAclFromObject(academicTerm.getId(), academicTerm.getClass().getName()) &&
@@ -147,7 +146,7 @@ public class AcademicTermService {
 			 */
 			success = 	daoAcademicTerm.deleteAcademicTerm(academicTerm.getId());
 		}
-		result.setE(success);
+		result.setSingleElement(success);
 		return result;
 	}
 
@@ -155,7 +154,7 @@ public class AcademicTermService {
 	@Transactional(readOnly = false)
 	public ResultClass<Integer> numberOfPages(Boolean showAll) {
 		ResultClass<Integer> result = new ResultClass<Integer>();
-		result.setE(daoAcademicTerm.numberOfPages(showAll));
+		result.setSingleElement(daoAcademicTerm.numberOfPages(showAll));
 		return result;
 	}
 
@@ -177,8 +176,8 @@ public class AcademicTermService {
 	public ResultClass<AcademicTerm> getAcademicTerm(Long id_academic) {
 		ResultClass<AcademicTerm> result = new ResultClass<AcademicTerm>();
 		AcademicTerm aT= daoAcademicTerm.getAcademicTermById(id_academic);
-		aT.setCourses(serviceCourse.getCoursesByAcademicTerm(id_academic).getE());
-		result.setE(aT);
+		aT.setCourses(serviceCourse.getCoursesByAcademicTerm(id_academic));
+		result.setSingleElement(aT);
 		return result;
 	}
 
@@ -187,10 +186,10 @@ public class AcademicTermService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteAcademicTermCollection(Collection<AcademicTerm> academicList) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		boolean deleteCourses = serviceCourse.deleteCourses(academicList);
+		boolean deleteCourses = serviceCourse.deleteCourses(academicList).getSingleElement();
 		if (deleteCourses)
-			result.setE(daoAcademicTerm.deleteAcademicTerm(academicList));
-		else result.setE(false);
+			result.setSingleElement(daoAcademicTerm.deleteAcademicTerm(academicList));
+		else result.setSingleElement(false);
 
 		return result;
 	}
@@ -220,7 +219,7 @@ public class AcademicTermService {
 			a.setTerm(academicTerm.getTerm());
 			boolean r = daoAcademicTerm.saveAcademicTerm(a);
 			if (r)
-				result.setE(a);	
+				result.setSingleElement(a);	
 
 		}
 		return result;

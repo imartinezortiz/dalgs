@@ -91,13 +91,15 @@ public class AcademicTermController {
 			ResultClass<AcademicTerm> resultReturned = serviceAcademicTerm.addAcademicTerm(newAcademicTerm);
 			if (resultReturned.hasErrors()){
 
-				attr.addFlashAttribute("addAcademicTerm", newAcademicTerm);
+				
 
 				if (resultReturned.isElementDeleted()){
 
 					attr.addFlashAttribute("unDelete", resultReturned.isElementDeleted());
-					attr.addFlashAttribute("addAcademicTerm", resultReturned.getE());
+					attr.addFlashAttribute("addAcademicTerm", resultReturned.getSingleElement());
 				}
+				else attr.addFlashAttribute("addAcademicTerm", newAcademicTerm);
+				
 				attr.addFlashAttribute("idDegree", newAcademicTerm.getDegree().getId());
 				attr.addFlashAttribute("errors", resultReturned.getErrorsList());
 
@@ -141,8 +143,8 @@ public class AcademicTermController {
 
 			if (!result.hasErrors()){
 
-				attr.addFlashAttribute("academicTerm", result.getE());
-				return "redirect:/academicTerm/" + result.getE().getId() + "/modify.htm";
+				attr.addFlashAttribute("academicTerm", result.getSingleElement());
+				return "redirect:/academicTerm/" + result.getSingleElement().getId() + "/modify.htm";
 
 
 			}else{
@@ -187,7 +189,7 @@ public class AcademicTermController {
 		ResultClass<AcademicTerm> p = serviceAcademicTerm.getAcademicsTerm(pageIndex, showAll);
 		myModel.put("showAll", showAll);
 		myModel.put("academicTerms", p);
-		Integer numberOfPages = serviceAcademicTerm.numberOfPages(showAll).getE();
+		Integer numberOfPages = serviceAcademicTerm.numberOfPages(showAll).getSingleElement();
 		myModel.put("numberOfPages",numberOfPages );
 		myModel.put("currentPage", pageIndex);
 
@@ -209,7 +211,7 @@ public class AcademicTermController {
 					throws ServletException {
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		AcademicTerm a = serviceAcademicTerm.getAcademicTerm(id_academic).getE();
+		AcademicTerm a = serviceAcademicTerm.getAcademicTerm(id_academic).getSingleElement();
 		myModel.put("academicTerm", a);
 
 		myModel.put("courses", a.getCourses());
@@ -234,7 +236,7 @@ public class AcademicTermController {
 					throws ServletException {
 
 		if (!model.containsAttribute("academicTerm")){
-			AcademicTerm aT = serviceAcademicTerm.getAcademicTerm(id_academic).getE();
+			AcademicTerm aT = serviceAcademicTerm.getAcademicTerm(id_academic).getSingleElement();
 
 			model.addAttribute("academicTerm", aT);
 
@@ -297,7 +299,7 @@ public class AcademicTermController {
 			@PathVariable("academicId") Long id_academic)
 					throws ServletException {
 
-		if (serviceAcademicTerm.deleteAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic).getE()).getE()) {
+		if (serviceAcademicTerm.deleteAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic).getSingleElement()).getSingleElement()) {
 			return "redirect:/academicTerm/page/0.htm?showAll="+showAll;
 		} else
 			return "redirect:/error.htm";
@@ -311,7 +313,7 @@ public class AcademicTermController {
 	@RequestMapping(value = "/academicTerm/{academicId}/restore.htm")
 	// Every Post have to return redirect
 	public String restoreAcademicTerm(@PathVariable("academicId") Long id_academic) {
-		ResultClass<AcademicTerm> result = serviceAcademicTerm.undeleteAcademic((serviceAcademicTerm.getAcademicTerm(id_academic).getE()));
+		ResultClass<AcademicTerm> result = serviceAcademicTerm.undeleteAcademic((serviceAcademicTerm.getAcademicTerm(id_academic).getSingleElement()));
 		if (!result.hasErrors())
 
 			return "redirect:/academicTerm/page/0.htm?showAll="+showAll;

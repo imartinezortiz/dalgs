@@ -106,9 +106,9 @@ public class CourseRepository {
 				.createQuery("select c from Course c  join c.academicTerm a  where a=?1 and c.isDeleted='false'");
 		query.setParameter(1, academic);
 
-		if (query.getResultList().isEmpty())
-			return null;
-		else
+//		if (query.getResultList().isEmpty())
+//			return null;
+//		else
 			return query.getResultList();
 
 	}

@@ -144,7 +144,7 @@ public class CompetenceController {
 			@PathVariable("competenceId") Long id_competence, Model model)
 			throws ServletException {
 
-		Competence p = serviceCompetence.getCompetence(id_competence).getE();
+		Competence p = serviceCompetence.getCompetence(id_competence).getSingleElement();
 		model.addAttribute("modifyCompetence", p);
 		return "/competence/modify";
 
@@ -181,7 +181,7 @@ public class CompetenceController {
 
 //		Competence p = serviceCompetence.getCompetence(id_competence);
 		
-		Competence p = serviceCompetence.getCompetenceAll(id_competence).getE();
+		Competence p = serviceCompetence.getCompetenceAll(id_competence).getSingleElement();
 
 		// List<Subject> subjects =
 		// serviceSubject.getSubjectsForCompetence(id_competence);

@@ -70,7 +70,7 @@ public class DegreeService {
 				errors.add("Cannot create ACL. Object not set");
 			}
 			
-			if (r) result.setE(true);
+			if (r) result.setSingleElement(true);
 		}
 			
 		
@@ -126,7 +126,7 @@ public class DegreeService {
 			modifydegree.setInfo(degree.getInfo());
 			boolean r = daoDegree.saveDegree(modifydegree);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;
 
@@ -151,18 +151,18 @@ public class DegreeService {
 
 		Degree d = daoDegree.getDegree(id);
 		if (!d.getModules().isEmpty())
-			deleteModules = serviceModule.deleteModulesForDegree(d).getE();
+			deleteModules = serviceModule.deleteModulesForDegree(d).getSingleElement();
 		if (!d.getCompetences().isEmpty())
-			deleteCompetences = serviceCompetence.deleteCompetencesForDegree(d).getE();
+			deleteCompetences = serviceCompetence.deleteCompetencesForDegree(d).getSingleElement();
 		ResultClass<AcademicTerm> academicList = serviceAcademicTerm.getAcademicTermsByDegree(id);
 
-		if(!academicList.isEmpty()) deleteAcademic = serviceAcademicTerm.deleteAcademicTermCollection(academicList).getE();
+		if(!academicList.isEmpty()) deleteAcademic = serviceAcademicTerm.deleteAcademicTermCollection(academicList).getSingleElement();
 		if ((deleteModules || d.getModules().isEmpty()) && (deleteCompetences || d.getCompetences().isEmpty())
 				&& (deleteAcademic || academicList.isEmpty())){
-			result.setE(daoDegree.deleteDegree(d));	
+			result.setSingleElement(daoDegree.deleteDegree(d));	
 			return result;
 		} else{
-			result.setE(false);
+			result.setSingleElement(false);
 			return result;
 		}
 	}
@@ -171,7 +171,7 @@ public class DegreeService {
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getDegreeSubject(Subject p) {
 		ResultClass<Degree> result = new ResultClass<Degree>();
-		result.setE(daoDegree.getDegreeSubject(p));
+		result.setSingleElement(daoDegree.getDegreeSubject(p));
 		return result;
 	}
 
@@ -179,7 +179,7 @@ public class DegreeService {
 	@Transactional(readOnly = true)
 	public ResultClass<String> getNextCode() {
 		ResultClass<String> result = new ResultClass<String>();
-		result.setE(daoDegree.getNextCode());
+		result.setSingleElement(daoDegree.getNextCode());
 		return result;
 
 	}
@@ -191,9 +191,9 @@ public class DegreeService {
 		ResultClass<Degree> result = new ResultClass<Degree>();
 		
 		Degree d = daoDegree.getDegree(id);
-		d.setModules(serviceModule.getModulesForDegree(id).getE());
+		d.setModules(serviceModule.getModulesForDegree(id).getSingleElement());
 		d.setCompetences(serviceCompetence.getCompetencesForDegree(id));
-		result.setE(d);
+		result.setSingleElement(d);
 		return result;
 	}
 
@@ -220,7 +220,7 @@ public class DegreeService {
 			d.setInfo(degree.getInfo());
 			boolean r = daoDegree.saveDegree(d);
 			if (r)
-				result.setE(true);	
+				result.setSingleElement(true);	
 
 		}
 		return result;

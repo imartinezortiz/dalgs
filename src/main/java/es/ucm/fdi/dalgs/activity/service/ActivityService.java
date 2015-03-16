@@ -50,14 +50,14 @@ public class ActivityService {
 				errors.add("Element is deleted");
 
 			}
-			result.setE(false);
+			result.setSingleElement(false);
 			result.setErrorsList(errors);
 		}
 		else{
-			activity.setCourse(serviceCourse.getCourse(id_course).getE());
+			activity.setCourse(serviceCourse.getCourse(id_course).getSingleElement());
 			boolean r = daoActivity.addActivity(activity);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;		
 	}
@@ -66,7 +66,7 @@ public class ActivityService {
 	@Transactional(readOnly = true)
 	public ResultClass<List<Activity>> getAll() {
 		ResultClass<List<Activity>> result = new ResultClass<List<Activity>>();
-		result.setE(daoActivity.getAll());
+		result.setSingleElement(daoActivity.getAll());
 		return result;
 	}
 	
@@ -93,13 +93,13 @@ public class ActivityService {
 
 			}
 			result.setErrorsList(errors);
-			result.setE(false);
+			result.setSingleElement(false);
 		}
 		else{
 			modifyActivity.setInfo(activity.getInfo());
 			boolean r = daoActivity.saveActivity(modifyActivity);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;
 
@@ -108,7 +108,7 @@ public class ActivityService {
 	@Transactional(readOnly = false)
 	public ResultClass<Activity> getActivity(Long id) {
 		ResultClass<Activity> result = new ResultClass<Activity>();
-		result.setE(daoActivity.getActivity(id));
+		result.setSingleElement(daoActivity.getActivity(id));
 		return result;
 	}
 
@@ -116,7 +116,7 @@ public class ActivityService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean> deleteActivity(Long id) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setE(daoActivity.deleteActivity(id));
+		result.setSingleElement(daoActivity.deleteActivity(id));
 		return result;
 	}
 
@@ -124,7 +124,7 @@ public class ActivityService {
 	@Transactional(readOnly = true)
 	public ResultClass<List<Activity>> getActivitiesForCourse(Long id_course) {
 		ResultClass<List<Activity>> result = new ResultClass<List<Activity>>();
-		result.setE(daoActivity.getActivitiesForCourse(id_course));
+		result.setSingleElement(daoActivity.getActivitiesForCourse(id_course));
 		return result;
 	}
 
@@ -132,7 +132,7 @@ public class ActivityService {
 	@Transactional(readOnly = true)
 	public ResultClass<String> getNextCode() {
 		ResultClass<String> result = new ResultClass<String>();
-		result.setE(daoActivity.getNextCode());
+		result.setSingleElement(daoActivity.getNextCode());
 		return result;
 
 	}
@@ -141,7 +141,7 @@ public class ActivityService {
 	@Transactional(readOnly = true)
 	public ResultClass<Activity> getActivityByName(String string) {
 		ResultClass<Activity> result = new ResultClass<Activity>();
-		result.setE(daoActivity.getActivityByName(string));
+		result.setSingleElement(daoActivity.getActivityByName(string));
 		return result;
 	}
 
@@ -156,7 +156,7 @@ public class ActivityService {
 
 
 		Collection<LearningGoalStatus> c = a.getLearningGoalStatus();
-		LearningGoal learningGoal = serviceLearningGoal.getLearningGoal(id_learningGoalStatus).getE();
+		LearningGoal learningGoal = serviceLearningGoal.getLearningGoal(id_learningGoalStatus).getSingleElement();
 		try {
 			for (LearningGoalStatus aux : c) {
 				if (aux.getLearningGoal().equals(learningGoal)) {
@@ -166,11 +166,11 @@ public class ActivityService {
 				}
 
 			}
-			result.setE(daoActivity.saveActivity(a));
+			result.setSingleElement(daoActivity.saveActivity(a));
 			
 
 		} catch (Exception e) {
-			result.setE(false);
+			result.setSingleElement(false);
 		}
 		return result;
 	}
@@ -182,12 +182,12 @@ public class ActivityService {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		if (learningGoalStatus.getPercentage() <= 0.0
 				|| learningGoalStatus.getPercentage() > 100.0){
-			result.setE(false);
+			result.setSingleElement(false);
 			
 		}
 		else {
 			p.getLearningGoalStatus().add(learningGoalStatus);
-			result.setE(daoActivity.saveActivity(p));
+			result.setSingleElement(daoActivity.saveActivity(p));
 		}
 		
 		
@@ -197,14 +197,14 @@ public class ActivityService {
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
 	public ResultClass<Boolean> deleteActivitiesFromCourses(Collection<Course> courses) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setE(daoActivity.deleteActivitiesFromCourses(courses));
+		result.setSingleElement(daoActivity.deleteActivitiesFromCourses(courses));
 		return result;
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
 	public ResultClass<Boolean> deleteActivitiesFromCourse(Course course) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setE(daoActivity.deleteActivitiesFromCourse(course));
+		result.setSingleElement(daoActivity.deleteActivitiesFromCourse(course));
 		return result;
 	}
 
@@ -231,7 +231,7 @@ public class ActivityService {
 			a.setInfo(activity.getInfo());
 			boolean r = daoActivity.saveActivity(a);
 			if(r) 
-				result.setE(true);	
+				result.setSingleElement(true);	
 
 		}
 		return result;

@@ -35,7 +35,7 @@ public class CompetenceService {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> addCompetence(Competence competence, Long id_degree) {
-		competence.setDegree(serviceDegree.getDegree(id_degree).getE());
+		competence.setDegree(serviceDegree.getDegree(id_degree).getSingleElement());
 		
 		Competence competenceExists = daoCompetence.existByCode(competence.getInfo().getCode(), competence.getDegree());
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -50,14 +50,14 @@ public class CompetenceService {
 				errors.add("Element is deleted");
 
 			}
-			result.setE(false);
+			result.setSingleElement(false);
 			result.setErrorsList(errors);
 		}
 		else{
 			
 			boolean r = daoCompetence.addCompetence(competence);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;	
 	}
@@ -66,7 +66,7 @@ public class CompetenceService {
 	@Transactional(readOnly = true)
 	public ResultClass<List<Competence>> getAll() {
 		ResultClass<List<Competence>> result = new ResultClass<List<Competence>>();
-		result.setE(daoCompetence.getAll());
+		result.setSingleElement(daoCompetence.getAll());
 		return result;
 	}
 	
@@ -74,7 +74,7 @@ public class CompetenceService {
 	@Transactional(readOnly = false)
 	public ResultClass<Competence> getCompetence(Long id) {
 		ResultClass<Competence> result = new ResultClass<Competence>();
-		result.setE(daoCompetence.getCompetence(id));
+		result.setSingleElement(daoCompetence.getCompetence(id));
 		return result;
 	}
 
@@ -82,7 +82,7 @@ public class CompetenceService {
 	@Transactional(readOnly = false)
 	public ResultClass<Competence> getCompetenceByName(String name) {
 		ResultClass<Competence> result = new ResultClass<Competence>();
-		result.setE(daoCompetence.getCompetenceByName(name));
+		result.setSingleElement(daoCompetence.getCompetenceByName(name));
 		return result;
 	}
 
@@ -92,7 +92,7 @@ public class CompetenceService {
 		Competence competence = daoCompetence.getCompetence(id);
 		Collection <Competence> competences= new ArrayList<Competence>();
 		competences.add(competence);
-		if(serviceLearning.deleteLearningGoalForCompetences(competences).getE())
+		if(serviceLearning.deleteLearningGoalForCompetences(competences).getSingleElement())
 			return daoCompetence.deleteCompetence(id);
 		return false;
 	}
@@ -115,7 +115,7 @@ public class CompetenceService {
 	public ResultClass<Boolean> modifyCompetence(Competence competence, Long id_competence, Long id_degree) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		
-		competence.setDegree(serviceDegree.getDegree(id_degree).getE());
+		competence.setDegree(serviceDegree.getDegree(id_degree).getSingleElement());
 		Competence modifyCompetence = daoCompetence.getCompetence(id_competence);
 		
 		Competence competenceExists = daoCompetence.existByCode(competence.getInfo().getCode(),competence.getDegree() );
@@ -132,13 +132,13 @@ public class CompetenceService {
 
 			}
 			result.setErrorsList(errors);
-			result.setE(false);
+			result.setSingleElement(false);
 		}
 		else{
 			modifyCompetence.setInfo(competence.getInfo());
 			boolean r = daoCompetence.saveCompetence(modifyCompetence);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;
 	}
@@ -149,15 +149,15 @@ public class CompetenceService {
 			Long id_subject) {
 		// Subject subject = daoSubject.getSubject(id);
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		Collection<Competence> c = serviceSubject.getSubject(id_subject).getE()
+		Collection<Competence> c = serviceSubject.getSubject(id_subject).getSingleElement()
 				.getCompetences();
 		try {
 			c.remove(daoCompetence.getCompetence(id_competence));
-			result.setE(true);
+			result.setSingleElement(true);
 			
 
 		} catch (Exception e) {
-			result.setE(false);;
+			result.setSingleElement(false);;
 		}
 		return result;
 	}
@@ -166,11 +166,11 @@ public class CompetenceService {
 	public ResultClass<Boolean> deleteCompetencesForDegree(Degree degree) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
-		if(serviceLearning.deleteLearningGoalForCompetences(degree.getCompetences()).getE()){
-			result.setE(daoCompetence.deleteCompetencesForDegree(degree));
+		if(serviceLearning.deleteLearningGoalForCompetences(degree.getCompetences()).getSingleElement()){
+			result.setSingleElement(daoCompetence.deleteCompetencesForDegree(degree));
 		}
 			
-		else result.setE(false);
+		else result.setSingleElement(false);
 		
 		return result;
 	}
@@ -186,8 +186,8 @@ public class CompetenceService {
 		ResultClass<Competence> result = new ResultClass<Competence>();
 		Competence competence = daoCompetence.getCompetence(id_competence);
 		//		Competence c = daoCompetence.getCompetenceAll(id_competence);
-		competence.setLearningGoals(serviceLearning.getLearningGoalsFromCompetence(competence).getE());
-		result.setE(competence);
+		competence.setLearningGoals(serviceLearning.getLearningGoalsFromCompetence(competence).getSingleElement());
+		result.setSingleElement(competence);
 		return result;
 	}
 	
@@ -195,7 +195,7 @@ public class CompetenceService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> unDeleteCompetence(Competence competence, Long id_degree) {
 		
-		competence.setDegree(serviceDegree.getDegree(id_degree).getE());
+		competence.setDegree(serviceDegree.getDegree(id_degree).getSingleElement());
 		Competence c = daoCompetence.existByCode(competence.getInfo().getCode(), competence.getDegree());
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		if(c == null){
@@ -216,7 +216,7 @@ public class CompetenceService {
 			c.setInfo(competence.getInfo());
 			boolean r = daoCompetence.saveCompetence(c);
 			if(r) 
-				result.setE(true);	
+				result.setSingleElement(true);	
 
 		}
 		return result;

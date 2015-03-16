@@ -85,7 +85,7 @@ public class DegreeController {
 	@RequestMapping(value = "/degree/{id_degree}/restore.htm")
 	// Every Post have to return redirect
 	public String restoreDegree(@PathVariable("id_degree") Long id_degree) {
-		ResultClass<Boolean> result = serviceDegree.unDeleteDegree(serviceDegree.getDegree(id_degree).getE());
+		ResultClass<Boolean> result = serviceDegree.unDeleteDegree(serviceDegree.getDegree(id_degree).getSingleElement());
 		if (!result.hasErrors())
 //			if (created)
 				return "redirect:/degree/page/0.htm?showAll="+showAll;
@@ -152,7 +152,7 @@ public class DegreeController {
 	protected String modifyDegreeGET(@PathVariable("degreeId") Long id, Model model)
 			throws ServletException {
 //		ModelAndView model = new ModelAndView();
-		Degree p = serviceDegree.getDegree(id).getE();
+		Degree p = serviceDegree.getDegree(id).getSingleElement();
 		model.addAttribute("Degree", p);
 //		model.setViewName("degree/modify");
 		
@@ -169,7 +169,7 @@ public class DegreeController {
 	public String deleteDegreeGET(@PathVariable("degreeId") Long id)
 			throws ServletException {
 
-		if (serviceDegree.deleteDegree(id).getE()) {
+		if (serviceDegree.deleteDegree(id).getSingleElement()) {
 			return "redirect:/degree/page/0.htm?showAll="+showAll;
 		} else
 			return "redirect:/error.htm";
@@ -186,7 +186,7 @@ public class DegreeController {
 
 		// Degree p = serviceDegree.getDegree(id);
 
-		Degree p = serviceDegree.getDegree(id).getE();
+		Degree p = serviceDegree.getDegree(id).getSingleElement();
 
 		myModel.put("degree", p);
 		if (p.getModules() != null)

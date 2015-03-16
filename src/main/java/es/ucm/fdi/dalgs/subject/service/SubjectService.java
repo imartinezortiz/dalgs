@@ -51,14 +51,14 @@ public class SubjectService {
 				errors.add("Element is deleted");
 
 			}
-			result.setE(false);
+			result.setSingleElement(false);
 			result.setErrorsList(errors);
 		}
 		else{
-			subject.setTopic(serviceTopic.getTopic(id_topic).getE());
+			subject.setTopic(serviceTopic.getTopic(id_topic).getSingleElement());
 			boolean r = daoSubject.addSubject(subject);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;		
 	}
@@ -69,7 +69,7 @@ public class SubjectService {
 		
 		
 		ResultClass<List<Subject>> result = new ResultClass<List<Subject>>();
-		result.setE(daoSubject.getAll());
+		result.setSingleElement(daoSubject.getAll());
 		return result;
 	}
 
@@ -77,7 +77,7 @@ public class SubjectService {
 	@Transactional(readOnly = false)
 	public ResultClass<Subject> getSubject(Long id) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
-		result.setE(daoSubject.getSubject(id));
+		result.setSingleElement(daoSubject.getSubject(id));
 		return result;
 	}
 
@@ -86,7 +86,7 @@ public class SubjectService {
 	public ResultClass<Boolean>deleteSubject(Long id) {
 		daoSubject.getSubject(id).getCompetences().clear();
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setE(daoSubject.deleteSubject(id));
+		result.setSingleElement(daoSubject.deleteSubject(id));
 		return result;
 	}
 
@@ -94,7 +94,7 @@ public class SubjectService {
 	@Transactional(readOnly = true)
 	public ResultClass<List<Subject>> getSubjectsForTopic(Long id_topic) {
 		ResultClass<List<Subject>> result = new ResultClass<List<Subject>>();
-		result.setE(daoSubject.getSubjectsForTopic(id_topic));
+		result.setSingleElement(daoSubject.getSubjectsForTopic(id_topic));
 		return result;
 	}
 
@@ -119,13 +119,13 @@ public class SubjectService {
 
 			}
 			result.setErrorsList(errors);
-			result.setE(false);
+			result.setSingleElement(false);
 		}
 		else{
 			modifySubject.setInfo(subject.getInfo());
 			boolean r = daoSubject.saveSubject(modifySubject);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;
 	}
@@ -137,7 +137,7 @@ public class SubjectService {
 		Subject subject = daoSubject.getSubject(id_subject);
 		subject.setInfo(modify.getInfo());
 		subject.setCompetences(modify.getCompetences());		
-		result.setE(daoSubject.saveSubject(subject));
+		result.setSingleElement(daoSubject.saveSubject(subject));
 		return result;
 	}
 	
@@ -145,7 +145,7 @@ public class SubjectService {
 	@Transactional(readOnly = true)
 	public ResultClass<String> getNextCode() {
 		ResultClass<String> result = new ResultClass<String>();
-		result.setE(daoSubject.getNextCode());
+		result.setSingleElement(daoSubject.getNextCode());
 		return result;
 
 	}
@@ -154,7 +154,7 @@ public class SubjectService {
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectForCourse(Long id) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
-		result.setE(daoSubject.getSubjectForCourse(id));
+		result.setSingleElement(daoSubject.getSubjectForCourse(id));
 		return result;
 	}
 
@@ -162,7 +162,7 @@ public class SubjectService {
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectByName(String string) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
-		result.setE(daoSubject.getSubjectByName(string));
+		result.setSingleElement(daoSubject.getSubjectByName(string));
 		return result;
 	}
 	
@@ -172,7 +172,7 @@ public class SubjectService {
 		ResultClass<Subject> result = new ResultClass<Subject>();
 		Subject p = daoSubject.getSubject(id_subject);;
 		p.setCompetences(serviceCompetence.getCompetencesForSubject(id_subject));
-		result.setE(p);
+		result.setSingleElement(p);
 		return result;
 	}
 
@@ -181,7 +181,7 @@ public class SubjectService {
 	@Transactional(readOnly = true)
 	public ResultClass<Collection<Subject>> getSubjectForDegree(Degree degree) {
 		ResultClass<Collection<Subject>> result = new ResultClass<Collection<Subject>>();
-		result.setE(daoSubject.getSubjectForDegree(degree));
+		result.setSingleElement(daoSubject.getSubjectForDegree(degree));
 		return result;
 	}
 
@@ -189,7 +189,7 @@ public class SubjectService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteSubjectsForTopic(Collection<Topic> topics) {	
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setE(daoSubject.deleteSubjectsForTopics(topics));
+		result.setSingleElement(daoSubject.deleteSubjectsForTopics(topics));
 		return result;
 	}
 
@@ -214,7 +214,7 @@ public class SubjectService {
 			s.setInfo(subject.getInfo());
 			boolean r = daoSubject.saveSubject(s);
 			if(r) 
-				result.setE(true);	
+				result.setSingleElement(true);	
 
 		}
 		return result;

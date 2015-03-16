@@ -54,7 +54,7 @@ public class ModuleController {
 			//		if (created)
 			return "redirect:/degree/" +id_degree+ ".htm";		
 		else{
-			model.addAttribute("addModule", result.getE());
+			model.addAttribute("addModule", result.getSingleElement());
 			if (result.isElementDeleted())
 				model.addAttribute("unDelete", result.isElementDeleted()); 
 			model.addAttribute("valueButton", "Add");
@@ -76,7 +76,7 @@ public class ModuleController {
 		
 		if (!result.hasErrors())
 
-			return "redirect:/degree/" + id_degree +  "/module/" + result.getE().getId() + "/modify.htm";
+			return "redirect:/degree/" + id_degree +  "/module/" + result.getSingleElement().getId() + "/modify.htm";
 		else{
 			model.addAttribute("addModule", module);
 			if (result.isElementDeleted())
@@ -127,7 +127,7 @@ public class ModuleController {
 			throws ServletException {
 		
 //		ModelAndView model = new ModelAndView();
-		Module p = serviceModule.getModule(id_module).getE();
+		Module p = serviceModule.getModule(id_module).getSingleElement();
 		model.addAttribute("addModule", p);
 		model.addAttribute("valueButton", "Modify");
 //		model.setViewName("module/add");
@@ -144,7 +144,7 @@ public class ModuleController {
 						@PathVariable("degreeId") Long id_degree)
 						throws ServletException {
 
-		if (serviceModule.deleteModule(id_module).getE()) {
+		if (serviceModule.deleteModule(id_module).getSingleElement()) {
 			return "redirect:/degree/" + id_degree + ".htm";
 		} else
 			return "redirect:/error.htm";
@@ -162,7 +162,7 @@ public class ModuleController {
 
 		// Degree p = serviceDegree.getDegree(id);
 
-		Module p = serviceModule.getModuleAll(id_module).getE();
+		Module p = serviceModule.getModuleAll(id_module).getSingleElement();
 
 		myModel.put("module", p);
 		if (p.getTopics() != null)

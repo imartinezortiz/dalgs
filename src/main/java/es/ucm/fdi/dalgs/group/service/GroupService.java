@@ -45,14 +45,14 @@ public class GroupService {
 				errors.add("Element is deleted");
 
 			}
-			result.setE(false);
+			result.setSingleElement(false);
 			result.setErrorsList(errors);
 		}
 		else{
-			group.setCourse(serviceCourse.getCourse(id_course).getE());
+			group.setCourse(serviceCourse.getCourse(id_course).getSingleElement());
 			boolean r = daoGroup.addGroup(group);
 			if (r) 
-				result.setE(true);
+				result.setSingleElement(true);
 		}
 		return result;		
 	}
@@ -61,7 +61,7 @@ public class GroupService {
 	@Transactional(readOnly = true)
 	public ResultClass<Group> getGroup(Long id_group) {
 		ResultClass<Group> result = new ResultClass<Group>();
-		result.setE(daoGroup.getGroup(id_group));
+		result.setSingleElement(daoGroup.getGroup(id_group));
 		return result;
 	}
 
@@ -82,12 +82,12 @@ public class GroupService {
 
 			}
 			result.setErrorsList(errors);
-			result.setE(false);
+			result.setSingleElement(false);
 		}
 		else{
 			boolean r = daoGroup.saveGroup(group);
 			if (r) {
-				result.setE(true);
+				result.setSingleElement(true);
 
 				// Adding the authorities to the professor list
 				manageAclService.addPermissionToAnObject(group.getProfessors(),group.getCourse().getId(), group.getCourse().getClass().getName());
@@ -104,7 +104,7 @@ public class GroupService {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
 			boolean r = daoGroup.saveGroup(group);
-			if (r) 	result.setE(true);
+			if (r) 	result.setSingleElement(true);
 		
 		return result;
 	}
@@ -115,21 +115,21 @@ public class GroupService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteGroup(Long id_group) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setE(daoGroup.deleteGroup(id_group));
+		result.setSingleElement(daoGroup.deleteGroup(id_group));
 		return result;
 	}
 
 
 	public ResultClass<Collection<Group>> getGroupsForCourse(Long id) {
 		ResultClass<Collection<Group>> result = new ResultClass<Collection<Group>>();
-		result.setE(daoGroup.getGroupsForCourse(id));
+		result.setSingleElement(daoGroup.getGroupsForCourse(id));
 		return result;
 	}
 
 	
 	public ResultClass<Boolean> deleteGroupsFromCourses(Collection<Course> coursesList) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setE(daoGroup.deleteGroupsFromCourses(coursesList));
+		result.setSingleElement(daoGroup.deleteGroupsFromCourses(coursesList));
 		return result;
 	}
 	
@@ -158,7 +158,7 @@ public class GroupService {
 			g.setName(group.getName());
 			boolean r = daoGroup.saveGroup(g);
 			if(r) 
-				result.setE(true);	
+				result.setSingleElement(true);	
 
 		}
 		return result;
@@ -168,7 +168,7 @@ public class GroupService {
 	@PostAuthorize("hasPermission(returnObject, 'READ')")
 	public ResultClass<Collection<Group>> getGroupsForStudent(Long id_student){
 		ResultClass<Collection<Group>> result = new ResultClass<Collection<Group>>();
-		result.setE(daoGroup.getGroupsForStudent(id_student));
+		result.setSingleElement(daoGroup.getGroupsForStudent(id_student));
 		return result;
 	}
 	
@@ -176,7 +176,7 @@ public class GroupService {
 	@PostAuthorize("hasPermission(returnObject, 'READ')")
 	public ResultClass<Collection<Group>> getGroupsForProfessor(Long id_professor){
 		ResultClass<Collection<Group>> result = new ResultClass<Collection<Group>>();
-		result.setE(daoGroup.getGroupsForProfessor(id_professor));
+		result.setSingleElement(daoGroup.getGroupsForProfessor(id_professor));
 		return result;
 	}
 
