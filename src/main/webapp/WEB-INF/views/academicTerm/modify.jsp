@@ -27,7 +27,7 @@
 
 			<form:form method="post" commandName="academicTerm" role="form">
 				<div>
-					<form:hidden path="id" />
+					<form:hidden path="id" />					
 				</div>
 				<div class="form-group">
 					<label>Term: </label>

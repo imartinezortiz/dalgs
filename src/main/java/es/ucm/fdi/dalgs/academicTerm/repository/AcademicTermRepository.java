@@ -173,12 +173,20 @@ public class AcademicTermRepository{
 
 	}
 
-	public AcademicTerm exists(String term, Degree degree) {
-		Query query = em
-				.createQuery("select a from AcademicTerm a where  a.term=?1 and a.degree = ?2");
-		query.setParameter(1, term);
-		query.setParameter(2, degree);
-
+	public AcademicTerm exists(String term, Degree degree, Long id_academic) {
+		Query query = null;
+		if(id_academic!=null) {
+			query = em.createQuery("select a from AcademicTerm a where  a.term=?1 and a.degree = ?2 and a.id !=?3");
+			query.setParameter(1, term);
+			query.setParameter(2, degree);
+			query.setParameter(3, id_academic);
+		}
+		else{
+			query = em.createQuery("select a from AcademicTerm a where  a.term=?1 and a.degree = ?2");
+			query.setParameter(1, term);
+			query.setParameter(2, degree);
+		}
+		
 		if (query.getResultList().isEmpty())
 			return null;
 		else return (AcademicTerm)query.getSingleResult();

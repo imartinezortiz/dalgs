@@ -76,7 +76,7 @@ public class AcademicTermController {
 	 * @return String
 	 */
 	@RequestMapping(value = "/academicTerm/add.htm", method = RequestMethod.GET)
-	protected String getAddNewAcademicTermForm(Model model) {
+	protected String addAcademicTermFormGET(Model model) {
 
 		if (!model.containsAttribute("addAcademicTerm"))
 			model.addAttribute("addAcademicTerm", new AcademicTerm());
@@ -96,7 +96,7 @@ public class AcademicTermController {
 	 */
 	@RequestMapping(value = "/academicTerm/add.htm", method = RequestMethod.POST, params="Add")
 	// Every Post have to return redirect
-	public String processAddNewAcademicTerm(
+	public String addAcademicTermPOST(
 			@ModelAttribute("addAcademicTerm") @Valid AcademicTerm newAcademicTerm,
 			BindingResult resultBinding,
 			RedirectAttributes attr) {
@@ -155,7 +155,7 @@ public class AcademicTermController {
 
 		if(!resultBinding.hasErrors()){
 
-			ResultClass<AcademicTerm> result = serviceAcademicTerm.undeleteAcademic(academicTerm);
+			ResultClass<AcademicTerm> result = serviceAcademicTerm.restoreAcademic(academicTerm);
 
 			if (!result.hasErrors()){
 
@@ -195,7 +195,7 @@ public class AcademicTermController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/academicTerm/page/{pageIndex}.htm")
-	protected ModelAndView formViewAcademicTerm(@PathVariable("pageIndex") Integer pageIndex, 
+	protected ModelAndView academicTermsGET(@PathVariable("pageIndex") Integer pageIndex, 
 			@RequestParam(value = "showAll", defaultValue="false") Boolean showAll)
 					throws ServletException, IOException {
 
@@ -272,14 +272,14 @@ public class AcademicTermController {
 	 * @return String
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/modify.htm", method = RequestMethod.POST)
-	public String formModifySystem(@PathVariable("academicId") Long id_academic,
+	public String modifyAcademictermPOST(@PathVariable("academicId") Long id_academic,
 			@ModelAttribute("academicTerm") @Valid AcademicTerm newTerm,
 			BindingResult bindingResult, Model model,
 			RedirectAttributes attr) {
 
 		if ((!bindingResult.hasErrors()) || (bindingResult.hasErrors() && bindingResult.getFieldError().getField().equals("degree"))) {
-
-			ResultClass<Boolean> resultReturned = serviceAcademicTerm.modifyAcademicTerm(newTerm, id_academic);
+			
+			ResultClass<Boolean> resultReturned = serviceAcademicTerm.modifyAcademicTerm(newTerm);
 			if (!resultReturned.hasErrors())
 				return "redirect:/academicTerm/page/0.htm?showAll";
 			else{
@@ -329,7 +329,7 @@ public class AcademicTermController {
 	@RequestMapping(value = "/academicTerm/{academicId}/restore.htm")
 	// Every Post have to return redirect
 	public String restoreAcademicTerm(@PathVariable("academicId") Long id_academic) {
-		ResultClass<AcademicTerm> result = serviceAcademicTerm.undeleteAcademic((serviceAcademicTerm.getAcademicTerm(id_academic).getSingleElement()));
+		ResultClass<AcademicTerm> result = serviceAcademicTerm.restoreAcademic((serviceAcademicTerm.getAcademicTerm(id_academic).getSingleElement()));
 		if (!result.hasErrors())
 
 			return "redirect:/academicTerm/page/0.htm?showAll="+showAll;
