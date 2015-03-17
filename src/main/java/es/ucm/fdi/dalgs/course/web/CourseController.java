@@ -68,7 +68,7 @@ public class CourseController {
 
 		if(!model.containsAttribute("addCourse")){
 
-			AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic).getSingleElement();
+			AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic,false).getSingleElement();
 
 
 
@@ -171,7 +171,7 @@ public class CourseController {
 			//			attr.addFlashAttribute("addCourse", course);
 
 		}
-		AcademicTerm a = serviceAcademic.getAcademicTerm(id_academic).getSingleElement();
+		AcademicTerm a = serviceAcademic.getAcademicTerm(id_academic, false).getSingleElement();
 		attr.addFlashAttribute("academicTerm", a);
 		attr.addFlashAttribute("subjects",serviceSubject.getSubjectForDegree(a.getDegree()).getSingleElement());
 
@@ -219,7 +219,7 @@ public class CourseController {
 		if(!model.containsAttribute("modifyCourse")){
 			Course p = serviceCourse.getCourse(id).getSingleElement();
 
-			AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic).getSingleElement();
+			AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic,false).getSingleElement();
 
 			Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree()).getSingleElement();
 			model.addAttribute("idSubject", p.getSubject().getId());

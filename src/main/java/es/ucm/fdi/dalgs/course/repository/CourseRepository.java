@@ -98,12 +98,15 @@ public class CourseRepository {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Course> getCoursesByAcademicTerm(Long academic_id) {
+	public List<Course> getCoursesByAcademicTerm(Long academic_id, Boolean showAll) {
 		AcademicTerm academic = em
 				.getReference(AcademicTerm.class, academic_id);
-
-		Query query = em
-				.createQuery("select c from Course c  join c.academicTerm a  where a=?1 and c.isDeleted='false'");
+		
+		Query query = null;
+		
+		if (showAll) query =em.createQuery("select c from Course c  join c.academicTerm a  where a=?1 ");
+		else query = em.createQuery("select c from Course c  join c.academicTerm a  where a=?1 and c.isDeleted='false'");
+		
 		query.setParameter(1, academic);
 
 //		if (query.getResultList().isEmpty())

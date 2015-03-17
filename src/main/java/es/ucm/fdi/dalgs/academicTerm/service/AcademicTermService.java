@@ -163,10 +163,10 @@ public class AcademicTermService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 //	@PostFilter("hasPermission(filterObject, 'READ')")
 	@Transactional(readOnly = true)
-	public ResultClass<AcademicTerm> getAcademicTerm(Long id_academic) {
+	public ResultClass<AcademicTerm> getAcademicTerm(Long id_academic, Boolean showAll) {
 		ResultClass<AcademicTerm> result = new ResultClass<AcademicTerm>();
 		AcademicTerm aT= daoAcademicTerm.getAcademicTermById(id_academic);
-		aT.setCourses(serviceCourse.getCoursesByAcademicTerm(id_academic));
+		aT.setCourses(serviceCourse.getCoursesByAcademicTerm(id_academic,showAll));
 		result.setSingleElement(aT);
 		return result;
 	}

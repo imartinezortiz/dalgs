@@ -237,13 +237,15 @@ public class AcademicTermController {
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}.htm", method = RequestMethod.GET)
 	protected ModelAndView academicTermGET(
-			@PathVariable("academicId") Long id_academic)
+			@PathVariable("academicId") Long id_academic,
+			@RequestParam(value = "showAll", defaultValue = "false") Boolean showAll)
 			throws ServletException {
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		AcademicTerm a = serviceAcademicTerm.getAcademicTerm(id_academic)
-				.getSingleElement();
+		AcademicTerm a = serviceAcademicTerm.getAcademicTerm(id_academic,showAll).getSingleElement();
 		myModel.put("academicTerm", a);
+		
+		myModel.put("showAll", showAll);
 
 		myModel.put("courses", a.getCourses());
 
@@ -268,7 +270,7 @@ public class AcademicTermController {
 			throws ServletException {
 
 		if (!model.containsAttribute("academicTerm")) {
-			AcademicTerm aT = serviceAcademicTerm.getAcademicTerm(id_academic)
+			AcademicTerm aT = serviceAcademicTerm.getAcademicTerm(id_academic,false)
 					.getSingleElement();
 
 			model.addAttribute("academicTerm", aT);
@@ -338,7 +340,7 @@ public class AcademicTermController {
 			throws ServletException {
 
 		if (serviceAcademicTerm.deleteAcademicTerm(
-				serviceAcademicTerm.getAcademicTerm(id_academic)
+				serviceAcademicTerm.getAcademicTerm(id_academic,false)
 						.getSingleElement()).getSingleElement()) {
 			return "redirect:/academicTerm/page/0.htm?showAll=" + showAll;
 		} else
@@ -357,7 +359,7 @@ public class AcademicTermController {
 			@PathVariable("academicId") Long id_academic) {
 		ResultClass<AcademicTerm> result = serviceAcademicTerm
 				.restoreAcademic((serviceAcademicTerm
-						.getAcademicTerm(id_academic).getSingleElement()));
+						.getAcademicTerm(id_academic,false).getSingleElement()));
 		if (!result.hasErrors())
 
 			return "redirect:/academicTerm/page/0.htm?showAll=" + showAll;

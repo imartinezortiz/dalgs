@@ -64,7 +64,7 @@
 					<td>
 					<c:choose>
    						<c:when  test="${academic.isDeleted eq false}">
-   							<a	href="<c:url value='/academicTerm/${academic.id}.htm'/>"
+   							<a	href="<c:url value='/academicTerm/${academic.id}.htm?showAll=false'/>"
 								class="btn btn-success">View</a> 
  							<sec:authorize access="hasRole('ROLE_ADMIN')">
  							<a	href="<c:url value='/academicTerm/${academic.id}/clone.htm'/>"
