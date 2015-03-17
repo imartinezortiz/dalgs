@@ -17,13 +17,13 @@
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
 			<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
-			<h3 class="panel-title list">
-			Module Details</h3>
+			<h3 class="panel-title list">Module Details</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
-			<a class="btn list-btn btn-warning"
-				href="<c:url value='/degree/${model.module.degree.id}/module/${moduleId}/modify.htm'/>">				
-				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
-				Edit</a>
+				<a class="btn list-btn btn-warning"
+					href="<c:url value='/degree/${model.module.degree.id}/module/${moduleId}/modify.htm'/>">
+					<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
+					Edit
+				</a>
 			</sec:authorize>
 			<c:choose>
 				<c:when test="${model.showAll eq true}">
@@ -79,12 +79,12 @@
 				Topic List
 			</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
-			
-			<a style="cursor:copy;" class="btn list-btn btn-warning2"
-				href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/add.htm'/>">
-				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				Add
-			</a>
+
+				<a style="cursor: copy;" class="btn list-btn btn-warning2"
+					href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/add.htm'/>">
+					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
+					Add
+				</a>
 			</sec:authorize>
 
 		</div>
@@ -105,14 +105,25 @@
 							</div></td>
 
 
-						<td><a class="btn list-btn btn-success"
-							href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topic.id}.htm'/>">View</a>
-							<sec:authorize access="hasRole('ROLE_ADMIN')"><a class="btn btn-danger"
-							href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topic.id}/delete.htm'/>">
-								
-								Delete
-						</a></sec:authorize></td>
 
+						<td><c:choose>
+								<c:when test="${topic.isDeleted eq false}">
+									<a class="btn list-btn btn-success"
+										href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topic.id}.htm'/>">View</a>
+									<sec:authorize access="hasRole('ROLE_ADMIN')">
+										<a class="btn btn-danger"
+											href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topic.id}/delete.htm'/>">
+											Delete </a>
+									</sec:authorize>
+								</c:when>
+								<c:otherwise>
+									<sec:authorize access="hasRole('ROLE_ADMIN')">
+										<a class="btn btn-danger"
+											href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topic.id}/restore.htm'/>">
+											Restore </a>
+									</sec:authorize>
+								</c:otherwise>
+							</c:choose></td>
 					</tr>
 				</c:forEach>
 

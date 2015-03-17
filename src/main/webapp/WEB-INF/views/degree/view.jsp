@@ -104,14 +104,26 @@
 							</div></td>
 
 
-						<td><a class="btn list-btn btn-success"
-							href="<c:url value='/degree/${degreeId}/module/${module.id}.htm'/>">View</a>
 
-							<sec:authorize access="hasRole('ROLE_ADMIN')">
-								<a class="btn btn-danger"
-									href="<c:url value='/degree/${degreeId}/module/${module.id}/delete.htm'/>">
-									Delete </a>
-							</sec:authorize></td>
+						<td><c:choose>
+								<c:when test="${module.isDeleted eq false}">
+									<a class="btn list-btn btn-success"
+										href="<c:url value='/degree/${degreeId}/module/${module.id}.htm'/>">View</a>
+
+									<sec:authorize access="hasRole('ROLE_ADMIN')">
+										<a class="btn btn-danger"
+											href="<c:url value='/degree/${degreeId}/module/${module.id}/delete.htm'/>">
+											Delete </a>
+									</sec:authorize>
+								</c:when>
+								<c:otherwise>
+									<sec:authorize access="hasRole('ROLE_ADMIN')">
+										<a class="btn btn-danger"
+											href="<c:url value='/degree/${degreeId}/module/${module.id}/restore.htm'/>">
+											Restore </a>
+									</sec:authorize>
+								</c:otherwise>
+							</c:choose></td>
 
 					</tr>
 				</c:forEach>
@@ -156,13 +168,25 @@
 							</div>
 						</td>
 
-						<td><a class="btn list-btn btn-success"
-							href="<c:url value='/degree/${degreeId}/competence/${competence.id}.htm'/>">View</a>
-							<sec:authorize access="hasRole('ROLE_ADMIN')">
-								<a class="btn btn-danger"
-									href="<c:url value='/degree/${degreeId}/competence/${competence.id}/delete.htm'/>">
-									Delete </a>
-							</sec:authorize></td>
+
+						<td><c:choose>
+								<c:when test="${competence.isDeleted eq false}">
+									<a class="btn list-btn btn-success"
+										href="<c:url value='/degree/${degreeId}/competence/${competence.id}.htm'/>">View</a>
+									<sec:authorize access="hasRole('ROLE_ADMIN')">
+										<a class="btn btn-danger"
+											href="<c:url value='/degree/${degreeId}/competence/${competence.id}/delete.htm'/>">
+											Delete </a>
+									</sec:authorize>
+								</c:when>
+								<c:otherwise>
+									<sec:authorize access="hasRole('ROLE_ADMIN')">
+										<a class="btn btn-danger"
+											href="<c:url value='/degree/${degreeId}/competence/${competence.id}/restore.htm'/>">
+											Restore </a>
+									</sec:authorize>
+								</c:otherwise>
+							</c:choose></td>
 
 					</tr>
 				</c:forEach>

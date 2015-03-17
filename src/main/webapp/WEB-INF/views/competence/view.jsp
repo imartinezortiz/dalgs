@@ -105,16 +105,28 @@
 							</div>
 						</td>
 
-						<td><a class="btn list-btn btn-success"
-							href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}.htm'/>">View</a>
-							<sec:authorize access="hasRole('ROLE_ADMIN')">
+						<td><c:choose>
+								<c:when test="${learningGoal.isDeleted eq false}">
+									<a class="btn list-btn btn-success"
+										href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}.htm'/>">View</a>
+									<sec:authorize access="hasRole('ROLE_ADMIN')">
 
-								<a class="btn btn-danger"
-									href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}/delete.htm'/>">
+										<a class="btn btn-danger"
+											href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}/delete.htm'/>">
 
-									Delete </a>
-							</sec:authorize></td>
+											Delete </a>
+									</sec:authorize>
+								</c:when>
+								<c:otherwise>
+									<sec:authorize access="hasRole('ROLE_ADMIN')">
 
+										<a class="btn btn-danger"
+											href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}/restore.htm'/>">
+
+											Restore </a>
+									</sec:authorize>
+								</c:otherwise>
+							</c:choose></td>
 					</tr>
 				</c:forEach>
 
