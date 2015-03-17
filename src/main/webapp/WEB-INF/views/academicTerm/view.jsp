@@ -63,7 +63,7 @@
 						href="<c:url value='/academicTerm/${academicId}.htm?showAll=false'>
     						</c:url>">
 						<img
-						src="<c:url value="/resources/images/trash_open_view.png" /> "
+						src="<c:url value="/resources/images/theme/trash_open_view.png" /> "
 						style="float: right; margin-right: 1%; margin-top: -0.5%;">
 					</a>
 				</c:when>
@@ -72,7 +72,7 @@
 						href="<c:url value='/academicTerm/${academicId}.htm?showAll=true'> 
     							</c:url>">
 						<img
-						src="<c:url value="/resources/images/trash_close_view.png" /> "
+						src="<c:url value="/resources/images/theme/trash_close_view.png" /> "
 						style="float: right; margin-right: 1%;">
 					</a>
 				</c:otherwise>

@@ -23,13 +23,13 @@
    				<c:when  test="${model.showAll eq true}">
    					<a href="<c:url value='/degree/page/${model.currentPage}.htm?showAll=false'>
     						</c:url>">
-   					<img src="<c:url value="/resources/images/trash_open.png" /> "  
+   					<img src="<c:url value="/resources/images/theme/trash_open.png" /> "  
 			 		style=" float: right;  margin-top: -1;  margin-right: 1%;"></a> 
     			</c:when>
     			<c:otherwise>
     					<a href="<c:url value='/degree/page/${model.currentPage}.htm?showAll=true'> 
     							</c:url>">
-			 			<img src="<c:url value="/resources/images/trash_close.png" /> " 
+			 			<img src="<c:url value="/resources/images/theme/trash_close.png" /> " 
 			 			 style="float: right; margin-right: 1%;margin-top: 3;"></a> 
 				</c:otherwise>
 			</c:choose>
