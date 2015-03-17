@@ -26,14 +26,17 @@
 				<div class="form-group">
 					<label>Code: </label>
 					<form:input path="info.code" class="form-control" placeholder="Code of the activity" required="true"/>
+					<form:errors path="info.code" cssStyle="color: #ff0000" />
 				</div>
 				<div class="form-group">
 					<label>Name: </label>
 					<form:input path="info.name" class="form-control" placeholder="Name of the activity" required="true"/>
+					<form:errors path="info.name" cssStyle="color: #ff0000" />
 				</div>
 				<div class="form-group">
 					<label>Description: </label>
 					<form:input path="info.description" class="form-control"  placeholder="Description of the activity" required="true"/>
+					<form:errors path="info.description" cssStyle="color: #ff0000" />
 				</div>
 
 				

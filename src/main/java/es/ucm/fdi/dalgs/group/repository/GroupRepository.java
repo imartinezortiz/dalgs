@@ -34,12 +34,12 @@ public class GroupRepository {
 			logger.error(e.getMessage());
 		}
 	}
-	
+
 	public Group getGroup(Long id_group) {
 		return em.find(Group.class, id_group);
 	}
 
-	
+
 	public Group existByName(String name, Long id) {
 		Query query = null;
 		if (id!=null){
@@ -59,15 +59,26 @@ public class GroupRepository {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<Group> getGroupsForCourse(Long id) {
+	public Collection<Group> getGroupsForCourse(Long id, Boolean showAll) {
 		Course course = em.getReference(Course.class, id);
 
-		Query query = em
-				.createQuery("select g from Group g where g.course=?1 and g.isDeleted='false' ");
-		query.setParameter(1, course);
+		if(!showAll){
+			Query query = em
+					.createQuery("select g from Group g where g.course=?1 and g.isDeleted='false' ");
+			query.setParameter(1, course);
+			return query.getResultList();
+		}
+		else{
+			Query query = em
+					.createQuery("select g from Group g where g.course=?1");
+			query.setParameter(1, course);
+			return query.getResultList();
+
+		}
 
 
-		return query.getResultList();
+
+
 	}
 
 	public boolean addGroup(Group newgroup) {
@@ -81,7 +92,7 @@ public class GroupRepository {
 		return true;
 	}
 
-	
+
 	public boolean saveGroup(Group existGroup) {
 		try {
 			em.merge(existGroup);
@@ -92,7 +103,7 @@ public class GroupRepository {
 		return true;
 	}
 
-	
+
 	public boolean deleteGroup(Long id_group) {
 		Group group = em.getReference(Group.class, id_group);
 		try {

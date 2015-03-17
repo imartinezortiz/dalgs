@@ -63,6 +63,7 @@
 							</c:choose>
 						</c:forEach>
 					</form:select>
+					<form:errors path="subject" cssStyle="color: #ff0000" />
 				</div>
 
 				<input type="submit" class="btn btn-success" value="Update" >

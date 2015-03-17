@@ -24,11 +24,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import es.ucm.fdi.dalgs.activity.service.ActivityService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.Activity;
+import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.LearningGoal;
 import es.ucm.fdi.dalgs.domain.LearningGoalStatus;
 import es.ucm.fdi.dalgs.learningGoal.service.LearningGoalService;
@@ -45,6 +47,16 @@ public class ActivityController {
 	@Autowired
 	private LearningGoalService serviceLearningGoal;
 
+	private Boolean showAll;
+
+	public Boolean getShowAll() {
+		return showAll;
+	}
+
+	public void setShowAll(Boolean showAll) {
+		this.showAll = showAll;
+	}
+
 	private static final Logger logger = LoggerFactory
 			.getLogger(ActivityController.class);
 
@@ -56,11 +68,14 @@ public class ActivityController {
 	protected String getAddNewActivityForm(
 			@PathVariable("academicId") Long id_Long,
 			@PathVariable("courseId") Long id_course, Model model) {
-		Activity newActivity = new Activity();
-		// newActivity.setCode(serviceActivity.getNextCode());
-		newActivity.setCourse(serviceCourse.getCourse(id_course).getSingleElement());
-		model.addAttribute("addactivity", newActivity);
 
+		if(!model.containsAttribute("addactivity")){
+
+			Activity newActivity = new Activity();
+			// newActivity.setCode(serviceActivity.getNextCode());
+			//			newActivity.setCourse(serviceCourse.getCourse(id_course).getSingleElement());
+			model.addAttribute("addactivity", newActivity);
+		}
 		return "activity/add";
 
 	}
@@ -71,23 +86,35 @@ public class ActivityController {
 			@PathVariable("academicId") Long id_academicTerm,
 			@PathVariable("courseId") Long id_course,
 			@ModelAttribute("addactivity") @Valid Activity newactivity,
-			BindingResult result, Model model) throws NotOwnerException {
+			BindingResult resultBinding,
+			RedirectAttributes attr) throws NotOwnerException {
 
-		if (!result.hasErrors()) {
-			ResultClass<Boolean> results = serviceActivity.addActivity(newactivity, id_course);
-			if (!results.hasErrors())
+		if (!resultBinding.hasErrors()) {
+			ResultClass<Activity> result = serviceActivity.addActivity(newactivity, id_course);
+			if (!result.hasErrors())
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
 				+ id_course + "/activity/"+ newactivity.getId()+"/modify.htm";		
 			else{
-				model.addAttribute("addActivity", newactivity);
-				if (results.isElementDeleted())
-					model.addAttribute("unDelete", results.isElementDeleted()); 
-				model.addAttribute("errors", results.getErrorsList());
-				return "activity/add";
+
+				if (result.isElementDeleted()){
+					attr.addFlashAttribute("unDelete", result.isElementDeleted()); 
+					attr.addFlashAttribute("addactivity", result.getSingleElement());
+				}else attr.addFlashAttribute("addactivity", newactivity);
+				attr.addFlashAttribute("errors", result.getErrorsList());
+
 
 			}
 		}
-		return "redirect:/error.htm";
+		else{
+			attr.addFlashAttribute("org.springframework.validation.BindingResult.addAcademicTerm", resultBinding);
+			attr.addFlashAttribute("addactivity", newactivity);
+
+
+		}
+
+
+		return "redirect:/academicTerm/{academicId}/course/{courseId}/activity/add.htm";
+
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/add.htm", method = RequestMethod.POST, params="Undelete")
@@ -95,27 +122,41 @@ public class ActivityController {
 	public String undeleteDegree(
 			@PathVariable("academicId") Long id_academicTerm,
 			@PathVariable("courseId") Long id_course,
-			@ModelAttribute("addActivity") @Valid Activity activity, Model model) {
-		
-		ResultClass<Boolean> result = serviceActivity.unDeleteActivity(activity);
-		
-		if (!result.hasErrors())
+			@ModelAttribute("addActivity") @Valid Activity activity,
+			BindingResult resultBinding,
+			RedirectAttributes attr) {
 
-			return "redirect:/academicTerm/" + id_academicTerm + "/course/"
-			+ id_course + ".htm";		
-		else{
-			model.addAttribute("addActivity", activity);
-			if (result.isElementDeleted())
-				model.addAttribute("unDelete", true); 
-			model.addAttribute("errors", result.getErrorsList());
-			return "group/add";
+
+		if(!resultBinding.hasErrors()){
+
+			ResultClass<Activity> result = serviceActivity.unDeleteActivity(activity);
+
+			if (!result.hasErrors())
+
+				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
+				+ id_course + "/activity/"+ result.getSingleElement().getId()+"/modify.htm";			
+			else{
+				//			attr.addFlashAttribute("addActivity", activity);
+				if (result.isElementDeleted())
+					attr.addFlashAttribute("unDelete", true); 
+				attr.addFlashAttribute("errors", result.getErrorsList());
+
+			}
+
+		} else{
+			attr.addFlashAttribute("org.springframework.validation.BindingResult.addAcademicTerm", resultBinding);
+
+
 		}
+		attr.addFlashAttribute("addActivity", activity);
+		return "redirect:/academicTerm/{academicId}/course/{courseId}/activity/add.htm";
+
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	/**
 	 * Methods for modifying activities
 	 */
@@ -125,19 +166,28 @@ public class ActivityController {
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("activityId") Long id_activity, Model model)
-			throws ServletException {
+					throws ServletException {
+
 
 		Activity p = serviceActivity.getActivity(id_activity).getSingleElement();
 		model.addAttribute("courseId", id_course);
-		
-		Collection<LearningGoal> lg = serviceLearningGoal.getLearningGoalsFromCourse(id_course, p).getSingleElement();
-		
-		model.addAttribute("learningGoalStatus", p.getLearningGoalStatus());
-		model.addAttribute("modifyactivity", p);
-		model.addAttribute("learningGoals", lg);
 
-		LearningGoalStatus cs = new LearningGoalStatus();
-		model.addAttribute("addlearningstatus", cs);
+		if(!model.containsAttribute("modifyactivity")){
+				model.addAttribute("modifyactivity", p);
+
+		}
+
+
+			Collection<LearningGoal> lg = serviceLearningGoal.getLearningGoalsFromCourse(id_course, p).getSingleElement();
+
+			model.addAttribute("learningGoalStatus", p.getLearningGoalStatus());
+			model.addAttribute("learningGoals", lg);	
+
+			LearningGoalStatus cs = new LearningGoalStatus();
+			model.addAttribute("addlearningstatus", cs);
+		
+
+
 
 		return "activity/modifyChoose";
 	}
@@ -148,32 +198,30 @@ public class ActivityController {
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("activityId") Long id_activity,
 			@ModelAttribute("modifyactivity") @Valid Activity activity,
-			BindingResult result, Model model)
+			BindingResult resultBinding, RedirectAttributes attr)
 
 	{
 
-		if (!result.hasErrors()) {
-			ResultClass<Boolean> results = serviceActivity.modifyActivity(activity, id_activity, id_course);
+		if (!resultBinding.hasErrors()) {
+			ResultClass<Boolean> result = serviceActivity.modifyActivity(activity, id_activity, id_course);
 			if (!result.hasErrors())
 
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
 				+ id_course + ".htm";
 			else{
-					model.addAttribute("modifyActivity", activity);
-					if (results.isElementDeleted()){
-						model.addAttribute("addActivity", activity);
-						model.addAttribute("unDelete", true); 
-						model.addAttribute("errors", results.getErrorsList());
-						return "module/add";
-					}	
-					model.addAttribute("errors", results.getErrorsList());
-					return "module/modify";
-				}
-				
+	
+				attr.addFlashAttribute("errors", result.getErrorsList());
+
 			}
 
-		
-		return "redirect:/error.htm";
+		}	else {
+
+			attr.addFlashAttribute("org.springframework.validation.BindingResult.modifyactivity", resultBinding);
+
+		}
+		attr.addFlashAttribute("modifyactivity", activity);
+
+		return "redirect:/academicTerm/"+ id_academicTerm +"/course/" +id_course+"/activity/"+id_activity + "/modify.htm";
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{idCourse}/activity/{activityId}/addLearningStatus.htm", method = RequestMethod.POST)
@@ -189,22 +237,12 @@ public class ActivityController {
 
 			if (serviceActivity.addLearningGoals(id, learningGoalStatus).getSingleElement())
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
-						+ id_course + "/activity/" + id + "/modify.htm";
-		// if(serviceActivity.existsCompetenceStatus(id,
-		// competencestatus.getCompetence().getId()))
-		// return "redirect:/academicTerm/"+
-		// id_academicTerm+"/course/"+id_course+"/activity/"+id+"/modify.htm";
-		//
-		// if( competencestatus.getPercentage() <= 0.0 ||
-		// competencestatus.getPercentage() > 100.0)
-		// return "redirect:/academicTerm/"+
-		// id_academicTerm+"/course/"+id_course+"/activity/"+id+"/modify.htm";
+				+ id_course + "/activity/" + id + "/modify.htm";
 
-		// p.getCompetenceStatus().add(competencestatus);
-		// modify
+
 
 		return "redirect:/academicTerm/" + id_academicTerm + "/course/"
-				+ id_course + "/activity/" + id + "/modify.htm";
+		+ id_course + "/activity/" + id + "/modify.htm";
 	}
 
 	/**
@@ -216,7 +254,7 @@ public class ActivityController {
 			@PathVariable("academicId") Long id_AcademicTerm,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("activityId") Long id_activity)
-			throws ServletException {
+					throws ServletException {
 
 		if (serviceActivity.deleteActivity(id_activity).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
@@ -235,7 +273,7 @@ public class ActivityController {
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("activityId") long id_Activity,
 			@PathVariable("compStatusId") Long id_learningStatus)
-			throws ServletException {
+					throws ServletException {
 
 		if (serviceActivity.deleteLearningActivity(id_learningStatus,
 				id_Activity).getSingleElement()) {
@@ -253,7 +291,7 @@ public class ActivityController {
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("activityId") long id_activity)
-			throws ServletException {
+					throws ServletException {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
@@ -267,6 +305,25 @@ public class ActivityController {
 		return new ModelAndView("activity/view", "model", model);
 	}
 
+
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/{activityId}/restore.htm")
+	// Every Post have to return redirect
+	public String restoreAcademicTerm(
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("courseId") Long id_course,
+			@PathVariable("activityId") Long id_activity) {
+		ResultClass<Activity> result = serviceActivity.unDeleteActivity(serviceActivity.getActivity(id_activity).getSingleElement());
+
+		if (!result.hasErrors())
+
+			return "redirect:/academicTerm/"+ id_academic +"/course/" +  id_course  +".htm";
+		else {
+			return "redirect:/error.htm";
+
+		}
+
+	}
+
 	/**
 	 * For binding the courses of the activity
 	 */
@@ -274,23 +331,23 @@ public class ActivityController {
 	protected void initBinder(WebDataBinder binder) throws Exception {
 		binder.registerCustomEditor(Set.class, "learningGoals",
 				new CustomCollectionEditor(Set.class) {
-					protected Object convertElement(Object element) {
-						if (element instanceof LearningGoal) {
-							logger.info("Converting...{}", element);
-							return element;
-						}
-						if (element instanceof String) {
-							LearningGoal learning = serviceLearningGoal
-									.getLearningGoalByName(element.toString()).getSingleElement();
-							logger.info("Loking up {} to {}", element,
-									learning);
+			protected Object convertElement(Object element) {
+				if (element instanceof LearningGoal) {
+					logger.info("Converting...{}", element);
+					return element;
+				}
+				if (element instanceof String) {
+					LearningGoal learning = serviceLearningGoal
+							.getLearningGoalByName(element.toString()).getSingleElement();
+					logger.info("Loking up {} to {}", element,
+							learning);
 
-							return learning;
-						}
-						System.out.println("Don't know what to do with: "
-								+ element);
-						return null;
-					}
-				});
+					return learning;
+				}
+				System.out.println("Don't know what to do with: "
+						+ element);
+				return null;
+			}
+		});
 	}
 }

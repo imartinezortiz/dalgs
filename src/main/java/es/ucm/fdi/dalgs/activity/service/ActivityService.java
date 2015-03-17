@@ -2,15 +2,14 @@ package es.ucm.fdi.dalgs.activity.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.activity.repository.ActivityRepository;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
@@ -28,18 +27,24 @@ public class ActivityService {
 
 	@Autowired
 	private CourseService serviceCourse;
+	
 	@Autowired
 	private UserService serviceUser;
+
+	@Autowired
+	private AclObjectService manageAclService;
 
 	@Autowired
 	private LearningGoalService serviceLearningGoal;
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> addActivity(Activity activity, Long id_course) {
+	public ResultClass<Activity> addActivity(Activity activity, Long id_course) {
 
+		boolean success = false;
+		
 		Activity activityExists = daoActivity.existByCode(activity.getInfo().getCode());
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		ResultClass<Activity> result = new ResultClass<>();
 
 		if( activityExists != null){
 			result.setHasErrors(true);
@@ -49,25 +54,36 @@ public class ActivityService {
 			if (activityExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
+				result.setSingleElement(activityExists);
 
 			}
-			result.setSingleElement(false);
+			else result.setSingleElement(activity);
 			result.setErrorsList(errors);
 		}
 		else{
 			activity.setCourse(serviceCourse.getCourse(id_course).getSingleElement());
-			boolean r = daoActivity.addActivity(activity);
-			if (r) 
-				result.setSingleElement(true);
+			success = daoActivity.addActivity(activity);
+			
+			if(success){
+				activityExists = daoActivity.existByCode(activity.getInfo().getCode());
+				success = manageAclService.addAclToObject(activityExists.getId(), activityExists.getClass().getName());
+				if (success) result.setSingleElement(activity);
+			
+			}else{
+				throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
+
+			}
+			
+		
 		}
 		return result;		
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<List<Activity>> getAll() {
-		ResultClass<List<Activity>> result = new ResultClass<List<Activity>>();
-		result.setSingleElement(daoActivity.getAll());
+	public ResultClass<Activity> getAll() {
+		ResultClass<Activity> result = new ResultClass<>();
+		result.addAll(daoActivity.getAll());
 		return result;
 	}
 	
@@ -123,9 +139,9 @@ public class ActivityService {
 
 //	@PreAuthorize("hasRole('ROLE_USER')")
 //	@PostFilter("hasPermission(filterObject, 'READ')")	
-	public ResultClass<Activity> getActivitiesForCourse(Long id_course) {
+	public ResultClass<Activity> getActivitiesForCourse(Long id_course, Boolean showAll) {
 		ResultClass<Activity> result = new ResultClass<>();
-		result.addAll(daoActivity.getActivitiesForCourse(id_course));
+		result.addAll(daoActivity.getActivitiesForCourse(id_course, showAll));
 		return result;
 	}
 
@@ -211,9 +227,9 @@ public class ActivityService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> unDeleteActivity(Activity activity) {
+	public ResultClass<Activity> unDeleteActivity(Activity activity) {
 		Activity a = daoActivity.existByCode(activity.getInfo().getCode());
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		ResultClass<Activity> result = new ResultClass<>();
 		if(a == null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
@@ -232,7 +248,7 @@ public class ActivityService {
 			a.setInfo(activity.getInfo());
 			boolean r = daoActivity.saveActivity(a);
 			if(r) 
-				result.setSingleElement(true);	
+				result.setSingleElement(a);	
 
 		}
 		return result;

@@ -54,7 +54,7 @@ public class ActivityRepository {
 		return em
 				.createQuery(
 						"select a from Activity a inner join a.course s  where a.isDeleted='false' order by a.course")
-				.getResultList();
+						.getResultList();
 	}
 
 	public boolean saveActivity(Activity activity) {
@@ -74,6 +74,7 @@ public class ActivityRepository {
 
 	public boolean deleteActivity(Long id) {
 		Activity activity = em.getReference(Activity.class, id);
+		activity.getLearningGoalStatus().clear();
 		activity.setDeleted(true);
 		try {
 
@@ -88,17 +89,26 @@ public class ActivityRepository {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Activity> getActivitiesForCourse(Long id_course) {
+	public List<Activity> getActivitiesForCourse(Long id_course, Boolean showAll) {
 		Course course = em.getReference(Course.class, id_course);
+		if(!showAll){
 
-		Query query = em
-				.createQuery("select a from Activity a where a.course=?1 and a.isDeleted='false' ");
-		query.setParameter(1, course);
+			Query query = em
+					.createQuery("select a from Activity a where a.course=?1 and a.isDeleted='false' ");
+			query.setParameter(1, course);
 
-//		if (query.getResultList().isEmpty())
-//			return null;
+			return query.getResultList();
+		}
+		else {
+			Query query = em
+					.createQuery("select a from Activity a where a.course=?1");
+			query.setParameter(1, course);
 
-		return query.getResultList();
+			return query.getResultList();	
+
+		}
+
+
 	}
 
 	public Activity existByCode(String code) {
@@ -131,14 +141,14 @@ public class ActivityRepository {
 		return (Activity) query.getResultList().get(0);
 
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Collection<Activity> getActivitiesForLearningGoal(
 			LearningGoal learningGoal) {
-//		LearningGoal learning =em.getReference(LearningGoal.class, id_learningGoal);
+		//		LearningGoal learning =em.getReference(LearningGoal.class, id_learningGoal);
 		Query query = em.createQuery("SELECT a FROM Activity a JOIN a.learningGoalStatus l WHERE l.learningGoal = ?1");
 		query.setParameter(1, learningGoal);
-		
+
 		return (Collection<Activity>)query.getResultList();
 	}
 	public boolean deleteActivitiesFromCourses(Collection<Course> courses) {
@@ -157,7 +167,7 @@ public class ActivityRepository {
 		}
 		return true;
 	}
-	
+
 	public boolean deleteActivitiesFromCourse(Course course) {
 
 		try {

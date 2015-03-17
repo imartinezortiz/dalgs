@@ -129,7 +129,7 @@ public class CourseService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ')")
+//	@PostFilter("hasPermission(filterObject, 'READ')")
 	@Transactional(readOnly = true)
 	public ResultClass<Course> getCourse(Long id) {
 		ResultClass<Course> result = new ResultClass<Course>();
@@ -181,11 +181,11 @@ public class CourseService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ')")
 	@Transactional(readOnly = true)
-	public ResultClass<Course> getCourseAll(Long id) {
+	public ResultClass<Course> getCourseAll(Long id, Boolean showAll) {
 		ResultClass<Course> result = new ResultClass<>();
 		Course c = daoCourse.getCourse(id);
-		c.setActivities(serviceActivity.getActivitiesForCourse(id));
-		c.setGroups(serviceGroup.getGroupsForCourse(id));
+		c.setActivities(serviceActivity.getActivitiesForCourse(id, showAll));
+		c.setGroups(serviceGroup.getGroupsForCourse(id, showAll));
 		
 		result.setSingleElement(c);
 	

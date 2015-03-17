@@ -18,8 +18,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
-
 import es.ucm.fdi.dalgs.domain.info.ActivityInfo;
 
 @Entity
@@ -30,6 +28,7 @@ public class Activity implements Cloneable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_activity")
 	private Long id;
+	
 
 	@Embedded
 	private ActivityInfo info;

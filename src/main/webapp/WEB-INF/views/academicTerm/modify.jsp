@@ -33,7 +33,7 @@
 					<label>Term: </label>
 					<form:input path="term" class="form-control" required="true"
 						length="20" />
-
+				<form:errors path="term" cssStyle="color: #ff0000" />
 				</div>
 				
 				<input type="submit" class="btn btn-success" value="Update">

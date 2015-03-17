@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -130,7 +131,7 @@ public class CourseController {
 			}
 
 		}else{
-			attr.addFlashAttribute("org.springframework.validation.BindingResult.addAcademicTerm", resultBinding);
+			attr.addFlashAttribute("org.springframework.validation.BindingResult.addCourse", resultBinding);
 			//			AcademicTerm a = serviceAcademic.getAcademicTerm(id_academic).getSingleElement();
 			//			attr.addFlashAttribute("academicTerm", a);
 			//			attr.addFlashAttribute("subjects",serviceSubject.getSubjectForDegree(a.getDegree()).getSingleElement());
@@ -179,7 +180,7 @@ public class CourseController {
 				//				return "redirect:/academicTerm/{academicId}/course/add.htm";
 			}
 		}else{
-			attr.addFlashAttribute("org.springframework.validation.BindingResult.addAcademicTerm", resultBinding);
+			attr.addFlashAttribute("org.springframework.validation.BindingResult.addCourse", resultBinding);
 			//			attr.addFlashAttribute("addCourse", course);
 
 		}
@@ -199,13 +200,14 @@ public class CourseController {
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}.htm", method = RequestMethod.GET)
 	protected ModelAndView formViewCourse(
 			@PathVariable("academicId") Long id_academic,
-			@PathVariable("courseId") Long id) throws ServletException {
+			@PathVariable("courseId") Long id,
+			@RequestParam(value = "showAll", defaultValue = "false") Boolean showAll) throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		Course p = serviceCourse.getCourseAll(id).getSingleElement();
+		Course p = serviceCourse.getCourseAll(id, showAll).getSingleElement();
 		myModel.put("course", p);
-
+		myModel.put("showAll", showAll);
 		//		List<Activity> activities = serviceActivity.getActivitiesForCourse(id);
 
 		if (!p.getActivities().isEmpty())
@@ -276,7 +278,7 @@ public class CourseController {
 			}
 		}
 		else {
-			attr.addFlashAttribute("org.springframework.validation.BindingResult.addAcademicTerm", resultBinding);
+			attr.addFlashAttribute("org.springframework.validation.BindingResult.modifyCourse", resultBinding);
 
 		}
 		
