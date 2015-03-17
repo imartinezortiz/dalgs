@@ -23,7 +23,26 @@
 				href="<c:url value='/degree/${degreeId}/module/${model.subject.topic.module.id}/topic/${model.subject.topic.id}/subject/${subjectId}/modify.htm'/>">				
 				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
 				Edit</a></sec:authorize>
-
+			<c:choose>
+				<c:when test="${model.showAll eq true}">
+					<a
+						href="<c:url value='/degree/${degreeId}/module/${model.subject.topic.module.id}/topic/${model.subject.topic.id}/subject/${subjectId}.htm?showAll=false'>
+    						</c:url>">
+						<img
+						src="<c:url value="/resources/images/theme/trash_open_view.png" /> "
+						style="float: right; margin-right: 1%; margin-top: -0.5%;">
+					</a>
+				</c:when>
+				<c:otherwise>
+					<a
+						href="<c:url value='/degree/${degreeId}/module/${model.subject.topic.module.id}/topic/${model.subject.topic.id}/subject/${subjectId}.htm?showAll=true'> 
+    							</c:url>">
+						<img
+						src="<c:url value="/resources/images/theme/trash_close_view.png" /> "
+						style="float: right; margin-right: 1%;">
+					</a>
+				</c:otherwise>
+			</c:choose>
 		</div>
 
 		<div class="panel-body">

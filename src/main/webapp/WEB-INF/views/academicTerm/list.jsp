@@ -74,8 +74,10 @@
 							</sec:authorize>
 					</c:when>
 					<c:otherwise>
+						<sec:authorize access="hasRole('ROLE_ADMIN')">
 						<a	href="<c:url value='/academicTerm/${academic.id}/restore.htm'/>"
 								class="btn btn-success">Restore</a> 
+						</sec:authorize>
 					</c:otherwise>
 				</c:choose>
 				</td>

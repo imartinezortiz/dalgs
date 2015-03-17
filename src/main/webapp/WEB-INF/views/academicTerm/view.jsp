@@ -96,13 +96,30 @@
 							</div>
 						</td>
 
-						<td><a class="btn btn-success"
-							href="<c:url value='/academicTerm/${model.academicTerm.id}/course/${course.id}.htm'/>">
-								View </a> <sec:authorize access="hasRole('ROLE_ADMIN')">
-								<a class="btn btn-danger"
-									href="<c:url value='/academicTerm/${model.academicTerm.id}/course/${course.id}/delete.htm'/>">
-									Delete </a>
-							</sec:authorize></td>
+						<td>
+						<c:choose>
+								<c:when test="${course.isDeleted eq false}">
+									<a class="btn btn-success"
+										href="<c:url value='/academicTerm/${model.academicTerm.id}/course/${course.id}.htm'/>">
+										View </a>
+									<sec:authorize access="hasRole('ROLE_ADMIN')">
+										<a class="btn btn-danger"
+											href="<c:url value='/academicTerm/${model.academicTerm.id}/course/${course.id}/delete.htm'/>">
+											Delete </a>
+									</sec:authorize>
+								</c:when>
+								<c:otherwise>
+									<sec:authorize access="hasRole('ROLE_ADMIN')">
+										<a class="btn btn-danger"
+											href="<c:url value='/academicTerm/${model.academicTerm.id}/course/${course.id}/restore.htm'/>">
+											Restore </a>
+									</sec:authorize>
+								</c:otherwise>
+							</c:choose>
+
+
+
+						</td>
 
 					</tr>
 				</c:forEach>
