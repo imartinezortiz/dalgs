@@ -108,7 +108,7 @@
 				</button>
 				<a class="navbar-brand active" href="${homeUrl}"><img
 					style="width: 40px; margin-top: -25%;"
-					src="<c:url value="/resources/images/house.png" /> "></a>
+					src="<c:url value="/resources/images/theme/house.png" /> "></a>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->

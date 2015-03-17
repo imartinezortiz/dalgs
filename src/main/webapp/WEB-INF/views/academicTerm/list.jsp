@@ -26,13 +26,13 @@
    				<c:when  test="${model.showAll eq true}">
    					<a href="<c:url value='/academicTerm/page/${model.currentPage}.htm?showAll=false'>
     						</c:url>">
-   					<img src="<c:url value="/resources/images/trash_open.png" /> "  
+   					<img src="<c:url value="/resources/images/theme/trash_open.png" /> "  
 			 		style=" float: right;  margin-top: -1;  margin-right: 1%;"></a> 
     			</c:when>
     			<c:otherwise>
     					<a href="<c:url value='/academicTerm/page/${model.currentPage}.htm?showAll=true'> 
     							</c:url>">
-			 			<img src="<c:url value="/resources/images/trash_close.png" /> " 
+			 			<img src="<c:url value="/resources/images/theme/trash_close.png" /> " 
 			 			 style="float: right; margin-right: 1%;margin-top: 3;"></a> 
 				</c:otherwise>
 			</c:choose>
@@ -64,16 +64,20 @@
 					<td>
 					<c:choose>
    						<c:when  test="${academic.isDeleted eq false}">
-   							<a	href="<c:url value='/academicTerm/${academic.id}.htm'/>"
+   							<a	href="<c:url value='/academicTerm/${academic.id}.htm?showAll=false'/>"
 								class="btn btn-success">View</a> 
  							<sec:authorize access="hasRole('ROLE_ADMIN')">
+ 							<a	href="<c:url value='/academicTerm/${academic.id}/clone.htm'/>"
+								class="btn btn-success">Clone</a> 
 							<a href="<c:url value='/academicTerm/${academic.id}/delete.htm'/>"
 								class="btn btn-danger">Delete</a>
 							</sec:authorize>
 					</c:when>
 					<c:otherwise>
+						<sec:authorize access="hasRole('ROLE_ADMIN')">
 						<a	href="<c:url value='/academicTerm/${academic.id}/restore.htm'/>"
 								class="btn btn-success">Restore</a> 
+						</sec:authorize>
 					</c:otherwise>
 				</c:choose>
 				</td>

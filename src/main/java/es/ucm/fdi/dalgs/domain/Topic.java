@@ -2,7 +2,9 @@ package es.ucm.fdi.dalgs.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -15,41 +17,35 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import es.ucm.fdi.dalgs.domain.info.TopicInfo;
 
 @Entity
-//@Table(name = "topic")
 @Table(name = "topic", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"code_topic", "id_module" }))
-public class Topic {
+public class Topic implements Cloneable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id_topic")	
+	@Column(name = "id_topic")
 	private Long id;
-	
+
 	@Embedded
 	private TopicInfo info;
-	
-	
+
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
+
+	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_module")
 	private Module module;
-	
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "topic")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "topic",cascade = CascadeType.ALL)
 	private Collection<Subject> subjects = new ArrayList<Subject>();
 
-	
 	public Topic() {
 		super();
-		this.isDeleted=false;
+		this.isDeleted = false;
 	}
 
 	public Long getId() {
@@ -91,7 +87,25 @@ public class Topic {
 	public void setSubjects(Collection<Subject> subjects) {
 		this.subjects = subjects;
 	}
-	
-	
-	
+
+	public Topic clone() {
+		Topic clone = new Topic();
+		clone.setId(null);
+
+		clone.setDeleted(this.isDeleted);
+		clone.setInfo(this.info);
+		
+//		clone.setModule(this.module); clone.getModule().setId(null);
+
+		List<Subject> subjectsClone = new ArrayList<Subject>();
+		if (this.subjects != null) {
+			for (Subject s : this.subjects) {
+				subjectsClone.add(s.clone());
+			}
+		}
+		clone.setSubjects(subjectsClone);
+
+		return clone;
+	}
+
 }

@@ -12,25 +12,36 @@
 	<div class="table-responsive list">
 		<div class="panel-heading list">
 
-			<h4>			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-			Degree List</h4>
-						<sec:authorize access="hasRole('ROLE_ADMIN')">
-			
-			<a  style="cursor:copy;" class="btn btn-add2" href="<c:url value='/degree/add.htm'/>">
-							<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				Add  </a></sec:authorize>
-				<c:choose>
-   				<c:when  test="${model.showAll eq true}">
-   					<a href="<c:url value='/degree/page/${model.currentPage}.htm?showAll=false'>
+			<h4>
+				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
+				Degree List
+			</h4>
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+
+				<a style="cursor: copy;" class="btn btn-add2"
+					href="<c:url value='/degree/add.htm'/>"> <span
+					class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
+					Add
+				</a>
+			</sec:authorize>
+			<c:choose>
+				<c:when test="${model.showAll eq true}">
+					<a
+						href="<c:url value='/degree/page/${model.currentPage}.htm?showAll=false'>
     						</c:url>">
-   					<img src="<c:url value="/resources/images/trash_open.png" /> "  
-			 		style=" float: right;  margin-top: -1;  margin-right: 1%;"></a> 
-    			</c:when>
-    			<c:otherwise>
-    					<a href="<c:url value='/degree/page/${model.currentPage}.htm?showAll=true'> 
+						<img
+						src="<c:url value="/resources/images/theme/trash_open.png" /> "
+						style="float: right; margin-top: -1; margin-right: 1%;">
+					</a>
+				</c:when>
+				<c:otherwise>
+					<a
+						href="<c:url value='/degree/page/${model.currentPage}.htm?showAll=true'> 
     							</c:url>">
-			 			<img src="<c:url value="/resources/images/trash_close.png" /> " 
-			 			 style="float: right; margin-right: 1%;margin-top: 3;"></a> 
+						<img
+						src="<c:url value="/resources/images/theme/trash_close.png" /> "
+						style="float: right; margin-right: 1%; margin-top: 3;">
+					</a>
 				</c:otherwise>
 			</c:choose>
 		</div>
@@ -47,30 +58,29 @@
 					<td><c:out value="${degree.info.name}" /></td>
 					<td><c:out value="${degree.info.description}" /></td>
 
-					<td>
-					
-					<c:choose>
-   						<c:when  test="${degree.isDeleted eq false}">
-   						<a class="btn list-btn btn-success"
-						href="<c:url value='/degree/${degree.id}.htm'/>">View</a> <!-- <a href="modify.html"  class="btn list-btn btn-warning">Modify</a>-->
-						<sec:authorize access="hasRole('ROLE_ADMIN')">
-						<a class="btn list-btn btn-danger"
-						href="<c:url value='/degree/${degree.id}/delete.htm'/>">Delete</a>
-						</sec:authorize>
-					</c:when>
-					<c:otherwise>
-						<a	href="<c:url value='/degree/${degree.id}/restore.htm'/>"
-								class="btn btn-success">Restore</a> 
-					</c:otherwise>
-				</c:choose>
-				</td>
+					<td><c:choose>
+							<c:when test="${degree.isDeleted eq false}">
+								<a class="btn list-btn btn-success"
+									href="<c:url value='/degree/${degree.id}.htm'/>">View</a>
+								<!-- <a href="modify.html"  class="btn list-btn btn-warning">Modify</a>-->
+								<sec:authorize access="hasRole('ROLE_ADMIN')">
+									<a class="btn list-btn btn-danger"
+										href="<c:url value='/degree/${degree.id}/delete.htm'/>">Delete</a>
+								</sec:authorize>
+							</c:when>
+							<c:otherwise>							
+							<sec:authorize access="hasRole('ROLE_ADMIN')">
+								<a href="<c:url value='/degree/${degree.id}/restore.htm'/>"
+									class="btn btn-success">Restore</a></sec:authorize>
+							</c:otherwise>
+						</c:choose></td>
 
 				</tr>
 			</c:forEach>
 
 
 		</table>
-		
+
 		<nav>
 			<ul class="pagination">
 				<c:if test="${model.currentPage > 0}">
@@ -86,7 +96,8 @@
 
 
 
-					<li><a href="<c:url value='/degree/page/${index}.htm?showAll=${model.showAll}'/>">
+					<li><a
+						href="<c:url value='/degree/page/${index}.htm?showAll=${model.showAll}'/>">
 							${index + 1} </a></li>
 
 

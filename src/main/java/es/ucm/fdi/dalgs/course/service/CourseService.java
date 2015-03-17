@@ -46,7 +46,7 @@ public class CourseService {
 		
 		boolean success = false;
 		
-		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic).getSingleElement());
+		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic,false).getSingleElement());
 		Course courseExists = daoCourse.exist(course);
 		ResultClass<Course> result = new ResultClass<Course>();
 
@@ -96,7 +96,7 @@ public class CourseService {
 	public ResultClass<Boolean> modifyCourse(Course course, Long id_academic, Long id_course) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		
-		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic).getSingleElement());
+		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic, false).getSingleElement());
 		
 		Course modifyCourse = daoCourse.getCourse(id_course);
 		
@@ -137,12 +137,12 @@ public class CourseService {
 		return result;
 	}
 	
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PreAuthorize("hasPermission(#course, 'DELETE') or hasPermission(#course, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+//	@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public ResultClass<Boolean> deleteCourse(Course course) {
+	public ResultClass<Boolean> deleteCourse(Long id) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-//		Course course = daoCourse.getCourse(resultClass);
+		Course course = daoCourse.getCourse(id);
 		if (serviceActivity.deleteActivitiesFromCourse(course).getSingleElement()){
 			result.setSingleElement(daoCourse.deleteCourse(course));
 			return result;
@@ -152,12 +152,12 @@ public class CourseService {
 	}
 
 	
-//	@PreAuthorize("hasRole('ROLE_USER')")
-//	@PostFilter("hasPermission(filterObject, 'READ')")
-	public ResultClass<Course> getCoursesByAcademicTerm(Long id_academic) {
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ')")
+	public ResultClass<Course> getCoursesByAcademicTerm(Long id_academic, Boolean showAll) {
 		ResultClass<Course> result = new ResultClass<>();
-		result.addAll(daoCourse.getCoursesByAcademicTerm(id_academic));
-		
+
+		result.addAll(daoCourse.getCoursesByAcademicTerm(id_academic, showAll));
 		return result;
 	}
 
@@ -230,7 +230,7 @@ public class CourseService {
 	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#course, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Course> unDeleteCourse(Course course, Long id_academic) {
-		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic).getSingleElement());
+		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic, false).getSingleElement());
 		Course c = daoCourse.exist(course);
 		ResultClass<Course> result = new ResultClass<>();
 		if(c == null){

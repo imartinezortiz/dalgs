@@ -19,11 +19,11 @@
 			<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
 
 			<h3 class="panel-title list">Academic Term Details</h3>
- 			<sec:authorize access="hasRole('ROLE_ADMIN')">
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<a class="btn list-btn btn-warning"
 					href="<c:url value='/academicTerm/${academicId}/modify.htm'/>">Modify</a>
- 			</sec:authorize>
-
+			</sec:authorize>
+			
 		</div>
 
 		<div class="panel-body">
@@ -50,12 +50,33 @@
 
 			<h3 class="panel-title list">Course List</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
-				<a class="btn list-btn btn-warning2" style="margin-top: 5px; cursor:copy;"
+				<a class="btn list-btn btn-warning2"
+					style="margin-top: 5px; cursor: copy;"
 					href="<c:url value='/academicTerm/${model.academicTerm.id}/course/add.htm'/>">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 					Add
 				</a>
 			</sec:authorize>
+			<c:choose>
+				<c:when test="${model.showAll eq true}">
+					<a
+						href="<c:url value='/academicTerm/${academicId}.htm?showAll=false'>
+    						</c:url>">
+						<img
+						src="<c:url value="/resources/images/theme/trash_open_view.png" /> "
+						style="float: right; margin-right: 1%; margin-top: -0.5%;">
+					</a>
+				</c:when>
+				<c:otherwise>
+					<a
+						href="<c:url value='/academicTerm/${academicId}.htm?showAll=true'> 
+    							</c:url>">
+						<img
+						src="<c:url value="/resources/images/theme/trash_close_view.png" /> "
+						style="float: right; margin-right: 1%;">
+					</a>
+				</c:otherwise>
+			</c:choose>
 		</div>
 		<div class="panel-body">
 			<table class="table table-striped table-bordered">
@@ -75,15 +96,30 @@
 							</div>
 						</td>
 
-						<td><a class="btn btn-success"
-							href="<c:url value='/academicTerm/${model.academicTerm.id}/course/${course.id}.htm'/>">
-								View </a> 
-								<sec:authorize access="hasRole('ROLE_ADMIN')">
-								<a class="btn btn-danger"
-									href="<c:url value='/academicTerm/${model.academicTerm.id}/course/${course.id}/delete.htm'/>">
-									Delete </a>
-								</sec:authorize>
-							</td>
+						<td>
+						<c:choose>
+								<c:when test="${course.isDeleted eq false}">
+									<a class="btn btn-success"
+										href="<c:url value='/academicTerm/${model.academicTerm.id}/course/${course.id}.htm'/>">
+										View </a>
+									<sec:authorize access="hasRole('ROLE_ADMIN')">
+										<a class="btn btn-danger"
+											href="<c:url value='/academicTerm/${model.academicTerm.id}/course/${course.id}/delete.htm'/>">
+											Delete </a>
+									</sec:authorize>
+								</c:when>
+								<c:otherwise>
+									<sec:authorize access="hasRole('ROLE_ADMIN')">
+										<a class="btn btn-danger"
+											href="<c:url value='/academicTerm/${model.academicTerm.id}/course/${course.id}/restore.htm'/>">
+											Restore </a>
+									</sec:authorize>
+								</c:otherwise>
+							</c:choose>
+
+
+
+						</td>
 
 					</tr>
 				</c:forEach>

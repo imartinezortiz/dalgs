@@ -2,6 +2,7 @@ package es.ucm.fdi.dalgs.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -21,11 +22,10 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
-
-
 @Entity
-@Table(name = "academicterm", uniqueConstraints = { @UniqueConstraint(columnNames = {"term", "id_degree" }) })
-public class AcademicTerm {
+@Table(name = "academicterm", uniqueConstraints = { @UniqueConstraint(columnNames = {
+		"term", "id_degree" }) })
+public class AcademicTerm implements Cloneable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,7 +35,7 @@ public class AcademicTerm {
 	@NotEmpty
 	@NotNull
 	@NotBlank
-	@Size(min=4, max=20)
+	@Size(min = 4, max = 20)
 	@Basic(optional = false)
 	@Column(name = "term", nullable = false, columnDefinition = "varchar(32) default '2014/2015'")
 	private String term;
@@ -44,11 +44,12 @@ public class AcademicTerm {
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-	
 	@NotNull(message="field null")
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_degree")
 	private Degree degree;
+
+
 
 	
 	//@NotNull
@@ -56,12 +57,12 @@ public class AcademicTerm {
 	@OneToMany(mappedBy = "academicTerm", cascade = CascadeType.ALL)
 	private Collection<Course> courses = new ArrayList<Course>();
 
-	
 	public AcademicTerm() {
 		super();
 		this.isDeleted = false;
 	}
 
+	
 	public Collection<Course> getCourses() {
 		return courses;
 	}
@@ -86,7 +87,6 @@ public class AcademicTerm {
 		this.term = term;
 	}
 
-	
 	public Boolean getIsDeleted() {
 		return isDeleted;
 	}
@@ -102,6 +102,26 @@ public class AcademicTerm {
 	public void setDegree(Degree degree) {
 		this.degree = degree;
 	}
-	
+
+	// For doing copy
+	public AcademicTerm clone() {
+		AcademicTerm clon = new AcademicTerm();
+		clon.setId(null);
+
+		clon.setTerm(this.term + " (copy)");
+		clon.setDeleted(this.isDeleted);
+		clon.setDegree(this.degree.clone(false));
+
+		List<Course> coursesClon = new ArrayList<Course>();
+		if (this.courses != null) {
+			for (Course c : this.courses) {
+				coursesClon.add((Course) c.clone(false));
+			}
+		}
+		clon.setCourses(coursesClon);
+
+		return clon;
+	}
+
 	
 }

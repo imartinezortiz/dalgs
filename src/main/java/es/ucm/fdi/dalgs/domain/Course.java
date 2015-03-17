@@ -2,6 +2,7 @@ package es.ucm.fdi.dalgs.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,21 +16,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-
-
-
 @Entity
-@Table(name = "course", uniqueConstraints = { @UniqueConstraint(columnNames = {
-		"id_subject", "id_academicterm" }) })
-public class Course {
+@Table(name = "course", uniqueConstraints = { @UniqueConstraint(columnNames = {"id_subject", "id_academicterm" }) })
+public class Course implements Cloneable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_course")
 	private Long id;
-
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
@@ -45,15 +40,14 @@ public class Course {
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
 	private Collection<Group> groups = new ArrayList<Group>();
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false,cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_academicterm")
 	private AcademicTerm academicTerm;
 
-
 	@ManyToOne
 	@JoinColumn(name = "id_coordinator")
-	private User coordinator; 
-	
+	private User coordinator;
+
 	public User getCoordinator() {
 		return coordinator;
 	}
@@ -68,7 +62,7 @@ public class Course {
 
 	public Course() {
 		super();
-		this.isDeleted=false;
+		this.isDeleted = false;
 
 	}
 
@@ -118,6 +112,35 @@ public class Course {
 
 	public void setGroups(Collection<Group> groups) {
 		this.groups = groups;
+	}
+
+	public Course clone(Boolean cloneOwner) {
+		Course clone = new Course();
+
+		clone.setId(null);
+
+		//clone.setAcademicTerm(this.academicTerm); clone.getAcademicTerm().setId(null);
+		
+		clone.setDeleted(isDeleted);
+		clone.setSubject((Subject) this.subject.clone());
+
+		List<Group> groupsClone = new ArrayList<Group>();
+		if (this.groups != null) {
+			for (Group g : this.groups) {
+				groupsClone.add((Group) g.clone());
+			}
+		}
+		clone.setGroups(groupsClone);
+
+		List<Activity> activitiesClone = new ArrayList<Activity>();
+		if (this.activities != null) {
+			for (Activity a : this.activities) {
+				activitiesClone.add((Activity) a.clone());
+			}
+		}
+		clone.setActivities(activities);
+
+		return clone;
 	}
 
 }

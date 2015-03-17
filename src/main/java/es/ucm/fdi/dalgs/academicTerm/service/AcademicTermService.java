@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,12 +13,9 @@ import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
-import es.ucm.fdi.dalgs.domain.Course;
 
 @Service
 public class AcademicTermService {
-
-
 
 	@Autowired
 	private AclObjectService manageAclService;
@@ -31,16 +27,11 @@ public class AcademicTermService {
 	private CourseService serviceCourse;
 
 
-
-
-
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<AcademicTerm> addAcademicTerm(AcademicTerm academicTerm) {
 
 		boolean success  =false;
-
-
 
 		AcademicTerm academicExists = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
 		ResultClass<AcademicTerm> result = new ResultClass<>();
@@ -62,16 +53,14 @@ public class AcademicTermService {
 		}
 		else{
 			success = daoAcademicTerm.addAcademicTerm(academicTerm);
-			
-			
 
-		
 
 		if(success){ //&& academicAux != null){
 			academicExists = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
 			success = manageAclService.addAclToObject(academicExists.getId(), academicExists.getClass().getName());
 			if (success) result.setSingleElement(academicTerm);
-		} else {
+		} 
+		else {
 			throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
 		}
 		
@@ -124,7 +113,7 @@ public class AcademicTermService {
 	 *  filterObject refers to the returned object list.
 	 */
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ')")
+//	@PostFilter("hasPermission(filterObject, 'READ')")
 	@Transactional(readOnly = true)
 	public ResultClass<AcademicTerm> getAcademicsTerm(Integer pageIndex, Boolean showAll) {
 		ResultClass<AcademicTerm> result = new ResultClass<>();
@@ -161,7 +150,7 @@ public class AcademicTermService {
 
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ')") // Collection: filterObject
+//	@PostFilter("hasPermission(filterObject, 'READ')") // Collection: filterObject
 	@Transactional(readOnly = false)
 	public ResultClass<AcademicTerm> getAcademicTermsByDegree(Long id_degree) {
 		ResultClass<AcademicTerm> result = new ResultClass<>();
@@ -170,21 +159,19 @@ public class AcademicTermService {
 	}
 
 
-	// WORKING 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ')")
+//	@PostFilter("hasPermission(filterObject, 'READ')")
 	@Transactional(readOnly = true)
-	public ResultClass<AcademicTerm> getAcademicTerm(Long id_academic) {
+	public ResultClass<AcademicTerm> getAcademicTerm(Long id_academic, Boolean showAll) {
 		ResultClass<AcademicTerm> result = new ResultClass<AcademicTerm>();
 		AcademicTerm aT= daoAcademicTerm.getAcademicTermById(id_academic);
-	
 		aT.setCourses(serviceCourse.getCoursesByAcademicTerm(id_academic));
 		result.setSingleElement(aT);
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	//	@PreAuthorize("hasPermission(returnObject, 'DELETE') or hasPermission(returnObject, 'ADMINISTRATION')" )
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(returnObject, 'DELETE') or hasPermission(returnObject, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteAcademicTermCollection(Collection<AcademicTerm> academicList) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -197,8 +184,9 @@ public class AcademicTermService {
 	}
 
 	
-	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, 'ADMINISTRATION')")	@Transactional(readOnly = false)
-	public ResultClass<AcademicTerm> undeleteAcademic(AcademicTerm academicTerm) {
+	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
+	@Transactional(readOnly = false)
+	public ResultClass<AcademicTerm> restoreAcademic(AcademicTerm academicTerm) {
 		AcademicTerm a = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
 		ResultClass<AcademicTerm> result = new ResultClass<>();
 		

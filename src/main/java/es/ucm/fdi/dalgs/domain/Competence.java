@@ -2,7 +2,9 @@ package es.ucm.fdi.dalgs.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -16,47 +18,43 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import es.ucm.fdi.dalgs.domain.info.CompetenceInfo;
 
-
 @Entity
-@Table(name = "competence", uniqueConstraints = @UniqueConstraint(columnNames = {"code_competence", "id_degree" }))
-public class Competence {
+@Table(name = "competence", uniqueConstraints = @UniqueConstraint(columnNames = {
+		"code_competence", "id_degree" }))
+public class Competence implements Cloneable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_competence")
 	private Long id;
-	
+
 	@Embedded
 	private CompetenceInfo info;
 
-
-	@ManyToMany(mappedBy = "competences", fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "competences", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	private Collection<Subject> subjects = new ArrayList<Subject>();
-	
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "competence")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "competence",cascade = CascadeType.ALL)
 	private Collection<LearningGoal> learningGoals = new ArrayList<LearningGoal>();
 
-	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_degree")
 	private Degree degree;
+
 
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-//	@Column(name = "code_competence", nullable = false)
-//	private String code;
+	// @Column(name = "code_competence", nullable = false)
+	// private String code;
 
 	public Competence() {
 		super();
-		this.isDeleted=false;
+		this.isDeleted = false;
 	}
 
 	public Degree getDegree() {
@@ -74,7 +72,6 @@ public class Competence {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 
 	public Collection<Subject> getSubjects() {
 		return subjects;
@@ -108,12 +105,35 @@ public class Competence {
 		this.learningGoals = learningGoals;
 	}
 
-//	public String getCode() {
-//		return code;
-//	}
-//
-//	public void setCode(String code) {
-//		this.code = code;
-//	}
+	public Competence clone() {
+		Competence clone = new Competence();
+
+		clone.setId(null);
+
+		clone.setInfo(this.info);
+		clone.setDeleted(this.isDeleted);
+
+		List<LearningGoal> learningGoalsClon = new ArrayList<LearningGoal>();
+		if (this.learningGoals != null) {
+			for (LearningGoal lg : this.learningGoals) {
+				learningGoalsClon.add((LearningGoal) lg.clone());
+			}
+		}
+		clone.setLearningGoals(learningGoalsClon);
+//		clone.setSubjects(this.subjects); 
+
+//		
+//		List<Subject> subjectsClone = (List<Subject>) this.subjects;
+//		if(subjectsClone != null){
+//			for(Subject s: this.subjects){
+//				s.setId(null);
+//				subjectsClone.add(s);
+//			}
+//		}
+//		clone.setSubjects(subjectsClone); 
+
+		return clone;
+
+	}
 
 }

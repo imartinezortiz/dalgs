@@ -9,7 +9,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Embeddable
-public class LearningGoalStatus {
+public class LearningGoalStatus implements Cloneable{
 
 	@NotNull
 	@ManyToOne
@@ -23,6 +23,10 @@ public class LearningGoalStatus {
 	private Integer percentage;
 
 
+
+	public LearningGoalStatus() {
+		super();
+	}
 
 	public LearningGoal getLearningGoal() {
 		return learningGoal;
@@ -38,6 +42,15 @@ public class LearningGoalStatus {
 
 	public void setPercentage(Integer percentage) {
 		this.percentage = percentage;
+	}
+	
+	public LearningGoalStatus clone(){
+		LearningGoalStatus clone = new LearningGoalStatus();
+		
+		//clone.setLearningGoal(this.learningGoal); clone.getLearningGoal().setId(null);
+		
+		clone.setPercentage(this.percentage);
+		return clone;
 	}
 
 }

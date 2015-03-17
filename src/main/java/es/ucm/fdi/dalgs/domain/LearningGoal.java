@@ -1,5 +1,6 @@
 package es.ucm.fdi.dalgs.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -10,13 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import es.ucm.fdi.dalgs.domain.info.LearningGoalInfo;
 
 @Entity
 @Table(name = "learninggoal")
-public class LearningGoal {
+public class LearningGoal implements Cloneable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,7 +26,7 @@ public class LearningGoal {
 	@Embedded
 	private LearningGoalInfo info;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_competence")
 	private Competence competence;
 	
@@ -74,6 +74,17 @@ public class LearningGoal {
 	}
 	
 	
-	
+	public LearningGoal clone(){
+		LearningGoal clone = new LearningGoal();
+		
+		clone.setId(null);
+		
+		//clone.setCompetence(this.competence); clone.getCompetence().setId(null);
+		
+		clone.setDeleted(this.isDeleted);
+		clone.setInfo(this.info);
+		
+		return clone;
+	}
 		
 }
