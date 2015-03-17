@@ -238,14 +238,14 @@ public class AcademicTermController {
 	@RequestMapping(value = "/academicTerm/{academicId}.htm", method = RequestMethod.GET)
 	protected ModelAndView academicTermGET(
 			@PathVariable("academicId") Long id_academic,
-			@RequestParam(value = "showAll", defaultValue = "false") Boolean showAll)
+			@RequestParam(value = "showAll", defaultValue = "false") Boolean show)
 			throws ServletException {
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		AcademicTerm a = serviceAcademicTerm.getAcademicTerm(id_academic,showAll).getSingleElement();
+		AcademicTerm a = serviceAcademicTerm.getAcademicTerm(id_academic,show).getSingleElement();
 		myModel.put("academicTerm", a);
 		
-		myModel.put("showAll", showAll);
+		myModel.put("showAll", show);
 
 		myModel.put("courses", a.getCourses());
 

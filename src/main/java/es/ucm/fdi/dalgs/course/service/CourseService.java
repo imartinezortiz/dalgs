@@ -153,7 +153,7 @@ public class CourseService {
 
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ')")
+//	@PostFilter("hasPermission(filterObject, 'READ')")
 	public ResultClass<Course> getCoursesByAcademicTerm(Long id_academic, Boolean showAll) {
 		ResultClass<Course> result = new ResultClass<>();
 

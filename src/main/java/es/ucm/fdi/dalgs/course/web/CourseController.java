@@ -57,6 +57,17 @@ public class CourseController {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(CourseController.class);
+	
+	
+	private Boolean showAll;
+
+	public Boolean getShowAll() {
+		return showAll;
+	}
+
+	public void setShowAll(Boolean showAll) {
+		this.showAll = showAll;
+	}
 
 	/**
 	 * Methods for adding courses
@@ -274,7 +285,22 @@ public class CourseController {
 
 
 
+	}
+	
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/restore.htm")
+	// Every Post have to return redirect
+	public String restoreAcademicTerm(
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("courseId") Long id_course) {
+		ResultClass<Course> result = serviceCourse.unDeleteCourse(serviceCourse.getCourse(id_course).getSingleElement(), id_academic);
+			
+		if (!result.hasErrors())
 
+			return "redirect:/academicTerm/"+ id_academic +".htm";//?showAll=" + showAll;
+		else {
+			return "redirect:/error.htm";
+
+		}
 
 	}
 
