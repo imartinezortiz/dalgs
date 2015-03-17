@@ -24,7 +24,9 @@
 
 
 			<form:form method="post" commandName="modifyCourse" role="form">
-	
+				<div>
+				<form:hidden path="id"/>
+				</div>
 				
 				<div class="form-group">
 					<label>Academic Term:</label>

@@ -25,7 +25,10 @@
 		</div>
 		<div class="panel-body">
 			<form:form method="post" commandName="addCourse" role="form">
-
+				
+				<div>
+					<form:hidden path="id" />
+				</div>
 				<div class="form-group">
 					<label>Academic Term</label>
 					<p>${academicTerm.term}&nbsp; ${academicTerm.degree.info.name}</p>

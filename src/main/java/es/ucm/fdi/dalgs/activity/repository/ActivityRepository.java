@@ -95,8 +95,8 @@ public class ActivityRepository {
 				.createQuery("select a from Activity a where a.course=?1 and a.isDeleted='false' ");
 		query.setParameter(1, course);
 
-		if (query.getResultList().isEmpty())
-			return null;
+//		if (query.getResultList().isEmpty())
+//			return null;
 
 		return query.getResultList();
 	}

@@ -91,7 +91,7 @@ public class CourseService {
 
 
 
-	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
+	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#course, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyCourse(Course course, Long id_academic, Long id_course) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -137,14 +137,14 @@ public class CourseService {
 		return result;
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-//	@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#course, 'DELETE') or hasPermission(#course, 'ADMINISTRATION')")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public ResultClass<Boolean> deleteCourse(Long id) {
+	public ResultClass<Boolean> deleteCourse(Course course) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		Course course = daoCourse.getCourse(id);
+//		Course course = daoCourse.getCourse(resultClass);
 		if (serviceActivity.deleteActivitiesFromCourse(course).getSingleElement()){
-			result.setSingleElement(daoCourse.deleteCourse(id));
+			result.setSingleElement(daoCourse.deleteCourse(course));
 			return result;
 		}
 		result.setSingleElement(false);
@@ -152,12 +152,12 @@ public class CourseService {
 	}
 
 	
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ')")
+//	@PreAuthorize("hasRole('ROLE_USER')")
+//	@PostFilter("hasPermission(filterObject, 'READ')")
 	public ResultClass<Course> getCoursesByAcademicTerm(Long id_academic) {
 		ResultClass<Course> result = new ResultClass<>();
-		Collection<Course> courses =  daoCourse.getCoursesByAcademicTerm(id_academic);
-		if(courses != null) result.addAll(courses);
+		result.addAll(daoCourse.getCoursesByAcademicTerm(id_academic));
+		
 		return result;
 	}
 
@@ -178,14 +178,14 @@ public class CourseService {
 
 
 	
-	@PreAuthorize("hasRole('ROLE_USER')")	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ')")
 	@Transactional(readOnly = true)
 	public ResultClass<Course> getCourseAll(Long id) {
 		ResultClass<Course> result = new ResultClass<>();
 		Course c = daoCourse.getCourse(id);
-		c.setActivities(serviceActivity.getActivitiesForCourse(id).getSingleElement());
-		c.setGroups(serviceGroup.getGroupsForCourse(id).getSingleElement());
+		c.setActivities(serviceActivity.getActivitiesForCourse(id));
+		c.setGroups(serviceGroup.getGroupsForCourse(id));
 		
 		result.setSingleElement(c);
 	
@@ -226,7 +226,8 @@ public class CourseService {
 //		return result;
 //	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#course, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Course> unDeleteCourse(Course course, Long id_academic) {
 		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic).getSingleElement());

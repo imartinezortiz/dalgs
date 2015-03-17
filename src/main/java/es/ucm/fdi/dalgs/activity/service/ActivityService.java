@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -120,11 +121,11 @@ public class ActivityService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@Transactional(readOnly = true)
-	public ResultClass<List<Activity>> getActivitiesForCourse(Long id_course) {
-		ResultClass<List<Activity>> result = new ResultClass<List<Activity>>();
-		result.setSingleElement(daoActivity.getActivitiesForCourse(id_course));
+//	@PreAuthorize("hasRole('ROLE_USER')")
+//	@PostFilter("hasPermission(filterObject, 'READ')")	
+	public ResultClass<Activity> getActivitiesForCourse(Long id_course) {
+		ResultClass<Activity> result = new ResultClass<>();
+		result.addAll(daoActivity.getActivitiesForCourse(id_course));
 		return result;
 	}
 

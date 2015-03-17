@@ -70,8 +70,8 @@ public class CourseRepository {
 	}
 
 	
-	public boolean deleteCourse(Long id) {
-		Course course = em.getReference(Course.class, id);
+	public boolean deleteCourse(Course course) {
+//		Course course = em.getReference(Course.class, course2);
 		try {
 			course.setDeleted(true);
 			em.merge(course);

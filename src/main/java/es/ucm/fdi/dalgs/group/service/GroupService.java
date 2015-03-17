@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -119,10 +120,11 @@ public class GroupService {
 		return result;
 	}
 
-
-	public ResultClass<Collection<Group>> getGroupsForCourse(Long id) {
-		ResultClass<Collection<Group>> result = new ResultClass<Collection<Group>>();
-		result.setSingleElement(daoGroup.getGroupsForCourse(id));
+//	@PreAuthorize("hasRole('ROLE_USER')")
+//	@PostFilter("hasPermission(filterObject, 'READ')")
+	public ResultClass<Group> getGroupsForCourse(Long id) {
+		ResultClass<Group> result = new ResultClass<>();
+		result.addAll(daoGroup.getGroupsForCourse(id));
 		return result;
 	}
 

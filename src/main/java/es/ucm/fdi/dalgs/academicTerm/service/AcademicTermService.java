@@ -14,6 +14,7 @@ import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
+import es.ucm.fdi.dalgs.domain.Course;
 
 @Service
 public class AcademicTermService {
@@ -81,17 +82,17 @@ public class AcademicTermService {
 
 
 	
-	//	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
+	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifyAcademicTerm(AcademicTerm academic, Long id_academic) {
+	public ResultClass<Boolean> modifyAcademicTerm(AcademicTerm academicTerm, Long id_academic) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
 		AcademicTerm modifyAcademic = daoAcademicTerm.getAcademicTermById(id_academic);
 
 
-		AcademicTerm academicExists = daoAcademicTerm.exists(academic.getTerm(), modifyAcademic.getDegree());
+		AcademicTerm academicExists = daoAcademicTerm.exists(academicTerm.getTerm(), modifyAcademic.getDegree());
 
-		if(!academic.getTerm().equalsIgnoreCase(modifyAcademic.getTerm())  && 
+		if(!academicTerm.getTerm().equalsIgnoreCase(modifyAcademic.getTerm())  && 
 				academicExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
@@ -106,7 +107,7 @@ public class AcademicTermService {
 			result.setSingleElement(false);
 		}
 		else{
-			modifyAcademic.setTerm(academic.getTerm());
+			modifyAcademic.setTerm(academicTerm.getTerm());
 			boolean r = daoAcademicTerm.saveAcademicTerm(modifyAcademic);
 			if (r) 
 				result.setSingleElement(true);
@@ -132,13 +133,13 @@ public class AcademicTermService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	//	@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')" )
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)// propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean> deleteAcademicTerm(AcademicTerm academicTerm) {
 		boolean success = false;
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		if (academicTerm.getCourses() == null || serviceCourse.deleteCoursesFromAcademic(academicTerm).getSingleElement()){
+		if (academicTerm.getCourses().isEmpty() || serviceCourse.deleteCoursesFromAcademic(academicTerm).getSingleElement()){
 
 			/* COMENTADO PARA LA PAPELERA DE LA VISTA
 			 success = ( manageAclService.removeAclFromObject(academicTerm.getId(), academicTerm.getClass().getName()) &&
@@ -176,6 +177,7 @@ public class AcademicTermService {
 	public ResultClass<AcademicTerm> getAcademicTerm(Long id_academic) {
 		ResultClass<AcademicTerm> result = new ResultClass<AcademicTerm>();
 		AcademicTerm aT= daoAcademicTerm.getAcademicTermById(id_academic);
+	
 		aT.setCourses(serviceCourse.getCoursesByAcademicTerm(id_academic));
 		result.setSingleElement(aT);
 		return result;
@@ -195,8 +197,7 @@ public class AcademicTermService {
 	}
 
 	
-	//	@PreAuthorize("hasPermission(returnObject, 'WRITE') or hasPermission(returnObject, 'ADMINISTRATION')" )
-	@Transactional(readOnly = false)
+	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, 'ADMINISTRATION')")	@Transactional(readOnly = false)
 	public ResultClass<AcademicTerm> undeleteAcademic(AcademicTerm academicTerm) {
 		AcademicTerm a = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
 		ResultClass<AcademicTerm> result = new ResultClass<>();

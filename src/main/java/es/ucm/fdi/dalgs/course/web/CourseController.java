@@ -75,10 +75,10 @@ public class CourseController {
 			model.addAttribute("addCourse", new Course());
 			model.addAttribute("academicTerm", academic);
 			Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree()).getSingleElement();
-			
+
 			model.addAttribute("subjects", subjects);
 		}
-		
+
 
 		//		model.addAttribute("add", true);
 
@@ -113,22 +113,22 @@ public class CourseController {
 						resultReturned.getSingleElement().getAcademicTerm().getDegree()).getSingleElement());
 
 				attr.addFlashAttribute("errors", resultReturned.getErrorsList());
-					
+
 
 
 			}
 
 		}else{
 			attr.addFlashAttribute("org.springframework.validation.BindingResult.addAcademicTerm", resultBinding);
-//			AcademicTerm a = serviceAcademic.getAcademicTerm(id_academic).getSingleElement();
-//			attr.addFlashAttribute("academicTerm", a);
-//			attr.addFlashAttribute("subjects",serviceSubject.getSubjectForDegree(a.getDegree()).getSingleElement());
+			//			AcademicTerm a = serviceAcademic.getAcademicTerm(id_academic).getSingleElement();
+			//			attr.addFlashAttribute("academicTerm", a);
+			//			attr.addFlashAttribute("subjects",serviceSubject.getSubjectForDegree(a.getDegree()).getSingleElement());
 
 
 			//			return "redirect:/academicTerm/{academicId}/course/add.htm";
 		}
 
-		
+
 		attr.addFlashAttribute("addCourse", newCourse );
 
 		if (newCourse.getSubject() != null)
@@ -151,9 +151,10 @@ public class CourseController {
 
 		if(!resultBinding.hasErrors()){
 			ResultClass<Course> resultReturned = serviceCourse.unDeleteCourse(course, id_academic);
-			
+
 			if (!resultReturned.hasErrors()){
-				attr.addFlashAttribute("addCourse", resultReturned.getSingleElement());
+				attr.addFlashAttribute("academicTerm", resultReturned.getSingleElement().getAcademicTerm());
+				attr.addFlashAttribute("idSubject", course.getSubject().getId());
 				return "redirect:/academicTerm/" + id_academic + "/course/"+ resultReturned.getSingleElement().getId() +"/modify.htm";		
 
 			}else{
@@ -164,7 +165,7 @@ public class CourseController {
 				//				attr.addFlashAttribute("addCourse", course.getSubject().getId());
 
 
-//				return "redirect:/academicTerm/{academicId}/course/add.htm";
+				//				return "redirect:/academicTerm/{academicId}/course/add.htm";
 			}
 		}else{
 			attr.addFlashAttribute("org.springframework.validation.BindingResult.addAcademicTerm", resultBinding);
@@ -196,10 +197,10 @@ public class CourseController {
 
 		//		List<Activity> activities = serviceActivity.getActivitiesForCourse(id);
 
-		if (p.getActivities() != null)
+		if (!p.getActivities().isEmpty())
 			myModel.put("activities", p.getActivities());
 
-		if (p.getGroups() != null)
+		if (!p.getGroups().isEmpty())
 			myModel.put("groups", p.getGroups());
 
 
@@ -228,7 +229,7 @@ public class CourseController {
 			// serviceSubject.getSubjectsForDegree(academic.getDegree().getId());
 			model.addAttribute("academicTerm", academic);
 			model.addAttribute("subjects", subjects);
-			
+
 
 			//model.addAttribute("activities", activities);
 			model.addAttribute("modifyCourse", p);
@@ -243,37 +244,37 @@ public class CourseController {
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@ModelAttribute("modifyCourse") Course modify,
-			BindingResult result, Model model)
+			BindingResult resultBinding, 
+			RedirectAttributes attr)
 
 	{
 
 		//AcademicTerm y subject
-		if (!result.hasErrors()) {
+		if (!resultBinding.hasErrors()) {
 			//			Course course_aux = serviceCourse.getCourse(id_course).getSingleElement();
 			//			course_aux.setAcademicTerm(modify.getAcademicTerm());
 			//			course_aux.setSubject(modify.getSubject());
 
-			ResultClass<Boolean> results = serviceCourse.modifyCourse(modify, id_academic, id_course);
-			if (!result.hasErrors())
+			ResultClass<Boolean> resultReturned = serviceCourse.modifyCourse(modify, id_academic, id_course);
+			if (!resultReturned.hasErrors())
 
 				return "redirect:/academicTerm/" + id_academic + ".htm";	
 			else{
-				model.addAttribute("modifyCourse", modify);
-				if (results.isElementDeleted()){
-					model.addAttribute("addCourse", modify);
-					model.addAttribute("unDelete", true); 
-					model.addAttribute("errors", results.getErrorsList());
-					return "course/add";
-				}	
-				model.addAttribute("errors", results.getErrorsList());
-				return "course/modify";
+				
+				attr.addFlashAttribute("errors", resultReturned.getErrorsList());
 			}
+		}
+		else {
+			attr.addFlashAttribute("org.springframework.validation.BindingResult.addAcademicTerm", resultBinding);
 
 		}
+		
+		
+		return "redirect:/academicTerm/{academicId}/course/{courseId}/modify.htm";
 
 
 
-		return "redirect:/error.htm";
+
 
 	}
 
@@ -285,7 +286,7 @@ public class CourseController {
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course) throws ServletException {
 
-		if (serviceCourse.deleteCourse(id_course).getSingleElement()) {
+		if (serviceCourse.deleteCourse(serviceCourse.getCourse(id_course).getSingleElement()).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_academic + ".htm";
 		} else
 			return "redirect:/error.htm";

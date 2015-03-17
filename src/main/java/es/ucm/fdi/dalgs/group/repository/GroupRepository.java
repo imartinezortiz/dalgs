@@ -66,8 +66,6 @@ public class GroupRepository {
 				.createQuery("select g from Group g where g.course=?1 and g.isDeleted='false' ");
 		query.setParameter(1, course);
 
-		if (query.getResultList().isEmpty())
-			return null;
 
 		return query.getResultList();
 	}
