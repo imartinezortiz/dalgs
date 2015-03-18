@@ -26,7 +26,8 @@
 			<div class="form-group">
   				<div class="form-group">
   					<form:form method="post" commandName="group" role="form">
-  				
+  					
+  					<form:hidden path="id"/>
 					<label>Available Professors:</label>
 					<div class="checkbox">
 						<form:checkboxes items="${professors}" path="professors"

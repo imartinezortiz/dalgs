@@ -40,17 +40,17 @@ public class GroupRepository {
 	}
 
 
-	public Group existByName(String name, Long id) {
+	public Group existByName(String name){//, Long id) {
 		Query query = null;
-		if (id!=null){
-			query =em.createQuery("select g from Group g  where g.name = ?1 and g.id !=?2");
-			query.setParameter(1, name);		
-			query.setParameter(2, id);	
-		}
-		else{
+//		if (id!=null){
+//			query =em.createQuery("select g from Group g  where g.name = ?1 and g.id !=?2");
+//			query.setParameter(1, name);		
+//			query.setParameter(2, id);	
+//		}
+//		else{
 			query =em.createQuery("select g from Group g  where g.name = ?1");
 			query.setParameter(1, name);		
-		}
+//		}
 
 		if (query.getResultList().isEmpty())
 			return null;
@@ -104,9 +104,11 @@ public class GroupRepository {
 	}
 
 
-	public boolean deleteGroup(Long id_group) {
-		Group group = em.getReference(Group.class, id_group);
+	public boolean deleteGroup(Group group) {
+//		Group group = em.getReference(Group.class, id_group);
 		try {
+			group.getProfessors().clear();
+			group.getStudents().clear();
 			group.setDeleted(true);
 			em.merge(group);
 

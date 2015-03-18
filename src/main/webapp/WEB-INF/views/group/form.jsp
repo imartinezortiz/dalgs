@@ -19,20 +19,24 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">							
 			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-			Add Group</h3>
+			${valueButton} Group</h3>
 		</div>
 		<div class="panel-body">
-			<form:form method="post" commandName="addGroup" role="form">
+			<form:form method="post" commandName="group" role="form">
+				<div>
+				<form:hidden path="id"/>
+				</div>
 				
 				<div class="form-group">
 					<label>Name: </label>
 					<form:input path="name" class="form-control"
 						placeholder="Name of the group" required="true" />
+					<form:errors path="name" cssStyle="color: #ff0000" />
 				</div>
 				
 
 				
-				<input type="submit" class="btn btn-success" value="Add" name="Add" />
+				<input type="submit" class="btn btn-success" value="${valueButton}" name="${valueButton}" />
 				<c:if test="${unDelete == true}">
 					<input type="submit" class="btn btn-success" value="Undelete" name="Undelete"/>
 				</c:if>
