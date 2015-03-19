@@ -113,8 +113,8 @@ public class LearningGoalRepository{
 		return (Collection<LearningGoal>)query.getResultList();
 	}
 
-	public boolean deleteLearningGoal(Long id_learningGoal) {
-		LearningGoal learningGoal = em.getReference(LearningGoal.class, id_learningGoal);
+	public boolean deleteLearningGoal(LearningGoal learningGoal) {
+//		LearningGoal learningGoal = em.getReference(LearningGoal.class, learningGoal);
 		learningGoal.setDeleted(true);
 
 		try {

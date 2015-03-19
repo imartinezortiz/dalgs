@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.activity.service.ActivityService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.competence.service.CompetenceService;
@@ -28,32 +29,45 @@ public class LearningGoalService {
 	@Autowired
 	ActivityService serviceActivity;
 	
+	@Autowired
+	private AclObjectService manageAclService;
+
+	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> addLearningGoal(LearningGoal learningGoal,
+	public ResultClass<LearningGoal> addLearningGoal(LearningGoal learningGoal,
 			Long id_competence) {
-
+		
+		boolean success = false;
+		
 		LearningGoal learningExists = daoLearningGoal.existByCode(learningGoal.getInfo().getCode());
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		ResultClass<LearningGoal> result = new ResultClass<>();
 
 		if( learningExists != null){
 			result.setHasErrors(true);
-			Collection<String> errors = new ArrayList<String>();
+			Collection<String> errors = new ArrayList<>();
 			errors.add("Code already exists");
 
 			if (learningExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
-
+				result.setSingleElement(learningExists);
 			}
-			result.setSingleElement(false);
+			else result.setSingleElement(learningGoal);
 			result.setErrorsList(errors);
 		}
 		else{
 			learningGoal.setCompetence(serviceCompetence.getCompetence(id_competence).getSingleElement());
-			boolean r = daoLearningGoal.addLearningGoal(learningGoal);
-			if (r) 
-				result.setSingleElement(true);
+			success = daoLearningGoal.addLearningGoal(learningGoal);
+			if(success){
+				learningExists = daoLearningGoal.existByCode(learningGoal.getInfo().getCode());
+				success = manageAclService.addAclToObject(learningExists.getId(), learningExists.getClass().getName());
+				if (success) result.setSingleElement(learningGoal);
+			
+			}else{
+				throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
+
+			}
 		}
 		return result;		
 	}
@@ -61,15 +75,16 @@ public class LearningGoalService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<LearningGoal> getLearningGoal(Long id_learningGoal) {
-		ResultClass<LearningGoal> result = new ResultClass<LearningGoal>();
+		ResultClass<LearningGoal> result = new ResultClass<>();
 		result.setSingleElement(daoLearningGoal.getLearningGoal(id_learningGoal));
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@PreAuthorize("hasPermission(#learningGoal, 'WRITE') or hasPermission(#learningGoal, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyLearningGoal(LearningGoal learningGoal, Long id_learningGoal) {
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		ResultClass<Boolean> result = new ResultClass<>();
 
 		LearningGoal modifyLearning = daoLearningGoal.getLearningGoal(id_learningGoal);
 		
@@ -78,7 +93,7 @@ public class LearningGoalService {
 		if(!learningGoal.getInfo().getCode().equalsIgnoreCase(modifyLearning.getInfo().getCode()) && 
 				learningExists != null){
 			result.setHasErrors(true);
-			Collection<String> errors = new ArrayList<String>();
+			Collection<String> errors = new ArrayList<>();
 			errors.add("New code already exists");
 
 			if (learningExists.getIsDeleted()){
@@ -99,34 +114,36 @@ public class LearningGoalService {
 
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@PreAuthorize("hasPermission(#learningGoal, 'DELETE') or hasPermission(#learningGoal, 'ADMINISTRATION')" )
+
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> deleteLearningGoal(Long id_learningGoal) {
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setSingleElement(daoLearningGoal.deleteLearningGoal(id_learningGoal));
+	public ResultClass<Boolean> deleteLearningGoal(LearningGoal learningGoal) {
+		ResultClass<Boolean> result = new ResultClass<>();
+		result.setSingleElement(daoLearningGoal.deleteLearningGoal(learningGoal));
 		return result;
 
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	public ResultClass<Boolean> deleteLearningGoalForCompetence(Competence competence) {
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		ResultClass<Boolean> result = new ResultClass<>();
 		result.setSingleElement(daoLearningGoal.deleteLearningGoalForCompetence(competence));
 		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
-	public ResultClass<Collection<LearningGoal>> getLearningGoalsFromCourse(Long id_course, Activity activity) {
-		ResultClass<Collection<LearningGoal>> result = new ResultClass<Collection<LearningGoal>>();
+	public ResultClass<LearningGoal> getLearningGoalsFromCourse(Long id_course, Activity activity) {
+		ResultClass<LearningGoal> result = new ResultClass<>();
 		Collection<LearningGoal> learningGoals = daoLearningGoal.getLearningGoalsFromActivity(activity);
 		if(!learningGoals.isEmpty()){
-			result.setSingleElement(daoLearningGoal.getLearningGoalsFromCourse(id_course, learningGoals));
+			result.addAll(daoLearningGoal.getLearningGoalsFromCourse(id_course, learningGoals));
 			return result;
 		}
 			
 		else{
-			result.setSingleElement(daoLearningGoal.getLearningGoalsFromCourse(id_course));
+			result.addAll(daoLearningGoal.getLearningGoalsFromCourse(id_course));
 			return result;
 		}
 	}
@@ -134,16 +151,16 @@ public class LearningGoalService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<LearningGoal> getLearningGoalByName(String name) {
-		ResultClass<LearningGoal> result = new ResultClass<LearningGoal>();
+		ResultClass<LearningGoal> result = new ResultClass<>();
 		result.setSingleElement(daoLearningGoal.getLearningGoalByName(name));
 		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	public ResultClass<Collection<LearningGoal>> getLearningGoalsFromCompetence(
+	public ResultClass<LearningGoal> getLearningGoalsFromCompetence(
 			Competence competence) {
-		ResultClass<Collection<LearningGoal>> result = new ResultClass<Collection<LearningGoal>>();
-		result.setSingleElement(daoLearningGoal.getLearningGoalsFromCompetence(competence));
+		ResultClass<LearningGoal> result = new ResultClass<>();
+		result.addAll(daoLearningGoal.getLearningGoalsFromCompetence(competence));
 		return result;
 	}
 
@@ -155,30 +172,31 @@ public class LearningGoalService {
 		return result;
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@PreAuthorize("hasPermission(#learningGoal, 'WRITE') or hasPermission(#learningGoal, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> unDeleteLearningGoal(LearningGoal learning) {
-		LearningGoal l = daoLearningGoal.existByCode(learning.getInfo().getCode());
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
+	public ResultClass<LearningGoal> unDeleteLearningGoal(LearningGoal learningGoal) {
+		LearningGoal l = daoLearningGoal.existByCode(learningGoal.getInfo().getCode());
+		ResultClass<LearningGoal> result = new ResultClass<>();
 		if(l == null){
 			result.setHasErrors(true);
-			Collection<String> errors = new ArrayList<String>();
+			Collection<String> errors = new ArrayList<>();
 			errors.add("Code doesn't exist");
 			result.setErrorsList(errors);
 
 		}
 		else{
 			if(!l.getIsDeleted()){
-				Collection<String> errors = new ArrayList<String>();
+				Collection<String> errors = new ArrayList<>();
 				errors.add("Code is not deleted");
 				result.setErrorsList(errors);
 			}
 
 			l.setDeleted(false);
-			l.setInfo(learning.getInfo());
+			l.setInfo(learningGoal.getInfo());
 			boolean r = daoLearningGoal.saveLearningGoal(l);
 			if(r) 
-				result.setSingleElement(true);	
+				result.setSingleElement(l);	
 
 		}
 		return result;
