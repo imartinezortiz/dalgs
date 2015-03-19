@@ -234,7 +234,8 @@ public class GroupController {
 
 		model.put("group", a);
 		model.put("groupId", id_group);
-
+		model.put("activitiesGroup", serviceGroup.getGroup(id_group).getSingleElement().getActivities());
+		model.put("activitiesCourse", serviceCourse.getCourse(id_course).getSingleElement().getActivities());
 
 		return new ModelAndView("group/view", "model", model);
 	}

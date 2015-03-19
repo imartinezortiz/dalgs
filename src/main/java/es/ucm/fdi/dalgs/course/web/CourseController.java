@@ -74,7 +74,7 @@ public class CourseController {
 	 * Methods for adding courses
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/add.htm", method = RequestMethod.GET)
-	protected String getAddNewCourseForm(
+	protected String addCourseGET(
 			@PathVariable("academicId") Long id_academic, Model model) {
 
 
@@ -87,6 +87,7 @@ public class CourseController {
 			model.addAttribute("addCourse", new Course());
 			model.addAttribute("academicTerm", academic);
 			Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree()).getSingleElement();
+			model.addAttribute("professors", serviceUser.getAllByRole("ROLE_PROFESSOR"));
 
 			model.addAttribute("subjects", subjects);
 		}
@@ -99,7 +100,7 @@ public class CourseController {
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/add.htm", method = RequestMethod.POST, params="Add")
 	// Every Post have to return redirect
-	public String processAddNewCourse(
+	public String addCoursePOST(
 			@PathVariable("academicId") Long id_academic,
 			@ModelAttribute("addCourse") @Valid Course newCourse,
 			BindingResult resultBinding,
@@ -198,7 +199,7 @@ public class CourseController {
 	 * Methods for view courses
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}.htm", method = RequestMethod.GET)
-	protected ModelAndView formViewCourse(
+	protected ModelAndView viewCourseGET(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean showAll) throws ServletException {
@@ -225,7 +226,7 @@ public class CourseController {
 	 */
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/modify.htm", method = RequestMethod.GET)
-	protected String formModifyCourses(
+	protected String modifyCourseGET(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id, Model model)
 					throws ServletException {
@@ -242,7 +243,8 @@ public class CourseController {
 			// serviceSubject.getSubjectsForDegree(academic.getDegree().getId());
 			model.addAttribute("academicTerm", academic);
 			model.addAttribute("subjects", subjects);
-
+			model.addAttribute("professors", serviceUser.getAllByRole("ROLE_PROFESSOR"));
+			if(p.getCoordinator()!=null)model.addAttribute("idCoordinator", p.getCoordinator().getId());
 
 			//model.addAttribute("activities", activities);
 			model.addAttribute("modifyCourse", p);
@@ -253,7 +255,7 @@ public class CourseController {
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/modify.htm", method = RequestMethod.POST)
-	public String formModifyCourse(
+	public String modifyCoursePOST(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@ModelAttribute("modifyCourse") Course modify,
@@ -319,7 +321,57 @@ public class CourseController {
 		} else
 			return "redirect:/error.htm";
 	}
-
+	
+	/**
+	 * Add a coordinator
+//	 */
+//	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/coordinator/add.htm", method = RequestMethod.GET)
+//	public String addCoordinatorToCourseGET(@PathVariable("courseId") Long id_course, Model model) {
+//
+//		Course course = serviceCourse.getCourse(id_course).getSingleElement();
+//		List<String> professors = serviceUser.getAllByRole("ROLE_PROFESSOR");
+//
+//		model.addAttribute("course",course);
+//		//model.addAttribute("group",true);
+//
+//		model.addAttribute("professors", professors);
+//
+//		return "course/addCoordinator";
+//
+//	}
+//
+//	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/coordinator/add.htm", method = RequestMethod.POST, params="AddProfessors")
+//	// Every Post have to return redirect
+//	public String addCoordinatorToCoursePOST(
+//			@PathVariable("academicId") Long academicId,
+//			@PathVariable("courseId") Long courseId,
+//			@PathVariable("courseId") Long id_course,
+//			@ModelAttribute("course") @Valid Course course,
+//			BindingResult resultBinding, RedirectAttributes attr) {
+//
+//		if (!resultBinding.hasErrors()){
+//			return "redirect:/academicTerm/" + academicId + "/course/"
+//					+ courseId +  "/coordinator/add.htm";		
+//		}
+//		else{
+//			
+//			ResultClass<Boolean> result = serviceCourse.modifyCourse(course, academicId, id_course);
+//
+//			if (!result.hasErrors())
+//
+//				return "redirect:/academicTerm/" + academicId + "/course/"	+ courseId +  ".htm";
+//			
+//			else{
+//				
+//				return "redirect:/academicTerm/" + academicId + "/course/"	+ courseId  + "/coordinator/add.htm";
+//
+//				
+//			}
+//		}
+//
+//
+//	}
+	
 	/**
 	 * For binding subject and activities of the course.
 	 */

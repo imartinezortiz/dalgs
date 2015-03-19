@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -59,6 +60,9 @@ public class Group implements Cloneable{
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
+	
+	@OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+	private Collection<Activity> activities = new ArrayList<Activity>();
 	
 	
 	public Group() {
@@ -114,6 +118,18 @@ public class Group implements Cloneable{
 		this.course = course;
 	}
 	
+	public Collection<Activity> getActivities() {
+		return activities;
+	}
+
+	public void setActivities(Collection<Activity> activities) {
+		this.activities = activities;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
 	public Group clone(){
 		Group clone = new Group();
 		clone.setId(null);
@@ -125,6 +141,8 @@ public class Group implements Cloneable{
 		
 		return clone;
 	}
+
+	
 	
 }
 

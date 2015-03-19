@@ -214,8 +214,7 @@ public class AcademicTermController {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		ResultClass<AcademicTerm> p = serviceAcademicTerm.getAcademicsTerm(
-				pageIndex, showAll);
+		ResultClass<AcademicTerm> p = serviceAcademicTerm.getAcademicTerms(pageIndex, showAll);
 		myModel.put("showAll", showAll);
 		myModel.put("academicTerms", p);
 		Integer numberOfPages = serviceAcademicTerm.numberOfPages(showAll)

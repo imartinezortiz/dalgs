@@ -140,7 +140,7 @@ public class GroupRepository {
 	public Collection<Group> getGroupsForStudent(Long id_student){
 		User user = em.getReference(User.class, id_student);
 
-		Query query = em.createQuery("select g from Group g join g.students s where a=?1 and g.isDeleted='false' ");
+		Query query = em.createQuery("select g from Group g join g.students s where s=?1 and g.isDeleted='false' ");
 		query.setParameter(1, user);
 
 		if (query.getResultList().isEmpty())
@@ -152,7 +152,7 @@ public class GroupRepository {
 	public Collection<Group> getGroupsForProfessor(Long id_professor){
 		User user = em.getReference(User.class, id_professor);
 
-		Query query = em.createQuery("select g from Group g join g.professors s where a=?1 and g.isDeleted='false' ");
+		Query query = em.createQuery("select g from Group g join g.professors s where s=?1 and g.isDeleted='false' ");
 		query.setParameter(1, user);
 
 		if (query.getResultList().isEmpty())

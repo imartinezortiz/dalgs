@@ -28,28 +28,10 @@
 				<form:hidden path="id"/>
 				</div>
 				
-				<div class="form-group">
-					<label>Academic Term:</label>
-					<p>${academicTerm.term} &nbsp; ${academicTerm.degree.info.name}</p>
-					<p><label>Course Coordinator: &nbsp;</label>
-					<form:select class="form-control 2" path="academicTerm" id="termSelect">
-						<form:option value="">-- Select an option --</form:option>
-						<c:forEach items="${professors}" var="prof">
-							<c:choose>
-								<c:when test="${prof.id == idCoordinator}">
-									<form:option value="${prof.id}" selected='true'>${prof.username}</form:option>
-								</c:when>
-								<c:otherwise>
-									<form:option value="${prof.id}">${prof.username}</form:option>
-								</c:otherwise>
-							</c:choose>
-						</c:forEach>
-					</form:select>
-					
-				</div>
+				
 				
 				<div class="form-group">
-					<label>Subject:</label>
+					<label>Subject: ${idSubject}</label>
 					<form:select class="form-control 2" path="subject" >
 						<form:option value="">-- Select an option --</form:option>
 						<c:forEach items="${subjects}" var="subject">
@@ -66,6 +48,24 @@
 					<form:errors path="subject" cssStyle="color: #ff0000" />
 				</div>
 
+				<div class="form-group">
+					<label>Coordinator:</label>
+					<form:select class="form-control 2" path="coordinator">
+						<form:option value="">-- Select an option --</form:option>
+						<c:forEach items="${professors}" var="prof">
+							<c:choose>
+								<c:when test="${prof.id == idCoordinator}">
+									<form:option value="${prof.id}" selected='true'>${prof.lastName}, ${prof.firstName}</form:option>
+								</c:when>
+								<c:otherwise>
+									<form:option value="${prof.id}">${prof.lastName}, ${prof.firstName}</form:option>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+					</form:select>
+					<form:errors path="coordinator" cssStyle="color: #ff0000" />
+				</div>
+				
 				<input type="submit" class="btn btn-success" value="Update" >
 
 			</form:form>

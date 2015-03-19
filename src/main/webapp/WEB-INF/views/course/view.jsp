@@ -60,7 +60,7 @@
 					</p>
 
 					<p>
-						<label>Course Coordinator: &nbsp;</label>${model.course.coordinator}</p>
+						<label>Course Coordinator: &nbsp;</label>${model.course.coordinator.lastName}, ${model.course.coordinator.firstName}</p>
 
 				</div>
 

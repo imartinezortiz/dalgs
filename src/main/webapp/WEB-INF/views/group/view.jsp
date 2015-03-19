@@ -59,10 +59,10 @@
 			<div class="form-group">
 				<div class="form-group view">
 					<p>
-						<label>Name: &nbsp; </label>${model.group.name}</p>
+						<label>Name: &nbsp; </label>${model.group.name} &nbsp; (${model.group.course.subject.info.name} - ${model.group.course.academicTerm.term})</p>
 
 					<p>
-						<label>Course Coordinator: &nbsp;</label>${model.group.course.coordinator}</p>
+						<label>Course Coordinator: &nbsp;</label>${model.group.course.coordinator.lastName}, ${model.group.course.coordinator.firstName}</p>
 
 				</div>
 			</div>
@@ -70,6 +70,110 @@
 		</div>
 	</div>
 
+
+
+	<div class="panel panel-primary group">
+		<div class="panel-heading">
+			<h3 class="panel-title list">
+				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
+				Activity List - Course
+			</h3>
+
+		</div>
+		<div class="panel-body">
+
+			<table class="table table-striped table-bordered">
+				<tr align="center">
+					<td width="20%"><div class="td-label">Name</div></td>
+					<td width="50%"><div class="td-label">Description</div></td>
+				</tr>
+				<c:forEach items="${model.activitiesCourse}" var="activity">
+					<tr align="center">
+						<td><div class="td-content">
+								<c:out value="${activity.info.name}" />
+							</div></td>
+						<td>
+							<div class="td-content">
+								<c:out value="${activity.info.description}" />
+							</div>
+						</td>
+
+						<td><c:if test="${activity.isDeleted eq false}">
+								<a class="btn btn-success"
+									href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}.htm'/>">
+									View </a>
+							</c:if></td>
+					</tr>
+				</c:forEach>
+			</table>
+		</div>
+	</div>
+
+	<div class="panel panel-primary group">
+		<div class="panel-heading">
+			<h3 class="panel-title list">
+				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
+				Activity List - Group
+			</h3>
+
+			<!-- If you are a professor who belongs to this course you can edit -->
+			<sec:accesscontrollist hasPermission="ADMINISTRATION"
+				domainObject="${model.group}">
+
+
+				<a style="cursor: copy;" class="btn list-btn btn-warning2"
+					href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/activity/add.htm'/>">
+					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
+
+					Add
+				</a>
+			</sec:accesscontrollist>
+
+		</div>
+		<div class="panel-body">
+
+			<table class="table table-striped table-bordered">
+				<tr align="center">
+					<td width="20%"><div class="td-label">Name</div></td>
+					<td width="50%"><div class="td-label">Description</div></td>
+				</tr>
+				<c:forEach items="${model.activitiesGroup}" var="activity">
+					<tr align="center">
+						<td><div class="td-content">
+								<c:out value="${activity.info.name}" />
+							</div></td>
+						<td>
+							<div class="td-content">
+								<c:out value="${activity.info.description}" />
+							</div>
+						</td>
+
+						<td><c:choose>
+								<c:when test="${activity.isDeleted eq false}">
+									<a class="btn btn-success"
+										href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/activity/${activity.id}.htm'/>">
+										View </a>
+									<sec:accesscontrollist hasPermission="ADMINISTRATION"
+										domainObject="${model.group}">
+
+										<a class="btn btn-danger"
+											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/activity/${activity.id}/delete.htm'/>">
+											Delete </a>
+									</sec:accesscontrollist>
+								</c:when>
+								<c:otherwise>
+									<sec:authorize access="hasRole('ROLE_ADMIN')">
+										<a class="btn btn-danger"
+											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}/restore.htm'/>">
+											Restore </a>
+									</sec:authorize>
+								</c:otherwise>
+							</c:choose></td>
+					</tr>
+				</c:forEach>
+			</table>
+		</div>
+	</div>
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
 			<h3 class="panel-title list">
@@ -188,15 +292,11 @@
 
 					</tr>
 				</c:forEach>
-
-
 			</table>
 		</div>
 
 
 	</div>
-
-
 </body>
 
 </html>

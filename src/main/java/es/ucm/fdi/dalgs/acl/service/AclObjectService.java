@@ -80,7 +80,7 @@ public class AclObjectService {
 	}
 
 	// Authorize professors to manage his course
-	public void addPermissionToAnObject(Collection<User> professors,
+	public void addPermissionToAnObjectCollection(Collection<User> professors,
 			Long id_object, String name_class) {
 
 		// Create or update the relevant ACL
@@ -107,5 +107,34 @@ public class AclObjectService {
 		}
 
 	}
+	
+	// Authorize professors to manage his course
+		public void addPermissionToAnObjectCoordinator(User coordinator,
+				Long id_object, String name_class) {
+
+			// Create or update the relevant ACL
+			MutableAcl acl = null;
+			// Prepare the information we'd like in our access control entry (ACE)
+			ObjectIdentity oi = new ObjectIdentityImpl(name_class, id_object);
+
+			
+			Sid sid = null;
+			
+			sid = new PrincipalSid(coordinator.getUsername());
+			Permission p = BasePermission.ADMINISTRATION;
+
+			try {
+				acl = (MutableAcl) mutableAclService.readAclById(oi);
+			} catch (NotFoundException nfe) {
+				acl = mutableAclService.createAcl(oi);
+			}
+
+			// Now grant some permissions via an access control entry (ACE)
+			acl.insertAce(acl.getEntries().size(), p, sid, true);
+			mutableAclService.updateAcl(acl);
+
+		
+
+		}
 
 }

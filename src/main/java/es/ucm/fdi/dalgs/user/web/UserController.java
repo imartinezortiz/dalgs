@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.validation.Valid;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import es.ucm.fdi.dalgs.classes.CharsetString;
+import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.classes.UploadForm;
 import es.ucm.fdi.dalgs.classes.ValidatorUtil;
+import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.group.service.GroupService;
 import es.ucm.fdi.dalgs.user.service.UserService;
@@ -66,12 +67,18 @@ public class UserController {
 		User user = serviceUser.getUser(id_user);
 		if (user != null){
 		myModel.put("user", user);
+		
+		//FALLA AQUI
+		ResultClass<Group> groups = new ResultClass<Group>();
 
-		if(serviceUser.hasRole(user,"ROLE_PROFESSOR"))
-			myModel.put("professorGroup", serviceGroup.getGroupsForProfessor(id_user));
-		else if(serviceUser.hasRole(user,"ROLE_STUDENT"))
-			myModel.put("studentGroup", serviceGroup.getGroupsForStudent(id_user));
-
+		if(serviceUser.hasRole(user,"ROLE_PROFESSOR")){
+			groups = serviceGroup.getGroupsForProfessor(id_user);
+			myModel.put("professorGroup",groups );
+		}
+		else if(serviceUser.hasRole(user,"ROLE_STUDENT")){
+			groups = serviceGroup.getGroupsForStudent(id_user);
+			myModel.put("studentGroup", groups);
+		}
 	
 		return new ModelAndView("user/view", "model", myModel); //Admin view
 		}

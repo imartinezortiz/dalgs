@@ -115,7 +115,7 @@ public class AcademicTermService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 //	@PostFilter("hasPermission(filterObject, 'READ')")
 	@Transactional(readOnly = true)
-	public ResultClass<AcademicTerm> getAcademicsTerm(Integer pageIndex, Boolean showAll) {
+	public ResultClass<AcademicTerm> getAcademicTerms(Integer pageIndex, Boolean showAll) {
 		ResultClass<AcademicTerm> result = new ResultClass<>();
 		result.addAll(daoAcademicTerm.getAcademicsTerm(pageIndex, showAll));
 

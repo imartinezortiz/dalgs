@@ -110,8 +110,7 @@ public class GroupService {
 				result.setSingleElement(true);
 
 				// Adding the authorities to the professor list
-				manageAclService.addPermissionToAnObject(group.getProfessors(),group.getCourse().getId(), group.getCourse().getClass().getName());
-				manageAclService.addPermissionToAnObject(group.getProfessors(),group.getId(), group.getClass().getName());
+				manageAclService.addPermissionToAnObjectCollection(group.getProfessors(),group.getId(), group.getClass().getName());
 			}
 		}
 		return result;

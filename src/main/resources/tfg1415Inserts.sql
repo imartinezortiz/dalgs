@@ -497,28 +497,32 @@ INSERT INTO subject_competence(id_subject,id_competence) VALUES (5,5);
 -- User - Role Inserts  ROLE_USER(2) ROLE_ADMIN(1)
 
 INSERT INTO user (id_user, accountNonExpired, accountNonLocked, credentialsNonExpired, email, enabled, firstname, lastname, password, salt, username) VALUES (1, true, true, true, 'admin@ucm.es', true, 'adminFirst', 'adminLast', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', null, 'admin');
-
 INSERT INTO user_roles (user, role) VALUES(1, 'ROLE_USER');
 INSERT INTO user_roles (user, role) VALUES(1, 'ROLE_ADMIN');
 
 
 INSERT INTO user (id_user, accountNonExpired, accountNonLocked, credentialsNonExpired, email, enabled, firstname, lastname, password, salt, username) VALUES (2, true, true, true, 'student@ucm.es', true, 'studentFirst', 'studentLast', '264c8c381bf16c982a4e59b0dd4c6f7808c51a05f64c35db42cc78a2a72875bb', null, 'student');
-
 INSERT INTO user_roles (user, role) VALUES(2, 'ROLE_USER');
 INSERT INTO user_roles (user, role) VALUES(2, 'ROLE_STUDENT');
 
 INSERT INTO user (id_user, accountNonExpired, accountNonLocked, credentialsNonExpired, email, enabled, firstname, lastname, password, salt, username) VALUES (3, true, true, true, 'professor@ucm.es', true, 'professorFirst', 'professorLast', '17c1532ca6cff8f6a3a8200028af6c2580bf37f39e10cb0966e8a573e3b24a1f', null, 'professor');
-
 INSERT INTO user_roles (user, role) VALUES(3, 'ROLE_USER');
 INSERT INTO user_roles (user, role) VALUES(3, 'ROLE_PROFESSOR');
 
 INSERT INTO user (id_user, accountNonExpired, accountNonLocked, credentialsNonExpired, email, enabled, firstname, lastname, password, salt, username) VALUES (4, true, true, true, 'user@ucm.es', true, 'userFirst', 'userLast', '04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb', null, 'user');
-
 INSERT INTO user_roles (user, role) VALUES(4, 'ROLE_USER');
 
+INSERT INTO user (id_user, accountNonExpired, accountNonLocked, credentialsNonExpired, email, enabled, firstname, lastname, password, salt, username) VALUES (5, true, true, true, 'professor2@ucm.es', true, 'professor2First', 'professorLast', '17c1532ca6cff8f6a3a8200028af6c2580bf37f39e10cb0966e8a573e3b24a1f', null, 'professor2');
+INSERT INTO user_roles (user, role) VALUES(5, 'ROLE_USER');
+INSERT INTO user_roles (user, role) VALUES(5, 'ROLE_PROFESSOR');
 
+INSERT INTO user (id_user, accountNonExpired, accountNonLocked, credentialsNonExpired, email, enabled, firstname, lastname, password, salt, username) VALUES (6, true, true, true, 'coordinator@ucm.es', true, 'coordinatorFirst', 'coordinatorLast', '17c1532ca6cff8f6a3a8200028af6c2580bf37f39e10cb0966e8a573e3b24a1f', null, 'coordinator');
+INSERT INTO user_roles (user, role) VALUES(6, 'ROLE_USER');
+INSERT INTO user_roles (user, role) VALUES(6, 'ROLE_PROFESSOR');
 
-
+INSERT INTO user (id_user, accountNonExpired, accountNonLocked, credentialsNonExpired, email, enabled, firstname, lastname, password, salt, username) VALUES (7, true, true, true, 'professor3@ucm.es', true, 'professor3First', 'professor2Last', '17c1532ca6cff8f6a3a8200028af6c2580bf37f39e10cb0966e8a573e3b24a1f', null, 'professor3');
+INSERT INTO user_roles (user, role) VALUES(7, 'ROLE_USER');
+INSERT INTO user_roles (user, role) VALUES(7, 'ROLE_PROFESSOR');
 
 
 

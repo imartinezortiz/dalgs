@@ -73,8 +73,6 @@ public class ActivityService {
 				throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
 
 			}
-			
-		
 		}
 		return result;		
 	}

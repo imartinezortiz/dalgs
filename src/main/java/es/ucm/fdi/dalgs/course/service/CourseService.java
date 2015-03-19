@@ -118,9 +118,13 @@ public class CourseService {
 		}
 		else{
 			modifyCourse.setSubject(course.getSubject());
+			modifyCourse.setCoordinator(course.getCoordinator());
 			boolean r = daoCourse.saveCourse(modifyCourse);
-			if (r) 
+			if (r) {
 				result.setSingleElement(true);
+				// Adding the authorities to the professor list
+				manageAclService.addPermissionToAnObjectCoordinator(course.getCoordinator(),course.getId(), course.getClass().getName());
+			}
 		}
 		return result;
 

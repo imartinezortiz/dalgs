@@ -45,6 +45,10 @@ public class Activity implements Cloneable {
 	@Column(nullable = false)
 	private Collection<LearningGoalStatus> learningGoalStatus = new ArrayList<LearningGoalStatus>();
 
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)
+	@JoinColumn(name = "id_group")
+	private Group group;
+	
 	public Activity() {
 		super();
 		this.isDeleted = false;
@@ -90,6 +94,18 @@ public class Activity implements Cloneable {
 
 	public void setInfo(ActivityInfo info) {
 		this.info = info;
+	}
+
+	public Group getGroup() {
+		return group;
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 
 	public Activity clone() {

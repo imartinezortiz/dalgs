@@ -54,6 +54,16 @@
 					<form:errors path="subject" cssStyle="color: #ff0000" />
 				</div>
 				
+				<div class="form-group">
+					<label>Coordinator:</label>
+					<form:select class="form-control 2" path="coordinator">
+						<form:option value="">-- Select an option --</form:option>
+						<c:forEach items="${professors}" var="prof">							
+							<form:option value="${prof.id}">${prof.lastName}, ${prof.firstName}</form:option>				
+						</c:forEach>
+					</form:select>
+					<form:errors path="coordinator" cssStyle="color: #ff0000" />
+				</div>
 
 				<br>
 				<input type="submit" class="btn btn-success" value="Add" name="Add" />
