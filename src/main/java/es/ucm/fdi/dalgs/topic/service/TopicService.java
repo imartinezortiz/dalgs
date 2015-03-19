@@ -47,7 +47,7 @@ public class TopicService {
 			if (topicExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
-
+				result.setSingleElement(topicExists);
 			}
 			else result.setSingleElement(topic);
 			result.setErrorsList(errors);

@@ -55,7 +55,7 @@ public class SubjectService {
 			if (subjectExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
-
+				result.setSingleElement(subjectExists);
 			}
 			else result.setSingleElement(subject);
 			result.setErrorsList(errors);

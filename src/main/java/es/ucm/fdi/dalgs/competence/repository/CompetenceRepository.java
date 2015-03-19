@@ -83,8 +83,8 @@ public class CompetenceRepository {
 
 	}
 
-	public boolean deleteCompetence(Long id) {
-		Competence competence = em.getReference(Competence.class, id);
+	public boolean deleteCompetence(Competence competence) {
+//		Competence competence = em.getReference(Competence.class, competence2);
 //		Competence competence = this.getCompetence(id);
 		competence.setDeleted(true);
 

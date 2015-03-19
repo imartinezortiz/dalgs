@@ -55,7 +55,7 @@ public class DegreeService {
 			if (degreeExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
-
+				result.setSingleElement(degreeExists);
 			}
 			result.setErrorsList(errors);
 		}
