@@ -158,9 +158,9 @@ public class LearningGoalService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResultClass<LearningGoal> getLearningGoalsFromCompetence(
-			Competence competence) {
+			Competence competence, Boolean show) {
 		ResultClass<LearningGoal> result = new ResultClass<>();
-		result.addAll(daoLearningGoal.getLearningGoalsFromCompetence(competence));
+		result.addAll(daoLearningGoal.getLearningGoalsFromCompetence(competence, show));
 		return result;
 	}
 

@@ -173,7 +173,7 @@ public class DegreeService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getDegreeSubject(Subject p) {
-		ResultClass<Degree> result = new ResultClass<Degree>();
+		ResultClass<Degree> result = new ResultClass<>();
 		result.setSingleElement(daoDegree.getDegreeSubject(p));
 		return result;
 	}
@@ -186,16 +186,22 @@ public class DegreeService {
 		return result;
 
 	}
+	public ResultClass<Degree> getDegree(Long id){
+		ResultClass<Degree> result = new ResultClass<>();
+		result.setSingleElement(daoDegree.getDegree(id));
+		return result;
+		
+	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 //	@PostAuthorize("hasPermission(returnObject, 'READ')")
 	@Transactional(readOnly = true)
-	public ResultClass<Degree> getDegree(Long id) {
+	public ResultClass<Degree> getDegreeAll(Long id, Boolean show) {
 		ResultClass<Degree> result = new ResultClass<Degree>();
 		
 		Degree d = daoDegree.getDegree(id);
-		d.setModules(serviceModule.getModulesForDegree(id));
-		d.setCompetences(serviceCompetence.getCompetencesForDegree(id));
+		d.setModules(serviceModule.getModulesForDegree(id, show));
+		d.setCompetences(serviceCompetence.getCompetencesForDegree(id, show));
 		result.setSingleElement(d);
 		return result;
 	}

@@ -86,7 +86,7 @@ public class CourseController {
 
 			model.addAttribute("addCourse", new Course());
 			model.addAttribute("academicTerm", academic);
-			Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree()).getSingleElement();
+			Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree());
 			model.addAttribute("professors", serviceUser.getAllByRole("ROLE_PROFESSOR"));
 
 			model.addAttribute("subjects", subjects);
@@ -236,7 +236,7 @@ public class CourseController {
 
 			AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic,false).getSingleElement();
 
-			Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree()).getSingleElement();
+			Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree());
 			model.addAttribute("idSubject", p.getSubject().getId());
 
 			//Collection<Activity> activities  =serviceActivity.getAll();

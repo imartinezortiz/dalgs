@@ -35,7 +35,7 @@ public class ModuleRepository {
 
 		}
 	}
-	
+
 	public boolean addModule(Module module) {
 		try {
 			em.persist(module);
@@ -65,15 +65,15 @@ public class ModuleRepository {
 		return true;
 	}
 
-	
+
 	public Module getModule(Long id) {
 		return em.find(Module.class, id);
 	}
 
-	
+
 	public boolean deleteModule(Module module) {
 		try {
-//			Module module = em.getReference(Module.class, id_module);
+			//			Module module = em.getReference(Module.class, id_module);
 			module.setDeleted(true);
 			em.merge(module);
 
@@ -84,7 +84,7 @@ public class ModuleRepository {
 		}
 	}
 
-	
+
 	public String getNextCode() {
 		// TODO Auto-generated method stub
 		return null;
@@ -96,27 +96,31 @@ public class ModuleRepository {
 		Query query = em.createQuery("select m from Module m where m.info.code=?1 and m.degree = ?2");
 		query.setParameter(1, code);
 		query.setParameter(2, d);
-		 if (query.getResultList().isEmpty())
-		 	return null;
-		 else return (Module) query.getSingleResult();
+		if (query.getResultList().isEmpty())
+			return null;
+		else return (Module) query.getSingleResult();
 	}
 
 	@SuppressWarnings("unchecked")
 
-	public Collection<Module> getModulesForDegree(Long id) {
+	public Collection<Module> getModulesForDegree(Long id, Boolean show) {
 		Degree degree = em.getReference(Degree.class, id);
 
-		Query query = em
-				.createQuery("select m from Module m where m.degree=?1 and m.isDeleted='false'");
-		query.setParameter(1, degree);
+		if(!show){
+			Query query = em
+					.createQuery("select m from Module m where m.degree=?1 and m.isDeleted='false'");
+			query.setParameter(1, degree);
+			return (List<Module>) query.getResultList();
+		}else{
+			Query query = em
+					.createQuery("select m from Module m where m.degree=?1");
+			query.setParameter(1, degree);
 
-		if (query.getResultList().isEmpty())
-			return null;
-		return (List<Module>) query.getResultList();
-		
+			return (List<Module>) query.getResultList();
+		}
 	}
 
-	
+
 	public boolean deleteModulesForDegree(Degree d) {
 		try {
 			Query query = em

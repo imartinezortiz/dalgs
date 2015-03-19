@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,15 +81,15 @@ public class GroupService {
 	}
 
 	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	//	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyGroup(Group group, Long id_group) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		
+
 		Group modifyGroup = daoGroup.getGroup(id_group);
-		
+
 		Group groupExists = daoGroup.existByName(group.getName());
-		
+
 		if (!group.getName().equalsIgnoreCase(modifyGroup.getName()) && groupExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
@@ -134,7 +134,7 @@ public class GroupService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteGroup(Group group) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		
+
 		result.setSingleElement(daoGroup.deleteGroup(group));
 		return result;
 	}
@@ -186,7 +186,7 @@ public class GroupService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostAuthorize("hasPermission(returnObject, 'READ')")
+	@PostFilter("hasPermission(filterObject, 'READ')")
 	public ResultClass<Group> getGroupsForStudent(Long id_student){
 		ResultClass<Group> result = new ResultClass<>();
 		result.addAll(daoGroup.getGroupsForStudent(id_student));
@@ -194,13 +194,13 @@ public class GroupService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostAuthorize("hasPermission(returnObject, 'READ')")
+	@PostFilter("hasPermission(filterObject, 'READ')")
 	public ResultClass<Group> getGroupsForProfessor(Long id_professor){
 		ResultClass<Group> result = new ResultClass<>();
 		result.addAll(daoGroup.getGroupsForProfessor(id_professor));
 		return result;
 	}
-	
+
 	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> addProfessors(Group group, Long id_group) {
@@ -209,9 +209,9 @@ public class GroupService {
 		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
 		modifyGroup.setProfessors(group.getProfessors());
 		result.setSingleElement(result.hasErrors());
-		
+
 		return result;
-		
+
 	}
 
 }

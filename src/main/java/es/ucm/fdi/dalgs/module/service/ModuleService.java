@@ -138,19 +138,19 @@ public class ModuleService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
-	public ResultClass<Module> getModuleAll(Long id_module) {
+	public ResultClass<Module> getModuleAll(Long id_module, Boolean show) {
 		ResultClass<Module> result = new ResultClass<Module>();
 		Module p = daoModule.getModule(id_module);
-		p.setTopics(serviceTopic.getTopicsForModule(id_module));
+		p.setTopics(serviceTopic.getTopicsForModule(id_module, show));
 		result.setSingleElement(p);
 		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
-	public ResultClass<Module> getModulesForDegree(Long id) {
+	public ResultClass<Module> getModulesForDegree(Long id, Boolean show) {
 		ResultClass<Module> result = new ResultClass<>();
-		result.addAll(daoModule.getModulesForDegree(id));
+		result.addAll(daoModule.getModulesForDegree(id, show));
 		return result;
 	}
 

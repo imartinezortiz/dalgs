@@ -23,7 +23,10 @@
 			</h3>
 		</div>
 		<div class="panel-body">
-			<form:form method="post" commandName="addModule" role="form">
+			<form:form method="post" commandName="module" role="form">
+
+				<form:hidden path="id" />
+
 				<div class="form-group">
 					<label>Code: </label>
 					<form:input path="info.code" class="form-control"

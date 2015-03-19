@@ -138,19 +138,19 @@ public class TopicService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
-	public ResultClass<Topic> getTopicAll(Long id_topic) {
+	public ResultClass<Topic> getTopicAll(Long id_topic, Boolean show) {
 		ResultClass<Topic> result = new ResultClass<Topic>();
 		Topic p = daoTopic.getTopic(id_topic);
-		p.setSubjects(serviceSubject.getSubjectsForTopic(id_topic));
+		p.setSubjects(serviceSubject.getSubjectsForTopic(id_topic, show));
 		result.setSingleElement(p);
 		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
-	public ResultClass<Topic> getTopicsForModule(Long id) {
+	public ResultClass<Topic> getTopicsForModule(Long id, Boolean show) {
 		ResultClass<Topic> result = new ResultClass<>();
-		result.addAll(daoTopic.getTopicsForModule(id));
+		result.addAll(daoTopic.getTopicsForModule(id, show));
 		return result;
 	}
 

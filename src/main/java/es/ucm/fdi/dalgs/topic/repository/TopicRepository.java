@@ -36,7 +36,7 @@ public class TopicRepository {
 
 		}
 	}
-	
+
 	public boolean addTopic(Topic topic) {
 		try {
 			em.persist(topic);
@@ -48,14 +48,14 @@ public class TopicRepository {
 		return true;
 	}
 
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Topic> getAll() {
 		return em.createQuery("select t from Topic t where t.isDeleted = false order by t.id ")
 				.getResultList();
 	}
 
-	
+
 	public boolean saveTopic(Topic topic) {
 		try {
 			em.merge(topic);
@@ -74,7 +74,7 @@ public class TopicRepository {
 
 	public boolean deleteTopic(Topic topic) {
 		try {
-//			Topic topic = em.getReference(Topic.class, id_topic);
+			//			Topic topic = em.getReference(Topic.class, id_topic);
 			topic.setDeleted(true);
 			em.merge(topic);
 
@@ -87,7 +87,7 @@ public class TopicRepository {
 
 
 	public String getNextCode() {
-	return "";
+		return "";
 	}
 
 
@@ -96,23 +96,30 @@ public class TopicRepository {
 		Query query = em.createQuery("select t from Topic t where t.info.code=?1 and t.module = ?2");
 		query.setParameter(1, code);
 		query.setParameter(2, module);
-		 if (query.getResultList().isEmpty())
-		 	return null;
-		 else return (Topic) query.getSingleResult();
-	}
-
-	
-	@SuppressWarnings("unchecked")
-	public Collection<Topic> getTopicsForModule(Long id) {
-		Module module = em.getReference(Module.class, id);
-
-		Query query = em
-				.createQuery("select t from Topic t where t.module=?1 and t.isDeleted='false'");
-		query.setParameter(1, module);
-
 		if (query.getResultList().isEmpty())
 			return null;
-		return (List<Topic>) query.getResultList();
+		else return (Topic) query.getSingleResult();
+	}
+
+
+	@SuppressWarnings("unchecked")
+	public Collection<Topic> getTopicsForModule(Long id, Boolean show) {
+		Module module = em.getReference(Module.class, id);
+		if(show){
+			Query query = em
+					.createQuery("select t from Topic t where t.module=?1");
+			query.setParameter(1, module);
+
+			return (List<Topic>) query.getResultList();
+		}else{
+
+			Query query = em
+					.createQuery("select t from Topic t where t.module=?1 and t.isDeleted='false'");
+			query.setParameter(1, module);
+
+			return (List<Topic>) query.getResultList();
+
+		}
 	}
 
 
@@ -120,10 +127,10 @@ public class TopicRepository {
 	public Collection<Topic> getTopicsForModules(Collection<Module> modules) {
 		Query query = em.createQuery("SELECT t  FROM Topic t WHERE t.isDeleted = false  AND t.module in ?1");
 		query.setParameter(1, modules);
-		
+
 		if (query.getResultList().isEmpty()) return null;
 		else return (Collection<Topic>) query.getResultList();
-		
+
 	}
 
 
@@ -139,10 +146,10 @@ public class TopicRepository {
 			logger.error(e.getMessage());
 			return false;
 		}
-		
+
 	}
 
-	
+
 	public boolean deleteTopicsForModule(Module module) {
 		try {
 
@@ -157,5 +164,5 @@ public class TopicRepository {
 		}
 	}
 
-	
+
 }

@@ -123,10 +123,10 @@ public class CompetenceService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<Competence> getCompetencesForDegree(Long id_degree) {
+	public ResultClass<Competence> getCompetencesForDegree(Long id_degree, Boolean show) {
 		ResultClass<Competence> result = new ResultClass<>();
 
-		result.addAll(daoCompetence.getCompetencesForDegree(id_degree));
+		result.addAll(daoCompetence.getCompetencesForDegree(id_degree, show));
 		return result;
 	}
 
@@ -203,11 +203,11 @@ public class CompetenceService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<Competence> getCompetenceAll(Long id_competence) {
+	public ResultClass<Competence> getCompetenceAll(Long id_competence, Boolean show) {
 		ResultClass<Competence> result = new ResultClass<>();
 		Competence competence = daoCompetence.getCompetence(id_competence);
 		//		Competence c = daoCompetence.getCompetenceAll(id_competence);
-		competence.setLearningGoals(serviceLearning.getLearningGoalsFromCompetence(competence).getSingleElement());
+		competence.setLearningGoals(serviceLearning.getLearningGoalsFromCompetence(competence, show));
 		result.setSingleElement(competence);
 		return result;
 	}

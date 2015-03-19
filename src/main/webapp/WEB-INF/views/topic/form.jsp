@@ -23,7 +23,8 @@
 			</h3>
 		</div>
 		<div class="panel-body">
-			<form:form method="post" commandName="addTopic" role="form">
+			<form:form method="post" commandName="topic" role="form">
+				<form:hidden path="id" />
 				<div class="form-group">
 					<label>Code: </label>
 					<form:input path="info.code" class="form-control"
@@ -48,7 +49,8 @@
 
 				</div>
 
-				<input type="submit" class="btn btn-success" value="${valueButton}" name="${valueButton}"/>
+				<input type="submit" class="btn btn-success" value="${valueButton}"
+					name="${valueButton}" />
 				<c:if test="${unDelete == true}">
 					<input type="submit" class="btn btn-success" value="Undelete"
 						name="Undelete" />
