@@ -18,6 +18,7 @@ import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.repository.CourseRepository;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
 import es.ucm.fdi.dalgs.domain.Course;
+import es.ucm.fdi.dalgs.domain.Subject;
 import es.ucm.fdi.dalgs.group.service.GroupService;
 
 @Service
@@ -258,6 +259,20 @@ public class CourseService {
 				result.setSingleElement(c);	
 
 		}
+		return result;
+	}
+
+	public ResultClass<Course> getCoursesBySubject(Subject subject) {
+		
+		ResultClass<Course> result = new ResultClass<>();
+		result.addAll(daoCourse.getCoursesBySubject(subject)); 
+		return result;
+	}
+
+	public ResultClass<Boolean> deleteCoursesForSubject(Collection<Subject> subjects) {
+		ResultClass<Boolean> result = new ResultClass<>();
+		result.setSingleElement(daoCourse.deleteCoursesForSubject(subjects));
+
 		return result;
 	}
 }

@@ -2,13 +2,13 @@ package es.ucm.fdi.dalgs.module.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.degree.service.DegreeService;
 import es.ucm.fdi.dalgs.domain.Degree;
@@ -27,10 +27,16 @@ public class ModuleService {
 
 	@Autowired
 	private TopicService serviceTopic; 
+	
+	@Autowired
+	private AclObjectService manageAclService;
+
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly=false)
 	public ResultClass<Module> addModule(Module module, Long id_degree) {
+		
+		boolean success = false;
 		
 		Module moduleExists = daoModule.existByCode(module.getInfo().getCode(), id_degree);
 		ResultClass<Module> result = new ResultClass<Module>();
@@ -50,9 +56,17 @@ public class ModuleService {
 		}
 		else{
 			module.setDegree(serviceDegree.getDegree(id_degree).getSingleElement());
-			daoModule.addModule(module);
-			result.setSingleElement(module);
-				
+			success = daoModule.addModule(module);
+			
+			if(success){
+				moduleExists = daoModule.existByCode(module.getInfo().getCode(), id_degree);
+				success = manageAclService.addAclToObject(moduleExists.getId(), moduleExists.getClass().getName());
+				if (success) result.setSingleElement(module);
+			
+			}else{
+				throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
+
+			}
 		}
 		
 		return result;		
@@ -61,13 +75,14 @@ public class ModuleService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
-	public ResultClass<List<Module>> getAll() {
-		ResultClass<List<Module>> result = new ResultClass<List<Module>>();
-		result.setSingleElement(daoModule.getAll());
+	public ResultClass<Module> getAll() {
+		ResultClass<Module> result = new ResultClass<Module>();
+		result.addAll(daoModule.getAll());
 		return result;
 	}
 
 //	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@PreAuthorize("hasPermission(#module, 'WRITE') or hasPermission(#module, 'ADMINISTRATION')")
 	@Transactional(readOnly=false)
 	public ResultClass<Boolean> modifyModule(Module module, Long id_module, Long id_degree) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -107,11 +122,12 @@ public class ModuleService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#module, 'DELETE') or hasPermission(#module, 'ADMINISTRATION')" )
 	@Transactional(readOnly=false)
-	public ResultClass<Boolean> deleteModule(Long id) {
+	public ResultClass<Boolean> deleteModule(Module module) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		Module module = daoModule.getModule(id);
+//		Module module = daoModule.getModule(id);
 		if(serviceTopic.deleteTopicsForModule(module).getSingleElement()){
 			result.setSingleElement(daoModule.deleteModule(module));
 			return result;
@@ -125,26 +141,26 @@ public class ModuleService {
 	public ResultClass<Module> getModuleAll(Long id_module) {
 		ResultClass<Module> result = new ResultClass<Module>();
 		Module p = daoModule.getModule(id_module);
-		p.setTopics(serviceTopic.getTopicsForModule(id_module).getSingleElement());
+		p.setTopics(serviceTopic.getTopicsForModule(id_module));
 		result.setSingleElement(p);
 		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
-	public ResultClass<Collection<Module>> getModulesForDegree(Long id) {
-		ResultClass<Collection<Module>> result = new ResultClass<Collection<Module>>();
-		result.setSingleElement(daoModule.getModulesForDegree(id));
+	public ResultClass<Module> getModulesForDegree(Long id) {
+		ResultClass<Module> result = new ResultClass<>();
+		result.addAll(daoModule.getModulesForDegree(id));
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@Transactional(readOnly=false)
-	public ResultClass<Boolean> modifyModule(Module module) {
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setSingleElement(daoModule.saveModule(module));
-		return result;
-	}
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+//	@Transactional(readOnly=false)
+//	public ResultClass<Boolean> modifyModule(Module module) {
+//		ResultClass<Boolean> result = new ResultClass<Boolean>();
+//		result.setSingleElement(daoModule.saveModule(module));
+//		return result;
+//	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly=false)
@@ -157,7 +173,8 @@ public class ModuleService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#module, 'WRITE') or hasPermission(#module, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Module> unDeleteModule(Module module, Long id_degree) {
 		Module m = daoModule.existByCode(module.getInfo().getCode(), id_degree);

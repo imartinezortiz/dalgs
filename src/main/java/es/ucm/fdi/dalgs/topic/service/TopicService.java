@@ -2,13 +2,13 @@ package es.ucm.fdi.dalgs.topic.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.domain.Module;
 import es.ucm.fdi.dalgs.domain.Topic;
@@ -26,13 +26,18 @@ public class TopicService {
 
 	@Autowired
 	private SubjectService serviceSubject;
+	
+	@Autowired
+	private AclObjectService manageAclService;
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly=false)	
-	public ResultClass<Boolean> addTopic(Topic topic, Long id_module) {
+	public ResultClass<Topic> addTopic(Topic topic, Long id_module) {
 
+		boolean success = false;
+		
 		Topic topicExists = daoTopic.existByCode(topic.getInfo().getCode(), id_module);
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		ResultClass<Topic> result = new ResultClass<>();
 
 		if( topicExists != null){
 			result.setHasErrors(true);
@@ -44,30 +49,40 @@ public class TopicService {
 				errors.add("Element is deleted");
 
 			}
-			result.setSingleElement(false);
+			else result.setSingleElement(topic);
 			result.setErrorsList(errors);
 		}
 		else{
 			topic.setModule(serviceModule.getModule(id_module).getSingleElement());
-			boolean r = daoTopic.addTopic(topic);
-			if (r) 
-				result.setSingleElement(true);
+			success = daoTopic.addTopic(topic);
+			
+			if(success){
+				topicExists = daoTopic.existByCode(topic.getInfo().getCode(), id_module);
+				success = manageAclService.addAclToObject(topicExists.getId(), topicExists.getClass().getName());
+				if (success) result.setSingleElement(topic);
+			
+			}else{
+				throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
+
+			}
 		}
 		return result;		
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
-	public ResultClass<List<Topic>> getAll() {
-		ResultClass<List<Topic>> result = new ResultClass<List<Topic>>();
-		result.setSingleElement(daoTopic.getAll());
+	public ResultClass<Topic> getAll() {
+		ResultClass<Topic> result = new ResultClass<>();
+		result.addAll(daoTopic.getAll());
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#topic, 'WRITE') or hasPermission(#topic, 'ADMINISTRATION')")
 	@Transactional(readOnly=false)
 	public ResultClass<Boolean> modifyTopic(Topic topic, Long id_topic, Long id_module) {
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		ResultClass<Boolean> result = new ResultClass<>();
 
 		Topic modifyTopic = daoTopic.getTopic(id_topic);
 
@@ -76,7 +91,7 @@ public class TopicService {
 		if(!topic.getInfo().getCode().equalsIgnoreCase(modifyTopic.getInfo().getCode()) && 
 				topicExists != null){
 			result.setHasErrors(true);
-			Collection<String> errors = new ArrayList<String>();
+			Collection<String> errors = new ArrayList<>();
 			errors.add("New code already exists");
 
 			if (topicExists.getIsDeleted()){
@@ -104,12 +119,13 @@ public class TopicService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#topic, 'DELETE') or hasPermission(#topic, 'ADMINISTRATION')" )
 	@Transactional(readOnly=false)
-	public ResultClass<Boolean> deleteTopic(Long id) {
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		Topic topic = daoTopic.getTopic(id);
-		Collection<Topic> topics = new ArrayList<Topic>();
+	public ResultClass<Boolean> deleteTopic(Topic topic) {
+		ResultClass<Boolean> result = new ResultClass<>();
+//		Topic topic = daoTopic.getTopic(id);
+		Collection<Topic> topics = new ArrayList<>();
 		topics.add(topic);
 		if (serviceSubject.deleteSubjectsForTopic(topics).getSingleElement()){
 			result.setSingleElement(daoTopic.deleteTopic(topic));
@@ -125,16 +141,16 @@ public class TopicService {
 	public ResultClass<Topic> getTopicAll(Long id_topic) {
 		ResultClass<Topic> result = new ResultClass<Topic>();
 		Topic p = daoTopic.getTopic(id_topic);
-		p.setSubjects(serviceSubject.getSubjectsForTopic(id_topic).getSingleElement());
+		p.setSubjects(serviceSubject.getSubjectsForTopic(id_topic));
 		result.setSingleElement(p);
 		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
-	public ResultClass<Collection<Topic>> getTopicsForModule(Long id) {
-		ResultClass<Collection<Topic>> result = new ResultClass<Collection<Topic>>();
-		result.setSingleElement(daoTopic.getTopicsForModule(id));
+	public ResultClass<Topic> getTopicsForModule(Long id) {
+		ResultClass<Topic> result = new ResultClass<>();
+		result.addAll(daoTopic.getTopicsForModule(id));
 		return result;
 	}
 
@@ -149,7 +165,7 @@ public class TopicService {
 	//		return daoTopic.saveTopic(topic);
 	//	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly=false)
 	public ResultClass<Boolean> deleteTopicsForModules(Collection<Module> modules) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -178,11 +194,12 @@ public class TopicService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@PreAuthorize("hasPermission(#topic, 'WRITE') or hasPermission(#topic, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> unDeleteTopic(Topic topic, Long id_module) {
+	public ResultClass<Topic> unDeleteTopic(Topic topic, Long id_module) {
 		Topic t = daoTopic.existByCode(topic.getInfo().getCode(), id_module);
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		ResultClass<Topic> result = new ResultClass<>();
 		if(t == null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
@@ -201,7 +218,7 @@ public class TopicService {
 			t.setInfo(topic.getInfo());
 			boolean r = daoTopic.saveTopic(t);
 			if(r) 
-				result.setSingleElement(true);	
+				result.setSingleElement(t);	
 
 		}
 		return result;

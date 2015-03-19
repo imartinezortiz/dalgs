@@ -13,6 +13,7 @@ import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
+import es.ucm.fdi.dalgs.domain.Degree;
 
 @Service
 public class AcademicTermService {
@@ -152,9 +153,9 @@ public class AcademicTermService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 //	@PostFilter("hasPermission(filterObject, 'READ')") // Collection: filterObject
 	@Transactional(readOnly = false)
-	public ResultClass<AcademicTerm> getAcademicTermsByDegree(Long id_degree) {
+	public ResultClass<AcademicTerm> getAcademicTermsByDegree(Degree degree) {
 		ResultClass<AcademicTerm> result = new ResultClass<>();
-		result.addAll(daoAcademicTerm.getAcademicTermsByDegree(id_degree));
+		result.addAll(daoAcademicTerm.getAcademicTermsByDegree(degree));
 		return result;
 	}
 
