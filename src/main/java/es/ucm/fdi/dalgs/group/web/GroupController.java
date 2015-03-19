@@ -247,9 +247,9 @@ public class GroupController {
 		List<String> professors = serviceUser.getAllByRole("ROLE_PROFESSOR");
 
 		model.addAttribute("group",group);
-		//model.addAttribute("group",true);
+		model.addAttribute("typeOfUser","Proffesors");
 
-		model.addAttribute("professors", professors);
+		model.addAttribute("users", professors);
 
 		return "group/addUsers";
 
@@ -270,28 +270,50 @@ public class GroupController {
 		}
 		else{
 			
-			ResultClass<Boolean> result = serviceGroup.addProfessors(group, id_group);
-			
-			
-//			Group aux = serviceGroup.getGroup(id_group).getSingleElement();
-//			aux.setProfessors(group.getProfessors());
-//
-//			serviceGroup.modifyGroup(aux);
+			ResultClass<Boolean> result = serviceGroup.setProfessors(group, id_group);
 			if (!result.hasErrors())
-
 				return "redirect:/academicTerm/" + academicId + "/course/"	+ courseId + "/group/"+ id_group + ".htm";
-			
-			else{
-				
+			else
 				return "redirect:/academicTerm/" + academicId + "/course/"	+ courseId + "/group/"+ id_group + "/professor/add.htm";
-
-				
-			}
 		}
-
-
 	}
 	
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/student/add.htm", method = RequestMethod.GET)
+	public String addStudentToGroupGET(@PathVariable("groupId") Long id_group, Model model) {
+
+		Group group = serviceGroup.getGroup(id_group).getSingleElement();
+		List<String> students = serviceUser.getAllByRole("ROLE_STUDENT");
+
+		model.addAttribute("group",group);
+		model.addAttribute("typeOfUser","Students");
+		model.addAttribute("users", students);
+
+		return "group/addUsers";
+
+	}
+
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/student/add.htm", method = RequestMethod.POST, params="AddProfessors")
+	// Every Post have to return redirect
+	public String addStudentsToGroupPOST(
+			@PathVariable("academicId") Long academicId,
+			@PathVariable("courseId") Long courseId,
+			@PathVariable("groupId") Long id_group,
+			@ModelAttribute("group") @Valid Group group,
+			BindingResult resultBinding, RedirectAttributes attr) {
+
+		if (!resultBinding.hasErrors()){
+			return "redirect:/academicTerm/" + academicId + "/course/"
+					+ courseId + "/group/"+ id_group + "/student/add.htm";		
+		}
+		else{
+			
+			ResultClass<Boolean> result = serviceGroup.setStudents(group, id_group);
+			if (!result.hasErrors())
+				return "redirect:/academicTerm/" + academicId + "/course/"	+ courseId + "/group/"+ id_group + ".htm";
+			else
+				return "redirect:/academicTerm/" + academicId + "/course/"	+ courseId + "/group/"+ id_group + "/student/add.htm";
+		}
+	}
 	
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/restore.htm")
 	// Every Post have to return redirect
@@ -325,7 +347,27 @@ public class GroupController {
 					return element;
 				}
 				if (element instanceof String) {
-					User user = serviceUser.findByUsername(element.toString());
+					User user = serviceUser.findByFullName(element.toString());
+					logger.info("Loking up {} to {}", element,
+							user);
+
+					return user;
+				}
+				System.out.println("Don't know what to do with: "
+						+ element);
+				return null;
+			}
+		});
+		
+		binder.registerCustomEditor(Set.class, "students",
+				new CustomCollectionEditor(Set.class) {
+			protected Object convertElement(Object element) {
+				if (element instanceof User) {
+					logger.info("Converting...{}", element);
+					return element;
+				}
+				if (element instanceof String) {
+					User user = serviceUser.findByFullName(element.toString());
 					logger.info("Loking up {} to {}", element,
 							user);
 

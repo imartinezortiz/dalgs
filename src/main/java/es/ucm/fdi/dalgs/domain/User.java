@@ -57,6 +57,9 @@ public class User implements UserDetails, CredentialsContainer{
 	@Column(name="email", unique = true)
 	private String email;
 	
+	@Column(name = "fullname")
+	private String fullName;
+	
 	//  User Credentials
 	private String salt;
 
@@ -209,6 +212,19 @@ public class User implements UserDetails, CredentialsContainer{
 	public String getSalt() {
 		return salt;
 	}
+
+	public String getFullName() {
+		return fullName ;
+	}
+
+
+
+	public void setFullName(String fullName) {
+		this.fullName= fullName;// = this.lastName + ", " + this.firstName+ " - " + this.username;
+
+	}
+
+
 
 	public void setSalt(String salt) {
 		this.salt = salt;

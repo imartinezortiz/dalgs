@@ -140,7 +140,7 @@ public class GroupRepository {
 	public Collection<Group> getGroupsForStudent(Long id_student){
 		User user = em.getReference(User.class, id_student);
 
-		Query query = em.createQuery("select g from Group g join g.students s where s=?1 and g.isDeleted='false' ");
+		Query query = em.createQuery("select g from Group g join g.course c join c.subject join c.academicTerm join g.students s where s=?1 and g.isDeleted='false' ");
 		query.setParameter(1, user);
 
 		if (query.getResultList().isEmpty())
@@ -151,8 +151,9 @@ public class GroupRepository {
 	@SuppressWarnings("unchecked")
 	public Collection<Group> getGroupsForProfessor(Long id_professor){
 		User user = em.getReference(User.class, id_professor);
-
-		Query query = em.createQuery("select g from Group g join g.professors s where s=?1 and g.isDeleted='false' ");
+		/*Query query = em.createQuery("SELECT s FROM Subject s JOIN s.topic t "
+				+ "JOIN t.module m JOIN m.degree d WHERE d = ?1");*/
+		Query query = em.createQuery("select g from Group g join g.course c join c.subject join c.academicTerm join g.professors s where s=?1 and g.isDeleted='false' ");
 		query.setParameter(1, user);
 
 		if (query.getResultList().isEmpty())

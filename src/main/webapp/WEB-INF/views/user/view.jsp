@@ -36,40 +36,35 @@
 				<div class="panel-body">
 					<label>UserName: </label>
 					<p class="details">${model.user.username}</p>
-					<br>
-					<br> <label>Student </label>
+					<br> <br> <label>Student </label>
 					<p class="details">${model.user.firstName}
 						&nbsp;${model.user.lastName}</p>
-					<br>
-					<label>Email: </label>
+					<br> <label>Email: </label>
 					<p class="details">${model.user.email}</p>
 				</div>
 			</div>
 		</div>
 	</div>
 
+
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
-			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
+			<h3 class="panel-title list">
+				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
+				Group List
+			</h3>
 
-			<h3 class="panel-title list">Group List</h3>
-			<sec:authorize access="hasRole('ROLE_ADMIN')">
-
-				<a style="cursor:copy;" class="btn list-btn btn-warning2" style="margin-top: 5px;"
-					href="<c:url value='/user/${model.user.id}/group/add.htm'/>"><span
-					class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					Add
-				</a>
-			</sec:authorize>
 		</div>
 		<div class="panel-body">
+
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label">Subject</div></td>
-					<td width="50%"><div class="td-label">Academic Term</div></td>
+					<td><div class="td-label">Subject</div></td>
+					<td><div class="td-label">Academic Term</div></td>
+					<td><div class="td-label">Group</div></td>
+
 				</tr>
-				<c:if test="studentGroup"><
-				<c:forEach items="${model.studentGroup}" var="group">
+				<c:forEach items="${model.groups}" var="group">
 					<tr align="center">
 						<td><div class="td-content">
 								<c:out value="${group.course.subject.info.name}" />
@@ -79,7 +74,11 @@
 								<c:out value="${group.course.academicTerm.term}" />
 							</div>
 						</td>
-
+						<td>
+							<div class="td-content">
+								<c:out value="${group.name}" />
+							</div>
+						</td>
 						<td><a class="btn btn-success"
 							href="<c:url value='/academicTerm/${group.course.academicTerm.id}/course/${group.course.id}/group/${group.id }.htm'/>">
 								View </a> <sec:authorize access="hasRole('ROLE_ADMIN')">
@@ -92,36 +91,13 @@
 					</tr>
 				</c:forEach>
 
-				</c:if>
-				<c:if test="professorGroup"><
-				<c:forEach items="${model.professorGroup}" var="group">
-					<tr align="center">
-						<td><div class="td-content">
-								<c:out value="${group.course.subject.info.name}" />
-							</div></td>
-						<td>
-							<div class="td-content">
-								<c:out value="${group.course.academicTerm.term}" />
-							</div>
-						</td>
-
-						<td><a class="btn btn-success"
-							href="<c:url value='/academicTerm/${group.course.academicTerm.id}/course/${group.course.id}/group/${group.id }.htm'/>">
-								View </a> <sec:authorize access="hasRole('ROLE_ADMIN')">
-								<a class="btn btn-danger"
-									href="<c:url 
-									value='/academicTerm/${group.course.academicTerm.id}/course/${group.course.id}/group/${group.id }/user/${model.userDetails.id}delete.htm'/>">
-									Delete </a>
-							</sec:authorize></td>
-
-					</tr>
-				</c:forEach>
-
-				</c:if>
 
 			</table>
 		</div>
 	</div>
+
+
+
 
 
 </body>

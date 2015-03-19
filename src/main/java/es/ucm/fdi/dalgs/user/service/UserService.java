@@ -126,5 +126,13 @@ public class UserService {
 		return daoUser.getAllByRole(user_role);
 
 	}
+
+	@PreAuthorize("hasRole('ROLE_USER')")
+	public User findByFullName(String fullname) {
+		String fullnamesplit[] = fullname.split(" - ");
+		return findByUsername(fullnamesplit[0]);
+	}
+
+
 	
 }

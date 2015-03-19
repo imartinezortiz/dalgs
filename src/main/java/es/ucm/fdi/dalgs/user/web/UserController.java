@@ -68,18 +68,16 @@ public class UserController {
 		if (user != null){
 		myModel.put("user", user);
 		
-		//FALLA AQUI
 		ResultClass<Group> groups = new ResultClass<Group>();
 
 		if(serviceUser.hasRole(user,"ROLE_PROFESSOR")){
 			groups = serviceGroup.getGroupsForProfessor(id_user);
-			myModel.put("professorGroup",groups );
 		}
 		else if(serviceUser.hasRole(user,"ROLE_STUDENT")){
 			groups = serviceGroup.getGroupsForStudent(id_user);
-			myModel.put("studentGroup", groups);
 		}
-	
+		myModel.put("groups",groups );
+
 		return new ModelAndView("user/view", "model", myModel); //Admin view
 		}
 		return new ModelAndView("error", "model", myModel);

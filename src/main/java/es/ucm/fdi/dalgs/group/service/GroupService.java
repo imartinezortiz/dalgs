@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -186,7 +185,7 @@ public class GroupService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostAuthorize("hasPermission(returnObject, 'READ')")
+//	@PostAuthorize("hasPermission(returnObject, 'READ')")
 	public ResultClass<Group> getGroupsForStudent(Long id_student){
 		ResultClass<Group> result = new ResultClass<>();
 		result.addAll(daoGroup.getGroupsForStudent(id_student));
@@ -194,7 +193,7 @@ public class GroupService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostAuthorize("hasPermission(returnObject, 'READ')")
+//	@PostAuthorize("hasPermission(returnObject, 'READ')")
 	public ResultClass<Group> getGroupsForProfessor(Long id_professor){
 		ResultClass<Group> result = new ResultClass<>();
 		result.addAll(daoGroup.getGroupsForProfessor(id_professor));
@@ -203,7 +202,7 @@ public class GroupService {
 	
 	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> addProfessors(Group group, Long id_group) {
+	public ResultClass<Boolean> setProfessors(Group group, Long id_group) {
 		ResultClass<Boolean> result = new ResultClass<>();
 		Group modifyGroup = daoGroup.getGroup(id_group);
 		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
@@ -212,6 +211,18 @@ public class GroupService {
 		
 		return result;
 		
+	}
+	
+	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
+	@Transactional(readOnly = false)
+	public ResultClass<Boolean> setStudents(Group group, Long id_group) {
+		ResultClass<Boolean> result = new ResultClass<>();
+		Group modifyGroup = daoGroup.getGroup(id_group);
+		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
+		modifyGroup.setStudents(group.getStudents());
+		result.setSingleElement(result.hasErrors());
+		
+		return result;	
 	}
 
 }

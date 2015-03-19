@@ -155,4 +155,6 @@ public class UserRepository {
 		query.setParameter(1, user_role);
 		return query.getResultList();
 	}
+
+
 }
