@@ -26,7 +26,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "_group")
-public class Group implements Cloneable{
+public class Group implements Cloneable, Copyable<Group>{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -129,19 +129,26 @@ public class Group implements Cloneable{
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-
-	public Group clone(){
-		Group clone = new Group();
-		clone.setId(null);
-
-		//clone.setCourse(this.course); clone.getCourse().setId(null);
+	
+	@Override
+	public Group copy() {
+		Group copy;
+		try {
+			copy = (Group) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 		
-		clone.setDeleted(this.isDeleted);
-		clone.setName(this.name);
-		
-		return clone;
+		copy.id = null;
+		copy.activities = new ArrayList<>();
+		for (Activity a : this.activities) {
+			Activity activity  = a.copy();
+			activity.setGroup(copy);
+			copy.activities.add(activity);
+		}
+		return copy;
 	}
-
+	
 	
 	
 }

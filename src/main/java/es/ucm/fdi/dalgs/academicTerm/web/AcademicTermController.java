@@ -50,23 +50,7 @@ public class AcademicTermController {
 		this.showAll = showAll;
 	}
 
-	/**
-	 * Method for clone an existing AcademicTerm
-	 */
 
-	// @RequestMapping(value = "/academicTerm/{academicId}/clone.htm", method =
-	// RequestMethod.GET)
-	// public String cloneAcademicTermGET(
-	// @PathVariable("academicId") Long id_academic)
-	// throws ServletException {
-	//
-	// ResultClass<AcademicTerm> resultReturned =
-	// serviceAcademicTerm.getAcademicTerm(id_academic);
-	// if (resultReturned.hasErrors()){
-	// return "redirect:/academicTerm/page/0.htm?showAll="+showAll;
-	// } else
-	// return "redirect:/error.htm";
-	// }
 
 	/**
 	 * Methods for adding academicTerms
@@ -363,6 +347,21 @@ public class AcademicTermController {
 			return "redirect:/error.htm";
 
 		}
+
+	}
+	
+	@RequestMapping(value = "/academicTerm/{academicId}/clone.htm")
+	// Every Post have to return redirect
+	public String copyAcademicTerm(@PathVariable("academicId") Long id_academic) {
+		ResultClass<AcademicTerm> result = 
+				serviceAcademicTerm.copyAcademicTerm((serviceAcademicTerm
+						.getAcademicTerm(id_academic,false).getSingleElement()));
+		
+		if (!result.hasErrors())
+			return "redirect:/academicTerm/page/0.htm?showAll=" + showAll;
+		
+		return "redirect:/error.htm";
+
 
 	}
 
