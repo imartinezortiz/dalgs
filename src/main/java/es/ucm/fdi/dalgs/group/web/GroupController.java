@@ -355,8 +355,7 @@ public class GroupController {
 		}
 
 	}
-
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/user/${userId}/delete.htm",method = RequestMethod.GET)
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/user/{userId}/delete.htm",method = RequestMethod.GET)
 	public String deleteUserGroupGET(
 			@PathVariable("academicId") Long id_AcademicTerm,
 			@PathVariable("courseId") Long id_course,
