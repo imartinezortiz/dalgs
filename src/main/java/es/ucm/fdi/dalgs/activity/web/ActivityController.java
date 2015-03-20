@@ -30,8 +30,11 @@ import es.ucm.fdi.dalgs.activity.service.ActivityService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.Activity;
+import es.ucm.fdi.dalgs.domain.Course;
+import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.LearningGoal;
 import es.ucm.fdi.dalgs.domain.LearningGoalStatus;
+import es.ucm.fdi.dalgs.group.service.GroupService;
 import es.ucm.fdi.dalgs.learningGoal.service.LearningGoalService;
 
 @Controller
@@ -42,6 +45,9 @@ public class ActivityController {
 
 	@Autowired
 	private CourseService serviceCourse;
+	
+	@Autowired
+	private GroupService serviceGroup;
 
 	@Autowired
 	private LearningGoalService serviceLearningGoal;
@@ -93,7 +99,9 @@ public class ActivityController {
 			throws NotOwnerException {
 
 		if (!resultBinding.hasErrors()) {
-			ResultClass<Activity> result = serviceActivity.addActivity(
+			Course course = serviceCourse.getCourse(id_course).getSingleElement();
+			
+			ResultClass<Activity> result = serviceActivity.addActivityCourse(course,
 					newactivity, id_course);
 			if (!result.hasErrors())
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
@@ -132,9 +140,10 @@ public class ActivityController {
 			BindingResult resultBinding, RedirectAttributes attr) {
 
 		if (!resultBinding.hasErrors()) {
+			Course course = serviceCourse.getCourse(id_course).getSingleElement();
 
 			ResultClass<Activity> result = serviceActivity
-					.unDeleteActivity(activity);
+					.unDeleteActivity(course, null,activity);
 
 			if (!result.hasErrors())
 
@@ -203,8 +212,10 @@ public class ActivityController {
 	{
 
 		if (!resultBinding.hasErrors()) {
-			ResultClass<Boolean> result = serviceActivity.modifyActivity(
-					activity, id_activity, id_course);
+			Course course = serviceCourse.getCourse(id_course).getSingleElement();
+
+			ResultClass<Boolean> result = serviceActivity.modifyActivity(course,null,
+					activity, id_activity);
 			if (!result.hasErrors())
 
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
@@ -237,13 +248,14 @@ public class ActivityController {
 			BindingResult result, Model model) throws ServletException {
 
 		// Activity p = serviceActivity.getActivity(id);
-		if (!result.hasErrors())
+		if (!result.hasErrors()){
+			Course course = serviceCourse.getCourse(id_course).getSingleElement();
 
-			if (serviceActivity.addLearningGoals(id, learningGoalStatus)
+			if (serviceActivity.addLearningGoals(course, null,id, learningGoalStatus)
 					.getSingleElement())
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
 						+ id_course + "/activity/" + id + "/modify.htm";
-
+		}
 		return "redirect:/academicTerm/" + id_academicTerm + "/course/"
 				+ id_course + "/activity/" + id + "/modify.htm";
 	}
@@ -259,7 +271,9 @@ public class ActivityController {
 			@PathVariable("activityId") Long id_activity)
 			throws ServletException {
 
-		if (serviceActivity.deleteActivity(id_activity).getSingleElement()) {
+		Course course = serviceCourse.getCourse(id_course).getSingleElement();
+
+		if (serviceActivity.deleteActivity(course,null, id_activity).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
 					+ id_course + ".htm";
 		} else
@@ -277,8 +291,9 @@ public class ActivityController {
 			@PathVariable("activityId") long id_Activity,
 			@PathVariable("compStatusId") Long id_learningStatus)
 			throws ServletException {
+		Course course = serviceCourse.getCourse(id_course).getSingleElement();
 
-		if (serviceActivity.deleteLearningActivity(id_learningStatus,
+		if (serviceActivity.deleteLearningActivity(course, null, id_learningStatus,
 				id_Activity).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
 					+ id_course + "/activity/" + id_Activity + "/modify.htm";
@@ -315,8 +330,10 @@ public class ActivityController {
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("activityId") Long id_activity) {
+		Course course = serviceCourse.getCourse(id_course).getSingleElement();
+
 		ResultClass<Activity> result = serviceActivity
-				.unDeleteActivity(serviceActivity.getActivity(id_activity)
+				.unDeleteActivity(course, null, serviceActivity.getActivity(id_activity)
 						.getSingleElement());
 
 		if (!result.hasErrors())
@@ -362,7 +379,9 @@ public class ActivityController {
 			throws NotOwnerException {
 
 		if (!resultBinding.hasErrors()) {
-			ResultClass<Activity> result = serviceActivity.addActivitytoGroup(newactivity, id_group);
+			Group group = serviceGroup.getGroup(id_group).getSingleElement();
+
+			ResultClass<Activity> result = serviceActivity.addActivitytoGroup(group,newactivity, id_group);
 			if (!result.hasErrors())
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
 						+ id_course + "/group/" + id_group + "/activity/"
@@ -402,7 +421,9 @@ public class ActivityController {
 
 		if (!resultBinding.hasErrors()) {
 
-			ResultClass<Activity> result = serviceActivity.unDeleteActivity(activity);
+			Group group = serviceGroup.getGroup(id_group).getSingleElement();
+
+			ResultClass<Activity> result = serviceActivity.unDeleteActivity(null,group,activity);
 
 			if (!result.hasErrors())
 
@@ -473,7 +494,9 @@ public class ActivityController {
 	{
 
 		if (!resultBinding.hasErrors()) {
-			ResultClass<Boolean> result = serviceActivity.modifyActivityGroup(activity, id_activity, id_group);
+			Group group = serviceGroup.getGroup(id_group).getSingleElement();
+
+			ResultClass<Boolean> result = serviceActivity.modifyActivity(null, group,activity, id_activity);
 			if (!result.hasErrors())
 
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
@@ -507,14 +530,15 @@ public class ActivityController {
 			@ModelAttribute("addlearningstatus") @Valid LearningGoalStatus learningGoalStatus,
 			BindingResult result, Model model) throws ServletException {
 
-		if (!result.hasErrors())
+		if (!result.hasErrors()){
+			Group group = serviceGroup.getGroup(id_group).getSingleElement();
 
-			if (serviceActivity.addLearningGoals(id, learningGoalStatus)
+			if (serviceActivity.addLearningGoals(null, group,id, learningGoalStatus)
 					.getSingleElement())
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
 						+ id_course + "/group/" + id_group + "/activity/" + id
 						+ "/modify.htm";
-
+		}
 		return "redirect:/academicTerm/" + id_academicTerm + "/course/"
 				+ id_course + "/group/" + id_group + "/activity/" + id
 				+ "/modify.htm";
@@ -531,8 +555,10 @@ public class ActivityController {
 			@PathVariable("groupId") Long id_group,
 			@PathVariable("activityId") Long id_activity)
 			throws ServletException {
+		
+		Group group = serviceGroup.getGroup(id_group).getSingleElement();
 
-		if (serviceActivity.deleteActivity(id_activity).getSingleElement()) {
+		if (serviceActivity.deleteActivity(null, group,id_activity).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
 					+ id_course + "/group/" + id_group + ".htm";
 		} else
@@ -552,7 +578,9 @@ public class ActivityController {
 			@PathVariable("compStatusId") Long id_learningStatus)
 			throws ServletException {
 
-		if (serviceActivity.deleteLearningActivity(id_learningStatus,
+		Group group = serviceGroup.getGroup(id_group).getSingleElement();
+
+		if (serviceActivity.deleteLearningActivity(null, group,id_learningStatus,
 				id_Activity).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
 					+ id_course + "/group/" + id_group + "/activity/"
@@ -593,8 +621,11 @@ public class ActivityController {
 			@PathVariable("groupId") Long id_group,
 
 			@PathVariable("activityId") Long id_activity) {
+		
+		Group group = serviceGroup.getGroup(id_group).getSingleElement();
+
 		ResultClass<Activity> result = serviceActivity
-				.unDeleteActivity(serviceActivity.getActivity(id_activity)
+				.unDeleteActivity(null, group,serviceActivity.getActivity(id_activity)
 						.getSingleElement());
 
 		if (!result.hasErrors())

@@ -161,4 +161,9 @@ public class GroupRepository {
 
 		return query.getResultList();
 	}
+
+	//TODO
+	public boolean deleteUserGroup(Group g, Long id_user) {
+		return false;
+	}
 }

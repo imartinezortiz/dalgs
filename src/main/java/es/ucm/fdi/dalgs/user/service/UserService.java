@@ -22,104 +22,105 @@ import es.ucm.fdi.dalgs.user.repository.UserRepository;
 public class UserService {
 	@Autowired
 	private UserRepository daoUser;
-	
-	@PreAuthorize("permitAll") 
+
+	@PreAuthorize("permitAll")
 	@Transactional(readOnly = true)
-	public User findByEmail(String email){
+	public User findByEmail(String email) {
 		return daoUser.findByEmail(email);
 	}
-	
-	@PreAuthorize("permitAll") 
+
+	@PreAuthorize("permitAll")
 	@Transactional(readOnly = true)
-	public User findByUsername(String username){
+	public User findByUsername(String username) {
 		return daoUser.findByUsername(username);
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public List<User> getAll(Integer pageIndex){
-		return daoUser.getAll( pageIndex);
+	public List<User> getAll(Integer pageIndex) {
+		return daoUser.getAll(pageIndex);
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteUser(Long id){
+	public boolean deleteUser(Long id) {
 		return daoUser.deleteUser(id);
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public boolean saveUser(User user){
+	public boolean saveUser(User user) {
 		return daoUser.saveUser(user);
 	}
 
-	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
 	public Integer numberOfPages() {
 		return daoUser.numberOfPages();
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public User getUser(Long id_user) {
 		return daoUser.getUser(id_user);
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public boolean addUser(User user){
-		//StringSHA sha = new StringSHA();
-		//String pass = sha.getStringMessageDigest(user.getPassword());
-		//user.setPassword(pass);
+	public boolean addUser(User user) {
+		// StringSHA sha = new StringSHA();
+		// String pass = sha.getStringMessageDigest(user.getPassword());
+		// user.setPassword(pass);
 		return (daoUser.addUser(user));
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@Transactional(readOnly = false)//, propagation = Propagation.REQUIRED)
+	@Transactional(readOnly = false)
+	// , propagation = Propagation.REQUIRED)
 	public boolean uploadCVS(UploadForm upload) {
 		CsvPreference prefers =
-				// new CsvPreference.Builder('"', ';',"\n").build();
-				new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload
-						.getDelimiterChar().charAt(0), upload.getEndOfLineSymbols())
-						.build();
+		// new CsvPreference.Builder('"', ';',"\n").build();
+		new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload
+				.getDelimiterChar().charAt(0), upload.getEndOfLineSymbols())
+				.build();
 
-				List<User> list = null;
-				try {
-					FileItem fileItem = upload.getFileData().getFileItem();
-					UserUpload userUpload = new UserUpload();
-					list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
-							upload.getCharset(), prefers);// getInputStream().toString()
+		List<User> list = null;
+		try {
+			FileItem fileItem = upload.getFileData().getFileItem();
+			UserUpload userUpload = new UserUpload();
+			list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
+					upload.getCharset(), prefers);// getInputStream().toString()
 
-					return daoUser.persistALotUsers(list);
-					
-				} catch (IOException e) {
-					e.printStackTrace();
-					return false;
-				}
+			return daoUser.persistALotUsers(list);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	 public final boolean hasRole(User user, String role) {
-		    boolean hasRole = false;
-		    try {
-		 
-				Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>) user.getAuthorities();
-				for (GrantedAuthority grantedAuthority : authorities) {
-				      hasRole = grantedAuthority.getAuthority().equals(role);
-				      if (hasRole){
-				    	  break;
-				      }
-				 }
-				
-		    }catch(NotFoundException nfe) {
-		    }
-		   
-		    return hasRole;
-		  }
+	public final boolean hasRole(User user, String role) {
+		boolean hasRole = false;
+		try {
+
+			Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>) user
+					.getAuthorities();
+			for (GrantedAuthority grantedAuthority : authorities) {
+				hasRole = grantedAuthority.getAuthority().equals(role);
+				if (hasRole) {
+					break;
+				}
+			}
+
+		} catch (NotFoundException nfe) {
+		}
+
+		return hasRole;
+	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public List<String> getAllByRole(String user_role) {
@@ -133,6 +134,4 @@ public class UserService {
 		return findByUsername(fullnamesplit[0]);
 	}
 
-
-	
 }

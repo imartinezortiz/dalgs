@@ -33,7 +33,7 @@ public class Activity implements Cloneable {
 	@Embedded
 	private ActivityInfo info;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)
 	@JoinColumn(name = "id_course")
 	private Course course;
 

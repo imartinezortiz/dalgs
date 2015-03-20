@@ -15,6 +15,7 @@ import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -108,9 +109,7 @@ public class CourseController {
 
 
 
-		//		if (newCourse.getSubject() == null)
-		//			return "redirect:/academicTerm/" + id_academic + "/course/add.htm";
-
+		validate(newCourse, resultBinding);
 		if (!resultBinding.hasErrors()) {
 			ResultClass<Course> resultReturned = serviceCourse.addCourse(newCourse, id_academic);
 			if (!resultReturned.hasErrors())
@@ -265,6 +264,7 @@ public class CourseController {
 	{
 
 		//AcademicTerm y subject
+		validate(modify, resultBinding);
 		if (!resultBinding.hasErrors()) {
 			//			Course course_aux = serviceCourse.getCourse(id_course).getSingleElement();
 			//			course_aux.setAcademicTerm(modify.getAcademicTerm());
@@ -416,5 +416,18 @@ public class CourseController {
 				return null;
 			}
 		});
+	}
+	
+	public void validate(Course course, Errors errors) {
+
+		if (course.getCoordinator() == null) {
+			errors.rejectValue("degree", "validation.negative",
+					"You must select a coordinator");
+		}
+		if (course.getSubject() == null) {
+			errors.rejectValue("degree", "validation.negative",
+					"You must select a subject");
+		}
+		
 	}
 }

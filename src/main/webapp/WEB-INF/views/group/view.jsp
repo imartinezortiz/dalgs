@@ -22,15 +22,13 @@
 			</h3>
 
 			<!-- If you are a professor who belongs to this course you can edit -->
-			<sec:accesscontrollist hasPermission="ADMINISTRATION"
-				domainObject="${model.group}">
-
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<a class="btn list-btn btn-warning"
 					href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/modify.htm'/>">
 					<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
 					Edit
 				</a>
-			</sec:accesscontrollist>
+			</sec:authorize>
 			<c:choose>
 				<c:when test="${model.showAll eq true}">
 					<a
@@ -117,8 +115,7 @@
 			</h3>
 
 			<!-- If you are a professor who belongs to this course you can edit -->
-			<sec:accesscontrollist hasPermission="ADMINISTRATION"
-				domainObject="${model.group}">
+			<sec:accesscontrollist hasPermission="ADMINISTRATION" domainObject="${model.group}">
 
 
 				<a style="cursor: copy;" class="btn list-btn btn-warning2"
@@ -162,11 +159,12 @@
 									</sec:accesscontrollist>
 								</c:when>
 								<c:otherwise>
-									<sec:authorize access="hasRole('ROLE_ADMIN')">
+									<sec:accesscontrollist hasPermission="ADMINISTRATION"
+										domainObject="${model.group}">
 										<a class="btn btn-danger"
-											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}/restore.htm'/>">
+											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/activity/${activity.id}/restore.htm'/>">
 											Restore </a>
-									</sec:authorize>
+									</sec:accesscontrollist>
 								</c:otherwise>
 							</c:choose></td>
 					</tr>

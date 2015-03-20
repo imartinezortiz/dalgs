@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
+import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.LearningGoal;
 
 @Repository
@@ -184,5 +185,40 @@ public class ActivityRepository {
 		}
 		return true;
 	}
+
+	public boolean deleteActivitiesFromGroup(Group group) {
+		try {
+			Query query = em
+					.createQuery("UPDATE Activity a SET a.isDeleted = true where a.group = ?1");
+
+			query.setParameter(1, group);
+			query.executeUpdate();
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+
+			return false;
+		}
+		return true;
+	}
+
+	public boolean deleteActivitiesFromGroups(Collection<Group> groups) {
+
+		//TODO 
+		try {
+			Query query = em
+					.createQuery("UPDATE Activity a SET a.isDeleted = true where a.group in ?1");
+
+			query.setParameter(1, groups);
+			query.executeUpdate();
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+
+			return false;
+		}
+		return true;
+	}
+
 
 }

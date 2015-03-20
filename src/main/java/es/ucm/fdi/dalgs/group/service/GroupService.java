@@ -13,7 +13,9 @@ import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Group;
+import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.group.repository.GroupRepository;
+import es.ucm.fdi.dalgs.user.service.UserService;
 
 @Service
 public class GroupService {
@@ -27,7 +29,8 @@ public class GroupService {
 	@Autowired
 	private CourseService serviceCourse;
 
-
+	@Autowired
+	private UserService serviceUser;
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
@@ -80,7 +83,6 @@ public class GroupService {
 	}
 
 	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyGroup(Group group, Long id_group) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -104,19 +106,17 @@ public class GroupService {
 		}
 		else{
 			modifyGroup.setName(group.getName());
-			boolean r = daoGroup.saveGroup(group);
+			boolean r = daoGroup.saveGroup(modifyGroup);
 			if (r) {
 				result.setSingleElement(true);
 
-				// Adding the authorities to the professor list
-				manageAclService.addPermissionToAnObjectCollection(group.getProfessors(),group.getId(), group.getClass().getName());
 			}
 		}
 		return result;
 	}
 
 	//-----
-	@PreAuthorize("hasPermission(#degree, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
+	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyGroupActivities(Group group) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -129,7 +129,7 @@ public class GroupService {
 
 	//----
 
-	@PreAuthorize("hasPermission(#degree, 'DELETE') or hasPermission(#group, 'ADMINISTRATION')" )
+	@PreAuthorize("hasPermission(#group, 'DELETE') or hasPermission(#group, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteGroup(Group group) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -138,15 +138,14 @@ public class GroupService {
 		return result;
 	}
 
-	//	@PreAuthorize("hasRole('ROLE_USER')")
-	//	@PostFilter("hasPermission(filterObject, 'READ')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResultClass<Group> getGroupsForCourse(Long id, Boolean showAll) {
 		ResultClass<Group> result = new ResultClass<>();
 		result.addAll(daoGroup.getGroupsForCourse(id,showAll));
 		return result;
 	}
 
-
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	public ResultClass<Boolean> deleteGroupsFromCourses(Collection<Course> coursesList) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		result.setSingleElement(daoGroup.deleteGroupsFromCourses(coursesList));
@@ -209,6 +208,13 @@ public class GroupService {
 		modifyGroup.setProfessors(group.getProfessors());
 		result.setSingleElement(result.hasErrors());
 		
+		if (!result.hasErrors()) {
+			result.setSingleElement(true);
+			// Adding the authorities to the professor list
+			manageAclService.addPermissionToAnObjectCollection(modifyGroup.getProfessors(), modifyGroup.getId(), modifyGroup.getClass().getName());
+			
+		}
+		
 		return result;
 		
 	}
@@ -224,6 +230,25 @@ public class GroupService {
 		
 		return result;	
 	}
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = false)
+	public ResultClass<Boolean> deleteUserGroup(Long id_group,Long id_user) {
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		Group g = daoGroup.getGroup(id_group);
+		
+		//TODO 
+		
+		if(!result.hasErrors()){
+			User u = serviceUser.getUser(id_user);
+			if(serviceUser.hasRole(u, "ROLE_PROFESSOR") || serviceUser.hasRole(u, "ROLE_COORDINATOR") ){
+				// Adding the authorities to the professor list
+				manageAclService.removePermissionToAnObject(u, id_group, Group.class.getName());
+			}
+		}
+		return result;
+	}
+
 
 }
 

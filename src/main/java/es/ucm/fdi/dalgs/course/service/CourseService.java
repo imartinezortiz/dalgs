@@ -3,6 +3,8 @@ package es.ucm.fdi.dalgs.course.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostFilter;
@@ -10,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Errors;
 
 import es.ucm.fdi.dalgs.academicTerm.service.AcademicTermService;
 import es.ucm.fdi.dalgs.acl.service.AclObjectService;
@@ -260,4 +263,6 @@ public class CourseService {
 		}
 		return result;
 	}
+	
+	
 }

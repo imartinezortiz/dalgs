@@ -243,11 +243,10 @@ public class AcademicTermController {
 
 		AcademicTerm a = serviceAcademicTerm.getAcademicTerm(id_academic,show).getSingleElement();
 		myModel.put("academicTerm", a);
-		
 		myModel.put("showAll", show);
-
 		myModel.put("courses", a.getCourses());
-
+		
+		setShowAll(show);
 		return new ModelAndView("academicTerm/view", "model", myModel);
 	}
 

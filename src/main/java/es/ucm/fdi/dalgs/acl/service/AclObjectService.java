@@ -9,6 +9,7 @@ import org.springframework.security.acls.domain.GrantedAuthoritySid;
 import org.springframework.security.acls.domain.ObjectIdentityImpl;
 import org.springframework.security.acls.domain.PrincipalSid;
 import org.springframework.security.acls.domain.SidRetrievalStrategyImpl;
+import org.springframework.security.acls.model.AccessControlEntry;
 import org.springframework.security.acls.model.MutableAcl;
 import org.springframework.security.acls.model.MutableAclService;
 import org.springframework.security.acls.model.NotFoundException;
@@ -108,6 +109,43 @@ public class AclObjectService {
 
 	}
 	
+	//Remove ACL Permissions
+	public void removePermissionToAnObject(User user,
+			Long id_object, String name_class) {
+
+		// Create or update the relevant ACL
+		MutableAcl acl = null;
+		// Prepare the information we'd like in our access control entry (ACE)
+		ObjectIdentity oi = new ObjectIdentityImpl(name_class, id_object);
+
+		
+		Sid sid = null;
+		
+		sid = new PrincipalSid(user.getUsername());
+		Permission p = BasePermission.ADMINISTRATION;
+
+		try {
+			acl = (MutableAcl) mutableAclService.readAclById(oi);
+		} catch (NotFoundException nfe) {
+			acl = mutableAclService.createAcl(oi);
+		}
+		
+		for (AccessControlEntry ace : acl.getEntries()){
+			if ( (ace.getSid() ==sid ) && (ace.getClass().getName().equalsIgnoreCase(name_class)) && (ace.getPermission()==p )){
+				acl.deleteAce((int) (ace.getId()));
+				break;
+			}
+		}
+		
+		//acl.insertAce(acl.getEntries().size(), p, sid, true);
+
+		
+		// Now grant some permissions via an access control entry (ACE)
+		mutableAclService.updateAcl(acl);
+
+	
+
+	}
 	// Authorize professors to manage his course
 		public void addPermissionToAnObjectCoordinator(User coordinator,
 				Long id_object, String name_class) {

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -44,6 +45,15 @@ public class GroupController {
 	private UserService serviceUser;
 	private static final Logger logger = LoggerFactory
 			.getLogger(GroupController.class);
+
+	private Boolean showAll;
+	public Boolean getShowAll() {
+		return showAll;
+	}
+
+	public void setShowAll(Boolean showAll) {
+		this.showAll = showAll;
+	}
 
 	/**
 	 * Methods for adding activities
@@ -225,13 +235,15 @@ public class GroupController {
 	protected ModelAndView groupGET(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
-			@PathVariable("groupId") long id_group)
+			@PathVariable("groupId") long id_group,
+			@RequestParam(value = "showAll", defaultValue = "false") Boolean show)
 					throws ServletException {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		Group a = serviceGroup.getGroup(id_group).getSingleElement();
-
+		model.put("showAll", show);
+		
 		model.put("group", a);
 		model.put("groupId", id_group);
 		model.put("activitiesGroup", serviceGroup.getGroup(id_group).getSingleElement().getActivities());
@@ -334,6 +346,22 @@ public class GroupController {
 
 	}
 
+
+
+			@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/user/${userId}/delete.htm", method = RequestMethod.GET)
+			public String deleteUserGroupGET(
+					@PathVariable("academicId") Long id_AcademicTerm,
+					@PathVariable("courseId") Long id_course,
+					@PathVariable("groupId") Long id_group,
+					@PathVariable("userId") Long id_user)
+							throws ServletException {
+
+				if (serviceGroup.deleteUserGroup(id_group, id_user).getSingleElement()) {
+					return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
+							+ id_course + "/group/" + id_group+ ".htm";
+				} else
+					return "redirect:/error.htm";
+			}
 	/**
 	 * For binding the professor of the subject.
 	 */
