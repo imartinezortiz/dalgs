@@ -270,6 +270,14 @@ public class ActivityService {
 		return result;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_USER')")
+	public ResultClass<Activity> getActivitiesForGroup(Long id_group,
+			Boolean showAll) {
+		ResultClass<Activity> result = new ResultClass<>();
+		result.addAll(daoActivity.getActivitiesForGroup(id_group, showAll));
+		return result;
+	}
+
 	@PreAuthorize("hasPermission(#group, 'ADMINISTRATION')")
 	public ResultClass<Boolean> deleteActivitiesFromGroup(Group group) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();

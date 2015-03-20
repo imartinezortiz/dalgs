@@ -91,27 +91,39 @@ public class ActivityRepository {
 
 	@SuppressWarnings("unchecked")
 	public List<Activity> getActivitiesForCourse(Long id_course, Boolean showAll) {
+		
 		Course course = em.getReference(Course.class, id_course);
+		Query query = null;
+
 		if(!showAll){
-
-			Query query = em
-					.createQuery("select a from Activity a where a.course=?1 and a.isDeleted='false' ");
-			query.setParameter(1, course);
-
-			return query.getResultList();
+			query = em.createQuery("select a from Activity a where a.course=?1 and a.isDeleted='false' ");
 		}
 		else {
-			Query query = em
-					.createQuery("select a from Activity a where a.course=?1");
-			query.setParameter(1, course);
-
-			return query.getResultList();	
-
+			query = em.createQuery("select a from Activity a where a.course=?1");
 		}
 
+		query.setParameter(1, course);
+		return query.getResultList();	
 
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Activity> getActivitiesForGroup(Long id_group, Boolean showAll) {
+		
+		Group group = em.getReference(Group.class, id_group);
+		Query query = null;
+		
+		if(!showAll){
+			 query = em.createQuery("select a from Activity a where a.group=?1 and a.isDeleted='false' ");
+		}
+		else {
+			 query = em.createQuery("select a from Activity a where a.group=?1");
+		}
+		
+		query.setParameter(1, group);
+		return query.getResultList();
+
+	}
 	public Activity existByCode(String code) {
 		Query query = em.createQuery("Select a from Activity a where a.info.code=?1");
 		query.setParameter(1, code);

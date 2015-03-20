@@ -2,6 +2,7 @@ package es.ucm.fdi.dalgs.group.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -203,6 +204,9 @@ public class GroupService {
 	public ResultClass<Boolean> setProfessors(Group group, Long id_group) {
 		ResultClass<Boolean> result = new ResultClass<>();
 		Group modifyGroup = daoGroup.getGroup(id_group);
+		
+		Collection<User> old_professors = modifyGroup.getProfessors();  //To delete old ACL permissions
+		
 		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
 		modifyGroup.setProfessors(group.getProfessors());
 		result.setSingleElement(result.hasErrors());
@@ -210,6 +214,10 @@ public class GroupService {
 		
 		if (!result.hasErrors()) {
 			result.setSingleElement(true);
+			
+			// Deleting the authorities to the old professor list
+			if(!old_professors.isEmpty()) 
+				manageAclService.removePermissionToAnObjectCollection(old_professors, modifyGroup.getId(), modifyGroup.getClass().getName());
 			// Adding the authorities to the professor list
 			manageAclService.addPermissionToAnObjectCollection(modifyGroup.getProfessors(), modifyGroup.getId(), modifyGroup.getClass().getName());
 			

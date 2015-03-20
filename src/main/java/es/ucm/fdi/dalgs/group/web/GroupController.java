@@ -25,8 +25,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import es.ucm.fdi.dalgs.activity.service.ActivityService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
+import es.ucm.fdi.dalgs.domain.AcademicTerm;
+import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.group.service.GroupService;
@@ -37,6 +40,9 @@ public class GroupController {
 
 	@Autowired
 	private GroupService serviceGroup;
+	
+	@Autowired
+	private ActivityService serviceActivity;
 
 	@Autowired
 	private CourseService serviceCourse;
@@ -246,8 +252,12 @@ public class GroupController {
 		
 		model.put("group", a);
 		model.put("groupId", id_group);
-		model.put("activitiesGroup", serviceGroup.getGroup(id_group).getSingleElement().getActivities());
-		model.put("activitiesCourse", serviceCourse.getCourse(id_course).getSingleElement().getActivities());
+	
+		ResultClass<Activity>  activitiesGroup = serviceActivity.getActivitiesForGroup(id_group, show);
+
+		ResultClass<Activity>  activitiesCourse = serviceActivity.getActivitiesForCourse(id_course, show);
+		model.put("activitiesGroup", activitiesGroup);
+		model.put("activitiesCourse", activitiesCourse);
 
 		return new ModelAndView("group/view", "model", model);
 	}

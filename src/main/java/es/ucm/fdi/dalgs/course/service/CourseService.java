@@ -19,6 +19,7 @@ import es.ucm.fdi.dalgs.course.repository.CourseRepository;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Subject;
+import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.group.service.GroupService;
 
 @Service
@@ -103,6 +104,8 @@ public class CourseService {
 		
 		Course courseExists = daoCourse.exist(course);
 		
+		User old_coordinator = modifyCourse.getCoordinator();
+		
 		if(!course.getSubject().equals(modifyCourse.getSubject()) && 
 				courseExists != null){
 			result.setHasErrors(true);
@@ -123,7 +126,10 @@ public class CourseService {
 			boolean r = daoCourse.saveCourse(modifyCourse);
 			if (r) {
 				result.setSingleElement(true);
-				// Adding the authorities to the professor list
+				// Deleting the authorities to the old coordinator
+				if(old_coordinator !=null)manageAclService.removePermissionToAnObject(old_coordinator, modifyCourse.getId(), modifyCourse.getClass().getName());
+				
+				// Adding the authorities to the new coordinator 
 				manageAclService.addPermissionToAnObjectCoordinator(course.getCoordinator(),course.getId(), course.getClass().getName());
 			}
 		}

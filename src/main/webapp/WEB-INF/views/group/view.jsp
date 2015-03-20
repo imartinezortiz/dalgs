@@ -185,7 +185,7 @@
 				<a style="cursor: copy;" class="btn list-btn btn-warning2"
 					href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/professor/add.htm'/>">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					Add
+					Change
 				</a>
 			</sec:authorize>
 
@@ -207,7 +207,11 @@
 							</div></td>
 
 
-						<td><c:choose>
+						<td>
+						<a class="btn list-btn btn-success"
+										href="<c:url value='/user/${prof.id}.htm'/>">View </a>
+						</td>
+						<%-- <td><c:choose>
 								<c:when test="${prof.enabled eq true}">
 									<a class="btn list-btn btn-success"
 										href="<c:url value='/user/${prof.id}.htm'/>">View</a>
@@ -226,7 +230,7 @@
 									</sec:authorize>
 								</c:otherwise>
 							</c:choose></td>
-
+ --%>
 					</tr>
 				</c:forEach>
 
