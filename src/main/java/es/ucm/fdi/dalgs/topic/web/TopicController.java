@@ -44,7 +44,7 @@ public class TopicController {
 	public String getAddNewTopicForm(Model model, @PathVariable("degreeId") Long id_degree) {
 		//		Topic newTopic = new Topic();
 		// newDegree.setCode(serviceDegree.getNextCode());
-		if(model.containsAttribute("topic"))
+		if(!model.containsAttribute("topic"))
 			model.addAttribute("topic", new Topic());
 		model.addAttribute("valueButton", "Add");
 		return "topic/form";
@@ -74,12 +74,13 @@ public class TopicController {
 
 			}
 		}else{
-			attr.addFlashAttribute("module", newTopic);
+			attr.addFlashAttribute("topic", newTopic);
 			attr.addFlashAttribute(
 					"org.springframework.validation.BindingResult.topic",
 					resultBinding);			
 		}
-		return "/degree/"+ id_degree+"/module/"+ id_module+"/topic/add.htm";
+		
+		return "redirect:/degree/"+ id_degree+"/module/"+ id_module+"/topic/add.htm";
 	}
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/add.htm", method = RequestMethod.POST, params="Undelete")
 	// Every Post have to return redirect
@@ -94,14 +95,15 @@ public class TopicController {
 			ResultClass<Topic> result = serviceTopic.unDeleteTopic(topic, id_module);
 
 
-			if (!result.hasErrors())
-				//		if (created)
+			if (!result.hasErrors()){
+				attr.addFlashAttribute("topic", result.getSingleElement());
+
 				return "redirect:/degree/" + id_degree + "/module/" + id_module + "/topic/"+result.getSingleElement().getId()+"/modify.htm";
-			else{
+			}else{
 
 				if (result.isElementDeleted())
-					attr.addAttribute("unDelete", true); 
-				attr.addAttribute("errors", result.getErrorsList());
+					attr.addFlashAttribute("unDelete", true); 
+				attr.addFlashAttribute("errors", result.getErrorsList());
 		
 			}
 		}else{
@@ -212,7 +214,7 @@ public class TopicController {
 	
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/restore.htm")
 	// Every Post have to return redirect
-	public String restoreDegree(@PathVariable("degreeId") Long id_degree,
+	public String restoreTopic(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic) {
 		ResultClass<Topic> result = serviceTopic.unDeleteTopic(serviceTopic.getTopic(id_topic).getSingleElement(), id_module);

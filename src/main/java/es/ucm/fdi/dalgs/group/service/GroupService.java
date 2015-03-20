@@ -105,7 +105,7 @@ public class GroupService {
 		}
 		else{
 			modifyGroup.setName(group.getName());
-			boolean r = daoGroup.saveGroup(group);
+			boolean r = daoGroup.saveGroup(modifyGroup);
 			if (r) {
 				result.setSingleElement(true);
 

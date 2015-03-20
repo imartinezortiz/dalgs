@@ -47,7 +47,7 @@ public class ModuleController {
 	public String getAddNewModuleForm(Model model, @PathVariable("degreeId") Long id_degree) {
 		//		Module newModule = new Module();
 		// newDegree.setCode(serviceDegree.getNextCode());
-		if(model.containsAttribute("module"))
+		if(!model.containsAttribute("module"))
 			model.addAttribute(new Module());
 		model.addAttribute("valueButton", "Add");
 		return "module/form";
@@ -74,7 +74,7 @@ public class ModuleController {
 					//			model.addAttribute("valueButton", "Add");
 				}
 				else attr.addFlashAttribute("module", newModule);
-				attr.addAttribute("errors", result.getErrorsList());
+				attr.addFlashAttribute("errors", result.getErrorsList());
 			}
 		}else{
 			attr.addFlashAttribute("module", newModule);
@@ -97,15 +97,16 @@ public class ModuleController {
 		if (!resultBinding.hasErrors()){
 			ResultClass<Module> result = serviceModule.unDeleteModule(module, id_degree);
 
-			if (!result.hasErrors())
-
+			if (!result.hasErrors()){
+				attr.addFlashAttribute("module", result.getSingleElement());
 				return "redirect:/degree/" + id_degree +  "/module/" + result.getSingleElement().getId() + "/modify.htm";
-			else{
+			
+			}else{
 				//			attr.addFlashAttribute("module", module);
 				if (result.isElementDeleted())
 					attr.addAttribute("unDelete", true); 
 				//			model.addAttribute("valueButton", "Add");
-				attr.addAttribute("errors", result.getErrorsList());
+				attr.addFlashAttribute("errors", result.getErrorsList());
 
 			}
 		}else{
@@ -219,7 +220,7 @@ public class ModuleController {
 	
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/restore.htm")
 	// Every Post have to return redirect
-	public String restoreDegree(@PathVariable("degreeId") Long id_degree,
+	public String restoreModule(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module) {
 		ResultClass<Module> result = serviceModule.unDeleteModule(serviceModule.getModule(id_module).getSingleElement(), id_degree);
 		if (!result.hasErrors())

@@ -54,9 +54,10 @@ public class CompetenceService {
 			if (competenceExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
+				result.setSingleElement(competenceExists);
 
 			}
-			result.setSingleElement(competence);
+			else result.setSingleElement(competence);
 			result.setErrorsList(errors);
 		}
 		else{
@@ -104,13 +105,15 @@ public class CompetenceService {
 //	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@PreAuthorize("hasPermission(#competence, 'DELETE') or hasPermission(#competence, 'ADMINISTRATION')" )
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteCompetence(Competence competence) {
+	public ResultClass<Boolean> deleteCompetence(Competence competence) {
 //		Competence competence = daoCompetence.getCompetence(id);
+		ResultClass<Boolean> result = new ResultClass<>();
+
 		Collection <Competence> competences= new ArrayList<>();
 		competences.add(competence);
-		if(serviceLearning.deleteLearningGoalForCompetences(competences).getSingleElement())
-			return daoCompetence.deleteCompetence(competence);
-		return false;
+		if(!serviceLearning.deleteLearningGoalForCompetences(competences).getSingleElement()) result.setSingleElement(false);
+		else result.setSingleElement(daoCompetence.deleteCompetence(competence));
+		 return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")

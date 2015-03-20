@@ -30,13 +30,16 @@ public class LearningGoalController {
 	/**
 	 * Methods for adding LearningGoals
 	 */
-
+																				
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/add.htm", method = RequestMethod.GET)
 	public String getAddNewLearningGoalForm2(Model model,
 			@PathVariable("degreeId") Long id) {
 		//		LearningGoal newLearningGoal = new LearningGoal();
-		if(model.containsAttribute("learningGoal"))
+		if(!model.containsAttribute("learningGoal"))
 			model.addAttribute("learningGoal", new LearningGoal());
+		model.addAttribute("valueButton", "Add");
+
+		
 		return "learningGoal/form";
 	}
 
@@ -55,9 +58,10 @@ public class LearningGoalController {
 				return "redirect:/degree/" + id_degree + "/competence/"+ id_competence +".htm";	
 			else{
 
-				if (result.isElementDeleted())
-					attr.addAttribute("unDelete", result.isElementDeleted()); 
-				else attr.addFlashAttribute("learningGoal", newLearningGoal);
+				if (result.isElementDeleted()){
+					attr.addFlashAttribute("unDelete", result.isElementDeleted()); 
+					attr.addFlashAttribute("learningGoal", result.getSingleElement());
+				}else attr.addFlashAttribute("learningGoal", newLearningGoal);
 
 
 			}
@@ -67,7 +71,7 @@ public class LearningGoalController {
 					"org.springframework.validation.BindingResult.learningGoal",
 					resultBinding);			
 		}
-		return "/degree/"+ id_degree+"/competence/"+ id_competence+"/learninggoal/add.htm";
+		return "redirect:/degree/"+ id_degree+"/competence/"+ id_competence+"/learninggoal/add.htm";
 
 	}
 
@@ -84,10 +88,11 @@ public class LearningGoalController {
 
 			ResultClass<LearningGoal> result = serviceLearningGoal.unDeleteLearningGoal(learningGoal);
 
-			if (!result.hasErrors())
+			if (!result.hasErrors()){
+				attr.addFlashAttribute("learningGoal", result.getSingleElement());
 
 				return "redirect:/degree/" + id_degree + "/competence/" + id_competence + "/learninggoal/"+result.getSingleElement().getId()+"/modify.htm";
-			else{
+			}else{
 
 				if (result.isElementDeleted())
 					attr.addFlashAttribute("unDelete", true); 
@@ -143,7 +148,7 @@ public class LearningGoalController {
 			ResultClass<Boolean> result = serviceLearningGoal.modifyLearningGoal(modify, id_learningGoal);
 			if (!result.hasErrors())
 
-				return "redirect:/degree/" + id_degree +"/competence"+ id_competence +".htm";
+				return "redirect:/degree/" + id_degree +"/competence/"+ id_competence +".htm";
 			else{
 				//				attr.addAttribute("modifyLearningGoal", modify);
 				//				if (result.isElementDeleted()){
@@ -173,10 +178,10 @@ public class LearningGoalController {
 			Model model)
 					throws ServletException {
 
-		if (!model.containsAttribute("topic")){
+		if (!model.containsAttribute("learningGoal")){
 
 			LearningGoal p = serviceLearningGoal.getLearningGoal(id_learningGoal).getSingleElement();
-			model.addAttribute("modifyLearningGoal", p);
+			model.addAttribute("learningGoal", p);
 		}
 		model.addAttribute("valueButton", "Modify");
 
@@ -211,7 +216,7 @@ public class LearningGoalController {
 	
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/{learninggoalId}/restore.htm")
 	// Every Post have to return redirect
-	public String restoreDegree(@PathVariable("degreeId") Long id_degree,
+	public String restoreLearningGoal(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence,
 			@PathVariable("learninggoalId") Long id_learningGoal ) {
 		

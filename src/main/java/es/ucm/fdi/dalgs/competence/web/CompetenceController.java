@@ -61,7 +61,7 @@ public class CompetenceController {
 			@PathVariable("degreeId") Long id) {
 		//		Competence newCompetence = new Competence();
 
-		if(model.containsAttribute("module"))
+		if(!model.containsAttribute("competence"))
 			model.addAttribute("competence", new Competence());
 
 		model.addAttribute("valueButton", "Add");
@@ -86,8 +86,8 @@ public class CompetenceController {
 					attr.addFlashAttribute("unDelete", result.isElementDeleted()); 
 					attr.addFlashAttribute("competence", result.getSingleElement());
 
-				}else attr.addAttribute("competence", newCompetence);
-				attr.addAttribute("errors", result.getErrorsList());
+				}else attr.addFlashAttribute("competence", newCompetence);
+				attr.addFlashAttribute("errors", result.getErrorsList());
 
 			}
 		}else{
@@ -110,7 +110,7 @@ public class CompetenceController {
 			@PathVariable("competenceId") Long id_competence)
 					throws ServletException {
 
-		if (serviceCompetence.deleteCompetence(serviceCompetence.getCompetence(id_competence).getSingleElement())) {
+		if (serviceCompetence.deleteCompetence(serviceCompetence.getCompetence(id_competence).getSingleElement()).getSingleElement()) {
 			return "redirect:/degree/" + id_degree + ".htm";
 		} else
 			return "redirect:/error.htm";
@@ -128,9 +128,10 @@ public class CompetenceController {
 
 			ResultClass<Competence> result = serviceCompetence.unDeleteCompetence(competence, id_degree);
 
-			if (!result.hasErrors())
+			if (!result.hasErrors()){
+				attr.addFlashAttribute("competence", result.getSingleElement());
 				return "redirect:/degree/" + id_degree +  "/competence/" + result.getSingleElement().getId() + "/modify.htm";
-
+			}
 			else{
 
 				if (result.isElementDeleted())
@@ -160,7 +161,7 @@ public class CompetenceController {
 	{
 		if (!resultBinding.hasErrors()){
 
-			ResultClass<Competence> result = serviceCompetence.addCompetence(modify, id_competence);
+			ResultClass<Boolean> result = serviceCompetence.modifyCompetence(modify, id_competence, id_degree);
 			if (!result.hasErrors())
 				return "redirect:/degree/" + id_degree + ".htm";
 			else{
@@ -190,7 +191,7 @@ public class CompetenceController {
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence, Model model)
 					throws ServletException {
-		if (!model.containsAttribute("module")){
+		if (!model.containsAttribute("competence")){
 
 			Competence p = serviceCompetence.getCompetence(id_competence).getSingleElement();
 			model.addAttribute("competence", p);
@@ -247,7 +248,7 @@ public class CompetenceController {
 	
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/restore.htm")
 	// Every Post have to return redirect
-	public String restoreDegree(@PathVariable("degreeId") Long id_degree,
+	public String restoreCompetence(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence) {
 		ResultClass<Competence> result = serviceCompetence.unDeleteCompetence(serviceCompetence.getCompetence(id_competence).getSingleElement(), id_degree);
 		if (!result.hasErrors())

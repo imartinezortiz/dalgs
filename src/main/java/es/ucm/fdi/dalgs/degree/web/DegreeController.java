@@ -42,7 +42,7 @@ public class DegreeController {
 	public String addDegreeGET(Model model) {
 		//		Degree newDegree = new Degree();
 		// newDegree.setCode(serviceDegree.getNextCode());
-		if (model.containsAttribute("degree"))
+		if (!model.containsAttribute("degree"))
 			model.addAttribute("degree", new Degree());
 		model.addAttribute("valueButton", "Add" );
 		return "degree/form";
@@ -65,8 +65,8 @@ public class DegreeController {
 					attr.addFlashAttribute("unDelete", result.isElementDeleted()); 
 					attr.addFlashAttribute("degree", result.getSingleElement());
 				}
-				else attr.addAttribute("degree", newDegree);
-				attr.addAttribute("errors", result.getErrorsList());
+				else attr.addFlashAttribute("degree", newDegree);
+				attr.addFlashAttribute("errors", result.getErrorsList());
 
 			}
 		}else{
@@ -82,16 +82,17 @@ public class DegreeController {
 	@RequestMapping(value = "/degree/add.htm", method = RequestMethod.POST, params="Undelete")
 	// Every Post have to return redirect
 	public String undeleteDegree(
-			@ModelAttribute("addDegree") Degree degree,
+			@ModelAttribute("degree") Degree degree,
 			BindingResult resultBinding, RedirectAttributes attr) {
 
 		if (!resultBinding.hasErrors()){
 			ResultClass<Degree> result = serviceDegree.unDeleteDegree(degree);
 
-			if (!result.hasErrors())
+			if (!result.hasErrors()){
 				//		if (created)
+				attr.addFlashAttribute("degree", result.getSingleElement());
 				return "redirect:/degree/" + result.getSingleElement().getId() + "/modify.htm";
-			else{
+			}else{
 				attr.addFlashAttribute("degree", degree);
 				if (result.isElementDeleted())
 					attr.addFlashAttribute("unDelete", true); 
@@ -192,9 +193,9 @@ public class DegreeController {
 			throws ServletException {
 		//		ModelAndView model = new ModelAndView();
 	
-		if(model.containsAttribute("degree")){
+		if(!model.containsAttribute("degree")){
 			Degree p = serviceDegree.getDegree(id).getSingleElement();
-			model.addAttribute("Degree", p);
+			model.addAttribute("degree", p);
 		//		model.setViewName("degree/modify");
 		}
 		model.addAttribute("valueButton", "Modify");

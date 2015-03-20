@@ -24,8 +24,9 @@
 		<div class="panel-body">
 
 			<form:form method="post" commandName="competence" role="form">
-				
+				<div>
 				<form:hidden path="id"/>
+				</div>
 				<div class="form-group">
 					<label>Code: </label>
 					<form:input path="info.code" class="form-control"

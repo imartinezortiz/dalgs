@@ -73,7 +73,7 @@ public class SubjectController {
 		// newSubject.setCode(serviceSubject.getNextCode());
 
 		// newSubject.setDegree(serviceDegree.getDegree(id));
-		if(model.containsAttribute("subject"))
+		if(!model.containsAttribute("subject"))
 			model.addAttribute("subject", new Subject());
 		model.addAttribute("valueButton", "Add");
 
@@ -98,11 +98,11 @@ public class SubjectController {
 			else{
 
 				if (result.isElementDeleted()){
-					attr.addAttribute("unDelete", result.isElementDeleted()); 
+					attr.addFlashAttribute("unDelete", result.isElementDeleted()); 
 					attr.addFlashAttribute("subject", result.getSingleElement());
 
 				}else attr.addFlashAttribute("subject", newSubject);
-				attr.addAttribute("errors", result.getErrorsList());
+				attr.addFlashAttribute("errors", result.getErrorsList());
 
 
 			}
@@ -112,7 +112,7 @@ public class SubjectController {
 					"org.springframework.validation.BindingResult.subject",
 					resultBinding);			
 		}
-		return "/degree/"+ id_degree+"/module/"+ id_module+"/topic/"+id_topic+"/subject/add.htm";
+		return "redirect:/degree/"+ id_degree+"/module/"+ id_module+"/topic/"+id_topic+"/subject/add.htm";
 	}
 
 
@@ -128,11 +128,11 @@ public class SubjectController {
 		if (!resultBinding.hasErrors()){
 			ResultClass<Subject> result = serviceSubject.unDeleteSubject(subject);
 
-			if (!result.hasErrors())
-				//		if (created)
-				return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + "/subject"
+			if (!result.hasErrors()){
+				attr.addFlashAttribute("subject", result.getSingleElement());
+				return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + "/subject/"
 						+result.getSingleElement().getId()+"/modify.htm";
-			else{
+			}else{
 
 				if (result.isElementDeleted())
 					attr.addFlashAttribute("unDelete", true); 
@@ -258,7 +258,7 @@ public class SubjectController {
 
 		Subject s = serviceSubject.getSubject(id_subject).getSingleElement();
 		Collection<Competence> competences = serviceCompetence
-				.getCompetencesForDegree(id_degree);
+				.getCompetencesForDegree(id_degree, false);
 
 		model.addAttribute("subject", s);
 		model.addAttribute("competences", competences);
@@ -294,13 +294,14 @@ public class SubjectController {
 
 	}
 	
-	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/restore.htm")
+	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/restore.htm")
 	// Every Post have to return redirect
-	public String restoreDegree(@PathVariable("degreeId") Long id_degree,
+	public String restoreSubject(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
-			@PathVariable("topicId") Long id_topic) {
+			@PathVariable("topicId") Long id_topic,
+			@PathVariable("subjectId") Long id_subject) {
 		
-		ResultClass<Subject> result = serviceSubject.unDeleteSubject(serviceSubject.getSubject(id_topic).getSingleElement());
+		ResultClass<Subject> result = serviceSubject.unDeleteSubject(serviceSubject.getSubject(id_subject).getSingleElement());
 		if (!result.hasErrors())
 			//			if (created)
 			return "redirect:/degree/"+id_degree+"/module/"+id_module+".htm";
