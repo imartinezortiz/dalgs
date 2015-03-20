@@ -1,5 +1,6 @@
 package es.ucm.fdi.dalgs.domain;
 
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -16,7 +17,7 @@ import es.ucm.fdi.dalgs.domain.info.LearningGoalInfo;
 
 @Entity
 @Table(name = "learninggoal")
-public class LearningGoal implements Cloneable{
+public class LearningGoal implements Cloneable, Copyable<LearningGoal>{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -73,18 +74,18 @@ public class LearningGoal implements Cloneable{
 		this.isDeleted = isDeleted;
 	}
 	
-	
-	public LearningGoal clone(){
-		LearningGoal clone = new LearningGoal();
+	@Override
+	public LearningGoal copy() {
+		LearningGoal copy;
+		try {
+			copy = (LearningGoal) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 		
-		clone.setId(null);
-		
-		//clone.setCompetence(this.competence); clone.getCompetence().setId(null);
-		
-		clone.setDeleted(this.isDeleted);
-		clone.setInfo(this.info);
-		
-		return clone;
+		copy.id = null;
+		return copy;
 	}
-		
+	
+
 }

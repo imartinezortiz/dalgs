@@ -2,7 +2,6 @@ package es.ucm.fdi.dalgs.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -18,7 +17,7 @@ import es.ucm.fdi.dalgs.domain.info.DegreeInfo;
 
 @Entity
 @Table(name = "degree")
-public class Degree implements Cloneable {
+public class Degree implements Cloneable ,Copyable<Degree>{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -86,38 +85,31 @@ public class Degree implements Cloneable {
 		this.modules = modules;
 	}
 
-	public Degree clone(Boolean cloneOwner) {
-		Degree clone = new Degree();
-		clone.setId(null);
-
-
-		clone.setInfo(this.info);
-
-		// If the clone root is Degree, it needs a new id, otherwise its value
-		// be obtained by inheritance
-		if (cloneOwner) {
-			clone.getInfo().setCode(this.info.getCode() + "(copy)");
+	@Override
+	public Degree copy() {
+		Degree copy;
+		try {
+			copy = (Degree) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
 		}
 		
-		clone.setDeleted(this.isDeleted);
-
-		List<Module> modulesClon = new ArrayList<Module>();
-		if (this.modules != null) {
-			for (Module m : this.modules) {
-				modulesClon.add((Module) m.clone());
-			}
+		copy.id = null;
+		copy.modules = new ArrayList<>();
+		for (Module m : this.modules) {
+			Module module  = m.copy();
+			module.setDegree(copy);
+			copy.modules.add(m.copy());
 		}
-		clone.setModules(modulesClon);
-
-		List<Competence> competencesClon = new ArrayList<Competence>();
-		if (this.competences != null) {
-			for (Competence c : this.competences) {
-				competencesClon.add((Competence) c.clone());
-			}
+		
+		copy.competences = new ArrayList<>();
+		for (Competence c : this.competences) {
+			Competence competence = c.copy();
+			competence.setDegree(copy);
+			copy.competences.add(c.copy());
 		}
-		clone.setCompetences(competencesClon);
-
-		return clone;
+		return copy;
 	}
-
+	
+	
 }

@@ -210,6 +210,50 @@ public class AcademicTermService {
 		return result;
 
 	}
+
+
+	@PreAuthorize("hasPermission(#academicTerm, 'ADMINISTRATION')")
+	@Transactional(readOnly = false)
+	public ResultClass<AcademicTerm> copyAcademicTerm(AcademicTerm academicTerm) {
+		AcademicTerm copy = academicTerm.copy();
+		
+		ResultClass<AcademicTerm> result = new ResultClass<>();
+		
+		if(copy == null){
+			result.setHasErrors(true);
+			Collection<String> errors = new ArrayList<String>();
+			errors.add("Copy doesn't work");
+			result.setErrorsList(errors);
+			
+		}
+		else{
+	
+			copy.setDeleted(false);
+			copy.setTerm(academicTerm.getTerm() + " (copy)");
+			
+			//TODO Cambiar el resto de codes que tengan que ser unicos
+			
+			
+			boolean r = daoAcademicTerm.addAcademicTerm(copy);
+			if (r){
+				result.setSingleElement(copy);	
+				AcademicTerm academicExists = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
+				boolean	success = manageAclService.addAclToObject(academicExists.getId(), academicExists.getClass().getName());
+				if (success) result.setSingleElement(academicTerm);
+				
+			} 
+				else {
+					throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
+				}
+			}
+		
+		return result;
+
+	}
+
+
+
+
 	
 //	@PreAuthorize("hasRole('ROLE_ADMIN')")
 //	@Transactional(propagation=Propagation.REQUIRED)

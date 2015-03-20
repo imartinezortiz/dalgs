@@ -2,7 +2,6 @@ package es.ucm.fdi.dalgs.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,7 +19,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "course", uniqueConstraints = { @UniqueConstraint(columnNames = {"id_subject", "id_academicterm" }) })
-public class Course implements Cloneable {
+public class Course implements Cloneable ,Copyable<Course>{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_course")
@@ -113,34 +112,33 @@ public class Course implements Cloneable {
 	public void setGroups(Collection<Group> groups) {
 		this.groups = groups;
 	}
-
-	public Course clone(Boolean cloneOwner) {
-		Course clone = new Course();
-
-		clone.setId(null);
-
-		//clone.setAcademicTerm(this.academicTerm); clone.getAcademicTerm().setId(null);
+	
+	
+	@Override
+	public Course copy() {
+		Course copy;
+		try {
+			copy = (Course) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 		
-		clone.setDeleted(isDeleted);
-		clone.setSubject((Subject) this.subject.clone());
-
-		List<Group> groupsClone = new ArrayList<Group>();
-		if (this.groups != null) {
-			for (Group g : this.groups) {
-				groupsClone.add((Group) g.clone());
-			}
+		copy.id = null;
+		copy.groups = new ArrayList<>();
+		for (Group g : this.groups) {
+			Group group = g.copy();
+			group.setCourse(copy);
+			copy.groups.add(group);
 		}
-		clone.setGroups(groupsClone);
-
-		List<Activity> activitiesClone = new ArrayList<Activity>();
-		if (this.activities != null) {
-			for (Activity a : this.activities) {
-				activitiesClone.add((Activity) a.clone());
-			}
+		
+		copy.activities = new ArrayList<>();
+		for (Activity a : this.activities) {
+			Activity activity = a.copy();
+			activity.setCourse(copy);
+			copy.activities.add(activity);
 		}
-		clone.setActivities(activities);
-
-		return clone;
+		return copy;
 	}
 
+	
 }
