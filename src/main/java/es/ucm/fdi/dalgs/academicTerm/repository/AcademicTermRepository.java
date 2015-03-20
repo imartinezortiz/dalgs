@@ -32,6 +32,7 @@ public class AcademicTermRepository{
 
 	@PersistenceContext
 	public void setEntityManager(EntityManager entityManager) {
+		
 		try {
 			this.em = entityManager;
 		} catch (Exception e) {
