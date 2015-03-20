@@ -2,7 +2,6 @@ package es.ucm.fdi.dalgs.subject.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,9 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.competence.service.CompetenceService;
 import es.ucm.fdi.dalgs.course.service.CourseService;
+import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.domain.Subject;
 import es.ucm.fdi.dalgs.domain.Topic;
@@ -33,75 +34,102 @@ public class SubjectService {
 	
 	@Autowired
 	private CourseService serviceCourse;
+	
+	@Autowired
+	private AclObjectService manageAclService;
+
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> addSubject(Subject subject, Long id_topic) {
+	public ResultClass<Subject> addSubject(Subject subject, Long id_topic) {
 		
+		boolean success = false;
 		Subject subjectExists = daoSubject.existByCode(subject.getInfo().getCode());
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		ResultClass<Subject> result = new ResultClass<>();
 
 		if( subjectExists != null){
 			result.setHasErrors(true);
-			Collection<String> errors = new ArrayList<String>();
+			Collection<String> errors = new ArrayList<>();
 			errors.add("Code already exists");
 
 			if (subjectExists.getIsDeleted()){
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
-
+				result.setSingleElement(subjectExists);
 			}
-			result.setSingleElement(false);
+			else result.setSingleElement(subject);
 			result.setErrorsList(errors);
 		}
 		else{
 			subject.setTopic(serviceTopic.getTopic(id_topic).getSingleElement());
-			boolean r = daoSubject.addSubject(subject);
-			if (r) 
-				result.setSingleElement(true);
+			success = daoSubject.addSubject(subject);
+			
+			
+			if(success){
+				subjectExists = daoSubject.existByCode(subject.getInfo().getCode());
+				success = manageAclService.addAclToObject(subjectExists.getId(), subjectExists.getClass().getName());
+				if (success) result.setSingleElement(subject);
+			
+			}else{
+				throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
+
+			}
 		}
 		return result;		
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<List<Subject>> getAll() {
+	public ResultClass<Subject> getAll() {
 		
 		
-		ResultClass<List<Subject>> result = new ResultClass<List<Subject>>();
-		result.setSingleElement(daoSubject.getAll());
+		ResultClass<Subject> result = new ResultClass<>();
+		result.addAll(daoSubject.getAll());
 		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
 	public ResultClass<Subject> getSubject(Long id) {
-		ResultClass<Subject> result = new ResultClass<Subject>();
+		ResultClass<Subject> result = new ResultClass<>();
 		result.setSingleElement(daoSubject.getSubject(id));
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#subject, 'DELETE') or hasPermission(#subject, 'ADMINISTRATION')" )
 	@Transactional(propagation = Propagation.REQUIRED)
-	public ResultClass<Boolean>deleteSubject(Long id) {
-		daoSubject.getSubject(id).getCompetences().clear();
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setSingleElement(daoSubject.deleteSubject(id));
+	public ResultClass<Boolean>deleteSubject(Subject subject) {
+//		boolean deleteCourses = false;
+		ResultClass<Boolean> result = new ResultClass<>();
+
+		ResultClass<Course> courses = serviceCourse.getCoursesBySubject(subject);
+		if (!courses.isEmpty()){
+				Collection<Subject> subjects = new ArrayList<>();
+				subjects.add(subject);
+					ResultClass<Boolean> deleteCourses= serviceCourse.deleteCoursesForSubject(subjects); 
+					if (deleteCourses.getSingleElement()){
+						subject.getCompetences().clear();
+						result.setSingleElement(daoSubject.deleteSubject(subject));
+					}
+		}
+		else result.setSingleElement(daoSubject.deleteSubject(subject));
 		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<List<Subject>> getSubjectsForTopic(Long id_topic) {
-		ResultClass<List<Subject>> result = new ResultClass<List<Subject>>();
-		result.setSingleElement(daoSubject.getSubjectsForTopic(id_topic));
+	public ResultClass<Subject> getSubjectsForTopic(Long id_topic, Boolean show) {
+		ResultClass<Subject> result = new ResultClass<>();
+		result.addAll(daoSubject.getSubjectsForTopic(id_topic, show));
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#subject, 'WRITE') or hasPermission(#subject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifySubject(Subject subject, Long id_subject) {
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		ResultClass<Boolean> result = new ResultClass<>();
 
 		Subject modifySubject = daoSubject.getSubject(id_subject);
 		
@@ -133,7 +161,7 @@ public class SubjectService {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> addCompetences(Subject modify, Long id_subject) {
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		ResultClass<Boolean> result = new ResultClass<>();
 		Subject subject = daoSubject.getSubject(id_subject);
 		subject.setInfo(modify.getInfo());
 		subject.setCompetences(modify.getCompetences());		
@@ -179,33 +207,45 @@ public class SubjectService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<Collection<Subject>> getSubjectForDegree(Degree degree) {
-		ResultClass<Collection<Subject>> result = new ResultClass<Collection<Subject>>();
-		result.setSingleElement(daoSubject.getSubjectForDegree(degree));
+	public ResultClass<Subject> getSubjectForDegree(Degree degree) {
+		ResultClass<Subject> result = new ResultClass<>();
+		result.addAll(daoSubject.getSubjectForDegree(degree));
 		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteSubjectsForTopic(Collection<Topic> topics) {	
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setSingleElement(daoSubject.deleteSubjectsForTopics(topics));
+		
+//		boolean deleteCourses = false;
+		ResultClass<Boolean> result = new ResultClass<>();
+		Collection<Subject> subjects = daoSubject.getSubjectsForTopics(topics);
+		
+		if (!subjects.isEmpty()) {
+			ResultClass<Boolean> deleteCourses= serviceCourse.deleteCoursesForSubject(subjects);
+			if(deleteCourses.getSingleElement())
+				result.setSingleElement(daoSubject.deleteSubjectsForTopics(topics));
+			else result.setSingleElement(false);
+		}
+		else result.setSingleElement(daoSubject.deleteSubjectsForTopics(topics));
 		return result;
 	}
-
-	public ResultClass<Boolean> unDeleteSubject(Subject subject){
+	
+	@PreAuthorize("hasPermission(#subect, 'WRITE') or hasPermission(#subject, 'ADMINISTRATION')")
+	@Transactional(readOnly = false)
+	public ResultClass<Subject> unDeleteSubject(Subject subject){
 		Subject s = daoSubject.existByCode(subject.getInfo().getCode());
-		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		ResultClass<Subject> result = new ResultClass<>();
 		if(s == null){
 			result.setHasErrors(true);
-			Collection<String> errors = new ArrayList<String>();
+			Collection<String> errors = new ArrayList<>();
 			errors.add("Code doesn't exist");
 			result.setErrorsList(errors);
 
 		}
 		else{
 			if(!s.getIsDeleted()){
-				Collection<String> errors = new ArrayList<String>();
+				Collection<String> errors = new ArrayList<>();
 				errors.add("Code is not deleted");
 				result.setErrorsList(errors);
 			}
@@ -214,7 +254,7 @@ public class SubjectService {
 			s.setInfo(subject.getInfo());
 			boolean r = daoSubject.saveSubject(s);
 			if(r) 
-				result.setSingleElement(true);	
+				result.setSingleElement(s);	
 
 		}
 		return result;

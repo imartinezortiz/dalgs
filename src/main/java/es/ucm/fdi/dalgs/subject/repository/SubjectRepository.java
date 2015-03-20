@@ -74,9 +74,9 @@ public class SubjectRepository {
 
 	}
 
-	public boolean deleteSubject(Long id) {
+	public boolean deleteSubject(Subject subject) {
 		// Subject subject = this.getSubject(id);
-		Subject subject = em.getReference(Subject.class, id);
+		//		Subject subject = em.getReference(Subject.class, id);
 		try {
 			subject.setDeleted(true);
 			em.merge(subject);
@@ -90,17 +90,22 @@ public class SubjectRepository {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Subject> getSubjectsForTopic(Long id_topic) {
+	public List<Subject> getSubjectsForTopic(Long id_topic, Boolean show) {
 		Topic topic = em.getReference(Topic.class, id_topic);
+		if (show){
+			Query query = em
+					.createQuery("select s from Subject s where s.topic=?1");
+			query.setParameter(1, topic);
 
-		Query query = em
-				.createQuery("select s from Subject s where s.topic=?1 and s.isDeleted='false'");
-		query.setParameter(1, topic);
+			return (List<Subject>) query.getResultList();
+		}else{
 
-		if (query.getResultList().isEmpty())
-			return null;
-		List<Subject> s = (List<Subject>) query.getResultList();
-		return s;
+			Query query = em
+					.createQuery("select s from Subject s where s.topic=?1 and s.isDeleted='false'");
+			query.setParameter(1, topic);
+
+			return (List<Subject>) query.getResultList();
+		}
 	}
 
 
@@ -147,7 +152,7 @@ public class SubjectRepository {
 
 	}
 
-	
+
 	public boolean addSubjects(List<Subject> s) {
 		try {
 			for (Subject subject : s)
@@ -159,13 +164,13 @@ public class SubjectRepository {
 		}
 	}
 
-	
+
 	@SuppressWarnings("unchecked")
 	public Collection<Subject> getSubjectForDegree(Degree degree) {
 		Query query = em.createQuery("SELECT s FROM Subject s JOIN s.topic t "
 				+ "JOIN t.module m JOIN m.degree d WHERE d = ?1");
 		query.setParameter(1, degree);
-		
+
 		return (Collection<Subject>) query.getResultList();
 	}
 
@@ -182,6 +187,21 @@ public class SubjectRepository {
 			logger.error(e.getMessage());
 			return false;
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<Subject> getSubjectsForTopics(Collection<Topic> topics) {
+
+		//		Topic topic = em.getReference(Topic.class, id_topic);
+
+		Query query = em
+				.createQuery("select s from Subject s where s.isDeleted='false' and s.topic in ?1");
+		query.setParameter(1, topics);
+
+		//		if (query.getResultList().isEmpty())
+		//			return null;
+		return (Collection<Subject>) query.getResultList();
+
 	}
 
 }

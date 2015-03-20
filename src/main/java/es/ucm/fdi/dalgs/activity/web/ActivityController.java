@@ -190,7 +190,7 @@ public class ActivityController {
 		}
 
 		Collection<LearningGoal> lg = serviceLearningGoal
-				.getLearningGoalsFromCourse(id_course, p).getSingleElement();
+				.getLearningGoalsFromCourse(id_course, p);
 
 		model.addAttribute("learningGoalStatus", p.getLearningGoalStatus());
 		model.addAttribute("learningGoals", lg);
@@ -440,7 +440,7 @@ public class ActivityController {
 
 		} else {
 			attr.addFlashAttribute(
-					"org.springframework.validation.BindingResult.addAcademicTerm",
+					"org.springframework.validation.BindingResult.activity",
 					resultBinding);
 
 		}
@@ -471,7 +471,7 @@ public class ActivityController {
 		}
 
 		Collection<LearningGoal> lg = serviceLearningGoal
-				.getLearningGoalsFromCourse(id_course, p).getSingleElement();
+				.getLearningGoalsFromCourse(id_course, p);
 
 		model.addAttribute("learningGoalStatus", p.getLearningGoalStatus());
 		model.addAttribute("learningGoals", lg);

@@ -86,11 +86,11 @@ public class GroupService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyGroup(Group group, Long id_group) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		
+
 		Group modifyGroup = daoGroup.getGroup(id_group);
-		
+
 		Group groupExists = daoGroup.existByName(group.getName());
-		
+
 		if (!group.getName().equalsIgnoreCase(modifyGroup.getName()) && groupExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
@@ -133,7 +133,7 @@ public class GroupService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteGroup(Group group) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		
+
 		result.setSingleElement(daoGroup.deleteGroup(group));
 		return result;
 	}
@@ -184,7 +184,6 @@ public class GroupService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-//	@PostAuthorize("hasPermission(returnObject, 'READ')")
 	public ResultClass<Group> getGroupsForStudent(Long id_student){
 		ResultClass<Group> result = new ResultClass<>();
 		result.addAll(daoGroup.getGroupsForStudent(id_student));
@@ -192,13 +191,13 @@ public class GroupService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-//	@PostAuthorize("hasPermission(returnObject, 'READ')")
+
 	public ResultClass<Group> getGroupsForProfessor(Long id_professor){
 		ResultClass<Group> result = new ResultClass<>();
 		result.addAll(daoGroup.getGroupsForProfessor(id_professor));
 		return result;
 	}
-	
+
 	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> setProfessors(Group group, Long id_group) {
@@ -207,6 +206,7 @@ public class GroupService {
 		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
 		modifyGroup.setProfessors(group.getProfessors());
 		result.setSingleElement(result.hasErrors());
+
 		
 		if (!result.hasErrors()) {
 			result.setSingleElement(true);
@@ -215,8 +215,9 @@ public class GroupService {
 			
 		}
 		
+
 		return result;
-		
+
 	}
 	
 	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
@@ -235,7 +236,7 @@ public class GroupService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteUserGroup(Long id_group,Long id_user) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		Group g = daoGroup.getGroup(id_group);
+		//Group g = daoGroup.getGroup(id_group);
 		
 		//TODO 
 		

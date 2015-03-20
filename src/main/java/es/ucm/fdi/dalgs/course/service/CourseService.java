@@ -3,8 +3,6 @@ package es.ucm.fdi.dalgs.course.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostFilter;
@@ -12,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.Errors;
 
 import es.ucm.fdi.dalgs.academicTerm.service.AcademicTermService;
 import es.ucm.fdi.dalgs.acl.service.AclObjectService;
@@ -21,6 +18,7 @@ import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.repository.CourseRepository;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
 import es.ucm.fdi.dalgs.domain.Course;
+import es.ucm.fdi.dalgs.domain.Subject;
 import es.ucm.fdi.dalgs.group.service.GroupService;
 
 @Service
@@ -263,6 +261,18 @@ public class CourseService {
 		}
 		return result;
 	}
-	
-	
+
+	public ResultClass<Course> getCoursesBySubject(Subject subject) {
+		
+		ResultClass<Course> result = new ResultClass<>();
+		result.addAll(daoCourse.getCoursesBySubject(subject)); 
+		return result;
+	}
+
+	public ResultClass<Boolean> deleteCoursesForSubject(Collection<Subject> subjects) {
+		ResultClass<Boolean> result = new ResultClass<>();
+		result.setSingleElement(daoCourse.deleteCoursesForSubject(subjects));
+
+		return result;
+	}
 }

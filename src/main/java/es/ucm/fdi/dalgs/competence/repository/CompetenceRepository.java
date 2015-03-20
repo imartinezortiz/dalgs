@@ -49,7 +49,7 @@ public class CompetenceRepository {
 	}
 
 	public boolean addCompetence(Competence competence) {
-		
+
 		try {
 			em.persist(competence);
 			return true;
@@ -57,7 +57,7 @@ public class CompetenceRepository {
 			logger.error(e.getMessage());
 			return false;
 		}
-		
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -66,7 +66,7 @@ public class CompetenceRepository {
 				.createQuery(
 						"select c from Competence c inner join c.degree where c.isDeleted='false' order by c.id")
 
-				.getResultList();
+						.getResultList();
 	}
 
 	public boolean saveCompetence(Competence competence) {
@@ -83,9 +83,9 @@ public class CompetenceRepository {
 
 	}
 
-	public boolean deleteCompetence(Long id) {
-		Competence competence = em.getReference(Competence.class, id);
-//		Competence competence = this.getCompetence(id);
+	public boolean deleteCompetence(Competence competence) {
+		//		Competence competence = em.getReference(Competence.class, competence2);
+		//		Competence competence = this.getCompetence(id);
 		competence.setDeleted(true);
 
 		try {
@@ -111,13 +111,20 @@ public class CompetenceRepository {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Competence> getCompetencesForDegree(Long id_degree) {
+	public List<Competence> getCompetencesForDegree(Long id_degree, Boolean show) {
 		Degree degree = em.getReference(Degree.class, id_degree);
+		if(show){
 
-		Query query = em
-				.createQuery("select c from Competence c where c.degree=?1 and c.isDeleted='false'");
-		query.setParameter(1, degree);
-		return query.getResultList();
+			Query query = em
+					.createQuery("select c from Competence c where c.degree=?1");
+			query.setParameter(1, degree);
+			return query.getResultList();
+		}else{
+			Query query = em
+					.createQuery("select c from Competence c where c.degree=?1 and c.isDeleted='false'");
+			query.setParameter(1, degree);
+			return query.getResultList();
+		}
 	}
 
 	public Competence getCompetenceByName(String name) {

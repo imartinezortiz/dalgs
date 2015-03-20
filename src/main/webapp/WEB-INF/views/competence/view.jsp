@@ -80,7 +80,7 @@
 			</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<a class="btn list-btn btn-warning2" style="cursor: copy;"
-					href="<c:url value='/degree/${degreeId}/competence/${competenceId}/add.htm'/>">
+					href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/add.htm'/>">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 					Add
 				</a>

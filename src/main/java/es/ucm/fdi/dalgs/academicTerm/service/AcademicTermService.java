@@ -13,6 +13,7 @@ import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
+import es.ucm.fdi.dalgs.domain.Degree;
 
 @Service
 public class AcademicTermService {
@@ -152,9 +153,9 @@ public class AcademicTermService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 //	@PostFilter("hasPermission(filterObject, 'READ')") // Collection: filterObject
 	@Transactional(readOnly = false)
-	public ResultClass<AcademicTerm> getAcademicTermsByDegree(Long id_degree) {
+	public ResultClass<AcademicTerm> getAcademicTermsByDegree(Degree degree) {
 		ResultClass<AcademicTerm> result = new ResultClass<>();
-		result.addAll(daoAcademicTerm.getAcademicTermsByDegree(id_degree));
+		result.addAll(daoAcademicTerm.getAcademicTermsByDegree(degree));
 		return result;
 	}
 
@@ -170,8 +171,8 @@ public class AcademicTermService {
 		return result;
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PreAuthorize("hasPermission(returnObject, 'DELETE') or hasPermission(returnObject, 'ADMINISTRATION')" )
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+//	@PreAuthorize("hasPermission(returnObject, 'DELETE') or hasPermission(returnObject, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteAcademicTermCollection(Collection<AcademicTerm> academicList) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();

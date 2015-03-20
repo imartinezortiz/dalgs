@@ -178,5 +178,35 @@ public class CourseRepository {
 		
 	}
 
+	@SuppressWarnings("unchecked")
+	public Collection<Course> getCoursesBySubject(Subject subject) {
+		
+				
+		Query query =em.createQuery(
+				"select c from Course c  join c.subject s  where s=?1 and c.isDeleted='false'");
+		
+		query.setParameter(1, subject);
+
+//		if (query.getResultList().isEmpty())
+//			return null;
+//		else
+			return query.getResultList();
+	}
+
+	public Boolean deleteCoursesForSubject(Collection<Subject> subjects) {
+	
+		try{
+			Query query = em.createQuery("UPDATE Course c SET c.isDeleted = true WHERE c.subject in ?1");
+			query.setParameter(1, subjects);
+			int n = query.executeUpdate();
+			if (n>0)return true;
+			else return false;	
+			
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			return false;
+		}
+	}
+
 
 }

@@ -60,7 +60,9 @@
 					</p>
 
 					<p>
-						<label>Course Coordinator: &nbsp;</label>${model.course.coordinator.lastName}, ${model.course.coordinator.firstName}</p>
+						<label>Course Coordinator: &nbsp;</label>${model.course.coordinator.lastName},
+						${model.course.coordinator.firstName}
+					</p>
 
 				</div>
 
@@ -138,11 +140,12 @@
 									</sec:accesscontrollist>
 								</c:when>
 								<c:otherwise>
-									<sec:authorize access="hasRole('ROLE_ADMIN')">
+									<sec:accesscontrollist hasPermission="ADMINISTRATION"
+										domainObject="${model.course}">
 										<a class="btn btn-danger"
 											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}/restore.htm'/>">
 											Restore </a>
-									</sec:authorize>
+									</sec:accesscontrollist>
 								</c:otherwise>
 							</c:choose></td>
 

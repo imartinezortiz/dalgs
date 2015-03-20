@@ -162,8 +162,8 @@ public class AcademicTermRepository{
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AcademicTerm> getAcademicTermsByDegree(Long id_degree) {
-		Degree degree = em.getReference(Degree.class, id_degree);
+	public List<AcademicTerm> getAcademicTermsByDegree(Degree  degree) {
+//		Degree degree = em.getReference(Degree.class, id_degree);
 
 		Query query = em
 				.createQuery("select a from AcademicTerm a where a.isDeleted='false' and  a.degree=?1");

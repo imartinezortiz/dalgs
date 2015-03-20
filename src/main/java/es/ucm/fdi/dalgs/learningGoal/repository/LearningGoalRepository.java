@@ -37,9 +37,9 @@ public class LearningGoalRepository{
 
 		}
 	}
-	
+
 	public boolean addLearningGoal(LearningGoal newLearningGoal) {
-	
+
 		try {
 			em.persist(newLearningGoal);
 			return true;
@@ -47,7 +47,7 @@ public class LearningGoalRepository{
 			logger.error(e.getMessage());
 			return false;
 		}
-		
+
 	}
 
 
@@ -62,11 +62,11 @@ public class LearningGoalRepository{
 
 
 	public LearningGoal existByCode(String code) {
-		
+
 		Query query = em
 				.createQuery("Select l from LearningGoal l where l.info.code=?1");
 		query.setParameter(1, code);
-		
+
 
 		if (query.getResultList().isEmpty())
 			return null;
@@ -82,39 +82,39 @@ public class LearningGoalRepository{
 	@SuppressWarnings("unchecked")
 	public Collection<LearningGoal> getLearningGoalsFromCourse(Long id_course, Collection<LearningGoal> LearningGoals) {
 		try{
-		
-		
-		Course course = em.getReference(Course.class, id_course);
-		Query query = em.createQuery("SELECT l FROM Course c JOIN c.subject s "
-				+ "JOIN s.competences x JOIN x.learningGoals l WHERE l NOT IN ?2 AND l.isDeleted = false AND c=?1");
-//				+ "AND l NOT IN ?2");
-		
-		query.setParameter(1, course);
-		query.setParameter(2, LearningGoals);
-		
-		return (Collection<LearningGoal>)query.getResultList();
+
+
+			Course course = em.getReference(Course.class, id_course);
+			Query query = em.createQuery("SELECT l FROM Course c JOIN c.subject s "
+					+ "JOIN s.competences x JOIN x.learningGoals l WHERE l NOT IN ?2 AND l.isDeleted = false AND c=?1");
+			//				+ "AND l NOT IN ?2");
+
+			query.setParameter(1, course);
+			query.setParameter(2, LearningGoals);
+
+			return (Collection<LearningGoal>)query.getResultList();
 		}catch(Exception e){
-			
+
 			logger.error(e.getMessage());
 			return null;
 		}
-		
+
 	}
-	
-	
+
+
 	@SuppressWarnings("unchecked")
 	public Collection<LearningGoal> getLearningGoalsFromCourse(Long id_course) {
 		Course course = em.getReference(Course.class, id_course);
 		Query query = em.createQuery("SELECT l FROM Course c JOIN c.subject s "
 				+ "JOIN s.competences x JOIN x.learningGoals l WHERE l.isDeleted = false AND c=?1");
 
-		
+
 		query.setParameter(1, course);
 		return (Collection<LearningGoal>)query.getResultList();
 	}
 
-	public boolean deleteLearningGoal(Long id_learningGoal) {
-		LearningGoal learningGoal = em.getReference(LearningGoal.class, id_learningGoal);
+	public boolean deleteLearningGoal(LearningGoal learningGoal) {
+		//		LearningGoal learningGoal = em.getReference(LearningGoal.class, learningGoal);
 		learningGoal.setDeleted(true);
 
 		try {
@@ -135,7 +135,7 @@ public class LearningGoalRepository{
 
 			query.setParameter(1, competence);
 			query.executeUpdate();
-			
+
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return false;
@@ -145,10 +145,10 @@ public class LearningGoalRepository{
 
 
 	public LearningGoal getLearningGoalByName(String name) {
-		
+
 		Query query = em.createQuery("SELECT l FROM LearningGoal l WHERE isDeleted = false AND l.name = ?1");
 		query.setParameter(1, name);
-		
+
 		return (LearningGoal)query.getSingleResult();
 	}
 
@@ -161,20 +161,26 @@ public class LearningGoalRepository{
 				+ "INNER JOIN s.learningGoal l WHERE a=?1");
 		query1.setParameter(1, activity);
 		return  (Collection<LearningGoal>)query1.getResultList();
-		
+
 	}
 
 	@SuppressWarnings("unchecked")
 	public Collection<LearningGoal> getLearningGoalsFromCompetence(
-			Competence competence) {
-		Query query = em
-				.createQuery("select l from LearningGoal l where l.competence=?1 and l.isDeleted='false'");
-		query.setParameter(1, competence);
-		return query.getResultList();
-
+			Competence competence, Boolean show) {
+		if(show){
+			Query query = em
+					.createQuery("select l from LearningGoal l where l.competence=?1");
+			query.setParameter(1, competence);
+			return query.getResultList();
+		}else{
+			Query query = em
+					.createQuery("select l from LearningGoal l where l.competence=?1 and l.isDeleted='false'");
+			query.setParameter(1, competence);
+			return query.getResultList();
+		}
 	}
 
-	
+
 	public boolean deleteLearningGoalsForCompetences(
 			Collection<Competence> competences) {
 		try {
@@ -183,7 +189,7 @@ public class LearningGoalRepository{
 
 			query.setParameter(1, competences);
 			query.executeUpdate();
-			
+
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return false;
@@ -193,7 +199,7 @@ public class LearningGoalRepository{
 
 
 
-	
+
 
 
 }
