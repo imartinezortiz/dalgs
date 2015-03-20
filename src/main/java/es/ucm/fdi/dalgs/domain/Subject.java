@@ -87,7 +87,8 @@ public class Subject implements Cloneable, Copyable<Subject> {
 	public void setTopic(Topic topic) {
 		this.topic = topic;
 	}
-	@Override
+
+	
 	public Subject copy() {
 		Subject copy;
 		try {

@@ -74,7 +74,7 @@ public class LearningGoal implements Cloneable, Copyable<LearningGoal>{
 		this.isDeleted = isDeleted;
 	}
 	
-	@Override
+	
 	public LearningGoal copy() {
 		LearningGoal copy;
 		try {

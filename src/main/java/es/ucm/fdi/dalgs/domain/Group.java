@@ -130,7 +130,7 @@ public class Group implements Cloneable, Copyable<Group>{
 		this.isDeleted = isDeleted;
 	}
 	
-	@Override
+	
 	public Group copy() {
 		Group copy;
 		try {

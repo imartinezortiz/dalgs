@@ -23,7 +23,7 @@ import es.ucm.fdi.dalgs.domain.info.CompetenceInfo;
 @Entity
 @Table(name = "competence", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"code_competence", "id_degree" }))
-public class Competence implements Cloneable , Copyable<Competence>{
+public class Competence implements Cloneable{// , Copyable<Competence>{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -104,7 +104,6 @@ public class Competence implements Cloneable , Copyable<Competence>{
 		this.learningGoals = learningGoals;
 	}
 
-	@Override
 	public Competence copy() {
 		Competence copy;
 		try {

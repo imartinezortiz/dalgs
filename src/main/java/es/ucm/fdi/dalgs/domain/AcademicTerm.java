@@ -103,7 +103,7 @@ public class AcademicTerm implements Cloneable, Copyable<AcademicTerm> {
 	}
 
 
-	@Override
+	
 	public AcademicTerm copy() {
 		AcademicTerm copy;
 		try {

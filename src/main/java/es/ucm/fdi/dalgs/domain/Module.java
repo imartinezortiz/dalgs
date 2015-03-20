@@ -89,7 +89,7 @@ public class Module implements Cloneable, Copyable<Module>{
 		this.topics = topics;
 	}
 	
-	@Override
+	
 	public Module copy() {
 		Module copy;
 		try {

@@ -43,7 +43,8 @@ public class LearningGoalStatus implements Cloneable, Copyable<LearningGoalStatu
 	public void setPercentage(Integer percentage) {
 		this.percentage = percentage;
 	}
-	@Override
+	
+	
 	public LearningGoalStatus copy() {
 		LearningGoalStatus copy;
 		try {

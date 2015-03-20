@@ -114,7 +114,7 @@ public class Course implements Cloneable ,Copyable<Course>{
 	}
 	
 	
-	@Override
+	
 	public Course copy() {
 		Course copy;
 		try {
@@ -130,13 +130,18 @@ public class Course implements Cloneable ,Copyable<Course>{
 			group.setCourse(copy);
 			copy.groups.add(group);
 		}
-		
+	
 		copy.activities = new ArrayList<>();
 		for (Activity a : this.activities) {
 			Activity activity = a.copy();
 			activity.setCourse(copy);
 			copy.activities.add(activity);
 		}
+		
+		copy.setCoordinator(null);
+//		copy.setSubject(this.subject);
+		
+		copy.setSubject(copy.subject);
 		return copy;
 	}
 

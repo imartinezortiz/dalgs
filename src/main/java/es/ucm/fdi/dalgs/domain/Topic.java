@@ -87,7 +87,6 @@ public class Topic implements Cloneable, Copyable<Topic>{
 		this.subjects = subjects;
 	}
 	
-	@Override
 	public Topic copy() {
 		Topic copy;
 		try {

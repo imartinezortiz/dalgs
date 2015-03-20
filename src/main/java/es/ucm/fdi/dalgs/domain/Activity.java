@@ -107,7 +107,7 @@ public class Activity implements Cloneable, Copyable<Activity> {
 		this.isDeleted = isDeleted;
 	}
 	
-	@Override
+	
 	public Activity copy() {
 		Activity copy;
 		try {

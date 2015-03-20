@@ -85,7 +85,7 @@ public class Degree implements Cloneable ,Copyable<Degree>{
 		this.modules = modules;
 	}
 
-	@Override
+	
 	public Degree copy() {
 		Degree copy;
 		try {

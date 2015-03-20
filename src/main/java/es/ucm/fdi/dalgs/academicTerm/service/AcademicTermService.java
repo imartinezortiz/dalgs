@@ -2,6 +2,7 @@ package es.ucm.fdi.dalgs.academicTerm.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,7 +14,10 @@ import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
+import es.ucm.fdi.dalgs.domain.Activity;
+import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Degree;
+import es.ucm.fdi.dalgs.domain.Group;
 
 @Service
 public class AcademicTermService {
@@ -232,11 +236,27 @@ public class AcademicTermService {
 			copy.setTerm(academicTerm.getTerm() + " (copy)");
 			
 			//TODO Cambiar el resto de codes que tengan que ser unicos
-			
-			
+			List<Activity> activities_aux = new ArrayList<Activity>();
+			for(Course c: copy.getCourses()){
+				for(Activity a: c.getActivities()){
+					a.getInfo().setCode(a.getInfo().getCode()+ "(copy)");
+					activities_aux.add(a);
+				}
+				c.setActivities(activities_aux);
+				activities_aux.clear();
+				
+				for(Group g : c.getGroups()){
+					for(Activity a: g.getActivities()){
+						a.getInfo().setCode(a.getInfo().getCode()+ "(copy)");
+						activities_aux.add(a);
+					}
+					g.setActivities(activities_aux);
+					activities_aux.clear();
+				}
+			}
 			boolean r = daoAcademicTerm.addAcademicTerm(copy);
 			if (r){
-				result.setSingleElement(copy);	
+				//result.setSingleElement(copy);	
 				AcademicTerm academicExists = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
 				boolean	success = manageAclService.addAclToObject(academicExists.getId(), academicExists.getClass().getName());
 				if (success) result.setSingleElement(academicTerm);
