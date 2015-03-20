@@ -51,16 +51,12 @@ public class CourseController {
 	@Autowired
 	private UserService serviceUser;
 
-	//	@Autowired
-	//	private ActivityService serviceActivity;
-
 	@Autowired
 	private AcademicTermService serviceAcademic;
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(CourseController.class);
-	
-	
+
 	private Boolean showAll;
 
 	public Boolean getShowAll() {
@@ -75,73 +71,64 @@ public class CourseController {
 	 * Methods for adding courses
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/add.htm", method = RequestMethod.GET)
-	protected String addCourseGET(
-			@PathVariable("academicId") Long id_academic, Model model) {
+	protected String addCourseGET(@PathVariable("academicId") Long id_academic,
+			Model model) {
 
+		if (!model.containsAttribute("addCourse")) {
 
-		if(!model.containsAttribute("addCourse")){
-
-			AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic,false).getSingleElement();
-
-
+			AcademicTerm academic = serviceAcademic.getAcademicTerm(
+					id_academic, false).getSingleElement();
 
 			model.addAttribute("addCourse", new Course());
 			model.addAttribute("academicTerm", academic);
-			Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree());
-			model.addAttribute("professors", serviceUser.getAllByRole("ROLE_PROFESSOR"));
+			Collection<Subject> subjects = serviceSubject
+					.getSubjectForDegree(academic.getDegree());
+			model.addAttribute("professors",
+					serviceUser.getAllByRole("ROLE_PROFESSOR"));
 
 			model.addAttribute("subjects", subjects);
 		}
 
-
-		//		model.addAttribute("add", true);
-
 		return "course/add";
 	}
 
-	@RequestMapping(value = "/academicTerm/{academicId}/course/add.htm", method = RequestMethod.POST, params="Add")
+	@RequestMapping(value = "/academicTerm/{academicId}/course/add.htm", method = RequestMethod.POST, params = "Add")
 	// Every Post have to return redirect
-	public String addCoursePOST(
-			@PathVariable("academicId") Long id_academic,
+	public String addCoursePOST(@PathVariable("academicId") Long id_academic,
 			@ModelAttribute("addCourse") @Valid Course newCourse,
-			BindingResult resultBinding,
-			RedirectAttributes attr) {
-
-
+			BindingResult resultBinding, RedirectAttributes attr) {
 
 		validate(newCourse, resultBinding);
 		if (!resultBinding.hasErrors()) {
-			ResultClass<Course> resultReturned = serviceCourse.addCourse(newCourse, id_academic);
+			ResultClass<Course> resultReturned = serviceCourse.addCourse(
+					newCourse, id_academic);
 			if (!resultReturned.hasErrors())
-				return "redirect:/academicTerm/" + id_academic + ".htm";	
-			else{
-				//				AcademicTerm a = serviceAcademic.getAcademicTerm(id_academic).getSingleElement();
-				if (resultReturned.isElementDeleted()){
-					attr.addFlashAttribute("unDelete", resultReturned.isElementDeleted()); 
-					attr.addFlashAttribute("academicTerm", resultReturned.getSingleElement().getAcademicTerm());
+				return "redirect:/academicTerm/" + id_academic + ".htm";
+			else {
+				if (resultReturned.isElementDeleted()) {
+					attr.addFlashAttribute("unDelete",
+							resultReturned.isElementDeleted());
+					attr.addFlashAttribute("academicTerm", resultReturned
+							.getSingleElement().getAcademicTerm());
 				}
-				//				else attr.addFlashAttribute("academicTerm", a);
-				attr.addFlashAttribute("subjects",serviceSubject.getSubjectForDegree(
-						resultReturned.getSingleElement().getAcademicTerm().getDegree()).getSingleElement());
+				attr.addFlashAttribute(
+						"subjects",
+						serviceSubject.getSubjectForDegree(
+								resultReturned.getSingleElement()
+										.getAcademicTerm().getDegree())
+								.getSingleElement());
 
 				attr.addFlashAttribute("errors", resultReturned.getErrorsList());
-
-
-
 			}
 
-		}else{
-			attr.addFlashAttribute("org.springframework.validation.BindingResult.addCourse", resultBinding);
-			//			AcademicTerm a = serviceAcademic.getAcademicTerm(id_academic).getSingleElement();
-			//			attr.addFlashAttribute("academicTerm", a);
-			//			attr.addFlashAttribute("subjects",serviceSubject.getSubjectForDegree(a.getDegree()).getSingleElement());
+		} else {
+			attr.addFlashAttribute(
+					"org.springframework.validation.BindingResult.addCourse",
+					resultBinding);
 
-
-			//			return "redirect:/academicTerm/{academicId}/course/add.htm";
 		}
 
-
-		attr.addFlashAttribute("addCourse", newCourse );
+		attr.addFlashAttribute("addCourse", newCourse);
 
 		if (newCourse.getSubject() != null)
 			attr.addFlashAttribute("idSubject", newCourse.getSubject().getId());
@@ -149,51 +136,48 @@ public class CourseController {
 		return "redirect:/academicTerm/{academicId}/course/add.htm";
 	}
 
-
-
-	@RequestMapping(value ="/academicTerm/{academicId}/course/add.htm", method = RequestMethod.POST, params="Undelete")
+	@RequestMapping(value = "/academicTerm/{academicId}/course/add.htm", method = RequestMethod.POST, params = "Undelete")
 	// Every Post have to return redirect
-	public String undeleteCourse(
-			@PathVariable("academicId") Long id_academic,
+	public String undeleteCourse(@PathVariable("academicId") Long id_academic,
 			@ModelAttribute("addCourse") @Valid Course course,
-			BindingResult resultBinding,
-			RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr) {
 
+		if (!resultBinding.hasErrors()) {
+			ResultClass<Course> resultReturned = serviceCourse.unDeleteCourse(
+					course, id_academic);
 
-
-		if(!resultBinding.hasErrors()){
-			ResultClass<Course> resultReturned = serviceCourse.unDeleteCourse(course, id_academic);
-
-			if (!resultReturned.hasErrors()){
-				attr.addFlashAttribute("academicTerm", resultReturned.getSingleElement().getAcademicTerm());
+			if (!resultReturned.hasErrors()) {
+				attr.addFlashAttribute("academicTerm", resultReturned
+						.getSingleElement().getAcademicTerm());
 				attr.addFlashAttribute("idSubject", course.getSubject().getId());
-				return "redirect:/academicTerm/" + id_academic + "/course/"+ resultReturned.getSingleElement().getId() +"/modify.htm";		
+				return "redirect:/academicTerm/" + id_academic + "/course/"
+						+ resultReturned.getSingleElement().getId()
+						+ "/modify.htm";
 
-			}else{
-				//				attr.addFlashAttribute("addCourse", course);
+			} else {
 				if (resultReturned.isElementDeleted())
-					attr.addFlashAttribute("unDelete", true); 
+					attr.addFlashAttribute("unDelete", true);
 				attr.addFlashAttribute("errors", resultReturned.getErrorsList());
-				//				attr.addFlashAttribute("addCourse", course.getSubject().getId());
-
-
-				//				return "redirect:/academicTerm/{academicId}/course/add.htm";
 			}
-		}else{
-			attr.addFlashAttribute("org.springframework.validation.BindingResult.addCourse", resultBinding);
-			//			attr.addFlashAttribute("addCourse", course);
+		} else {
+			attr.addFlashAttribute(
+					"org.springframework.validation.BindingResult.addCourse",
+					resultBinding);
 
 		}
-		AcademicTerm a = serviceAcademic.getAcademicTerm(id_academic, false).getSingleElement();
+		AcademicTerm a = serviceAcademic.getAcademicTerm(id_academic, false)
+				.getSingleElement();
 		attr.addFlashAttribute("academicTerm", a);
-		attr.addFlashAttribute("subjects",serviceSubject.getSubjectForDegree(a.getDegree()).getSingleElement());
+		attr.addFlashAttribute("subjects",
+				serviceSubject.getSubjectForDegree(a.getDegree())
+						.getSingleElement());
 
 		if (course.getSubject() != null)
 			attr.addFlashAttribute("idSubject", course.getSubject().getId());
 		return "redirect:/academicTerm/{academicId}/course/add.htm";
 
-
 	}
+
 	/**
 	 * Methods for view courses
 	 */
@@ -201,21 +185,20 @@ public class CourseController {
 	protected ModelAndView viewCourseGET(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id,
-			@RequestParam(value = "showAll", defaultValue = "false") Boolean showAll) throws ServletException {
+			@RequestParam(value = "showAll", defaultValue = "false") Boolean showAll)
+			throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
 		Course p = serviceCourse.getCourseAll(id, showAll).getSingleElement();
 		myModel.put("course", p);
 		myModel.put("showAll", showAll);
-		//		List<Activity> activities = serviceActivity.getActivitiesForCourse(id);
 
 		if (!p.getActivities().isEmpty())
 			myModel.put("activities", p.getActivities());
 
 		if (!p.getGroups().isEmpty())
 			myModel.put("groups", p.getGroups());
-
 
 		return new ModelAndView("course/view", "model", myModel);
 	}
@@ -228,27 +211,29 @@ public class CourseController {
 	protected String modifyCourseGET(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id, Model model)
-					throws ServletException {
+			throws ServletException {
 
-		if(!model.containsAttribute("modifyCourse")){
+		if (!model.containsAttribute("modifyCourse")) {
 			Course p = serviceCourse.getCourse(id).getSingleElement();
 
-			AcademicTerm academic = serviceAcademic.getAcademicTerm(id_academic,false).getSingleElement();
+			AcademicTerm academic = serviceAcademic.getAcademicTerm(
+					id_academic, false).getSingleElement();
 
-			Collection <Subject> subjects = serviceSubject.getSubjectForDegree(academic.getDegree());
+			Collection<Subject> subjects = serviceSubject
+					.getSubjectForDegree(academic.getDegree());
 			model.addAttribute("idSubject", p.getSubject().getId());
 
-			//Collection<Activity> activities  =serviceActivity.getAll();
-			// serviceSubject.getSubjectsForDegree(academic.getDegree().getId());
 			model.addAttribute("academicTerm", academic);
 			model.addAttribute("subjects", subjects);
-			model.addAttribute("professors", serviceUser.getAllByRole("ROLE_PROFESSOR"));
-			if(p.getCoordinator()!=null)model.addAttribute("idCoordinator", p.getCoordinator().getId());
+			model.addAttribute("professors",
+					serviceUser.getAllByRole("ROLE_PROFESSOR"));
+			if (p.getCoordinator() != null)
+				model.addAttribute("idCoordinator", p.getCoordinator().getId());
 
-			//model.addAttribute("activities", activities);
 			model.addAttribute("modifyCourse", p);
 		}
-		model.addAttribute("professors", serviceUser.getAllByRole("ROLE_PROFESSOR"));
+		model.addAttribute("professors",
+				serviceUser.getAllByRole("ROLE_PROFESSOR"));
 		return "course/modify";
 
 	}
@@ -258,49 +243,47 @@ public class CourseController {
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@ModelAttribute("modifyCourse") Course modify,
-			BindingResult resultBinding, 
-			RedirectAttributes attr)
+			BindingResult resultBinding, RedirectAttributes attr)
 
 	{
 
-		//AcademicTerm y subject
+		// AcademicTerm y subject
 		validate(modify, resultBinding);
 		if (!resultBinding.hasErrors()) {
-			//			Course course_aux = serviceCourse.getCourse(id_course).getSingleElement();
-			//			course_aux.setAcademicTerm(modify.getAcademicTerm());
-			//			course_aux.setSubject(modify.getSubject());
 
-			ResultClass<Boolean> resultReturned = serviceCourse.modifyCourse(modify, id_academic, id_course);
+			ResultClass<Boolean> resultReturned = serviceCourse.modifyCourse(
+					modify, id_academic, id_course);
 			if (!resultReturned.hasErrors())
 
-				return "redirect:/academicTerm/" + id_academic + ".htm";	
-			else{
-				
+				return "redirect:/academicTerm/" + id_academic + ".htm";
+			else {
+
 				attr.addFlashAttribute("errors", resultReturned.getErrorsList());
 			}
-		}
-		else {
-			attr.addFlashAttribute("org.springframework.validation.BindingResult.modifyCourse", resultBinding);
+		} else {
+			attr.addFlashAttribute(
+					"org.springframework.validation.BindingResult.modifyCourse",
+					resultBinding);
 
 		}
-		
-		
+
 		return "redirect:/academicTerm/{academicId}/course/{courseId}/modify.htm";
 
-
-
 	}
-	
+
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/restore.htm")
 	// Every Post have to return redirect
 	public String restoreAcademicTerm(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course) {
-		ResultClass<Course> result = serviceCourse.unDeleteCourse(serviceCourse.getCourse(id_course).getSingleElement(), id_academic);
-			
+		ResultClass<Course> result = serviceCourse.unDeleteCourse(serviceCourse
+				.getCourse(id_course).getSingleElement(), id_academic);
+
 		if (!result.hasErrors())
 
-			return "redirect:/academicTerm/"+ id_academic +".htm";//?showAll=" + showAll;
+			return "redirect:/academicTerm/" + id_academic + ".htm";// ?showAll="
+																	// +
+																	// showAll;
 		else {
 			return "redirect:/error.htm";
 
@@ -321,57 +304,11 @@ public class CourseController {
 		} else
 			return "redirect:/error.htm";
 	}
-	
+
 	/**
-	 * Add a coordinator
-//	 */
-//	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/coordinator/add.htm", method = RequestMethod.GET)
-//	public String addCoordinatorToCourseGET(@PathVariable("courseId") Long id_course, Model model) {
-//
-//		Course course = serviceCourse.getCourse(id_course).getSingleElement();
-//		List<String> professors = serviceUser.getAllByRole("ROLE_PROFESSOR");
-//
-//		model.addAttribute("course",course);
-//		//model.addAttribute("group",true);
-//
-//		model.addAttribute("professors", professors);
-//
-//		return "course/addCoordinator";
-//
-//	}
-//
-//	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/coordinator/add.htm", method = RequestMethod.POST, params="AddProfessors")
-//	// Every Post have to return redirect
-//	public String addCoordinatorToCoursePOST(
-//			@PathVariable("academicId") Long academicId,
-//			@PathVariable("courseId") Long courseId,
-//			@PathVariable("courseId") Long id_course,
-//			@ModelAttribute("course") @Valid Course course,
-//			BindingResult resultBinding, RedirectAttributes attr) {
-//
-//		if (!resultBinding.hasErrors()){
-//			return "redirect:/academicTerm/" + academicId + "/course/"
-//					+ courseId +  "/coordinator/add.htm";		
-//		}
-//		else{
-//			
-//			ResultClass<Boolean> result = serviceCourse.modifyCourse(course, academicId, id_course);
-//
-//			if (!result.hasErrors())
-//
-//				return "redirect:/academicTerm/" + academicId + "/course/"	+ courseId +  ".htm";
-//			
-//			else{
-//				
-//				return "redirect:/academicTerm/" + academicId + "/course/"	+ courseId  + "/coordinator/add.htm";
-//
-//				
-//			}
-//		}
-//
-//
-//	}
-	
+	 * Add a coordinator //
+	 */
+
 	/**
 	 * For binding subject and activities of the course.
 	 */
@@ -379,45 +316,46 @@ public class CourseController {
 	protected void initBinder(WebDataBinder binder) throws Exception {
 		binder.registerCustomEditor(Set.class, "subject",
 				new CustomCollectionEditor(Set.class) {
-			protected Object convertElement(Object element) {
-				if (element instanceof Subject) {
-					logger.info("Converting...{}", element);
-					return element;
-				}
+					protected Object convertElement(Object element) {
+						if (element instanceof Subject) {
+							logger.info("Converting...{}", element);
+							return element;
+						}
 
-				if (element instanceof String) {
-					Subject subject = serviceSubject
-							.getSubjectByName(element.toString()).getSingleElement();
-					logger.info("Loking up {} to {}", element, subject);
-					return subject;
-				}
-				System.out.println("Don't know what to do with: "
-						+ element);
-				return null;
-			}
-		});
+						if (element instanceof String) {
+							Subject subject = serviceSubject.getSubjectByName(
+									element.toString()).getSingleElement();
+							logger.info("Loking up {} to {}", element, subject);
+							return subject;
+						}
+						System.out.println("Don't know what to do with: "
+								+ element);
+						return null;
+					}
+				});
 
 		binder.registerCustomEditor(Set.class, "professors",
 				new CustomCollectionEditor(Set.class) {
-			protected Object convertElement(Object element) {
-				if (element instanceof User) {
-					logger.info("Converting...{}", element);
-					return element;
-				}
+					protected Object convertElement(Object element) {
+						if (element instanceof User) {
+							logger.info("Converting...{}", element);
+							return element;
+						}
 
-				if (element instanceof String) {
-					User user = serviceUser.findByUsername(element.toString());
+						if (element instanceof String) {
+							User user = serviceUser.findByUsername(element
+									.toString());
 
-					logger.info("Loking up {} to {}", element, user);
-					return user;
-				}
-				System.out.println("Don't know what to do with: "
-						+ element);
-				return null;
-			}
-		});
+							logger.info("Loking up {} to {}", element, user);
+							return user;
+						}
+						System.out.println("Don't know what to do with: "
+								+ element);
+						return null;
+					}
+				});
 	}
-	
+
 	public void validate(Course course, Errors errors) {
 
 		if (course.getCoordinator() == null) {
@@ -428,6 +366,6 @@ public class CourseController {
 			errors.rejectValue("degree", "validation.negative",
 					"You must select a subject");
 		}
-		
+
 	}
 }

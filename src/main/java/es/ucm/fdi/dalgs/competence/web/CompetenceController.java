@@ -57,7 +57,7 @@ public class CompetenceController {
 	 */
 
 	@RequestMapping(value = "/degree/{degreeId}/competence/add.htm", method = RequestMethod.GET)
-	public String getAddNewCompetenceForm2(Model model,
+	public String addCompetenceGET(Model model,
 			@PathVariable("degreeId") Long id) {
 		//		Competence newCompetence = new Competence();
 
@@ -71,7 +71,7 @@ public class CompetenceController {
 
 	@RequestMapping(value = "/degree/{degreeId}/competence/add.htm", method = RequestMethod.POST, params="Add")
 	// Every Post have to return redirect
-	public String processAddNewCompetence2(
+	public String addCompetencePOST(
 			@ModelAttribute("competence") Competence newCompetence,
 			@PathVariable("degreeId") Long id_degree,
 			BindingResult resultBinding, RedirectAttributes attr) {
@@ -105,7 +105,7 @@ public class CompetenceController {
 	 * Methods for delete competences
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/delete.htm", method = RequestMethod.GET)
-	public String formDeleteCompetenceFromDegree(
+	public String deleteCompetenceGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence)
 					throws ServletException {
@@ -119,7 +119,7 @@ public class CompetenceController {
 
 	@RequestMapping(value = "/degree/{degreeId}/competence/add.htm", method = RequestMethod.POST, params="Undelete")
 	// Every Post have to return redirect
-	public String undeleteDegree(
+	public String undeleteDegreePOST(
 			@PathVariable("degreeId") Long id_degree,
 			@ModelAttribute("competence") Competence competence,
 			BindingResult resultBinding, RedirectAttributes attr) {
@@ -152,7 +152,7 @@ public class CompetenceController {
 	 * Methods for modify competences
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/modify.htm", method = RequestMethod.POST)
-	public String formModifyCompetenceFromDegree(
+	public String modifyCompetencePOST(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence,
 			@ModelAttribute("competence") Competence modify,
@@ -165,12 +165,7 @@ public class CompetenceController {
 			if (!result.hasErrors())
 				return "redirect:/degree/" + id_degree + ".htm";
 			else{
-				//			model.addAttribute("modifyCompetence", modify);
-				//			if (result.isElementDeleted()){
-				//				model.addAttribute("addcompetence", modify);
-				//				model.addAttribute("unDelete", true); 
 				attr.addFlashAttribute("errors", result.getErrorsList());
-
 			}	
 
 		}
@@ -178,8 +173,8 @@ public class CompetenceController {
 			attr.addFlashAttribute(
 					"org.springframework.validation.BindingResult.competence",
 					resultBinding);
-
 		}
+		
 		attr.addFlashAttribute("module", modify);
 		return "redirect:/degree/"+id_degree+"/competence/"+id_competence+"/modify.htm";
 
@@ -187,7 +182,7 @@ public class CompetenceController {
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/modify.htm", method = RequestMethod.GET)
-	protected String formModifyCompetenceFromDegree(
+	protected String modifyCompetenceGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence, Model model)
 					throws ServletException {
@@ -202,29 +197,11 @@ public class CompetenceController {
 
 	}
 
-	//	/**
-	//	 * Delete Subject of a Competence
-	//	 */
-	//
-	//	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/subject/{subjectId}/delete.htm", method = RequestMethod.GET)
-	//	public String formDeleteSubjectForCompetence(
-	//			@PathVariable("degreeId") Long id_degree,
-	//			@PathVariable("competenceId") Long id_competence,
-	//			@PathVariable("subjectId") Long id_subject) throws ServletException {
-	//
-	//		if (serviceCompetence.deleteCompetenceFromSubject(id_competence,
-	//				id_subject)) {
-	//			return "redirect:/degree/" + id_degree + "/competence/"
-	//					+ id_competence + ".htm";
-	//		} else
-	//			return "redirect:/error.htm";
-	//	}
-
 	/**
 	 * Methods for view competence
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}.htm", method = RequestMethod.GET)
-	protected ModelAndView formViewSubject(
+	protected ModelAndView getCompetenceGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean show)
@@ -232,15 +209,10 @@ public class CompetenceController {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		//		Competence p = serviceCompetence.getCompetence(id_competence);
-
 		Competence p = serviceCompetence.getCompetenceAll(id_competence, show).getSingleElement();
 
-		// List<Subject> subjects =
-		// serviceSubject.getSubjectsForCompetence(id_competence);
 		myModel.put("showAll", show);
 		myModel.put("competence", p);
-		// if(subjects != null)
 		myModel.put("learningGoals", p.getLearningGoals());
 
 		return new ModelAndView("competence/view", "model", myModel);
@@ -252,7 +224,6 @@ public class CompetenceController {
 			@PathVariable("competenceId") Long id_competence) {
 		ResultClass<Competence> result = serviceCompetence.unDeleteCompetence(serviceCompetence.getCompetence(id_competence).getSingleElement(), id_degree);
 		if (!result.hasErrors())
-			//			if (created)
 			return "redirect:/degree/"+id_degree+".htm";
 		else{
 			return "redirect:/error.htm";

@@ -103,7 +103,7 @@ public class CompetenceService {
 	}
 
 //	@PreAuthorize("hasRole('ROLE_ADMIN')")	
-	@PreAuthorize("hasPermission(#competence, 'DELETE') or hasPermission(#competence, 'ADMINISTRATION')" )
+	@PreAuthorize("hasPermission(#competence, 'ADMINISTRATION')" )
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean> deleteCompetence(Competence competence) {
 //		Competence competence = daoCompetence.getCompetence(id);
@@ -133,8 +133,8 @@ public class CompetenceService {
 		return result;
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
-	@PreAuthorize("hasPermission(#competence, 'WRITE') or hasPermission(#competence, 'ADMINISTRATION')")
+//	@PreAuthorize("hasPermission(#competence, 'WRITE') or hasPermission(#competence, 'ADMINISTRATION')")
+	@PreAuthorize("hasPermission(#competence, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyCompetence(Competence competence, Long id_competence, Long id_degree) {
 		ResultClass<Boolean> result = new ResultClass<>();
@@ -199,24 +199,18 @@ public class CompetenceService {
 		return result;
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
-//	public boolean modifyCompetence(Competence competence) {
-//		return daoCompetence.saveCompetence(competence);
-//	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<Competence> getCompetenceAll(Long id_competence, Boolean show) {
 		ResultClass<Competence> result = new ResultClass<>();
 		Competence competence = daoCompetence.getCompetence(id_competence);
-		//		Competence c = daoCompetence.getCompetenceAll(id_competence);
 		competence.setLearningGoals(serviceLearning.getLearningGoalsFromCompetence(competence, show));
 		result.setSingleElement(competence);
 		return result;
 	}
 	
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
-	@PreAuthorize("hasPermission(#competence, 'WRITE') or hasPermission(#competence, 'ADMINISTRATION')")
+	@PreAuthorize("hasPermission(#competence, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Competence> unDeleteCompetence(Competence competence, Long id_degree) {
 		

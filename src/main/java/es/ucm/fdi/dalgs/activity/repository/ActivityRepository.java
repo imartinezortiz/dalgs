@@ -215,8 +215,7 @@ public class ActivityRepository {
 	}
 
 	public boolean deleteActivitiesFromGroups(Collection<Group> groups) {
-
-		//TODO 
+ 
 		try {
 			Query query = em
 					.createQuery("UPDATE Activity a SET a.isDeleted = true where a.group in ?1");

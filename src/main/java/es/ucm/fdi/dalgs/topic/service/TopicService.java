@@ -78,7 +78,6 @@ public class TopicService {
 	}
 
 	
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PreAuthorize("hasPermission(#topic, 'WRITE') or hasPermission(#topic, 'ADMINISTRATION')")
 	@Transactional(readOnly=false)
 	public ResultClass<Boolean> modifyTopic(Topic topic, Long id_topic, Long id_module) {
@@ -119,12 +118,10 @@ public class TopicService {
 		return result;
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PreAuthorize("hasPermission(#topic, 'DELETE') or hasPermission(#topic, 'ADMINISTRATION')" )
 	@Transactional(readOnly=false)
 	public ResultClass<Boolean> deleteTopic(Topic topic) {
 		ResultClass<Boolean> result = new ResultClass<>();
-//		Topic topic = daoTopic.getTopic(id);
 		Collection<Topic> topics = new ArrayList<>();
 		topics.add(topic);
 		if (serviceSubject.deleteSubjectsForTopic(topics).getSingleElement()){
@@ -154,18 +151,7 @@ public class TopicService {
 		return result;
 	}
 
-
-	//	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	//	@Transactional(readOnly=false)
-	////	public boolean modifyTopic(Topic topic) {
-	////
-	////		return daoTopic.saveTopic(topic);
-	////	}
-	//	public boolean modifyTopic(Topic topic) {
-	//		return daoTopic.saveTopic(topic);
-	//	}
-
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly=false)
 	public ResultClass<Boolean> deleteTopicsForModules(Collection<Module> modules) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -194,7 +180,6 @@ public class TopicService {
 		return result;
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@PreAuthorize("hasPermission(#topic, 'WRITE') or hasPermission(#topic, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Topic> unDeleteTopic(Topic topic, Long id_module) {

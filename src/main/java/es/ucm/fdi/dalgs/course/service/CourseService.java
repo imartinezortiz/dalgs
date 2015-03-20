@@ -36,9 +36,6 @@ public class CourseService {
 	@Autowired
 	GroupService serviceGroup;
 
-	// @Autowired
-	// private DegreeService serviceDegree;
-
 	@Autowired
 	private AcademicTermService serviceAcademicTerm;
 
@@ -231,13 +228,6 @@ public class CourseService {
 	}
 
 
-//	public ResultClass<Boolean> modifyCourse(Course course) {
-//		ResultClass<Boolean> result = new ResultClass<Boolean>();
-//		result.setSingleElement(daoCourse.saveCourse(course));
-//		return result;
-//	}
-
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#course, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Course> unDeleteCourse(Course course, Long id_academic) {

@@ -96,11 +96,9 @@ public class SubjectService {
 		return result;
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PreAuthorize("hasPermission(#subject, 'DELETE') or hasPermission(#subject, 'ADMINISTRATION')" )
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean>deleteSubject(Subject subject) {
-//		boolean deleteCourses = false;
 		ResultClass<Boolean> result = new ResultClass<>();
 
 		ResultClass<Course> courses = serviceCourse.getCoursesBySubject(subject);
@@ -125,7 +123,6 @@ public class SubjectService {
 		return result;
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PreAuthorize("hasPermission(#subject, 'WRITE') or hasPermission(#subject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifySubject(Subject subject, Long id_subject) {

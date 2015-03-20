@@ -207,12 +207,12 @@
 							</div></td>
 
 
-						<td>
+				<%-- 		<td>
 						<a class="btn list-btn btn-success"
 										href="<c:url value='/user/${prof.id}.htm'/>">View </a>
-						</td>
-						<%-- <td><c:choose>
-								<c:when test="${prof.enabled eq true}">
+						</td> --%>
+						<td>
+								<c:if test="${prof.enabled eq true}">
 									<a class="btn list-btn btn-success"
 										href="<c:url value='/user/${prof.id}.htm'/>">View</a>
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
@@ -221,16 +221,10 @@
 											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/user/${prof.id}/delete.htm'/>">
 											Delete </a>
 									</sec:authorize>
-								</c:when>
-								<c:otherwise>
-									<sec:authorize access="hasRole('ROLE_ADMIN')">
-										<a class="btn btn-danger"
-											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/user/${prof.id}/restore.htm'/>">
-											Restore </a>
-									</sec:authorize>
-								</c:otherwise>
-							</c:choose></td>
- --%>
+								</c:if>
+								
+							</td>
+
 					</tr>
 				</c:forEach>
 

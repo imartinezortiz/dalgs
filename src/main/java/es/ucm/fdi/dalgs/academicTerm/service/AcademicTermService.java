@@ -56,7 +56,7 @@ public class AcademicTermService {
 			success = daoAcademicTerm.addAcademicTerm(academicTerm);
 
 
-		if(success){ //&& academicAux != null){
+		if(success){ 
 			academicExists = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
 			success = manageAclService.addAclToObject(academicExists.getId(), academicExists.getClass().getName());
 			if (success) result.setSingleElement(academicTerm);
@@ -72,7 +72,7 @@ public class AcademicTermService {
 
 
 	
-	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
+	@PreAuthorize("hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyAcademicTerm(AcademicTerm academicTerm, Long id_academic) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -114,7 +114,6 @@ public class AcademicTermService {
 	 *  filterObject refers to the returned object list.
 	 */
 	@PreAuthorize("hasRole('ROLE_USER')")
-//	@PostFilter("hasPermission(filterObject, 'READ')")
 	@Transactional(readOnly = true)
 	public ResultClass<AcademicTerm> getAcademicTerms(Integer pageIndex, Boolean showAll) {
 		ResultClass<AcademicTerm> result = new ResultClass<>();
@@ -123,8 +122,7 @@ public class AcademicTermService {
 		return result;
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PreAuthorize("hasPermission(#academicTerm, 'DELETE') or hasPermission(#academicTerm, 'ADMINISTRATION')" )
+	@PreAuthorize("hasPermission(#academicTerm, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)// propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean> deleteAcademicTerm(AcademicTerm academicTerm) {
 		boolean success = false;
@@ -151,7 +149,6 @@ public class AcademicTermService {
 
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-//	@PostFilter("hasPermission(filterObject, 'READ')") // Collection: filterObject
 	@Transactional(readOnly = false)
 	public ResultClass<AcademicTerm> getAcademicTermsByDegree(Degree degree) {
 		ResultClass<AcademicTerm> result = new ResultClass<>();
@@ -161,7 +158,6 @@ public class AcademicTermService {
 
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-//	@PostFilter("hasPermission(filterObject, 'READ')")
 	@Transactional(readOnly = true)
 	public ResultClass<AcademicTerm> getAcademicTerm(Long id_academic, Boolean showAll) {
 		ResultClass<AcademicTerm> result = new ResultClass<AcademicTerm>();
@@ -172,7 +168,6 @@ public class AcademicTermService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-//	@PreAuthorize("hasPermission(returnObject, 'DELETE') or hasPermission(returnObject, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteAcademicTermCollection(Collection<AcademicTerm> academicList) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -185,7 +180,7 @@ public class AcademicTermService {
 	}
 
 	
-	@PreAuthorize("hasPermission(#academicTerm, 'WRITE') or hasPermission(#academicTerm, 'ADMINISTRATION')")
+	@PreAuthorize("hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<AcademicTerm> restoreAcademic(AcademicTerm academicTerm) {
 		AcademicTerm a = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
@@ -216,8 +211,7 @@ public class AcademicTermService {
 
 	}
 	
-//	@PreAuthorize("hasRole('ROLE_USER')")
-//	//@PreAuthorize("hasPermission(returnObject, 'DELETE') or hasPermission(returnObject, 'ADMINISTRATION')" )
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
 //	@Transactional(propagation=Propagation.REQUIRED)
 //	public boolean cloneAcademicTerm(AcademicTerm academic) {
 //

@@ -80,7 +80,6 @@ public class LearningGoalService {
 		return result;
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@PreAuthorize("hasPermission(#learningGoal, 'WRITE') or hasPermission(#learningGoal, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyLearningGoal(LearningGoal learningGoal, Long id_learningGoal) {
@@ -114,9 +113,7 @@ public class LearningGoalService {
 
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@PreAuthorize("hasPermission(#learningGoal, 'DELETE') or hasPermission(#learningGoal, 'ADMINISTRATION')" )
-
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteLearningGoal(LearningGoal learningGoal) {
 		ResultClass<Boolean> result = new ResultClass<>();
@@ -172,7 +169,6 @@ public class LearningGoalService {
 		return result;
 	}
 	
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@PreAuthorize("hasPermission(#learningGoal, 'WRITE') or hasPermission(#learningGoal, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<LearningGoal> unDeleteLearningGoal(LearningGoal learningGoal) {

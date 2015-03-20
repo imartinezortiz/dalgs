@@ -75,8 +75,7 @@ public class SubjectRepository {
 	}
 
 	public boolean deleteSubject(Subject subject) {
-		// Subject subject = this.getSubject(id);
-		//		Subject subject = em.getReference(Subject.class, id);
+		
 		try {
 			subject.setDeleted(true);
 			em.merge(subject);
@@ -192,14 +191,10 @@ public class SubjectRepository {
 	@SuppressWarnings("unchecked")
 	public Collection<Subject> getSubjectsForTopics(Collection<Topic> topics) {
 
-		//		Topic topic = em.getReference(Topic.class, id_topic);
-
 		Query query = em
 				.createQuery("select s from Subject s where s.isDeleted='false' and s.topic in ?1");
 		query.setParameter(1, topics);
 
-		//		if (query.getResultList().isEmpty())
-		//			return null;
 		return (Collection<Subject>) query.getResultList();
 
 	}

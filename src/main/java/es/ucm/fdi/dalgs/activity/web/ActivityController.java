@@ -81,8 +81,6 @@ public class ActivityController {
 		if (!model.containsAttribute("addactivity")) {
 
 			Activity newActivity = new Activity();
-			// newActivity.setCode(serviceActivity.getNextCode());
-			// newActivity.setCourse(serviceCourse.getCourse(id_course).getSingleElement());
 			model.addAttribute("addactivity", newActivity);
 		}
 		return "activity/add";
@@ -151,7 +149,6 @@ public class ActivityController {
 						+ id_course + "/activity/"
 						+ result.getSingleElement().getId() + "/modify.htm";
 			else {
-				// attr.addFlashAttribute("addActivity", activity);
 				if (result.isElementDeleted())
 					attr.addFlashAttribute("unDelete", true);
 				attr.addFlashAttribute("errors", result.getErrorsList());
@@ -431,7 +428,6 @@ public class ActivityController {
 						+ id_course + "/group/" + id_group + "/activity/"
 						+ result.getSingleElement().getId() + "/modify.htm";
 			else {
-				// attr.addFlashAttribute("addActivity", activity);
 				if (result.isElementDeleted())
 					attr.addFlashAttribute("unDelete", true);
 				attr.addFlashAttribute("errors", result.getErrorsList());

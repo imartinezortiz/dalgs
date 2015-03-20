@@ -40,7 +40,6 @@ public class UserUpload {
 
 			while ((u = beanReader.read(User.class, nameMapping, processors)) != null) {
 				users.add(u);
-				// serviceUser.add(u);
 			}
 
 		} finally {
@@ -63,8 +62,6 @@ public class UserUpload {
 				new NotNull(), // Lastname
 				new UniqueHashCode(), // Username
 				new NotNull(), // Password
-				//new Role()
-				//new ParseInt() //Role
 		};
 		return processors;
 	}

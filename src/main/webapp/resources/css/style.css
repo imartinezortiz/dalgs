@@ -82,19 +82,23 @@ a.btn.list-btn {
 }
 
 .home-button {
-	background-color: #009AFF;
-	border-radius: 12%;
-	text-transform: uppercase;
-	width: 10%;
-	text-align: center;
-	border: 2px outset;
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
+  background-color: rgb(160, 13, 23);
+  border-radius: 10%;
+  text-transform: uppercase;
+  width: 10%;
+  text-align: center;
+  border: 2px outset;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 5px;
+  padding-top: 5px;
 }
 
 a.btn.home {
-	color: white;
+  color: white;
+  font-family: Helvetica;
+  font-weight: bolder;
 }
 
 #view-div {

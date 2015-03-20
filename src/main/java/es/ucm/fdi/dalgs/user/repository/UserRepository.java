@@ -45,9 +45,18 @@ public class UserRepository {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<User> getAll(Integer pageIndex) {
-		Query query = em.createQuery("select u from User u  order by u.id");
-		
+	public List<User> getAll(Integer pageIndex, Boolean showAll, String typeOfUser) {
+		Query query = null;
+		if(showAll){
+			query = em.createQuery("select u from User u join u.roles ur where ur.role =?1 order by u.id");
+			query.setParameter(1, typeOfUser);
+			
+		}
+		else{
+			query = em.createQuery("select u from User u join u.roles ur where ur.role =?1 and u.enabled = '00000001' order by u.id");
+			query.setParameter(1, typeOfUser);
+
+		}
 		return query.setMaxResults(noOfRecords)
 				.setFirstResult(pageIndex * noOfRecords).getResultList();
 	}
@@ -90,9 +99,6 @@ public class UserRepository {
 
 	public User getUser(Long id_user) {
 		return em.find(User.class, id_user);
-//		Query query =em.createQuery("select u from User u  where u.id =?1");
-//		query.setParameter(1, id_user);
-//		return (User) query.getSingleResult();
 	}
 
 	public boolean persistALotUsers(List<User> users){

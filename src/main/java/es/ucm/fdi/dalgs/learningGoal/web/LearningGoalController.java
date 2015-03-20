@@ -32,9 +32,8 @@ public class LearningGoalController {
 	 */
 																				
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/add.htm", method = RequestMethod.GET)
-	public String getAddNewLearningGoalForm2(Model model,
+	public String addLearningGoalGET(Model model,
 			@PathVariable("degreeId") Long id) {
-		//		LearningGoal newLearningGoal = new LearningGoal();
 		if(!model.containsAttribute("learningGoal"))
 			model.addAttribute("learningGoal", new LearningGoal());
 		model.addAttribute("valueButton", "Add");
@@ -45,7 +44,7 @@ public class LearningGoalController {
 
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/add.htm", method = RequestMethod.POST, params="Add")
 	// Every Post have to return redirect
-	public String processAddNewLearningGoal2(
+	public String addLearningGoalPOST(
 			@ModelAttribute("learningGoal") LearningGoal newLearningGoal,
 			@PathVariable("competenceId") Long id_competence,
 			@PathVariable("degreeId") Long id_degree,
@@ -77,7 +76,7 @@ public class LearningGoalController {
 
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/add.htm", method = RequestMethod.POST, params="Undelete")
 	// Every Post have to return redirect
-	public String undeleteDegree(
+	public String undeleteLearningGoalPOST(
 			@PathVariable("competenceId") Long id_competence,
 			@PathVariable("degreeId") Long id_degree,
 			@ModelAttribute("learningGoal") LearningGoal learningGoal,
@@ -115,7 +114,7 @@ public class LearningGoalController {
 	 * Methods for delete LearningGoals
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/{learninggoalId}/delete.htm", method = RequestMethod.GET)
-	public String formDeleteLearningGoalFromDegree(
+	public String deleteLearningGoalGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence,
 			@PathVariable("learninggoalId") Long id_learningGoal)
@@ -135,7 +134,7 @@ public class LearningGoalController {
 	 * Methods for modify LearningGoals
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/{learninggoalId}/modify.htm", method = RequestMethod.POST)
-	public String formModifyLearningGoalFromCompetence(
+	public String modifyLearningGoalPOST(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence,
 			@PathVariable("learninggoalId") Long id_learningGoal,
@@ -150,13 +149,6 @@ public class LearningGoalController {
 
 				return "redirect:/degree/" + id_degree +"/competence/"+ id_competence +".htm";
 			else{
-				//				attr.addAttribute("modifyLearningGoal", modify);
-				//				if (result.isElementDeleted()){
-				//					model.addAttribute("addLearningGoal", modify);
-				//					model.addAttribute("unDelete", true); 
-				//					model.addAttribute("errors", result.getErrorsList());
-				//					return "module/add";
-				//				}	
 				attr.addFlashAttribute("errors", result.getErrorsList());
 
 			}
@@ -171,7 +163,7 @@ public class LearningGoalController {
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/{learninggoalId}/modify.htm", method = RequestMethod.GET)
-	protected String formModifyLearningGoal(
+	protected String modifyLearningGoalGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence, 
 			@PathVariable("learninggoalId") Long id_learningGoal,
@@ -195,7 +187,7 @@ public class LearningGoalController {
 	 * Methods for view LearningGoal
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/{learninggoalId}.htm", method = RequestMethod.GET)
-	protected ModelAndView formViewLearningGoal(
+	protected ModelAndView getLearningGoalGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence,
 			@PathVariable("learninggoalId") Long id_learningGoal)
@@ -204,12 +196,7 @@ public class LearningGoalController {
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
 		LearningGoal p = serviceLearningGoal.getLearningGoal(id_learningGoal).getSingleElement();
-
-		// List<Subject> subjects =
-		// serviceSubject.getSubjectsForCompetence(id_competence);
-
 		myModel.put("learningGoal", p);
-
 
 		return new ModelAndView("learningGoal/view", "model", myModel);
 	}
@@ -222,7 +209,6 @@ public class LearningGoalController {
 		
 		ResultClass<LearningGoal> result = serviceLearningGoal.unDeleteLearningGoal(serviceLearningGoal.getLearningGoal(id_learningGoal).getSingleElement());
 		if (!result.hasErrors())
-			//			if (created)
 			return "redirect:/degree/"+id_degree+"/competence/"+id_competence+".htm";
 		else{
 			return "redirect:/error.htm";

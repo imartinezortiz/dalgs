@@ -2,7 +2,6 @@ package es.ucm.fdi.dalgs.group.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -244,9 +243,12 @@ public class GroupService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteUserGroup(Long id_group,Long id_user) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		//Group g = daoGroup.getGroup(id_group);
+		Group g = daoGroup.getGroup(id_group);
 		
-		//TODO 
+		//TODO
+		g.getProfessors().remove(serviceUser.getUser(id_user));
+		
+		result = this.modifyGroup(g, id_group);
 		
 		if(!result.hasErrors()){
 			User u = serviceUser.getUser(id_user);

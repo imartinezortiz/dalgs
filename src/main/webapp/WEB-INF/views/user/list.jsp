@@ -19,13 +19,29 @@
 				Add 
 			</a>
 			</sec:authorize>
+			<c:choose>
+   				<c:when  test="${model.showAll eq true}">
+					<a
+						href="<c:url value='/user/page/${model.currentPage}.htm?showAll=false&typeOfUser=${model.typeOfUser}'>
+    						</c:url>">
+						<img
+						src="<c:url value="/resources/images/theme/trash_open.png" /> "
+						style="float: right; margin-top: -1; margin-right: 1%;">
+					</a>
+				</c:when>
+    			<c:otherwise>
+   					<a href="<c:url value='/user/page/${model.currentPage}.htm?showAll=true&typeOfUser=${model.typeOfUser}'>
+    							</c:url>">
+			 			<img src="<c:url value="/resources/images/theme/trash_close.png" /> " 
+			 			 style="float: right; margin-right: 1%;margin-top: 3;"></a> 
+				</c:otherwise>
+			</c:choose>
 		</div>
 		<table class="table table-striped table-bordered">
 					<tr align="center">
 						<td><div class="td-label">Last Name</div></td>
 						<td><div class="td-label">First Name</div></td>
 						<td><div class="td-label">Email</div></td>
-						<td><div class="td-label">Status</div></td>
 
 					</tr>
 					<c:forEach items="${model.users}" var="user">
@@ -43,38 +59,27 @@
 									<c:out value="${user.email}" />
 								</div>
 							</td>
-								<td>
-								<div class="td-content">
-									<c:choose>
-      									<c:when test="${user.enabled}">Enabled
-      									<br />
-      									</c:when>
-
-      									<c:otherwise>Disabled.
-      									<br />
-      									</c:otherwise>
-									</c:choose>
-								</div>
-							</td>
-
-							<td><a class="btn btn-success"
-								href="<c:url value='/user/${user.id}.htm'/>"> View </a> 
-						<sec:authorize access="hasRole('ROLE_ADMIN')">
-									
-									<a class="btn btn-danger"
-										href="<c:url value='/user/${user.id}/status.htm'/>">
-									<c:choose>
-      									<c:when test="${user.enabled}">
-      									 Disabled
-				
-      									</c:when>
-
-      									<c:otherwise>
-										Enabled
-      									</c:otherwise>
-									</c:choose>
-									</a>
-								</sec:authorize></td>
+		
+							<td>
+							<c:choose>
+   								<c:when  test="${user.enabled eq true}">
+   									<a class="btn btn-success" href="<c:url value='/user/${user.id}.htm'/>"> View </a> 
+										<sec:authorize access="hasRole('ROLE_ADMIN')">
+											<a class="btn btn-danger" href="<c:url value='/user/${user.id}/status.htm'/>">
+											Disabled</a>
+										</sec:authorize>
+      							</c:when>	
+								<c:otherwise>
+										<sec:authorize access="hasRole('ROLE_ADMIN')">
+											<a class="btn btn-danger" href="<c:url value='/user/${user.id}/status.htm'/>">
+											Enabled</a>
+										</sec:authorize>
+								</c:otherwise>
+							</c:choose>
+							
+							
+							
+								</td>
 
 						</tr>
 					</c:forEach>

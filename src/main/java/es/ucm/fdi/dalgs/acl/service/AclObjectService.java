@@ -66,7 +66,7 @@ public class AclObjectService {
 		acl.insertAce(1, BasePermission.DELETE, new GrantedAuthoritySid(
 				"ROLE_ADMIN"), true);
 
-		// Acceso de lectura a todos los usuarios con ROLE_USER
+		// READ access for users with ROLE_USER
 		acl.insertAce(2, BasePermission.READ, new GrantedAuthoritySid(
 				"ROLE_USER"), true);
 
@@ -139,8 +139,6 @@ public class AclObjectService {
 			else aceIndex++;
 		}
 
-		// acl.insertAce(acl.getEntries().size(), p, sid, true);
-
 		// Now grant some permissions via an access control entry (ACE)
 		if(acl !=null)mutableAclService.updateAcl(acl);
 	}
@@ -176,8 +174,6 @@ public class AclObjectService {
 				else  aceIndex++;
 			}
 		}
-
-		// acl.insertAce(acl.getEntries().size(), p, sid, true);
 
 		// Now grant some permissions via an access control entry (ACE)
 		if(acl !=null)	mutableAclService.updateAcl(acl);

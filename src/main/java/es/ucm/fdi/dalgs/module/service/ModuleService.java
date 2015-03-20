@@ -81,7 +81,6 @@ public class ModuleService {
 		return result;
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@PreAuthorize("hasPermission(#module, 'WRITE') or hasPermission(#module, 'ADMINISTRATION')")
 	@Transactional(readOnly=false)
 	public ResultClass<Boolean> modifyModule(Module module, Long id_module, Long id_degree) {
@@ -122,12 +121,10 @@ public class ModuleService {
 		return result;
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PreAuthorize("hasPermission(#module, 'DELETE') or hasPermission(#module, 'ADMINISTRATION')" )
 	@Transactional(readOnly=false)
 	public ResultClass<Boolean> deleteModule(Module module) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-//		Module module = daoModule.getModule(id);
 		if(serviceTopic.deleteTopicsForModule(module).getSingleElement()){
 			result.setSingleElement(daoModule.deleteModule(module));
 			return result;

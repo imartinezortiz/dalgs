@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import es.ucm.fdi.dalgs.classes.CharsetString;
@@ -39,27 +40,56 @@ public class UserController {
 	@Autowired
 	private GroupService serviceGroup;
 
+
+	private Boolean showAll;
+	public Boolean getShowAll() {
+		return showAll;
+	}
+
+	public void setShowAll(Boolean showAll) {
+		this.showAll = showAll;
+	}
+	
+	private String typeOfUser ="";
+	
+	
+	public String getTypeOfUser() {
+		return typeOfUser;
+	}
+
+	public void setTypeOfUser(String typeOfUser) {
+		this.typeOfUser = typeOfUser;
+	}
+
 	/**
 	 * Methods for list academic terms of a term
 	 */
 	@RequestMapping(value = "/user/page/{pageIndex}.htm")
-	protected ModelAndView formViewAUsers(
-			@PathVariable("pageIndex") Integer pageIndex)
+	protected ModelAndView getUsersGET(
+			@PathVariable("pageIndex") Integer pageIndex,
+			@RequestParam(value = "showAll", defaultValue = "false") Boolean show,
+			@RequestParam(value = "typeOfUser") String typeOfUser)
 			throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		List<User> p = serviceUser.getAll(pageIndex);
+		
+		List<User> p = serviceUser.getAll(pageIndex, show, typeOfUser);
 
 		myModel.put("users", p);
 		myModel.put("numberOfPages", serviceUser.numberOfPages());
 		myModel.put("currentPage", pageIndex);
+		myModel.put("showAll", show);
+		myModel.put("typeOfUser", typeOfUser);
 
+		
+		setTypeOfUser(typeOfUser);
+		setShowAll(show);
 		return new ModelAndView("user/list", "model", myModel);
 	}
 	
 	@RequestMapping(value = "/user/{userId}.htm", method = RequestMethod.GET)
-	protected ModelAndView formViewAUser(@PathVariable("userId") Long id_user)
+	protected ModelAndView getUserGET(@PathVariable("userId") Long id_user)
 			throws ServletException {
 		
 		Map<String, Object> myModel = new HashMap<String, Object>();
@@ -87,7 +117,7 @@ public class UserController {
 	 * Methods for add a single user
 	 */
 	@RequestMapping(value = "/user/add.htm", method = RequestMethod.GET)
-	protected String getAddNewUserForm(Model model) {
+	protected String addUserGET(Model model) {
 
 		User user = new User();
 		
@@ -111,7 +141,7 @@ public class UserController {
 
 	@RequestMapping(value = "/user/add.htm", method = RequestMethod.POST)
 	// Every Post have to return redirect
-	public String processAddNewUser(
+	public String addUserPOST(
 			@ModelAttribute("addUser") @Valid User user,
 			BindingResult result, Model model) {
 
@@ -123,7 +153,7 @@ public class UserController {
 
 			boolean created = serviceUser.addUser(user);
 			if (created)
-				return "redirect:/user/page/0.htm";
+				return "redirect:/user/page/0.htm?showAll="+ showAll+ "&typeOfUser="+typeOfUser;
 			else
 				return "redirect:/user/add.htm";
 		}
@@ -168,7 +198,7 @@ public class UserController {
  		else user.setEnabled(true);
  		
  		if (serviceUser.saveUser(user)) {
-			return "redirect:/user/page/0.htm";
+			return "redirect:/user/page/0.htm?showAll="+ showAll+ "&typeOfUser="+typeOfUser;
 		} else
 			return "redirect:/error.htm";
 	}
