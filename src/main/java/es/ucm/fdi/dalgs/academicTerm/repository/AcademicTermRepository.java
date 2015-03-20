@@ -57,14 +57,7 @@ public class AcademicTermRepository{
 		}
 	}
 
-	/*
-	 * @SuppressWarnings("unchecked") public List<AcademicTerm> getAll() {
-	 * 
-	 * return em.createQuery(
-	 * "select a from AcademicTerm a inner join a.degree d order by a.id")
-	 * .getResultList(); }
-	 */
-
+	
 	public boolean saveAcademicTerm(AcademicTerm academicTerm) {
 		try {
 			em.merge(academicTerm);
@@ -84,9 +77,6 @@ public class AcademicTermRepository{
 		if (showAll) query =em.createQuery("select a from AcademicTerm a  order by a.term DESC");
 		else query =em.createQuery("select a from AcademicTerm a  where a.isDeleted='false' order by a.term DESC");
 
-
-		// query.setParameter(1, term);
-
 		if (query.getResultList().isEmpty())
 			return null;
 
@@ -96,7 +86,6 @@ public class AcademicTermRepository{
 	}
 
 	public boolean deleteAcademicTerm(Long id_academic) {
-		// Degree degree = em.getReference(Degree.class, id_degree);
 
 		AcademicTerm academic = em
 				.getReference(AcademicTerm.class, id_academic);
@@ -105,7 +94,6 @@ public class AcademicTermRepository{
 		try {
 
 			em.merge(academic);
-			// em.remove(academicTerm);
 			return true;
 
 		} catch (Exception e) {
@@ -121,16 +109,14 @@ public class AcademicTermRepository{
 
 		if (query.getResultList().isEmpty())
 			return false;
-		else
-			return true;
+		
+		return true;
 	}
 
 
 	
 	public AcademicTerm getAcademicTermById(Long id) {
-
 		return em.find(AcademicTerm.class, id);
-
 	}
 
 
@@ -164,8 +150,6 @@ public class AcademicTermRepository{
 
 	@SuppressWarnings("unchecked")
 	public List<AcademicTerm> getAcademicTermsByDegree(Degree  degree) {
-//		Degree degree = em.getReference(Degree.class, id_degree);
-
 		Query query = em
 				.createQuery("select a from AcademicTerm a where a.isDeleted='false' and  a.degree=?1");
 		query.setParameter(1, degree);
@@ -176,18 +160,10 @@ public class AcademicTermRepository{
 
 	public AcademicTerm exists(String term, Degree degree) {
 		Query query = null;
-//		if(id_academic!=null) {
 			query = em.createQuery("select a from AcademicTerm a where  a.term=?1 and a.degree = ?2");
 			query.setParameter(1, term);
 			query.setParameter(2, degree);
-//			query.setParameter(3, id_academic);
-//		}
-//		else{
-//			query = em.createQuery("select a from AcademicTerm a where  a.term=?1 and a.degree = ?2");
-//			query.setParameter(1, term);
-//			query.setParameter(2, degree);
-//		}
-		
+
 		if (query.getResultList().isEmpty())
 			return null;
 		else return (AcademicTerm)query.getSingleResult();

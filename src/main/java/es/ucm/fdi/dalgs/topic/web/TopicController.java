@@ -41,9 +41,7 @@ public class TopicController {
 	 * methods for adding topics
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/add.htm", method = RequestMethod.GET)
-	public String getAddNewTopicForm(Model model, @PathVariable("degreeId") Long id_degree) {
-		//		Topic newTopic = new Topic();
-		// newDegree.setCode(serviceDegree.getNextCode());
+	public String addTopicGET(Model model, @PathVariable("degreeId") Long id_degree) {
 		if(!model.containsAttribute("topic"))
 			model.addAttribute("topic", new Topic());
 		model.addAttribute("valueButton", "Add");
@@ -51,8 +49,7 @@ public class TopicController {
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/add.htm", method = RequestMethod.POST, params="Add")
-	// Every Post have to return redirect
-	public String processAddNewTopic(
+	public String addTopicPOST(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@ModelAttribute("topic") Topic newTopic,
@@ -62,7 +59,6 @@ public class TopicController {
 
 			ResultClass<Topic> result = serviceTopic.addTopic(newTopic, id_module);
 			if (!result.hasErrors())
-				//		if (created)
 				return "redirect:/degree/" + id_degree + "/module/" + id_module + ".htm";
 			else{
 
@@ -122,7 +118,7 @@ public class TopicController {
 	 * Methods for modify topics
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/modify.htm", method = RequestMethod.POST)
-	public String formModifyTopic(
+	public String modifyTopicPOST(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
@@ -134,13 +130,8 @@ public class TopicController {
 		if (!resultBinding.hasErrors()){	
 			ResultClass<Boolean> result = serviceTopic.modifyTopic(modify, id_topic, id_module);
 			if (!result.hasErrors())
-				//			if (created)
 				return "redirect:/degree/" + id_degree + "/module/" + id_module + ".htm";
 			else{
-				//			attr.addAttribute("modifyTopic", modify);
-				//			if (result.isElementDeleted()){
-				//				attr.addAttribute("addTopic", modify);
-				//				attr.addAttribute("unDelete", true); 
 				attr.addFlashAttribute("errors", result.getErrorsList());
 
 
@@ -157,7 +148,7 @@ public class TopicController {
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/modify.htm", method = RequestMethod.GET)
-	protected String formModifyTopics(
+	protected String modifyTopicGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
@@ -177,7 +168,7 @@ public class TopicController {
 	 */
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/delete.htm", method = RequestMethod.GET)
-	public String formDeleteTopics(@PathVariable("topicId") Long id_topic,
+	public String deleteTopicGET(@PathVariable("topicId") Long id_topic,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("degreeId") Long id_degree)
 					throws ServletException {
@@ -192,15 +183,13 @@ public class TopicController {
 	 * Methods for view topics
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}.htm", method = RequestMethod.GET)
-	protected ModelAndView formViewTopic(@PathVariable("topicId") Long id_topic,
+	protected ModelAndView getTopicGET(@PathVariable("topicId") Long id_topic,
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean show)
 					throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
-
-		// Degree p = serviceDegree.getDegree(id);
 
 		Topic p = serviceTopic.getTopicAll(id_topic, show).getSingleElement();
 		myModel.put("showAll", show);
@@ -219,7 +208,6 @@ public class TopicController {
 			@PathVariable("topicId") Long id_topic) {
 		ResultClass<Topic> result = serviceTopic.unDeleteTopic(serviceTopic.getTopic(id_topic).getSingleElement(), id_module);
 		if (!result.hasErrors())
-			//			if (created)
 			return "redirect:/degree/"+id_degree+"/module/"+id_module+".htm";
 		else{
 			return "redirect:/error.htm";

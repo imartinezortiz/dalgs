@@ -74,7 +74,6 @@ public class TopicRepository {
 
 	public boolean deleteTopic(Topic topic) {
 		try {
-			//			Topic topic = em.getReference(Topic.class, id_topic);
 			topic.setDeleted(true);
 			em.merge(topic);
 

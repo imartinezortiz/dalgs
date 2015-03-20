@@ -32,6 +32,7 @@
 					<p class="details">${model.userDetails.email}</p>
 				</div>
 			</div>
+		</div>
 	</div>
 </body>
 </html>

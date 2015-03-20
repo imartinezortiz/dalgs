@@ -203,6 +203,9 @@ public class GroupService {
 	public ResultClass<Boolean> setProfessors(Group group, Long id_group) {
 		ResultClass<Boolean> result = new ResultClass<>();
 		Group modifyGroup = daoGroup.getGroup(id_group);
+		
+		Collection<User> old_professors = modifyGroup.getProfessors();  //To delete old ACL permissions
+		
 		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
 		modifyGroup.setProfessors(group.getProfessors());
 		result.setSingleElement(result.hasErrors());
@@ -210,6 +213,10 @@ public class GroupService {
 		
 		if (!result.hasErrors()) {
 			result.setSingleElement(true);
+			
+			// Deleting the authorities to the old professor list
+			if(!old_professors.isEmpty()) 
+				manageAclService.removePermissionToAnObjectCollection(old_professors, modifyGroup.getId(), modifyGroup.getClass().getName());
 			// Adding the authorities to the professor list
 			manageAclService.addPermissionToAnObjectCollection(modifyGroup.getProfessors(), modifyGroup.getId(), modifyGroup.getClass().getName());
 			
@@ -236,9 +243,12 @@ public class GroupService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteUserGroup(Long id_group,Long id_user) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		//Group g = daoGroup.getGroup(id_group);
+		Group g = daoGroup.getGroup(id_group);
 		
-		//TODO 
+		//TODO
+		g.getProfessors().remove(serviceUser.getUser(id_user));
+		
+		result = this.modifyGroup(g, id_group);
 		
 		if(!result.hasErrors()){
 			User u = serviceUser.getUser(id_user);

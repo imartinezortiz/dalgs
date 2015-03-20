@@ -37,8 +37,8 @@ public class UserService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public List<User> getAll(Integer pageIndex) {
-		return daoUser.getAll(pageIndex);
+	public List<User> getAll(Integer pageIndex, Boolean showAll, String typeOfUser) {
+		return daoUser.getAll(pageIndex,showAll,typeOfUser);
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -76,10 +76,8 @@ public class UserService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	// , propagation = Propagation.REQUIRED)
 	public boolean uploadCVS(UploadForm upload) {
 		CsvPreference prefers =
-		// new CsvPreference.Builder('"', ';',"\n").build();
 		new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload
 				.getDelimiterChar().charAt(0), upload.getEndOfLineSymbols())
 				.build();
@@ -89,7 +87,7 @@ public class UserService {
 			FileItem fileItem = upload.getFileData().getFileItem();
 			UserUpload userUpload = new UserUpload();
 			list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
-					upload.getCharset(), prefers);// getInputStream().toString()
+					upload.getCharset(), prefers);
 
 			return daoUser.persistALotUsers(list);
 

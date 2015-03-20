@@ -63,6 +63,7 @@ public class User implements UserDetails, CredentialsContainer{
 	//  User Credentials
 	private String salt;
 
+	@Column(name = "enabled")
 	private boolean enabled;
 
 	private boolean accountNonExpired;

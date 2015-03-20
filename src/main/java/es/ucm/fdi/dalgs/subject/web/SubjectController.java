@@ -51,7 +51,7 @@ public class SubjectController {
 	 */
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/delete.htm", method = RequestMethod.GET)
-	public String formDeleteSubjectFromTopic(
+	public String deleteSubjectGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
@@ -67,12 +67,9 @@ public class SubjectController {
 	 * Methods for adding subjects
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/add.htm", method = RequestMethod.GET)
-	protected String getAddNewActivityForm(Model model,
+	protected String addSubjectGET(Model model,
 			@PathVariable("degreeId") Long id_degree) {
-		//		Subject newSubject = new Subject();
-		// newSubject.setCode(serviceSubject.getNextCode());
-
-		// newSubject.setDegree(serviceDegree.getDegree(id));
+		
 		if(!model.containsAttribute("subject"))
 			model.addAttribute("subject", new Subject());
 		model.addAttribute("valueButton", "Add");
@@ -82,7 +79,7 @@ public class SubjectController {
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/add", method = RequestMethod.POST, params="Add")
 	// Every Post have to return redirect
-	public String processAddNewSubject(
+	public String addSubjectPOST(
 			@ModelAttribute("subject") Subject newSubject,
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
@@ -93,7 +90,6 @@ public class SubjectController {
 
 			ResultClass<Subject> result = serviceSubject.addSubject(newSubject, id_topic);
 			if (!result.hasErrors())
-				//		if (created)
 				return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
 			else{
 
@@ -118,7 +114,7 @@ public class SubjectController {
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/add", method = RequestMethod.POST, params="Undelete")
 	// Every Post have to return redirect
-	public String undeleteDegree(
+	public String undeleteSubject(
 			@ModelAttribute("subject") Subject subject, 
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
@@ -151,7 +147,7 @@ public class SubjectController {
 	 * Methods for modify subjects
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/modify.htm", method = RequestMethod.POST)
-	public String formModifySubjectFromDegree(
+	public String modifySubjectPOST(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
@@ -164,19 +160,11 @@ public class SubjectController {
 
 			ResultClass<Boolean> result = serviceSubject.modifySubject(modify, id_subject);
 			if (!result.hasErrors())
-				//				if (created)
 				return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
-			else{
-				//			attr.addAttribute("modifySubject", modify);
-				//			if (result.isElementDeleted()){
-				//				attr.addAttribute("addsubject", modify);
-				//				attr.addAttribute("unDelete", true); 
+			else
 				attr.addFlashAttribute("errors", result.getErrorsList());
-
-			}	
-			
-
 		}
+		
 		else{
 			attr.addFlashAttribute(
 					"org.springframework.validation.BindingResult.topic",
@@ -190,23 +178,19 @@ public class SubjectController {
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/modify.htm", method = RequestMethod.GET)
-	protected String formModifySubjectFromDegree(
+	protected String modifySubjectGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
 			@PathVariable("subjectId") Long id_subject,
 			Model model) throws ServletException {
-//		ModelAndView model = new ModelAndView();
+
 		if (!model.containsAttribute("subject")){
-
 			Subject p = serviceSubject.getSubject(id_subject).getSingleElement();
-
 			model.addAttribute("subject", p);
 		}
-//		model.addObject("competences", p.getCompetences());
-//		model.setViewName("/subject/modify");
-			model.addAttribute("valueButton", "Modify");
 
+		model.addAttribute("valueButton", "Modify");
 		return "subject/form";
 	}
 
@@ -214,7 +198,7 @@ public class SubjectController {
 	 * Methods for view subjects
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}.htm", method = RequestMethod.GET)
-	protected ModelAndView formViewSubject(
+	protected ModelAndView getSubjectGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("subjectId") Long id_subject) throws ServletException {
 
@@ -236,7 +220,7 @@ public class SubjectController {
 	 */
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/competence/{competenceId}/delete.htm", method = RequestMethod.GET)
-	public String formDeleteCompetenceFromSubject(
+	public String deleteCompetenceFromSubjectGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("moduleId") Long id_topic,
@@ -252,7 +236,7 @@ public class SubjectController {
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/addCompetences.htm", method = RequestMethod.GET)
-	protected String getAddNewCompetenceForm(
+	protected String addCompetenceToSubjectGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("subjectId") Long id_subject, Model model) {
 
@@ -268,19 +252,13 @@ public class SubjectController {
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/addCompetences.htm", method = RequestMethod.POST)
 	// Every Post have to return redirect
-	public String processAddNewCompetence(
+	public String addCompetenceToSubjectPOST(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("moduleId") Long id_topic,
 			@PathVariable("subjectId") Long id_subject,
 			@ModelAttribute("subject") Subject subject, BindingResult result,
 			Model model) {
-
-		// Subject aux = serviceSubject.getSubject(id_subject);
-
-		// subject.setId(id_subject);
-
-		// subject.setDegree(aux.getDegree());
 
 		if (!result.hasErrors()){
 			try {
@@ -303,7 +281,6 @@ public class SubjectController {
 		
 		ResultClass<Subject> result = serviceSubject.unDeleteSubject(serviceSubject.getSubject(id_subject).getSingleElement());
 		if (!result.hasErrors())
-			//			if (created)
 			return "redirect:/degree/"+id_degree+"/module/"+id_module+".htm";
 		else{
 			return "redirect:/error.htm";

@@ -44,9 +44,8 @@ public class ModuleController {
 	 * methods for adding modules
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/add.htm", method = RequestMethod.GET)
-	public String getAddNewModuleForm(Model model, @PathVariable("degreeId") Long id_degree) {
-		//		Module newModule = new Module();
-		// newDegree.setCode(serviceDegree.getNextCode());
+	public String addModuleGET(Model model, @PathVariable("degreeId") Long id_degree) {
+
 		if(!model.containsAttribute("module"))
 			model.addAttribute(new Module());
 		model.addAttribute("valueButton", "Add");
@@ -55,7 +54,7 @@ public class ModuleController {
 
 	@RequestMapping(value = "/degree/{degreeId}/module/add.htm", method = RequestMethod.POST, params="Add")
 	// Every Post have to return redirect
-	public String processAddNewModule(
+	public String addModulePOST(
 			@PathVariable("degreeId") Long id_degree,
 			@ModelAttribute("module") Module newModule,
 			BindingResult resultBinding, RedirectAttributes attr) {
@@ -63,17 +62,14 @@ public class ModuleController {
 		if (!resultBinding.hasErrors()){
 			ResultClass<Module> result = serviceModule.addModule(newModule, id_degree);
 			if (!result.hasErrors())
-				//		if (created)
 				return "redirect:/degree/" +id_degree+ ".htm";		
 			else{
-				//			model.addAttribute("addModule", result.getSingleElement());
 				if (result.isElementDeleted()){
 					attr.addFlashAttribute("unDelete", result.isElementDeleted()); 
 					attr.addFlashAttribute("module", result.getSingleElement());
-
-					//			model.addAttribute("valueButton", "Add");
 				}
 				else attr.addFlashAttribute("module", newModule);
+				
 				attr.addFlashAttribute("errors", result.getErrorsList());
 			}
 		}else{
@@ -89,7 +85,7 @@ public class ModuleController {
 
 	@RequestMapping(value = "/degree/{degreeId}/module/add.htm", method = RequestMethod.POST, params="Undelete")
 	// Every Post have to return redirect
-	public String undeleteDegree(
+	public String undeleteModulePOST(
 			@ModelAttribute("module") Module module,
 			@PathVariable("degreeId") Long id_degree,
 			BindingResult resultBinding, RedirectAttributes attr) {
@@ -102,10 +98,9 @@ public class ModuleController {
 				return "redirect:/degree/" + id_degree +  "/module/" + result.getSingleElement().getId() + "/modify.htm";
 			
 			}else{
-				//			attr.addFlashAttribute("module", module);
 				if (result.isElementDeleted())
 					attr.addAttribute("unDelete", true); 
-				//			model.addAttribute("valueButton", "Add");
+
 				attr.addFlashAttribute("errors", result.getErrorsList());
 
 			}
@@ -124,7 +119,7 @@ public class ModuleController {
 	 * Methods for modify modules
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/modify.htm", method = RequestMethod.POST)
-	public String formModifyModule(
+	public String modifyModulePOST(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@ModelAttribute("module") Module modify,
@@ -136,18 +131,8 @@ public class ModuleController {
 			if (!result.hasErrors())
 
 				return "redirect:/degree/" + id_degree + ".htm";
-			else{
-				//			attr.addAttribute("modifyModule", modify);
-				//			if (result.isElementDeleted()){
-				//
-				//				attr.addAttribute("addModule", modify);
-				//				//					model.addAttribute("unDelete", true); 
+			else{ 
 				attr.addFlashAttribute("errors", result.getErrorsList());
-				//				attr.addAttribute("valueButton", "Modify");
-
-				//			}	
-//				attr.addAttribute("errors", result.getErrorsList());
-
 			}
 		}
 		else{
@@ -162,7 +147,7 @@ public class ModuleController {
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/modify.htm", method = RequestMethod.GET)
-	protected String formModifyModules(
+	protected String modifyModuleGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			Model model)
@@ -174,7 +159,6 @@ public class ModuleController {
 			model.addAttribute("module", p);
 		}	
 		model.addAttribute("valueButton", "Modify");
-		//		model.setViewName("module/add");
 
 		return "module/form";
 	}
@@ -184,7 +168,7 @@ public class ModuleController {
 	 */
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/delete.htm", method = RequestMethod.GET)
-	public String formDeleteModules(@PathVariable("moduleId") Long id_module,
+	public String deleteModuleGET(@PathVariable("moduleId") Long id_module,
 			@PathVariable("degreeId") Long id_degree)
 					throws ServletException {
 
@@ -199,21 +183,18 @@ public class ModuleController {
 	 * Methods for view modules
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}.htm", method = RequestMethod.GET)
-	protected ModelAndView formViewModule(@PathVariable("moduleId") Long id_module,
+	protected ModelAndView getModuleGET(@PathVariable("moduleId") Long id_module,
 			@PathVariable("degreeId") Long id_degree,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean show)
 					throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		// Degree p = serviceDegree.getDegree(id);
-
 		Module p = serviceModule.getModuleAll(id_module, show).getSingleElement();
 		myModel.put("showAll", show);
 		myModel.put("module", p);
 		if (p.getTopics() != null)
 			myModel.put("topics", p.getTopics());
-		//		myModel.put("moduleId", p.getId());
 
 		return new ModelAndView("module/view", "model", myModel);
 	}
@@ -224,7 +205,6 @@ public class ModuleController {
 			@PathVariable("moduleId") Long id_module) {
 		ResultClass<Module> result = serviceModule.unDeleteModule(serviceModule.getModule(id_module).getSingleElement(), id_degree);
 		if (!result.hasErrors())
-			//			if (created)
 			return "redirect:/degree/"+id_degree+".htm";
 		else{
 			return "redirect:/error.htm";

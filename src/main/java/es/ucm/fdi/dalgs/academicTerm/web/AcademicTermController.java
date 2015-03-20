@@ -296,9 +296,7 @@ public class AcademicTermController {
 
 		this.validate(newTerm, bindingResult);
 
-		if ((!bindingResult.hasErrors())
-				|| (bindingResult.hasErrors() && bindingResult.getFieldError()
-						.getField().equals("degree"))) {
+		if (!bindingResult.hasErrors()) {
 
 			ResultClass<Boolean> resultReturned = serviceAcademicTerm
 					.modifyAcademicTerm(newTerm, id_academic);

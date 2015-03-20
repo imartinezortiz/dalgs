@@ -21,10 +21,10 @@ import es.ucm.fdi.dalgs.module.service.ModuleService;
 
 @Service
 public class DegreeService {
-	
+
 	@Autowired
 	private AclObjectService manageAclService;
-	
+
 	@Autowired
 	private DegreeRepository daoDegree;
 
@@ -37,47 +37,47 @@ public class DegreeService {
 	@Autowired
 	private AcademicTermService serviceAcademicTerm;
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
-	@Transactional(readOnly=false)
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = false)
 	public ResultClass<Degree> addDegree(Degree degree) {
-		
+
 		boolean success = false;
 
-		
 		Degree degreeExists = daoDegree.existByCode(degree.getInfo().getCode());
 		ResultClass<Degree> result = new ResultClass<Degree>();
 		Collection<String> errors = new ArrayList<String>();
-		if( degreeExists != null){
+		if (degreeExists != null) {
 			result.setHasErrors(true);
-			
+
 			errors.add("Code already exists");
 
-			if (degreeExists.getIsDeleted()){
+			if (degreeExists.getIsDeleted()) {
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
 				result.setSingleElement(degreeExists);
 			}
 			result.setErrorsList(errors);
-		}
-		else if ( degree.getInfo().getCode()==null){
+		} else if (degree.getInfo().getCode() == null) {
 			errors.add("Code necessary");
 
-		}
-		else{
-			
+		} else {
+
 			success = daoDegree.addDegree(degree);
-			
-			if(success){
-				degreeExists = daoDegree.existByCode(degree.getInfo().getCode());
-				success = manageAclService.addAclToObject(degreeExists.getId(), degreeExists.getClass().getName());
-				if (success) result.setSingleElement(degreeExists);
+
+			if (success) {
+				degreeExists = daoDegree
+						.existByCode(degree.getInfo().getCode());
+				success = manageAclService.addAclToObject(degreeExists.getId(),
+						degreeExists.getClass().getName());
+				if (success)
+					result.setSingleElement(degreeExists);
 
 			} else {
 				errors.add("Cannot create ACL. Object not set");
 			}
-			
+
 		}
-			
+
 		return result;
 
 	}
@@ -90,7 +90,6 @@ public class DegreeService {
 		result.addAll(daoDegree.getDegrees(pageIndex, showAll));
 		return result;
 	}
-	
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ')")
@@ -98,9 +97,8 @@ public class DegreeService {
 	public ResultClass<Degree> getAll() {
 		ResultClass<Degree> result = new ResultClass<>();
 		result.addAll(daoDegree.getAll());
-//		result.setE(daoDegree.getAll());
 		return result;
-	
+
 	}
 
 	@PreAuthorize("hasPermission(#degree, 'WRITE') or hasPermission(#degree, 'ADMINISTRATION')")
@@ -109,42 +107,33 @@ public class DegreeService {
 		ResultClass<Boolean> result = new ResultClass<>();
 
 		Degree modifydegree = daoDegree.getDegree(id_degree);
-		
+
 		Degree degreeExists = daoDegree.existByCode(degree.getInfo().getCode());
-		
-		if(!degree.getInfo().getCode().equalsIgnoreCase(modifydegree.getInfo().getCode()) && 
-				degreeExists != null){
+
+		if (!degree.getInfo().getCode()
+				.equalsIgnoreCase(modifydegree.getInfo().getCode())
+				&& degreeExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<>();
 			errors.add("New code already exists");
 
-			if (degreeExists.getIsDeleted()){
+			if (degreeExists.getIsDeleted()) {
 				result.setElementDeleted(true);
 				errors.add("Element is deleted");
 
 			}
 			result.setErrorsList(errors);
-		}
-		else{
+		} else {
 			modifydegree.setInfo(degree.getInfo());
 			boolean r = daoDegree.saveDegree(modifydegree);
-			if (r) 
+			if (r)
 				result.setSingleElement(true);
 		}
 		return result;
 
-		
 	}
 
-//	@PreAuthorize("hasRole('ROLE_USER')")
-//	@Transactional(readOnly = false)
-//	public ResultClass<Degree> getDegree(Long id) {
-//		ResultClass<Degree> result = new ResultClass<Degree>();
-//		result.setE(daoDegree.getDegree(id));
-//		return result;
-//	}
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PreAuthorize("hasPermission(#degree, 'DELETE') or hasPermission(#degree, 'ADMINISTRATION')" )
+	@PreAuthorize("hasPermission(#degree, 'DELETE') or hasPermission(#degree, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteDegree(Degree degree) {
 		ResultClass<Boolean> result = new ResultClass<>();
@@ -152,19 +141,24 @@ public class DegreeService {
 		boolean deleteCompetences = false;
 		boolean deleteAcademic = false;
 
-//		Degree degree = daoDegree.getDegree(id);
 		if (!degree.getModules().isEmpty())
-			deleteModules = serviceModule.deleteModulesForDegree(degree).getSingleElement();
+			deleteModules = serviceModule.deleteModulesForDegree(degree)
+					.getSingleElement();
 		if (!degree.getCompetences().isEmpty())
-			deleteCompetences = serviceCompetence.deleteCompetencesForDegree(degree).getSingleElement();
-		ResultClass<AcademicTerm> academicList = serviceAcademicTerm.getAcademicTermsByDegree(degree);
+			deleteCompetences = serviceCompetence.deleteCompetencesForDegree(
+					degree).getSingleElement();
+		ResultClass<AcademicTerm> academicList = serviceAcademicTerm
+				.getAcademicTermsByDegree(degree);
 
-		if(!academicList.isEmpty()) deleteAcademic = serviceAcademicTerm.deleteAcademicTermCollection(academicList).getSingleElement();
-		if ((deleteModules || degree.getModules().isEmpty()) && (deleteCompetences || degree.getCompetences().isEmpty())
-				&& (deleteAcademic || academicList.isEmpty())){
-			result.setSingleElement(daoDegree.deleteDegree(degree));	
+		if (!academicList.isEmpty())
+			deleteAcademic = serviceAcademicTerm.deleteAcademicTermCollection(
+					academicList).getSingleElement();
+		if ((deleteModules || degree.getModules().isEmpty())
+				&& (deleteCompetences || degree.getCompetences().isEmpty())
+				&& (deleteAcademic || academicList.isEmpty())) {
+			result.setSingleElement(daoDegree.deleteDegree(degree));
 			return result;
-		} else{
+		} else {
 			result.setSingleElement(false);
 			return result;
 		}
@@ -186,19 +180,19 @@ public class DegreeService {
 		return result;
 
 	}
-	public ResultClass<Degree> getDegree(Long id){
+
+	public ResultClass<Degree> getDegree(Long id) {
 		ResultClass<Degree> result = new ResultClass<>();
 		result.setSingleElement(daoDegree.getDegree(id));
 		return result;
-		
+
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-//	@PostAuthorize("hasPermission(returnObject, 'READ')")
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getDegreeAll(Long id, Boolean show) {
 		ResultClass<Degree> result = new ResultClass<Degree>();
-		
+
 		Degree d = daoDegree.getDegree(id);
 		d.setModules(serviceModule.getModulesForDegree(id, show));
 		d.setCompetences(serviceCompetence.getCompetencesForDegree(id, show));
@@ -211,15 +205,14 @@ public class DegreeService {
 	public ResultClass<Degree> unDeleteDegree(Degree degree) {
 		Degree d = daoDegree.existByCode(degree.getInfo().getCode());
 		ResultClass<Degree> result = new ResultClass<Degree>();
-		if(d == null){
+		if (d == null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
 			errors.add("Code doesn't exist");
 			result.setErrorsList(errors);
 
-		}
-		else{
-			if(!d.getIsDeleted()){
+		} else {
+			if (!d.getIsDeleted()) {
 				Collection<String> errors = new ArrayList<String>();
 				errors.add("Code is not deleted");
 				result.setErrorsList(errors);
@@ -229,11 +222,12 @@ public class DegreeService {
 			d.setInfo(degree.getInfo());
 			boolean r = daoDegree.saveDegree(d);
 			if (r)
-				result.setSingleElement(d);	
+				result.setSingleElement(d);
 
 		}
 		return result;
 	}
+
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<Integer> numberOfPages(Boolean showAll) {

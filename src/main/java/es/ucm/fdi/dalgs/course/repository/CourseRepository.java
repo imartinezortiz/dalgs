@@ -71,7 +71,6 @@ public class CourseRepository {
 
 	
 	public boolean deleteCourse(Course course) {
-//		Course course = em.getReference(Course.class, course2);
 		try {
 			course.setDeleted(true);
 			em.merge(course);
@@ -109,10 +108,8 @@ public class CourseRepository {
 		
 		query.setParameter(1, academic);
 
-//		if (query.getResultList().isEmpty())
-//			return null;
-//		else
-			return query.getResultList();
+
+		return query.getResultList();
 
 	}
 
@@ -187,10 +184,7 @@ public class CourseRepository {
 		
 		query.setParameter(1, subject);
 
-//		if (query.getResultList().isEmpty())
-//			return null;
-//		else
-			return query.getResultList();
+		return query.getResultList();
 	}
 
 	public Boolean deleteCoursesForSubject(Collection<Subject> subjects) {

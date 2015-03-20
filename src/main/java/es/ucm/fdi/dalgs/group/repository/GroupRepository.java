@@ -39,45 +39,34 @@ public class GroupRepository {
 		return em.find(Group.class, id_group);
 	}
 
-
-	public Group existByName(String name){//, Long id) {
+	public Group existByName(String name) {// , Long id) {
 		Query query = null;
-//		if (id!=null){
-//			query =em.createQuery("select g from Group g  where g.name = ?1 and g.id !=?2");
-//			query.setParameter(1, name);		
-//			query.setParameter(2, id);	
-//		}
-//		else{
-			query =em.createQuery("select g from Group g  where g.name = ?1");
-			query.setParameter(1, name);		
-//		}
+
+		query = em.createQuery("select g from Group g  where g.name = ?1");
+		query.setParameter(1, name);
 
 		if (query.getResultList().isEmpty())
 			return null;
 		else
-			return (Group)query.getSingleResult();
+			return (Group) query.getSingleResult();
 	}
 
 	@SuppressWarnings("unchecked")
 	public Collection<Group> getGroupsForCourse(Long id, Boolean showAll) {
 		Course course = em.getReference(Course.class, id);
 
-		if(!showAll){
+		if (!showAll) {
 			Query query = em
 					.createQuery("select g from Group g where g.course=?1 and g.isDeleted='false' ");
 			query.setParameter(1, course);
 			return query.getResultList();
-		}
-		else{
+		} else {
 			Query query = em
 					.createQuery("select g from Group g where g.course=?1");
 			query.setParameter(1, course);
 			return query.getResultList();
 
 		}
-
-
-
 
 	}
 
@@ -92,7 +81,6 @@ public class GroupRepository {
 		return true;
 	}
 
-
 	public boolean saveGroup(Group existGroup) {
 		try {
 			em.merge(existGroup);
@@ -103,9 +91,7 @@ public class GroupRepository {
 		return true;
 	}
 
-
 	public boolean deleteGroup(Group group) {
-//		Group group = em.getReference(Group.class, id_group);
 		try {
 			group.getProfessors().clear();
 			group.getStudents().clear();
@@ -118,7 +104,6 @@ public class GroupRepository {
 			return false;
 		}
 	}
-
 
 	public boolean deleteGroupsFromCourses(Collection<Course> coursesList) {
 		try {
@@ -137,10 +122,11 @@ public class GroupRepository {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<Group> getGroupsForStudent(Long id_student){
+	public Collection<Group> getGroupsForStudent(Long id_student) {
 		User user = em.getReference(User.class, id_student);
 
-		Query query = em.createQuery("select g from Group g join g.course c join c.subject join c.academicTerm join g.students s where s=?1 and g.isDeleted='false' ");
+		Query query = em
+				.createQuery("select g from Group g join g.course c join c.subject join c.academicTerm join g.students s where s=?1 and g.isDeleted='false' ");
 		query.setParameter(1, user);
 
 		if (query.getResultList().isEmpty())
@@ -148,12 +134,13 @@ public class GroupRepository {
 
 		return query.getResultList();
 	}
+
 	@SuppressWarnings("unchecked")
-	public Collection<Group> getGroupsForProfessor(Long id_professor){
+	public Collection<Group> getGroupsForProfessor(Long id_professor) {
 		User user = em.getReference(User.class, id_professor);
-		/*Query query = em.createQuery("SELECT s FROM Subject s JOIN s.topic t "
-				+ "JOIN t.module m JOIN m.degree d WHERE d = ?1");*/
-		Query query = em.createQuery("select g from Group g join g.course c join c.subject join c.academicTerm join g.professors s where s=?1 and g.isDeleted='false' ");
+
+		Query query = em
+				.createQuery("select g from Group g join g.course c join c.subject join c.academicTerm join g.professors s where s=?1 and g.isDeleted='false' ");
 		query.setParameter(1, user);
 
 		if (query.getResultList().isEmpty())
@@ -162,7 +149,7 @@ public class GroupRepository {
 		return query.getResultList();
 	}
 
-	//TODO
+	// TODO
 	public boolean deleteUserGroup(Group g, Long id_user) {
 		return false;
 	}

@@ -40,36 +40,33 @@ public class DegreeController {
 
 	@RequestMapping(value = "/degree/add.htm", method = RequestMethod.GET)
 	public String addDegreeGET(Model model) {
-		//		Degree newDegree = new Degree();
-		// newDegree.setCode(serviceDegree.getNextCode());
 		if (!model.containsAttribute("degree"))
 			model.addAttribute("degree", new Degree());
-		model.addAttribute("valueButton", "Add" );
+		model.addAttribute("valueButton", "Add");
 		return "degree/form";
 	}
 
-	@RequestMapping(value = "/degree/add.htm", method = RequestMethod.POST, params="Add")
+	@RequestMapping(value = "/degree/add.htm", method = RequestMethod.POST, params = "Add")
 	// Every Post have to return redirect
-	public String addDegreePOST(
-			@ModelAttribute("addDegree") Degree newDegree, 
+	public String addDegreePOST(@ModelAttribute("addDegree") Degree newDegree,
 			BindingResult resultBinding, RedirectAttributes attr) {
 
-		if (!resultBinding.hasErrors()){
+		if (!resultBinding.hasErrors()) {
 			ResultClass<Degree> result = serviceDegree.addDegree(newDegree);
 			if (!result.hasErrors())
-				//		if (created)
-				return "redirect:/degree/page/0.htm?showAll="+showAll;
-			else{
+				return "redirect:/degree/page/0.htm?showAll=" + showAll;
+			else {
 
-				if (result.isElementDeleted()){
-					attr.addFlashAttribute("unDelete", result.isElementDeleted()); 
+				if (result.isElementDeleted()) {
+					attr.addFlashAttribute("unDelete",
+							result.isElementDeleted());
 					attr.addFlashAttribute("degree", result.getSingleElement());
-				}
-				else attr.addFlashAttribute("degree", newDegree);
+				} else
+					attr.addFlashAttribute("degree", newDegree);
 				attr.addFlashAttribute("errors", result.getErrorsList());
 
 			}
-		}else{
+		} else {
 			attr.addFlashAttribute(
 					"org.springframework.validation.BindingResult.degree",
 					resultBinding);
@@ -79,27 +76,27 @@ public class DegreeController {
 		return "redirect:/degree/add.htm";
 	}
 
-	@RequestMapping(value = "/degree/add.htm", method = RequestMethod.POST, params="Undelete")
+	@RequestMapping(value = "/degree/add.htm", method = RequestMethod.POST, params = "Undelete")
 	// Every Post have to return redirect
-	public String undeleteDegree(
-			@ModelAttribute("degree") Degree degree,
+	public String undeleteDegree(@ModelAttribute("degree") Degree degree,
 			BindingResult resultBinding, RedirectAttributes attr) {
 
-		if (!resultBinding.hasErrors()){
+		if (!resultBinding.hasErrors()) {
 			ResultClass<Degree> result = serviceDegree.unDeleteDegree(degree);
 
-			if (!result.hasErrors()){
-				//		if (created)
+			if (!result.hasErrors()) {
+				// if (created)
 				attr.addFlashAttribute("degree", result.getSingleElement());
-				return "redirect:/degree/" + result.getSingleElement().getId() + "/modify.htm";
-			}else{
+				return "redirect:/degree/" + result.getSingleElement().getId()
+						+ "/modify.htm";
+			} else {
 				attr.addFlashAttribute("degree", degree);
 				if (result.isElementDeleted())
-					attr.addFlashAttribute("unDelete", true); 
+					attr.addFlashAttribute("unDelete", true);
 				attr.addFlashAttribute("errors", result.getErrorsList());
 
 			}
-		}else{
+		} else {
 			attr.addFlashAttribute(
 					"org.springframework.validation.BindingResult.degree",
 					resultBinding);
@@ -109,15 +106,14 @@ public class DegreeController {
 		return "redirect:/degree/add.htm";
 	}
 
-
 	@RequestMapping(value = "/degree/{id_degree}/restore.htm")
 	// Every Post have to return redirect
 	public String restoreDegree(@PathVariable("id_degree") Long id_degree) {
-		ResultClass<Degree> result = serviceDegree.unDeleteDegree(serviceDegree.getDegree(id_degree).getSingleElement());
+		ResultClass<Degree> result = serviceDegree.unDeleteDegree(serviceDegree
+				.getDegree(id_degree).getSingleElement());
 		if (!result.hasErrors())
-			//			if (created)
-			return "redirect:/degree/page/0.htm?showAll="+showAll;
-		else{
+			return "redirect:/degree/page/0.htm?showAll=" + showAll;
+		else {
 			return "redirect:/error.htm";
 
 		}
@@ -130,19 +126,21 @@ public class DegreeController {
 
 	@RequestMapping(value = "/degree/page/{pageIndex}.htm")
 	public ModelAndView degreesGET(
-			@PathVariable("pageIndex") Integer pageIndex, @RequestParam(value = "showAll", defaultValue="false") Boolean showAll) throws ServletException, IOException {
+			@PathVariable("pageIndex") Integer pageIndex,
+			@RequestParam(value = "showAll", defaultValue = "false") Boolean showAll)
+			throws ServletException, IOException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		//		List<Degree> result = serviceDegree.getAll().getE();
-		//		myModel.put("degrees", result);
-		ResultClass<Degree> result = serviceDegree.getDegrees(pageIndex, showAll);
-		ResultClass<Integer> numberOfPages = serviceDegree.numberOfPages(showAll);
+		ResultClass<Degree> result = serviceDegree.getDegrees(pageIndex,
+				showAll);
+		ResultClass<Integer> numberOfPages = serviceDegree
+				.numberOfPages(showAll);
 		myModel.put("showAll", showAll);
 
-		myModel.put("numberOfPages",numberOfPages.getSingleElement() );
+		myModel.put("numberOfPages", numberOfPages.getSingleElement());
 		myModel.put("currentPage", pageIndex);
-		myModel.put("degrees", result);		
+		myModel.put("degrees", result);
 
 		setShowAll(showAll);
 
@@ -160,46 +158,34 @@ public class DegreeController {
 
 	{
 
-		if (!resultBinding.hasErrors()){
-			ResultClass<Boolean> result = serviceDegree.modifyDegree(modify, id_degree);
+		if (!resultBinding.hasErrors()) {
+			ResultClass<Boolean> result = serviceDegree.modifyDegree(modify,
+					id_degree);
 			if (!result.hasErrors())
-				//			if (created)
-				return "redirect:/degree/page/0.htm?showAll="+showAll;
-			else{
-
-				//			if (result.isElementDeleted()){
-				
-				//				attr.addFlashAttribute("unDelete", result.getSingleElement()); 
-				//			}else 
-				attr.addFlashAttribute("errors", result.getErrorsList());
-
-				//			}	
+				return "redirect:/degree/page/0.htm?showAll=" + showAll;
+			else {
 				attr.addFlashAttribute("errors", result.getErrorsList());
 			}
-		}else{
+		} else {
 			attr.addFlashAttribute(
 					"org.springframework.validation.BindingResult.degree",
 					resultBinding);
-			
-			
+
 		}
 		attr.addFlashAttribute("degree", modify);
-		return "redirect:/degree/"+id_degree+"/modify.htm";
+		return "redirect:/degree/" + id_degree + "/modify.htm";
 
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/modify.htm", method = RequestMethod.GET)
-	protected String modifyDegreeGET(@PathVariable("degreeId") Long id, Model model)
-			throws ServletException {
-		//		ModelAndView model = new ModelAndView();
-	
-		if(!model.containsAttribute("degree")){
+	protected String modifyDegreeGET(@PathVariable("degreeId") Long id,
+			Model model) throws ServletException {
+
+		if (!model.containsAttribute("degree")) {
 			Degree p = serviceDegree.getDegree(id).getSingleElement();
 			model.addAttribute("degree", p);
-		//		model.setViewName("degree/modify");
 		}
 		model.addAttribute("valueButton", "Modify");
-		//		return model;
 		return "degree/form";
 	}
 
@@ -211,8 +197,10 @@ public class DegreeController {
 	public String deleteDegreeGET(@PathVariable("degreeId") Long id_degree)
 			throws ServletException {
 
-		if (serviceDegree.deleteDegree(serviceDegree.getDegree(id_degree).getSingleElement()).getSingleElement()) {
-			return "redirect:/degree/page/0.htm?showAll="+showAll;
+		if (serviceDegree.deleteDegree(
+				serviceDegree.getDegree(id_degree).getSingleElement())
+				.getSingleElement()) {
+			return "redirect:/degree/page/0.htm?showAll=" + showAll;
 		} else
 			return "redirect:/error.htm";
 	}
@@ -221,22 +209,21 @@ public class DegreeController {
 	 * Methods for view degrees
 	 */
 	@RequestMapping(value = "/degree/{degreeId}.htm", method = RequestMethod.GET)
-	protected ModelAndView degreeGET(@PathVariable("degreeId") Long id_degree,
+	protected ModelAndView degreeGET(
+			@PathVariable("degreeId") Long id_degree,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean show)
 			throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		// Degree p = serviceDegree.getDegree(id);
-
-		Degree p = serviceDegree.getDegreeAll(id_degree, show).getSingleElement();
+		Degree p = serviceDegree.getDegreeAll(id_degree, show)
+				.getSingleElement();
 		myModel.put("showAll", show);
 		myModel.put("degree", p);
 		if (p.getModules() != null)
 			myModel.put("modules", p.getModules());
 		if (p.getCompetences() != null)
 			myModel.put("competences", p.getCompetences());
-
 
 		return new ModelAndView("degree/view", "model", myModel);
 	}

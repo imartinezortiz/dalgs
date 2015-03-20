@@ -87,7 +87,6 @@ public class LearningGoalRepository{
 			Course course = em.getReference(Course.class, id_course);
 			Query query = em.createQuery("SELECT l FROM Course c JOIN c.subject s "
 					+ "JOIN s.competences x JOIN x.learningGoals l WHERE l NOT IN ?2 AND l.isDeleted = false AND c=?1");
-			//				+ "AND l NOT IN ?2");
 
 			query.setParameter(1, course);
 			query.setParameter(2, LearningGoals);
@@ -114,7 +113,6 @@ public class LearningGoalRepository{
 	}
 
 	public boolean deleteLearningGoal(LearningGoal learningGoal) {
-		//		LearningGoal learningGoal = em.getReference(LearningGoal.class, learningGoal);
 		learningGoal.setDeleted(true);
 
 		try {
