@@ -21,7 +21,9 @@
 			<p class="list-group-item-text">
 				Manage each of the academic term
 			</p>
-		</a> <a class="list-group-item " 
+		</a> 
+		<sec:authorize access="hasRole('ROLE_ADMIN')">
+		<a class="list-group-item " 
 			href="<c:url value='/degree/page/0.htm?showAll=false'/>">
 			<h4 class="list-group-item-heading">
 				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
@@ -37,18 +39,21 @@
 			<p class="list-group-item-text">Manage each of the badges which
 				belong to a Competence or to an Activity</p>
 		</a>
+		</sec:authorize>
 		
+		<br><br>
+		Direct Access
 		
 		</a> <a  class="list-group-item " 
 			href="<c:url value='/academicTerm/1/course/1/group/1.htm'/>">
 			<h4 class="list-group-item-heading">
 				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-				Group Professor (Admin)</h4>
+				Group 1 (Coordinator)</h4>
 		</a><a  class="list-group-item " 
 			href="<c:url value='/academicTerm/1/course/1.htm'/>">
 			<h4 class="list-group-item-heading">
 				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-				Course Professor (Admin)</h4>
+				Course 1 G1 (Professor , Students)</h4>
 		</a>
 
 	</div>

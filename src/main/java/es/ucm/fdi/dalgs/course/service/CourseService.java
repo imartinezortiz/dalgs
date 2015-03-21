@@ -74,6 +74,10 @@ public class CourseService {
 				
 					// Adding the authorities to the new coordinator 
 					manageAclService.addPermissionToAnObject_ADMINISTRATION(course.getCoordinator(),course.getId(), course.getClass().getName());
+					
+					//	Adding the READ permissions in cascade to see through the general view
+					manageAclService.addPermissionCASCADE(course.getCoordinator(), course, course.getClass().getName());
+				
 					if (success)result.setSingleElement(course);
 
 				} else {
@@ -130,10 +134,10 @@ public class CourseService {
 				if(old_coordinator !=null)manageAclService.removePermissionToAnObject_ADMINISTRATION(old_coordinator, modifyCourse.getId(), modifyCourse.getClass().getName());
 				
 				// Adding the authorities to the new coordinator 
-				manageAclService.addPermissionToAnObject_ADMINISTRATION(course.getCoordinator(),course.getId(), course.getClass().getName());
+				manageAclService.addPermissionToAnObject_ADMINISTRATION(modifyCourse.getCoordinator(),modifyCourse.getId(), modifyCourse.getClass().getName());
 				
 				//	Adding the READ permissions in cascade to see through the general view
-				manageAclService.addPermissionCASCADE(course.getCoordinator(), course, course.getClass().getName());
+				manageAclService.addPermissionCASCADE(modifyCourse.getCoordinator(), modifyCourse, modifyCourse.getClass().getName());
 			}
 		}
 		return result;

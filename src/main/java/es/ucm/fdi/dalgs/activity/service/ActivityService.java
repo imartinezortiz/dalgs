@@ -73,10 +73,20 @@ public class ActivityService {
 			success = daoActivity.addActivity(activity);
 
 			if (success) {
-				activityExists = daoActivity.existByCode(activity.getInfo()
-						.getCode());
-				success = manageAclService.addACLToObject(activityExists
-						.getId(), activityExists.getClass().getName());
+				activityExists = daoActivity.existByCode(activity.getInfo().getCode());
+				success = manageAclService.addACLToObject(activityExists.getId(), activityExists.getClass().getName());
+				
+				manageAclService.addPermissionToAnObject_ADMINISTRATION(course.getCoordinator(), activityExists
+								.getId(), activityExists.getClass().getName());
+				
+				//Rest of users which belong to this course need READ permission
+				for(Group g : course.getGroups()){
+					manageAclService.addPermissionToAnObjectCollection_READ(g.getProfessors(),activityExists
+							.getId(), activityExists.getClass().getName());
+					manageAclService.addPermissionToAnObjectCollection_READ(g.getStudents(),activityExists
+							.getId(), activityExists.getClass().getName());
+				}
+				
 				if (success)
 					result.setSingleElement(activityExists);
 
@@ -309,8 +319,15 @@ public class ActivityService {
 			if (success) {
 				activityExists = daoActivity.existByCode(activity.getInfo()
 						.getCode());
-				success = manageAclService.addACLToObject(activityExists
-						.getId(), activityExists.getClass().getName());
+				success = manageAclService.addACLToObject(activityExists.getId(), activityExists.getClass().getName());
+				
+				//Rest of users which belong to this course need READ permission
+				manageAclService.addPermissionToAnObjectCollection_READ(group.getProfessors(),activityExists
+							.getId(), activityExists.getClass().getName());
+				manageAclService.addPermissionToAnObjectCollection_READ(group.getStudents(),activityExists
+							.getId(), activityExists.getClass().getName());
+				
+				
 				if (success)
 					result.setSingleElement(activityExists);
 

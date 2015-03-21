@@ -213,7 +213,7 @@ public class GroupService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> setProfessors(Group group, Long id_group) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		Group modifyGroup = daoGroup.getGroup(id_group);
+		Group modifyGroup = daoGroup.getGroupAll(id_group);
 		
 		Collection<User> old_professors = modifyGroup.getProfessors();  //To delete old ACL permissions
 		
@@ -226,11 +226,18 @@ public class GroupService {
 			result.setSingleElement(true);
 			
 			// Deleting the authorities to the old professor list
-			if(!old_professors.isEmpty()) 
+			if(!old_professors.isEmpty()) {
 				manageAclService.removePermissionToAnObjectCollection_ADMINISTRATION(old_professors, modifyGroup.getId(), modifyGroup.getClass().getName());
+				manageAclService.removePermissionCollectionCASCADE(old_professors, modifyGroup.getId(), modifyGroup.getClass().getName());
+
+			}
 			// Adding the authorities to the professor list
 			manageAclService.addPermissionToAnObjectCollection_ADMINISTRATION(modifyGroup.getProfessors(), modifyGroup.getId(), modifyGroup.getClass().getName());
 			
+//			Adding the READ permissions in cascade to see through the general view
+			for(User u: modifyGroup.getProfessors()){
+				manageAclService.addPermissionCASCADE(u, modifyGroup, modifyGroup.getClass().getName());
+			}
 		}
 		
 
@@ -242,7 +249,7 @@ public class GroupService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> setStudents(Group group, Long id_group) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		Group modifyGroup = daoGroup.getGroup(id_group);
+		Group modifyGroup = daoGroup.getGroupAll(id_group);
 		Collection<User> old_students = modifyGroup.getStudents();
 		
 		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
@@ -254,11 +261,17 @@ public class GroupService {
 			result.setSingleElement(true);
 			
 			// Deleting the authorities to the old students list
-			if(!old_students.isEmpty()) 
+			if(!old_students.isEmpty()){ 
 				manageAclService.removePermissionToAnObjectCollection_READ(old_students, modifyGroup.getId(), modifyGroup.getClass().getName());
+				manageAclService.removePermissionCollectionCASCADE(old_students, modifyGroup.getId(), modifyGroup.getClass().getName());
+			}
 			// Adding the authorities to the students list
 			manageAclService.addPermissionToAnObjectCollection_READ(modifyGroup.getStudents(), modifyGroup.getId(), modifyGroup.getClass().getName());
-			//TODO Añadir permisos necesarios para ver 
+			
+			//	Adding the READ permissions in cascade to see through the general view
+			for(User u: modifyGroup.getStudents()){
+				manageAclService.addPermissionCASCADE(u, modifyGroup, modifyGroup.getClass().getName());
+			}		
 		}
 		
 		return result;	

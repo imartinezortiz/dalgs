@@ -22,10 +22,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
+import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
-import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
+import es.ucm.fdi.dalgs.user.service.UserService;
 
 @Service
 public class AclObjectService {
@@ -35,6 +36,9 @@ public class AclObjectService {
 	@Autowired
 	private MutableAclService mutableAclService;
 
+	@Autowired
+	private UserService userService;
+	
 	public void setMutableAclService(MutableAclService mutableAclService) {
 		this.mutableAclService = mutableAclService;
 	}
@@ -234,6 +238,7 @@ public class AclObjectService {
 			mutableAclService.updateAcl(acl);
 
 		}
+		
 		// Authorize professors to manage his course
 		public void addPermissionToAnObjectCollection_READ(Collection<User> professors,
 				Long id_object, String name_class) {
@@ -337,20 +342,71 @@ public class AclObjectService {
 				AcademicTerm at = ((Course) object).getAcademicTerm();
 				if(at!=null)
 					this.addPermissionToAnObject_READ(user, at.getId(), at.getClass().getName());
+				
+				for(Activity a: ((Course) object).getActivities())
+					this.addPermissionToAnObject_ADMINISTRATION(user, a.getId(), a.getClass().getName());
+				
+				for(Group g: ((Course) object).getGroups())
+					this.addPermissionToAnObject_ADMINISTRATION(user, g.getId(), g.getClass().getName());
+
 			}
 			else if (object instanceof Group){
-				
-				
 				Course c = ((Group) object).getCourse();
 				if(c!=null)
 					this.addPermissionToAnObject_READ(user, c.getId(), c.getClass().getName());
 
 				AcademicTerm at = c.getAcademicTerm();
 				//TODO
-				//Degree d = at.getDegree();
 				if(at!=null)
 					this.addPermissionToAnObject_READ(user, at.getId(), at.getClass().getName());
+				
+				for(Activity a: ((Group) object).getCourse().getActivities())
+					this.addPermissionToAnObject_READ(user, a.getId(), a.getClass().getName());
+				
+				for(Activity a: ((Group) object).getActivities())
+					this.addPermissionToAnObject_ADMINISTRATION(user, a.getId(), a.getClass().getName());
 			}
+		}
+		
+		public void removePermissionCASCADE(User user, Object object, String name) {
+			if (object instanceof Course){
+				AcademicTerm at = ((Course) object).getAcademicTerm();
+				if(at!=null)
+					this.removePermissionToAnObject_READ(user, at.getId(), at.getClass().getName());
+				
+				for(Activity a: ((Course) object).getActivities())
+					this.removePermissionToAnObject_ADMINISTRATION(user, a.getId(), a.getClass().getName());
+				
+				for(Group g: ((Course) object).getGroups())
+					this.removePermissionToAnObject_ADMINISTRATION(user, g.getId(), g.getClass().getName());
+
+			}
+			else if (object instanceof Group){
+				Course c = ((Group) object).getCourse();
+				if(c!=null)
+					this.removePermissionToAnObject_READ(user, c.getId(), c.getClass().getName());
+
+				AcademicTerm at = c.getAcademicTerm();
+				if(at!=null)
+					this.removePermissionToAnObject_READ(user, at.getId(), at.getClass().getName());
+				
+				
+				for(Activity a: ((Group) object).getCourse().getActivities())
+					this.removePermissionToAnObject_READ(user, a.getId(), a.getClass().getName());
+				
+				if(userService.hasRole(user, "ROLE_PROFESSOR")){
+					for(Activity a: ((Group) object).getActivities())
+						this.removePermissionToAnObject_ADMINISTRATION(user, a.getId(), a.getClass().getName());
+				}else if (userService.hasRole(user, "ROLE_STUDENT")){
+					for(Activity a: ((Group) object).getActivities())
+						this.removePermissionToAnObject_READ(user, a.getId(), a.getClass().getName());
+				}
+			}
+		}
+
+		public void removePermissionCollectionCASCADE(Collection<User> users, Object object, String name) {
+			for(User u : users)
+				this.removePermissionCASCADE(u, object, name);
 		}
 
 }
