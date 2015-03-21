@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,7 +62,7 @@ public class GroupService {
 
 			if(success){
 				groupExists = daoGroup.existByName(group.getName());
-				success = manageAclService.addAclToObject(groupExists.getId(), groupExists.getClass().getName());
+				success = manageAclService.addACLToObject(groupExists.getId(), groupExists.getClass().getName());
 				if (success) result.setSingleElement(group);
 
 
@@ -74,7 +75,7 @@ public class GroupService {
 		return result;		
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = true)
 	public ResultClass<Group> getGroup(Long id_group) {
 		ResultClass<Group> result = new ResultClass<Group>();
@@ -138,7 +139,8 @@ public class GroupService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = true)
 	public ResultClass<Group> getGroupsForCourse(Long id, Boolean showAll) {
 		ResultClass<Group> result = new ResultClass<>();
 		result.addAll(daoGroup.getGroupsForCourse(id,showAll));
@@ -146,6 +148,7 @@ public class GroupService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteGroupsFromCourses(Collection<Course> coursesList) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		result.setSingleElement(daoGroup.deleteGroupsFromCourses(coursesList));
@@ -183,15 +186,16 @@ public class GroupService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = true)
 	public ResultClass<Group> getGroupsForStudent(Long id_student){
 		ResultClass<Group> result = new ResultClass<>();
 		result.addAll(daoGroup.getGroupsForStudent(id_student));
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
-
+	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = true)
 	public ResultClass<Group> getGroupsForProfessor(Long id_professor){
 		ResultClass<Group> result = new ResultClass<>();
 		result.addAll(daoGroup.getGroupsForProfessor(id_professor));
@@ -216,9 +220,9 @@ public class GroupService {
 			
 			// Deleting the authorities to the old professor list
 			if(!old_professors.isEmpty()) 
-				manageAclService.removePermissionToAnObjectCollection(old_professors, modifyGroup.getId(), modifyGroup.getClass().getName());
+				manageAclService.removePermissionToAnObjectCollection_ADMINISTRATION(old_professors, modifyGroup.getId(), modifyGroup.getClass().getName());
 			// Adding the authorities to the professor list
-			manageAclService.addPermissionToAnObjectCollection(modifyGroup.getProfessors(), modifyGroup.getId(), modifyGroup.getClass().getName());
+			manageAclService.addPermissionToAnObjectCollection_ADMINISTRATION(modifyGroup.getProfessors(), modifyGroup.getId(), modifyGroup.getClass().getName());
 			
 		}
 		
@@ -232,9 +236,23 @@ public class GroupService {
 	public ResultClass<Boolean> setStudents(Group group, Long id_group) {
 		ResultClass<Boolean> result = new ResultClass<>();
 		Group modifyGroup = daoGroup.getGroup(id_group);
+		Collection<User> old_students = modifyGroup.getStudents();
+		
 		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
 		modifyGroup.setStudents(group.getStudents());
 		result.setSingleElement(result.hasErrors());
+
+		
+		if (!result.hasErrors()) {
+			result.setSingleElement(true);
+			
+			// Deleting the authorities to the old students list
+			if(!old_students.isEmpty()) 
+				manageAclService.removePermissionToAnObjectCollection_READ(old_students, modifyGroup.getId(), modifyGroup.getClass().getName());
+			// Adding the authorities to the students list
+			manageAclService.addPermissionToAnObjectCollection_READ(modifyGroup.getStudents(), modifyGroup.getId(), modifyGroup.getClass().getName());
+			//TODO Añadir permisos necesarios para ver 
+		}
 		
 		return result;	
 	}
@@ -254,7 +272,11 @@ public class GroupService {
 			User u = serviceUser.getUser(id_user);
 			if(serviceUser.hasRole(u, "ROLE_PROFESSOR") || serviceUser.hasRole(u, "ROLE_COORDINATOR") ){
 				// Adding the authorities to the professor list
-				manageAclService.removePermissionToAnObject(u, id_group, Group.class.getName());
+				manageAclService.removePermissionToAnObject_ADMINISTRATION(u, id_group, Group.class.getName());
+			}
+			else if(serviceUser.hasRole(u, "ROLE_STUDENT")){
+				manageAclService.removePermissionToAnObject_READ(u, id_group, Group.class.getName());
+
 			}
 		}
 		return result;
@@ -262,4 +284,6 @@ public class GroupService {
 
 
 }
+
+
 

@@ -50,7 +50,7 @@
 					<table class="table table-condensed">
 						<tr align="center">
 							<td width="20%"><div class="td-label">Competence</div></td>
-							<td width="50%"><div class="td-label">Percentage</div></td>
+							<td width="50%"><div class="td-label">Weight</div></td>
 						</tr>
 						
 						<c:forEach items="${learningGoalStatus}" var="learnStatus" varStatus="status">		
@@ -61,7 +61,7 @@
 									</div></td>
 								<td>
 									<div class="td-content">
-										<c:out value="${learnStatus.percentage}" />
+										<c:out value="${learnStatus.weight}" />
 										
 									</div>
 								</td>
@@ -102,8 +102,8 @@
 						</c:forEach>
 					</form:select>
 					<br>
-					<label>Learning Goal Percentage:</label>
-					<form:input class="form-control" path="percentage" id="percentage"
+					<label>Learning Goal Weight:</label>
+					<form:input class="form-control" path="weight" id="weight"
 						required="true" />
 
 

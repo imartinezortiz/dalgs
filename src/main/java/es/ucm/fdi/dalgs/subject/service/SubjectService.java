@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -67,7 +68,7 @@ public class SubjectService {
 			
 			if(success){
 				subjectExists = daoSubject.existByCode(subject.getInfo().getCode());
-				success = manageAclService.addAclToObject(subjectExists.getId(), subjectExists.getClass().getName());
+				success = manageAclService.addACLToObject(subjectExists.getId(), subjectExists.getClass().getName());
 				if (success) result.setSingleElement(subject);
 			
 			}else{
@@ -78,7 +79,7 @@ public class SubjectService {
 		return result;		
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getAll() {
 		
@@ -88,7 +89,7 @@ public class SubjectService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Subject> getSubject(Long id) {
 		ResultClass<Subject> result = new ResultClass<>();
@@ -115,7 +116,7 @@ public class SubjectService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectsForTopic(Long id_topic, Boolean show) {
 		ResultClass<Subject> result = new ResultClass<>();
@@ -166,16 +167,8 @@ public class SubjectService {
 		return result;
 	}
 	
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@Transactional(readOnly = true)
-	public ResultClass<String> getNextCode() {
-		ResultClass<String> result = new ResultClass<String>();
-		result.setSingleElement(daoSubject.getNextCode());
-		return result;
 
-	}
-
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectForCourse(Long id) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
@@ -183,7 +176,7 @@ public class SubjectService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectByName(String string) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
@@ -191,7 +184,7 @@ public class SubjectService {
 		return result;
 	}
 	
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectAll(Long id_subject) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
@@ -202,7 +195,7 @@ public class SubjectService {
 	}
 
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectForDegree(Degree degree) {
 		ResultClass<Subject> result = new ResultClass<>();
@@ -214,7 +207,6 @@ public class SubjectService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteSubjectsForTopic(Collection<Topic> topics) {	
 		
-//		boolean deleteCourses = false;
 		ResultClass<Boolean> result = new ResultClass<>();
 		Collection<Subject> subjects = daoSubject.getSubjectsForTopics(topics);
 		

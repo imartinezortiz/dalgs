@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,7 @@ public class AcademicTermService {
 
 	@Autowired
 	private CourseService serviceCourse;
-
+	
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
@@ -54,7 +55,7 @@ public class AcademicTermService {
 			}
 			else result.setSingleElement(academicTerm);
 			result.setErrorsList(errors);
-			
+
 		}
 		else{
 			success = daoAcademicTerm.addAcademicTerm(academicTerm);
@@ -62,8 +63,9 @@ public class AcademicTermService {
 
 		if(success){ 
 			academicExists = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
-			success = manageAclService.addAclToObject(academicExists.getId(), academicExists.getClass().getName());
+			success = manageAclService.addACLToObject(academicExists.getId(), academicExists.getClass().getName());
 			if (success) result.setSingleElement(academicTerm);
+			
 		} 
 		else {
 			throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
@@ -117,7 +119,7 @@ public class AcademicTermService {
 	 *  Access-control will be evaluated after this method is invoked.
 	 *  filterObject refers to the returned object list.
 	 */
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<AcademicTerm> getAcademicTerms(Integer pageIndex, Boolean showAll) {
 		ResultClass<AcademicTerm> result = new ResultClass<>();
@@ -143,7 +145,7 @@ public class AcademicTermService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	//TODO Contemplar el filtrado de objectos
 	@Transactional(readOnly = false)
 	public ResultClass<Integer> numberOfPages(Boolean showAll) {
 		ResultClass<Integer> result = new ResultClass<Integer>();
@@ -152,7 +154,7 @@ public class AcademicTermService {
 	}
 
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<AcademicTerm> getAcademicTermsByDegree(Degree degree) {
 		ResultClass<AcademicTerm> result = new ResultClass<>();
@@ -161,7 +163,7 @@ public class AcademicTermService {
 	}
 
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = true)
 	public ResultClass<AcademicTerm> getAcademicTerm(Long id_academic, Boolean showAll) {
 		ResultClass<AcademicTerm> result = new ResultClass<AcademicTerm>();
@@ -258,7 +260,7 @@ public class AcademicTermService {
 			if (r){
 				//result.setSingleElement(copy);	
 				AcademicTerm academicExists = daoAcademicTerm.exists(academicTerm.getTerm(), academicTerm.getDegree());
-				boolean	success = manageAclService.addAclToObject(academicExists.getId(), academicExists.getClass().getName());
+				boolean	success = manageAclService.addACLToObject(academicExists.getId(), academicExists.getClass().getName());
 				if (success) result.setSingleElement(academicTerm);
 				
 			} 
@@ -270,20 +272,5 @@ public class AcademicTermService {
 		return result;
 
 	}
-
-
-
-
-	
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
-//	@Transactional(propagation=Propagation.REQUIRED)
-//	public boolean cloneAcademicTerm(AcademicTerm academic) {
-//
-//		AcademicTerm cloneAcademic = academic.clone();
-//		if (cloneAcademic!=null)
-//			return this.addAcademicTerm(cloneAcademic);
-//
-//		else return false;
-//	}
 
 }

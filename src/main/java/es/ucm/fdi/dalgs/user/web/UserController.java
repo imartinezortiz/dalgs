@@ -25,6 +25,8 @@ import es.ucm.fdi.dalgs.classes.CharsetString;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.classes.UploadForm;
 import es.ucm.fdi.dalgs.classes.ValidatorUtil;
+import es.ucm.fdi.dalgs.course.service.CourseService;
+import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.group.service.GroupService;
@@ -39,6 +41,9 @@ public class UserController {
 
 	@Autowired
 	private GroupService serviceGroup;
+	
+	@Autowired
+	private CourseService serviceCourse;
 
 
 	private Boolean showAll;
@@ -96,12 +101,18 @@ public class UserController {
 
 		User user = serviceUser.getUser(id_user);
 		if (user != null){
-		myModel.put("user", user);
+		myModel.put("userDetails", user);
 		
 		ResultClass<Group> groups = new ResultClass<Group>();
 
 		if(serviceUser.hasRole(user,"ROLE_PROFESSOR")){
 			groups = serviceGroup.getGroupsForProfessor(id_user);
+			
+			ResultClass<Course> courses = new ResultClass<Course>();
+			courses = serviceCourse.getCourseForCoordinator(id_user);
+			myModel.put("courses",courses );
+
+
 		}
 		else if(serviceUser.hasRole(user,"ROLE_STUDENT")){
 			groups = serviceGroup.getGroupsForStudent(id_user);

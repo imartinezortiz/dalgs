@@ -63,7 +63,7 @@ public class AcademicTermController {
 	 * @return String
 	 */
 	@RequestMapping(value = "/academicTerm/add.htm", method = RequestMethod.GET)
-	protected String addAcademicTermFormGET(Model model) {
+	protected String addAcademicTermGET(Model model) {
 
 		if (!model.containsAttribute("addAcademicTerm"))
 			model.addAttribute("addAcademicTerm", new AcademicTerm());
@@ -278,7 +278,7 @@ public class AcademicTermController {
 			@ModelAttribute("academicTerm") @Valid AcademicTerm newTerm,
 			BindingResult bindingResult, Model model, RedirectAttributes attr) {
 
-		this.validate(newTerm, bindingResult);
+	
 
 		if (!bindingResult.hasErrors()) {
 

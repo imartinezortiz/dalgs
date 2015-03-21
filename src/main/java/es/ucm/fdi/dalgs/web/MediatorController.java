@@ -12,7 +12,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import es.ucm.fdi.dalgs.classes.ResultClass;
+import es.ucm.fdi.dalgs.course.service.CourseService;
+import es.ucm.fdi.dalgs.domain.Course;
+import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
+import es.ucm.fdi.dalgs.group.service.GroupService;
 import es.ucm.fdi.dalgs.user.service.UserService;
 
 @Controller
@@ -24,6 +29,12 @@ public class MediatorController {
 	@Autowired
 	private UserService serviceUser;
 	
+	@Autowired
+	private GroupService serviceGroup;
+	
+	@Autowired
+	private CourseService serviceCourse;
+	
 	@RequestMapping(value = "/user.htm")
 	public ModelAndView getUserPage(Model model) {
 		Map<String, Object> myModel = new HashMap<String, Object>();
@@ -33,7 +44,23 @@ public class MediatorController {
 		logger.info(username + "  " + u.getEmail());
 		myModel.put("userDetails", u);
 
-		return new ModelAndView("user/user", "model", myModel);
+		ResultClass<Group> groups =new ResultClass<Group>();
+		//TODO
+		if(serviceUser.hasRole(u,"ROLE_PROFESSOR")){
+			groups = serviceGroup.getGroupsForProfessor(u.getId());
+			
+			ResultClass<Course> courses = new ResultClass<Course>();
+			courses = serviceCourse.getCourseForCoordinator(u.getId());
+			myModel.put("courses",courses );
+
+		}
+		else if(serviceUser.hasRole(u,"ROLE_STUDENT")){
+			groups = serviceGroup.getGroupsForStudent(u.getId());
+		}
+		myModel.put("groups",groups );
+
+
+		return new ModelAndView("user/view", "model", myModel);
 	}
 
 	@RequestMapping(value = "/admin.htm")

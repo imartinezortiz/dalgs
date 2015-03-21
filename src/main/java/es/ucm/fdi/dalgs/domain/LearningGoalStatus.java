@@ -19,8 +19,8 @@ public class LearningGoalStatus implements Cloneable, Copyable<LearningGoalStatu
     @Min(0)
 	@Max(100)
 	@Basic
-	@Column(name = "percentage", nullable = false, columnDefinition = "INTEGER DEFAULT 0")
-	private Integer percentage;
+	@Column(name = "weight", nullable = false, columnDefinition = "INTEGER DEFAULT 0")
+	private Integer weight;
 
 
 
@@ -36,12 +36,12 @@ public class LearningGoalStatus implements Cloneable, Copyable<LearningGoalStatu
 		this.learningGoal = learningGoal;
 	}
 
-	public Integer getPercentage() {
-		return percentage;
+	public Integer getWeight() {
+		return weight;
 	}
 
-	public void setPercentage(Integer percentage) {
-		this.percentage = percentage;
+	public void setWeight(Integer weight) {
+		this.weight = weight;
 	}
 	
 	
