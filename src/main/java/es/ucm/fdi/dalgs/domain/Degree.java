@@ -94,7 +94,7 @@ public class Degree implements Cloneable ,Copyable<Degree>{
 			throw new RuntimeException(e);
 		}
 		
-		copy.id = null;
+//		copy.id = null;
 		copy.modules = new ArrayList<>();
 		for (Module m : this.modules) {
 			Module module  = m.copy();
@@ -108,6 +108,7 @@ public class Degree implements Cloneable ,Copyable<Degree>{
 			competence.setDegree(copy);
 			copy.competences.add(c.copy());
 		}
+		
 		return copy;
 	}
 	

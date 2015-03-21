@@ -17,6 +17,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -25,7 +26,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 
 @Entity
-@Table(name = "_group")
+@Table(name = "_group" , uniqueConstraints = { @UniqueConstraint(columnNames = {"id_course", "name" }) })
 public class Group implements Cloneable, Copyable<Group>{
 
 	@Id
@@ -36,7 +37,7 @@ public class Group implements Cloneable, Copyable<Group>{
 	@NotEmpty @NotNull @NotBlank
 	@Size(min=5, max=50)
 	@Basic(optional = false)
-	@Column(name = "name", length = 50, nullable = false, unique=true)
+	@Column(name = "name", length = 50, nullable = false)//, unique=true)
 	private String name;
 	
 	//@NotNull

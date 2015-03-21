@@ -112,6 +112,7 @@ public class AcademicTerm implements Cloneable, Copyable<AcademicTerm> {
 			throw new RuntimeException(e);
 		}
 		
+		copy.setDegree(this.degree.copy());
 		copy.id = null;
 		copy.courses = new ArrayList<>();
 		for (Course c : this.courses) {
