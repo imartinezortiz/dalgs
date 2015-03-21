@@ -86,6 +86,7 @@
 			</c:forEach>
 		</table>
 
+		<sec:authorize access="hasRole('ROLE_ADMIN')">
 
 		<nav>
 			<ul class="pagination">
@@ -117,6 +118,8 @@
 				</c:if>
 			</ul>
 		</nav>
+		
+		</sec:authorize>
 	</div>
 
 

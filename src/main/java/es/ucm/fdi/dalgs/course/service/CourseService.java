@@ -72,12 +72,10 @@ public class CourseService {
 					courseExists = daoCourse.exist(course);
 					success = manageAclService.addACLToObject(courseExists.getId(), courseExists.getClass().getName());
 				
-					// Adding the authorities to the new coordinator 
-					manageAclService.addPermissionToAnObject_ADMINISTRATION(course.getCoordinator(),course.getId(), course.getClass().getName());
-					
+					// 	Adding the authorities to the new coordinator 
 					//	Adding the READ permissions in cascade to see through the general view
-					manageAclService.addPermissionCASCADE(course.getCoordinator(), course, course.getClass().getName());
-				
+					manageAclService.addPermissionCASCADE(course.getCoordinator(), course, id_academic, course.getId(),null);
+
 					if (success)result.setSingleElement(course);
 
 				} else {
@@ -88,7 +86,8 @@ public class CourseService {
 		return result;		
 	
 	}
-
+	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public List<Course> getAll() {
@@ -131,21 +130,19 @@ public class CourseService {
 			if (r) {
 				result.setSingleElement(true);
 				// Deleting the authorities to the old coordinator
-				if(old_coordinator !=null)manageAclService.removePermissionToAnObject_ADMINISTRATION(old_coordinator, modifyCourse.getId(), modifyCourse.getClass().getName());
+				if(old_coordinator !=null){
+					manageAclService.removePermissionCASCADE(modifyCourse.getCoordinator(), modifyCourse, id_academic,id_course, null);
+				}
 				
-				// Adding the authorities to the new coordinator 
-				manageAclService.addPermissionToAnObject_ADMINISTRATION(modifyCourse.getCoordinator(),modifyCourse.getId(), modifyCourse.getClass().getName());
-				
+				// 	Adding the authorities to the new coordinator 
 				//	Adding the READ permissions in cascade to see through the general view
-				manageAclService.addPermissionCASCADE(modifyCourse.getCoordinator(), modifyCourse, modifyCourse.getClass().getName());
+				manageAclService.addPermissionCASCADE(modifyCourse.getCoordinator(), modifyCourse, id_academic,id_course, null);
 			}
 		}
 		return result;
-
-			
-
 	}
-
+	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Course> getCourse(Long id) {
@@ -167,7 +164,7 @@ public class CourseService {
 		return result;
 	}
 
-	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Course> getCoursesByAcademicTerm(Long id_academic, Boolean showAll) {
 		ResultClass<Course> result = new ResultClass<>();
@@ -192,7 +189,7 @@ public class CourseService {
 	
 
 
-	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Course> getCourseAll(Long id, Boolean showAll) {
@@ -206,6 +203,7 @@ public class CourseService {
 		return result;
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Course> getCoursesfromListAcademic(
 			Collection<AcademicTerm> academicList) {
@@ -262,6 +260,7 @@ public class CourseService {
 		return result;
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Course> getCoursesBySubject(Subject subject) {
 		ResultClass<Course> result = new ResultClass<>();
@@ -277,6 +276,7 @@ public class CourseService {
 		return result;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Course> getCourseForCoordinator(Long id_user) {
 		ResultClass<Course> result = new ResultClass<>();

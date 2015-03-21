@@ -80,8 +80,8 @@
 		</div>
 		<div class="panel-body">
 			<div class="form-group view">
-				<label>Subject: </label>
-				<p class="details">${model.course.subject.info.code}-
+				<p class="details"><label>Subject: </label>
+				${model.course.subject.info.code}-
 					${model.course.subject.info.name}</p>
 			</div>
 		</div>

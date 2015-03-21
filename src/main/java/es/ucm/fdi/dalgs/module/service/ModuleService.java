@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,8 +72,7 @@ public class ModuleService {
 		return result;		
 	}
 	
-
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
 	public ResultClass<Module> getAll() {
 		ResultClass<Module> result = new ResultClass<Module>();
@@ -114,7 +112,7 @@ public class ModuleService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
 	public ResultClass<Module> getModule(Long id) {
 		ResultClass<Module> result = new ResultClass<Module>();
@@ -134,7 +132,7 @@ public class ModuleService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
 	public ResultClass<Module> getModuleAll(Long id_module, Boolean show) {
 		ResultClass<Module> result = new ResultClass<Module>();
@@ -144,7 +142,7 @@ public class ModuleService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
 	public ResultClass<Module> getModulesForDegree(Long id, Boolean show) {
 		ResultClass<Module> result = new ResultClass<>();

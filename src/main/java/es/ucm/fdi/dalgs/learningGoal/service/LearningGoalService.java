@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,7 +72,8 @@ public class LearningGoalService {
 		return result;		
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")	@Transactional(readOnly = true)
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@Transactional(readOnly = true)
 	public ResultClass<LearningGoal> getLearningGoal(Long id_learningGoal) {
 		ResultClass<LearningGoal> result = new ResultClass<>();
 		result.setSingleElement(daoLearningGoal.getLearningGoal(id_learningGoal));
@@ -129,7 +129,7 @@ public class LearningGoalService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<LearningGoal> getLearningGoalsFromCourse(Long id_course, Activity activity) {
 		ResultClass<LearningGoal> result = new ResultClass<>();
@@ -145,7 +145,7 @@ public class LearningGoalService {
 		}
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<LearningGoal> getLearningGoalByName(String name) {
 		ResultClass<LearningGoal> result = new ResultClass<>();
@@ -153,7 +153,7 @@ public class LearningGoalService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResultClass<LearningGoal> getLearningGoalsFromCompetence(
 			Competence competence, Boolean show) {
 		ResultClass<LearningGoal> result = new ResultClass<>();

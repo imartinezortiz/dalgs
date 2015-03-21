@@ -284,7 +284,7 @@ public class GroupController {
 		} else {
 
 			ResultClass<Boolean> result = serviceGroup.setProfessors(group,
-					id_group);
+					id_group, courseId, academicId);
 			if (!result.hasErrors())
 				return "redirect:/academicTerm/" + academicId + "/course/"
 						+ courseId + "/group/" + id_group + ".htm";
@@ -325,7 +325,7 @@ public class GroupController {
 		} else {
 
 			ResultClass<Boolean> result = serviceGroup.setStudents(group,
-					id_group);
+					id_group,courseId, academicId);
 			if (!result.hasErrors())
 				return "redirect:/academicTerm/" + academicId + "/course/"
 						+ courseId + "/group/" + id_group + ".htm";
@@ -362,7 +362,7 @@ public class GroupController {
 			@PathVariable("groupId") Long id_group,
 			@PathVariable("userId") Long id_user) {
 
-		if (serviceGroup.deleteUserGroup(id_group, id_user).getSingleElement()) {
+		if (serviceGroup.deleteUserGroup(id_group, id_user, id_course,id_AcademicTerm).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
 					+ id_course + "/group/" + id_group + ".htm";
 		} else

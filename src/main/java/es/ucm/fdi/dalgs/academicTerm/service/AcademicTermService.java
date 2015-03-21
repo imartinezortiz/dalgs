@@ -119,6 +119,7 @@ public class AcademicTermService {
 	 *  Access-control will be evaluated after this method is invoked.
 	 *  filterObject refers to the returned object list.
 	 */
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<AcademicTerm> getAcademicTerms(Integer pageIndex, Boolean showAll) {
@@ -146,6 +147,7 @@ public class AcademicTermService {
 	}
 
 	//TODO Contemplar el filtrado de objectos
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
 	public ResultClass<Integer> numberOfPages(Boolean showAll) {
 		ResultClass<Integer> result = new ResultClass<Integer>();
@@ -153,7 +155,7 @@ public class AcademicTermService {
 		return result;
 	}
 
-
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<AcademicTerm> getAcademicTermsByDegree(Degree degree) {
@@ -162,7 +164,7 @@ public class AcademicTermService {
 		return result;
 	}
 
-
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<AcademicTerm> getAcademicTerm(Long id_academic, Boolean showAll) {

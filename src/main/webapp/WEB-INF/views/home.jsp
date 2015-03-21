@@ -22,7 +22,6 @@
 				Manage each of the academic term
 			</p>
 		</a> 
-		<sec:authorize access="hasRole('ROLE_ADMIN')">
 		<a class="list-group-item " 
 			href="<c:url value='/degree/page/0.htm?showAll=false'/>">
 			<h4 class="list-group-item-heading">
@@ -39,23 +38,24 @@
 			<p class="list-group-item-text">Manage each of the badges which
 				belong to a Competence or to an Activity</p>
 		</a>
-		</sec:authorize>
+	
 		
 		<br><br>
-		Direct Access
 		
-		</a> <a  class="list-group-item " 
-			href="<c:url value='/academicTerm/1/course/1/group/1.htm'/>">
-			<h4 class="list-group-item-heading">
-				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-				Group 1 (Coordinator)</h4>
-		</a><a  class="list-group-item " 
+		Direct Access to delete
+		<a  class="list-group-item " 
 			href="<c:url value='/academicTerm/1/course/1.htm'/>">
 			<h4 class="list-group-item-heading">
 				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-				Course 1 G1 (Professor , Students)</h4>
+				Course 1  (Coordinator)</h4>
 		</a>
-
+		
+		 <a  class="list-group-item " 
+			href="<c:url value='/academicTerm/1/course/1/group/1.htm'/>">
+			<h4 class="list-group-item-heading">
+				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+				Group 1 - C1 (Student, Professor)</h4>
+		</a>
 	</div>
 </body>
 </html>
