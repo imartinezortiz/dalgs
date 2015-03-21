@@ -97,13 +97,13 @@ public class Subject implements Cloneable, Copyable<Subject> {
 			throw new RuntimeException(e);
 		}
 		
-		copy.id = null;
+//		copy.id = null;
 		copy.competences = new ArrayList<>();
-		for (Competence c : this.competences) {
-			c.getSubjects().remove(this);
-			c.getSubjects().add(copy);
-			copy.competences.add(c);
-		}
+//		for (Competence c : this.competences) {
+//			c.getSubjects().remove(this);
+//			c.getSubjects().add(copy);
+//			copy.competences.add(c);
+//		}
 		return copy;
 	}
 

@@ -47,6 +47,7 @@ public class AcademicTermRepository{
 			em.persist(academicTerm);
 			return true;
 		} catch (PersistenceException e) {
+			logger.error(e.getMessage());
 			return false;
 		} catch (DataIntegrityViolationException e) {
 			logger.error(e.getMessage());

@@ -29,7 +29,7 @@ public class Course implements Cloneable ,Copyable<Course>{
 	private Boolean isDeleted;
 
 	@NotNull
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_subject")
 	private Subject subject;
 
@@ -43,7 +43,7 @@ public class Course implements Cloneable ,Copyable<Course>{
 	@JoinColumn(name = "id_academicterm")
 	private AcademicTerm academicTerm;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_coordinator")
 	private User coordinator;
 

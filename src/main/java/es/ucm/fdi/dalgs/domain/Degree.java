@@ -3,6 +3,7 @@ package es.ucm.fdi.dalgs.domain;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -33,11 +34,11 @@ public class Degree implements Cloneable ,Copyable<Degree>{
 	private Boolean isDeleted;
 
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree",cascade = CascadeType.ALL)
 	private Collection<Module> modules = new ArrayList<Module>();
 
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree",cascade = CascadeType.ALL)
 	private Collection<Competence> competences = new ArrayList<Competence>();
 
 	public Degree() {
@@ -94,7 +95,6 @@ public class Degree implements Cloneable ,Copyable<Degree>{
 			throw new RuntimeException(e);
 		}
 		
-//		copy.id = null;
 		copy.modules = new ArrayList<>();
 		for (Module m : this.modules) {
 			Module module  = m.copy();

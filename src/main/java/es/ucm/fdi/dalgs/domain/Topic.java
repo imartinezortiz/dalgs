@@ -95,7 +95,7 @@ public class Topic implements Cloneable, Copyable<Topic>{
 			throw new RuntimeException(e);
 		}
 		
-		copy.id = null;
+//		copy.id = null;
 		copy.subjects = new ArrayList<>();
 		for (Subject s : this.subjects) {
 			Subject subject  = s.copy();

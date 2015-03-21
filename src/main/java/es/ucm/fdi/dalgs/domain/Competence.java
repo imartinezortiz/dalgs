@@ -112,7 +112,7 @@ public class Competence implements Cloneable{// , Copyable<Competence>{
 			throw new RuntimeException(e);
 		}
 		
-		copy.id = null;
+//		copy.id = null;
 		copy.learningGoals = new ArrayList<>();
 		for (LearningGoal lg : this.learningGoals) {
 			LearningGoal learningGoal = lg.copy();

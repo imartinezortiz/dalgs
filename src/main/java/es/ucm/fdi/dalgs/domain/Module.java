@@ -98,7 +98,7 @@ public class Module implements Cloneable, Copyable<Module>{
 			throw new RuntimeException(e);
 		}
 		
-		copy.id = null;
+//		copy.id = null;
 		copy.topics = new ArrayList<>();
 		for (Topic t : this.topics) {
 			Topic topic  = t.copy();
