@@ -145,7 +145,6 @@ public class GroupRepository {
 
 		if (query.getResultList().isEmpty())
 			return null;
-
 		return query.getResultList();
 	}
 

@@ -1,6 +1,5 @@
 package es.ucm.fdi.dalgs.user.web;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,18 +34,17 @@ import es.ucm.fdi.dalgs.user.service.UserService;
 @Controller
 public class UserController {
 
-
 	@Autowired
 	private UserService serviceUser;
 
 	@Autowired
 	private GroupService serviceGroup;
-	
+
 	@Autowired
 	private CourseService serviceCourse;
 
-
 	private Boolean showAll;
+
 	public Boolean getShowAll() {
 		return showAll;
 	}
@@ -54,10 +52,9 @@ public class UserController {
 	public void setShowAll(Boolean showAll) {
 		this.showAll = showAll;
 	}
-	
-	private String typeOfUser ="";
-	
-	
+
+	private String typeOfUser = "";
+
 	public String getTypeOfUser() {
 		return typeOfUser;
 	}
@@ -78,7 +75,6 @@ public class UserController {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		
 		List<User> p = serviceUser.getAll(pageIndex, show, typeOfUser);
 
 		myModel.put("users", p);
@@ -87,43 +83,44 @@ public class UserController {
 		myModel.put("showAll", show);
 		myModel.put("typeOfUser", typeOfUser);
 
-		
 		setTypeOfUser(typeOfUser);
 		setShowAll(show);
 		return new ModelAndView("user/list", "model", myModel);
 	}
-	
+
 	@RequestMapping(value = "/user/{userId}.htm", method = RequestMethod.GET)
 	protected ModelAndView getUserGET(@PathVariable("userId") Long id_user)
 			throws ServletException {
-		
+
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
 		User user = serviceUser.getUser(id_user);
-		if (user != null){
-		myModel.put("userDetails", user);
-		
-		ResultClass<Group> groups = new ResultClass<Group>();
-
-		if(serviceUser.hasRole(user,"ROLE_PROFESSOR")){
-			groups = serviceGroup.getGroupsForProfessor(id_user);
+		if (user != null) {
+			myModel.put("userDetails", user);
 			
-			ResultClass<Course> courses = new ResultClass<Course>();
-			courses = serviceCourse.getCourseForCoordinator(id_user);
-			myModel.put("courses",courses );
+			ResultClass<Group> groups = new ResultClass<Group>();
+			if (serviceUser.hasRole(user, "ROLE_PROFESSOR")) {
+				ResultClass<Course> courses = new ResultClass<Course>();
+				courses = serviceCourse.getCourseForCoordinator(id_user);
+				groups = serviceGroup.getGroupsForProfessor(id_user);
 
+				if(!courses.isEmpty()){
+					myModel.put("courses", courses);
+				}
+				
+			} else if (serviceUser.hasRole(user, "ROLE_STUDENT")) {
+				groups = serviceGroup.getGroupsForStudent(id_user);
+			}
+			
+			if(!groups.isEmpty())
+			myModel.put("groups", groups);
 
-		}
-		else if(serviceUser.hasRole(user,"ROLE_STUDENT")){
-			groups = serviceGroup.getGroupsForStudent(id_user);
-		}
-		myModel.put("groups",groups );
-
-		return new ModelAndView("user/view", "model", myModel); //Admin view
+			return new ModelAndView("user/view", "model", myModel); // Admin
+																	// view
 		}
 		return new ModelAndView("error", "model", myModel);
 	}
-	
+
 	/**
 	 * Methods for add a single user
 	 */
@@ -131,20 +128,19 @@ public class UserController {
 	protected String addUserGET(Model model) {
 
 		User user = new User();
-		
-		// 			Test
-		
+
+		// Test
+
 		List<String> roles = new ArrayList<String>();
 		roles.add("ROLE_ADMIN");
 		roles.add("ROLE_USER");
 		roles.add("ROLE_STUDENT");
 		roles.add("ROLE_PROFESSOR");
 
-		model.addAttribute("roles",roles);
-		
+		model.addAttribute("roles", roles);
 
 		// ----------------------
-		
+
 		model.addAttribute("addUser", user);
 		return "user/add";
 
@@ -152,11 +148,10 @@ public class UserController {
 
 	@RequestMapping(value = "/user/add.htm", method = RequestMethod.POST)
 	// Every Post have to return redirect
-	public String addUserPOST(
-			@ModelAttribute("addUser") @Valid User user,
+	public String addUserPOST(@ModelAttribute("addUser") @Valid User user,
 			BindingResult result, Model model) {
 
-	     ValidatorUtil validator = new ValidatorUtil();
+		ValidatorUtil validator = new ValidatorUtil();
 		if (!validator.validateEmail(user.getEmail()))
 			return "redirect://user/add.htm";
 
@@ -164,27 +159,29 @@ public class UserController {
 
 			boolean created = serviceUser.addUser(user);
 			if (created)
-				return "redirect:/user/page/0.htm?showAll="+ showAll+ "&typeOfUser="+typeOfUser;
+				return "redirect:/user/page/0.htm?showAll=" + showAll
+						+ "&typeOfUser=" + typeOfUser;
 			else
 				return "redirect:/user/add.htm";
 		}
 		return "redirect:/error.htm";
 	}
-	
-	/** Method method to insert users massively*/
-	
+
+	/** Method method to insert users massively */
+
 	@RequestMapping(value = "/upload/User.htm", method = RequestMethod.GET)
 	public String uploadGet(Model model) {
-		CharsetString charsets = new CharsetString() ;
+		CharsetString charsets = new CharsetString();
 
 		model.addAttribute("className", "User");
 		model.addAttribute("listCharsets", charsets.ListCharsets());
 		model.addAttribute("newUpload", new UploadForm("User"));
 		return "upload";
 	}
-	
- 	@RequestMapping(value = "/upload/User.htm", method = RequestMethod.POST)
-	public String uploadPost(@ModelAttribute("newUpload") @Valid UploadForm upload,
+
+	@RequestMapping(value = "/upload/User.htm", method = RequestMethod.POST)
+	public String uploadPost(
+			@ModelAttribute("newUpload") @Valid UploadForm upload,
 			BindingResult result, Model model) {
 
 		if (result.hasErrors() || upload.getCharset().isEmpty()) {
@@ -195,26 +192,27 @@ public class UserController {
 			return "upload";
 		}
 
-		 if (serviceUser.uploadCVS(upload)) return "home";
-		 else return "upload";
+		if (serviceUser.uploadCVS(upload))
+			return "home";
+		else
+			return "upload";
 	}
 
-	
- 	@RequestMapping(value = "/user/{userId}/status.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "/user/{userId}/status.htm", method = RequestMethod.GET)
 	protected String disabledUser(@PathVariable("userId") Long id_user)
 			throws ServletException {
- 		
- 		User user = serviceUser.getUser(id_user);
- 		if(user.isEnabled())user.setEnabled(false);
- 		else user.setEnabled(true);
- 		
- 		if (serviceUser.saveUser(user)) {
-			return "redirect:/user/page/0.htm?showAll="+ showAll+ "&typeOfUser="+typeOfUser;
+
+		User user = serviceUser.getUser(id_user);
+		if (user.isEnabled())
+			user.setEnabled(false);
+		else
+			user.setEnabled(true);
+
+		if (serviceUser.saveUser(user)) {
+			return "redirect:/user/page/0.htm?showAll=" + showAll
+					+ "&typeOfUser=" + typeOfUser;
 		} else
 			return "redirect:/error.htm";
 	}
- 	
- 
-
 
 }

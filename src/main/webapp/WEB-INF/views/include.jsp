@@ -121,7 +121,7 @@
 								<span class="sr-only">(current)</span></a></li>
 					</sec:authorize>
 
-					<sec:authorize access="hasRole('ROLE_USER')">
+					<sec:authorize access="hasRole('ROLE_STUDENT') or hasRole('ROLE_PROFESSOR')">
 						<li><a href="${userUrl}"> <span
 								class="glyphicon glyphicon-user" aria-hidden="true"></span> User
 								<span class="sr-only">(current)</span></a></li>

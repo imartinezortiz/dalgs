@@ -45,20 +45,24 @@ public class MediatorController {
 		myModel.put("userDetails", u);
 
 		ResultClass<Group> groups =new ResultClass<Group>();
-		//TODO
-		if(serviceUser.hasRole(u,"ROLE_PROFESSOR")){
-			groups = serviceGroup.getGroupsForProfessor(u.getId());
-			
+
+		if(serviceUser.hasRole(u,"ROLE_PROFESSOR")){	
 			ResultClass<Course> courses = new ResultClass<Course>();
 			courses = serviceCourse.getCourseForCoordinator(u.getId());
-			myModel.put("courses",courses );
+			
+			if(!courses.isEmpty()){
+				myModel.put("courses", courses);
+			}
+			groups = serviceGroup.getGroupsForProfessor(u.getId());
 
 		}
 		else if(serviceUser.hasRole(u,"ROLE_STUDENT")){
 			groups = serviceGroup.getGroupsForStudent(u.getId());
-		}
-		myModel.put("groups",groups );
 
+
+		}
+		if(!groups.isEmpty())
+			myModel.put("groups", groups);
 
 		return new ModelAndView("user/view", "model", myModel);
 	}

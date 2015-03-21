@@ -190,7 +190,11 @@ public class GroupService {
 	@Transactional(readOnly = true)
 	public ResultClass<Group> getGroupsForStudent(Long id_student){
 		ResultClass<Group> result = new ResultClass<>();
-		result.addAll(daoGroup.getGroupsForStudent(id_student));
+		Collection<Group> groups = daoGroup.getGroupsForStudent(id_student);
+
+		if(groups!=null)
+			result.addAll(groups);
+		result.addAll(groups);
 		return result;
 	}
 
@@ -198,7 +202,10 @@ public class GroupService {
 	@Transactional(readOnly = true)
 	public ResultClass<Group> getGroupsForProfessor(Long id_professor){
 		ResultClass<Group> result = new ResultClass<>();
-		result.addAll(daoGroup.getGroupsForProfessor(id_professor));
+		
+		Collection<Group> groups = daoGroup.getGroupsForProfessor(id_professor);
+		if(groups!=null)
+		result.addAll(groups);
 		return result;
 	}
 
