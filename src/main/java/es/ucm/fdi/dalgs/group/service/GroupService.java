@@ -270,20 +270,24 @@ public class GroupService {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		Group g = daoGroup.getGroup(id_group);
 		
-		//TODO
-		g.getProfessors().remove(serviceUser.getUser(id_user));
-		
-		result = this.modifyGroup(g, id_group);
-		
-		if(!result.hasErrors()){
-			User u = serviceUser.getUser(id_user);
-			if(serviceUser.hasRole(u, "ROLE_PROFESSOR") || serviceUser.hasRole(u, "ROLE_COORDINATOR") ){
-				// Adding the authorities to the professor list
-				manageAclService.removePermissionToAnObject_ADMINISTRATION(u, id_group, Group.class.getName());
+	
+		User u = serviceUser.getUser(id_user);
+		if(serviceUser.hasRole(u, "ROLE_PROFESSOR") && !serviceUser.hasRole(u, "ROLE_COORDINATOR") ){
+			
+			g.getProfessors().remove(serviceUser.getUser(id_user));
+			result = this.modifyGroup(g, id_group);
+			if(!result.hasErrors()){
+				// Removing the authorities to the professor 
+				manageAclService.removePermissionToAnObject_ADMINISTRATION(u, id_group, Group.class.getName());				
 			}
-			else if(serviceUser.hasRole(u, "ROLE_STUDENT")){
+		}
+		else if(serviceUser.hasRole(u, "ROLE_STUDENT")){
+			g.getStudents().remove(serviceUser.getUser(id_user));
+			
+			result = this.modifyGroup(g, id_group);
+			if(!result.hasErrors()){
+				// Removing the authorities to the student 
 				manageAclService.removePermissionToAnObject_READ(u, id_group, Group.class.getName());
-
 			}
 		}
 		return result;
