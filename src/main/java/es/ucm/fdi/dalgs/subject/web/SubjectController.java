@@ -255,7 +255,7 @@ public class SubjectController {
 	public String addCompetenceToSubjectPOST(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
-			@PathVariable("moduleId") Long id_topic,
+			@PathVariable("topicId") Long id_topic,
 			@PathVariable("subjectId") Long id_subject,
 			@ModelAttribute("subject") Subject subject, BindingResult result,
 			Model model) {

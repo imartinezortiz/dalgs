@@ -2,7 +2,6 @@ package es.ucm.fdi.dalgs.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,7 +22,7 @@ import es.ucm.fdi.dalgs.domain.info.TopicInfo;
 @Entity
 @Table(name = "topic", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"code_topic", "id_module" }))
-public class Topic implements Cloneable{
+public class Topic implements Cloneable, Copyable<Topic>{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -87,25 +86,22 @@ public class Topic implements Cloneable{
 	public void setSubjects(Collection<Subject> subjects) {
 		this.subjects = subjects;
 	}
-
-	public Topic clone() {
-		Topic clone = new Topic();
-		clone.setId(null);
-
-		clone.setDeleted(this.isDeleted);
-		clone.setInfo(this.info);
-		
-//		clone.setModule(this.module); clone.getModule().setId(null);
-
-		List<Subject> subjectsClone = new ArrayList<Subject>();
-		if (this.subjects != null) {
-			for (Subject s : this.subjects) {
-				subjectsClone.add(s.clone());
-			}
+	
+	public Topic copy() {
+		Topic copy;
+		try {
+			copy = (Topic) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
 		}
-		clone.setSubjects(subjectsClone);
-
-		return clone;
+		
+		copy.id = null;
+		copy.subjects = new ArrayList<>();
+		for (Subject s : this.subjects) {
+			Subject subject  = s.copy();
+			subject.setTopic(copy);
+		}
+		return copy;
 	}
 
 }

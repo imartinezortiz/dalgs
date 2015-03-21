@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,7 +61,7 @@ public class ModuleService {
 			
 			if(success){
 				moduleExists = daoModule.existByCode(module.getInfo().getCode(), id_degree);
-				success = manageAclService.addAclToObject(moduleExists.getId(), moduleExists.getClass().getName());
+				success = manageAclService.addACLToObject(moduleExists.getId(), moduleExists.getClass().getName());
 				if (success) result.setSingleElement(module);
 			
 			}else{
@@ -73,7 +74,7 @@ public class ModuleService {
 	}
 	
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly=true)
 	public ResultClass<Module> getAll() {
 		ResultClass<Module> result = new ResultClass<Module>();
@@ -113,7 +114,7 @@ public class ModuleService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly=true)
 	public ResultClass<Module> getModule(Long id) {
 		ResultClass<Module> result = new ResultClass<Module>();
@@ -133,7 +134,7 @@ public class ModuleService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly=true)
 	public ResultClass<Module> getModuleAll(Long id_module, Boolean show) {
 		ResultClass<Module> result = new ResultClass<Module>();
@@ -143,21 +144,13 @@ public class ModuleService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly=true)
 	public ResultClass<Module> getModulesForDegree(Long id, Boolean show) {
 		ResultClass<Module> result = new ResultClass<>();
 		result.addAll(daoModule.getModulesForDegree(id, show));
 		return result;
 	}
-
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
-//	@Transactional(readOnly=false)
-//	public ResultClass<Boolean> modifyModule(Module module) {
-//		ResultClass<Boolean> result = new ResultClass<Boolean>();
-//		result.setSingleElement(daoModule.saveModule(module));
-//		return result;
-//	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly=false)
@@ -170,7 +163,6 @@ public class ModuleService {
 		return result;
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PreAuthorize("hasPermission(#module, 'WRITE') or hasPermission(#module, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Module> unDeleteModule(Module module, Long id_degree) {

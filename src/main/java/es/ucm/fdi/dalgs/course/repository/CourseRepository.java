@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Subject;
+import es.ucm.fdi.dalgs.domain.User;
 
 @Repository
 public class CourseRepository {
@@ -200,6 +201,15 @@ public class CourseRepository {
 			logger.error(e.getMessage());
 			return false;
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<Course> getCoursesByUser(Long id_user) {
+		User user = em.getReference(User.class, id_user);
+
+		Query query =em.createQuery("select c from Course c   where c.coordinator=?1 and c.isDeleted='false'");
+		query.setParameter(1, user);
+		return query.getResultList();
 	}
 
 

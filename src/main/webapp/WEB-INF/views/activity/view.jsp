@@ -67,7 +67,7 @@
 			<table class="table table-striped table-bordered">
 				<tr align="center">
 					<td width="20%"><div class="td-label">Learning Goal</div></td>
-					<td width="50%"><div class="td-label">Percentage</div></td>
+					<td width="50%"><div class="td-label">Weight</div></td>
 				
 				</tr>
 				<c:forEach items="${model.learningStatus}" var="ls">
@@ -77,7 +77,7 @@
 							</div></td>
 						<td>
 							<div class="td-content">
-								<c:out value="${ls.percentage}" />
+								<c:out value="${ls.weight}" />
 							</div>
 						</td>
 

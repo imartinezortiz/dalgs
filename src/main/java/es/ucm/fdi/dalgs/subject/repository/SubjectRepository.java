@@ -108,18 +108,6 @@ public class SubjectRepository {
 	}
 
 
-	public String getNextCode() {
-		Query query = em.createQuery("Select MAX(e.id ) from Subject e");
-		try {
-			Long aux = (Long) query.getSingleResult() + 1;
-			return "SUB" + aux;
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			return null;
-		}
-
-	}
-
 	public Subject existByCode(String code) {
 		Query query = em.createQuery("Select s from Subject s where s.info.code=?1");
 		query.setParameter(1, code);

@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -71,7 +72,7 @@ public class CompetenceService {
 			
 			if(success){
 				competenceExists = daoCompetence.existByCode(competence.getInfo().getCode(), competence.getDegree());
-				success = manageAclService.addAclToObject(competenceExists.getId(), competenceExists.getClass().getName());
+				success = manageAclService.addACLToObject(competenceExists.getId(), competenceExists.getClass().getName());
 				if (success) result.setSingleElement(competence);
 			
 			}else{
@@ -83,7 +84,7 @@ public class CompetenceService {
 		return result;	
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Competence> getAll() {
 		ResultClass<Competence> result = new ResultClass<Competence>();
@@ -91,7 +92,7 @@ public class CompetenceService {
 		return result;
 	}
 	
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Competence> getCompetence(Long id) {
 		ResultClass<Competence> result = new ResultClass<Competence>();
@@ -99,7 +100,7 @@ public class CompetenceService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Competence> getCompetenceByName(String name) {
 		ResultClass<Competence> result = new ResultClass<>();
@@ -107,11 +108,9 @@ public class CompetenceService {
 		return result;
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@PreAuthorize("hasPermission(#competence, 'ADMINISTRATION')" )
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean> deleteCompetence(Competence competence) {
-//		Competence competence = daoCompetence.getCompetence(id);
 		ResultClass<Boolean> result = new ResultClass<>();
 
 		Collection <Competence> competences= new ArrayList<>();
@@ -121,7 +120,7 @@ public class CompetenceService {
 		 return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Competence> getCompetencesForSubject(Long id_subject) {
 		ResultClass<Competence> result = new ResultClass<>();
@@ -129,7 +128,7 @@ public class CompetenceService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Competence> getCompetencesForDegree(Long id_degree, Boolean show) {
 		ResultClass<Competence> result = new ResultClass<>();
@@ -138,7 +137,6 @@ public class CompetenceService {
 		return result;
 	}
 
-//	@PreAuthorize("hasPermission(#competence, 'WRITE') or hasPermission(#competence, 'ADMINISTRATION')")
 	@PreAuthorize("hasPermission(#competence, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyCompetence(Competence competence, Long id_competence, Long id_degree) {
@@ -205,7 +203,7 @@ public class CompetenceService {
 	}
 
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Competence> getCompetenceAll(Long id_competence, Boolean show) {
 		ResultClass<Competence> result = new ResultClass<>();

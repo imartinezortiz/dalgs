@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -72,12 +73,22 @@ public class ActivityService {
 			success = daoActivity.addActivity(activity);
 
 			if (success) {
-				activityExists = daoActivity.existByCode(activity.getInfo()
-						.getCode());
-				success = manageAclService.addAclToObject(activityExists
-						.getId(), activityExists.getClass().getName());
+				activityExists = daoActivity.existByCode(activity.getInfo().getCode());
+				success = manageAclService.addACLToObject(activityExists.getId(), activityExists.getClass().getName());
+				
+				manageAclService.addPermissionToAnObject_ADMINISTRATION(course.getCoordinator(), activityExists
+								.getId(), activityExists.getClass().getName());
+				
+				//Rest of users which belong to this course need READ permission
+				for(Group g : course.getGroups()){
+					manageAclService.addPermissionToAnObjectCollection_READ(g.getProfessors(),activityExists
+							.getId(), activityExists.getClass().getName());
+					manageAclService.addPermissionToAnObjectCollection_READ(g.getStudents(),activityExists
+							.getId(), activityExists.getClass().getName());
+				}
+				
 				if (success)
-					result.setSingleElement(activity);
+					result.setSingleElement(activityExists);
 
 			} else {
 				throw new IllegalArgumentException(
@@ -88,7 +99,7 @@ public class ActivityService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Activity> getAll() {
 		ResultClass<Activity> result = new ResultClass<>();
@@ -132,7 +143,7 @@ public class ActivityService {
 
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Activity> getActivity(Long id) {
 		ResultClass<Activity> result = new ResultClass<Activity>();
@@ -148,7 +159,7 @@ public class ActivityService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Activity> getActivitiesForCourse(Long id_course,
 			Boolean showAll) {
 		ResultClass<Activity> result = new ResultClass<>();
@@ -156,16 +167,8 @@ public class ActivityService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@Transactional(readOnly = true)
-	public ResultClass<String> getNextCode() {
-		ResultClass<String> result = new ResultClass<String>();
-		result.setSingleElement(daoActivity.getNextCode());
-		return result;
 
-	}
-
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Activity> getActivityByName(String string) {
 		ResultClass<Activity> result = new ResultClass<Activity>();
@@ -207,8 +210,8 @@ public class ActivityService {
 			LearningGoalStatus learningGoalStatus) {
 		Activity p = daoActivity.getActivity(id);
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		if (learningGoalStatus.getPercentage() <= 0.0
-				|| learningGoalStatus.getPercentage() > 100.0) {
+		if (learningGoalStatus.getWeight() <= 0.0
+				|| learningGoalStatus.getWeight() > 100.0) {
 			result.setSingleElement(false);
 
 		} else {
@@ -270,7 +273,7 @@ public class ActivityService {
 		return result;
 	}
 	
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Activity> getActivitiesForGroup(Long id_group,
 			Boolean showAll) {
 		ResultClass<Activity> result = new ResultClass<>();
@@ -316,10 +319,17 @@ public class ActivityService {
 			if (success) {
 				activityExists = daoActivity.existByCode(activity.getInfo()
 						.getCode());
-				success = manageAclService.addAclToObject(activityExists
-						.getId(), activityExists.getClass().getName());
+				success = manageAclService.addACLToObject(activityExists.getId(), activityExists.getClass().getName());
+				
+				//Rest of users which belong to this course need READ permission
+				manageAclService.addPermissionToAnObjectCollection_READ(group.getProfessors(),activityExists
+							.getId(), activityExists.getClass().getName());
+				manageAclService.addPermissionToAnObjectCollection_READ(group.getStudents(),activityExists
+							.getId(), activityExists.getClass().getName());
+				
+				
 				if (success)
-					result.setSingleElement(activity);
+					result.setSingleElement(activityExists);
 
 			} else {
 				throw new IllegalArgumentException(

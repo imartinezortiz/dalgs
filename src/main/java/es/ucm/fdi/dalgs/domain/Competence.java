@@ -2,7 +2,6 @@ package es.ucm.fdi.dalgs.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,7 +23,7 @@ import es.ucm.fdi.dalgs.domain.info.CompetenceInfo;
 @Entity
 @Table(name = "competence", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"code_competence", "id_degree" }))
-public class Competence implements Cloneable {
+public class Competence implements Cloneable{// , Copyable<Competence>{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -105,35 +104,23 @@ public class Competence implements Cloneable {
 		this.learningGoals = learningGoals;
 	}
 
-	public Competence clone() {
-		Competence clone = new Competence();
-
-		clone.setId(null);
-
-		clone.setInfo(this.info);
-		clone.setDeleted(this.isDeleted);
-
-		List<LearningGoal> learningGoalsClon = new ArrayList<LearningGoal>();
-		if (this.learningGoals != null) {
-			for (LearningGoal lg : this.learningGoals) {
-				learningGoalsClon.add((LearningGoal) lg.clone());
-			}
+	public Competence copy() {
+		Competence copy;
+		try {
+			copy = (Competence) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
 		}
-		clone.setLearningGoals(learningGoalsClon);
-//		clone.setSubjects(this.subjects); 
-
-//		
-//		List<Subject> subjectsClone = (List<Subject>) this.subjects;
-//		if(subjectsClone != null){
-//			for(Subject s: this.subjects){
-//				s.setId(null);
-//				subjectsClone.add(s);
-//			}
-//		}
-//		clone.setSubjects(subjectsClone); 
-
-		return clone;
-
+		
+		copy.id = null;
+		copy.learningGoals = new ArrayList<>();
+		for (LearningGoal lg : this.learningGoals) {
+			LearningGoal learningGoal = lg.copy();
+			learningGoal.setCompetence(copy);
+			copy.learningGoals.add(learningGoal);
+		}
+		return copy;
 	}
+
 
 }

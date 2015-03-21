@@ -2,7 +2,6 @@ package es.ucm.fdi.dalgs.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -25,7 +24,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @Table(name = "academicterm", uniqueConstraints = { @UniqueConstraint(columnNames = {
 		"term", "id_degree" }) })
-public class AcademicTerm implements Cloneable {
+public class AcademicTerm implements Cloneable, Copyable<AcademicTerm> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -103,25 +102,24 @@ public class AcademicTerm implements Cloneable {
 		this.degree = degree;
 	}
 
-	// For doing copy
-	public AcademicTerm clone() {
-		AcademicTerm clon = new AcademicTerm();
-		clon.setId(null);
 
-		clon.setTerm(this.term + " (copy)");
-		clon.setDeleted(this.isDeleted);
-		clon.setDegree(this.degree.clone(false));
-
-		List<Course> coursesClon = new ArrayList<Course>();
-		if (this.courses != null) {
-			for (Course c : this.courses) {
-				coursesClon.add((Course) c.clone(false));
-			}
+	
+	public AcademicTerm copy() {
+		AcademicTerm copy;
+		try {
+			copy = (AcademicTerm) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
 		}
-		clon.setCourses(coursesClon);
-
-		return clon;
+		
+		copy.id = null;
+		copy.courses = new ArrayList<>();
+		for (Course c : this.courses) {
+			Course course = c.copy();
+			course.setAcademicTerm(copy);
+			copy.courses.add(course);
+		}
+		return copy;
 	}
-
 	
 }

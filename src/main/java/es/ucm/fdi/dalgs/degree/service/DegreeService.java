@@ -67,7 +67,7 @@ public class DegreeService {
 			if (success) {
 				degreeExists = daoDegree
 						.existByCode(degree.getInfo().getCode());
-				success = manageAclService.addAclToObject(degreeExists.getId(),
+				success = manageAclService.addACLToObject(degreeExists.getId(),
 						degreeExists.getClass().getName());
 				if (success)
 					result.setSingleElement(degreeExists);
@@ -82,8 +82,7 @@ public class DegreeService {
 
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getDegrees(Integer pageIndex, Boolean showAll) {
 		ResultClass<Degree> result = new ResultClass<>();
@@ -91,8 +90,7 @@ public class DegreeService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getAll() {
 		ResultClass<Degree> result = new ResultClass<>();
@@ -164,7 +162,7 @@ public class DegreeService {
 		}
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getDegreeSubject(Subject p) {
 		ResultClass<Degree> result = new ResultClass<>();
@@ -172,15 +170,9 @@ public class DegreeService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@Transactional(readOnly = true)
-	public ResultClass<String> getNextCode() {
-		ResultClass<String> result = new ResultClass<String>();
-		result.setSingleElement(daoDegree.getNextCode());
-		return result;
 
-	}
-
+	
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Degree> getDegree(Long id) {
 		ResultClass<Degree> result = new ResultClass<>();
 		result.setSingleElement(daoDegree.getDegree(id));
@@ -188,7 +180,7 @@ public class DegreeService {
 
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getDegreeAll(Long id, Boolean show) {
 		ResultClass<Degree> result = new ResultClass<Degree>();
@@ -228,7 +220,6 @@ public class DegreeService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<Integer> numberOfPages(Boolean showAll) {
 		ResultClass<Integer> result = new ResultClass<>();

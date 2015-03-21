@@ -194,12 +194,13 @@ public class CourseController {
 		myModel.put("course", p);
 		myModel.put("showAll", showAll);
 
-		if (!p.getActivities().isEmpty())
-			myModel.put("activities", p.getActivities());
+		if (p != null) {
+			if (!p.getActivities().isEmpty())
+				myModel.put("activities", p.getActivities());
 
-		if (!p.getGroups().isEmpty())
-			myModel.put("groups", p.getGroups());
-
+			if (!p.getGroups().isEmpty())
+				myModel.put("groups", p.getGroups());
+		}
 		return new ModelAndView("course/view", "model", myModel);
 	}
 

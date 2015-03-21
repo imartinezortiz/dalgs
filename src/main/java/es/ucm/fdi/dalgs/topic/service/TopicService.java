@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,7 +59,7 @@ public class TopicService {
 			
 			if(success){
 				topicExists = daoTopic.existByCode(topic.getInfo().getCode(), id_module);
-				success = manageAclService.addAclToObject(topicExists.getId(), topicExists.getClass().getName());
+				success = manageAclService.addACLToObject(topicExists.getId(), topicExists.getClass().getName());
 				if (success) result.setSingleElement(topic);
 			
 			}else{
@@ -69,7 +70,7 @@ public class TopicService {
 		return result;		
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly=true)
 	public ResultClass<Topic> getAll() {
 		ResultClass<Topic> result = new ResultClass<>();
@@ -110,7 +111,7 @@ public class TopicService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly=true)
 	public ResultClass<Topic> getTopic(Long id) {
 		ResultClass<Topic> result = new ResultClass<Topic>();
@@ -133,7 +134,7 @@ public class TopicService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly=true)
 	public ResultClass<Topic> getTopicAll(Long id_topic, Boolean show) {
 		ResultClass<Topic> result = new ResultClass<Topic>();
@@ -143,7 +144,7 @@ public class TopicService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly=true)
 	public ResultClass<Topic> getTopicsForModule(Long id, Boolean show) {
 		ResultClass<Topic> result = new ResultClass<>();

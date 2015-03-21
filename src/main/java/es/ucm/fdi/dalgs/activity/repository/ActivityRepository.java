@@ -134,18 +134,6 @@ public class ActivityRepository {
 			return (Activity) query.getSingleResult();
 	}
 
-	public String getNextCode() {
-		Query query = em.createQuery("Select MAX(e.id ) from Activity e");
-		try {
-			Long aux = (Long) query.getSingleResult() + 1;
-			return "ACT" + aux;
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			return null;
-		}
-
-	}
-
 	public Activity getActivityByName(String name) {
 		Query query = em
 				.createQuery("select a from Activity a where a.info.name=?1");

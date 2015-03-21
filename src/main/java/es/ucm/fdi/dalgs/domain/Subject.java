@@ -2,7 +2,6 @@ package es.ucm.fdi.dalgs.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,12 +17,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
 import es.ucm.fdi.dalgs.domain.info.SubjectInfo;
 
 @Entity
 @Table(name = "subject")
-public class Subject implements Cloneable {
+public class Subject implements Cloneable, Copyable<Subject> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_subject")
@@ -90,24 +88,24 @@ public class Subject implements Cloneable {
 		this.topic = topic;
 	}
 
-	public Subject clone() {
-		Subject clone = new Subject();
-
-		clone.setId(null);
-
-		clone.setInfo(this.info);
-		clone.setDeleted(this.isDeleted);
-		
-//		clone.setTopic(this.topic); clone.getTopic().setId(null);
-
-		List<Competence> competencesClone = new ArrayList<Competence>();
-		if (this.competences != null) {
-			for (Competence c : this.competences) {
-				competencesClone.add(c.clone());
-			}
+	
+	public Subject copy() {
+		Subject copy;
+		try {
+			copy = (Subject) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
 		}
-		clone.setCompetences(competencesClone);
-
-		return clone;
+		
+		copy.id = null;
+		copy.competences = new ArrayList<>();
+		for (Competence c : this.competences) {
+			c.getSubjects().remove(this);
+			c.getSubjects().add(copy);
+			copy.competences.add(c);
+		}
+		return copy;
 	}
+
+	
 }

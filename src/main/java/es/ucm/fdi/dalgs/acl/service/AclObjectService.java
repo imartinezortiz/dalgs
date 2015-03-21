@@ -21,7 +21,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import es.ucm.fdi.dalgs.domain.AcademicTerm;
+import es.ucm.fdi.dalgs.domain.Activity;
+import es.ucm.fdi.dalgs.domain.Course;
+import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
+import es.ucm.fdi.dalgs.user.service.UserService;
 
 @Service
 public class AclObjectService {
@@ -31,11 +36,14 @@ public class AclObjectService {
 	@Autowired
 	private MutableAclService mutableAclService;
 
+	@Autowired
+	private UserService userService;
+	
 	public void setMutableAclService(MutableAclService mutableAclService) {
 		this.mutableAclService = mutableAclService;
 	}
 
-	public boolean addAclToObject(Long id_object, String name_class) {
+	public boolean addACLToObject(Long id_object, String name_class) {
 
 		Authentication authentication = null;
 		ObjectIdentity objectIdentity = new ObjectIdentityImpl(name_class,
@@ -66,23 +74,22 @@ public class AclObjectService {
 		acl.insertAce(1, BasePermission.DELETE, new GrantedAuthoritySid(
 				"ROLE_ADMIN"), true);
 
-		// READ access for users with ROLE_USER
+		/*// READ access for users with ROLE_USER
 		acl.insertAce(2, BasePermission.READ, new GrantedAuthoritySid(
 				"ROLE_USER"), true);
-
+		 */
 		return true;
 	}
 
-	public boolean removeAclFromObject(Long id_object, String name_class) {
+	public boolean removeACLFromObject(Long id_object, String name_class) {
 		// Delete the ACL information as well
 		ObjectIdentity oid = new ObjectIdentityImpl(name_class, id_object);
 		mutableAclService.deleteAcl(oid, false);
-
 		return true;
 	}
 
 	// Authorize professors to manage his course
-	public void addPermissionToAnObjectCollection(Collection<User> professors,
+	public void addPermissionToAnObjectCollection_ADMINISTRATION(Collection<User> professors,
 			Long id_object, String name_class) {
 
 		// Create or update the relevant ACL
@@ -110,7 +117,7 @@ public class AclObjectService {
 	}
 
 	// Remove ACL Permissions
-	public void removePermissionToAnObject(User user, Long id_object,
+	public void removePermissionToAnObject_ADMINISTRATION(User user, Long id_object,
 			String name_class) {
 
 		// Create or update the relevant ACL
@@ -144,7 +151,7 @@ public class AclObjectService {
 	}
 
 	// Remove ACL Permissions
-	public void removePermissionToAnObjectCollection(Collection<User> users,
+	public void removePermissionToAnObjectCollection_ADMINISTRATION(Collection<User> users,
 			Long id_object, String name_class) {
 
 		// Create or update the relevant ACL
@@ -181,7 +188,7 @@ public class AclObjectService {
 	}
 
 	// Authorize professors to manage his course
-	public void addPermissionToAnObjectCoordinator(User coordinator,
+	public void addPermissionToAnObject_ADMINISTRATION(User coordinator,
 			Long id_object, String name_class) {
 
 		// Create or update the relevant ACL
@@ -205,5 +212,201 @@ public class AclObjectService {
 		mutableAclService.updateAcl(acl);
 
 	}
+	
+	// Authorize professors to manage his course
+		public void addPermissionToAnObject_READ(User coordinator,
+				Long id_object, String name_class) {
+
+			// Create or update the relevant ACL
+			MutableAcl acl = null;
+			// Prepare the information we'd like in our access control entry (ACE)
+			ObjectIdentity oi = new ObjectIdentityImpl(name_class, id_object);
+
+			Sid sid = null;
+
+			sid = new PrincipalSid(coordinator.getUsername());
+			Permission p = BasePermission.ADMINISTRATION;
+
+			try {
+				acl = (MutableAcl) mutableAclService.readAclById(oi);
+			} catch (NotFoundException nfe) {
+				acl = mutableAclService.createAcl(oi);
+			}
+
+			// Now grant some permissions via an access control entry (ACE)
+			acl.insertAce(acl.getEntries().size(), p, sid, true);
+			mutableAclService.updateAcl(acl);
+
+		}
+		
+		// Authorize professors to manage his course
+		public void addPermissionToAnObjectCollection_READ(Collection<User> professors,
+				Long id_object, String name_class) {
+
+			// Create or update the relevant ACL
+			MutableAcl acl = null;
+			// Prepare the information we'd like in our access control entry (ACE)
+			ObjectIdentity oi = new ObjectIdentityImpl(name_class, id_object);
+
+			Sid sid = null;
+			for (User u : professors) {
+				sid = new PrincipalSid(u.getUsername());
+				Permission p = BasePermission.READ;
+
+				try {
+					acl = (MutableAcl) mutableAclService.readAclById(oi);
+				} catch (NotFoundException nfe) {
+					acl = mutableAclService.createAcl(oi);
+				}
+
+				// Now grant some permissions via an access control entry (ACE)
+				acl.insertAce(acl.getEntries().size(), p, sid, true);
+				mutableAclService.updateAcl(acl);
+
+			}
+
+		}
+		
+		public void removePermissionToAnObject_READ(User user, Long id_object,
+				String name_class) {
+
+			// Create or update the relevant ACL
+			MutableAcl acl = null;
+			// Prepare the information we'd like in our access control entry (ACE)
+			ObjectIdentity oi = new ObjectIdentityImpl(name_class, id_object);
+
+			Sid sid = null;
+
+			sid = new PrincipalSid(user.getUsername());
+			Permission p = BasePermission.READ;
+
+			try {
+				acl = (MutableAcl) mutableAclService.readAclById(oi);
+			} catch (NotFoundException nfe) {
+				acl = mutableAclService.createAcl(oi);
+			}
+
+			Integer aceIndex = 0;
+			for (AccessControlEntry ace : acl.getEntries()) {
+				if ((ace.getSid().equals(sid))
+						&& (ace.getPermission().equals(p))) { 
+					acl.deleteAce(aceIndex);
+					break;
+				}
+				else aceIndex++;
+			}
+
+			// Now grant some permissions via an access control entry (ACE)
+			if(acl !=null)mutableAclService.updateAcl(acl);
+		}
+
+		// Remove ACL Permissions
+		public void removePermissionToAnObjectCollection_READ(Collection<User> users,
+				Long id_object, String name_class) {
+
+			// Create or update the relevant ACL
+			MutableAcl acl = null;
+			// Prepare the information we'd like in our access control entry (ACE)
+			ObjectIdentity oi = new ObjectIdentityImpl(name_class, id_object);
+
+			Sid sid = null;
+
+			for (User u : users) {
+				sid = new PrincipalSid(u.getUsername());
+				Permission p = BasePermission.READ;
+
+				try {
+					acl = (MutableAcl) mutableAclService.readAclById(oi);
+				} catch (NotFoundException nfe) {
+					acl = mutableAclService.createAcl(oi);
+				}
+
+		        int aceIndex = 0;
+				for (AccessControlEntry ace : acl.getEntries()) {
+					if ((ace.getSid().equals(sid))
+							&& (ace.getPermission().equals(p))) {
+						acl.deleteAce(aceIndex);
+						break;
+					}
+					else  aceIndex++;
+				}
+			}
+
+			// Now grant some permissions via an access control entry (ACE)
+			if(acl !=null)	mutableAclService.updateAcl(acl);
+
+		}
+
+		public void addPermissionCASCADE(User user, Object object, String name) {
+			if (object instanceof Course){
+				AcademicTerm at = ((Course) object).getAcademicTerm();
+				if(at!=null)
+					this.addPermissionToAnObject_READ(user, at.getId(), at.getClass().getName());
+				
+				for(Activity a: ((Course) object).getActivities())
+					this.addPermissionToAnObject_ADMINISTRATION(user, a.getId(), a.getClass().getName());
+				
+				for(Group g: ((Course) object).getGroups())
+					this.addPermissionToAnObject_ADMINISTRATION(user, g.getId(), g.getClass().getName());
+
+			}
+			else if (object instanceof Group){
+				Course c = ((Group) object).getCourse();
+				if(c!=null)
+					this.addPermissionToAnObject_READ(user, c.getId(), c.getClass().getName());
+
+				AcademicTerm at = c.getAcademicTerm();
+				//TODO
+				if(at!=null)
+					this.addPermissionToAnObject_READ(user, at.getId(), at.getClass().getName());
+				
+				for(Activity a: ((Group) object).getCourse().getActivities())
+					this.addPermissionToAnObject_READ(user, a.getId(), a.getClass().getName());
+				
+				for(Activity a: ((Group) object).getActivities())
+					this.addPermissionToAnObject_ADMINISTRATION(user, a.getId(), a.getClass().getName());
+			}
+		}
+		
+		public void removePermissionCASCADE(User user, Object object, String name) {
+			if (object instanceof Course){
+				AcademicTerm at = ((Course) object).getAcademicTerm();
+				if(at!=null)
+					this.removePermissionToAnObject_READ(user, at.getId(), at.getClass().getName());
+				
+				for(Activity a: ((Course) object).getActivities())
+					this.removePermissionToAnObject_ADMINISTRATION(user, a.getId(), a.getClass().getName());
+				
+				for(Group g: ((Course) object).getGroups())
+					this.removePermissionToAnObject_ADMINISTRATION(user, g.getId(), g.getClass().getName());
+
+			}
+			else if (object instanceof Group){
+				Course c = ((Group) object).getCourse();
+				if(c!=null)
+					this.removePermissionToAnObject_READ(user, c.getId(), c.getClass().getName());
+
+				AcademicTerm at = c.getAcademicTerm();
+				if(at!=null)
+					this.removePermissionToAnObject_READ(user, at.getId(), at.getClass().getName());
+				
+				
+				for(Activity a: ((Group) object).getCourse().getActivities())
+					this.removePermissionToAnObject_READ(user, a.getId(), a.getClass().getName());
+				
+				if(userService.hasRole(user, "ROLE_PROFESSOR")){
+					for(Activity a: ((Group) object).getActivities())
+						this.removePermissionToAnObject_ADMINISTRATION(user, a.getId(), a.getClass().getName());
+				}else if (userService.hasRole(user, "ROLE_STUDENT")){
+					for(Activity a: ((Group) object).getActivities())
+						this.removePermissionToAnObject_READ(user, a.getId(), a.getClass().getName());
+				}
+			}
+		}
+
+		public void removePermissionCollectionCASCADE(Collection<User> users, Object object, String name) {
+			for(User u : users)
+				this.removePermissionCASCADE(u, object, name);
+		}
 
 }

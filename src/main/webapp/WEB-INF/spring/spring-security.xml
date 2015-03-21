@@ -38,7 +38,11 @@
 		<intercept-url pattern="/logout.htm" access="permitAll" />
 		<intercept-url pattern="/*" access="hasRole('ROLE_USER')" />
 
-
+		<!-- 
+		<intercept-url pattern="/user_home.htm" access="hasRole('ROLE_STUDENT')" />
+		<intercept-url pattern="/user_home.htm" access="hasRole('ROLE_PROFESSOR')" />
+		<intercept-url pattern="/*" access="hasRole('ROLE_ADMIN')" />
+		 -->
 		<!-- form login This declares our login settings: login-page: the URL path 
 			of our login page authentication-failure-url: the URL where a user will be 
 			redirected after a failed login default-target-url: the URL where a user 

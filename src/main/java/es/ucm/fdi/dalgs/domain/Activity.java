@@ -2,7 +2,6 @@ package es.ucm.fdi.dalgs.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -22,7 +21,7 @@ import es.ucm.fdi.dalgs.domain.info.ActivityInfo;
 
 @Entity
 @Table(name = "activity")
-public class Activity implements Cloneable {
+public class Activity implements Cloneable, Copyable<Activity> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -107,22 +106,22 @@ public class Activity implements Cloneable {
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-
-	public Activity clone() {
-		Activity clone = new Activity();
-
-		clone.setId(null);
-		
-		clone.setDeleted(this.isDeleted);
-		clone.setInfo(this.info);
-
-		List<LearningGoalStatus> learningGoalStatusClone = new ArrayList<LearningGoalStatus>();
-		if (this.learningGoalStatus != null) {
-			for (LearningGoalStatus lgs : this.learningGoalStatus) {
-				learningGoalStatusClone.add((LearningGoalStatus) lgs.clone());
-			}
+	
+	
+	public Activity copy() {
+		Activity copy;
+		try {
+			copy = (Activity) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
 		}
-		clone.setLearningGoalStatus(learningGoalStatusClone);
-		return clone;
+		
+		copy.id = null;
+		copy.learningGoalStatus = new ArrayList<>();
+		for (LearningGoalStatus lgs : this.learningGoalStatus) {
+			copy.learningGoalStatus.add(lgs.copy());
+		}
+		return copy;
 	}
+
 }
