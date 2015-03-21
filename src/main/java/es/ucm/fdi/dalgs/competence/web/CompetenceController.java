@@ -1,6 +1,7 @@
 package es.ucm.fdi.dalgs.competence.web;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -74,10 +75,10 @@ public class CompetenceController {
 	public String addCompetencePOST(
 			@ModelAttribute("competence") Competence newCompetence,
 			@PathVariable("degreeId") Long id_degree,
-			BindingResult resultBinding, RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale ) {
 
 		if (!resultBinding.hasErrors()){
-			ResultClass<Competence> result = serviceCompetence.addCompetence(newCompetence, id_degree);
+			ResultClass<Competence> result = serviceCompetence.addCompetence(newCompetence, id_degree, locale);
 			if (!result.hasErrors())
 				return "redirect:/degree/" + id_degree + ".htm";
 			else{

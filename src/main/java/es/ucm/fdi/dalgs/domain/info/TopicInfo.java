@@ -19,7 +19,7 @@ public class TopicInfo {
 	private String code;
 	
 	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=50)
+	@Size(min=1, max=60)
 	@Basic(optional = false)
 	@Column(name = "name", length = 50, nullable = false)
 	private String name;

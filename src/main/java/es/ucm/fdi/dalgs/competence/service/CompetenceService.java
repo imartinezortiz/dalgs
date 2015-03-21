@@ -2,8 +2,10 @@ package es.ucm.fdi.dalgs.competence.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -34,10 +36,13 @@ public class CompetenceService {
 	
 	@Autowired
 	private AclObjectService manageAclService;
+	
+	@Autowired
+	private MessageSource messages;
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public ResultClass<Competence> addCompetence(Competence competence, Long id_degree) {
+	public ResultClass<Competence> addCompetence(Competence competence, Long id_degree, Locale locale) {
 		
 		boolean success  = false;
 		
@@ -49,7 +54,7 @@ public class CompetenceService {
 		if( competenceExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("Code already exists");
+			errors.add(messages.getMessage("error.codeExists", null, "RRRRRRR", locale));
 
 			if (competenceExists.getIsDeleted()){
 				result.setElementDeleted(true);
