@@ -75,7 +75,7 @@ public class GroupService {
 		return result;		
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Group> getGroup(Long id_group) {
 		ResultClass<Group> result = new ResultClass<Group>();
@@ -139,7 +139,7 @@ public class GroupService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Group> getGroupsForCourse(Long id, Boolean showAll) {
 		ResultClass<Group> result = new ResultClass<>();
@@ -186,7 +186,7 @@ public class GroupService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Group> getGroupsForStudent(Long id_student){
 		ResultClass<Group> result = new ResultClass<>();
@@ -198,7 +198,7 @@ public class GroupService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Group> getGroupsForProfessor(Long id_professor){
 		ResultClass<Group> result = new ResultClass<>();

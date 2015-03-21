@@ -79,7 +79,7 @@ public class CompetenceService {
 		return result;	
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Competence> getAll() {
 		ResultClass<Competence> result = new ResultClass<Competence>();
@@ -87,7 +87,7 @@ public class CompetenceService {
 		return result;
 	}
 	
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Competence> getCompetence(Long id) {
 		ResultClass<Competence> result = new ResultClass<Competence>();
@@ -95,7 +95,7 @@ public class CompetenceService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Competence> getCompetenceByName(String name) {
 		ResultClass<Competence> result = new ResultClass<>();
@@ -115,7 +115,7 @@ public class CompetenceService {
 		 return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Competence> getCompetencesForSubject(Long id_subject) {
 		ResultClass<Competence> result = new ResultClass<>();
@@ -123,7 +123,7 @@ public class CompetenceService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Competence> getCompetencesForDegree(Long id_degree, Boolean show) {
 		ResultClass<Competence> result = new ResultClass<>();
@@ -198,7 +198,7 @@ public class CompetenceService {
 	}
 
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Competence> getCompetenceAll(Long id_competence, Boolean show) {
 		ResultClass<Competence> result = new ResultClass<>();

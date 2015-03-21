@@ -113,7 +113,7 @@
 							</td>
 							
 							<td><a class="btn btn-success"
-								href="<c:url value='/academicTerm/${group.course.academicTerm.id}/course/${group.course.id}.htm'/>">
+								href="<c:url value='/academicTerm/${course.academicTerm.id}/course/${course.id}.htm'/>">
 									View </a></td>
 
 						</tr>

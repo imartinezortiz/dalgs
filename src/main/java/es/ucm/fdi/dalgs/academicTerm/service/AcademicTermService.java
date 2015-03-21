@@ -154,7 +154,7 @@ public class AcademicTermService {
 	}
 
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<AcademicTerm> getAcademicTermsByDegree(Degree degree) {
 		ResultClass<AcademicTerm> result = new ResultClass<>();
@@ -163,7 +163,7 @@ public class AcademicTermService {
 	}
 
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<AcademicTerm> getAcademicTerm(Long id_academic, Boolean showAll) {
 		ResultClass<AcademicTerm> result = new ResultClass<AcademicTerm>();

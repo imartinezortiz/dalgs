@@ -78,7 +78,7 @@ public class ActivityService {
 				success = manageAclService.addACLToObject(activityExists
 						.getId(), activityExists.getClass().getName());
 				if (success)
-					result.setSingleElement(activity);
+					result.setSingleElement(activityExists);
 
 			} else {
 				throw new IllegalArgumentException(
@@ -89,7 +89,7 @@ public class ActivityService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Activity> getAll() {
 		ResultClass<Activity> result = new ResultClass<>();
@@ -133,7 +133,7 @@ public class ActivityService {
 
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Activity> getActivity(Long id) {
 		ResultClass<Activity> result = new ResultClass<Activity>();
@@ -149,7 +149,7 @@ public class ActivityService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Activity> getActivitiesForCourse(Long id_course,
 			Boolean showAll) {
 		ResultClass<Activity> result = new ResultClass<>();
@@ -158,7 +158,7 @@ public class ActivityService {
 	}
 
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Activity> getActivityByName(String string) {
 		ResultClass<Activity> result = new ResultClass<Activity>();
@@ -263,7 +263,7 @@ public class ActivityService {
 		return result;
 	}
 	
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Activity> getActivitiesForGroup(Long id_group,
 			Boolean showAll) {
 		ResultClass<Activity> result = new ResultClass<>();
@@ -312,7 +312,7 @@ public class ActivityService {
 				success = manageAclService.addACLToObject(activityExists
 						.getId(), activityExists.getClass().getName());
 				if (success)
-					result.setSingleElement(activity);
+					result.setSingleElement(activityExists);
 
 			} else {
 				throw new IllegalArgumentException(

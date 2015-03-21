@@ -103,7 +103,7 @@ public class ActivityController {
 					newactivity, id_course);
 			if (!result.hasErrors())
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
-						+ id_course + "/activity/" + newactivity.getId()
+						+ id_course + "/activity/" + result.getSingleElement().getId()
 						+ "/modify.htm";
 			else {
 
@@ -113,7 +113,7 @@ public class ActivityController {
 					attr.addFlashAttribute("addactivity",
 							result.getSingleElement());
 				} else
-					attr.addFlashAttribute("addactivity", newactivity);
+					attr.addFlashAttribute("addactivity", result.getSingleElement());
 				attr.addFlashAttribute("errors", result.getErrorsList());
 
 			}
@@ -382,7 +382,7 @@ public class ActivityController {
 			if (!result.hasErrors())
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
 						+ id_course + "/group/" + id_group + "/activity/"
-						+ newactivity.getId() + "/modify.htm";
+						+  result.getSingleElement().getId() + "/modify.htm";
 			else {
 
 				if (result.isElementDeleted()) {
@@ -391,7 +391,9 @@ public class ActivityController {
 					attr.addFlashAttribute("addactivity",
 							result.getSingleElement());
 				} else
-					attr.addFlashAttribute("addactivity", newactivity);
+					attr.addFlashAttribute("addactivity", result.getSingleElement());
+
+	//				attr.addFlashAttribute("addactivity", newactivity);
 				attr.addFlashAttribute("errors", result.getErrorsList());
 
 			}

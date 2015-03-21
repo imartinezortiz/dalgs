@@ -85,7 +85,7 @@ public class CourseService {
 	
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public List<Course> getAll() {
 		return daoCourse.getAll();
@@ -131,6 +131,9 @@ public class CourseService {
 				
 				// Adding the authorities to the new coordinator 
 				manageAclService.addPermissionToAnObject_ADMINISTRATION(course.getCoordinator(),course.getId(), course.getClass().getName());
+				
+				//	Adding the READ permissions in cascade to see through the general view
+				manageAclService.addPermissionCASCADE(course.getCoordinator(), course, course.getClass().getName());
 			}
 		}
 		return result;
@@ -139,7 +142,7 @@ public class CourseService {
 
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Course> getCourse(Long id) {
 		ResultClass<Course> result = new ResultClass<Course>();
@@ -161,7 +164,7 @@ public class CourseService {
 	}
 
 	
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Course> getCoursesByAcademicTerm(Long id_academic, Boolean showAll) {
 		ResultClass<Course> result = new ResultClass<>();
 
@@ -186,7 +189,7 @@ public class CourseService {
 
 
 	
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Course> getCourseAll(Long id, Boolean showAll) {
 		ResultClass<Course> result = new ResultClass<>();
@@ -199,7 +202,7 @@ public class CourseService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Course> getCoursesfromListAcademic(
 			Collection<AcademicTerm> academicList) {
 		
@@ -255,7 +258,7 @@ public class CourseService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Course> getCoursesBySubject(Subject subject) {
 		ResultClass<Course> result = new ResultClass<>();
 		result.addAll(daoCourse.getCoursesBySubject(subject)); 
@@ -270,7 +273,7 @@ public class CourseService {
 		return result;
 	}
 	
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Course> getCourseForCoordinator(Long id_user) {
 		ResultClass<Course> result = new ResultClass<>();
 		result.addAll(daoCourse.getCoursesByUser(id_user)); 

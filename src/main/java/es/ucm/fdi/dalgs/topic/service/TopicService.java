@@ -70,7 +70,7 @@ public class TopicService {
 		return result;		
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly=true)
 	public ResultClass<Topic> getAll() {
 		ResultClass<Topic> result = new ResultClass<>();
@@ -111,7 +111,7 @@ public class TopicService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly=true)
 	public ResultClass<Topic> getTopic(Long id) {
 		ResultClass<Topic> result = new ResultClass<Topic>();
@@ -134,7 +134,7 @@ public class TopicService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly=true)
 	public ResultClass<Topic> getTopicAll(Long id_topic, Boolean show) {
 		ResultClass<Topic> result = new ResultClass<Topic>();
@@ -144,7 +144,7 @@ public class TopicService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly=true)
 	public ResultClass<Topic> getTopicsForModule(Long id, Boolean show) {
 		ResultClass<Topic> result = new ResultClass<>();

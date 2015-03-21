@@ -79,7 +79,7 @@ public class SubjectService {
 		return result;		
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getAll() {
 		
@@ -89,7 +89,7 @@ public class SubjectService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Subject> getSubject(Long id) {
 		ResultClass<Subject> result = new ResultClass<>();
@@ -116,7 +116,7 @@ public class SubjectService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectsForTopic(Long id_topic, Boolean show) {
 		ResultClass<Subject> result = new ResultClass<>();
@@ -168,7 +168,7 @@ public class SubjectService {
 	}
 	
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectForCourse(Long id) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
@@ -176,7 +176,7 @@ public class SubjectService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectByName(String string) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
@@ -184,7 +184,7 @@ public class SubjectService {
 		return result;
 	}
 	
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectAll(Long id_subject) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
@@ -195,7 +195,7 @@ public class SubjectService {
 	}
 
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectForDegree(Degree degree) {
 		ResultClass<Subject> result = new ResultClass<>();

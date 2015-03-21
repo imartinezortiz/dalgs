@@ -44,6 +44,11 @@
 			<h4 class="list-group-item-heading">
 				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
 				Group Professor (Admin)</h4>
+		</a><a  class="list-group-item " 
+			href="<c:url value='/academicTerm/1/course/1.htm'/>">
+			<h4 class="list-group-item-heading">
+				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+				Course Professor (Admin)</h4>
 		</a>
 
 	</div>

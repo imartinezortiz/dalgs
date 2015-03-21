@@ -21,6 +21,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import es.ucm.fdi.dalgs.domain.AcademicTerm;
+import es.ucm.fdi.dalgs.domain.Course;
+import es.ucm.fdi.dalgs.domain.Degree;
+import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
 
 @Service
@@ -326,6 +330,27 @@ public class AclObjectService {
 			// Now grant some permissions via an access control entry (ACE)
 			if(acl !=null)	mutableAclService.updateAcl(acl);
 
+		}
+
+		public void addPermissionCASCADE(User user, Object object, String name) {
+			if (object instanceof Course){
+				AcademicTerm at = ((Course) object).getAcademicTerm();
+				if(at!=null)
+					this.addPermissionToAnObject_READ(user, at.getId(), at.getClass().getName());
+			}
+			else if (object instanceof Group){
+				
+				
+				Course c = ((Group) object).getCourse();
+				if(c!=null)
+					this.addPermissionToAnObject_READ(user, c.getId(), c.getClass().getName());
+
+				AcademicTerm at = c.getAcademicTerm();
+				//TODO
+				//Degree d = at.getDegree();
+				if(at!=null)
+					this.addPermissionToAnObject_READ(user, at.getId(), at.getClass().getName());
+			}
 		}
 
 }

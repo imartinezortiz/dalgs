@@ -82,7 +82,7 @@ public class DegreeService {
 
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getDegrees(Integer pageIndex, Boolean showAll) {
 		ResultClass<Degree> result = new ResultClass<>();
@@ -90,7 +90,7 @@ public class DegreeService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getAll() {
 		ResultClass<Degree> result = new ResultClass<>();
@@ -162,7 +162,7 @@ public class DegreeService {
 		}
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getDegreeSubject(Subject p) {
 		ResultClass<Degree> result = new ResultClass<>();
@@ -172,7 +172,7 @@ public class DegreeService {
 
 
 	
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Degree> getDegree(Long id) {
 		ResultClass<Degree> result = new ResultClass<>();
 		result.setSingleElement(daoDegree.getDegree(id));
@@ -180,7 +180,7 @@ public class DegreeService {
 
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getDegreeAll(Long id, Boolean show) {
 		ResultClass<Degree> result = new ResultClass<Degree>();

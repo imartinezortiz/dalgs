@@ -74,7 +74,7 @@ public class ModuleService {
 	}
 	
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly=true)
 	public ResultClass<Module> getAll() {
 		ResultClass<Module> result = new ResultClass<Module>();
@@ -114,7 +114,7 @@ public class ModuleService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly=true)
 	public ResultClass<Module> getModule(Long id) {
 		ResultClass<Module> result = new ResultClass<Module>();
@@ -134,7 +134,7 @@ public class ModuleService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly=true)
 	public ResultClass<Module> getModuleAll(Long id_module, Boolean show) {
 		ResultClass<Module> result = new ResultClass<Module>();
@@ -144,7 +144,7 @@ public class ModuleService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly=true)
 	public ResultClass<Module> getModulesForDegree(Long id, Boolean show) {
 		ResultClass<Module> result = new ResultClass<>();
