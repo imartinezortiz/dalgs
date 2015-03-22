@@ -361,8 +361,6 @@ public class AcademicTermController {
 			return "redirect:/academicTerm/page/0.htm?showAll=" + showAll;
 		
 		return "redirect:/error.htm";
-
-
 	}
 
 	public void validate(AcademicTerm academicTerm, Errors errors) {

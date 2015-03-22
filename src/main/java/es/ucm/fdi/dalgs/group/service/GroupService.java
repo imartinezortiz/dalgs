@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.activity.service.ActivityService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
-
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
@@ -293,6 +293,29 @@ public class GroupService {
 		return result;
 	}
 
+	@PreAuthorize("hasPermission(#group, 'ADMINISTRATION')")
+	@Transactional(readOnly = false	,propagation = Propagation.REQUIRED)
+	public ResultClass<Group> copyGroup(Group group) {
+		Group copy = group.copy();
+		ResultClass<Group> result = new ResultClass<>();
+		copy.setName(copy.getName() + " (copy)");
+		boolean r = daoGroup.addGroup(copy);
+		if (r) {
+			Group groupexist = daoGroup.existByName(copy.getName());
+			boolean success = manageAclService.addACLToObject(
+					groupexist.getId(), groupexist.getClass().getName());
+			if (success)
+				result.setSingleElement(copy);
+
+			else {
+				throw new IllegalArgumentException(
+						"Cannot create ACL. Object not set.");
+			}
+		}
+	
+		return result;
+
+	}
 
 }
 

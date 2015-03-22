@@ -147,6 +147,10 @@ public class Group implements Cloneable, Copyable<Group>{
 			activity.setGroup(copy);
 			copy.activities.add(activity);
 		}
+		
+		copy.students = new ArrayList<>();
+		copy.professors = new ArrayList<>();
+		
 		return copy;
 	}
 	

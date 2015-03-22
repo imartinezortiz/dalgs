@@ -39,36 +39,29 @@
 		</div>
 		<table class="table table-striped table-bordered">
 			<tr align="center">
-
+				<td></td>
 				<td>Term</td>
 				<td>Code Degree</td>
 				<td>Name Degree</td>
-				<!--			<td>Name</td>
-			<td>Description</td>
-			<td>Subject</td>
-			<td>Actions</td>-->
 			</tr>
 
 
 			<c:forEach items="${model.academicTerms}" var="academic">
 
 				<tr align="center">
+					<td> <sec:authorize access="hasRole('ROLE_ADMIN')">
+					<a	href="<c:url value='/academicTerm/${academic.id}/clone.htm'/>"
+								class="btn btn-clone">Clone</a> </sec:authorize></td>
 					<td><c:out value="${academic.term}" /></td>
 					<td><c:out value="${academic.degree.info.code}" /></td>
 					<td><c:out value="${academic.degree.info.name}" /></td>
-					<!-- <td><c:out value="${activity.name}" /></td>
-				<td><c:out value="${activity.description}" /></td>
-				<td><c:out value="${activity.subject.name}" /></td>
-				-->
-
 					<td>
 					<c:choose>
    						<c:when  test="${academic.isDeleted eq false}">
    							<a	href="<c:url value='/academicTerm/${academic.id}.htm?showAll=false'/>"
 								class="btn btn-success">View</a> 
  							<sec:authorize access="hasRole('ROLE_ADMIN')">
- 							<a	href="<c:url value='/academicTerm/${academic.id}/clone.htm'/>"
-								class="btn btn-success">Clone</a> 
+ 			
 							<a href="<c:url value='/academicTerm/${academic.id}/delete.htm'/>"
 								class="btn btn-danger">Delete</a>
 							</sec:authorize>
