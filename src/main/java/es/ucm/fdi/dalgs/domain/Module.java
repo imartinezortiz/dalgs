@@ -1,5 +1,6 @@
 package es.ucm.fdi.dalgs.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -23,7 +24,10 @@ import es.ucm.fdi.dalgs.domain.info.ModuleInfo;
 
 @Table(name = "module", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"code_module", "id_degree" }))
-public class Module implements Cloneable, Copyable<Module>{
+public class Module implements Cloneable, Copyable<Module>, Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -90,6 +94,37 @@ public class Module implements Cloneable, Copyable<Module>{
 	}
 	
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((degree == null) ? 0 : degree.hashCode());
+		result = prime * result + ((info == null) ? 0 : info.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Module other = (Module) obj;
+		if (degree == null) {
+			if (other.degree != null)
+				return false;
+		} else if (!degree.equals(other.degree))
+			return false;
+		if (info == null) {
+			if (other.info != null)
+				return false;
+		} else if (!info.equals(other.info))
+			return false;
+		return true;
+	}
+
 	public Module copy() {
 		Module copy;
 		try {

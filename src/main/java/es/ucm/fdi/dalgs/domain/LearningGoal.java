@@ -1,6 +1,8 @@
 package es.ucm.fdi.dalgs.domain;
 
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -17,7 +19,10 @@ import es.ucm.fdi.dalgs.domain.info.LearningGoalInfo;
 
 @Entity
 @Table(name = "learninggoal")
-public class LearningGoal implements Cloneable, Copyable<LearningGoal>{
+public class LearningGoal implements Cloneable, Copyable<LearningGoal>, Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -85,6 +90,31 @@ public class LearningGoal implements Cloneable, Copyable<LearningGoal>{
 		
 		copy.id = null;
 		return copy;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((info == null) ? 0 : info.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LearningGoal other = (LearningGoal) obj;
+		if (info == null) {
+			if (other.info != null)
+				return false;
+		} else if (!info.equals(other.info))
+			return false;
+		return true;
 	}
 	
 

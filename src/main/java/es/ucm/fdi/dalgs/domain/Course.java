@@ -1,5 +1,6 @@
 package es.ucm.fdi.dalgs.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -19,7 +20,10 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "course", uniqueConstraints = { @UniqueConstraint(columnNames = {"id_subject", "id_academicterm" }) })
-public class Course implements Cloneable ,Copyable<Course>{
+public class Course implements Cloneable ,Copyable<Course>, Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_course")
@@ -115,6 +119,38 @@ public class Course implements Cloneable ,Copyable<Course>{
 	
 	
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((academicTerm == null) ? 0 : academicTerm.hashCode());
+		result = prime * result + ((subject == null) ? 0 : subject.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Course other = (Course) obj;
+		if (academicTerm == null) {
+			if (other.academicTerm != null)
+				return false;
+		} else if (!academicTerm.equals(other.academicTerm))
+			return false;
+		if (subject == null) {
+			if (other.subject != null)
+				return false;
+		} else if (!subject.equals(other.subject))
+			return false;
+		return true;
+	}
+
 	public Course copy() {
 		Course copy;
 		try {

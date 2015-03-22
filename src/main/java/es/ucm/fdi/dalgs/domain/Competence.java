@@ -1,5 +1,6 @@
 package es.ucm.fdi.dalgs.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -23,7 +24,10 @@ import es.ucm.fdi.dalgs.domain.info.CompetenceInfo;
 @Entity
 @Table(name = "competence", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"code_competence", "id_degree" }))
-public class Competence implements Cloneable{// , Copyable<Competence>{
+public class Competence implements Cloneable, Copyable<Competence>, Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,9 +51,6 @@ public class Competence implements Cloneable{// , Copyable<Competence>{
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
-
-	// @Column(name = "code_competence", nullable = false)
-	// private String code;
 
 	public Competence() {
 		super();
@@ -102,6 +103,40 @@ public class Competence implements Cloneable{// , Copyable<Competence>{
 
 	public void setLearningGoals(Collection<LearningGoal> learningGoals) {
 		this.learningGoals = learningGoals;
+	}
+
+	
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((degree == null) ? 0 : degree.hashCode());
+		result = prime * result + ((info == null) ? 0 : info.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Competence other = (Competence) obj;
+		if (degree == null) {
+			if (other.degree != null)
+				return false;
+		} else if (!degree.equals(other.degree))
+			return false;
+		if (info == null) {
+			if (other.info != null)
+				return false;
+		} else if (!info.equals(other.info))
+			return false;
+		return true;
 	}
 
 	public Competence copy() {

@@ -1,5 +1,6 @@
 package es.ucm.fdi.dalgs.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -21,7 +22,10 @@ import es.ucm.fdi.dalgs.domain.info.ActivityInfo;
 
 @Entity
 @Table(name = "activity")
-public class Activity implements Cloneable, Copyable<Activity> {
+public class Activity implements Cloneable, Copyable<Activity>, Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -108,6 +112,33 @@ public class Activity implements Cloneable, Copyable<Activity> {
 	}
 	
 	
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((info == null) ? 0 : info.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Activity other = (Activity) obj;
+		if (info == null) {
+			if (other.info != null)
+				return false;
+		} else if (!info.equals(other.info))
+			return false;
+		return true;
+	}
+
 	public Activity copy() {
 		Activity copy;
 		try {

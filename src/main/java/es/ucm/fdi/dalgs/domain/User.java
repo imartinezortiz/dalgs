@@ -1,5 +1,6 @@
 package es.ucm.fdi.dalgs.domain;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -25,12 +26,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "user")
-public class User implements UserDetails, CredentialsContainer{
+public class User implements UserDetails, CredentialsContainer, Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -140,15 +140,6 @@ public class User implements UserDetails, CredentialsContainer{
 	}
 
 
-/*
-	public Collection<Group> getGroups() {
-		return groups;
-	}
-
-	public void setGroups(Collection<Group> groups) {
-		this.groups = groups;
-	}
-	*/
 
 	@Override
 	public int hashCode() {
