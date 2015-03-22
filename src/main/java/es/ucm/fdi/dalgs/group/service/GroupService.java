@@ -139,10 +139,14 @@ public class GroupService {
 	@PreAuthorize("hasPermission(#group, 'DELETE') or hasPermission(#group, 'ADMINISTRATION')" )
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteGroup(Group group) {
+		
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-
-		result.setSingleElement(daoGroup.deleteGroup(group));
-		return result;
+		if (serviceActivity.deleteActivitiesFromGroup(group).getSingleElement()){
+			result.setSingleElement(daoGroup.deleteGroup(group));
+			return result;
+		}
+		result.setSingleElement(false);
+		return result;	
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
