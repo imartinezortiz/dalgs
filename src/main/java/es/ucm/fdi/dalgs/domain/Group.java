@@ -171,21 +171,17 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 	public Group copy() {
 		Group copy;
 		try {
+	
 			copy = (Group) super.clone();
+			
+			
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
-		
 		copy.id = null;
-		copy.activities = new ArrayList<>();
-		for (Activity a : this.activities) {
-			Activity activity  = a.copy();
-			activity.setGroup(copy);
-			copy.activities.add(activity);
-		}
-		
-		copy.students = new ArrayList<>();
-		copy.professors = new ArrayList<>();
+		copy.activities = new ArrayList<Activity>();
+		copy.students = new ArrayList<User>();
+		copy.professors = new ArrayList<User>();
 		
 		return copy;
 	}

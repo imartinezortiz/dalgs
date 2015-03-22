@@ -140,19 +140,20 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 	}
 
 	public Activity copy() {
-		Activity copy;
+		 Activity copy;
 		try {
-			copy = (Activity) super.clone();
+			 copy = (Activity) super.clone();
+			
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
-		
 		copy.id = null;
-		copy.learningGoalStatus = new ArrayList<>();
+		copy.learningGoalStatus = new ArrayList<LearningGoalStatus>();
 		for (LearningGoalStatus lgs : this.learningGoalStatus) {
 			copy.learningGoalStatus.add(lgs.copy());
 		}
 		return copy;
+		
 	}
 
 }

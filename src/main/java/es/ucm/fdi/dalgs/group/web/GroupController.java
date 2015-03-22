@@ -379,7 +379,7 @@ public class GroupController {
 				serviceGroup.copyGroup((serviceGroup.getGroup(id_group).getSingleElement()));
 		
 		if (!result.hasErrors())
-			return "redirect:/academicTerm/"+id_academic+"/course/"+ id_course+".htm?showAll=" + showAll;
+			return "redirect:/academicTerm/"+id_academic+"/course/"+ id_course+".htm";
 		
 		return "redirect:/error.htm";
 	}

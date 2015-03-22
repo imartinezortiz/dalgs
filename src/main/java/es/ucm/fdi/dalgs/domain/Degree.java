@@ -127,14 +127,14 @@ public class Degree implements Cloneable ,Copyable<Degree>, Serializable {
 		for (Module m : this.modules) {
 			Module module  = m.copy();
 			module.setDegree(copy);
-			copy.modules.add(m.copy());
+			copy.modules.add(module);
 		}
 		
 		copy.competences = new ArrayList<>();
 		for (Competence c : this.competences) {
 			Competence competence = c.copy();
 			competence.setDegree(copy);
-			copy.competences.add(c.copy());
+			copy.competences.add(competence);
 		}
 		
 		return copy;

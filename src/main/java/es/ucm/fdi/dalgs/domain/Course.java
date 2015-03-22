@@ -47,6 +47,7 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 	@JoinColumn(name = "id_academicterm")
 	private AcademicTerm academicTerm;
 
+//	@NotNull
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_coordinator")
 	private User coordinator;
@@ -155,31 +156,31 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 		Course copy;
 		try {
 			copy = (Course) super.clone();
+			
+
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
 		
 		copy.id = null;
-		copy.groups = new ArrayList<>();
+		copy.groups = new ArrayList<Group>();
+		
 		for (Group g : this.groups) {
 			Group group = g.copy();
 			group.setCourse(copy);
-			copy.groups.add(group);
+			copy.getGroups().add(group);
 		}
-	
-		copy.activities = new ArrayList<>();
+		
+		copy.activities = new ArrayList<Activity>();
 		for (Activity a : this.activities) {
 			Activity activity = a.copy();
 			activity.setCourse(copy);
-			copy.activities.add(activity);
+			copy.getActivities().add(activity);
 		}
 		
 		copy.setCoordinator(null);
-//		copy.setSubject(this.subject);
-		
-		copy.setSubject(copy.subject);
-		return copy;
-	}
 
+		return copy;
 	
+	}
 }

@@ -128,11 +128,12 @@ public class Subject implements Cloneable, Copyable<Subject>, Serializable {
 		}
 		
 //		copy.id = null;
-		copy.competences = new ArrayList<>();
+//		copy.competences = new ArrayList<>();
 //		for (Competence c : this.competences) {
-//			c.getSubjects().remove(this);
-//			c.getSubjects().add(copy);
-//			copy.competences.add(c);
+//			Competence competence = c;
+//			competence.getSubjects().remove(this);
+//			competence.getSubjects().add(copy);
+//			copy.competences.add(c.copy());
 //		}
 		return copy;
 	}
