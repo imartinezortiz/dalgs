@@ -1,5 +1,6 @@
 package es.ucm.fdi.dalgs.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -17,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -25,8 +27,11 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 
 @Entity
-@Table(name = "_group")
-public class Group implements Cloneable, Copyable<Group>{
+@Table(name = "_group" , uniqueConstraints = { @UniqueConstraint(columnNames = {"id_course", "name" }) })
+public class Group implements Cloneable, Copyable<Group>, Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,11 +41,11 @@ public class Group implements Cloneable, Copyable<Group>{
 	@NotEmpty @NotNull @NotBlank
 	@Size(min=5, max=50)
 	@Basic(optional = false)
-	@Column(name = "name", length = 50, nullable = false, unique=true)
+	@Column(name = "name", length = 50, nullable = false)//, unique=true)
 	private String name;
 	
 	//@NotNull
-	@ManyToOne(fetch = FetchType.LAZY, optional = false,cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false,cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_course")
 	private Course course;
 	
@@ -48,13 +53,13 @@ public class Group implements Cloneable, Copyable<Group>{
 	//@Valid
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "group_professor", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_user") })
-	private Collection<User> professors = new ArrayList<User>();
+	private Collection<User> professors;
 	
 	//@NotNull
 	//@Valid
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "group_student", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_user") })
-	private Collection<User> students = new ArrayList<User>();
+	private Collection<User> students;
 	
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
@@ -62,13 +67,19 @@ public class Group implements Cloneable, Copyable<Group>{
 
 	
 	@OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-	private Collection<Activity> activities = new ArrayList<Activity>();
+	private Collection<Activity> activities;
 	
 	
 	public Group() {
 		super();
 		this.isDeleted=false;
+		this.professors = new ArrayList<User>();
+		this.students = new ArrayList<User>();
+		this.activities = new ArrayList<Activity>();
 	}
+
+	
+
 
 	public Long getId() {
 		return id;
@@ -131,22 +142,67 @@ public class Group implements Cloneable, Copyable<Group>{
 	}
 	
 	
-	public Group copy() {
-		Group copy;
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((course == null) ? 0 : course.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Group other = (Group) obj;
+		if (course == null) {
+			if (other.course != null)
+				return false;
+		} else if (!course.equals(other.course))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+
+	
+	public Group depth_copy() {
+		Group copy = new Group();
+//		copy = this.shallow_copy();
+		
+		copy.id = null;
+//		copy.course = this.course;
+		copy.name = this.name;
+//		copy.activities = new ArrayList<Activity>();
+		for(Activity a: this.activities){
+			Activity activity = new Activity();
+				activity =  a.depth_copy();
+				activity.setGroup(copy);
+				copy.activities.add(activity);	
+		}
+		
+//		copy.students = new ArrayList<User>();
+//		copy.professors = new ArrayList<User>();
+		
+		return copy;
+	}
+
+
+	public Group shallow_copy() {
 		try {
-			copy = (Group) super.clone();
+			return (Group) super.clone();
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
-		
-		copy.id = null;
-		copy.activities = new ArrayList<>();
-		for (Activity a : this.activities) {
-			Activity activity  = a.copy();
-			activity.setGroup(copy);
-			copy.activities.add(activity);
-		}
-		return copy;
 	}
 	
 	

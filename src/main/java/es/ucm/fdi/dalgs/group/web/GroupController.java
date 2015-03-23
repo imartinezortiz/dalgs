@@ -249,7 +249,7 @@ public class GroupController {
 				.getActivitiesForCourse(id_course, show);
 		model.put("activitiesGroup", activitiesGroup);
 		model.put("activitiesCourse", activitiesCourse);
-
+		this.setShowAll(show);
 		return new ModelAndView("group/view", "model", model);
 	}
 
@@ -284,7 +284,7 @@ public class GroupController {
 		} else {
 
 			ResultClass<Boolean> result = serviceGroup.setProfessors(group,
-					id_group);
+					id_group, courseId, academicId);
 			if (!result.hasErrors())
 				return "redirect:/academicTerm/" + academicId + "/course/"
 						+ courseId + "/group/" + id_group + ".htm";
@@ -325,7 +325,7 @@ public class GroupController {
 		} else {
 
 			ResultClass<Boolean> result = serviceGroup.setStudents(group,
-					id_group);
+					id_group, courseId, academicId);
 			if (!result.hasErrors())
 				return "redirect:/academicTerm/" + academicId + "/course/"
 						+ courseId + "/group/" + id_group + ".htm";
@@ -355,20 +355,35 @@ public class GroupController {
 		}
 
 	}
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/user/{userId}/delete.htm",method = RequestMethod.GET)
+
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/user/{userId}/delete.htm", method = RequestMethod.GET)
 	public String deleteUserGroupGET(
 			@PathVariable("academicId") Long id_AcademicTerm,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
 			@PathVariable("userId") Long id_user) {
 
-		if (serviceGroup.deleteUserGroup(id_group, id_user).getSingleElement()) {
+		if (serviceGroup.deleteUserGroup(id_group, id_user, id_course,
+				id_AcademicTerm).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
 					+ id_course + "/group/" + id_group + ".htm";
 		} else
 			return "redirect:/error.htm";
 	}
 
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/clone.htm")
+	// Every Post have to return redirect
+	public String copyGroup(@PathVariable("academicId") Long id_academic,@PathVariable("courseId") Long id_course,
+			@PathVariable("groupId") Long id_group) {
+		ResultClass<Group> result = 
+				serviceGroup.copyGroup((serviceGroup.getGroup(id_group).getSingleElement()), id_course);
+		
+		if (!result.hasErrors())
+			return "redirect:/academicTerm/"+id_academic+"/course/"+ id_course+".htm";
+		
+		return "redirect:/error.htm";
+	}
+	
 	/**
 	 * For binding the professor of the subject.
 	 */

@@ -1,8 +1,10 @@
 package es.ucm.fdi.dalgs.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -17,7 +19,9 @@ import es.ucm.fdi.dalgs.domain.info.DegreeInfo;
 
 @Entity
 @Table(name = "degree")
-public class Degree implements Cloneable ,Copyable<Degree>{
+public class Degree implements Cloneable ,Copyable<Degree>, Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,16 +37,19 @@ public class Degree implements Cloneable ,Copyable<Degree>{
 	private Boolean isDeleted;
 
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
-	private Collection<Module> modules = new ArrayList<Module>();
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree",cascade = CascadeType.ALL)
+	private Collection<Module> modules;
 
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree")
-	private Collection<Competence> competences = new ArrayList<Competence>();
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree",cascade = CascadeType.ALL)
+	private Collection<Competence> competences;
 
 	public Degree() {
 		super();
 		this.isDeleted = false;
+		this.modules = new ArrayList<Module>();
+		this.competences = new ArrayList<Competence>();
+
 	}
 
 	public Long getId() {
@@ -86,29 +93,59 @@ public class Degree implements Cloneable ,Copyable<Degree>{
 	}
 
 	
-	public Degree copy() {
-		Degree copy;
-		try {
-			copy = (Degree) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((info == null) ? 0 : info.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Degree other = (Degree) obj;
+		if (info == null) {
+			if (other.info != null)
+				return false;
+		} else if (!info.equals(other.info))
+			return false;
+		return true;
+	}
+
+	public Degree depth_copy() {
+		Degree copy =this.shallow_copy();
 		
-		copy.id = null;
+		
 		copy.modules = new ArrayList<>();
 		for (Module m : this.modules) {
-			Module module  = m.copy();
+			Module module  = m.depth_copy();
 			module.setDegree(copy);
-			copy.modules.add(m.copy());
+			copy.modules.add(module);
 		}
 		
 		copy.competences = new ArrayList<>();
 		for (Competence c : this.competences) {
-			Competence competence = c.copy();
+			Competence competence = c.depth_copy();
 			competence.setDegree(copy);
-			copy.competences.add(c.copy());
+			copy.competences.add(competence);
 		}
+		
 		return copy;
+	}
+
+
+	public Degree shallow_copy() {
+		try {
+			return (Degree) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	

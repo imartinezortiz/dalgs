@@ -1,5 +1,6 @@
 package es.ucm.fdi.dalgs.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -24,7 +25,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @Table(name = "academicterm", uniqueConstraints = { @UniqueConstraint(columnNames = {
 		"term", "id_degree" }) })
-public class AcademicTerm implements Cloneable, Copyable<AcademicTerm> {
+public class AcademicTerm implements Cloneable, Copyable<AcademicTerm>, Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -103,23 +106,63 @@ public class AcademicTerm implements Cloneable, Copyable<AcademicTerm> {
 	}
 
 
-	
-	public AcademicTerm copy() {
-		AcademicTerm copy;
-		try {
-			copy = (AcademicTerm) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
-		
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((degree == null) ? 0 : degree.hashCode());
+		result = prime * result + ((term == null) ? 0 : term.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AcademicTerm other = (AcademicTerm) obj;
+		if (degree == null) {
+			if (other.degree != null)
+				return false;
+		} else if (!degree.equals(other.degree))
+			return false;
+		if (term == null) {
+			if (other.term != null)
+				return false;
+		} else if (!term.equals(other.term))
+			return false;
+		return true;
+	}
+
+
+	public AcademicTerm depth_copy() {
+		AcademicTerm copy = this.shallow_copy();
 		copy.id = null;
-		copy.courses = new ArrayList<>();
+		copy.courses = new ArrayList<Course>();
+		
 		for (Course c : this.courses) {
-			Course course = c.copy();
+			Course course = c.depth_copy();
 			course.setAcademicTerm(copy);
 			copy.courses.add(course);
 		}
 		return copy;
+	}
+
+
+	public AcademicTerm shallow_copy() {
+		try {
+			return  (AcademicTerm) super.clone();
+			
+			
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 }

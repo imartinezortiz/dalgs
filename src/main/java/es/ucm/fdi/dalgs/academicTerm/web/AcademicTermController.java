@@ -279,8 +279,9 @@ public class AcademicTermController {
 			BindingResult bindingResult, Model model, RedirectAttributes attr) {
 
 	
+		
 
-		if (!bindingResult.hasErrors()) {
+		if (!bindingResult.hasErrors() || bindingResult.hasFieldErrors("degree")) {
 
 			ResultClass<Boolean> resultReturned = serviceAcademicTerm
 					.modifyAcademicTerm(newTerm, id_academic);
@@ -361,8 +362,6 @@ public class AcademicTermController {
 			return "redirect:/academicTerm/page/0.htm?showAll=" + showAll;
 		
 		return "redirect:/error.htm";
-
-
 	}
 
 	public void validate(AcademicTerm academicTerm, Errors errors) {

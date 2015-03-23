@@ -27,6 +27,8 @@ public class LearningGoalStatus implements Cloneable, Copyable<LearningGoalStatu
 	public LearningGoalStatus() {
 		super();
 	}
+	
+	
 
 	public LearningGoal getLearningGoal() {
 		return learningGoal;
@@ -45,15 +47,21 @@ public class LearningGoalStatus implements Cloneable, Copyable<LearningGoalStatu
 	}
 	
 	
-	public LearningGoalStatus copy() {
-		LearningGoalStatus copy;
+	
+	public LearningGoalStatus depth_copy() {
+		LearningGoalStatus copy = new LearningGoalStatus();
+		copy.weight = this.weight;
+		copy.learningGoal= this.learningGoal;
+
+		return copy;
+	}
+	
+	public LearningGoalStatus shallow_copy() {
 		try {
-			copy = (LearningGoalStatus) super.clone();
+			return (LearningGoalStatus) super.clone();
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
-		
-		return copy;
 	}
 
 

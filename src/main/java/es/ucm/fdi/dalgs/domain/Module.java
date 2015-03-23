@@ -1,5 +1,6 @@
 package es.ucm.fdi.dalgs.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -23,7 +24,10 @@ import es.ucm.fdi.dalgs.domain.info.ModuleInfo;
 
 @Table(name = "module", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"code_module", "id_degree" }))
-public class Module implements Cloneable, Copyable<Module>{
+public class Module implements Cloneable, Copyable<Module>, Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,11 +46,13 @@ public class Module implements Cloneable, Copyable<Module>{
 	private Degree degree;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "module",cascade = CascadeType.ALL)
-	private Collection<Topic> topics = new ArrayList<Topic>();
+	private Collection<Topic> topics;
 
 	public Module() {
 		super();
 		this.isDeleted = false;
+		this.topics = new ArrayList<Topic>();
+
 	}
 
 	public Long getId() {
@@ -90,23 +96,55 @@ public class Module implements Cloneable, Copyable<Module>{
 	}
 	
 	
-	public Module copy() {
-		Module copy;
-		try {
-			copy = (Module) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((degree == null) ? 0 : degree.hashCode());
+		result = prime * result + ((info == null) ? 0 : info.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Module other = (Module) obj;
+		if (degree == null) {
+			if (other.degree != null)
+				return false;
+		} else if (!degree.equals(other.degree))
+			return false;
+		if (info == null) {
+			if (other.info != null)
+				return false;
+		} else if (!info.equals(other.info))
+			return false;
+		return true;
+	}
+
+	public Module depth_copy() {
+		Module copy = this.shallow_copy();
 		
-		copy.id = null;
+//		copy.id = null;
 		copy.topics = new ArrayList<>();
 		for (Topic t : this.topics) {
-			Topic topic  = t.copy();
+			Topic topic  = t.depth_copy();
 			topic.setModule(copy);
 			copy.topics.add(topic);
 		}
 		return copy;
 	}
-
+	public Module shallow_copy() {
+		try {
+			return (Module) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
 }

@@ -35,7 +35,7 @@ public class GroupRepository {
 		}
 	}
 
-	public Group getGroupAll(Long id_group) {
+/*	public Group getGroupAll(Long id_group) {
 		Query query = null;
 		
 		query = em.createQuery("select g from Group g  join g.course c join c.subject join c.academicTerm a where g.id = ?1");
@@ -46,7 +46,7 @@ public class GroupRepository {
 		else
 			return (Group) query.getSingleResult();
 	}
-	
+	*/
 	public Group getGroup(Long id_group) {
 		return em.find(Group.class, id_group);
 	}

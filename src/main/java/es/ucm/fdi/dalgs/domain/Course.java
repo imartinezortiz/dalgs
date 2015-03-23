@@ -1,5 +1,6 @@
 package es.ucm.fdi.dalgs.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -19,7 +20,10 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "course", uniqueConstraints = { @UniqueConstraint(columnNames = {"id_subject", "id_academicterm" }) })
-public class Course implements Cloneable ,Copyable<Course>{
+public class Course implements Cloneable ,Copyable<Course>, Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_course")
@@ -29,24 +33,35 @@ public class Course implements Cloneable ,Copyable<Course>{
 	private Boolean isDeleted;
 
 	@NotNull
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_subject")
 	private Subject subject;
 
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-	private Collection<Activity> activities = new ArrayList<Activity>();
+	private Collection<Activity> activities;
 
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-	private Collection<Group> groups = new ArrayList<Group>();
+	private Collection<Group> groups;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false,cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_academicterm")
 	private AcademicTerm academicTerm;
 
-	@ManyToOne
+//	@NotNull
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_coordinator")
 	private User coordinator;
 
+	
+	public Course() {
+		super();
+		this.isDeleted = false;
+		this.activities = new ArrayList<Activity>();
+		this.groups = new ArrayList<Group>();
+
+	}
+	
+	
 	public User getCoordinator() {
 		return coordinator;
 	}
@@ -59,11 +74,7 @@ public class Course implements Cloneable ,Copyable<Course>{
 		this.isDeleted = isDeleted;
 	}
 
-	public Course() {
-		super();
-		this.isDeleted = false;
 
-	}
 
 	public AcademicTerm getAcademicTerm() {
 		return academicTerm;
@@ -115,35 +126,71 @@ public class Course implements Cloneable ,Copyable<Course>{
 	
 	
 	
-	public Course copy() {
-		Course copy;
-		try {
-			copy = (Course) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((academicTerm == null) ? 0 : academicTerm.hashCode());
+		result = prime * result + ((subject == null) ? 0 : subject.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Course other = (Course) obj;
+		if (academicTerm == null) {
+			if (other.academicTerm != null)
+				return false;
+		} else if (!academicTerm.equals(other.academicTerm))
+			return false;
+		if (subject == null) {
+			if (other.subject != null)
+				return false;
+		} else if (!subject.equals(other.subject))
+			return false;
+		return true;
+	}
+
+	public Course depth_copy() {
+		Course copy = this.shallow_copy();
+		
 		
 		copy.id = null;
-		copy.groups = new ArrayList<>();
+		copy.groups = new ArrayList<Group>();
+		
 		for (Group g : this.groups) {
-			Group group = g.copy();
+			Group group = g.depth_copy();
 			group.setCourse(copy);
-			copy.groups.add(group);
+			copy.getGroups().add(group);
 		}
-	
-		copy.activities = new ArrayList<>();
+		
+		copy.activities = new ArrayList<Activity>();
 		for (Activity a : this.activities) {
-			Activity activity = a.copy();
+			Activity activity = a.depth_copy();
 			activity.setCourse(copy);
-			copy.activities.add(activity);
+			copy.getActivities().add(activity);
 		}
 		
 		copy.setCoordinator(null);
-//		copy.setSubject(this.subject);
-		
-		copy.setSubject(copy.subject);
+
 		return copy;
+	
 	}
 
-	
+	public Course shallow_copy() {
+		try {
+			return (Course) super.clone();
+			
+
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

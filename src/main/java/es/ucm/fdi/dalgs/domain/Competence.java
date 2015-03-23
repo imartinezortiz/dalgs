@@ -1,5 +1,6 @@
 package es.ucm.fdi.dalgs.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -23,7 +24,10 @@ import es.ucm.fdi.dalgs.domain.info.CompetenceInfo;
 @Entity
 @Table(name = "competence", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"code_competence", "id_degree" }))
-public class Competence implements Cloneable{// , Copyable<Competence>{
+public class Competence implements Cloneable, Copyable<Competence>, Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,10 +38,10 @@ public class Competence implements Cloneable{// , Copyable<Competence>{
 	private CompetenceInfo info;
 
 	@ManyToMany(mappedBy = "competences", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private Collection<Subject> subjects = new ArrayList<Subject>();
+	private Collection<Subject> subjects;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "competence",cascade = CascadeType.ALL)
-	private Collection<LearningGoal> learningGoals = new ArrayList<LearningGoal>();
+	private Collection<LearningGoal> learningGoals;
 
 	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_degree")
@@ -48,12 +52,11 @@ public class Competence implements Cloneable{// , Copyable<Competence>{
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-	// @Column(name = "code_competence", nullable = false)
-	// private String code;
-
 	public Competence() {
 		super();
 		this.isDeleted = false;
+		this.subjects = new ArrayList<Subject>();
+		this.learningGoals = new ArrayList<LearningGoal>();
 	}
 
 	public Degree getDegree() {
@@ -104,22 +107,61 @@ public class Competence implements Cloneable{// , Copyable<Competence>{
 		this.learningGoals = learningGoals;
 	}
 
-	public Competence copy() {
-		Competence copy;
-		try {
-			copy = (Competence) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
-		
-		copy.id = null;
+	
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((degree == null) ? 0 : degree.hashCode());
+		result = prime * result + ((info == null) ? 0 : info.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Competence other = (Competence) obj;
+		if (degree == null) {
+			if (other.degree != null)
+				return false;
+		} else if (!degree.equals(other.degree))
+			return false;
+		if (info == null) {
+			if (other.info != null)
+				return false;
+		} else if (!info.equals(other.info))
+			return false;
+		return true;
+	}
+
+	public Competence depth_copy() {
+		Competence copy = this.shallow_copy();
+
+//		copy.id = null;
 		copy.learningGoals = new ArrayList<>();
 		for (LearningGoal lg : this.learningGoals) {
-			LearningGoal learningGoal = lg.copy();
+			LearningGoal learningGoal = lg.depth_copy();
 			learningGoal.setCompetence(copy);
 			copy.learningGoals.add(learningGoal);
 		}
 		return copy;
+	}
+
+
+	public Competence shallow_copy() {
+		try {
+			return  (Competence) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+		
 	}
 
 

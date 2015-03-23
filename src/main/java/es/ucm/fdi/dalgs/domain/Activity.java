@@ -1,5 +1,6 @@
 package es.ucm.fdi.dalgs.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -21,7 +22,10 @@ import es.ucm.fdi.dalgs.domain.info.ActivityInfo;
 
 @Entity
 @Table(name = "activity")
-public class Activity implements Cloneable, Copyable<Activity> {
+public class Activity implements Cloneable, Copyable<Activity>, Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,7 +46,7 @@ public class Activity implements Cloneable, Copyable<Activity> {
 	@ElementCollection(fetch = FetchType.LAZY)
 	@CollectionTable(name = "activity_learninggoalstatus", joinColumns = @JoinColumn(name = "id_activity"))
 	@Column(nullable = false)
-	private Collection<LearningGoalStatus> learningGoalStatus = new ArrayList<LearningGoalStatus>();
+	private Collection<LearningGoalStatus> learningGoalStatus;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)
 	@JoinColumn(name = "id_group")
@@ -51,7 +55,7 @@ public class Activity implements Cloneable, Copyable<Activity> {
 	public Activity() {
 		super();
 		this.isDeleted = false;
-
+		this.learningGoalStatus = new ArrayList<LearningGoalStatus>();
 	}
 
 	public Long getId() {
@@ -108,20 +112,70 @@ public class Activity implements Cloneable, Copyable<Activity> {
 	}
 	
 	
-	public Activity copy() {
-		Activity copy;
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((info == null) ? 0 : info.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Activity other = (Activity) obj;
+		if (info == null) {
+			if (other.info != null)
+				return false;
+		} else if (!info.equals(other.info))
+			return false;
+		return true;
+	}
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
 		try {
-			copy = (Activity) super.clone();
+			 return (Activity) super.clone();
+			
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}	}
+
+	public Activity depth_copy() {
+		Activity copy = new Activity();
+		copy.id = null;
+//		copy.course = this.course;
+//		copy.group = this.group;
+		copy.info = this.info;
+
+//		copy.course = new Course();
+//		copy.group = new Group();
+//		copy.learningGoalStatus = new ArrayList<LearningGoalStatus>();
+		for (LearningGoalStatus lgs : this.learningGoalStatus) {
+//			LearningGoalStatus aux = lgs.depth_copy();
+//			aux.s
+			copy.learningGoalStatus.add(lgs.depth_copy());
+		}
+		return copy;
+		
+	}
+
+	
+	public Activity shallow_copy() {
+		//	Shame reference
+		try {
+			  return (Activity) super.clone();
+			
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
-		
-		copy.id = null;
-		copy.learningGoalStatus = new ArrayList<>();
-		for (LearningGoalStatus lgs : this.learningGoalStatus) {
-			copy.learningGoalStatus.add(lgs.copy());
-		}
-		return copy;
 	}
 
 }

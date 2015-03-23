@@ -98,7 +98,8 @@ public class ActivityService {
 		}
 		return result;
 	}
-
+	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Activity> getAll() {
@@ -143,6 +144,7 @@ public class ActivityService {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Activity> getActivity(Long id) {
@@ -150,7 +152,7 @@ public class ActivityService {
 		result.setSingleElement(daoActivity.getActivity(id));
 		return result;
 	}
-
+	
 	@PreAuthorize("hasPermission(#course, 'ADMINISTRATION') or hasPermission(#group, 'ADMINISTRATION') ")
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean> deleteActivity(Course course,Group group, Long id) {
@@ -158,7 +160,8 @@ public class ActivityService {
 		result.setSingleElement(daoActivity.deleteActivity(id));
 		return result;
 	}
-
+	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Activity> getActivitiesForCourse(Long id_course,
 			Boolean showAll) {
@@ -167,7 +170,7 @@ public class ActivityService {
 		return result;
 	}
 
-
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Activity> getActivityByName(String string) {
@@ -273,6 +276,7 @@ public class ActivityService {
 		return result;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Activity> getActivitiesForGroup(Long id_group,
 			Boolean showAll) {
@@ -337,6 +341,18 @@ public class ActivityService {
 
 			}
 		}
+		return result;
+	}
+	
+
+	@PreAuthorize("hasPermission(#group, 'ADMINISTRATION')")
+	@Transactional(readOnly = false)
+	public ResultClass<Activity> addActivitiestoGroup(Group group, Collection<Activity> activities, Long id_group) {
+		ResultClass<Activity> result = null;
+		for(Activity a:activities )
+			result =this.addActivitytoGroup(group, a, id_group);
+		
+		result.setHasErrors(false);
 		return result;
 	}
 	

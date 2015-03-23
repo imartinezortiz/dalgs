@@ -1,5 +1,6 @@
 package es.ucm.fdi.dalgs.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -21,7 +22,10 @@ import es.ucm.fdi.dalgs.domain.info.SubjectInfo;
 
 @Entity
 @Table(name = "subject")
-public class Subject implements Cloneable, Copyable<Subject> {
+public class Subject implements Cloneable, Copyable<Subject>, Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_subject")
@@ -40,11 +44,12 @@ public class Subject implements Cloneable, Copyable<Subject> {
 
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "subject_competence", joinColumns = { @JoinColumn(name = "id_subject") }, inverseJoinColumns = { @JoinColumn(name = "id_competence") })
-	private Collection<Competence> competences = new ArrayList<Competence>();
+	private Collection<Competence> competences;
 
 	public Subject() {
 		super();
 		this.isDeleted = false;
+		this.competences = new ArrayList<Competence>();
 
 	}
 
@@ -89,23 +94,51 @@ public class Subject implements Cloneable, Copyable<Subject> {
 	}
 
 	
-	public Subject copy() {
-		Subject copy;
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((info == null) ? 0 : info.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Subject other = (Subject) obj;
+		if (info == null) {
+			if (other.info != null)
+				return false;
+		} else if (!info.equals(other.info))
+			return false;
+		return true;
+	}
+
+	public Subject depth_copy() {
+		Subject copy = this.shallow_copy();
+		
+//		copy.id = null;
+//		copy.competences = new ArrayList<>();
+//		for (Competence c : this.competences) {
+//			Competence competence = c;
+//			competence.getSubjects().remove(this);
+//			competence.getSubjects().add(copy);
+//			copy.competences.add(c.copy());
+//		}
+		return copy;
+	}
+	public Subject shallow_copy() {
 		try {
-			copy = (Subject) super.clone();
+			return (Subject) super.clone();
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
-		
-		copy.id = null;
-		copy.competences = new ArrayList<>();
-		for (Competence c : this.competences) {
-			c.getSubjects().remove(this);
-			c.getSubjects().add(copy);
-			copy.competences.add(c);
-		}
-		return copy;
 	}
-
 	
 }

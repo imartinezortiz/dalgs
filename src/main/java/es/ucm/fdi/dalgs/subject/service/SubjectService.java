@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -79,7 +78,7 @@ public class SubjectService {
 		return result;		
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getAll() {
 		
@@ -89,7 +88,7 @@ public class SubjectService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
 	public ResultClass<Subject> getSubject(Long id) {
 		ResultClass<Subject> result = new ResultClass<>();
@@ -116,7 +115,7 @@ public class SubjectService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectsForTopic(Long id_topic, Boolean show) {
 		ResultClass<Subject> result = new ResultClass<>();
@@ -168,7 +167,7 @@ public class SubjectService {
 	}
 	
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectForCourse(Long id) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
@@ -176,7 +175,7 @@ public class SubjectService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectByName(String string) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
@@ -184,7 +183,7 @@ public class SubjectService {
 		return result;
 	}
 	
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectAll(Long id_subject) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
@@ -195,7 +194,7 @@ public class SubjectService {
 	}
 
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectForDegree(Degree degree) {
 		ResultClass<Subject> result = new ResultClass<>();

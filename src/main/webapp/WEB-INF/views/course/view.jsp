@@ -80,8 +80,8 @@
 		</div>
 		<div class="panel-body">
 			<div class="form-group view">
-				<label>Subject: </label>
-				<p class="details">${model.course.subject.info.code}-
+				<p class="details"><label>Subject: </label>
+				${model.course.subject.info.code}-
 					${model.course.subject.info.name}</p>
 			</div>
 		</div>
@@ -178,10 +178,14 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="50%"><div class="td-label">Name</div></td>
+					<td> </td>
+					<td><div class="td-label">Name</div></td>
 				</tr>
 				<c:forEach items="${model.groups}" var="group">
 					<tr align="center">
+					<td> <sec:authorize access="hasRole('ROLE_ADMIN')">
+					<a	href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${group.id}/clone.htm'/>"
+								class="btn btn-clone">Clone</a> </sec:authorize></td>
 						<td><div class="td-content">
 								<c:out value="${group.name}" />
 							</div></td>

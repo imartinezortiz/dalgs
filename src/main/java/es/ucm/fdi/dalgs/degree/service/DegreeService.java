@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,7 +81,7 @@ public class DegreeService {
 
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getDegrees(Integer pageIndex, Boolean showAll) {
 		ResultClass<Degree> result = new ResultClass<>();
@@ -90,7 +89,7 @@ public class DegreeService {
 		return result;
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getAll() {
 		ResultClass<Degree> result = new ResultClass<>();
@@ -162,7 +161,7 @@ public class DegreeService {
 		}
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getDegreeSubject(Subject p) {
 		ResultClass<Degree> result = new ResultClass<>();
@@ -172,7 +171,7 @@ public class DegreeService {
 
 
 	
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResultClass<Degree> getDegree(Long id) {
 		ResultClass<Degree> result = new ResultClass<>();
 		result.setSingleElement(daoDegree.getDegree(id));
@@ -180,7 +179,7 @@ public class DegreeService {
 
 	}
 
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getDegreeAll(Long id, Boolean show) {
 		ResultClass<Degree> result = new ResultClass<Degree>();

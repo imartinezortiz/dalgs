@@ -60,9 +60,8 @@
 
 					<td><c:choose>
 							<c:when test="${degree.isDeleted eq false}">
-								<a class="btn list-btn btn-success"
-									href="<c:url value='/degree/${degree.id}.htm'/>">View</a>
-								<!-- <a href="modify.html"  class="btn list-btn btn-warning">Modify</a>-->
+								<a class="btn btn-success"
+									href="<c:url value='/degree/${degree.id}.htm'/>"> View </a>
 								<sec:authorize access="hasRole('ROLE_ADMIN')">
 									<a class="btn list-btn btn-danger"
 										href="<c:url value='/degree/${degree.id}/delete.htm'/>">Delete</a>
