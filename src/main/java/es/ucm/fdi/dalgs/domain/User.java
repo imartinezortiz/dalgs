@@ -1,6 +1,7 @@
 package es.ucm.fdi.dalgs.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -85,7 +86,7 @@ public class User implements UserDetails, CredentialsContainer, Serializable {
 		this.credentialsNonExpired = true;
 		this.enabled = false;
 		this.accountNonLocked = true;
-		
+		this.roles = new ArrayList<UserRole>();
 	}
 	
 

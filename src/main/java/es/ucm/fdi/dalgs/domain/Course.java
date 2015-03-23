@@ -38,10 +38,10 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 	private Subject subject;
 
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-	private Collection<Activity> activities = new ArrayList<Activity>();
+	private Collection<Activity> activities;
 
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-	private Collection<Group> groups = new ArrayList<Group>();
+	private Collection<Group> groups;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false,cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_academicterm")
@@ -52,6 +52,16 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 	@JoinColumn(name = "id_coordinator")
 	private User coordinator;
 
+	
+	public Course() {
+		super();
+		this.isDeleted = false;
+		this.activities = new ArrayList<Activity>();
+		this.groups = new ArrayList<Group>();
+
+	}
+	
+	
 	public User getCoordinator() {
 		return coordinator;
 	}
@@ -64,11 +74,7 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 		this.isDeleted = isDeleted;
 	}
 
-	public Course() {
-		super();
-		this.isDeleted = false;
 
-	}
 
 	public AcademicTerm getAcademicTerm() {
 		return academicTerm;
@@ -152,28 +158,22 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 		return true;
 	}
 
-	public Course copy() {
-		Course copy;
-		try {
-			copy = (Course) super.clone();
-			
-
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
+	public Course depth_copy() {
+		Course copy = this.shallow_copy();
+		
 		
 		copy.id = null;
 		copy.groups = new ArrayList<Group>();
 		
 		for (Group g : this.groups) {
-			Group group = g.copy();
+			Group group = g.depth_copy();
 			group.setCourse(copy);
 			copy.getGroups().add(group);
 		}
 		
 		copy.activities = new ArrayList<Activity>();
 		for (Activity a : this.activities) {
-			Activity activity = a.copy();
+			Activity activity = a.depth_copy();
 			activity.setCourse(copy);
 			copy.getActivities().add(activity);
 		}
@@ -182,5 +182,15 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 
 		return copy;
 	
+	}
+
+	public Course shallow_copy() {
+		try {
+			return (Course) super.clone();
+			
+
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

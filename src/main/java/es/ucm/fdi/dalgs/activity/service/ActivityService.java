@@ -344,4 +344,16 @@ public class ActivityService {
 		return result;
 	}
 	
+
+	@PreAuthorize("hasPermission(#group, 'ADMINISTRATION')")
+	@Transactional(readOnly = false)
+	public ResultClass<Activity> addActivitiestoGroup(Group group, Collection<Activity> activities, Long id_group) {
+		ResultClass<Activity> result = null;
+		for(Activity a:activities )
+			result =this.addActivitytoGroup(group, a, id_group);
+		
+		result.setHasErrors(false);
+		return result;
+	}
+	
 }

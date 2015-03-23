@@ -141,23 +141,28 @@ public class AcademicTerm implements Cloneable, Copyable<AcademicTerm>, Serializ
 	}
 
 
-	public AcademicTerm copy() {
-		AcademicTerm copy;
+	public AcademicTerm depth_copy() {
+		AcademicTerm copy = this.shallow_copy();
+		copy.id = null;
+		copy.courses = new ArrayList<Course>();
+		
+		for (Course c : this.courses) {
+			Course course = c.depth_copy();
+			course.setAcademicTerm(copy);
+			copy.courses.add(course);
+		}
+		return copy;
+	}
+
+
+	public AcademicTerm shallow_copy() {
 		try {
-			copy = (AcademicTerm) super.clone();
+			return  (AcademicTerm) super.clone();
 			
 			
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
-		copy.id = null;
-		copy.courses = new ArrayList<Course>();
-		for (Course c : this.courses) {
-			Course course = c.copy();
-			course.setAcademicTerm(copy);
-			copy.courses.add(course);
-		}
-		return copy;
 	}
 	
 }

@@ -38,15 +38,18 @@ public class Degree implements Cloneable ,Copyable<Degree>, Serializable {
 
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree",cascade = CascadeType.ALL)
-	private Collection<Module> modules = new ArrayList<Module>();
+	private Collection<Module> modules;
 
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree",cascade = CascadeType.ALL)
-	private Collection<Competence> competences = new ArrayList<Competence>();
+	private Collection<Competence> competences;
 
 	public Degree() {
 		super();
 		this.isDeleted = false;
+		this.modules = new ArrayList<Module>();
+		this.competences = new ArrayList<Competence>();
+
 	}
 
 	public Long getId() {
@@ -115,29 +118,34 @@ public class Degree implements Cloneable ,Copyable<Degree>, Serializable {
 		return true;
 	}
 
-	public Degree copy() {
-		Degree copy;
-		try {
-			copy = (Degree) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
+	public Degree depth_copy() {
+		Degree copy =this.shallow_copy();
+		
 		
 		copy.modules = new ArrayList<>();
 		for (Module m : this.modules) {
-			Module module  = m.copy();
+			Module module  = m.depth_copy();
 			module.setDegree(copy);
 			copy.modules.add(module);
 		}
 		
 		copy.competences = new ArrayList<>();
 		for (Competence c : this.competences) {
-			Competence competence = c.copy();
+			Competence competence = c.depth_copy();
 			competence.setDegree(copy);
 			copy.competences.add(competence);
 		}
 		
 		return copy;
+	}
+
+
+	public Degree shallow_copy() {
+		try {
+			return (Degree) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	

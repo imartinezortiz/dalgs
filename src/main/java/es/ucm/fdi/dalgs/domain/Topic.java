@@ -44,11 +44,13 @@ public class Topic implements Cloneable, Copyable<Topic>, Serializable {
 	private Module module;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "topic",cascade = CascadeType.ALL)
-	private Collection<Subject> subjects = new ArrayList<Subject>();
+	private Collection<Subject> subjects;
 
 	public Topic() {
 		super();
 		this.isDeleted = false;
+		this. subjects = new ArrayList<Subject>();
+
 	}
 
 	public Long getId() {
@@ -124,21 +126,25 @@ public class Topic implements Cloneable, Copyable<Topic>, Serializable {
 		return true;
 	}
 
-	public Topic copy() {
-		Topic copy;
-		try {
-			copy = (Topic) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
+	public Topic depth_copy() {
+		Topic copy =  this.shallow_copy();
+		
 		
 //		copy.id = null;
 		copy.subjects = new ArrayList<>();
 		for (Subject s : this.subjects) {
-			Subject subject  = s.copy();
+			Subject subject  = s.depth_copy();
 			subject.setTopic(copy);
 		}
 		return copy;
+	}
+	
+	public Topic shallow_copy() {
+		try {
+			return (Topic) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

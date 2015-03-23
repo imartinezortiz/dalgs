@@ -14,6 +14,7 @@ import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.activity.service.ActivityService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
+import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
@@ -299,27 +300,46 @@ public class GroupService {
 
 	@PreAuthorize("hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false	,propagation = Propagation.REQUIRED)
-	public ResultClass<Group> copyGroup(Group group) {
-		Group copy = group.copy();
-		ResultClass<Group> result = new ResultClass<>();
+	public ResultClass<Group> copyGroup(Group group, Long id_course) {
+		
+		
+		Group copy = group.depth_copy();
+		ResultClass<Course> parent = serviceCourse.getCourse(id_course);
+		
+		copy.setCourse(parent.getSingleElement());
+		
+		//Modifying the copy
 		copy.setName(copy.getName() + " (copy)");
-		boolean r = daoGroup.addGroup(copy);
-		if (r) {
-			Group groupexist = daoGroup.existByName(copy.getName());
-			boolean success = manageAclService.addACLToObject(
-					groupexist.getId(), groupexist.getClass().getName());
-			if (success)
-				result.setSingleElement(copy);
-
-			else {
-				throw new IllegalArgumentException(
-						"Cannot create ACL. Object not set.");
-			}
+		
+		for(Activity a: copy.getActivities()){
+			a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
+			a.setGroup(copy);
 		}
-	
-		return result;
-
+		
+		return this.addGroup(copy, copy.getCourse().getId());
 	}
+//		
+//		ResultClass<Group> result = new ResultClass<Group>();
+//		Collection<Activity> activities_aux = copy.getActivities();
+//		copy.setActivities(new ArrayList<Activity>());
+//		
+//		ResultClass<Group> r = this.addGroup(copy, copy.getCourse().getId());
+//		if (!r.hasErrors()) {
+//			Group groupexist = daoGroup.existByName(copy.getName());
+//			
+//			for(Activity a: activities_aux){
+//				Activity aux = a;
+//				aux.getInfo().setCode(a.getInfo().getCode() + " (copy)");
+////				aux.setGroup(groupexist);
+//				groupexist.getActivities().add(aux);
+//			}
+//			
+//			serviceActivity.addActivitiestoGroup(groupexist, groupexist.getActivities(), groupexist.getId());
+//		}
+//	 
+//		return result;
+//
+//	}
 
 }
 

@@ -44,11 +44,12 @@ public class Subject implements Cloneable, Copyable<Subject>, Serializable {
 
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "subject_competence", joinColumns = { @JoinColumn(name = "id_subject") }, inverseJoinColumns = { @JoinColumn(name = "id_competence") })
-	private Collection<Competence> competences = new ArrayList<Competence>();
+	private Collection<Competence> competences;
 
 	public Subject() {
 		super();
 		this.isDeleted = false;
+		this.competences = new ArrayList<Competence>();
 
 	}
 
@@ -119,13 +120,8 @@ public class Subject implements Cloneable, Copyable<Subject>, Serializable {
 		return true;
 	}
 
-	public Subject copy() {
-		Subject copy;
-		try {
-			copy = (Subject) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
+	public Subject depth_copy() {
+		Subject copy = this.shallow_copy();
 		
 //		copy.id = null;
 //		copy.competences = new ArrayList<>();
@@ -137,6 +133,12 @@ public class Subject implements Cloneable, Copyable<Subject>, Serializable {
 //		}
 		return copy;
 	}
-
+	public Subject shallow_copy() {
+		try {
+			return (Subject) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
 }

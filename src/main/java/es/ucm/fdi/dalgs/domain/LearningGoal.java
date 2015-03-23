@@ -79,19 +79,6 @@ public class LearningGoal implements Cloneable, Copyable<LearningGoal>, Serializ
 		this.isDeleted = isDeleted;
 	}
 	
-	
-	public LearningGoal copy() {
-		LearningGoal copy;
-		try {
-			copy = (LearningGoal) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
-		
-		copy.id = null;
-		return copy;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -117,5 +104,20 @@ public class LearningGoal implements Cloneable, Copyable<LearningGoal>, Serializ
 		return true;
 	}
 	
+	
+	public LearningGoal depth_copy() {
+		LearningGoal copy = new LearningGoal();
+		copy.competence = this.competence;
+		copy.id = null;
+		return copy;
+	}
+	
+	public LearningGoal shallow_copy() {
+		try {
+			return (LearningGoal) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 }

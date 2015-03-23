@@ -376,7 +376,7 @@ public class GroupController {
 	public String copyGroup(@PathVariable("academicId") Long id_academic,@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group) {
 		ResultClass<Group> result = 
-				serviceGroup.copyGroup((serviceGroup.getGroup(id_group).getSingleElement()));
+				serviceGroup.copyGroup((serviceGroup.getGroup(id_group).getSingleElement()), id_course);
 		
 		if (!result.hasErrors())
 			return "redirect:/academicTerm/"+id_academic+"/course/"+ id_course+".htm";

@@ -46,11 +46,13 @@ public class Module implements Cloneable, Copyable<Module>, Serializable {
 	private Degree degree;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "module",cascade = CascadeType.ALL)
-	private Collection<Topic> topics = new ArrayList<Topic>();
+	private Collection<Topic> topics;
 
 	public Module() {
 		super();
 		this.isDeleted = false;
+		this.topics = new ArrayList<Topic>();
+
 	}
 
 	public Long getId() {
@@ -125,23 +127,24 @@ public class Module implements Cloneable, Copyable<Module>, Serializable {
 		return true;
 	}
 
-	public Module copy() {
-		Module copy;
-		try {
-			copy = (Module) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
+	public Module depth_copy() {
+		Module copy = this.shallow_copy();
 		
 //		copy.id = null;
 		copy.topics = new ArrayList<>();
 		for (Topic t : this.topics) {
-			Topic topic  = t.copy();
+			Topic topic  = t.depth_copy();
 			topic.setModule(copy);
 			copy.topics.add(topic);
 		}
 		return copy;
 	}
-
+	public Module shallow_copy() {
+		try {
+			return (Module) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
 }

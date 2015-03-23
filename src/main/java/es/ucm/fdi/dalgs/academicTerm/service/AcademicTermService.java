@@ -238,7 +238,7 @@ public class AcademicTermService {
 	@PreAuthorize("hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)//	,propagation = Propagation.REQUIRED)
 	public ResultClass<AcademicTerm> copyAcademicTerm(AcademicTerm academicTerm) {
-		AcademicTerm copy = academicTerm.copy();
+		AcademicTerm copy = academicTerm.depth_copy();
 
 		ResultClass<AcademicTerm> result = new ResultClass<>();
 

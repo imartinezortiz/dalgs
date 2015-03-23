@@ -38,10 +38,10 @@ public class Competence implements Cloneable, Copyable<Competence>, Serializable
 	private CompetenceInfo info;
 
 	@ManyToMany(mappedBy = "competences", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private Collection<Subject> subjects = new ArrayList<Subject>();
+	private Collection<Subject> subjects;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "competence",cascade = CascadeType.ALL)
-	private Collection<LearningGoal> learningGoals = new ArrayList<LearningGoal>();
+	private Collection<LearningGoal> learningGoals;
 
 	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_degree")
@@ -55,6 +55,8 @@ public class Competence implements Cloneable, Copyable<Competence>, Serializable
 	public Competence() {
 		super();
 		this.isDeleted = false;
+		this.subjects = new ArrayList<Subject>();
+		this.learningGoals = new ArrayList<LearningGoal>();
 	}
 
 	public Degree getDegree() {
@@ -139,22 +141,27 @@ public class Competence implements Cloneable, Copyable<Competence>, Serializable
 		return true;
 	}
 
-	public Competence copy() {
-		Competence copy;
-		try {
-			copy = (Competence) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
-		
+	public Competence depth_copy() {
+		Competence copy = this.shallow_copy();
+
 //		copy.id = null;
 		copy.learningGoals = new ArrayList<>();
 		for (LearningGoal lg : this.learningGoals) {
-			LearningGoal learningGoal = lg.copy();
+			LearningGoal learningGoal = lg.depth_copy();
 			learningGoal.setCompetence(copy);
 			copy.learningGoals.add(learningGoal);
 		}
 		return copy;
+	}
+
+
+	public Competence shallow_copy() {
+		try {
+			return  (Competence) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+		
 	}
 
 
