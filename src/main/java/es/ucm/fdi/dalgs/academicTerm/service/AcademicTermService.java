@@ -3,8 +3,10 @@ package es.ucm.fdi.dalgs.academicTerm.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,9 @@ public class AcademicTermService {
 	
 	@Autowired
 	private CourseService serviceCourse;
+	
+	@Autowired
+	private MessageSource messageSource;
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
@@ -53,7 +58,9 @@ public class AcademicTermService {
 		if (academicExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("Code already exists");
+	 
+			errors.add(messageSource.getMessage("academicTermExists", null,"Default Error", null));
+//			errors.add(messageSource.getMessage("academicTermExists", null,"Default Error", Locale.US));
 
 			if (academicExists.getIsDeleted()) {
 				result.setElementDeleted(true);
