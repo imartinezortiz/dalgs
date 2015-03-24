@@ -261,3 +261,11 @@ a.btn.btn-clone {
   font-weight: 400;
   font-family: Helvetica;
 }
+#locale > a > img {
+  margin-left: -10px;
+}
+#locale{
+  float: right;
+  margin-right: 1%;
+
+}

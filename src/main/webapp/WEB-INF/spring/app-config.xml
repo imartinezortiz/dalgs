@@ -77,18 +77,12 @@
 	</bean>
 	<mvc:annotation-driven conversion-service="conversionService" />
 	<mvc:annotation-driven></mvc:annotation-driven>
-<!--  <bean id="messageSource"
-		class="org.springframework.context.support.ResourceBundleMessageSource">
-		<property name="basenames" value="messages" />
-		<property name="fallbackToSystemLocale" value="false" />
-		<property name="defaultEncoding" value="UTF-8" />
-	</bean>-->
-
+	
 
 
 	<bean id="localeResolver"
 		class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
-		<property name="defaultLocale" value="en_US" />
+		<property name="defaultLocale" value="en_UK" />
 
 	</bean>
 <mvc:interceptors>

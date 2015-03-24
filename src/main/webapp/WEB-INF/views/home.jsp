@@ -17,27 +17,22 @@
 			href="<c:url value='/academicTerm/page/0.htm?showAll=false'/>">
 			<h4 class="list-group-item-heading">				
 			<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-			Academic Term</h4>
+			<fmt:message key="at" /></h4>
 			<p class="list-group-item-text">
-				Manage each of the academic term
+			<fmt:message key="headAT" />
 			</p>
 		</a> 
 		<a class="list-group-item " 
 			href="<c:url value='/degree/page/0.htm?showAll=false'/>">
 			<h4 class="list-group-item-heading">
 				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-				Degrees
+				<fmt:message key="deg" />
 			</h4>
-			<p class="list-group-item-text">Manage each of the degrees which
-				belong to a career</p>
-		</a> <a href="#" class="list-group-item disabled">
-			<h4 class="list-group-item-heading">
-				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-				Badges
-			</h4>
-			<p class="list-group-item-text">Manage each of the badges which
-				belong to a Competence or to an Activity</p>
+			<p class="list-group-item-text">
+			<fmt:message key="headDeg" />
+			</p>
 		</a>
+
 	
 		
 		<br><br>

@@ -6,14 +6,12 @@
 <title><fmt:message key="title" /></title>
 </head>
 <body>
-	<h2><spring:message code="label.title"></spring:message></h2>
-	Current Locale : ${pageContext.response.locale}
 	<div class="table-responsive list">
 		<div class="panel-heading list">
 			<h4>  
 			
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-			 Academic Term List</h4>
+					<fmt:message key="atList" /></h4>
 			 
 	
 			
@@ -21,7 +19,7 @@
 			<a class="btn list-btn btn-warning2" style="cursor:copy;"
 				href="<c:url value='/academicTerm/add.htm'/>"> 
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				Add 
+				<fmt:message key="add" /> 
 			</a>
 			 </sec:authorize> 
 			<c:choose>
@@ -42,9 +40,9 @@
 		<table class="table table-striped table-bordered">
 			<tr align="center">
 				<td></td>
-				<td>Term</td>
-				<td>Code Degree</td>
-				<td>Name Degree</td>
+				<td><fmt:message key="term" /></td>
+				<td><fmt:message key="codDeg" /></td>
+				<td><fmt:message key="nameDeg" /></td>
 			</tr>
 
 
@@ -53,7 +51,7 @@
 				<tr align="center">
 					<td> <sec:authorize access="hasRole('ROLE_ADMIN')">
 					<a	href="<c:url value='/academicTerm/${academic.id}/clone.htm'/>"
-								class="btn btn-clone">Clone</a> </sec:authorize></td>
+								class="btn btn-clone"><fmt:message key="copy" /></a> </sec:authorize></td>
 					<td><c:out value="${academic.term}" /></td>
 					<td><c:out value="${academic.degree.info.code}" /></td>
 					<td><c:out value="${academic.degree.info.name}" /></td>
@@ -61,17 +59,17 @@
 					<c:choose>
    						<c:when  test="${academic.isDeleted eq false}">
    							<a	href="<c:url value='/academicTerm/${academic.id}.htm?showAll=false'/>"
-								class="btn btn-success">View</a> 
+								class="btn btn-success"><fmt:message key="view" /></a> 
  							<sec:authorize access="hasRole('ROLE_ADMIN')">
  			
 							<a href="<c:url value='/academicTerm/${academic.id}/delete.htm'/>"
-								class="btn btn-danger">Delete</a>
+								class="btn btn-danger"><fmt:message key="delete" /></a>
 							</sec:authorize>
 					</c:when>
 					<c:otherwise>
 						<sec:authorize access="hasRole('ROLE_ADMIN')">
 						<a	href="<c:url value='/academicTerm/${academic.id}/restore.htm'/>"
-								class="btn btn-success">Restore</a> 
+								class="btn btn-success"><fmt:message key="restore" /></a> 
 						</sec:authorize>
 					</c:otherwise>
 				</c:choose>
@@ -86,6 +84,8 @@
 		<nav>
 			<ul class="pagination">
 				<c:if test="${model.currentPage > 0}">
+
+				
 
 					<li><a
 						href="<c:url value='/academicTerm/page/${model.currentPage - 1}.htm?showAll=${model.showAll}'/>"

@@ -18,10 +18,10 @@
 		<div class="panel-heading">
 			<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
 
-			<h3 class="panel-title list">Academic Term Details</h3>
+			<h3 class="panel-title list"><fmt:message key="detailsAT" /></h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<a class="btn list-btn btn-warning"
-					href="<c:url value='/academicTerm/${academicId}/modify.htm'/>">Modify</a>
+					href="<c:url value='/academicTerm/${academicId}/modify.htm'/>"><fmt:message key="modify" /></a>
 			</sec:authorize>
 			
 		</div>
@@ -31,11 +31,11 @@
 
 			<div class="form-group">
 				<div class="form-group view">
-					<label>Term: </label>
+					<label><fmt:message key="term" />: </label>
 					<p class="details">${model.academicTerm.term}</p>
 				</div>
 				<div class="form-group view">
-					<label>Degree:</label>
+					<label><fmt:message key="nameDeg" />:</label>
 					<p class="details">${model.academicTerm.degree.info.name}</p>
 				</div>
 
@@ -48,13 +48,13 @@
 		<div class="panel-heading">
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 
-			<h3 class="panel-title list">Course List</h3>
+			<h3 class="panel-title list"><fmt:message key="courList" /></h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<a class="btn list-btn btn-warning2"
 					style="margin-top: 5px; cursor: copy;"
 					href="<c:url value='/academicTerm/${model.academicTerm.id}/course/add.htm'/>">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					Add
+					<fmt:message key="add" />
 				</a>
 			</sec:authorize>
 			<c:choose>
@@ -81,8 +81,8 @@
 		<div class="panel-body">
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label">SubjectCode</div></td>
-					<td width="50%"><div class="td-label">Subject Name</div></td>
+					<td width="20%"><div class="td-label"><fmt:message key="codSub" /></div></td>
+					<td width="50%"><div class="td-label"><fmt:message key="nameSub" /></div></td>
 
 				</tr>
 				<c:forEach items="${model.courses}" var="course">
@@ -101,18 +101,18 @@
 								<c:when test="${course.isDeleted eq false}">
 									<a class="btn btn-success"
 										href="<c:url value='/academicTerm/${model.academicTerm.id}/course/${course.id}.htm'/>">
-										View </a>
+										<fmt:message key="view" /> </a>
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 										<a class="btn btn-danger"
 											href="<c:url value='/academicTerm/${model.academicTerm.id}/course/${course.id}/delete.htm'/>">
-											Delete </a>
+											<fmt:message key="delete" /> </a>
 									</sec:authorize>
 								</c:when>
 								<c:otherwise>
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 										<a class="btn btn-danger"
 											href="<c:url value='/academicTerm/${model.academicTerm.id}/course/${course.id}/restore.htm'/>">
-											Restore </a>
+											<fmt:message key="restore" /> </a>
 									</sec:authorize>
 								</c:otherwise>
 							</c:choose>
