@@ -77,12 +77,12 @@
 	</bean>
 	<mvc:annotation-driven conversion-service="conversionService" />
 	<mvc:annotation-driven></mvc:annotation-driven>
-	<bean id="messageSource"
+<!--  <bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basenames" value="messages" />
 		<property name="fallbackToSystemLocale" value="false" />
 		<property name="defaultEncoding" value="UTF-8" />
-	</bean>
+	</bean>-->
 
 
 
