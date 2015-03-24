@@ -2,9 +2,9 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
 
 	<!-- holding properties for database connectivity / -->
@@ -13,13 +13,14 @@
 	<!-- enabling annotation driven configuration / -->
 	<context:annotation-config />
 
+
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="${jdbc.driverClassName}" />
 		<property name="url" value="${jdbc.url}" />
 		<property name="username" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
-		
+
 
 		<!-- <property name="hibernate.hbm2ddl.auto">create-drop</property> -->
 	</bean>
@@ -37,12 +38,12 @@
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
 				<prop key="hibernate.format_sql">true</prop>
 				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>
-	 			<prop key="hibernate.hbm2ddl.import_files">/tfg1415Inserts.sql</prop>
-	 			<prop key="hibernate.connection.characterEncoding">UTF-8</prop>
-	 			<!-- Use JDBC batch API with a batch size of 100 -->
-	 			<prop key="hibernate.jdbc.batch_size">100</prop>
-	 			<prop key="hibernate.jdbc.use_getGeneratedKeys">false</prop>
-	 			<!-- <prop key="hibernate.jdbc.fetch_size">100</prop>-->
+				<prop key="hibernate.hbm2ddl.import_files">/tfg1415Inserts.sql</prop>
+				<prop key="hibernate.connection.characterEncoding">UTF-8</prop>
+				<!-- Use JDBC batch API with a batch size of 100 -->
+				<prop key="hibernate.jdbc.batch_size">100</prop>
+				<prop key="hibernate.jdbc.use_getGeneratedKeys">false</prop>
+				<!-- <prop key="hibernate.jdbc.fetch_size">100</prop> -->
 			</props>
 		</property>
 	</bean>
@@ -73,9 +74,9 @@
 	<context:component-scan base-package="es.ucm.fdi.dalgs.subject.repository" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.topic.repository" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.user.repository" />
-	
-	
-	
+
+
+
 	<context:component-scan base-package="es.ucm.fdi.dalgs.academicTerm.service" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.acl.service" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.activity.service" />
@@ -89,11 +90,10 @@
 	<context:component-scan base-package="es.ucm.fdi.dalgs.topic.service" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.user.service" />
 
- <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
-     <constructor-arg value="256"/>
- </bean>
- 
-<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
-<property name="basenames" value="messages" />
-</bean>
+	<bean id="passwordEncoder"
+		class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
+		<constructor-arg value="256" />
+	</bean>
+
+
 </beans>

@@ -6,6 +6,8 @@
 <title><fmt:message key="title" /></title>
 </head>
 <body>
+	<h2><spring:message code="label.title"></spring:message></h2>
+	Current Locale : ${pageContext.response.locale}
 	<div class="table-responsive list">
 		<div class="panel-heading list">
 			<h4>  

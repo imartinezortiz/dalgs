@@ -2,6 +2,7 @@ package es.ucm.fdi.dalgs.academicTerm.web;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -85,14 +86,14 @@ public class AcademicTermController {
 	// Every Post have to return redirect
 	public String addAcademicTermPOST(
 			@ModelAttribute("addAcademicTerm") @Valid AcademicTerm newAcademicTerm,
-			BindingResult resultBinding, RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		this.validate(newAcademicTerm, resultBinding);
 
 		if (!resultBinding.hasErrors()) {
 
 			ResultClass<AcademicTerm> resultReturned = serviceAcademicTerm
-					.addAcademicTerm(newAcademicTerm);
+					.addAcademicTerm(newAcademicTerm, locale);
 			if (resultReturned.hasErrors()) {
 
 				if (resultReturned.isElementDeleted()) {
@@ -353,10 +354,10 @@ public class AcademicTermController {
 	
 	@RequestMapping(value = "/academicTerm/{academicId}/clone.htm")
 	// Every Post have to return redirect
-	public String copyAcademicTerm(@PathVariable("academicId") Long id_academic) {
+	public String copyAcademicTerm(@PathVariable("academicId") Long id_academic, Locale locale) {
 		ResultClass<AcademicTerm> result = 
 				serviceAcademicTerm.copyAcademicTerm((serviceAcademicTerm
-						.getAcademicTerm(id_academic,false).getSingleElement()));
+						.getAcademicTerm(id_academic,false).getSingleElement()), locale);
 		
 		if (!result.hasErrors())
 			return "redirect:/academicTerm/page/0.htm?showAll=" + showAll;

@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
- 
- <!-- Hemos visto antes que es tremendamente fácil modificar la capa de servicio para usar persistencia en base de datos. 
- Esto es así porque está despegada de la capa web. Ahora es el momento de despegar también la configuración de la capa de servicio de la capa web. 
- Eliminaremos la configuración de productManager y la lista de productos del archivo de configuración 'app-config.xml' -->
- 
+
+<!-- Hemos visto antes que es tremendamente fácil modificar la capa de servicio 
+	para usar persistencia en base de datos. Esto es así porque está despegada 
+	de la capa web. Ahora es el momento de despegar también la configuración 
+	de la capa de servicio de la capa web. Eliminaremos la configuración de productManager 
+	y la lista de productos del archivo de configuración 'app-config.xml' -->
+
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:security="http://www.springframework.org/schema/security"
-	
-	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
- 
-    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
-        <property name="basename" value="messages"/>
-    </bean>
 
-    <!-- Scans the classpath of this application for @Components to deploy as beans -->
-    <context:component-scan base-package="es.ucm.fdi.dalgs.web" />
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+
+	<!-- <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"> 
+		<property name="basename" value="messages"/> </bean> -->
+
+	<!-- Scans the classpath of this application for @Components to deploy as 
+		beans -->
+	<context:component-scan base-package="es.ucm.fdi.dalgs.web" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.academicTerm.web" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.activity.web" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.competence.web" />
@@ -33,46 +35,71 @@
 	<context:component-scan base-package="es.ucm.fdi.dalgs.subject.web" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.topic.web" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.user.web" />
-	
-    <!-- Configures the @Controller programming model -->
-   
-    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
-        <property name="prefix" value="/WEB-INF/views/"></property>
-        <property name="suffix" value=".jsp"></property>        
-    </bean>
-	
+
+	<!-- Configures the @Controller programming model -->
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView"></property>
+		<property name="prefix" value="/WEB-INF/views/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
 	<!-- Declares mvc:resources, to map “url path” to a physical file path location -->
 	<mvc:resources mapping="/resources/**" location="/resources/" />
- 
- <bean id="multipartResolver"
-      class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 
-    <!-- one of the properties available; the maximum file size in bytes -->
-    <property name="maxUploadSize" value="100000"/>
-</bean>
- 
- <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-      <property name="formatters">
-           <set>
-                 <ref bean="academicTermFormatter"/>
-                 <ref bean="activityFormatter"/>
-                 <ref bean="competenceFormatter"/>
-                 <ref bean="courseFormatter"/>
-                 <ref bean="degreeFormatter"/>
-                 <ref bean="subjectFormatter"/>    
-                 <ref bean="learningGoalStatusFormatter"/>
-     	      	 <ref bean="moduleFormatter"/>
-                 <ref bean="topicFormatter"/>
-                 <ref bean="learningGoalFormatter"/>
-                 <ref bean="groupFormatter"/>
-                 <ref bean="userFormatter"/>
-           </set>
-      </property>
-</bean>
- <mvc:annotation-driven conversion-service="conversionService"/>
-<mvc:annotation-driven></mvc:annotation-driven>
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 
+		<!-- one of the properties available; the maximum file size in bytes -->
+		<property name="maxUploadSize" value="100000" />
+	</bean>
+
+	<bean id="conversionService"
+		class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<property name="formatters">
+			<set>
+				<ref bean="academicTermFormatter" />
+				<ref bean="activityFormatter" />
+				<ref bean="competenceFormatter" />
+				<ref bean="courseFormatter" />
+				<ref bean="degreeFormatter" />
+				<ref bean="subjectFormatter" />
+				<ref bean="learningGoalStatusFormatter" />
+				<ref bean="moduleFormatter" />
+				<ref bean="topicFormatter" />
+				<ref bean="learningGoalFormatter" />
+				<ref bean="groupFormatter" />
+				<ref bean="userFormatter" />
+			</set>
+		</property>
+	</bean>
+	<mvc:annotation-driven conversion-service="conversionService" />
+	<mvc:annotation-driven></mvc:annotation-driven>
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames" value="messages" />
+		<property name="fallbackToSystemLocale" value="false" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+
+
+
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+		<property name="defaultLocale" value="en_US" />
+
+	</bean>
+<mvc:interceptors>
+	<bean id="localeChangeInterceptor"
+		class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+		<property name="paramName" value="lang" />
+	</bean>
+</mvc:interceptors>
+	<!-- <bean id="handlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"> 
+		<property name="interceptors"> <ref bean="localeChangeInterceptor" /> </property> 
+		</bean> -->
 
 </beans>
 

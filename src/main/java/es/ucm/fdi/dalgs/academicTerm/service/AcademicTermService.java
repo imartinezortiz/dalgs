@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -47,10 +48,10 @@ public class AcademicTermService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<AcademicTerm> addAcademicTerm(AcademicTerm academicTerm) {
+	public ResultClass<AcademicTerm> addAcademicTerm(AcademicTerm academicTerm, Locale locale) {
 
 		boolean success = false;
-
+		
 		AcademicTerm academicExists = daoAcademicTerm.exists(
 				academicTerm.getTerm(), academicTerm.getDegree());
 		ResultClass<AcademicTerm> result = new ResultClass<>();
@@ -58,8 +59,8 @@ public class AcademicTermService {
 		if (academicExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-	 
-			errors.add(messageSource.getMessage("academicTermExists", null,"Default Error", null));
+			errors.add(messageSource.getMessage("academicTermExists", null, locale));
+//			errors.add(messageSource.getMessage("academicTermExists", null, "default Error", locale));
 //			errors.add(messageSource.getMessage("academicTermExists", null,"Default Error", Locale.US));
 
 			if (academicExists.getIsDeleted()) {
@@ -244,7 +245,7 @@ public class AcademicTermService {
 
 	@PreAuthorize("hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)//	,propagation = Propagation.REQUIRED)
-	public ResultClass<AcademicTerm> copyAcademicTerm(AcademicTerm academicTerm) {
+	public ResultClass<AcademicTerm> copyAcademicTerm(AcademicTerm academicTerm, Locale locale) {
 		AcademicTerm copy = academicTerm.depth_copy();
 
 		ResultClass<AcademicTerm> result = new ResultClass<>();
@@ -282,7 +283,7 @@ public class AcademicTermService {
 				courses.add(course_aux); //Add the course with all his activities modified
 			}
 			
-			AcademicTerm existAt = this.addAcademicTerm(copy).getSingleElement();
+			AcademicTerm existAt = this.addAcademicTerm(copy,locale).getSingleElement();
 			
 			for(Course c :  courses){
 				Course aux = c;
