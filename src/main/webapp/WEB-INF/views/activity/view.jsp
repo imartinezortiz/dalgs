@@ -18,13 +18,14 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
-				Activity Details
+				<fmt:message key="detailsAC" />
 			</h3>
-				<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')">
+			<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')">
 				<a class="btn list-btn btn-warning"
-				href="<c:url value='${activityId}/modify.htm'/>">			
-				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>Edit</a>
-				</sec:authorize>
+					href="<c:url value='${activityId}/modify.htm'/>"> <span
+					class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>Edit
+				</a>
+			</sec:authorize>
 
 		</div>
 
@@ -33,24 +34,18 @@
 
 			<div class="form-group">
 				<div class="form-group view">
-					<label>Code: </label>
-					<p class="details">
-						${model.activity.info.code}
-					</p>
-					</div>
-					<div class="form-group view">
-					<label>Name:</label>
-					<p class="details">
-						${model.activity.info.name}
-					</p>
+					<label><fmt:message key="code" /> : </label>
+					<p class="details">${model.activity.info.code}</p>
 				</div>
-					<div class="form-group view">
-					<label>Description:</label>
-					<p class="details">
-						${model.activity.info.description}
-					</p>
+				<div class="form-group view">
+					<label><fmt:message key="name" /> :</label>
+					<p class="details">${model.activity.info.name}</p>
 				</div>
-					
+				<div class="form-group view">
+					<label><fmt:message key="desc" /> :</label>
+					<p class="details">${model.activity.info.description}</p>
+				</div>
+
 
 			</div>
 
@@ -59,16 +54,21 @@
 
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
-			<h3 class="panel-title list">						
-			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-			Learning Goal Status List </h3>
+			<h3 class="panel-title list">
+				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
+				<fmt:message key="lgsList" />
+			</h3>
 		</div>
 		<div class="panel-body">
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label">Learning Goal</div></td>
-					<td width="50%"><div class="td-label">Weight</div></td>
-				
+					<td width="20%"><div class="td-label">
+							<fmt:message key="lg" />
+						</div></td>
+					<td width="50%"><div class="td-label">
+							<fmt:message key="weight" />
+						</div></td>
+
 				</tr>
 				<c:forEach items="${model.learningStatus}" var="ls">
 					<tr align="center">

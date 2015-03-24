@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
-<title>Upload CSV</title>
+<title><fmt:message key="upload" /></title>
 </head>
 
 <body>
@@ -12,7 +12,7 @@
 
 		<div class="panel panel-primary group">
 			<div class="panel-heading">
-				<h3 class="panel-title list">Upload a ${className} CSV File  </h3>
+				<h3 class="panel-title list"><fmt:message key="upload" /> : ${className}</h3>
 
 			</div>
 
@@ -35,19 +35,19 @@
 					</div>
 					<br>
 					<div class="form-group view">
-						<label>File Syntax </label>
+						<label><fmt:message key="syntax" /></label>
 
 						<table>
 							<tr>
-								<td><p>Quote Char</p></td>
+								<td><p><fmt:message key="quote" /></p></td>
 								<td><form:input path="quoteChar" type="text" value='\"' /></td>
 							</tr>
 							<tr>
-								<td><p>Delimiter Char</p></td>
+								<td><p><fmt:message key="delimiter" /></p></td>
 								<td><form:input path="delimiterChar" type="text" value=',' /></td>
 							</tr>
 							<tr>
-								<td><p>End of Line</p></td>
+								<td><p><fmt:message key="eol" /></p></td>
 								<td><form:input path="endOfLineSymbols" type="text"
 										value='\r\n' /></td>
 							</tr>
@@ -55,27 +55,31 @@
 					</div>
 					<br>
 					<div class="form-group view">
-						<label>CSV File</label>
+					
+					<spring:message code="choosefile" var="choose"/>
+					<spring:message code="upload" var="upload"/>
+					
+						<label><fmt:message key="file" /></label>
 						<form:input type="file" path="fileData" class="filestyle"
 							data-classButton="btn btn-primary" data-input="true"
-							data-classIcon="icon-plus" data-buttonText="  Choose a file" />
+							data-classIcon="icon-plus" data-buttonText="${choose}" />
 
 					</div>
 
 					<br>
-					<input class="btn btn-success" type="submit" value="Upload File" />
+					<input class="btn btn-success" type="submit" value="${upload}" />
 
 				</form:form>
 			</div>
 
 			<div class="panel-body">
-				<table border="0" class="table table-striped">
-					<h4 style="text-align: center;">Most Common delimiters:</h4>
+				<table border='0' class="table table-striped">
+					<h4 style="text-align:center;"><fmt:message key="commonDel" /></h4>
 					<tr>
-						<td align="left"><b>Constant</b></td>
-						<th align="center">Quote char</th>
-						<th align="center">Delimiter char</th>
-						<th align="center">End of line symbols</th>
+						<td align="left"><b><fmt:message key="constant" /></b></td>
+						<th align="center">	<fmt:message key="quote" /></th>
+						<th align="center"><fmt:message key="delimiter" /></th>
+						<th align="center"><fmt:message key="eol" /></th>
 					</tr>
 					<tr>
 						<td align="left"><a

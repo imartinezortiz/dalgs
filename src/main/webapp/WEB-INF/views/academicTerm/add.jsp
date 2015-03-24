@@ -18,7 +18,7 @@
 		<div class="panel-heading">
 			<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 
-			<h3 class="panel-title list">Add AcademicTerm</h3>
+			<h3 class="panel-title list"><fmt:message key="atAdd" /></h3>
 		</div>
 		<div class="panel-body">
 			<%-- 	<form:form  method="post" modelAttribute="modifyProduct" > (ResquestParam)  --%>
@@ -28,20 +28,20 @@
 				<div>
 					<form:hidden path="id" />
 				</div>
-
+				<spring:message code="placeTerm" var="placeterm"/>
 				<div class="form-group">
-					<label>Term: </label>
+					<label><fmt:message key="term" />: </label>
 					<form:input path="term" class="form-control"
-						placeholder="Code of the academicTerm" required="true" />
+						placeholder="${placeterm}" required="true" />
 					<form:errors path="term" cssStyle="color: #ff0000" />
 				</div>
 
 				<div class="form-group">
-					<label>Degrees List:</label>
+					<label><fmt:message key="degList" /></label>
 
-
+			
 					<form:select class="form-control 2" path="degree" id="degreeSelect">
-						<form:option value=""> --Select an option-- </form:option>
+						<form:option value=""> <fmt:message key="selectOp" /> </form:option>
 						<c:forEach items="${degrees}" var="degree">
 							<c:choose>
 								<c:when test="${degree.id == idDegree}">
@@ -58,9 +58,9 @@
 				</div>
 
 
-				<input type="submit" class="btn btn-success" value="Add" name="Add" />
+				<input type="submit" class="btn btn-success" value=<fmt:message key="add" /> name="Add" />
 				<c:if test="${unDelete == true}">
-					<input type="submit" class="btn btn-success" value="Undelete"
+					<input type="submit" class="btn btn-success" value=<fmt:message key="undelete" />
 						name="Undelete" />
 				</c:if>
 			</form:form>
@@ -68,7 +68,7 @@
 	</div>
 	<c:if test="${not empty errors}">
 		<div align="center">
-			<h3 class="panel-title list">Errors:</h3>
+			<h3 class="panel-title list"><fmt:message key="errors" />:</h3>
 			<br />
 			<c:forEach items="${errors}" var="error">
 

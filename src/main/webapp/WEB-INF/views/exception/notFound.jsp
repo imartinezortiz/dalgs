@@ -32,7 +32,7 @@
 
 <html>
 <head>
-<title>Error</title>
+<title><fmt:message key="error" /></title>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -44,7 +44,7 @@
 			<span class="glyphicon  glyphicon-road" aria-hidden="true">&nbsp;</span>
 			<h3 class="panel-title list pError">
 				
-					Status Code:
+					<fmt:message key="statusCode" />:
 					<%=request.getAttribute("javax.servlet.error.status_code")%>
 			</h3> 
 
@@ -57,7 +57,7 @@
 						src="<c:url value="/resources/images/404.png" /> ">
 				</div>
 				<div class="col-md-6">
-					<p class="pError" > Reason:</p>
+					<p class="pError" > <fmt:message key="reason" />:</p>
 					<p style=" font-family: monospace;">	
 						<%=request.getAttribute("javax.servlet.error.message")%>
 					</p>
@@ -71,7 +71,7 @@
 </body>
 </html>
 <div class="home-button">
-	<a class="btn home" href="<c:url value="/home.htm"/>">Home</a>
+	<a class="btn home" href="<c:url value="/home.htm"/>"><fmt:message key="home" /></a>
 </div>
 </body>
 </body>

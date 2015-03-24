@@ -95,5 +95,12 @@
 		<constructor-arg value="256" />
 	</bean>
 
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames" value="messages" />
+		<property name="fallbackToSystemLocale" value="false" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+
 
 </beans>

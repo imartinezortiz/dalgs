@@ -11,15 +11,13 @@
 
 
 <!-- Contains Function -->
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!-- spring:out formatea la salida -->
 
 
 <!-- Encoding -->
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<a href="?lang=en_US">Ingles</a>
-<a href="?lang=es_ES">Español</a>
 <link rel="shortcut icon"
 	href="<c:url value= "/resources/images/favicon.ico" />">
 
@@ -34,14 +32,17 @@
 <!-- Latest compiled and minified JavaScript -->
 <script type="text/javascript"
 	src="<c:url value="/resources/scripts/jquery-1.11.1.min.js" /> ">
+	
 </script>
 
 <script type="text/javascript"
 	src=" <c:url value="/resources/scripts/bootstrap.js" /> ">
+	
 </script>
 
 <script type="text/javascript"
 	src=" <c:url value="/resources/scripts/bootstrap-filestyle.js" /> ">
+	
 </script>
 
 <!-- FONTS -->
@@ -50,48 +51,51 @@
 <link href='http://fonts.googleapis.com/css?family=Prosto+One'
 	rel='stylesheet' type='text/css'>
 
-
-
+<div id="locale">
+	<a href="?lang=es_ES"> <img style="max-width: 40px;"
+		src="<c:url value="/resources/images/es_ES.png" /> " />
+	</a><br> <a href="?lang=en_UK"> <img style="max-width: 40px;"
+		src="<c:url value="/resources/images/en_UK.png" /> ">
+	</a></div>
 <div class="page-header logo">
+
 	<h1 class="logo">
 		Badges for Subjects <small>TFG 2014/ 2015</small>
 	</h1>
-	<img alt="tfg" class="img-rounded logo" style=" margin-top: 0.25%;"
-		src="<c:url value="/resources/images/theme/ucm-ws.png" /> ">
-		<img alt="tfg" class="img-rounded logo" 
-		src="<c:url value="/resources/images/theme/ucm.png" /> " >
+	<img alt="tfg" class="img-rounded logo" style="margin-top: 0.25%;"
+		src="<c:url value="/resources/images/theme/ucm-ws.png" /> "> <img
+		alt="tfg" class="img-rounded logo"
+		src="<c:url value="/resources/images/theme/ucm.png" /> ">
 </div>
 
-<!-- 
-<div id="logo">
-				<a href="http://www.ucm.es/" title="Universidad Complutense de Madrid - Portada">
-				<img src="/nodes/web/00media/img/ucm-ws.png" alt="Universidad Complutense de Madrid"></a>
-				<a href="/"><img src="/nodes/web/centros/informatica/media/img/ucm.png" alt="Facultad de Informática" title="Facultad de Informática - Portada">
-				</a>
-			</div>
- -->
+
+
+
 <c:url value="/" var="homeUrl" />
 <c:url value="/user.htm" var="userUrl" />
 <c:url value="/admin.htm" var="adminUrl" />
 <c:url value="/logout.htm" var="logoutUrl" />
 
-<c:set var="contextPath" value="${requestScope['javax.servlet.forward.request_uri']}"/> <!-- Get URI -->
-<c:set value="enabled" var="upload"/>   <!-- Location Boolean  -->  
+<c:set var="contextPath"
+	value="${requestScope['javax.servlet.forward.request_uri']}" />
+<!-- Get URI -->
+<c:set value="enabled" var="upload" />
+<!-- Location Boolean  -->
 
-	<!-- To do the same with the other entities -->
+<!-- To do the same with the other entities -->
 
 <c:choose>
-    <c:when  test="${fn:contains(contextPath, 'academicTerm')}">
+	<c:when test="${fn:contains(contextPath, 'academicTerm')}">
 		<c:url value="/upload/academicTerm.htm" var="uploadUrl" />
-    </c:when>
-    
-    
-    <c:when  test="${fn:contains(contextPath, 'module')}">
-         <c:url value="/upload/module.htm" var="uploadUrl" />
-    </c:when>
-    <c:otherwise>
-    	<c:set value="disabled" var="upload"/>
-    </c:otherwise>
+	</c:when>
+
+
+	<c:when test="${fn:contains(contextPath, 'module')}">
+		<c:url value="/upload/module.htm" var="uploadUrl" />
+	</c:when>
+	<c:otherwise>
+		<c:set value="disabled" var="upload" />
+	</c:otherwise>
 </c:choose>
 <%-- <c:out value="${upload}"></c:out>
 <c:out value="${contextPath}"></c:out>
@@ -99,6 +103,7 @@
 <div class="list-group index">
 
 	<nav class="navbar navbar-default">
+	
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
@@ -119,11 +124,13 @@
 				<ul class="nav navbar-nav">
 					<sec:authorize access="hasRole('ROLE_ANONYMOUS')">
 						<li><a href="${userUrl}"> <span
-								class="glyphicon glyphicon-user" aria-hidden="true"></span> Login
-								<span class="sr-only">(current)</span></a></li>
+								class="glyphicon glyphicon-user" aria-hidden="true"></span>
+										<fmt:message key="login" />
+ <span class="sr-only">(current)</span></a></li>
 					</sec:authorize>
 
-					<sec:authorize access="hasRole('ROLE_STUDENT') or hasRole('ROLE_PROFESSOR')">
+					<sec:authorize
+						access="hasRole('ROLE_STUDENT') or hasRole('ROLE_PROFESSOR')">
 						<li><a href="${userUrl}"> <span
 								class="glyphicon glyphicon-user" aria-hidden="true"></span> User
 								<span class="sr-only">(current)</span></a></li>
@@ -138,29 +145,31 @@
 					<sec:authorize access="hasAnyRole('ROLE_ADMIN' ,  'ROLE_USER')">
 						<li><a href="${logoutUrl}"> <span
 								class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
-								Logout
+										<fmt:message key="logout" />
+
 						</a></li>
 					</sec:authorize>
 
 				</ul>
-				
+
 				<ul class="nav navbar-nav navbar-right">
 					<c:if test="${upload == 'enabled'}">
-					<sec:authorize access="hasRole('ROLE_ADMIN')">
-					
-					<li><a href="${uploadUrl}"> <span
-							class="glyphicon glyphicon-upload" aria-hidden="true"></span> CVS
-							<span class="sr-only">(current)</span></a></li>
-							</sec:authorize>
-						</c:if>
+						<sec:authorize access="hasRole('ROLE_ADMIN')">
+
+							<li><a href="${uploadUrl}"> <span
+									class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+									CVS <span class="sr-only">(current)</span></a></li>
+						</sec:authorize>
+					</c:if>
 					<p class="navbar-text navbar-right" style="font-size: 15px;">
 
 						<span class="glyphicon glyphicon-eye-open" aria-hidden="true">
-						</span> Signed in as <a href="#" class="navbar-link"><%=SecurityContextHolder.getContext().getAuthentication()
+						</span> <fmt:message key="signedIn" />
+ <a href="#" class="navbar-link"><%=SecurityContextHolder.getContext().getAuthentication()
 					.getName()%></a>&nbsp&nbsp
 					</p>
 				</ul>
-			
+
 			</div>
 		</div>
 	</nav>
