@@ -241,7 +241,7 @@ public class AclObjectService {
 			Sid sid = null;
 
 			sid = new PrincipalSid(user.getUsername());
-			Permission p = BasePermission.ADMINISTRATION;
+			Permission p = BasePermission.READ;
 
 			try {
 				acl = (MutableAcl) mutableAclService.readAclById(oi);

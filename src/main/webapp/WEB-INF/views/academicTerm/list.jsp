@@ -22,6 +22,8 @@
 				<fmt:message key="add" /> 
 			</a>
 			 </sec:authorize> 
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+			 
 			<c:choose>
    				<c:when  test="${model.showAll eq true}">
    					<a href="<c:url value='/academicTerm/page/${model.currentPage}.htm?showAll=false'>
@@ -36,6 +38,7 @@
 			 			 style="float: right; margin-right: 1%;margin-top: 3;"></a> 
 				</c:otherwise>
 			</c:choose>
+			</sec:authorize>
 		</div>
 		<table class="table table-striped table-bordered">
 			<tr align="center">
@@ -69,7 +72,7 @@
 					<c:otherwise>
 						<sec:authorize access="hasRole('ROLE_ADMIN')">
 						<a	href="<c:url value='/academicTerm/${academic.id}/restore.htm'/>"
-								class="btn btn-success"><fmt:message key="restore" /></a> 
+								class="btn btn-success"><fmt:message key="restore"/></a> 
 						</sec:authorize>
 					</c:otherwise>
 				</c:choose>

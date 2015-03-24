@@ -29,7 +29,7 @@
 					Edit
 				</a>
 			</sec:authorize>
-			<c:choose>
+			<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')"><c:choose>
 				<c:when test="${model.showAll eq true}">
 					<a
 						href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}.htm?showAll=false'>
@@ -48,7 +48,7 @@
 						style="float: right; margin-right: 1%;">
 					</a>
 				</c:otherwise>
-			</c:choose>
+			</c:choose></sec:authorize>
 		</div>
 
 		<div class="panel-body">
@@ -244,7 +244,7 @@
 				<a style="cursor: copy;" class="btn list-btn btn-warning2"
 					href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/student/add.htm'/>">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					Add
+					CHANGE
 				</a>
 			</sec:authorize>
 

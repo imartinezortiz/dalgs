@@ -214,7 +214,7 @@ public class CourseService {
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#course, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResultClass<Boolean> deleteCourses(Collection<AcademicTerm> academicList) {
 		
 		ResultClass<Boolean> result = new ResultClass<>();
@@ -230,7 +230,7 @@ public class CourseService {
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#course, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Course> unDeleteCourse(Course course, Long id_academic) {
 		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic, false).getSingleElement());

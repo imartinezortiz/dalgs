@@ -130,7 +130,7 @@ public class DegreeService {
 
 	}
 
-	@PreAuthorize("hasPermission(#degree, 'DELETE') or hasPermission(#degree, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteDegree(Degree degree) {
 		ResultClass<Boolean> result = new ResultClass<>();

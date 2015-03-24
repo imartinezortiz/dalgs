@@ -28,6 +28,7 @@
 					Edit
 				</a>
 			</sec:authorize>
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
 			<c:choose>
 				<c:when test="${model.showAll eq true}">
 					<a
@@ -47,7 +48,7 @@
 						style="float: right; margin-right: 1%;">
 					</a>
 				</c:otherwise>
-			</c:choose>
+			</c:choose></sec:authorize>
 		</div>
 
 		<div class="panel-body">

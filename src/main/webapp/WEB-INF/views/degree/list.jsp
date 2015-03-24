@@ -23,7 +23,7 @@
 					class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 					Add
 				</a>
-			</sec:authorize>
+			</sec:authorize><sec:authorize access="hasRole('ROLE_ADMIN')">
 			<c:choose>
 				<c:when test="${model.showAll eq true}">
 					<a
@@ -43,13 +43,13 @@
 						style="float: right; margin-right: 1%; margin-top: 3;">
 					</a>
 				</c:otherwise>
-			</c:choose>
+			</c:choose></sec:authorize>
 		</div>
 		<table class="table table-striped table-bordered">
 			<tr align="center">
 				<td>Code</td>
 				<td>Name</td>
-				<td width="50%">Description</td>
+				<td width="40%">Description</td>
 				<td>Actions</td>
 			</tr>
 			<c:forEach items="${model.degrees}" var="degree">
@@ -64,7 +64,7 @@
 									href="<c:url value='/degree/${degree.id}.htm'/>"> View </a>
 								<sec:authorize access="hasRole('ROLE_ADMIN')">
 									<a class="btn list-btn btn-danger"
-										href="<c:url value='/degree/${degree.id}/delete.htm'/>">Delete</a>
+										href="<c:url value='/degree/${degree.id}/delete.htm'/>"> Delete </a>
 								</sec:authorize>
 							</c:when>
 							<c:otherwise>							

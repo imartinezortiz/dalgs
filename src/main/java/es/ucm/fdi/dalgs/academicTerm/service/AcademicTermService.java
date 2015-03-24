@@ -7,7 +7,6 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -143,7 +142,7 @@ public class AcademicTermService {
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#academicTerm, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	// propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean> deleteAcademicTerm(AcademicTerm academicTerm) {

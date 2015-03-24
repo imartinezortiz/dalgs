@@ -118,8 +118,7 @@ public class TopicService {
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#topic, 'DELETE') or hasPermission(#topic, 'ADMINISTRATION')" )
-	@Transactional(readOnly=false)
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	@Transactional(readOnly=false)
 	public ResultClass<Boolean> deleteTopic(Topic topic) {
 		ResultClass<Boolean> result = new ResultClass<>();
 		Collection<Topic> topics = new ArrayList<>();
@@ -180,7 +179,7 @@ public class TopicService {
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#topic, 'WRITE') or hasPermission(#topic, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Topic> unDeleteTopic(Topic topic, Long id_module) {
 		Topic t = daoTopic.existByCode(topic.getInfo().getCode(), id_module);
