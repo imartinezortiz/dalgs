@@ -84,7 +84,7 @@ public class User implements UserDetails, CredentialsContainer, Serializable {
 	public User() {
 		this.accountNonExpired = true;
 		this.credentialsNonExpired = true;
-		this.enabled = false;
+		this.enabled = true;
 		this.accountNonLocked = true;
 		this.roles = new ArrayList<UserRole>();
 	}

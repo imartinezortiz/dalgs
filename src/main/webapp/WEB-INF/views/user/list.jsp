@@ -10,13 +10,13 @@
 		<div class="panel-heading list">
 			<h4>  
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-			 User List</h4>
+			 <fmt:message key="userList" /></h4>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 			
 			<a style="cursor:copy;" class="btn list-btn btn-warning2"
 				href="<c:url value='/user/add.htm'/>"> 
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				Add 
+				<fmt:message key="add" /> 
 			</a>
 			</sec:authorize><sec:authorize access="hasRole('ROLE_ADMIN')">
 			<c:choose>
@@ -39,9 +39,9 @@
 		</div>
 		<table class="table table-striped table-bordered">
 					<tr align="center">
-						<td><div class="td-label">Last Name</div></td>
-						<td><div class="td-label">First Name</div></td>
-						<td><div class="td-label">Email</div></td>
+						<td><div class="td-label"><fmt:message key="lastN" /></div></td>
+						<td><div class="td-label"><fmt:message key="firstN" /></div></td>
+						<td><div class="td-label"><fmt:message key="email" /></div></td>
 
 					</tr>
 					<c:forEach items="${model.users}" var="user">
@@ -63,16 +63,16 @@
 							<td>
 							<c:choose>
    								<c:when  test="${user.enabled eq true}">
-   									<a class="btn btn-success" href="<c:url value='/user/${user.id}.htm'/>"> View </a> 
+   									<a class="btn btn-success" href="<c:url value='/user/${user.id}.htm'/>"> <fmt:message key="view" /> </a> 
 										<sec:authorize access="hasRole('ROLE_ADMIN')">
 											<a class="btn btn-danger" href="<c:url value='/user/${user.id}/status.htm'/>">
-											Disabled</a>
+											<fmt:message key="disabled" /></a>
 										</sec:authorize>
       							</c:when>	
 								<c:otherwise>
 										<sec:authorize access="hasRole('ROLE_ADMIN')">
 											<a class="btn btn-danger" href="<c:url value='/user/${user.id}/status.htm'/>">
-											Enabled</a>
+											<fmt:message key="enabled" /></a>
 										</sec:authorize>
 								</c:otherwise>
 							</c:choose>

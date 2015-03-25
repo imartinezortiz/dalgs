@@ -8,15 +8,11 @@
 1.- Finish User Module
 2.- Change messages in all services
 3.-	To Finish JSP messages:
+**** Except value="${valueButton}
 
-
-	module
-	topic
-	user
-	subject
 4.- CSV
 	
-**** Except value="${valueButton}
+
 
 -------------------------------------------------------
 
@@ -37,6 +33,10 @@ Optional: Change the pagination
 	Course
 	Degree
 	Group
+	Module
+	Topic
+	Subject
+	User
 	
 
 1.- Isolate the manage of ACLs
