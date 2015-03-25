@@ -16,30 +16,29 @@
 
 	<div class="panel panel-primary group category">
 		<div class="panel-heading">
-			<h3 class="panel-title list">Add Competence</h3>
+			<h3 class="panel-title list"><fmt:message key="comAdd" /></h3>
 		</div>
 		<div class="panel-body">
-			<%-- 	<form:form  method="post" modelAttribute="modifyProduct" > (ResquestParam)  --%>
 
 			<form:form method="post" commandName="subject">
 				
 				<div class="form-group">
-					<label>Code: </label>
+					<label><fmt:message key="code" />: </label>
 					<form:input path="info.code" class="form-control" readonly="true" required="true"/>
 				</div>
 				<div class="form-group">
-					<label>Name: </label>
+					<label><fmt:message key="name" />: </label>
 					<form:input path="info.name" class="form-control" id="name" readonly="true" required="true"/>
 
 				</div>
 				<div class="form-group">
-					<label>Description: </label>
+					<label><fmt:message key="desc" />: </label>
 					<form:input class="form-control" path="info.description"
 						id="description" readonly="true" required="true"/>
 				</div>
 
 				<div class="form-group">
-					<label>Available Competences:</label>
+					<label><fmt:message key="availableCom" />:</label>
 					<div class="checkbox">
 						<form:checkboxes items="${competences}" path="competences"
 							itemLabel="info.name" />
@@ -48,8 +47,8 @@
 			
 					</div>
 				</div>
-
-				<input type="submit" class="btn btn-success" value="Add" />
+				<spring:message code="add" var="add"/>
+				<input type="submit" class="btn btn-success" value="${add}" />
 
 			</form:form>
 		</div>

@@ -19,31 +19,36 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				"${valueButton}" Subject
+				"${valueButton}" <fmt:message key="sub" />
 			</h3>
 		</div>
 		<div class="panel-body">
 			<form:form method="post" commandName="subject" role="form">
 				<form:hidden path="id"/>
 				
+				<spring:message code="codSub" var="codSub"/>
+				<spring:message code="nameSub" var="nameSub"/>
+				<spring:message code="descSub" var="descSub"/>
+
+				
 				<div class="form-group">
-					<label>Code: </label>
+					<label><fmt:message key="code" />: </label>
 					<form:input path="info.code" class="form-control"
-						placeholder="Code of the subject" required="true" />
+						placeholder="${codSub}" required="true" />
 					<form:errors path="info.code" cssStyle="color: #ff0000" />
 
 				</div>
 				<div class="form-group">
-					<label>Name: </label>
+					<label><fmt:message key="name" />: </label>
 					<form:input path="info.name" class="form-control"
-						placeholder="Name of the subject" required="true" />
+						placeholder="${nameSub}" required="true" />
 					<form:errors path="info.name" cssStyle="color: #ff0000" />
 
 				</div>
 				<div class="form-group">
-					<label>Description: </label>
+					<label><fmt:message key="desc" />: </label>
 					<form:input path="info.description" class="form-control"
-						placeholder="Description of the subject" required="true" />
+						placeholder="${descSub}" required="true" />
 					<form:errors path="info.description" cssStyle="color: #ff0000" />
 
 				</div>
@@ -52,8 +57,9 @@
 				<input type="submit" class="btn btn-success" value="${valueButton}"
 					name="${valueButton}" />
 
+				<spring:message code="undelete" var="undelete"/>
 				<c:if test="${unDelete == true}">
-					<input type="submit" class="btn btn-success" value="Undelete"
+					<input type="submit" class="btn btn-success" value="${undelete}"
 						name="Undelete" />
 				</c:if>
 			</form:form>
@@ -62,7 +68,7 @@
 
 	<c:if test="${not empty errors}">
 		<div align="center">
-			<h3 class="panel-title list">Errors:</h3>
+			<h3 class="panel-title list"><fmt:message key="errors" />:</h3>
 			<br />
 			<c:forEach items="${errors}" var="error">
 				<c:out value="${error}" />
