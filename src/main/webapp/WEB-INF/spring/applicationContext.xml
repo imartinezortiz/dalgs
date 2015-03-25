@@ -39,7 +39,7 @@
 				<prop key="hibernate.format_sql">true</prop>
 				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>
 				<prop key="hibernate.hbm2ddl.import_files">/tfg1415Inserts.sql</prop>
-				<prop key="hibernate.connection.characterEncoding">UTF-8</prop>
+				<prop key="hibernate.connection.characterEncoding">ISO-8859-1</prop>
 				<!-- Use JDBC batch API with a batch size of 100 -->
 				<prop key="hibernate.jdbc.batch_size">100</prop>
 				<prop key="hibernate.jdbc.use_getGeneratedKeys">false</prop>
@@ -99,7 +99,7 @@
 		class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basenames" value="messages" />
 		<property name="fallbackToSystemLocale" value="false" />
-		<property name="defaultEncoding" value="UTF-8" />
+		<property name="defaultEncoding" value="ISO-8859-1" />
 	</bean>
 
 
