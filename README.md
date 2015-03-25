@@ -8,14 +8,17 @@
 1.- Finish User Module
 2.- Change messages in all services
 3.-	To Finish JSP messages:
-	competence
-	course
-	degree
+
 	learninggoal
 	module
 	topic
 	user
 	subject
+4.- CSV
+	
+**** Except value="${valueButton}
+
+-------------------------------------------------------
 
 
 Optional: Change the pagination
@@ -30,6 +33,10 @@ Optional: Change the pagination
 	Upload
 	Error
 	Exception
+	Competence
+	Course
+	Degree
+	Group
 
 1.- Isolate the manage of ACLs
 2.- Implement the trash (without link to restore)
