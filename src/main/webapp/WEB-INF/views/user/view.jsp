@@ -11,11 +11,11 @@
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
 
-				User Details
+				<fmt:message key="detailsUser" />
 			</h3>
 			<a class="btn list-btn btn-warning"
 				href="<c:url value='/user/${model.userDetails.id}/modify.htm'/>">
-				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>Edit
+				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span><fmt:message key="modify" />
 			</a>
 
 		</div>
@@ -23,16 +23,16 @@
 		<div class="panel-body">
 			<div class="form-group">
 				<div class="form-group view">
-					<label>UserName: </label>
+					<label><fmt:message key="username" />: </label>
 					<p class="details">${model.userDetails.username}</p>
 					<br>
-					<br> <label>FirstName: </label>
+					<br> <label><fmt:message key="firstN" />: </label>
 					<p class="details">${model.userDetails.firstName}</p>
 					<br>
-					<label>Last Name: </label>
+					<label><fmt:message key="lastN" />: </label>
 					<p class="details">${model.userDetails.lastName}</p>
 					<br>
-					<label>Email: </label>
+					<label><fmt:message key="email" />: </label>
 					<p class="details">${model.userDetails.email}</p>
 				</div>
 			</div>
@@ -44,7 +44,7 @@
 			<div class="panel-heading">
 				<h3 class="panel-title list">
 					<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-					Group List
+					<fmt:message key="grList" />
 				</h3>
 
 			</div>
@@ -52,9 +52,9 @@
 
 				<table class="table table-striped table-bordered">
 					<tr align="center">
-						<td><div class="td-label">Subject</div></td>
-						<td><div class="td-label">Academic Term</div></td>
-						<td><div class="td-label">Group</div></td>
+						<td><div class="td-label"><fmt:message key="sub" /></div></td>
+						<td><div class="td-label"><fmt:message key="at" /></div></td>
+						<td><div class="td-label"><fmt:message key="gr" /></div></td>
 
 					</tr>
 					<c:forEach items="${model.groups}" var="group">
@@ -74,7 +74,7 @@
 							</td>
 							<td><a class="btn btn-success"
 								href="<c:url value='/academicTerm/${group.course.academicTerm.id}/course/${group.course.id}/group/${group.id }.htm'/>">
-									View </a></td>
+									<fmt:message key="view" /> </a></td>
 
 						</tr>
 					</c:forEach>
@@ -89,7 +89,7 @@
 			<div class="panel-heading">
 				<h3 class="panel-title list">
 					<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-					Course List
+					<fmt:message key="courList" />
 				</h3>
 
 			</div>
@@ -97,8 +97,8 @@
 
 				<table class="table table-striped table-bordered">
 					<tr align="center">
-						<td><div class="td-label">Subject</div></td>
-						<td><div class="td-label">Academic Term</div></td>
+						<td><div class="td-label"><fmt:message key="sub" /></div></td>
+						<td><div class="td-label"><fmt:message key="at" /></div></td>
 
 					</tr>
 					<c:forEach items="${model.courses}" var="course">
@@ -114,7 +114,7 @@
 							
 							<td><a class="btn btn-success"
 								href="<c:url value='/academicTerm/${course.academicTerm.id}/course/${course.id}.htm'/>">
-									View </a></td>
+									<fmt:message key="view" /> </a></td>
 
 						</tr>
 					</c:forEach>

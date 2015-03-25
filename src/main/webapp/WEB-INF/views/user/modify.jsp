@@ -19,7 +19,7 @@
 			<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 
 			<h3 class="panel-title list">
-				<fmt:message key="userAdd" />
+				<fmt:message key="userMod" />
 			</h3>
 		</div>
 		<div class="panel-body">
@@ -30,7 +30,7 @@
 			<spring:message code="pass" var="pass" />
 			<spring:message code="validEmail" var="validEmail" />
 
-			<form:form method="post" commandName="addUser" role="form">
+			<form:form method="post" commandName="modifyUser" role="form">
 				<div class="form-group">
 					<label><fmt:message key="username" />: </label>
 					<form:input path="username" class="form-control"
@@ -54,22 +54,10 @@
 						placeholder="${pass}" required="true" />
 				</div>
 
-				<div class="form-group">
-					<label><fmt:message key="email" />: </label>
-					<form:input path="email" class="form-control"
-						placeholder="${validEmail}" required="true" />
-				</div>
 
-				<div class="form-group">
-					<label><fmt:message key="roles" />: </label>
-					<div class="checkbox">
-						<form:checkboxes items="${roles}" path="roles" />
-						<br> <br> <br>
-					</div>
-				</div>
 
-				<spring:message code="add" var="add" />
-				<input type="submit" class="btn btn-success" value="${add}" />
+				<spring:message code="modify" var="modify" />
+				<input type="submit" class="btn btn-success" value="${modify}" />
 
 			</form:form>
 		</div>

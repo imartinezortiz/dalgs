@@ -198,6 +198,39 @@ public class UserController {
 			return "upload";
 	}
 
+	@RequestMapping(value = "/user/{userId}/modify.htm", method = RequestMethod.GET)
+	protected String modifyUserGET(@PathVariable("userId") Long id_user, Model model) {
+
+		User user = serviceUser.getUser(id_user);
+
+		model.addAttribute("modifyUser", user);
+		return "user/modify";
+
+	}
+
+	@RequestMapping(value = "/user/{userId}/modify.htm", method = RequestMethod.POST)
+	// Every Post have to return redirect
+	public String modifyUserPOST(@PathVariable("userId") Long id_user, @ModelAttribute("modifyUser") @Valid User user,
+			BindingResult result, Model model) {
+		
+		User user_aux = serviceUser.getUser(id_user);
+
+		user_aux.setUsername(user.getUsername());
+		user_aux.setFirstName(user.getFirstName());
+		user_aux.setLastName(user.getLastName());
+		user_aux.setPassword(user.getPassword());
+		
+	
+
+		if (serviceUser.saveUser(user_aux)) {
+
+				return "redirect:/user/page/0.htm?showAll=" + showAll
+						+ "&typeOfUser=" + typeOfUser;
+		}
+		
+		return "redirect:/error.htm";
+	}
+	
 	@RequestMapping(value = "/user/{userId}/status.htm", method = RequestMethod.GET)
 	protected String disabledUser(@PathVariable("userId") Long id_user)
 			throws ServletException {

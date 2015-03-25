@@ -17,12 +17,12 @@
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
 			<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
-			<h3 class="panel-title list">Module Details</h3>
+			<h3 class="panel-title list"><fmt:message key="detailsMod" /></h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<a class="btn list-btn btn-warning"
 					href="<c:url value='/degree/${model.module.degree.id}/module/${moduleId}/modify.htm'/>">
 					<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
-					Edit
+					<fmt:message key="modify" />
 				</a>
 			</sec:authorize><sec:authorize access="hasRole('ROLE_ADMIN')">
 			<c:choose>
@@ -52,19 +52,19 @@
 
 			<div class="form-group">
 				<div class="form-group view">
-					<label>Code: </label>
+					<label><fmt:message key="code" />: </label>
 					<p class="details">${model.module.info.code}</p>
 				</div>
 				<div class="form-group view">
-					<label>Name: </label>
+					<label><fmt:message key="name" />: </label>
 					<p class="details">${model.module.info.name}</p>
 				</div>
 				<div class="form-group view">
-					<label>Description: </label>
+					<label><fmt:message key="desc" />: </label>
 					<p class="details">${model.module.info.description}</p>
 				</div>
 				<div class="form-group view">
-					<label>Degree: </label>
+					<label><fmt:message key="deg" />: </label>
 					<p class="details">${model.module.degree.info.name}</p>
 				</div>
 			</div>
@@ -76,14 +76,14 @@
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 
-				Topic List
+				<fmt:message key="topList" />
 			</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 
 				<a style="cursor: copy;" class="btn list-btn btn-warning2"
 					href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/add.htm'/>">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					Add
+					<fmt:message key="add" />
 				</a>
 			</sec:authorize>
 
@@ -92,8 +92,8 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label">Name</div></td>
-					<td width="50%"><div class="td-label">Description</div></td>
+					<td width="20%"><div class="td-label"><fmt:message key="name" /></div></td>
+					<td width="50%"><div class="td-label"><fmt:message key="desc" /></div></td>
 				</tr>
 				<c:forEach items="${model.topics}" var="topic">
 					<tr align="center">
@@ -109,18 +109,19 @@
 						<td><c:choose>
 								<c:when test="${topic.isDeleted eq false}">
 									<a class="btn list-btn btn-success"
-										href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topic.id}.htm'/>">View</a>
+										href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topic.id}.htm'/>">
+										<fmt:message key="view" /></a>
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 										<a class="btn btn-danger"
 											href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topic.id}/delete.htm'/>">
-											Delete </a>
+											<fmt:message key="delete" /> </a>
 									</sec:authorize>
 								</c:when>
 								<c:otherwise>
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 										<a class="btn btn-danger"
 											href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topic.id}/restore.htm'/>">
-											Restore </a>
+											<fmt:message key="restore" /> </a>
 									</sec:authorize>
 								</c:otherwise>
 							</c:choose></td>

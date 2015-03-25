@@ -18,12 +18,12 @@
 		<div class="panel-heading">
 			<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
 			<h3 class="panel-title list">
-			Learning Goal Details</h3>
+			<fmt:message key="detailsLg" /></h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 			<a class="btn list-btn btn-warning"
 				href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${model.learningGoal.id}/modify.htm'/>">				
 				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
-				Edit</a>
+				<fmt:message key="modify" /></a>
 			</sec:authorize>
 		</div>
 
@@ -32,19 +32,19 @@
 
 			<div class="form-group">
 				<div class="form-group view">
-					<label>Code: </label> 
+					<label><fmt:message key="code" />: </label> 
 					<p class="details">${model.learningGoal.info.code}</p>
 				</div>
 				<div class="form-group view">
-					<label>Name: </label> 
+					<label><fmt:message key="name" />: </label> 
 					<p class="details">${model.learningGoal.info.name}</p>
 				</div>
 				<div class="form-group view">
-					<label>Description: </label> 
+					<label><fmt:message key="desc" />: </label> 
 					<p class="details">${model.learningGoal.info.description}</p>
 				</div>
 				<div class="form-group view">
-					<label>Topic: </label> 
+					<label><fmt:message key="top" />: </label> 
 					<p class="details">${model.learningGoal.competence.info.name}</p>
 				</div>
 			</div>

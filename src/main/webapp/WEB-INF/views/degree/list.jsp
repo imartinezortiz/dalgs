@@ -14,14 +14,14 @@
 
 			<h4>
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-				Degree List
+				<fmt:message key="degList" />
 			</h4>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 
 				<a style="cursor: copy;" class="btn btn-add2"
 					href="<c:url value='/degree/add.htm'/>"> <span
 					class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					Add
+					<fmt:message key="add" />
 				</a>
 			</sec:authorize><sec:authorize access="hasRole('ROLE_ADMIN')">
 			<c:choose>
@@ -47,10 +47,10 @@
 		</div>
 		<table class="table table-striped table-bordered">
 			<tr align="center">
-				<td>Code</td>
-				<td>Name</td>
-				<td width="40%">Description</td>
-				<td>Actions</td>
+				<td><fmt:message key="code" /></td>
+				<td><fmt:message key="name" /></td>
+				<td width="40%"><fmt:message key="desc" /></td>
+				
 			</tr>
 			<c:forEach items="${model.degrees}" var="degree">
 				<tr align="center">
@@ -61,16 +61,16 @@
 					<td><c:choose>
 							<c:when test="${degree.isDeleted eq false}">
 								<a class="btn btn-success"
-									href="<c:url value='/degree/${degree.id}.htm'/>"> View </a>
+									href="<c:url value='/degree/${degree.id}.htm'/>"> <fmt:message key="view" /> </a>
 								<sec:authorize access="hasRole('ROLE_ADMIN')">
 									<a class="btn list-btn btn-danger"
-										href="<c:url value='/degree/${degree.id}/delete.htm'/>"> Delete </a>
+										href="<c:url value='/degree/${degree.id}/delete.htm'/>"> <fmt:message key="delete" /> </a>
 								</sec:authorize>
 							</c:when>
 							<c:otherwise>							
 							<sec:authorize access="hasRole('ROLE_ADMIN')">
 								<a href="<c:url value='/degree/${degree.id}/restore.htm'/>"
-									class="btn btn-success">Restore</a></sec:authorize>
+									class="btn btn-success"><fmt:message key="restore" /></a></sec:authorize>
 							</c:otherwise>
 						</c:choose></td>
 

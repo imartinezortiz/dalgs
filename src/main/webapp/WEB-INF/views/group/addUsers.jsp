@@ -18,8 +18,7 @@
 	<div class="panel panel-primary group category">
 		<div class="panel-heading">
 			<h3 class="panel-title list">
-				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-				Add ${typeOfUser} &nbsp; ( ${group.course.subject.info.name} - ${group.name} )
+				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ${typeOfUser} &nbsp; ( ${group.course.subject.info.name} - ${group.name} )
 			</h3>
 		</div>
 		<div class="panel-body">
@@ -28,7 +27,7 @@
 					<form:form method="post" commandName="group" role="form">
 
 						<form:hidden path="id" />
-						<label>Available ${typeOfUser}:</label>
+						<label><fmt:message key="availableUsers" /> (${typeOfUser}):</label>
 						<div class="checkbox">
 							<c:choose>
 								<c:when test="${typeOfUser eq 'Proffesors'}">
@@ -48,7 +47,8 @@
 							</c:choose>
 
 						</div>
-						<input type="submit" class="btn btn-success" value="Add"
+						<spring:message code="add" var="add"/>
+						<input type="submit" class="btn btn-success" value="${add}"
 							name="AddProfessors" />
 					</form:form>
 				</div>

@@ -19,7 +19,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				${valueButton} Module
+				${valueButton} <fmt:message key="mod" />
 			</h3>
 		</div>
 		<div class="panel-body">
@@ -27,32 +27,37 @@
 
 				<form:hidden path="id" />
 
+		<spring:message code="modCode" var="modCode"/>
+		<spring:message code="modName" var="modName"/>
+		<spring:message code="modDesc" var="modDesc"/>
+		
 				<div class="form-group">
-					<label>Code: </label>
+					<label><fmt:message key="code" />: </label>
 					<form:input path="info.code" class="form-control"
-						placeholder="Code of the Module" required="true" />
+						placeholder="${modCode}" required="true" />
 					<form:errors path="info.code" cssStyle="color: #ff0000" />
 
 				</div>
 				<div class="form-group">
-					<label>Name: </label>
+					<label><fmt:message key="name" />: </label>
 					<form:input path="info.name" class="form-control"
-						placeholder="Name of the Module" required="true" />
+						placeholder="${modName}" required="true" />
 					<form:errors path="info.name" cssStyle="color: #ff0000" />
 
 				</div>
 				<div class="form-group">
-					<label>Name: </label>
+					<label><fmt:message key="desc" />: </label>
 					<form:input path="info.description" class="form-control"
-						placeholder="Description of the Module" required="true" />
+						placeholder="${modDesc}" required="true" />
 					<form:errors path="info.description" cssStyle="color: #ff0000" />
 
 				</div>
+		<spring:message code="undelete" var="undelete"/>
 
 				<input type="submit" class="btn btn-success" value="${valueButton}"
 					name="${valueButton}" />
 				<c:if test="${unDelete == true}">
-					<input type="submit" class="btn btn-success" value="Undelete"
+					<input type="submit" class="btn btn-success" value="${undelete}"
 						name="Undelete" />
 				</c:if>
 			</form:form>
@@ -60,7 +65,7 @@
 	</div>
 	<c:if test="${not empty errors}">
 		<div align="center">
-			<h3 class="panel-title list">Errors:</h3>
+			<h3 class="panel-title list"><fmt:message key="errors" />:</h3>
 			<br />
 			<c:forEach items="${errors}" var="error">
 				<c:out value="${error}" />

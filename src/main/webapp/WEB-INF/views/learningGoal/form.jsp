@@ -19,46 +19,51 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				"${valueButton}" Learning Goal
+				"${valueButton}" <fmt:message key="lg" />
 			</h3>
 		</div>
+		<spring:message code="lgCode" var="lgCode"/>
+		<spring:message code="lgName" var="lgName"/>
+		<spring:message code="lgDesc" var="lgDesc"/>
+		
 		<div class="panel-body">
 			<form:form method="post" commandName="learningGoal" role="form">
 				<form:hidden path="id"/>
 				<div class="form-group">
-					<label>Code: </label>
+					<label><fmt:message key="code" />: </label>
 					<form:input path="info.code" class="form-control"
-						placeholder="Code of the learning goal" required="true" />
+						placeholder="${lgCode}" required="true" />
 					<form:errors path="info.code" cssStyle="color: #ff0000" />
 
 				</div>
 				<div class="form-group">
-					<label>Name: </label>
+					<label><fmt:message key="name" />: </label>
 					<form:input path="info.name" class="form-control"
-						placeholder="Name of the learning goal" required="true" />
+						placeholder="${lgName}" required="true" />
 					<form:errors path="info.name" cssStyle="color: #ff0000" />
 
 				</div>
 				<div class="form-group">
-					<label>Description: </label>
+					<label><fmt:message key="desc" />: </label>
 					<form:input path="info.description" class="form-control"
-						placeholder="Description of the learning goal" required="true" />
+						placeholder="${lgDesc}" required="true" />
 					<form:errors path="info.description" cssStyle="color: #ff0000" />
 
 				</div>
-
+				
+				<spring:message code="undelete" var="undelete"/>
 
 				<input type="submit" class="btn btn-success" value="${valueButton}" name="${valueButton}" />
 				<c:if test="${unDelete == true}">
-					<input type="submit" class="btn btn-success" value="Undelete"
-						name="Undelete" />
+					<input type="submit" class="btn btn-success" value="${undelete}"
+						name="${undelete}" />
 				</c:if>
 			</form:form>
 		</div>
 	</div>
 	<c:if test="${not empty errors}">
 		<div align="center">
-			<h3 class="panel-title list">Errors:</h3>
+			<h3 class="panel-title list"><fmt:message key="errors" />:</h3>
 			<br />
 			<c:forEach items="${errors}" var="error">
 				<c:out value="${error}" />

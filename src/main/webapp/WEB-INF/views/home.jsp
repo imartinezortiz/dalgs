@@ -33,6 +33,22 @@
 			</p>
 		</a>
 
+<a class="list-group-item "
+				href="<c:url value='/user/page/0.htm?showAll=false&typeOfUser=ROLE_PROFESSOR'/>">
+				<h4 class="list-group-item-heading">
+					<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+					<fmt:message key="profs" />
+				</h4>
+				<p class="list-group-item-text"><fmt:message key="headProf" /></p>
+			</a> 
+			<a class="list-group-item "
+				href="<c:url value='/user/page/0.htm?showAll=false&typeOfUser=ROLE_STUDENT'/>">
+				<h4 class="list-group-item-heading">
+					<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+					<fmt:message key="studs" />
+				</h4>
+				<p class="list-group-item-text"><fmt:message key="headStud" /></p>
+			</a>
 	
 		
 		<br><br>

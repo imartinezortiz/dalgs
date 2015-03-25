@@ -19,27 +19,26 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-
-				Add Course
+				<fmt:message key="courAdd" />
 			</h3>
 		</div>
 		<div class="panel-body">
 			<form:form method="post" commandName="addCourse" role="form">
-				
+
 				<div>
 					<form:hidden path="id" />
 				</div>
 				<div class="form-group">
-					<label>Academic Term</label>
-					<p>${academicTerm.term}&nbsp; ${academicTerm.degree.info.name}</p>
-				
+					<label><fmt:message key="at" /></label>
+					<p>${academicTerm.term}&nbsp;${academicTerm.degree.info.name}</p>
+
 
 				</div>
-				
+
 				<div class="form-group">
-					<label>Subject:</label>
+					<label><fmt:message key="sub" />:</label>
 					<form:select class="form-control 2" path="subject">
-						<form:option value="">-- Select an option --</form:option>
+						<form:option value="">-- <fmt:message key="selectOp" /> --</form:option>
 						<c:forEach items="${subjects}" var="subject">
 							<c:choose>
 								<c:when test="${subject.id == idSubject}">
@@ -53,30 +52,34 @@
 					</form:select>
 					<form:errors path="subject" cssStyle="color: #ff0000" />
 				</div>
-				
+
 				<div class="form-group">
-					<label>Coordinator:</label>
+					<label><fmt:message key="coordinator" />:</label>
 					<form:select class="form-control 2" path="coordinator">
-						<form:option value="">-- Select an option --</form:option>
-						<c:forEach items="${professors}" var="prof">							
-							<form:option value="${prof.id}">${prof.lastName}, ${prof.firstName}</form:option>				
+						<form:option value="">-- <fmt:message key="selectOp" /> --</form:option>
+						<c:forEach items="${professors}" var="prof">
+							<form:option value="${prof.id}">${prof.lastName}, ${prof.firstName}</form:option>
 						</c:forEach>
 					</form:select>
 					<form:errors path="coordinator" cssStyle="color: #ff0000" />
 				</div>
-
+				<spring:message code="undelete" var="add" />
+				<spring:message code="undelete" var="undelete" />
 				<br>
-				<input type="submit" class="btn btn-success" value="Add" name="Add" />
+				<input type="submit" class="btn btn-success" value="${add}" name="Add" />
 				<c:if test="${unDelete == true}">
-					<input type="submit" class="btn btn-success" value="Undelete"
-						name="Undelete" />
+					<input type="submit" class="btn btn-success" value="${undelete}"
+						name="${undelete}" />
 				</c:if>
 			</form:form>
 		</div>
 	</div>
 	<c:if test="${not empty errors}">
 		<div align="center">
-			<h3 class="panel-title list">Errors:</h3>
+			<h3 class="panel-title list">
+				<fmt:message key="errors" />
+				:
+			</h3>
 			<br />
 			<c:forEach items="${errors}" var="error">
 				<c:out value="${error}" />
