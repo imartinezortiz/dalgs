@@ -18,11 +18,11 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
-				Competence Details
-			</h3>
+			
+			<fmt:message key="detailsCom" />			</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<a class="btn list-btn btn-warning"
-					href="<c:url value='/degree/${degreeId}/competence/${competenceId}/modify.htm'/>">Edit</a>
+					href="<c:url value='/degree/${degreeId}/competence/${competenceId}/modify.htm'/>"><fmt:message key="modify" /></a>
 			</sec:authorize>
 			<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')">
 			<c:choose>
@@ -53,19 +53,19 @@
 
 			<div class="form-group">
 				<div class="form-group view">
-					<label>Code: </label>
+					<label><fmt:message key="code" />: </label>
 					<p class="details">${model.competence.info.code}</p>
 				</div>
 				<div class="form-group view">
-					<label>Name: </label>
+					<label><fmt:message key="name" />: </label>
 					<p class="details">${model.competence.info.name}</p>
 				</div>
 				<div class="form-group view">
-					<label>Description: </label>
+					<label><fmt:message key="desc" />: </label>
 					<p class="details">${model.competence.info.description}</p>
 				</div>
 				<div class="form-group view">
-					<label>Degree: </label>
+					<label><fmt:message key="deg" />: </label>
 					<p class="details">${model.competence.degree.info.name}</p>
 				</div>
 			</div>
@@ -78,13 +78,13 @@
 
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-				Learning List
+				<fmt:message key="lgList" />
 			</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<a class="btn list-btn btn-warning2" style="cursor: copy;"
 					href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/add.htm'/>">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					Add
+					<fmt:message key="add" />
 				</a>
 			</sec:authorize>
 
@@ -92,8 +92,8 @@
 		<div class="panel-body">
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label">Name</div></td>
-					<td width="50%"><div class="td-label">Description</div></td>
+					<td width="20%"><div class="td-label"><fmt:message key="name" /></div></td>
+					<td width="50%"><div class="td-label"><fmt:message key="desc" /></div></td>
 
 				</tr>
 				<c:forEach items="${model.learningGoals}" var="learningGoal">
@@ -110,13 +110,14 @@
 						<td><c:choose>
 								<c:when test="${learningGoal.isDeleted eq false}">
 									<a class="btn list-btn btn-success"
-										href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}.htm'/>">View</a>
+										href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}.htm'/>">
+									<fmt:message key="view" /></a>
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 
 										<a class="btn btn-danger"
 											href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}/delete.htm'/>">
 
-											Delete </a>
+											<fmt:message key="delete" /> </a>
 									</sec:authorize>
 								</c:when>
 								<c:otherwise>
@@ -124,8 +125,7 @@
 
 										<a class="btn btn-danger"
 											href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}/restore.htm'/>">
-
-											Restore </a>
+											<fmt:message key="restore" /></a>
 									</sec:authorize>
 								</c:otherwise>
 							</c:choose></td>
