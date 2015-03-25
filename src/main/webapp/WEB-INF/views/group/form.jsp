@@ -19,18 +19,18 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">							
 			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-			${valueButton} Group</h3>
+			${valueButton} <fmt:message key="gr" /></h3>
 		</div>
 		<div class="panel-body">
 			<form:form method="post" commandName="group" role="form">
 				<div>
 				<form:hidden path="id"/>
 				</div>
-				
+				<spring:message code="groupName" var="prev"/>
 				<div class="form-group">
-					<label>Name: </label>
+					<label><fmt:message key="name" />: </label>
 					<form:input path="name" class="form-control"
-						placeholder="Name of the group" required="true" />
+						placeholder="${groupName}" required="true" />
 					<form:errors path="name" cssStyle="color: #ff0000" />
 				</div>
 				
@@ -38,7 +38,8 @@
 				
 				<input type="submit" class="btn btn-success" value="${valueButton}" name="${valueButton}" />
 				<c:if test="${unDelete == true}">
-					<input type="submit" class="btn btn-success" value="Undelete" name="Undelete"/>
+				<spring:message code="undelete" var="undelete"/>
+					<input type="submit" class="btn btn-success" value="${undelete}" name="Undelete"/>
 				</c:if>
 			</form:form>
 		</div>
@@ -46,7 +47,7 @@
 	
 	<c:if test="${not empty errors}">
 	<div align="center">
-		<h3 class="panel-title list">	Errors: </h3>	
+		<h3 class="panel-title list">	<fmt:message key="errors" />: </h3>	
 			<br/>
 			<c:forEach items="${errors}" var="error">
 				<c:out  value="${error}" /><br/>
