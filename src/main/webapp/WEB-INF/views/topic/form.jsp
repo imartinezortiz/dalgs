@@ -19,7 +19,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				"${valueButton}" <fmt:message key="top" />
+				<fmt:message key="${typeform}"/> <fmt:message key="top" />
 			</h3>
 		</div>
 		

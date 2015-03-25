@@ -72,7 +72,7 @@ public class GroupController {
 		model.addAttribute("valueButton", "Add");
 		if (!model.containsAttribute("group"))
 			model.addAttribute("group", new Group());
-
+		model.addAttribute("typeform", "form.add");
 		return "group/form";
 
 	}
@@ -170,7 +170,7 @@ public class GroupController {
 			model.addAttribute("group", p);
 
 		}
-
+		model.addAttribute("typeform", "form.modify");
 		return "group/form";
 	}
 

@@ -19,7 +19,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">							
 			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-			${valueButton} <fmt:message key="gr" /></h3>
+			<fmt:message key="${typeform}"/> <fmt:message key="gr" /></h3>
 		</div>
 		<div class="panel-body">
 			<form:form method="post" commandName="group" role="form">

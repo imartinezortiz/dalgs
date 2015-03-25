@@ -73,6 +73,7 @@ public class SubjectController {
 		if(!model.containsAttribute("subject"))
 			model.addAttribute("subject", new Subject());
 		model.addAttribute("valueButton", "Add");
+		model.addAttribute("typeform", "form.add");
 
 		return "subject/form";
 	}
@@ -191,6 +192,7 @@ public class SubjectController {
 		}
 
 		model.addAttribute("valueButton", "Modify");
+		model.addAttribute("typeform", "form.modify");
 		return "subject/form";
 	}
 

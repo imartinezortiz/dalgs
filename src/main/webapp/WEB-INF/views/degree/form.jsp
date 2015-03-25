@@ -19,7 +19,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-				"${valueButton}" <fmt:message key="deg" />
+				<fmt:message key="${typeform}"/> <fmt:message key="deg" />
 			</h3>
 		</div>
 		<div class="panel-body">

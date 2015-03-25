@@ -66,6 +66,7 @@ public class CompetenceController {
 			model.addAttribute("competence", new Competence());
 
 		model.addAttribute("valueButton", "Add");
+		model.addAttribute("typeform", "form.add");
 
 		return "competence/form";
 	}
@@ -193,6 +194,7 @@ public class CompetenceController {
 			model.addAttribute("competence", p);
 		}
 		model.addAttribute("valueButton", "Modify");
+		model.addAttribute("typeform", "form.modify");
 
 		return "/competence/form";
 

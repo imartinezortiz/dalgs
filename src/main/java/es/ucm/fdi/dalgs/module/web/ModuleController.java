@@ -49,6 +49,7 @@ public class ModuleController {
 		if(!model.containsAttribute("module"))
 			model.addAttribute(new Module());
 		model.addAttribute("valueButton", "Add");
+		model.addAttribute("typeform", "form.add");
 		return "module/form";
 	}
 
@@ -159,6 +160,7 @@ public class ModuleController {
 			model.addAttribute("module", p);
 		}	
 		model.addAttribute("valueButton", "Modify");
+		model.addAttribute("typeform", "form.modify");
 
 		return "module/form";
 	}

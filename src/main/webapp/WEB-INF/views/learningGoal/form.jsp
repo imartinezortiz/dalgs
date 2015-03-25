@@ -19,7 +19,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				"${valueButton}" <fmt:message key="lg" />
+				<fmt:message key="${typeform}"/> <fmt:message key="lg" />
 			</h3>
 		</div>
 		<spring:message code="lgCode" var="lgCode"/>

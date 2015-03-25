@@ -37,6 +37,7 @@ public class LearningGoalController {
 		if(!model.containsAttribute("learningGoal"))
 			model.addAttribute("learningGoal", new LearningGoal());
 		model.addAttribute("valueButton", "Add");
+		model.addAttribute("typeform", "form.add");
 
 		
 		return "learningGoal/form";
@@ -176,6 +177,7 @@ public class LearningGoalController {
 			model.addAttribute("learningGoal", p);
 		}
 		model.addAttribute("valueButton", "Modify");
+		model.addAttribute("typeform", "form.modify");
 
 		return "learningGoal/form";
 

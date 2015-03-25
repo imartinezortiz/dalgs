@@ -45,6 +45,7 @@ public class TopicController {
 		if(!model.containsAttribute("topic"))
 			model.addAttribute("topic", new Topic());
 		model.addAttribute("valueButton", "Add");
+		model.addAttribute("typeform", "form.add");
 		return "topic/form";
 	}
 
@@ -159,6 +160,7 @@ public class TopicController {
 			model.addAttribute("topic", p);
 		}
 		model.addAttribute("valueButton", "Modify");
+		model.addAttribute("typeform", "form.modify");
 
 		return "topic/form";
 	}

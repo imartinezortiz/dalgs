@@ -43,6 +43,7 @@ public class DegreeController {
 		if (!model.containsAttribute("degree"))
 			model.addAttribute("degree", new Degree());
 		model.addAttribute("valueButton", "Add");
+		model.addAttribute("typeform", "form.add");
 		return "degree/form";
 	}
 
@@ -186,6 +187,7 @@ public class DegreeController {
 			model.addAttribute("degree", p);
 		}
 		model.addAttribute("valueButton", "Modify");
+		model.addAttribute("typeform", "form.modify");
 		return "degree/form";
 	}
 
