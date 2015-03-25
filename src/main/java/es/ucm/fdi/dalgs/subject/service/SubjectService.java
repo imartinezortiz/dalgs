@@ -96,8 +96,7 @@ public class SubjectService {
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#subject, 'DELETE') or hasPermission(#subject, 'ADMINISTRATION')" )
-	@Transactional(propagation = Propagation.REQUIRED)
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	@Transactional(propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean>deleteSubject(Subject subject) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
@@ -219,7 +218,7 @@ public class SubjectService {
 		return result;
 	}
 	
-	@PreAuthorize("hasPermission(#subect, 'WRITE') or hasPermission(#subject, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Subject> unDeleteSubject(Subject subject){
 		Subject s = daoSubject.existByCode(subject.getInfo().getCode());

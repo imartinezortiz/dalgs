@@ -17,7 +17,7 @@
 			href="<c:url value='/academicTerm/page/0.htm?showAll=false'/>">
 			<h4 class="list-group-item-heading">				
 			<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-			<fmt:message key="at" /></h4>
+			<fmt:message key="ats" /></h4>
 			<p class="list-group-item-text">
 			<fmt:message key="headAT" />
 			</p>
@@ -26,7 +26,7 @@
 			href="<c:url value='/degree/page/0.htm?showAll=false'/>">
 			<h4 class="list-group-item-heading">
 				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-				<fmt:message key="deg" />
+				<fmt:message key="degs" />
 			</h4>
 			<p class="list-group-item-text">
 			<fmt:message key="headDeg" />

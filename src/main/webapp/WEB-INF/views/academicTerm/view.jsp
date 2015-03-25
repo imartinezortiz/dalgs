@@ -57,6 +57,7 @@
 					<fmt:message key="add" />
 				</a>
 			</sec:authorize>
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
 			<c:choose>
 				<c:when test="${model.showAll eq true}">
 					<a
@@ -77,6 +78,7 @@
 					</a>
 				</c:otherwise>
 			</c:choose>
+			</sec:authorize>
 		</div>
 		<div class="panel-body">
 			<table class="table table-striped table-bordered">

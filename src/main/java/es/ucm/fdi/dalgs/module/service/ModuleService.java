@@ -120,7 +120,7 @@ public class ModuleService {
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#module, 'DELETE') or hasPermission(#module, 'ADMINISTRATION')" )
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly=false)
 	public ResultClass<Boolean> deleteModule(Module module) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -161,7 +161,7 @@ public class ModuleService {
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#module, 'WRITE') or hasPermission(#module, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public ResultClass<Module> unDeleteModule(Module module, Long id_degree) {
 		Module m = daoModule.existByCode(module.getInfo().getCode(), id_degree);

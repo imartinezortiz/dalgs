@@ -107,7 +107,7 @@ public class CompetenceService {
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#competence, 'ADMINISTRATION')" )
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean> deleteCompetence(Competence competence) {
 		ResultClass<Boolean> result = new ResultClass<>();

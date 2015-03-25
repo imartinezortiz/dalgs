@@ -24,6 +24,7 @@
 				<a class="btn list-btn btn-warning"
 					href="<c:url value='/degree/${degreeId}/competence/${competenceId}/modify.htm'/>">Edit</a>
 			</sec:authorize>
+			<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')">
 			<c:choose>
 				<c:when test="${model.showAll eq true}">
 					<a
@@ -44,6 +45,7 @@
 					</a>
 				</c:otherwise>
 			</c:choose>
+			</sec:authorize>
 		</div>
 
 		<div class="panel-body">

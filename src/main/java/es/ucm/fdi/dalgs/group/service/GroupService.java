@@ -142,8 +142,12 @@ public class GroupService {
 	public ResultClass<Boolean> deleteGroup(Group group) {
 		
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		
 		if (serviceActivity.deleteActivitiesFromGroup(group).getSingleElement()){
+			manageAclService.removePermissionCollectionCASCADE(group.getStudents(), group, group.getCourse().getAcademicTerm().getId(), group.getCourse().getId(), group.getId());
+			manageAclService.removePermissionCollectionCASCADE(group.getProfessors(), group, group.getCourse().getAcademicTerm().getId(), group.getCourse().getId(), group.getId());
 			result.setSingleElement(daoGroup.deleteGroup(group));
+		
 			return result;
 		}
 		result.setSingleElement(false);
@@ -163,6 +167,12 @@ public class GroupService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteGroupsFromCourses(Collection<Course> coursesList) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		for(Course course:coursesList)
+		for(Group group:course.getGroups()){
+			manageAclService.removePermissionCollectionCASCADE(group.getStudents(), group, course.getAcademicTerm().getId(), course.getId(), group.getId());
+			manageAclService.removePermissionCollectionCASCADE(group.getProfessors(), group, course.getAcademicTerm().getId(), course.getId(), group.getId());
+			
+		}
 		result.setSingleElement(daoGroup.deleteGroupsFromCourses(coursesList));
 		return result;
 	}
@@ -191,6 +201,7 @@ public class GroupService {
 			g.setDeleted(false);
 			g.setName(group.getName());
 			boolean r = daoGroup.saveGroup(g);
+		
 			if(r) 
 				result.setSingleElement(g);	
 
@@ -229,9 +240,9 @@ public class GroupService {
 		
 		
 		Collection<User> old_professors = modifyGroup.getProfessors();  //To delete old ACL permissions
-		
-		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
 		modifyGroup.setProfessors(group.getProfessors());
+
+		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
 	
 		result.setSingleElement(result.hasErrors());
 
@@ -256,8 +267,9 @@ public class GroupService {
 		Group modifyGroup = daoGroup.getGroup(id_group);
 		Collection<User> old_students = modifyGroup.getStudents();
 		
-		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
 		modifyGroup.setStudents(group.getStudents());
+
+		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
 		result.setSingleElement(result.hasErrors());
 
 		

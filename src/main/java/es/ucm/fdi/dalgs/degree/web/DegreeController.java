@@ -197,9 +197,9 @@ public class DegreeController {
 	public String deleteDegreeGET(@PathVariable("degreeId") Long id_degree)
 			throws ServletException {
 
-		if (serviceDegree.deleteDegree(
-				serviceDegree.getDegree(id_degree).getSingleElement())
-				.getSingleElement()) {
+		Degree degree= serviceDegree.getDegree(id_degree).getSingleElement();
+		
+		if (serviceDegree.deleteDegree(degree).getSingleElement()) {
 			return "redirect:/degree/page/0.htm?showAll=" + showAll;
 		} else
 			return "redirect:/error.htm";

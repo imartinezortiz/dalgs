@@ -18,7 +18,7 @@
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 				Add 
 			</a>
-			</sec:authorize>
+			</sec:authorize><sec:authorize access="hasRole('ROLE_ADMIN')">
 			<c:choose>
    				<c:when  test="${model.showAll eq true}">
 					<a
@@ -35,7 +35,7 @@
 			 			<img src="<c:url value="/resources/images/theme/trash_close.png" /> " 
 			 			 style="float: right; margin-right: 1%;margin-top: 3;"></a> 
 				</c:otherwise>
-			</c:choose>
+			</c:choose></sec:authorize>
 		</div>
 		<table class="table table-striped table-bordered">
 					<tr align="center">
