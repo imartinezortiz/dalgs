@@ -9,7 +9,7 @@
 2.- Change messages in all services
 3.-	To Finish JSP messages:
 
-	learninggoal
+
 	module
 	topic
 	user
@@ -37,6 +37,7 @@ Optional: Change the pagination
 	Course
 	Degree
 	Group
+	
 
 1.- Isolate the manage of ACLs
 2.- Implement the trash (without link to restore)
