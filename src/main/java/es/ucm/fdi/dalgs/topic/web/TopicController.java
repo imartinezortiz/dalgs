@@ -1,6 +1,7 @@
 package es.ucm.fdi.dalgs.topic.web;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -54,11 +55,11 @@ public class TopicController {
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@ModelAttribute("topic") Topic newTopic,
-			BindingResult resultBinding, RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		if (!resultBinding.hasErrors()){
 
-			ResultClass<Topic> result = serviceTopic.addTopic(newTopic, id_module);
+			ResultClass<Topic> result = serviceTopic.addTopic(newTopic, id_module, locale);
 			if (!result.hasErrors())
 				return "redirect:/degree/" + id_degree + "/module/" + id_module + ".htm";
 			else{
@@ -85,11 +86,11 @@ public class TopicController {
 			@ModelAttribute("topic") Topic topic, 
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
-			BindingResult resultBinding, RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 
 		if (!resultBinding.hasErrors()){
-			ResultClass<Topic> result = serviceTopic.unDeleteTopic(topic, id_module);
+			ResultClass<Topic> result = serviceTopic.unDeleteTopic(topic, id_module, locale);
 
 
 			if (!result.hasErrors()){
@@ -124,12 +125,12 @@ public class TopicController {
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
 			@ModelAttribute("topic") Topic modify,
-			BindingResult resultBinding, RedirectAttributes attr)
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale)
 
 	{
 
 		if (!resultBinding.hasErrors()){	
-			ResultClass<Boolean> result = serviceTopic.modifyTopic(modify, id_topic, id_module);
+			ResultClass<Boolean> result = serviceTopic.modifyTopic(modify, id_topic, id_module, locale);
 			if (!result.hasErrors())
 				return "redirect:/degree/" + id_degree + "/module/" + id_module + ".htm";
 			else{
@@ -207,8 +208,8 @@ public class TopicController {
 	// Every Post have to return redirect
 	public String restoreTopic(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
-			@PathVariable("topicId") Long id_topic) {
-		ResultClass<Topic> result = serviceTopic.unDeleteTopic(serviceTopic.getTopic(id_topic).getSingleElement(), id_module);
+			@PathVariable("topicId") Long id_topic, Locale locale) {
+		ResultClass<Topic> result = serviceTopic.unDeleteTopic(serviceTopic.getTopic(id_topic).getSingleElement(), id_module, locale);
 		if (!result.hasErrors())
 			return "redirect:/degree/"+id_degree+"/module/"+id_module+".htm";
 		else{

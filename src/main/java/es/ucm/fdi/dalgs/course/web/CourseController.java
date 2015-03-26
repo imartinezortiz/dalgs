@@ -2,6 +2,7 @@ package es.ucm.fdi.dalgs.course.web;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -96,12 +97,12 @@ public class CourseController {
 	// Every Post have to return redirect
 	public String addCoursePOST(@PathVariable("academicId") Long id_academic,
 			@ModelAttribute("addCourse") @Valid Course newCourse,
-			BindingResult resultBinding, RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		validate(newCourse, resultBinding);
 		if (!resultBinding.hasErrors()) {
 			ResultClass<Course> resultReturned = serviceCourse.addCourse(
-					newCourse, id_academic);
+					newCourse, id_academic, locale);
 			if (!resultReturned.hasErrors())
 				return "redirect:/academicTerm/" + id_academic + ".htm";
 			else {
@@ -140,11 +141,11 @@ public class CourseController {
 	// Every Post have to return redirect
 	public String undeleteCourse(@PathVariable("academicId") Long id_academic,
 			@ModelAttribute("addCourse") @Valid Course course,
-			BindingResult resultBinding, RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		if (!resultBinding.hasErrors()) {
 			ResultClass<Course> resultReturned = serviceCourse.unDeleteCourse(
-					course, id_academic);
+					course, id_academic, locale);
 
 			if (!resultReturned.hasErrors()) {
 				attr.addFlashAttribute("academicTerm", resultReturned
@@ -244,7 +245,7 @@ public class CourseController {
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@ModelAttribute("modifyCourse") Course modify,
-			BindingResult resultBinding, RedirectAttributes attr)
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale)
 
 	{
 
@@ -253,7 +254,7 @@ public class CourseController {
 		if (!resultBinding.hasErrors()) {
 
 			ResultClass<Boolean> resultReturned = serviceCourse.modifyCourse(
-					modify, id_academic, id_course);
+					modify, id_academic, id_course, locale);
 			if (!resultReturned.hasErrors())
 
 				return "redirect:/academicTerm/" + id_academic + ".htm";
@@ -276,9 +277,9 @@ public class CourseController {
 	// Every Post have to return redirect
 	public String restoreAcademicTerm(
 			@PathVariable("academicId") Long id_academic,
-			@PathVariable("courseId") Long id_course) {
+			@PathVariable("courseId") Long id_course, Locale locale) {
 		ResultClass<Course> result = serviceCourse.unDeleteCourse(serviceCourse
-				.getCourse(id_course).getSingleElement(), id_academic);
+				.getCourse(id_course).getSingleElement(), id_academic, locale);
 
 		if (!result.hasErrors())
 

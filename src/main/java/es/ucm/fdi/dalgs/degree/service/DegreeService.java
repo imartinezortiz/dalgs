@@ -2,8 +2,10 @@ package es.ucm.fdi.dalgs.degree.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,10 +37,13 @@ public class DegreeService {
 
 	@Autowired
 	private AcademicTermService serviceAcademicTerm;
+	
+	@Autowired
+	private MessageSource messageSource;
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Degree> addDegree(Degree degree) {
+	public ResultClass<Degree> addDegree(Degree degree, Locale locale) {
 
 		boolean success = false;
 
@@ -48,11 +53,11 @@ public class DegreeService {
 		if (degreeExists != null) {
 			result.setHasErrors(true);
 
-			errors.add("Code already exists");
+			errors.add(messageSource.getMessage("error.Code", null, locale));
 
 			if (degreeExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 				result.setSingleElement(degreeExists);
 			}
 			result.setErrorsList(errors);
@@ -100,7 +105,7 @@ public class DegreeService {
 
 	@PreAuthorize("hasPermission(#degree, 'WRITE') or hasPermission(#degree, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifyDegree(Degree degree, Long id_degree) {
+	public ResultClass<Boolean> modifyDegree(Degree degree, Long id_degree, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
 		Degree modifydegree = daoDegree.getDegree(id_degree);
@@ -112,11 +117,11 @@ public class DegreeService {
 				&& degreeExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<>();
-			errors.add("New code already exists");
+			errors.add(messageSource.getMessage("error.newCode", null, locale));
 
 			if (degreeExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 
 			}
 			result.setErrorsList(errors);
@@ -193,19 +198,19 @@ public class DegreeService {
 
 	@PreAuthorize("hasPermission(#degree, 'WRITE') or hasPermission(#degree, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Degree> unDeleteDegree(Degree degree) {
+	public ResultClass<Degree> unDeleteDegree(Degree degree, Locale locale) {
 		Degree d = daoDegree.existByCode(degree.getInfo().getCode());
 		ResultClass<Degree> result = new ResultClass<Degree>();
 		if (d == null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("Code doesn't exist");
+			errors.add(messageSource.getMessage("error.ElementNoExists", null, locale));
 			result.setErrorsList(errors);
 
 		} else {
 			if (!d.getIsDeleted()) {
 				Collection<String> errors = new ArrayList<String>();
-				errors.add("Code is not deleted");
+				errors.add(messageSource.getMessage("error.CodeNoDeleted", null, locale));
 				result.setErrorsList(errors);
 			}
 

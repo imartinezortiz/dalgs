@@ -38,7 +38,7 @@ public class CompetenceService {
 	private AclObjectService manageAclService;
 	
 	@Autowired
-	private MessageSource messages;
+	private MessageSource messageSource;
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
@@ -54,11 +54,11 @@ public class CompetenceService {
 		if( competenceExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add(messages.getMessage("error.codeExists", null, "RRRRRRR", locale));
+			errors.add(messageSource.getMessage("error.Code", null, locale));
 
 			if (competenceExists.getIsDeleted()){
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 				result.setSingleElement(competenceExists);
 
 			}
@@ -138,7 +138,7 @@ public class CompetenceService {
 
 	@PreAuthorize("hasPermission(#competence, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifyCompetence(Competence competence, Long id_competence, Long id_degree) {
+	public ResultClass<Boolean> modifyCompetence(Competence competence, Long id_competence, Long id_degree, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 		
 		competence.setDegree(serviceDegree.getDegree(id_degree).getSingleElement());
@@ -150,11 +150,11 @@ public class CompetenceService {
 				competenceExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<>();
-			errors.add("New code already exists");
+			errors.add(messageSource.getMessage("error.newCode", null, locale));
 
 			if (competenceExists.getIsDeleted()){
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 
 			}
 			result.setErrorsList(errors);
@@ -214,7 +214,7 @@ public class CompetenceService {
 	
 	@PreAuthorize("hasPermission(#competence, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Competence> unDeleteCompetence(Competence competence, Long id_degree) {
+	public ResultClass<Competence> unDeleteCompetence(Competence competence, Long id_degree, Locale locale) {
 		
 		competence.setDegree(serviceDegree.getDegree(id_degree).getSingleElement());
 		Competence c = daoCompetence.existByCode(competence.getInfo().getCode(), competence.getDegree());
@@ -222,14 +222,14 @@ public class CompetenceService {
 		if(c == null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<>();
-			errors.add("Code doesn't exist");
+			errors.add(messageSource.getMessage("error.ElementNoExists", null, locale));
 			result.setErrorsList(errors);
 
 		}
 		else{
 			if(!c.getIsDeleted()){
 				Collection<String> errors = new ArrayList<>();
-				errors.add("Code is not deleted");
+				errors.add(messageSource.getMessage("error.CodeNoDeleted", null, locale));
 				result.setErrorsList(errors);
 			}
 

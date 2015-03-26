@@ -2,6 +2,7 @@ package es.ucm.fdi.dalgs.module.web;
 
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -58,10 +59,10 @@ public class ModuleController {
 	public String addModulePOST(
 			@PathVariable("degreeId") Long id_degree,
 			@ModelAttribute("module") Module newModule,
-			BindingResult resultBinding, RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		if (!resultBinding.hasErrors()){
-			ResultClass<Module> result = serviceModule.addModule(newModule, id_degree);
+			ResultClass<Module> result = serviceModule.addModule(newModule, id_degree, locale);
 			if (!result.hasErrors())
 				return "redirect:/degree/" +id_degree+ ".htm";		
 			else{
@@ -89,10 +90,10 @@ public class ModuleController {
 	public String undeleteModulePOST(
 			@ModelAttribute("module") Module module,
 			@PathVariable("degreeId") Long id_degree,
-			BindingResult resultBinding, RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		if (!resultBinding.hasErrors()){
-			ResultClass<Module> result = serviceModule.unDeleteModule(module, id_degree);
+			ResultClass<Module> result = serviceModule.unDeleteModule(module, id_degree, locale);
 
 			if (!result.hasErrors()){
 				attr.addFlashAttribute("module", result.getSingleElement());
@@ -124,11 +125,11 @@ public class ModuleController {
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@ModelAttribute("module") Module modify,
-			BindingResult resultBinding, RedirectAttributes attr)
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale)
 
 	{
 		if (!resultBinding.hasErrors()){
-			ResultClass<Boolean> result = serviceModule.modifyModule(modify, id_module, id_degree);
+			ResultClass<Boolean> result = serviceModule.modifyModule(modify, id_module, id_degree, locale);
 			if (!result.hasErrors())
 
 				return "redirect:/degree/" + id_degree + ".htm";
@@ -204,8 +205,8 @@ public class ModuleController {
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/restore.htm")
 	// Every Post have to return redirect
 	public String restoreModule(@PathVariable("degreeId") Long id_degree,
-			@PathVariable("moduleId") Long id_module) {
-		ResultClass<Module> result = serviceModule.unDeleteModule(serviceModule.getModule(id_module).getSingleElement(), id_degree);
+			@PathVariable("moduleId") Long id_module, Locale locale) {
+		ResultClass<Module> result = serviceModule.unDeleteModule(serviceModule.getModule(id_module).getSingleElement(), id_degree, locale);
 		if (!result.hasErrors())
 			return "redirect:/degree/"+id_degree+".htm";
 		else{

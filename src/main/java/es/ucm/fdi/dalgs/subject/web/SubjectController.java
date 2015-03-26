@@ -2,6 +2,7 @@ package es.ucm.fdi.dalgs.subject.web;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -85,11 +86,11 @@ public class SubjectController {
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
-			BindingResult resultBinding, RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		if (!resultBinding.hasErrors()){
 
-			ResultClass<Subject> result = serviceSubject.addSubject(newSubject, id_topic);
+			ResultClass<Subject> result = serviceSubject.addSubject(newSubject, id_topic, locale);
 			if (!result.hasErrors())
 				return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
 			else{
@@ -120,10 +121,10 @@ public class SubjectController {
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
-			BindingResult resultBinding, RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		if (!resultBinding.hasErrors()){
-			ResultClass<Subject> result = serviceSubject.unDeleteSubject(subject);
+			ResultClass<Subject> result = serviceSubject.unDeleteSubject(subject, locale);
 
 			if (!result.hasErrors()){
 				attr.addFlashAttribute("subject", result.getSingleElement());
@@ -154,12 +155,12 @@ public class SubjectController {
 			@PathVariable("topicId") Long id_topic,
 			@PathVariable("subjectId") Long id_subject,
 			@ModelAttribute("modifySubject") Subject modify,
-			BindingResult resultBinding, RedirectAttributes attr)
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale)
 
 	{
 		if (!resultBinding.hasErrors()){	
 
-			ResultClass<Boolean> result = serviceSubject.modifySubject(modify, id_subject);
+			ResultClass<Boolean> result = serviceSubject.modifySubject(modify, id_subject, locale);
 			if (!result.hasErrors())
 				return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
 			else
@@ -279,9 +280,9 @@ public class SubjectController {
 	public String restoreSubject(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
-			@PathVariable("subjectId") Long id_subject) {
+			@PathVariable("subjectId") Long id_subject, Locale locale) {
 		
-		ResultClass<Subject> result = serviceSubject.unDeleteSubject(serviceSubject.getSubject(id_subject).getSingleElement());
+		ResultClass<Subject> result = serviceSubject.unDeleteSubject(serviceSubject.getSubject(id_subject).getSingleElement(), locale);
 		if (!result.hasErrors())
 			return "redirect:/degree/"+id_degree+"/module/"+id_module+".htm";
 		else{

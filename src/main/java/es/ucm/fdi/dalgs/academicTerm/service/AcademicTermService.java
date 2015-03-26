@@ -58,13 +58,13 @@ public class AcademicTermService {
 		if (academicExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add(messageSource.getMessage("academicTermExists", null, locale));
+			errors.add(messageSource.getMessage("error.Code", null, locale));
 //			errors.add(messageSource.getMessage("academicTermExists", null, "default Error", locale));
 //			errors.add(messageSource.getMessage("academicTermExists", null,"Default Error", Locale.US));
 
 			if (academicExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 				result.setSingleElement(academicExists);
 
 			} else
@@ -93,7 +93,7 @@ public class AcademicTermService {
 	@PreAuthorize("hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyAcademicTerm(AcademicTerm academicTerm,
-			Long id_academic) {
+			Long id_academic, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
 		AcademicTerm modifyAcademic = daoAcademicTerm
@@ -106,11 +106,11 @@ public class AcademicTermService {
 				&& academicExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("New code already exists");
+			errors.add(messageSource.getMessage("error.newCode", null, locale));
 
 			if (academicExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 
 			}
 			result.setErrorsList(errors);
@@ -213,7 +213,7 @@ public class AcademicTermService {
 
 	@PreAuthorize("hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<AcademicTerm> restoreAcademic(AcademicTerm academicTerm) {
+	public ResultClass<AcademicTerm> restoreAcademic(AcademicTerm academicTerm, Locale locale) {
 		AcademicTerm a = daoAcademicTerm.exists(academicTerm.getTerm(),
 				academicTerm.getDegree());
 		ResultClass<AcademicTerm> result = new ResultClass<>();
@@ -221,13 +221,13 @@ public class AcademicTermService {
 		if (a == null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("element doesn't exist");
+			errors.add(messageSource.getMessage("error.ElementNoExists", null, locale));
 			result.setErrorsList(errors);
 
 		} else {
 			if (!a.getIsDeleted()) {
 				Collection<String> errors = new ArrayList<String>();
-				errors.add("Code is not deleted");
+				errors.add(messageSource.getMessage("error.CodeNoDeleted", null, locale));
 				result.setErrorsList(errors);
 			}
 
@@ -287,9 +287,9 @@ public class AcademicTermService {
 			for(Course c :  courses){
 				Course aux = c;
 				aux.setAcademicTerm(copy);
-				serviceCourse.addCourse(aux, existAt.getId());
+				serviceCourse.addCourse(aux, existAt.getId(), locale);
 				for(Activity a: aux.getActivities()){
-					serviceActivity.addActivityCourse(aux, a, aux.getId());
+					serviceActivity.addActivityCourse(aux, a, aux.getId(), locale);
 				}
 			}
 

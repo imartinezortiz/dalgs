@@ -2,8 +2,10 @@ package es.ucm.fdi.dalgs.learningGoal.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,11 +34,13 @@ public class LearningGoalService {
 	@Autowired
 	private AclObjectService manageAclService;
 
+	@Autowired
+	private MessageSource messageSource;
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public ResultClass<LearningGoal> addLearningGoal(LearningGoal learningGoal,
-			Long id_competence) {
+			Long id_competence, Locale locale) {
 		
 		boolean success = false;
 		
@@ -46,11 +50,11 @@ public class LearningGoalService {
 		if( learningExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<>();
-			errors.add("Code already exists");
+			errors.add(messageSource.getMessage("error.Code", null, locale));
 
 			if (learningExists.getIsDeleted()){
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 				result.setSingleElement(learningExists);
 			}
 			else result.setSingleElement(learningGoal);
@@ -82,7 +86,7 @@ public class LearningGoalService {
 
 	@PreAuthorize("hasPermission(#learningGoal, 'WRITE') or hasPermission(#learningGoal, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifyLearningGoal(LearningGoal learningGoal, Long id_learningGoal) {
+	public ResultClass<Boolean> modifyLearningGoal(LearningGoal learningGoal, Long id_learningGoal, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
 		LearningGoal modifyLearning = daoLearningGoal.getLearningGoal(id_learningGoal);
@@ -93,11 +97,11 @@ public class LearningGoalService {
 				learningExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<>();
-			errors.add("New code already exists");
+			errors.add(messageSource.getMessage("error.newCode", null, locale));
 
 			if (learningExists.getIsDeleted()){
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 
 			}
 			result.setErrorsList(errors);
@@ -171,20 +175,20 @@ public class LearningGoalService {
 	
 	@PreAuthorize("hasPermission(#learningGoal, 'WRITE') or hasPermission(#learningGoal, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<LearningGoal> unDeleteLearningGoal(LearningGoal learningGoal) {
+	public ResultClass<LearningGoal> unDeleteLearningGoal(LearningGoal learningGoal, Locale locale) {
 		LearningGoal l = daoLearningGoal.existByCode(learningGoal.getInfo().getCode());
 		ResultClass<LearningGoal> result = new ResultClass<>();
 		if(l == null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<>();
-			errors.add("Code doesn't exist");
+			errors.add(messageSource.getMessage("error.ElementNoExists", null, locale));
 			result.setErrorsList(errors);
 
 		}
 		else{
 			if(!l.getIsDeleted()){
 				Collection<String> errors = new ArrayList<>();
-				errors.add("Code is not deleted");
+				errors.add(messageSource.getMessage("error.CodeNoDeleted", null, locale));
 				result.setErrorsList(errors);
 			}
 

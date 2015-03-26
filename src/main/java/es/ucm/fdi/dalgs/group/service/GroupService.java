@@ -2,8 +2,10 @@ package es.ucm.fdi.dalgs.group.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -38,10 +40,13 @@ public class GroupService {
 
 	@Autowired
 	private UserService serviceUser;
+	
+	@Autowired
+	private MessageSource messageSource;
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public ResultClass<Group> addGroup(Group group, Long id_course) {
+	public ResultClass<Group> addGroup(Group group, Long id_course, Locale locale) {
 
 		boolean success = false;
 
@@ -51,11 +56,11 @@ public class GroupService {
 		if( groupExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("Code already exists");
+			errors.add(messageSource.getMessage("error.Code", null, locale));
 
 			if (groupExists.getIsDeleted()){
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 				result.setSingleElement(groupExists);
 			}
 			else result.setSingleElement(group);
@@ -92,7 +97,7 @@ public class GroupService {
 
 	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifyGroup(Group group, Long id_group) {
+	public ResultClass<Boolean> modifyGroup(Group group, Long id_group, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
 		Group modifyGroup = daoGroup.getGroup(id_group);
@@ -102,11 +107,11 @@ public class GroupService {
 		if (!group.getName().equalsIgnoreCase(modifyGroup.getName()) && groupExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("New code already exists");
+			errors.add(messageSource.getMessage("error.newCode", null, locale));
 
 			if (groupExists.getIsDeleted()){
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 
 			}
 			result.setErrorsList(errors);
@@ -179,7 +184,7 @@ public class GroupService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public ResultClass<Group> unDeleteGroup(Group group) {
+	public ResultClass<Group> unDeleteGroup(Group group, Locale locale) {
 
 		Group g = daoGroup.existByName(group.getName());
 
@@ -187,14 +192,14 @@ public class GroupService {
 		if(g == null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("Code doesn't exist");
+			errors.add(messageSource.getMessage("error.ElementNoExists", null, locale));
 			result.setErrorsList(errors);
 
 		}
 		else{
 			if(!g.getIsDeleted()){
 				Collection<String> errors = new ArrayList<String>();
-				errors.add("Code is not deleted");
+				errors.add(messageSource.getMessage("error.CodeNoDeleted", null, locale));
 				result.setErrorsList(errors);
 			}
 
@@ -288,7 +293,7 @@ public class GroupService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> deleteUserGroup(Long id_group,Long id_user, Long id_course, Long id_academic) {
+	public ResultClass<Boolean> deleteUserGroup(Long id_group,Long id_user, Long id_course, Long id_academic, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		Group g = daoGroup.getGroup(id_group);
 		
@@ -297,11 +302,11 @@ public class GroupService {
 		if(serviceUser.hasRole(u, "ROLE_PROFESSOR") && !serviceUser.hasRole(u, "ROLE_COORDINATOR") ){
 			
 			g.getProfessors().remove(serviceUser.getUser(id_user));
-			result = this.modifyGroup(g, id_group);
+			result = this.modifyGroup(g, id_group, locale);
 		}
 		else if(serviceUser.hasRole(u, "ROLE_STUDENT")){
 			g.getStudents().remove(serviceUser.getUser(id_user));
-			result = this.modifyGroup(g, id_group);
+			result = this.modifyGroup(g, id_group, locale);
 		}
 		if(!result.hasErrors()){
 			// Removing the authorities to the student 
@@ -312,7 +317,7 @@ public class GroupService {
 
 	@PreAuthorize("hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false	,propagation = Propagation.REQUIRED)
-	public ResultClass<Group> copyGroup(Group group, Long id_course) {
+	public ResultClass<Group> copyGroup(Group group, Long id_course, Locale locale) {
 		
 		
 		Group copy = group.depth_copy();
@@ -328,7 +333,7 @@ public class GroupService {
 			a.setGroup(copy);
 		}
 		
-		return this.addGroup(copy, copy.getCourse().getId());
+		return this.addGroup(copy, copy.getCourse().getId(), locale);
 	}
 //		
 //		ResultClass<Group> result = new ResultClass<Group>();

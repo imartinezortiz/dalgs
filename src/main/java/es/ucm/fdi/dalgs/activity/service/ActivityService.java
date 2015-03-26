@@ -2,8 +2,10 @@ package es.ucm.fdi.dalgs.activity.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -42,11 +44,14 @@ public class ActivityService {
 
 	@Autowired
 	private LearningGoalService serviceLearningGoal;
+	
+	@Autowired
+	private MessageSource messageSource;
 
 	@PreAuthorize("hasPermission(#course, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Activity> addActivityCourse(Course course, Activity activity,
-			Long id_course) {
+			Long id_course, Locale locale) {
 
 		boolean success = false;
 
@@ -57,11 +62,11 @@ public class ActivityService {
 		if (activityExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("Code already exists");
+			errors.add(messageSource.getMessage("error.Code", null, locale));
 
 			if (activityExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 				result.setSingleElement(activityExists);
 
 			} else
@@ -111,7 +116,7 @@ public class ActivityService {
 	@PreAuthorize("hasPermission(#course, 'ADMINISTRATION') or hasPermission(#group, 'ADMINISTRATION') ")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyActivity(Course course, Group group, Activity activity,
-			Long id_activity) {
+			Long id_activity, Locale locale) {
 
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
@@ -125,11 +130,11 @@ public class ActivityService {
 				&& activityExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("New code already exists");
+			errors.add(messageSource.getMessage("error.newCode", null, locale));
 
 			if (activityExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 
 			}
 			result.setErrorsList(errors);
@@ -250,19 +255,19 @@ public class ActivityService {
 
 	@PreAuthorize("hasPermission(#course, 'ADMINISTRATION') or hasPermission(#group, 'ADMINISTRATION') ")
 	@Transactional(readOnly = false)
-	public ResultClass<Activity> unDeleteActivity(Course course, Group group, Activity activity) {
+	public ResultClass<Activity> unDeleteActivity(Course course, Group group, Activity activity, Locale locale) {
 		Activity a = daoActivity.existByCode(activity.getInfo().getCode());
 		ResultClass<Activity> result = new ResultClass<>();
 		if (a == null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("Code doesn't exist");
+			errors.add(messageSource.getMessage("error.ElementNoExists", null, locale));
 			result.setErrorsList(errors);
 
 		} else {
 			if (!a.getIsDeleted()) {
 				Collection<String> errors = new ArrayList<String>();
-				errors.add("Code is not deleted");
+				errors.add(messageSource.getMessage("error.CodeNoDeleted", null, locale));
 				result.setErrorsList(errors);
 			}
 

@@ -3,8 +3,10 @@ package es.ucm.fdi.dalgs.course.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -38,10 +40,13 @@ public class CourseService {
 
 	@Autowired
 	private AcademicTermService serviceAcademicTerm;
+	
+	@Autowired
+	private MessageSource messageSource;
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public ResultClass<Course> addCourse(Course course, Long id_academic) {
+	public ResultClass<Course> addCourse(Course course, Long id_academic, Locale locale) {
 		
 		boolean success = false;
 		
@@ -52,11 +57,11 @@ public class CourseService {
 		if( courseExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("Code already exists");
+			errors.add(messageSource.getMessage("error.Code", null, locale));
 
 			if (courseExists.getIsDeleted()){
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 				result.setSingleElement(courseExists);
 
 			}
@@ -98,7 +103,7 @@ public class CourseService {
 
 	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#course, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifyCourse(Course course, Long id_academic, Long id_course) {
+	public ResultClass<Boolean> modifyCourse(Course course, Long id_academic, Long id_course, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		
 		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic, false).getSingleElement());
@@ -113,11 +118,11 @@ public class CourseService {
 				courseExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("New code already exists");
+			errors.add(messageSource.getMessage("error.newCode", null, locale));
 
 			if (courseExists.getIsDeleted()){
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 
 			}
 			result.setErrorsList(errors);
@@ -232,21 +237,21 @@ public class CourseService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Course> unDeleteCourse(Course course, Long id_academic) {
+	public ResultClass<Course> unDeleteCourse(Course course, Long id_academic, Locale locale) {
 		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic, false).getSingleElement());
 		Course c = daoCourse.exist(course);
 		ResultClass<Course> result = new ResultClass<>();
 		if(c == null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("Element doesn't exist");
+			errors.add(messageSource.getMessage("error.ElementNoExists", null, locale));
 			result.setErrorsList(errors);
 
 		}
 		else{
 			if(!c.getIsDeleted()){
 				Collection<String> errors = new ArrayList<String>();
-				errors.add("Code is not deleted");
+				errors.add(messageSource.getMessage("error.CodeNoDeleted", null, locale));
 				result.setErrorsList(errors);
 			}
 

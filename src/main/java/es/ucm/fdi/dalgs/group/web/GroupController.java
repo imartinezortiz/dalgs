@@ -2,6 +2,7 @@ package es.ucm.fdi.dalgs.group.web;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -83,11 +84,11 @@ public class GroupController {
 			@PathVariable("academicId") Long id_academicTerm,
 			@PathVariable("courseId") Long id_course,
 			@ModelAttribute("group") @Valid Group newgroup,
-			BindingResult resultBinding, RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		if (!resultBinding.hasErrors()) {
 			ResultClass<Group> result = serviceGroup.addGroup(newgroup,
-					id_course);
+					id_course, locale);
 			if (!result.hasErrors())
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
 						+ id_course + ".htm";
@@ -119,10 +120,10 @@ public class GroupController {
 			@PathVariable("academicId") Long id_academicTerm,
 			@PathVariable("courseId") Long id_course,
 			@ModelAttribute("addGroup") @Valid Group group,
-			BindingResult resultBinding, RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		if (!resultBinding.hasErrors()) {
-			ResultClass<Group> result = serviceGroup.unDeleteGroup(group);
+			ResultClass<Group> result = serviceGroup.unDeleteGroup(group, locale);
 
 			if (!result.hasErrors()) {
 				attr.addFlashAttribute("group", result.getSingleElement());
@@ -180,14 +181,14 @@ public class GroupController {
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
 			@ModelAttribute("modifyGroup") @Valid Group group,
-			BindingResult resultBinding, RedirectAttributes attr)
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale)
 
 	{
 
 		if (!resultBinding.hasErrors()) {
 
 			ResultClass<Boolean> result = serviceGroup.modifyGroup(group,
-					id_group);
+					id_group, locale);
 			if (!result.hasErrors())
 
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
@@ -340,10 +341,10 @@ public class GroupController {
 	public String restoreAcademicTerm(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
-			@PathVariable("groupId") Long id_group) {
+			@PathVariable("groupId") Long id_group, Locale locale) {
 
 		ResultClass<Group> result = serviceGroup.unDeleteGroup(serviceGroup
-				.getGroup(id_group).getSingleElement());
+				.getGroup(id_group).getSingleElement(), locale);
 
 		if (!result.hasErrors())
 
@@ -361,10 +362,10 @@ public class GroupController {
 			@PathVariable("academicId") Long id_AcademicTerm,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
-			@PathVariable("userId") Long id_user) {
+			@PathVariable("userId") Long id_user, Locale locale) {
 
 		if (serviceGroup.deleteUserGroup(id_group, id_user, id_course,
-				id_AcademicTerm).getSingleElement()) {
+				id_AcademicTerm, locale).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
 					+ id_course + "/group/" + id_group + ".htm";
 		} else
@@ -374,9 +375,9 @@ public class GroupController {
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/clone.htm")
 	// Every Post have to return redirect
 	public String copyGroup(@PathVariable("academicId") Long id_academic,@PathVariable("courseId") Long id_course,
-			@PathVariable("groupId") Long id_group) {
+			@PathVariable("groupId") Long id_group, Locale locale) {
 		ResultClass<Group> result = 
-				serviceGroup.copyGroup((serviceGroup.getGroup(id_group).getSingleElement()), id_course);
+				serviceGroup.copyGroup((serviceGroup.getGroup(id_group).getSingleElement()), id_course, locale);
 		
 		if (!result.hasErrors())
 			return "redirect:/academicTerm/"+id_academic+"/course/"+ id_course+".htm";

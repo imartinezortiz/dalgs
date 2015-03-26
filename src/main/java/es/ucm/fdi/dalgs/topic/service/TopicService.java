@@ -2,8 +2,10 @@ package es.ucm.fdi.dalgs.topic.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,10 +31,13 @@ public class TopicService {
 	
 	@Autowired
 	private AclObjectService manageAclService;
+	
+	@Autowired
+	private MessageSource messageSource;
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly=false)	
-	public ResultClass<Topic> addTopic(Topic topic, Long id_module) {
+	public ResultClass<Topic> addTopic(Topic topic, Long id_module, Locale locale) {
 
 		boolean success = false;
 		
@@ -42,11 +47,11 @@ public class TopicService {
 		if( topicExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("Code already exists");
+			errors.add(messageSource.getMessage("error.Code", null, locale));
 
 			if (topicExists.getIsDeleted()){
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 				result.setSingleElement(topicExists);
 			}
 			else result.setSingleElement(topic);
@@ -80,7 +85,7 @@ public class TopicService {
 	
 	@PreAuthorize("hasPermission(#topic, 'WRITE') or hasPermission(#topic, 'ADMINISTRATION')")
 	@Transactional(readOnly=false)
-	public ResultClass<Boolean> modifyTopic(Topic topic, Long id_topic, Long id_module) {
+	public ResultClass<Boolean> modifyTopic(Topic topic, Long id_topic, Long id_module, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
 		Topic modifyTopic = daoTopic.getTopic(id_topic);
@@ -91,11 +96,11 @@ public class TopicService {
 				topicExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<>();
-			errors.add("New code already exists");
+			errors.add(messageSource.getMessage("error.newCode", null, locale));
 
 			if (topicExists.getIsDeleted()){
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 
 			}
 			result.setErrorsList(errors);
@@ -181,20 +186,20 @@ public class TopicService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Topic> unDeleteTopic(Topic topic, Long id_module) {
+	public ResultClass<Topic> unDeleteTopic(Topic topic, Long id_module, Locale locale) {
 		Topic t = daoTopic.existByCode(topic.getInfo().getCode(), id_module);
 		ResultClass<Topic> result = new ResultClass<>();
 		if(t == null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("Code doesn't exist");
+			errors.add(messageSource.getMessage("error.ElementNoExists", null, locale));
 			result.setErrorsList(errors);
 
 		}
 		else{
 			if(!t.getIsDeleted()){
 				Collection<String> errors = new ArrayList<String>();
-				errors.add("Code is not deleted");
+				errors.add(messageSource.getMessage("error.CodeNoDeleted", null, locale));
 				result.setErrorsList(errors);
 			}
 

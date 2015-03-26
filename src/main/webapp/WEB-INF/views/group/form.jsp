@@ -36,7 +36,7 @@
 				
 
 				
-				<input type="submit" class="btn btn-success" value="${valueButton}" name="${valueButton}" />
+				<input type="submit" class="btn btn-success" value="<fmt:message key="${typeform}"/>" name="${valueButton}" />
 				<c:if test="${unDelete == true}">
 				<spring:message code="undelete" var="undelete"/>
 					<input type="submit" class="btn btn-success" value="${undelete}" name="Undelete"/>

@@ -2,8 +2,10 @@ package es.ucm.fdi.dalgs.subject.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -38,10 +40,12 @@ public class SubjectService {
 	@Autowired
 	private AclObjectService manageAclService;
 
+	@Autowired
+	private MessageSource messageSource;
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Subject> addSubject(Subject subject, Long id_topic) {
+	public ResultClass<Subject> addSubject(Subject subject, Long id_topic, Locale locale) {
 		
 		boolean success = false;
 		Subject subjectExists = daoSubject.existByCode(subject.getInfo().getCode());
@@ -50,11 +54,11 @@ public class SubjectService {
 		if( subjectExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<>();
-			errors.add("Code already exists");
+			errors.add(messageSource.getMessage("error.Code", null, locale));
 
 			if (subjectExists.getIsDeleted()){
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 				result.setSingleElement(subjectExists);
 			}
 			else result.setSingleElement(subject);
@@ -124,7 +128,7 @@ public class SubjectService {
 
 	@PreAuthorize("hasPermission(#subject, 'WRITE') or hasPermission(#subject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifySubject(Subject subject, Long id_subject) {
+	public ResultClass<Boolean> modifySubject(Subject subject, Long id_subject, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
 		Subject modifySubject = daoSubject.getSubject(id_subject);
@@ -135,11 +139,11 @@ public class SubjectService {
 				subjectExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("New code already exists");
+			errors.add(messageSource.getMessage("error.newCode", null, locale));
 
 			if (subjectExists.getIsDeleted()){
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 
 			}
 			result.setErrorsList(errors);
@@ -220,20 +224,20 @@ public class SubjectService {
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Subject> unDeleteSubject(Subject subject){
+	public ResultClass<Subject> unDeleteSubject(Subject subject, Locale locale){
 		Subject s = daoSubject.existByCode(subject.getInfo().getCode());
 		ResultClass<Subject> result = new ResultClass<>();
 		if(s == null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<>();
-			errors.add("Code doesn't exist");
+			errors.add(messageSource.getMessage("error.ElementNoExists", null, locale));
 			result.setErrorsList(errors);
 
 		}
 		else{
 			if(!s.getIsDeleted()){
 				Collection<String> errors = new ArrayList<>();
-				errors.add("Code is not deleted");
+				errors.add(messageSource.getMessage("error.CodeNoDeleted", null, locale));
 				result.setErrorsList(errors);
 			}
 

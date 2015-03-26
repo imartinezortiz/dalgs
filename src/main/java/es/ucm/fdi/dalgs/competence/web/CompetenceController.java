@@ -124,11 +124,11 @@ public class CompetenceController {
 	public String undeleteDegreePOST(
 			@PathVariable("degreeId") Long id_degree,
 			@ModelAttribute("competence") Competence competence,
-			BindingResult resultBinding, RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		if (!resultBinding.hasErrors()){
 
-			ResultClass<Competence> result = serviceCompetence.unDeleteCompetence(competence, id_degree);
+			ResultClass<Competence> result = serviceCompetence.unDeleteCompetence(competence, id_degree, locale);
 
 			if (!result.hasErrors()){
 				attr.addFlashAttribute("competence", result.getSingleElement());
@@ -158,12 +158,12 @@ public class CompetenceController {
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence,
 			@ModelAttribute("competence") Competence modify,
-			BindingResult resultBinding, RedirectAttributes attr)
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale)
 
 	{
 		if (!resultBinding.hasErrors()){
 
-			ResultClass<Boolean> result = serviceCompetence.modifyCompetence(modify, id_competence, id_degree);
+			ResultClass<Boolean> result = serviceCompetence.modifyCompetence(modify, id_competence, id_degree, locale);
 			if (!result.hasErrors())
 				return "redirect:/degree/" + id_degree + ".htm";
 			else{
@@ -224,8 +224,8 @@ public class CompetenceController {
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/restore.htm")
 	// Every Post have to return redirect
 	public String restoreCompetence(@PathVariable("degreeId") Long id_degree,
-			@PathVariable("competenceId") Long id_competence) {
-		ResultClass<Competence> result = serviceCompetence.unDeleteCompetence(serviceCompetence.getCompetence(id_competence).getSingleElement(), id_degree);
+			@PathVariable("competenceId") Long id_competence, Locale locale) {
+		ResultClass<Competence> result = serviceCompetence.unDeleteCompetence(serviceCompetence.getCompetence(id_competence).getSingleElement(), id_degree, locale);
 		if (!result.hasErrors())
 			return "redirect:/degree/"+id_degree+".htm";
 		else{

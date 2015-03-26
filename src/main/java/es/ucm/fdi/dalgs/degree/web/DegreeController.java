@@ -2,6 +2,7 @@ package es.ucm.fdi.dalgs.degree.web;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -50,10 +51,10 @@ public class DegreeController {
 	@RequestMapping(value = "/degree/add.htm", method = RequestMethod.POST, params = "Add")
 	// Every Post have to return redirect
 	public String addDegreePOST(@ModelAttribute("addDegree") Degree newDegree,
-			BindingResult resultBinding, RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		if (!resultBinding.hasErrors()) {
-			ResultClass<Degree> result = serviceDegree.addDegree(newDegree);
+			ResultClass<Degree> result = serviceDegree.addDegree(newDegree, locale);
 			if (!result.hasErrors())
 				return "redirect:/degree/page/0.htm?showAll=" + showAll;
 			else {
@@ -80,10 +81,10 @@ public class DegreeController {
 	@RequestMapping(value = "/degree/add.htm", method = RequestMethod.POST, params = "Undelete")
 	// Every Post have to return redirect
 	public String undeleteDegree(@ModelAttribute("degree") Degree degree,
-			BindingResult resultBinding, RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		if (!resultBinding.hasErrors()) {
-			ResultClass<Degree> result = serviceDegree.unDeleteDegree(degree);
+			ResultClass<Degree> result = serviceDegree.unDeleteDegree(degree, locale);
 
 			if (!result.hasErrors()) {
 				// if (created)
@@ -109,9 +110,9 @@ public class DegreeController {
 
 	@RequestMapping(value = "/degree/{id_degree}/restore.htm")
 	// Every Post have to return redirect
-	public String restoreDegree(@PathVariable("id_degree") Long id_degree) {
+	public String restoreDegree(@PathVariable("id_degree") Long id_degree, Locale locale) {
 		ResultClass<Degree> result = serviceDegree.unDeleteDegree(serviceDegree
-				.getDegree(id_degree).getSingleElement());
+				.getDegree(id_degree).getSingleElement(), locale);
 		if (!result.hasErrors())
 			return "redirect:/degree/page/0.htm?showAll=" + showAll;
 		else {
@@ -155,13 +156,13 @@ public class DegreeController {
 	@RequestMapping(value = "/degree/{degreeId}/modify.htm", method = RequestMethod.POST)
 	public String modifyDegreePOST(@PathVariable("degreeId") Long id_degree,
 			@ModelAttribute("degree") Degree modify,
-			BindingResult resultBinding, RedirectAttributes attr)
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale)
 
 	{
 
 		if (!resultBinding.hasErrors()) {
 			ResultClass<Boolean> result = serviceDegree.modifyDegree(modify,
-					id_degree);
+					id_degree, locale);
 			if (!result.hasErrors())
 				return "redirect:/degree/page/0.htm?showAll=" + showAll;
 			else {

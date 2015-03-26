@@ -1,6 +1,7 @@
 package es.ucm.fdi.dalgs.learningGoal.web;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -49,11 +50,11 @@ public class LearningGoalController {
 			@ModelAttribute("learningGoal") LearningGoal newLearningGoal,
 			@PathVariable("competenceId") Long id_competence,
 			@PathVariable("degreeId") Long id_degree,
-			BindingResult resultBinding, RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		if (!resultBinding.hasErrors()){
 
-			ResultClass<LearningGoal> result = serviceLearningGoal.addLearningGoal(newLearningGoal, id_competence);
+			ResultClass<LearningGoal> result = serviceLearningGoal.addLearningGoal(newLearningGoal, id_competence, locale);
 			if (!result.hasErrors())
 				return "redirect:/degree/" + id_degree + "/competence/"+ id_competence +".htm";	
 			else{
@@ -81,12 +82,12 @@ public class LearningGoalController {
 			@PathVariable("competenceId") Long id_competence,
 			@PathVariable("degreeId") Long id_degree,
 			@ModelAttribute("learningGoal") LearningGoal learningGoal,
-			BindingResult resultBinding, RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 
 		if (!resultBinding.hasErrors()){
 
-			ResultClass<LearningGoal> result = serviceLearningGoal.unDeleteLearningGoal(learningGoal);
+			ResultClass<LearningGoal> result = serviceLearningGoal.unDeleteLearningGoal(learningGoal, locale);
 
 			if (!result.hasErrors()){
 				attr.addFlashAttribute("learningGoal", result.getSingleElement());
@@ -140,12 +141,12 @@ public class LearningGoalController {
 			@PathVariable("competenceId") Long id_competence,
 			@PathVariable("learninggoalId") Long id_learningGoal,
 			@ModelAttribute("learningGoal") LearningGoal modify,
-			BindingResult resultBinding, RedirectAttributes attr)
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale)
 
 	{
 		if (!resultBinding.hasErrors()){
 
-			ResultClass<Boolean> result = serviceLearningGoal.modifyLearningGoal(modify, id_learningGoal);
+			ResultClass<Boolean> result = serviceLearningGoal.modifyLearningGoal(modify, id_learningGoal, locale);
 			if (!result.hasErrors())
 
 				return "redirect:/degree/" + id_degree +"/competence/"+ id_competence +".htm";
@@ -207,9 +208,9 @@ public class LearningGoalController {
 	// Every Post have to return redirect
 	public String restoreLearningGoal(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence,
-			@PathVariable("learninggoalId") Long id_learningGoal ) {
+			@PathVariable("learninggoalId") Long id_learningGoal, Locale locale) {
 		
-		ResultClass<LearningGoal> result = serviceLearningGoal.unDeleteLearningGoal(serviceLearningGoal.getLearningGoal(id_learningGoal).getSingleElement());
+		ResultClass<LearningGoal> result = serviceLearningGoal.unDeleteLearningGoal(serviceLearningGoal.getLearningGoal(id_learningGoal).getSingleElement(), locale);
 		if (!result.hasErrors())
 			return "redirect:/degree/"+id_degree+"/competence/"+id_competence+".htm";
 		else{

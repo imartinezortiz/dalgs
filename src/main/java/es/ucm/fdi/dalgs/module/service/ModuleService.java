@@ -2,8 +2,10 @@ package es.ucm.fdi.dalgs.module.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,10 +33,12 @@ public class ModuleService {
 	@Autowired
 	private AclObjectService manageAclService;
 
+	@Autowired
+	private MessageSource messageSource;
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly=false)
-	public ResultClass<Module> addModule(Module module, Long id_degree) {
+	public ResultClass<Module> addModule(Module module, Long id_degree, Locale locale) {
 		
 		boolean success = false;
 		
@@ -44,11 +48,11 @@ public class ModuleService {
 		if( moduleExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("Code already exists");
+			errors.add(messageSource.getMessage("error.Code", null, locale));
 				
 			if (moduleExists.getIsDeleted()){
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 				result.setSingleElement(moduleExists);
 			}
 			else result.setSingleElement(module);
@@ -82,7 +86,7 @@ public class ModuleService {
 
 	@PreAuthorize("hasPermission(#module, 'WRITE') or hasPermission(#module, 'ADMINISTRATION')")
 	@Transactional(readOnly=false)
-	public ResultClass<Boolean> modifyModule(Module module, Long id_module, Long id_degree) {
+	public ResultClass<Boolean> modifyModule(Module module, Long id_module, Long id_degree, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
 		Module modifyModule = daoModule.getModule(id_module);
@@ -93,11 +97,11 @@ public class ModuleService {
 				moduleExists != null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("New code already exists");
+			errors.add(messageSource.getMessage("error.newCode", null, locale));
 
 			if (moduleExists.getIsDeleted()){
 				result.setElementDeleted(true);
-				errors.add("Element is deleted");
+				errors.add(messageSource.getMessage("error.deleted", null, locale));
 
 			}
 			result.setErrorsList(errors);
@@ -163,20 +167,20 @@ public class ModuleService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
-	public ResultClass<Module> unDeleteModule(Module module, Long id_degree) {
+	public ResultClass<Module> unDeleteModule(Module module, Long id_degree, Locale locale) {
 		Module m = daoModule.existByCode(module.getInfo().getCode(), id_degree);
 		ResultClass<Module> result = new ResultClass<Module>();
 		if(m == null){
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add("Code doesn't exist");
+			errors.add(messageSource.getMessage("error.ElementNoExists", null, locale));
 			result.setErrorsList(errors);
 			result.setSingleElement(module);
 		}
 		else{
 			if(!m.getIsDeleted()){
 				Collection<String> errors = new ArrayList<String>();
-				errors.add("Code is not deleted");
+				errors.add(messageSource.getMessage("error.CodeNoDeleted", null, locale));
 				result.setErrorsList(errors);
 				result.setSingleElement(module);
 			}

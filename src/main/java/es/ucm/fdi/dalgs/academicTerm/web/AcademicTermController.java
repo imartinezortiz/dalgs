@@ -142,12 +142,12 @@ public class AcademicTermController {
 	// Every Post have to return redirect
 	public String undeleteDegree(
 			@ModelAttribute("addAcademicTerm") AcademicTerm academicTerm,
-			BindingResult resultBinding, RedirectAttributes attr) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		if (!resultBinding.hasErrors()) {
 
 			ResultClass<AcademicTerm> result = serviceAcademicTerm
-					.restoreAcademic(academicTerm);
+					.restoreAcademic(academicTerm, locale);
 
 			if (!result.hasErrors()) {
 
@@ -277,7 +277,7 @@ public class AcademicTermController {
 	public String modifyAcademictermPOST(
 			@PathVariable("academicId") Long id_academic,
 			@ModelAttribute("academicTerm") @Valid AcademicTerm newTerm,
-			BindingResult bindingResult, Model model, RedirectAttributes attr) {
+			BindingResult bindingResult, Model model, RedirectAttributes attr, Locale locale) {
 
 	
 		
@@ -285,7 +285,7 @@ public class AcademicTermController {
 		if (!bindingResult.hasErrors() || bindingResult.hasFieldErrors("degree")) {
 
 			ResultClass<Boolean> resultReturned = serviceAcademicTerm
-					.modifyAcademicTerm(newTerm, id_academic);
+					.modifyAcademicTerm(newTerm, id_academic, locale);
 			if (!resultReturned.hasErrors())
 				return "redirect:/academicTerm/page/0.htm?showAll";
 			else {
@@ -338,10 +338,10 @@ public class AcademicTermController {
 	@RequestMapping(value = "/academicTerm/{academicId}/restore.htm")
 	// Every Post have to return redirect
 	public String restoreAcademicTerm(
-			@PathVariable("academicId") Long id_academic) {
+			@PathVariable("academicId") Long id_academic, Locale locale) {
 		ResultClass<AcademicTerm> result = serviceAcademicTerm
 				.restoreAcademic((serviceAcademicTerm
-						.getAcademicTerm(id_academic,false).getSingleElement()));
+						.getAcademicTerm(id_academic,false).getSingleElement()), locale);
 		if (!result.hasErrors())
 
 			return "redirect:/academicTerm/page/0.htm?showAll=" + showAll;

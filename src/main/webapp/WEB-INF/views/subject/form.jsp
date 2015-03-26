@@ -54,7 +54,7 @@
 				</div>
 
 
-				<input type="submit" class="btn btn-success" value="${valueButton}"
+				<input type="submit" class="btn btn-success" value="<fmt:message key="${typeform}"/>"
 					name="${valueButton}" />
 
 				<spring:message code="undelete" var="undelete"/>
