@@ -6,11 +6,13 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import es.ucm.fdi.dalgs.classes.CharsetString;
 import es.ucm.fdi.dalgs.classes.ResultClass;
+import es.ucm.fdi.dalgs.classes.UploadForm;
 import es.ucm.fdi.dalgs.domain.Module;
 import es.ucm.fdi.dalgs.module.service.ModuleService;
 
@@ -214,6 +218,36 @@ public class ModuleController {
 
 		}
 
+	}
+	
+	@RequestMapping(value = "/degree/{degreeId}/module/upload.htm", method = RequestMethod.GET)
+	public String uploadGet(Model model) {
+		CharsetString charsets = new CharsetString();
+
+		model.addAttribute("className", "Module");
+		model.addAttribute("listCharsets", charsets.ListCharsets());
+		model.addAttribute("newUpload", new UploadForm("Module"));
+		return "upload";
+	}
+
+	@RequestMapping(value = "/degree/{degreeId}/module/upload.htm", method = RequestMethod.POST)
+	public String uploadPost(
+			@ModelAttribute("newUpload") @Valid UploadForm upload,
+			BindingResult result, Model model,
+			@PathVariable("degreeId") Long id_degree) {
+
+		if (result.hasErrors() || upload.getCharset().isEmpty()) {
+			for (ObjectError error : result.getAllErrors()) {
+				System.err.println("Error: " + error.getCode() + " - "
+						+ error.getDefaultMessage());
+			}
+			return "upload";
+		}
+
+		if (serviceModule.uploadCSV(upload, id_degree))
+			return "home";
+		else
+			return "upload";
 	}
 	
 	

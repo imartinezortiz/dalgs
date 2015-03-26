@@ -135,4 +135,33 @@ public class ModuleRepository {
 		}
 		return true;
 	}
+
+	public boolean persistListModules(List<Module> modules) {
+	
+			int i = 0;
+			for(Module m : modules) {
+				try{
+					
+					//In this case we have to hash the password (SHA-256)
+					//StringSHA sha = new StringSHA();
+					//String pass = sha.getStringMessageDigest(u.getPassword());
+					//u.setPassword(pass);
+					
+					m.setId(null); //If not  a detached entity is passed to persist
+					em.persist(m);
+			    	//em.flush();
+
+
+			    if(++i % 20 == 0) {
+			    	em.flush();
+			    }
+				}catch(Exception e){
+					logger.error(e.getMessage());
+					return false;
+				}
+			}
+			
+			return true;
+
+		}
 }

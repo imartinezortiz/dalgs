@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletException;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,7 +26,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import es.ucm.fdi.dalgs.classes.CharsetString;
 import es.ucm.fdi.dalgs.classes.ResultClass;
+import es.ucm.fdi.dalgs.classes.UploadForm;
 import es.ucm.fdi.dalgs.competence.service.CompetenceService;
 import es.ucm.fdi.dalgs.domain.Competence;
 import es.ucm.fdi.dalgs.domain.Subject;
@@ -290,6 +294,36 @@ public class SubjectController {
 
 		}
 
+	}
+	
+	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/upload.htm", method = RequestMethod.GET)
+	public String uploadGet(Model model) {
+		CharsetString charsets = new CharsetString();
+
+		model.addAttribute("className", "Subject");
+		model.addAttribute("listCharsets", charsets.ListCharsets());
+		model.addAttribute("newUpload", new UploadForm("Subjecy"));
+		return "upload";
+	}
+
+	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/upload.htm", method = RequestMethod.POST)
+	public String uploadPost(
+			@ModelAttribute("newUpload") @Valid UploadForm upload,
+			BindingResult result, Model model,
+			@PathVariable("topicId") Long id_topic) {
+
+		if (result.hasErrors() || upload.getCharset().isEmpty()) {
+			for (ObjectError error : result.getAllErrors()) {
+				System.err.println("Error: " + error.getCode() + " - "
+						+ error.getDefaultMessage());
+			}
+			return "upload";
+		}
+
+		if (serviceSubject.uploadCSV(upload, id_topic))
+			return "home";
+		else
+			return "upload";
 	}
 	
 

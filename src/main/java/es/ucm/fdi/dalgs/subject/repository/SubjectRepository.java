@@ -75,7 +75,7 @@ public class SubjectRepository {
 	}
 
 	public boolean deleteSubject(Subject subject) {
-		
+
 		try {
 			subject.setDeleted(true);
 			em.merge(subject);
@@ -186,5 +186,35 @@ public class SubjectRepository {
 		return (Collection<Subject>) query.getResultList();
 
 	}
+
+	public boolean persistListSubjects(List<Subject> subjects) {
+
+		int i = 0;
+		for(Subject s : subjects) {
+			try{
+
+				//In this case we have to hash the password (SHA-256)
+				//StringSHA sha = new StringSHA();
+				//String pass = sha.getStringMessageDigest(u.getPassword());
+				//u.setPassword(pass);
+
+				s.setId(null); //If not  a detached entity is passed to persist
+				em.persist(s);
+				//em.flush();
+
+
+				if(++i % 20 == 0) {
+					em.flush();
+				}
+			}catch(Exception e){
+				logger.error(e.getMessage());
+				return false;
+			}
+		}
+
+		return true;
+
+	}
+
 
 }

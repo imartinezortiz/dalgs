@@ -163,5 +163,35 @@ public class TopicRepository {
 		}
 	}
 
+	public boolean persistListTopics(List<Topic> topics) {
+
+		int i = 0;
+		for(Topic t : topics) {
+			try{
+
+				//In this case we have to hash the password (SHA-256)
+				//StringSHA sha = new StringSHA();
+				//String pass = sha.getStringMessageDigest(u.getPassword());
+				//u.setPassword(pass);
+
+				t.setId(null); //If not  a detached entity is passed to persist
+				em.persist(t);
+				//em.flush();
+
+
+				if(++i % 20 == 0) {
+					em.flush();
+				}
+			}catch(Exception e){
+				logger.error(e.getMessage());
+				return false;
+			}
+		}
+
+		return true;
+
+	}
+
+
 
 }

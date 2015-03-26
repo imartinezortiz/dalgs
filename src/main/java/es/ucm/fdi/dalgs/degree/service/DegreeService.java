@@ -1,24 +1,31 @@
 package es.ucm.fdi.dalgs.degree.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.fileupload.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.academicTerm.service.AcademicTermService;
 import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
+import es.ucm.fdi.dalgs.classes.UploadForm;
 import es.ucm.fdi.dalgs.competence.service.CompetenceService;
 import es.ucm.fdi.dalgs.degree.repository.DegreeRepository;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
 import es.ucm.fdi.dalgs.domain.Degree;
-import es.ucm.fdi.dalgs.domain.Subject;
+
+
 import es.ucm.fdi.dalgs.module.service.ModuleService;
+
 
 @Service
 public class DegreeService {
@@ -166,13 +173,13 @@ public class DegreeService {
 		}
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@Transactional(readOnly = true)
-	public ResultClass<Degree> getDegreeSubject(Subject p) {
-		ResultClass<Degree> result = new ResultClass<>();
-		result.setSingleElement(daoDegree.getDegreeSubject(p));
-		return result;
-	}
+//	@PreAuthorize("hasRole('ROLE_USER')")
+//	@Transactional(readOnly = true)
+//	public ResultClass<Degree> getDegreeSubject(Degree p) {
+//		ResultClass<Degree> result = new ResultClass<>();
+//		result.setSingleElement(daoDegree.getDegreeSubject(p));
+//		return result;
+//	}
 
 
 	
@@ -230,5 +237,31 @@ public class DegreeService {
 		result.setSingleElement(daoDegree.numberOfPages(showAll));
 		return result;
 	}
+
+	public boolean uploadCSV(UploadForm upload) {
+		CsvPreference prefers =
+				new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload
+						.getDelimiterChar().charAt(0), upload.getEndOfLineSymbols())
+						.build();
+
+				List<Degree> list = null;
+				try {
+					FileItem fileItem = upload.getFileData().getFileItem();
+					DegreeUpload degreeUpload = new DegreeUpload();
+					
+					
+					list = degreeUpload.readCSVDegreeToBean(fileItem.getInputStream(),
+							upload.getCharset(), prefers);
+
+					return daoDegree.persistListDegrees(list);
+
+				} catch (IOException e) {
+					e.printStackTrace();
+					return false;
+				}
+		
+	
+	}
+	
 
 }

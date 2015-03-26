@@ -1,17 +1,22 @@
 package es.ucm.fdi.dalgs.topic.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.fileupload.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
+import es.ucm.fdi.dalgs.classes.UploadForm;
 import es.ucm.fdi.dalgs.domain.Module;
 import es.ucm.fdi.dalgs.domain.Topic;
 import es.ucm.fdi.dalgs.module.service.ModuleService;
@@ -211,6 +216,30 @@ public class TopicService {
 
 		}
 		return result;
+	}
+
+	public boolean uploadCSV(UploadForm upload, Long id_module) {
+		CsvPreference prefers =
+				new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload
+						.getDelimiterChar().charAt(0), upload.getEndOfLineSymbols())
+						.build();
+
+				List<Topic> list = null;
+				try {
+					FileItem fileItem = upload.getFileData().getFileItem();
+					TopicUpload topicUpload = new TopicUpload();
+					
+					Module m = serviceModule.getModule(id_module).getSingleElement();
+					list = topicUpload.readCSVTopicToBean(fileItem.getInputStream(),
+							upload.getCharset(), prefers, m);
+
+					return daoTopic.persistListTopics(list);
+
+				} catch (IOException e) {
+					e.printStackTrace();
+					return false;
+				}
+		
 	}
 }
 

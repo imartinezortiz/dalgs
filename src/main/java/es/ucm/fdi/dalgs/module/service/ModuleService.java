@@ -1,17 +1,22 @@
 package es.ucm.fdi.dalgs.module.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.fileupload.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
+import es.ucm.fdi.dalgs.classes.UploadForm;
 import es.ucm.fdi.dalgs.degree.service.DegreeService;
 import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.domain.Module;
@@ -194,4 +199,30 @@ public class ModuleService {
 		}
 		return result;
 	}
+
+	public boolean uploadCSV(UploadForm upload, Long id_degree) {
+		CsvPreference prefers =
+				new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload
+						.getDelimiterChar().charAt(0), upload.getEndOfLineSymbols())
+						.build();
+
+				List<Module> list = null;
+				try {
+					FileItem fileItem = upload.getFileData().getFileItem();
+					ModuleUpload moduleUpload = new ModuleUpload();
+					
+					Degree d = serviceDegree.getDegree(id_degree).getSingleElement();
+					list = moduleUpload.readCSVModuleToBean(fileItem.getInputStream(),
+							upload.getCharset(), prefers, d);
+
+					return daoModule.persistListModules(list);
+
+				} catch (IOException e) {
+					e.printStackTrace();
+					return false;
+				}
+		
+	
+	}
+	
 }

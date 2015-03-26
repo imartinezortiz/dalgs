@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import es.ucm.fdi.dalgs.domain.Competence;
 import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.domain.Subject;
+import es.ucm.fdi.dalgs.domain.User;
 
 @Repository
 public class CompetenceRepository {
@@ -151,5 +152,33 @@ public class CompetenceRepository {
 		}
 		return true;
 	}
+
+	public boolean persistListCompetences(List<Competence> competences) {
+			int i = 0;
+			for(Competence c : competences) {
+				try{
+					
+					//In this case we have to hash the password (SHA-256)
+					//StringSHA sha = new StringSHA();
+					//String pass = sha.getStringMessageDigest(u.getPassword());
+					//u.setPassword(pass);
+					
+					c.setId(null); //If not  a detached entity is passed to persist
+					em.persist(c);
+			    	//em.flush();
+
+
+			    if(++i % 20 == 0) {
+			    	em.flush();
+			    }
+				}catch(Exception e){
+					logger.error(e.getMessage());
+					return false;
+				}
+			}
+			
+			return true;
+
+		}
 
 }
