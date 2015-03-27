@@ -129,9 +129,8 @@ public class Topic implements Cloneable, Copyable<Topic>, Serializable {
 	public Topic depth_copy() {
 		Topic copy =  this.shallow_copy();
 		
+		copy.subjects = new ArrayList<Subject>();
 		
-//		copy.id = null;
-		copy.subjects = new ArrayList<>();
 		for (Subject s : this.subjects) {
 			Subject subject  = s.depth_copy();
 			subject.setTopic(copy);

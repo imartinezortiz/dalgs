@@ -123,14 +123,17 @@ public class Subject implements Cloneable, Copyable<Subject>, Serializable {
 	public Subject depth_copy() {
 		Subject copy = this.shallow_copy();
 		
-//		copy.id = null;
-//		copy.competences = new ArrayList<>();
-//		for (Competence c : this.competences) {
-//			Competence competence = c;
-//			competence.getSubjects().remove(this);
-//			competence.getSubjects().add(copy);
-//			copy.competences.add(c.copy());
-//		}
+		copy.id = null;
+		copy.isDeleted=false;
+		
+		copy.competences = new ArrayList<>();
+		for (Competence c : this.competences) {
+			Competence competence = c.depth_copy();
+			competence.getSubjects().remove(this);
+			competence.getSubjects().add(copy);
+			copy.competences.add(competence);
+		}
+		
 		return copy;
 	}
 	public Subject shallow_copy() {

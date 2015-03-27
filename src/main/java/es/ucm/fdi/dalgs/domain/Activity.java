@@ -139,28 +139,15 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 		return true;
 	}
 
-	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		try {
-			 return (Activity) super.clone();
-			
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}	}
 
 	public Activity depth_copy() {
-		Activity copy = new Activity();
+		Activity copy = this.shallow_copy();
+		
 		copy.id = null;
-//		copy.course = this.course;
-//		copy.group = this.group;
-		copy.info = this.info;
+		copy.isDeleted=false;
 
-//		copy.course = new Course();
-//		copy.group = new Group();
-//		copy.learningGoalStatus = new ArrayList<LearningGoalStatus>();
+		copy.learningGoalStatus = new ArrayList<LearningGoalStatus>();
 		for (LearningGoalStatus lgs : this.learningGoalStatus) {
-//			LearningGoalStatus aux = lgs.depth_copy();
-//			aux.s
 			copy.learningGoalStatus.add(lgs.depth_copy());
 		}
 		return copy;

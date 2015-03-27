@@ -164,7 +164,8 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 		
 		copy.id = null;
 		copy.groups = new ArrayList<Group>();
-		
+		copy.isDeleted=false;
+
 		for (Group g : this.groups) {
 			Group group = g.depth_copy();
 			group.setCourse(copy);
@@ -187,7 +188,6 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 	public Course shallow_copy() {
 		try {
 			return (Course) super.clone();
-			
 
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);

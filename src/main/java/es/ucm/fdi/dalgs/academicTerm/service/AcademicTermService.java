@@ -2,7 +2,6 @@ package es.ucm.fdi.dalgs.academicTerm.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import es.ucm.fdi.dalgs.activity.service.ActivityService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
-import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.domain.Group;
@@ -152,12 +150,6 @@ public class AcademicTermService {
 				|| serviceCourse.deleteCoursesFromAcademic(academicTerm)
 						.getSingleElement()) {
 
-			/*
-			 * COMENTADO PARA LA PAPELERA DE LA VISTA success = (
-			 * manageAclService.removeAclFromObject(academicTerm.getId(),
-			 * academicTerm.getClass().getName()) &&
-			 * daoAcademicTerm.deleteAcademicTerm(academicTerm.getId()) );
-			 */
 			success = daoAcademicTerm.deleteAcademicTerm(academicTerm.getId());
 		}
 		result.setSingleElement(success);
@@ -243,7 +235,7 @@ public class AcademicTermService {
 	}
 
 	@PreAuthorize("hasPermission(#academicTerm, 'ADMINISTRATION')")
-	@Transactional(readOnly = false)//	,propagation = Propagation.REQUIRED)
+	@Transactional(readOnly = false)
 	public ResultClass<AcademicTerm> copyAcademicTerm(AcademicTerm academicTerm, Locale locale) {
 		AcademicTerm copy = academicTerm.depth_copy();
 
@@ -256,62 +248,57 @@ public class AcademicTermService {
 			result.setErrorsList(errors);
 
 		} else {
-
-			copy.setDeleted(false);
 			copy.setTerm(academicTerm.getTerm() + " (copy)");
 
-//			// TODO Cambiar el resto de codes que tengan que ser unicos
-			List<Course> courses = new ArrayList<Course>();
-//			List<Activity> activities_aux = new ArrayList<Activity>();
+			for(Course c : copy.getCourses()){
+				c.setActivities(null);
 
-			for (Course c : copy.getCourses()) {
-				Course course_aux = c;
-//				for (Activity a : course_aux.getActivities()) {
-//					Activity aux = a;
-//					aux.getInfo().setCode(a.getInfo().getCode() + " (copy)");
-//					activities_aux.add(aux);
+//TODO				// ---> Fallan las actividades
+//				for(Activity a : c.getActivities()){
+////					a.setCourse(c);
+//					a.setGroup(null);
+//					a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
 //				}
-				course_aux.setActivities(new ArrayList<Activity>());	
-//				activities_aux.clear();
-
-				for (Group g : course_aux.getGroups()) {
-					Group group_aux = g;
-					group_aux.setName(g.getName() + " (copy)");
-					group_aux.setActivities(null);
+				
+				for (Group g : c.getGroups()){
+					g.setName(g.getName() + " (copy)");
+					g.setActivities(null);
+//					for(Activity a : g.getActivities()){
+//						a.setCourse(null);
+////					a.setGroup(null);
+//						a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
+//					}
 				}
-				courses.add(course_aux); //Add the course with all his activities modified
+				
 			}
 			
-			AcademicTerm existAt = this.addAcademicTerm(copy,locale).getSingleElement();
-			
-			for(Course c :  courses){
-				Course aux = c;
-				aux.setAcademicTerm(copy);
-				serviceCourse.addCourse(aux, existAt.getId(), locale);
-				for(Activity a: aux.getActivities()){
-					serviceActivity.addActivityCourse(aux, a, aux.getId(), locale);
+			boolean success = daoAcademicTerm.addAcademicTerm(copy);
+			if(success){
+				AcademicTerm exists = daoAcademicTerm.exists(copy.getTerm(), copy.getDegree());
+				if(exists!=null){
+					result.setSingleElement(exists);
+					manageAclService.addACLToObject(exists.getId(), exists.getClass().getName());
+				
+					for(Course c :exists.getCourses()){
+						success = success && manageAclService.addACLToObject(c.getId(), c.getClass().getName());
+					
+//						for(Activity a: c.getActivities()){
+//							success = success && manageAclService.addACLToObject(a.getId(), a.getClass().getName());
+//						}
+					
+					
+						for(Group g: c.getGroups()){
+							success = success && manageAclService.addACLToObject(g.getId(), g.getClass().getName());
+
+//							for(Activity a: g.getActivities()){
+//								success = success && manageAclService.addACLToObject(a.getId(), a.getClass().getName());
+//							}
+						}
+					}
 				}
 			}
-
-//		//PRUEBA 2
-//			for(Course c : copy.getCourses()){
-//
-//				c.setAcademicTerm(copy);
-//				c.setId(null);
-//				c.setActivities(null);
-//				
-//
-//				for (Group g : c.getGroups()){
-//					g.setId(null);
-//					g.setName(g.getName() + " (copy)");
-//					g.setCourse(c);
-//					g.setActivities(null);
-//				}
-//				
-//			}
-//			
-//			AcademicTerm existAcademic = this.addAcademicTerm(copy).getSingleElement();
-			result.setSingleElement(copy);
+			
+			result.setHasErrors(!success);
 
 
 		} 

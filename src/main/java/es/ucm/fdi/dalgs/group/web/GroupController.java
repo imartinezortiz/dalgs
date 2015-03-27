@@ -123,7 +123,7 @@ public class GroupController {
 			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		if (!resultBinding.hasErrors()) {
-			ResultClass<Group> result = serviceGroup.unDeleteGroup(group, locale);
+			ResultClass<Group> result = serviceGroup.unDeleteGroup(group,id_course, locale);
 
 			if (!result.hasErrors()) {
 				attr.addFlashAttribute("group", result.getSingleElement());
@@ -188,7 +188,7 @@ public class GroupController {
 		if (!resultBinding.hasErrors()) {
 
 			ResultClass<Boolean> result = serviceGroup.modifyGroup(group,
-					id_group, locale);
+					id_group, id_course,locale);
 			if (!result.hasErrors())
 
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
@@ -344,7 +344,7 @@ public class GroupController {
 			@PathVariable("groupId") Long id_group, Locale locale) {
 
 		ResultClass<Group> result = serviceGroup.unDeleteGroup(serviceGroup
-				.getGroup(id_group).getSingleElement(), locale);
+				.getGroup(id_group).getSingleElement(), id_course, locale);
 
 		if (!result.hasErrors())
 
@@ -376,8 +376,8 @@ public class GroupController {
 	// Every Post have to return redirect
 	public String copyGroup(@PathVariable("academicId") Long id_academic,@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group, Locale locale) {
-		ResultClass<Group> result = 
-				serviceGroup.copyGroup((serviceGroup.getGroup(id_group).getSingleElement()), id_course, locale);
+		Group aux_group = serviceGroup.getGroup(id_group).getSingleElement();
+		ResultClass<Group> result = serviceGroup.copyGroup(aux_group, id_course, locale);
 		
 		if (!result.hasErrors())
 			return "redirect:/academicTerm/"+id_academic+"/course/"+ id_course+".htm";

@@ -130,7 +130,8 @@ public class Module implements Cloneable, Copyable<Module>, Serializable {
 	public Module depth_copy() {
 		Module copy = this.shallow_copy();
 		
-//		copy.id = null;
+		copy.isDeleted=false;
+		copy.id=null;
 		copy.topics = new ArrayList<>();
 		for (Topic t : this.topics) {
 			Topic topic  = t.depth_copy();

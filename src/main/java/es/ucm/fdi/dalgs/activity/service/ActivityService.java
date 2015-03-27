@@ -303,8 +303,7 @@ public class ActivityService {
 			Activity activity, Long id_group) {
 		boolean success = false;
 
-		Activity activityExists = daoActivity.existByCode(activity.getInfo()
-				.getCode());
+		Activity activityExists = daoActivity.existByCode(activity.getInfo().getCode());
 		ResultClass<Activity> result = new ResultClass<>();
 
 		if (activityExists != null) {
