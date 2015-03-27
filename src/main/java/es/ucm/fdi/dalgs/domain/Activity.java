@@ -21,7 +21,7 @@ import javax.persistence.Table;
 import es.ucm.fdi.dalgs.domain.info.ActivityInfo;
 
 @Entity
-@Table(name = "activity")
+@Table(name = "activity")// ,uniqueConstraints =  @UniqueConstraint(columnNames = {"code_activity", "id_course", "id_group" }) )
 public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 
 	private static final long serialVersionUID = 1L;

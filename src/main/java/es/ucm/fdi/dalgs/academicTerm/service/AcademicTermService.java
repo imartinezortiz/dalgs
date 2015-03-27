@@ -17,6 +17,7 @@ import es.ucm.fdi.dalgs.activity.service.ActivityService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
+import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.domain.Group;
@@ -251,14 +252,14 @@ public class AcademicTermService {
 			copy.setTerm(academicTerm.getTerm() + " (copy)");
 
 			for(Course c : copy.getCourses()){
-				c.setActivities(null);
+//				c.setActivities(null);
 
 //TODO				// ---> Fallan las actividades
-//				for(Activity a : c.getActivities()){
-////					a.setCourse(c);
-//					a.setGroup(null);
-//					a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
-//				}
+				for(Activity a : c.getActivities()){
+//					a.setCourse(c);
+					a.setGroup(null);
+					a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
+				}
 				
 				for (Group g : c.getGroups()){
 					g.setName(g.getName() + " (copy)");
