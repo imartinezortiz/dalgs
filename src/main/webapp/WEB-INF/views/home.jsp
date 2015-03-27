@@ -1,8 +1,9 @@
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include.jsp"%>
 
 <html>
 <head>
-<title><fmt:message key="title" /></title>
+<title><fmt:message key="common.title" /></title>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="css/bootstrap.css">
 
@@ -14,22 +15,22 @@
 <body>
 	<div class="list-group index">
 		<a class="list-group-item "
-			href="<c:url value='/academicTerm/page/0.htm?showAll=false'/>">
+			href="<c:url value='/academicTerm/page/0.htm?showAll=false'/>"> 
 			<h4 class="list-group-item-heading">				
 			<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-			<fmt:message key="ats" /></h4>
+			<fmt:message key="home.ats" /></h4>
 			<p class="list-group-item-text">
-			<fmt:message key="headAT" />
+			<fmt:message key="academicterm.header" />
 			</p>
 		</a> 
 		<a class="list-group-item " 
 			href="<c:url value='/degree/page/0.htm?showAll=false'/>">
 			<h4 class="list-group-item-heading">
 				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-				<fmt:message key="degs" />
+				<fmt:message key="home.degs" />
 			</h4>
 			<p class="list-group-item-text">
-			<fmt:message key="headDeg" />
+			<fmt:message key="degree.header" />
 			</p>
 		</a>
 
@@ -37,17 +38,17 @@
 				href="<c:url value='/user/page/0.htm?showAll=false&typeOfUser=ROLE_PROFESSOR'/>">
 				<h4 class="list-group-item-heading">
 					<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-					<fmt:message key="profs" />
+					<fmt:message key="home.profs" />
 				</h4>
-				<p class="list-group-item-text"><fmt:message key="headProf" /></p>
+				<p class="list-group-item-text"><fmt:message key="header.profs" /></p>
 			</a> 
 			<a class="list-group-item "
 				href="<c:url value='/user/page/0.htm?showAll=false&typeOfUser=ROLE_STUDENT'/>">
 				<h4 class="list-group-item-heading">
 					<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-					<fmt:message key="studs" />
+					<fmt:message key="home.studs" />
 				</h4>
-				<p class="list-group-item-text"><fmt:message key="headStud" /></p>
+				<p class="list-group-item-text"><fmt:message key="header.studs" /></p>
 			</a>
 	
 		

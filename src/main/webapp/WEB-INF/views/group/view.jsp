@@ -1,16 +1,16 @@
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include.jsp"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <html>
 <head>
-<title><fmt:message key="title" /></title>
+<title><fmt:message key="common.title" /></title>
 <style>
 .error {
 	color: red;
 }
 </style>
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
 
@@ -18,7 +18,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="detailsGr" />
+				<fmt:message key="group.details" />
 			</h3>
 
 			<!-- If you are a professor who belongs to this course you can edit -->
@@ -26,7 +26,7 @@
 				<a class="btn list-btn btn-warning"
 					href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/modify.htm'/>">
 					<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="modify" />
+					<fmt:message key="common.modify" />
 				</a>
 			</sec:authorize>
 			<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')"><c:choose>
@@ -57,10 +57,10 @@
 			<div class="form-group">
 				<div class="form-group view">
 					<p>
-						<label><fmt:message key="name" />: &nbsp; </label>${model.group.name} &nbsp; (${model.group.course.subject.info.name} - ${model.group.course.academicTerm.term})</p>
+						<label><fmt:message key="group.name" />: &nbsp; </label>${model.group.name} &nbsp; (${model.group.course.subject.info.name} - ${model.group.course.academicTerm.term})</p>
 
 					<p>
-						<label><fmt:message key="courCoor" />: &nbsp;</label>${model.group.course.coordinator.lastName}, ${model.group.course.coordinator.firstName}</p>
+						<label><fmt:message key="course.courCoor" />: &nbsp;</label>${model.group.course.coordinator.lastName}, ${model.group.course.coordinator.firstName}</p>
 
 				</div>
 			</div>
@@ -74,7 +74,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="acList" /> - <fmt:message key="cour" />
+				<fmt:message key="activity.list" /> - <fmt:message key="course.cour" />
 			</h3>
 
 		</div>
@@ -82,8 +82,8 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label"><fmt:message key="name" /></div></td>
-					<td width="50%"><div class="td-label"><fmt:message key="desc" /></div></td>
+					<td width="20%"><div class="td-label"><fmt:message key="input.name" /></div></td>
+					<td width="50%"><div class="td-label"><fmt:message key="input.desc" /></div></td>
 				</tr>
 				<c:forEach items="${model.activitiesCourse}" var="activity">
 					<tr align="center">
@@ -99,7 +99,7 @@
 						<td><c:if test="${activity.isDeleted eq false}">
 								<a class="btn btn-success"
 									href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}.htm'/>">
-									<fmt:message key="view" /> </a>
+									<fmt:message key="common.view" /> </a>
 							</c:if></td>
 					</tr>
 				</c:forEach>
@@ -111,7 +111,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="acList" /> - <fmt:message key="gr" />
+				<fmt:message key="activity.list" /> - <fmt:message key="group.gr" />
 			</h3>
 
 			<!-- If you are a professor who belongs to this course you can edit -->
@@ -121,7 +121,7 @@
 				<a style="cursor: copy;" class="btn list-btn btn-warning2"
 					href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/activity/add.htm'/>">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="add" />
+					<fmt:message key="common.add" />
 				</a>
 			</sec:accesscontrollist>
 
@@ -130,8 +130,8 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label"><fmt:message key="name" /></div></td>
-					<td width="50%"><div class="td-label"><fmt:message key="desc" /></div></td>
+					<td width="20%"><div class="td-label"><fmt:message key="input.name" /></div></td>
+					<td width="50%"><div class="td-label"><fmt:message key="input.desc" /></div></td>
 				</tr>
 				<c:forEach items="${model.activitiesGroup}" var="activity">
 					<tr align="center">
@@ -148,13 +148,13 @@
 								<c:when test="${activity.isDeleted eq false}">
 									<a class="btn btn-success"
 										href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/activity/${activity.id}.htm'/>">
-										<fmt:message key="view" /> </a>
+										<fmt:message key="common.view" /> </a>
 									<sec:accesscontrollist hasPermission="ADMINISTRATION"
 										domainObject="${model.group}">
 
 										<a class="btn btn-danger"
 											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/activity/${activity.id}/delete.htm'/>">
-											<fmt:message key="delete" /> </a>
+											<fmt:message key="common.delete" /> </a>
 									</sec:accesscontrollist>
 								</c:when>
 								<c:otherwise>
@@ -162,7 +162,7 @@
 										domainObject="${model.group}">
 										<a class="btn btn-danger"
 											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/activity/${activity.id}/restore.htm'/>">
-											<fmt:message key="restore" /> </a>
+											<fmt:message key="common.restore" /> </a>
 									</sec:accesscontrollist>
 								</c:otherwise>
 							</c:choose></td>
@@ -175,7 +175,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-<fmt:message key="profList" />
+<fmt:message key="group.profList" />
 			</h3>
 
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
@@ -183,7 +183,7 @@
 				<a style="cursor: copy;" class="btn list-btn btn-warning2"
 					href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/professor/add.htm'/>">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="change" />
+					<fmt:message key="common.modify" />
 				</a>
 			</sec:authorize>
 
@@ -192,8 +192,8 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label"><fmt:message key="lastN" /></div></td>
-					<td width="50%"><div class="td-label"><fmt:message key="firstN" /></div></td>
+					<td width="20%"><div class="td-label"><fmt:message key="user.lastN" /></div></td>
+					<td width="50%"><div class="td-label"><fmt:message key="user.firstN" /></div></td>
 				</tr>
 				<c:forEach items="${model.group.professors}" var="prof">
 					<tr align="center">
@@ -212,12 +212,12 @@
 						<td>
 								<c:if test="${prof.enabled eq true}">
 									<a class="btn list-btn btn-success"
-										href="<c:url value='/user/${prof.id}.htm'/>"><fmt:message key="view" /></a>
+										href="<c:url value='/user/${prof.id}.htm'/>"><fmt:message key="common.view" /></a>
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 
 										<a class="btn btn-danger"
 											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/user/${prof.id}/delete.htm'/>">
-											<fmt:message key="delete" /> </a>
+											<fmt:message key="common.delete" /> </a>
 									</sec:authorize>
 								</c:if>
 								
@@ -235,14 +235,14 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="studList" />
+				<fmt:message key="group.studList" />
 			</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 
 				<a style="cursor: copy;" class="btn list-btn btn-warning2"
 					href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/student/add.htm'/>">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="change" />
+					<fmt:message key="common.modify" />
 				</a>
 			</sec:authorize>
 
@@ -251,8 +251,8 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label"><fmt:message key="lastN" /></div></td>
-					<td width="50%"><div class="td-label"><fmt:message key="firstN" /></div></td>
+					<td width="20%"><div class="td-label"><fmt:message key="user.lastN" /></div></td>
+					<td width="50%"><div class="td-label"><fmt:message key="user.firstN" /></div></td>
 				</tr>
 				<c:forEach items="${model.group.students}" var="student">
 					<tr align="center">
@@ -267,19 +267,19 @@
 						<td><c:choose>
 								<c:when test="${student.enabled eq true}">
 									<a class="btn list-btn btn-success"
-										href="<c:url value='/user/${student.id}.htm'/>"><fmt:message key="view" /></a>
+										href="<c:url value='/user/${student.id}.htm'/>"><fmt:message key="common.view" /></a>
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 
 										<a class="btn btn-danger"
 											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/user/${student.id}/delete.htm'/>">
-											<fmt:message key="delete" /> </a>
+											<fmt:message key="common.delete" /> </a>
 									</sec:authorize>
 								</c:when>
 								<c:otherwise>
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 										<a class="btn btn-danger"
 											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/user/${student.id}/restore.htm'/>">
-											<fmt:message key="restore" /> </a>
+											<fmt:message key="common.restore" /> </a>
 									</sec:authorize>
 								</c:otherwise>
 							</c:choose></td>

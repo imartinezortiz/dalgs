@@ -1,8 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
-<!-- archivo de cabecera para incluir en todos los archivos JSP que crearemos con posterioridad. -->
-<%@ page
-	import="org.springframework.security.core.context.SecurityContextHolder"%>
+<%@ page import="org.springframework.security.core.context.SecurityContextHolder"%>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <%@ page session="false"%>
@@ -126,14 +123,14 @@
 					<sec:authorize access="hasRole('ROLE_ANONYMOUS')">
 						<li><a href="${userUrl}"> <span
 								class="glyphicon glyphicon-user" aria-hidden="true"></span>
-										<fmt:message key="login" />
+										<fmt:message key="access.login" />
  <span class="sr-only">(current)</span></a></li>
 					</sec:authorize>
 
 					<sec:authorize
 						access="hasRole('ROLE_STUDENT') or hasRole('ROLE_PROFESSOR')">
 						<li><a href="${userUrl}"> <span
-								class="glyphicon glyphicon-user" aria-hidden="true"></span> <fmt:message key="user" />
+								class="glyphicon glyphicon-user" aria-hidden="true"></span> <fmt:message key="user.user" />
 								<span class="sr-only">(current)</span></a></li>
 					</sec:authorize>
 
@@ -146,7 +143,7 @@
 					<sec:authorize access="hasAnyRole('ROLE_ADMIN' ,  'ROLE_USER')">
 						<li><a href="${logoutUrl}"> <span
 								class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
-										<fmt:message key="logout" />
+										<fmt:message key="access.logout" />
 
 						</a></li>
 					</sec:authorize>
@@ -165,9 +162,8 @@
 					<p class="navbar-text navbar-right" style="font-size: 15px;">
 
 						<span class="glyphicon glyphicon-eye-open" aria-hidden="true">
-						</span> <fmt:message key="signedIn" />
- <a href="#" class="navbar-link"><%=SecurityContextHolder.getContext().getAuthentication()
-					.getName()%></a>&nbsp&nbsp
+						</span> <fmt:message key="access.signedIn" />
+ 						<a href="#" class="navbar-link"><%=SecurityContextHolder.getContext().getAuthentication().getName()%></a>&nbsp;&nbsp;
 					</p>
 				</ul>
 

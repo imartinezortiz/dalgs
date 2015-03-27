@@ -355,13 +355,12 @@ public class AcademicTermController {
 	@RequestMapping(value = "/academicTerm/{academicId}/clone.htm")
 	// Every Post have to return redirect
 	public String copyAcademicTerm(@PathVariable("academicId") Long id_academic, Locale locale) {
-		ResultClass<AcademicTerm> result = 
-				serviceAcademicTerm.copyAcademicTerm((serviceAcademicTerm
-						.getAcademicTerm(id_academic,false).getSingleElement()), locale);
 		
-		if (!result.hasErrors())
+//			AcademicTerm at_aux =;
+		if(serviceAcademicTerm.copyAcademicTerm( serviceAcademicTerm.getAcademicTerm(id_academic,false).getSingleElement(), locale).getSingleElement() != null){
+		
 			return "redirect:/academicTerm/page/0.htm?showAll=" + showAll;
-		
+		}
 		return "redirect:/error.htm";
 	}
 

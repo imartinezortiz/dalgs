@@ -1,9 +1,10 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include.jsp"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <html>
 <head>
-<title><fmt:message key="title" /></title>
+<title><fmt:message key="common.title" /></title>
 <style>
 .error {
 	color: red;
@@ -18,7 +19,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="detailsAC" />
+				<fmt:message key="activity.details" />
 			</h3>
 			<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')">
 				<a class="btn list-btn btn-warning"
@@ -34,15 +35,15 @@
 
 			<div class="form-group">
 				<div class="form-group view">
-					<label><fmt:message key="code" /> : </label>
+					<label><fmt:message key="input.code" /> : </label>
 					<p class="details">${model.activity.info.code}</p>
 				</div>
 				<div class="form-group view">
-					<label><fmt:message key="name" /> :</label>
+					<label><fmt:message key="input.name" /> :</label>
 					<p class="details">${model.activity.info.name}</p>
 				</div>
 				<div class="form-group view">
-					<label><fmt:message key="desc" /> :</label>
+					<label><fmt:message key="input.desc" /> :</label>
 					<p class="details">${model.activity.info.description}</p>
 				</div>
 
@@ -56,17 +57,17 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="lgsList" />
+				<fmt:message key="learninggoalstatus.list" />
 			</h3>
 		</div>
 		<div class="panel-body">
 			<table class="table table-striped table-bordered">
 				<tr align="center">
 					<td width="20%"><div class="td-label">
-							<fmt:message key="lg" />
+							<fmt:message key="learninggoal.lg" />
 						</div></td>
 					<td width="50%"><div class="td-label">
-							<fmt:message key="weight" />
+							<fmt:message key="input.weight" />
 						</div></td>
 
 				</tr>

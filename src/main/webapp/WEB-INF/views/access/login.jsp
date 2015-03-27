@@ -1,5 +1,5 @@
-
- <%@ include file="/WEB-INF/views/include.jsp"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/include.jsp"%>
  
 <html>
 <head>
@@ -14,9 +14,9 @@
 	<form class="form-signin" action="j_spring_security_check" method="post" >
 		<h2 class="form-signin-heading">								
 		<span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
-		<fmt:message key="pleaseSigin" /></h2>
-			<spring:message code="username" var="username"/>
-			<spring:message code="pass" var="pass"/>
+		<fmt:message key="access.pleaseSigin" /></h2>
+			<spring:message code="access.username" var="username"/>
+			<spring:message code="access.pass" var="pass"/>
 			
 			<br>
 			<label class="sr-only" for="j_username"></label>
@@ -30,14 +30,14 @@
 			<br>
 			 <button class="btn btn-lg btn-primary btn-block" 
 			 style=" background: rgb(192, 192, 192);  border: white 2px outset;  font-weight: bolder;  font-size: 18px;  padding: 5px;"
-			 type="submit"><fmt:message key="signin" /></button>
+			 type="submit"><fmt:message key="access.signin" /></button>
 		
 	</form>
 	<c:if test="${not empty message}">
 		<div class="alert alert-error">
 		<a href="#" class="close" data-dismiss="alert">&times;</a>
     	<c:if test="${!fn:contains(message, 'Success')}">
-    	<strong><fmt:message key="errors" />! </strong><fmt:message key="errorSub" /> <br>
+    	<strong><fmt:message key="error.errors" />! </strong><fmt:message key="access.errorSub" /> <br>
     	</c:if>
     	${message}
 		</div> 

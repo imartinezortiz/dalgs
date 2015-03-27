@@ -365,9 +365,10 @@ public class GroupService {
 
 			copy.setName(copy.getName() + " (copy)");
 
-			for (Activity a : copy.getActivities()) {
-				a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
-			}
+			copy.setActivities(new ArrayList<Activity>());
+//			for (Activity a : copy.getActivities()) {
+//				a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
+//			}
 
 			boolean success = daoGroup.addGroup(copy);
 			if (success) {

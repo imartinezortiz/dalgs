@@ -1,9 +1,10 @@
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include.jsp"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <html>
 <head>
-<title><fmt:message key="title" /></title>
+<title><fmt:message key="common.title" /></title>
 <style>
 .error {
 	color: red;
@@ -18,14 +19,14 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="detailsDeg" />
+				<fmt:message key="degree.details" />
 			</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 
 				<a class="btn list-btn btn-warning"
 					href="<c:url value='/degree/${degreeId}/modify.htm'/>"> <span
 					class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="modify" />
+					<fmt:message key="common.modify" />
 				</a>
 			</sec:authorize>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
@@ -56,15 +57,15 @@
 
 			<div class="form-group">
 				<div class="form-group view">
-					<label><fmt:message key="code" />: </label>
+					<label><fmt:message key="input.code" />: </label>
 					<p class="details">${model.degree.info.code}</p>
 				</div>
 				<div class="form-group view">
-					<label><fmt:message key="name" />: </label>
+					<label><fmt:message key="input.name" />: </label>
 					<p class="details">${model.degree.info.name}</p>
 				</div>
 				<div class="form-group view">
-					<label><fmt:message key="desc" />: </label>
+					<label><fmt:message key="input.desc" />: </label>
 					<p class="details">${model.degree.info.description}</p>
 				</div>
 			</div>
@@ -75,14 +76,14 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-<fmt:message key="modList" />
+<fmt:message key="module.list" />
 			</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 
 				<a style="cursor: copy;" class="btn list-btn btn-warning2"
 					href="<c:url value='/degree/${degreeId}/module/add.htm'/>"> <span
 					class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="add" />
+					<fmt:message key="common.add" />
 				</a>
 			</sec:authorize>
 
@@ -91,8 +92,8 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label"><fmt:message key="name" /></div></td>
-					<td width="50%"><div class="td-label"><fmt:message key="desc" /></div></td>
+					<td width="20%"><div class="td-label"><fmt:message key="input.name" /></div></td>
+					<td width="50%"><div class="td-label"><fmt:message key="input.desc" /></div></td>
 				</tr>
 				<c:forEach items="${model.modules}" var="module">
 					<tr align="center">
@@ -108,19 +109,19 @@
 						<td><c:choose>
 								<c:when test="${module.isDeleted eq false}">
 									<a class="btn list-btn btn-success"
-										href="<c:url value='/degree/${degreeId}/module/${module.id}.htm'/>"><fmt:message key="view" /></a>
+										href="<c:url value='/degree/${degreeId}/module/${module.id}.htm'/>"><fmt:message key="common.view" /></a>
 
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 										<a class="btn btn-danger"
 											href="<c:url value='/degree/${degreeId}/module/${module.id}/delete.htm'/>">
-											<fmt:message key="delete" /> </a>
+											<fmt:message key="common.delete" /> </a>
 									</sec:authorize>
 								</c:when>
 								<c:otherwise>
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 										<a class="btn btn-danger"
 											href="<c:url value='/degree/${degreeId}/module/${module.id}/restore.htm'/>">
-											<fmt:message key="restore" /> </a>
+											<fmt:message key="common.restore" /> </a>
 									</sec:authorize>
 								</c:otherwise>
 							</c:choose></td>
@@ -137,14 +138,14 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="comList" />
+				<fmt:message key="competence.list" />
 			</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 
 				<a style="cursor: copy;" class="btn list-btn btn-warning2"
 					href="<c:url value='/degree/${degreeId}/competence/add.htm'/>">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="add" />
+					<fmt:message key="common.add" />
 				</a>
 			</sec:authorize>
 
@@ -153,8 +154,8 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label"><fmt:message key="name" /></div></td>
-					<td width="50%"><div class="td-label"><fmt:message key="desc" /></div></td>
+					<td width="20%"><div class="td-label"><fmt:message key="input.name" /></div></td>
+					<td width="50%"><div class="td-label"><fmt:message key="input.desc" /></div></td>
 
 				</tr>
 				<c:forEach items="${model.competences}" var="competence">
@@ -172,18 +173,18 @@
 						<td><c:choose>
 								<c:when test="${competence.isDeleted eq false}">
 									<a class="btn list-btn btn-success"
-										href="<c:url value='/degree/${degreeId}/competence/${competence.id}.htm'/>"><fmt:message key="view" /></a>
+										href="<c:url value='/degree/${degreeId}/competence/${competence.id}.htm'/>"><fmt:message key="common.view" /></a>
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 										<a class="btn btn-danger"
 											href="<c:url value='/degree/${degreeId}/competence/${competence.id}/delete.htm'/>">
-											<fmt:message key="delete" /> </a>
+											<fmt:message key="common.delete" /> </a>
 									</sec:authorize>
 								</c:when>
 								<c:otherwise>
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 										<a class="btn btn-danger"
 											href="<c:url value='/degree/${degreeId}/competence/${competence.id}/restore.htm'/>">
-											<fmt:message key="restore" /> </a>
+											<fmt:message key="common.restore" /> </a>
 									</sec:authorize>
 								</c:otherwise>
 							</c:choose></td>

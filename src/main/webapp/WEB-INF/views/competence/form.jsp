@@ -1,9 +1,10 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include.jsp"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <html>
 <head>
-<title><fmt:message key="title" /></title>
+<title><fmt:message key="common.title" /></title>
 <style>
 .error {
 	color: red;
@@ -19,42 +20,42 @@
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
 				<fmt:message key="${typeform}"/>
-				<fmt:message key="com" />
+				<fmt:message key="competence.com" />
 
 			</h3>
 		</div>
 		<div class="panel-body">
-			<spring:message code="comCode" var="comCode" />
-			<spring:message code="comName" var="comName" />
-			<spring:message code="comDesc" var="comDesc" />
+			<spring:message code="competence.code" var="comCode" />
+			<spring:message code="competence.name" var="comName" />
+			<spring:message code="competence.desc" var="comDesc" />
 
 			<form:form method="post" commandName="competence" role="form">
 				<div>
 					<form:hidden path="id" />
 				</div>
 				<div class="form-group">
-					<label><fmt:message key="code" />: </label>
+					<label><fmt:message key="input.code" />: </label>
 					<form:input path="info.code" class="form-control"
 						placeholder="${comCode}" required="true" />
 					<form:errors path="info.code" cssStyle="color: #ff0000" />
 
 				</div>
 				<div class="form-group">
-					<label><fmt:message key="name" />: </label>
+					<label><fmt:message key="input.name" />: </label>
 					<form:input path="info.name" class="form-control"
 						placeholder="${comName}" required="true" />
 					<form:errors path="info.name" cssStyle="color: #ff0000" />
 
 				</div>
 				<div class="form-group">
-					<label><fmt:message key="desc" />: </label>
+					<label><fmt:message key="input.desc" />: </label>
 					<form:input path="info.description" class="form-control"
 						placeholder="${comDesc}" required="true" />
 					<form:errors path="info.description" cssStyle="color: #ff0000" />
 
 				</div>
 
-				<spring:message code="undelete" var="undelete" />
+				<spring:message code="common.undelete" var="undelete" />
 
 
 				<input type="submit" class="btn btn-success" value="<fmt:message key="${typeform}"/>"
@@ -69,7 +70,7 @@
 	<c:if test="${not empty errors}">
 		<div align="center">
 			<h3 class="panel-title list">
-				<fmt:message key="errors" />
+				<fmt:message key="error.errors" />
 				:
 			</h3>
 			<br />

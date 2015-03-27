@@ -1,3 +1,4 @@
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include.jsp"%>
 
 <html>
@@ -11,11 +12,11 @@
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
 
-				<fmt:message key="detailsUser" />
+				<fmt:message key="user.details" />
 			</h3>
 			<a class="btn list-btn btn-warning"
 				href="<c:url value='/user/${model.userDetails.id}/modify.htm'/>">
-				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span><fmt:message key="modify" />
+				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span><fmt:message key="common.modify" />
 			</a>
 
 		</div>
@@ -23,16 +24,16 @@
 		<div class="panel-body">
 			<div class="form-group">
 				<div class="form-group view">
-					<label><fmt:message key="username" />: </label>
+					<label><fmt:message key="access.username" />: </label>
 					<p class="details">${model.userDetails.username}</p>
 					<br>
-					<br> <label><fmt:message key="firstN" />: </label>
+					<br> <label><fmt:message key="user.firstN" />: </label>
 					<p class="details">${model.userDetails.firstName}</p>
 					<br>
-					<label><fmt:message key="lastN" />: </label>
+					<label><fmt:message key="user.lastN" />: </label>
 					<p class="details">${model.userDetails.lastName}</p>
 					<br>
-					<label><fmt:message key="email" />: </label>
+					<label><fmt:message key="user.email" />: </label>
 					<p class="details">${model.userDetails.email}</p>
 				</div>
 			</div>
@@ -44,7 +45,7 @@
 			<div class="panel-heading">
 				<h3 class="panel-title list">
 					<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="grList" />
+					<fmt:message key="group.list" />
 				</h3>
 
 			</div>
@@ -52,9 +53,9 @@
 
 				<table class="table table-striped table-bordered">
 					<tr align="center">
-						<td><div class="td-label"><fmt:message key="sub" /></div></td>
-						<td><div class="td-label"><fmt:message key="at" /></div></td>
-						<td><div class="td-label"><fmt:message key="gr" /></div></td>
+						<td><div class="td-label"><fmt:message key="subject.sub" /></div></td>
+						<td><div class="td-label"><fmt:message key="academicterm.at" /></div></td>
+						<td><div class="td-label"><fmt:message key="group.gr" /></div></td>
 
 					</tr>
 					<c:forEach items="${model.groups}" var="group">
@@ -74,7 +75,7 @@
 							</td>
 							<td><a class="btn btn-success"
 								href="<c:url value='/academicTerm/${group.course.academicTerm.id}/course/${group.course.id}/group/${group.id }.htm'/>">
-									<fmt:message key="view" /> </a></td>
+									<fmt:message key="common.view" /> </a></td>
 
 						</tr>
 					</c:forEach>
@@ -89,7 +90,7 @@
 			<div class="panel-heading">
 				<h3 class="panel-title list">
 					<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="courList" />
+					<fmt:message key="course.list" />
 				</h3>
 
 			</div>
@@ -97,8 +98,8 @@
 
 				<table class="table table-striped table-bordered">
 					<tr align="center">
-						<td><div class="td-label"><fmt:message key="sub" /></div></td>
-						<td><div class="td-label"><fmt:message key="at" /></div></td>
+						<td><div class="td-label"><fmt:message key="subject.sub" /></div></td>
+						<td><div class="td-label"><fmt:message key="academicterm.at" /></div></td>
 
 					</tr>
 					<c:forEach items="${model.courses}" var="course">
@@ -114,7 +115,7 @@
 							
 							<td><a class="btn btn-success"
 								href="<c:url value='/academicTerm/${course.academicTerm.id}/course/${course.id}.htm'/>">
-									<fmt:message key="view" /> </a></td>
+									<fmt:message key="common.view" /> </a></td>
 
 						</tr>
 					</c:forEach>

@@ -1,9 +1,10 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="org.apache.taglibs.standard.tag.common.xml.IfTag"%>
 <%@ include file="/WEB-INF/views/include.jsp"%>
 
 <html>
 <head>
-<title><fmt:message key="title" /></title>
+<title><fmt:message key="common.title" /></title>
 </head>
 <body>
 	<div class="table-responsive list">
@@ -11,7 +12,7 @@
 			<h4>  
 			
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="atList" /></h4>
+					<fmt:message key="academicterm.list" /></h4>
 			 
 	
 			
@@ -19,7 +20,7 @@
 			<a class="btn list-btn btn-warning2" style="cursor:copy;"
 				href="<c:url value='/academicTerm/add.htm'/>"> 
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="add" /> 
+				<fmt:message key="common.add" /> 
 			</a>
 			 </sec:authorize> 
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
@@ -43,9 +44,9 @@
 		<table class="table table-striped table-bordered">
 			<tr align="center">
 				<td></td>
-				<td><fmt:message key="term" /></td>
-				<td><fmt:message key="codDeg" /></td>
-				<td><fmt:message key="nameDeg" /></td>
+				<td><fmt:message key="academicterm.term" /></td>
+				<td><fmt:message key="degree.code" /></td>
+				<td><fmt:message key="degree.name" /></td>
 			</tr>
 
 
@@ -54,7 +55,7 @@
 				<tr align="center">
 					<td> <sec:authorize access="hasRole('ROLE_ADMIN')">
 					<a	href="<c:url value='/academicTerm/${academic.id}/clone.htm'/>"
-								class="btn btn-clone"><fmt:message key="copy" /></a> </sec:authorize></td>
+								class="btn btn-clone"><fmt:message key="common.copy" /></a> </sec:authorize></td>
 					<td><c:out value="${academic.term}" /></td>
 					<td><c:out value="${academic.degree.info.code}" /></td>
 					<td><c:out value="${academic.degree.info.name}" /></td>
@@ -62,17 +63,17 @@
 					<c:choose>
    						<c:when  test="${academic.isDeleted eq false}">
    							<a	href="<c:url value='/academicTerm/${academic.id}.htm?showAll=false'/>"
-								class="btn btn-success"><fmt:message key="view" /></a> 
+								class="btn btn-success"><fmt:message key="common.view" /></a> 
  							<sec:authorize access="hasRole('ROLE_ADMIN')">
  			
 							<a href="<c:url value='/academicTerm/${academic.id}/delete.htm'/>"
-								class="btn btn-danger"><fmt:message key="delete" /></a>
+								class="btn btn-danger"><fmt:message key="common.delete" /></a>
 							</sec:authorize>
 					</c:when>
 					<c:otherwise>
 						<sec:authorize access="hasRole('ROLE_ADMIN')">
 						<a	href="<c:url value='/academicTerm/${academic.id}/restore.htm'/>"
-								class="btn btn-success"><fmt:message key="restore"/></a> 
+								class="btn btn-success"><fmt:message key="common.restore"/></a> 
 						</sec:authorize>
 					</c:otherwise>
 				</c:choose>

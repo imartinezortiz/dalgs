@@ -1,18 +1,21 @@
 ---		TFG Project (March)	---
 
 //NOT WORKING
-1.- Implements the copy option for the entities
+1.- Implements the copy of activities
 
 
 //TO-DO
-1.- Finish User Module
 2.- Change messages in all services
 3.-	To Finish JSP messages:
-**** Except value="${valueButton}
+	**** typeOfUser 
+	**** Except value="${valueButton}
+4.- CSV (eliminar o incluir en la verificacion  a los usuarios)
+5.- Hacer mas comprobaciones a la hora de acceder a una entitie. Verificar con su id y el de su padre
+6.- new Collection -- addAll -- setCollection
 
-4.- CSV
-	
 
+//¿?¿?	
+1.- Permitir darse de alta (solo con role user)
 
 -------------------------------------------------------
 
@@ -20,25 +23,7 @@
 Optional: Change the pagination
 
 // DONE
-0.-	Finished JSP messages:
-	AcademicTerm
-	Activity
-	Access
-	Home
-	Include
-	Upload
-	Error
-	Exception
-	Competence
-	Course
-	Degree
-	Group
-	Module
-	Topic
-	Subject
-	User
-	
-
+0.-	Finished JSP messages
 1.- Isolate the manage of ACLs
 2.- Implement the trash (without link to restore)
 3.- Fix domain
@@ -54,4 +39,5 @@ Optional: Change the pagination
 13.- Adding professors to group, method POST 
 14.- Change the logic to use the trash when there are lists
 15.- Use the shame JSP to add and modify (when it is possible)
-
+16.- UTF-8 en todas las JSP
+17.- Finish User Module

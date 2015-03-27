@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 import es.ucm.fdi.dalgs.domain.Competence;
 import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.domain.Subject;
-import es.ucm.fdi.dalgs.domain.User;
 
 @Repository
 public class CompetenceRepository {

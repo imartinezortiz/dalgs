@@ -182,12 +182,11 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 		copy.activities = new ArrayList<Activity>();
 		copy.isDeleted=false;
 		
-//		for(Activity a: this.activities){
-//			Activity activity = new Activity();
-//				activity =  a.depth_copy();
-//				activity.setGroup(copy);
-//				copy.activities.add(activity);	
-//		}
+		for(Activity a: this.activities){
+			Activity activity = a.depth_copy();
+			activity.setGroup(copy);
+			copy.activities.add(activity);	
+		}
 		
 		copy.students = new ArrayList<User>();
 		copy.professors = new ArrayList<User>();

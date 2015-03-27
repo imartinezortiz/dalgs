@@ -1,9 +1,10 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include.jsp"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <html>
 <head>
-<title><fmt:message key="title" /></title>
+<title><fmt:message key="common.title" /></title>
 <style>
 .error {
 	color: red;
@@ -19,10 +20,10 @@
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
 			
-			<fmt:message key="detailsCom" />			</h3>
+			<fmt:message key="competence.details" />			</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<a class="btn list-btn btn-warning"
-					href="<c:url value='/degree/${degreeId}/competence/${competenceId}/modify.htm'/>"><fmt:message key="modify" /></a>
+					href="<c:url value='/degree/${degreeId}/competence/${competenceId}/modify.htm'/>"><fmt:message key="common.modify" /></a>
 			</sec:authorize>
 			<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')">
 			<c:choose>
@@ -53,19 +54,19 @@
 
 			<div class="form-group">
 				<div class="form-group view">
-					<label><fmt:message key="code" />: </label>
+					<label><fmt:message key="input.code" />: </label>
 					<p class="details">${model.competence.info.code}</p>
 				</div>
 				<div class="form-group view">
-					<label><fmt:message key="name" />: </label>
+					<label><fmt:message key="input.name" />: </label>
 					<p class="details">${model.competence.info.name}</p>
 				</div>
 				<div class="form-group view">
-					<label><fmt:message key="desc" />: </label>
+					<label><fmt:message key="input.desc" />: </label>
 					<p class="details">${model.competence.info.description}</p>
 				</div>
 				<div class="form-group view">
-					<label><fmt:message key="deg" />: </label>
+					<label><fmt:message key="degree.deg" />: </label>
 					<p class="details">${model.competence.degree.info.name}</p>
 				</div>
 			</div>
@@ -78,13 +79,13 @@
 
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="lgList" />
+				<fmt:message key="learninggoal.list" />
 			</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<a class="btn list-btn btn-warning2" style="cursor: copy;"
 					href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/add.htm'/>">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="add" />
+					<fmt:message key="common.add" />
 				</a>
 			</sec:authorize>
 
@@ -92,8 +93,8 @@
 		<div class="panel-body">
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label"><fmt:message key="name" /></div></td>
-					<td width="50%"><div class="td-label"><fmt:message key="desc" /></div></td>
+					<td width="20%"><div class="td-label"><fmt:message key="input.name" /></div></td>
+					<td width="50%"><div class="td-label"><fmt:message key="input.desc" /></div></td>
 
 				</tr>
 				<c:forEach items="${model.learningGoals}" var="learningGoal">
@@ -111,13 +112,13 @@
 								<c:when test="${learningGoal.isDeleted eq false}">
 									<a class="btn list-btn btn-success"
 										href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}.htm'/>">
-									<fmt:message key="view" /></a>
+									<fmt:message key="common.view" /></a>
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 
 										<a class="btn btn-danger"
 											href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}/delete.htm'/>">
 
-											<fmt:message key="delete" /> </a>
+											<fmt:message key="common.delete" /> </a>
 									</sec:authorize>
 								</c:when>
 								<c:otherwise>
@@ -125,7 +126,7 @@
 
 										<a class="btn btn-danger"
 											href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}/restore.htm'/>">
-											<fmt:message key="restore" /></a>
+											<fmt:message key="common.restore" /></a>
 									</sec:authorize>
 								</c:otherwise>
 							</c:choose></td>
