@@ -1,16 +1,16 @@
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include.jsp"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <html>
 <head>
-<title><fmt:message key="title" /></title>
+<title><fmt:message key="common.title" /></title>
 <style>
 .error {
 	color: red;
 }
 </style>
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
 
@@ -19,7 +19,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="${typeform}"/> <fmt:message key="mod" />
+				<fmt:message key="${typeform}"/> <fmt:message key="module.mod" />
 			</h3>
 		</div>
 		<div class="panel-body">
@@ -27,32 +27,32 @@
 
 				<form:hidden path="id" />
 
-		<spring:message code="modCode" var="modCode"/>
-		<spring:message code="modName" var="modName"/>
-		<spring:message code="modDesc" var="modDesc"/>
+		<spring:message code="module.code" var="modCode"/>
+		<spring:message code="module.name" var="modName"/>
+		<spring:message code="module.desc" var="modDesc"/>
 		
 				<div class="form-group">
-					<label><fmt:message key="code" />: </label>
+					<label><fmt:message key="input.code" />: </label>
 					<form:input path="info.code" class="form-control"
 						placeholder="${modCode}" required="true" />
 					<form:errors path="info.code" cssStyle="color: #ff0000" />
 
 				</div>
 				<div class="form-group">
-					<label><fmt:message key="name" />: </label>
+					<label><fmt:message key="input.name" />: </label>
 					<form:input path="info.name" class="form-control"
 						placeholder="${modName}" required="true" />
 					<form:errors path="info.name" cssStyle="color: #ff0000" />
 
 				</div>
 				<div class="form-group">
-					<label><fmt:message key="desc" />: </label>
+					<label><fmt:message key="input.desc" />: </label>
 					<form:input path="info.description" class="form-control"
 						placeholder="${modDesc}" required="true" />
 					<form:errors path="info.description" cssStyle="color: #ff0000" />
 
 				</div>
-		<spring:message code="undelete" var="undelete"/>
+		<spring:message code="common.undelete" var="undelete"/>
 
 				<input type="submit" class="btn btn-success" value="<fmt:message key="${typeform}"/>"
 					name="${valueButton}" />
@@ -65,7 +65,7 @@
 	</div>
 	<c:if test="${not empty errors}">
 		<div align="center">
-			<h3 class="panel-title list"><fmt:message key="errors" />:</h3>
+			<h3 class="panel-title list"><fmt:message key="error.errors" />:</h3>
 			<br />
 			<c:forEach items="${errors}" var="error">
 				<c:out value="${error}" />

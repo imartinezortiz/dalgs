@@ -45,7 +45,7 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 	private String name;
 	
 	//@NotNull
-	@ManyToOne(fetch = FetchType.EAGER, optional = false,cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false,cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_course")
 	private Course course;
 	
@@ -176,22 +176,20 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 
 	
 	public Group depth_copy() {
-		Group copy = new Group();
-//		copy = this.shallow_copy();
+		Group copy = this.shallow_copy();
 		
 		copy.id = null;
-//		copy.course = this.course;
-		copy.name = this.name;
-//		copy.activities = new ArrayList<Activity>();
+		copy.activities = new ArrayList<Activity>();
+		copy.isDeleted=false;
+		
 		for(Activity a: this.activities){
-			Activity activity = new Activity();
-				activity =  a.depth_copy();
-				activity.setGroup(copy);
-				copy.activities.add(activity);	
+			Activity activity = a.depth_copy();
+			activity.setGroup(copy);
+			copy.activities.add(activity);	
 		}
 		
-//		copy.students = new ArrayList<User>();
-//		copy.professors = new ArrayList<User>();
+		copy.students = new ArrayList<User>();
+		copy.professors = new ArrayList<User>();
 		
 		return copy;
 	}

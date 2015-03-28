@@ -1,28 +1,28 @@
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include.jsp"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <html>
 <head>
-<title><fmt:message key="title" /></title>
+<title><fmt:message key="common.title" /></title>
 <style>
 .error {
 	color: red;
 }
 </style>
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
 
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
 			<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
-			<h3 class="panel-title list"><fmt:message key="detailsTop" /></h3>
+			<h3 class="panel-title list"><fmt:message key="topic.details" /></h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<a class="btn list-btn btn-warning"
 					href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topicId}/modify.htm'/>">
 					<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="modify" />
+					<fmt:message key="common.modify" />
 				</a>
 			</sec:authorize>
 <sec:authorize access="hasRole('ROLE_ADMIN')">
@@ -53,21 +53,21 @@
 
 			<div class="form-group">
 				<div class="form-group view">
-					<label><fmt:message key="code" />: </label>
+					<label><fmt:message key="input.code" />: </label>
 					<p class="details">${model.topic.info.code}</p>
 				</div>
 				<div class="form-group view">
-					<label><fmt:message key="name" />: </label>
+					<label><fmt:message key="input.name" />: </label>
 					<p class="details">${model.topic.info.name}</p>
 				</div>
 
 				<div class="form-group view">
-					<label><fmt:message key="desc" />: </label>
+					<label><fmt:message key="input.desc" />: </label>
 					<p class="details">${model.topic.info.description}</p>
 				</div>
 
 				<div class="form-group view">
-					<label><fmt:message key="mod" />: </label>
+					<label><fmt:message key="module.mod" />: </label>
 					<p class="details">${model.topic.module.info.name}</p>
 				</div>
 			</div>
@@ -80,13 +80,13 @@
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 
-				<fmt:message key="subList" />
+				<fmt:message key="subject.list" />
 			</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<a style="cursor: copy;" class="btn list-btn btn-warning2"
 					href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topicId}/subject/add.htm'/>">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="add" />
+					<fmt:message key="common.add" />
 				</a>
 			</sec:authorize>
 
@@ -95,8 +95,8 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label"><fmt:message key="name" /></div></td>
-					<td width="50%"><div class="td-label"><fmt:message key="desc" /></div></td>
+					<td width="20%"><div class="td-label"><fmt:message key="input.name" /></div></td>
+					<td width="50%"><div class="td-label"><fmt:message key="input.desc" /></div></td>
 				</tr>
 				<c:forEach items="${model.subjects}" var="subject">
 					<tr align="center">
@@ -112,18 +112,18 @@
 								<c:when test="${subject.isDeleted eq false}">
 									<a class="btn list-btn btn-success"
 										href="<c:url value='/degree/${degreeId}/module/${subject.topic.module.id}/topic/${subject.topic.id}/subject/${subject.id}.htm'/>">
-										<fmt:message key="view" /></a>
+										<fmt:message key="common.view" /></a>
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 										<a class="btn btn-danger"
 											href="<c:url value='/degree/${degreeId}/module/${subject.topic.module.id}/topic/${subject.topic.id}/subject/${subject.id}/delete.htm'/>">
-											<fmt:message key="delete" /> </a>
+											<fmt:message key="common.delete" /> </a>
 									</sec:authorize>
 								</c:when>
 								<c:otherwise>
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 										<a class="btn btn-danger"
 											href="<c:url value='/degree/${degreeId}/module/${subject.topic.module.id}/topic/${subject.topic.id}/subject/${subject.id}/restore.htm'/>">
-											<fmt:message key="restore" /> </a>
+											<fmt:message key="common.restore" /> </a>
 									</sec:authorize>
 								</c:otherwise>
 							</c:choose></td>

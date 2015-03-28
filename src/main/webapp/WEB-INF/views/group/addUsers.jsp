@@ -1,9 +1,10 @@
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include.jsp"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <html>
 <head>
-<title><fmt:message key="title" /></title>
+<title><fmt:message key="common.title" /></title>
 <style>
 .error {
 	color: red;
@@ -27,7 +28,7 @@
 					<form:form method="post" commandName="group" role="form">
 
 						<form:hidden path="id" />
-						<label><fmt:message key="availableUsers" /> (${typeOfUser}):</label>
+						<label><fmt:message key="group.availableUsers" /> (${typeOfUser}):</label>
 						<div class="checkbox">
 							<c:choose>
 								<c:when test="${typeOfUser eq 'Proffesors'}">
@@ -47,7 +48,7 @@
 							</c:choose>
 
 						</div>
-						<spring:message code="add" var="add"/>
+						<spring:message code="common.add" var="add"/>
 						<input type="submit" class="btn btn-success" value="${add}"
 							name="AddProfessors" />
 					</form:form>

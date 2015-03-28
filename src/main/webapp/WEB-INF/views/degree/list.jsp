@@ -4,7 +4,7 @@
 
 <html>
 <head>
-<title><fmt:message key="title" /></title>
+<title><fmt:message key="common.title" /></title>
 </head>
 <body>
 
@@ -15,14 +15,14 @@
 
 			<h4>
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="degList" />
+				<fmt:message key="degree.list" />
 			</h4>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 
 				<a style="cursor: copy;" class="btn btn-add2"
 					href="<c:url value='/degree/add.htm'/>"> <span
 					class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="add" />
+					<fmt:message key="common.add" />
 				</a>
 			</sec:authorize><sec:authorize access="hasRole('ROLE_ADMIN')">
 			<c:choose>
@@ -48,9 +48,9 @@
 		</div>
 		<table class="table table-striped table-bordered">
 			<tr align="center">
-				<td><fmt:message key="code" /></td>
-				<td><fmt:message key="name" /></td>
-				<td width="40%"><fmt:message key="desc" /></td>
+				<td><fmt:message key="input.code" /></td>
+				<td><fmt:message key="input.name" /></td>
+				<td width="40%"><fmt:message key="input.desc" /></td>
 				
 			</tr>
 			<c:forEach items="${model.degrees}" var="degree">
@@ -62,16 +62,16 @@
 					<td><c:choose>
 							<c:when test="${degree.isDeleted eq false}">
 								<a class="btn btn-success"
-									href="<c:url value='/degree/${degree.id}.htm'/>"> <fmt:message key="view" /> </a>
+									href="<c:url value='/degree/${degree.id}.htm'/>"> <fmt:message key="common.view" /> </a>
 								<sec:authorize access="hasRole('ROLE_ADMIN')">
 									<a class="btn list-btn btn-danger"
-										href="<c:url value='/degree/${degree.id}/delete.htm'/>"> <fmt:message key="delete" /> </a>
+										href="<c:url value='/degree/${degree.id}/delete.htm'/>"> <fmt:message key="common.delete" /> </a>
 								</sec:authorize>
 							</c:when>
 							<c:otherwise>							
 							<sec:authorize access="hasRole('ROLE_ADMIN')">
 								<a href="<c:url value='/degree/${degree.id}/restore.htm'/>"
-									class="btn btn-success"><fmt:message key="restore" /></a></sec:authorize>
+									class="btn btn-success"><fmt:message key="common.restore" /></a></sec:authorize>
 							</c:otherwise>
 						</c:choose></td>
 

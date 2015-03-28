@@ -1,9 +1,10 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include.jsp"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <html>
 <head>
-<title><fmt:message key="title" /></title>
+<title><fmt:message key="common.title" /></title>
 <style>
 .error {
 	color: red;
@@ -18,7 +19,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">				
 			<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
-			<fmt:message key="courMod" /></h3>
+			<fmt:message key="course.mod" /></h3>
 		</div>
 		<div class="panel-body">
 
@@ -31,9 +32,9 @@
 				
 				
 				<div class="form-group">
-					<label><fmt:message key="sub" />: ${idSubject}</label>
+					<label><fmt:message key="subject.sub" />: ${idSubject}</label>
 					<form:select class="form-control 2" path="subject" >
-						<form:option value="">-- <fmt:message key="selectOp" /> --</form:option>
+						<form:option value="">-- <fmt:message key="common.selectOp" /> --</form:option>
 						<c:forEach items="${subjects}" var="subject">
 							<c:choose>
 								<c:when test="${subject.id == idSubject}">
@@ -49,9 +50,9 @@
 				</div>
 
 				<div class="form-group">
-					<label><fmt:message key="coordinator" />:</label>
+					<label><fmt:message key="course.coordinator" />:</label>
 					<form:select class="form-control 2" path="coordinator">
-						<form:option value="">-- <fmt:message key="selectOp" /> --</form:option>
+						<form:option value="">-- <fmt:message key="common.selectOp" /> --</form:option>
 						<c:forEach items="${professors}" var="prof">
 							<c:choose>
 								<c:when test="${prof.id == idCoordinator}">
@@ -65,7 +66,7 @@
 					</form:select>
 					<form:errors path="coordinator" cssStyle="color: #ff0000" />
 				</div>
-				<spring:message code="modify" var="modify"/>
+				<spring:message code="common.modify" var="modify"/>
 				<input type="submit" class="btn btn-success" value="${modify}" >
 
 			</form:form>
@@ -73,7 +74,7 @@
 	</div>
 	<c:if test="${not empty errors}">
 	<div align="center">
-		<h3 class="panel-title list"><fmt:message key="errors" />: </h3>	
+		<h3 class="panel-title list"><fmt:message key="error.errors" />: </h3>	
 			<br/>
 			<c:forEach items="${errors}" var="error">
 				<c:out  value="${error}" /><br/>

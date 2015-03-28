@@ -51,11 +51,17 @@ public class GroupRepository {
 		return em.find(Group.class, id_group);
 	}
 
-	public Group existByName(String name) {// , Long id) {
+
+	
+	public Group existInCourse(Long id_course, String name) {// , Long id) {
+		Course course = em.getReference(Course.class, id_course);
+
 		Query query = null;
 
-		query = em.createQuery("select g from Group g  where g.name = ?1");
-		query.setParameter(1, name);
+		query = em.createQuery("select g from Group g  where g.course = ?1 and g.name = ?2");
+		query.setParameter(1, course);
+		query.setParameter(2, name);
+
 
 		if (query.getResultList().isEmpty())
 			return null;

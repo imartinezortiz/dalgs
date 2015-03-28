@@ -1,9 +1,10 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include.jsp"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
-<title><fmt:message key="upload" /></title>
+<title><fmt:message key="upload.upload" /></title>
 </head>
 
 <body>
@@ -12,7 +13,7 @@
 
 		<div class="panel panel-primary group">
 			<div class="panel-heading">
-				<h3 class="panel-title list"><fmt:message key="upload" /> : ${className}</h3>
+				<h3 class="panel-title list"><fmt:message key="upload.upload" /> : ${className}</h3>
 
 			</div>
 
@@ -35,19 +36,19 @@
 					</div>
 					<br>
 					<div class="form-group view">
-						<label><fmt:message key="syntax" /></label>
+						<label><fmt:message key="upload.syntax" /></label>
 
 						<table>
 							<tr>
-								<td><p><fmt:message key="quote" /></p></td>
+								<td><p><fmt:message key="upload.quote" /></p></td>
 								<td><form:input path="quoteChar" type="text" value='\"' /></td>
 							</tr>
 							<tr>
-								<td><p><fmt:message key="delimiter" /></p></td>
+								<td><p><fmt:message key="upload.delimiter" /></p></td>
 								<td><form:input path="delimiterChar" type="text" value=',' /></td>
 							</tr>
 							<tr>
-								<td><p><fmt:message key="eol" /></p></td>
+								<td><p><fmt:message key="upload.eol" /></p></td>
 								<td><form:input path="endOfLineSymbols" type="text"
 										value='\r\n' /></td>
 							</tr>
@@ -56,10 +57,10 @@
 					<br>
 					<div class="form-group view">
 					
-					<spring:message code="choosefile" var="choose"/>
-					<spring:message code="upload" var="upload"/>
+					<spring:message code="upload.choosefile" var="choose"/>
+					<spring:message code="upload.upload" var="upload"/>
 					
-						<label><fmt:message key="file" /></label>
+						<label><fmt:message key="upload.file" /></label>
 						<form:input type="file" path="fileData" class="filestyle"
 							data-classButton="btn btn-primary" data-input="true"
 							data-classIcon="icon-plus" data-buttonText="${choose}" />
@@ -74,12 +75,12 @@
 
 			<div class="panel-body">
 				<table border='0' class="table table-striped">
-					<h4 style="text-align:center;"><fmt:message key="commonDel" /></h4>
+					<h4 style="text-align:center;"><fmt:message key="upload.commonDel" /></h4>
 					<tr>
-						<td align="left"><b><fmt:message key="constant" /></b></td>
-						<th align="center">	<fmt:message key="quote" /></th>
-						<th align="center"><fmt:message key="delimiter" /></th>
-						<th align="center"><fmt:message key="eol" /></th>
+						<td align="left"><b><fmt:message key="upload.constant" /></b></td>
+						<th align="center">	<fmt:message key="upload.quote" /></th>
+						<th align="center"><fmt:message key="upload.delimiter" /></th>
+						<th align="center"><fmt:message key="upload.eol" /></th>
 					</tr>
 					<tr>
 						<td align="left"><a

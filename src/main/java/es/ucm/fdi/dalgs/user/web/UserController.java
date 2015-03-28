@@ -218,10 +218,7 @@ public class UserController {
 		user_aux.setUsername(user.getUsername());
 		user_aux.setFirstName(user.getFirstName());
 		user_aux.setLastName(user.getLastName());
-		user_aux.setPassword(user.getPassword());
-		
 	
-
 		if (serviceUser.saveUser(user_aux)) {
 
 				return "redirect:/user/page/0.htm?showAll=" + showAll

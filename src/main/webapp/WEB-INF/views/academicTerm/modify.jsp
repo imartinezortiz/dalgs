@@ -1,9 +1,10 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include.jsp"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <html>
 <head>
-<title><fmt:message key="title" /></title>
+<title><fmt:message key="common.title" /></title>
 <style>
 .error {
 	color: red;
@@ -18,7 +19,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="atMod" />
+				<fmt:message key="academicterm.mod" />
 			</h3>
 		</div>
 		<div class="panel-body">
@@ -30,7 +31,7 @@
 					<form:hidden path="id" />					
 				</div>
 				<div class="form-group">
-					<label><fmt:message key="term" /> </label>
+					<label><fmt:message key="academicterm.term" /> </label>
 					<form:input path="term" class="form-control" required="true"
 						length="20" />
 				<form:errors path="term" cssStyle="color: #ff0000" />
@@ -44,7 +45,7 @@
 
 	<c:if test="${not empty errors}">
 		<div align="center">
-			<h3 class="panel-title list"><fmt:message key="errors" />:</h3>
+			<h3 class="panel-title list"><fmt:message key="error.errors" />:</h3>
 			<br />
 			<c:forEach items="${errors}" var="error">
 

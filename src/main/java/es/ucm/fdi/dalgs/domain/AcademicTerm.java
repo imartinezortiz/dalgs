@@ -145,6 +145,7 @@ public class AcademicTerm implements Cloneable, Copyable<AcademicTerm>, Serializ
 		AcademicTerm copy = this.shallow_copy();
 		copy.id = null;
 		copy.courses = new ArrayList<Course>();
+		copy.isDeleted=false;
 		
 		for (Course c : this.courses) {
 			Course course = c.depth_copy();
@@ -158,8 +159,7 @@ public class AcademicTerm implements Cloneable, Copyable<AcademicTerm>, Serializ
 	public AcademicTerm shallow_copy() {
 		try {
 			return  (AcademicTerm) super.clone();
-			
-			
+	
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}

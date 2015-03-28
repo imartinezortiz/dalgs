@@ -1,44 +1,44 @@
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include.jsp"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <html>
 <head>
-<title><fmt:message key="title" /></title>
+<title><fmt:message key="common.title" /></title>
 <style>
 .error {
 	color: red;
 }
 </style>
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
 
 	<div class="panel panel-primary group category">
 		<div class="panel-heading">
-			<h3 class="panel-title list"><fmt:message key="comAdd" /></h3>
+			<h3 class="panel-title list"><fmt:message key="competence.add" /></h3>
 		</div>
 		<div class="panel-body">
 
 			<form:form method="post" commandName="subject">
 				
 				<div class="form-group">
-					<label><fmt:message key="code" />: </label>
+					<label><fmt:message key="input.code" />: </label>
 					<form:input path="info.code" class="form-control" readonly="true" required="true"/>
 				</div>
 				<div class="form-group">
-					<label><fmt:message key="name" />: </label>
+					<label><fmt:message key="input.name" />: </label>
 					<form:input path="info.name" class="form-control" id="name" readonly="true" required="true"/>
 
 				</div>
 				<div class="form-group">
-					<label><fmt:message key="desc" />: </label>
+					<label><fmt:message key="input.desc" />: </label>
 					<form:input class="form-control" path="info.description"
 						id="description" readonly="true" required="true"/>
 				</div>
 
 				<div class="form-group">
-					<label><fmt:message key="availableCom" />:</label>
+					<label><fmt:message key="subject.availableCom" />:</label>
 					<div class="checkbox">
 						<form:checkboxes items="${competences}" path="competences"
 							itemLabel="info.name" />
@@ -47,7 +47,7 @@
 			
 					</div>
 				</div>
-				<spring:message code="add" var="add"/>
+				<spring:message code="common.add" var="add"/>
 				<input type="submit" class="btn btn-success" value="${add}" />
 
 			</form:form>

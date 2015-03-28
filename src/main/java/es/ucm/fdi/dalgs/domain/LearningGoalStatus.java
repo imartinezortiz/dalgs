@@ -49,9 +49,7 @@ public class LearningGoalStatus implements Cloneable, Copyable<LearningGoalStatu
 	
 	
 	public LearningGoalStatus depth_copy() {
-		LearningGoalStatus copy = new LearningGoalStatus();
-		copy.weight = this.weight;
-		copy.learningGoal= this.learningGoal;
+		LearningGoalStatus copy = this.shallow_copy();
 
 		return copy;
 	}

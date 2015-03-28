@@ -106,9 +106,9 @@ public class LearningGoal implements Cloneable, Copyable<LearningGoal>, Serializ
 	
 	
 	public LearningGoal depth_copy() {
-		LearningGoal copy = new LearningGoal();
-		copy.competence = this.competence;
+		LearningGoal copy = this.shallow_copy();
 		copy.id = null;
+		copy.isDeleted=false;
 		return copy;
 	}
 	

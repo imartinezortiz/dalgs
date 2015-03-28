@@ -1,22 +1,23 @@
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="org.apache.taglibs.standard.tag.common.xml.IfTag"%>
 <%@ include file="/WEB-INF/views/include.jsp"%>
 
 <html>
 <head>
-<title><fmt:message key="title" /></title>
+<title><fmt:message key="common.title" /></title>
 </head>
 <body>
 	<div class="table-responsive list">
 		<div class="panel-heading list">
 			<h4>  
 			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-			 <fmt:message key="userList" /></h4>
+			 <fmt:message key="user.list" /></h4>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 			
 			<a style="cursor:copy;" class="btn list-btn btn-warning2"
 				href="<c:url value='/user/add.htm'/>"> 
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="add" /> 
+				<fmt:message key="common.add" /> 
 			</a>
 			</sec:authorize><sec:authorize access="hasRole('ROLE_ADMIN')">
 			<c:choose>
@@ -39,9 +40,9 @@
 		</div>
 		<table class="table table-striped table-bordered">
 					<tr align="center">
-						<td><div class="td-label"><fmt:message key="lastN" /></div></td>
-						<td><div class="td-label"><fmt:message key="firstN" /></div></td>
-						<td><div class="td-label"><fmt:message key="email" /></div></td>
+						<td><div class="td-label"><fmt:message key="user.lastN" /></div></td>
+						<td><div class="td-label"><fmt:message key="user.firstN" /></div></td>
+						<td><div class="td-label"><fmt:message key="user.email" /></div></td>
 
 					</tr>
 					<c:forEach items="${model.users}" var="user">
@@ -63,16 +64,16 @@
 							<td>
 							<c:choose>
    								<c:when  test="${user.enabled eq true}">
-   									<a class="btn btn-success" href="<c:url value='/user/${user.id}.htm'/>"> <fmt:message key="view" /> </a> 
+   									<a class="btn btn-success" href="<c:url value='/user/${user.id}.htm'/>"> <fmt:message key="common.view" /> </a> 
 										<sec:authorize access="hasRole('ROLE_ADMIN')">
 											<a class="btn btn-danger" href="<c:url value='/user/${user.id}/status.htm'/>">
-											<fmt:message key="disabled" /></a>
+											<fmt:message key="common.disabled" /></a>
 										</sec:authorize>
       							</c:when>	
 								<c:otherwise>
 										<sec:authorize access="hasRole('ROLE_ADMIN')">
 											<a class="btn btn-danger" href="<c:url value='/user/${user.id}/status.htm'/>">
-											<fmt:message key="enabled" /></a>
+											<fmt:message key="common.enabled" /></a>
 										</sec:authorize>
 								</c:otherwise>
 							</c:choose>
