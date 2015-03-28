@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="org.apache.taglibs.standard.tag.common.xml.IfTag"%>
 <%@ include file="/WEB-INF/views/include.jsp"%>
 

@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!-- archivo de cabecera para incluir en todos los archivos JSP que crearemos con posterioridad. -->
 <%@ page
 	import="org.springframework.security.core.context.SecurityContextHolder"%>
@@ -14,9 +15,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!-- spring:out formatea la salida -->
 
-
-<!-- Encoding -->
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <link rel="shortcut icon"
 	href="<c:url value= "/resources/images/favicon.ico" />">

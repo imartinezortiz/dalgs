@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee"
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
   <display-name>Tfg</display-name>
   <servlet>
     <servlet-name>tfg</servlet-name>
@@ -10,6 +13,19 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
+
+	<!-- -->
+	<!-- Default JSPs' configuration -->
+	<!-- -->
+	<jsp-config>
+		<jsp-property-group>
+			<display-name>JSPs' configuration</display-name>
+			<url-pattern>*.jsp</url-pattern>
+			<page-encoding>UTF-8</page-encoding>
+			<default-content-type>text/html; charset=UTF-8</default-content-type>
+		</jsp-property-group>
+	</jsp-config>
+	
   <servlet-mapping>
     <servlet-name>tfg</servlet-name>
     <url-pattern>*.htm</url-pattern>
