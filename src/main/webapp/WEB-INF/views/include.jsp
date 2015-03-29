@@ -124,7 +124,7 @@
 						<li><a href="${userUrl}"> <span
 								class="glyphicon glyphicon-user" aria-hidden="true"></span>
 										<fmt:message key="access.login" />
- <span class="sr-only">(current)</span></a></li>
+ 					<span class="sr-only">(current)</span></a></li>
 					</sec:authorize>
 
 					<sec:authorize
@@ -159,12 +159,15 @@
 									CVS <span class="sr-only">(current)</span></a></li>
 						</sec:authorize>
 					</c:if>
+					<sec:authorize access="isAuthenticated()">
 					<p class="navbar-text navbar-right" style="font-size: 15px;">
 
 						<span class="glyphicon glyphicon-eye-open" aria-hidden="true">
 						</span> <fmt:message key="access.signedIn" />
- 						<a href="#" class="navbar-link"><%=SecurityContextHolder.getContext().getAuthentication().getName()%></a>&nbsp;&nbsp;
-					</p>
+ 						<a href="#" class="navbar-link">
+ 						<%=SecurityContextHolder.getContext().getAuthentication().getName()%>
+ 						</a>&nbsp;&nbsp;
+					</p></sec:authorize>
 				</ul>
 
 			</div>

@@ -356,8 +356,9 @@ public class AcademicTermController {
 	// Every Post have to return redirect
 	public String copyAcademicTerm(@PathVariable("academicId") Long id_academic, Locale locale) {
 		
-//			AcademicTerm at_aux =;
-		if(serviceAcademicTerm.copyAcademicTerm( serviceAcademicTerm.getAcademicTerm(id_academic,false).getSingleElement(), locale).getSingleElement() != null){
+		AcademicTerm at_aux = new AcademicTerm();
+		at_aux = serviceAcademicTerm.getAcademicTerm(id_academic,false).getSingleElement();
+		if(serviceAcademicTerm.copyAcademicTerm( at_aux, locale).getSingleElement() != null){
 		
 			return "redirect:/academicTerm/page/0.htm?showAll=" + showAll;
 		}

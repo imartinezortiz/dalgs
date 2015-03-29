@@ -17,6 +17,7 @@ import es.ucm.fdi.dalgs.activity.service.ActivityService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
+import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.domain.Group;
@@ -181,8 +182,10 @@ public class AcademicTermService {
 			Boolean showAll) {
 		ResultClass<AcademicTerm> result = new ResultClass<AcademicTerm>();
 		AcademicTerm aT = daoAcademicTerm.getAcademicTermById(id_academic);
-		aT.setCourses(serviceCourse.getCoursesByAcademicTerm(id_academic,
-				showAll));
+		Collection<Course> courses = new ArrayList<Course>();
+		courses.addAll(serviceCourse.getCoursesByAcademicTerm(id_academic,showAll));
+		
+		aT.setCourses(courses);
 		result.setSingleElement(aT);
 		return result;
 	}
@@ -251,13 +254,13 @@ public class AcademicTermService {
 			copy.setTerm(academicTerm.getTerm() + " (copy)");
 
 			for(Course c : copy.getCourses()){
-				c.setActivities(null);
+//				c.setActivities(null);
 
 //TODO				// ---> Fallan las actividades
-//				for(Activity a : c.getActivities()){
-//						a.setGroup(null);
-//						a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
-//				}	
+				for(Activity a : c.getActivities()){
+						a.setGroup(null);
+						a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
+				}	
 
 				
 				for (Group g : c.getGroups()){

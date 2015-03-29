@@ -178,25 +178,29 @@ public class ActivityController {
 			@PathVariable("activityId") Long id_activity, Model model)
 			throws ServletException {
 
-		Activity p = serviceActivity.getActivity(id_activity)
+		Activity p = serviceActivity.getActivity(id_activity, id_course,null)
 				.getSingleElement();
 		model.addAttribute("courseId", id_course);
 
-		if (!model.containsAttribute("modifyactivity")) {
-			model.addAttribute("modifyactivity", p);
-
+		if(p!=null){
+			if (!model.containsAttribute("modifyactivity")) {
+				model.addAttribute("modifyactivity", p);
+	
+			}
+	
+			Collection<LearningGoal> lg = serviceLearningGoal
+					.getLearningGoalsFromCourse(id_course, p);
+	
+			model.addAttribute("learningGoalStatus", p.getLearningGoalStatus());
+			model.addAttribute("learningGoals", lg);
+	
+			LearningGoalStatus cs = new LearningGoalStatus();
+			model.addAttribute("addlearningstatus", cs);
+	
+			return "activity/modifyChoose";
 		}
-
-		Collection<LearningGoal> lg = serviceLearningGoal
-				.getLearningGoalsFromCourse(id_course, p);
-
-		model.addAttribute("learningGoalStatus", p.getLearningGoalStatus());
-		model.addAttribute("learningGoals", lg);
-
-		LearningGoalStatus cs = new LearningGoalStatus();
-		model.addAttribute("addlearningstatus", cs);
-
-		return "activity/modifyChoose";
+		
+		return "redirect:/academicTerm/{academicId}/course/{courseId}.htm";
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/{activityId}/modify.htm", method = RequestMethod.POST)
@@ -311,15 +315,17 @@ public class ActivityController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		Activity a = serviceActivity.getActivity(id_activity)
-				.getSingleElement();
+		Activity a = serviceActivity.getActivity(id_activity, id_course, null).getSingleElement();
 
-		model.put("activity", a);
-		model.put("activityId", id_activity);
+		if(a!=null){
+			model.put("activity", a);
+			model.put("activityId", id_activity);
+			model.put("learningStatus", a.getLearningGoalStatus());
 
-		model.put("learningStatus", a.getLearningGoalStatus());
-
-		return new ModelAndView("activity/view", "model", model);
+			return new ModelAndView("activity/view", "model", model);
+		}
+		
+		return new ModelAndView("error", "model", model);
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/{activityId}/restore.htm")
@@ -331,7 +337,7 @@ public class ActivityController {
 		Course course = serviceCourse.getCourse(id_course).getSingleElement();
 
 		ResultClass<Activity> result = serviceActivity
-				.unDeleteActivity(course, null, serviceActivity.getActivity(id_activity)
+				.unDeleteActivity(course, null, serviceActivity.getActivity(id_activity,id_course,null)
 						.getSingleElement(), locale);
 
 		if (!result.hasErrors())
@@ -460,25 +466,29 @@ public class ActivityController {
 			@PathVariable("activityId") Long id_activity, Model model)
 			throws ServletException {
 
-		Activity p = serviceActivity.getActivity(id_activity)
+		Activity p = serviceActivity.getActivity(id_activity,null,id_group)
 				.getSingleElement();
-		model.addAttribute("courseId", id_course);
-
-		if (!model.containsAttribute("modifyactivity")) {
-			model.addAttribute("modifyactivity", p);
-
+		
+		if(p !=null){
+			model.addAttribute("courseId", id_course);
+	
+			if (!model.containsAttribute("modifyactivity")) {
+				model.addAttribute("modifyactivity", p);
+	
+			}
+	
+			Collection<LearningGoal> lg = serviceLearningGoal
+					.getLearningGoalsFromCourse(id_course, p);
+	
+			model.addAttribute("learningGoalStatus", p.getLearningGoalStatus());
+			model.addAttribute("learningGoals", lg);
+	
+			LearningGoalStatus cs = new LearningGoalStatus();
+			model.addAttribute("addlearningstatus", cs);
+	
+			return "activity/modifyChoose";
 		}
-
-		Collection<LearningGoal> lg = serviceLearningGoal
-				.getLearningGoalsFromCourse(id_course, p);
-
-		model.addAttribute("learningGoalStatus", p.getLearningGoalStatus());
-		model.addAttribute("learningGoals", lg);
-
-		LearningGoalStatus cs = new LearningGoalStatus();
-		model.addAttribute("addlearningstatus", cs);
-
-		return "activity/modifyChoose";
+		return "redirect:/academicTerm/{academicId}/course/{courseId}/group/{groupId}.htm";
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/activity/{activityId}/modify.htm", method = RequestMethod.POST)
@@ -601,15 +611,18 @@ public class ActivityController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		Activity a = serviceActivity.getActivity(id_activity)
+		Activity a = serviceActivity.getActivity(id_activity,null,id_group)
 				.getSingleElement();
 
-		model.put("activity", a);
-		model.put("activityId", id_activity);
-
-		model.put("learningStatus", a.getLearningGoalStatus());
-
-		return new ModelAndView("activity/view", "model", model);
+		if(a!=null){
+			model.put("activity", a);
+			model.put("activityId", id_activity);
+	
+			model.put("learningStatus", a.getLearningGoalStatus());
+	
+			return new ModelAndView("activity/view", "model", model);
+		}
+		return new ModelAndView("error", "model",model);
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/activity/{activityId}/restore.htm")
@@ -624,7 +637,7 @@ public class ActivityController {
 		Group group = serviceGroup.getGroup(id_group).getSingleElement();
 
 		ResultClass<Activity> result = serviceActivity
-				.unDeleteActivity(null, group,serviceActivity.getActivity(id_activity)
+				.unDeleteActivity(null, group,serviceActivity.getActivity(id_activity,null,id_group)
 						.getSingleElement(), locale);
 
 		if (!result.hasErrors())
