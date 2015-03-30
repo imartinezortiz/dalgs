@@ -31,7 +31,7 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
-
+	
 	@NotNull
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_subject")

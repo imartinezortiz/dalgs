@@ -103,7 +103,8 @@ public class ActivityRepository {
 		}
 
 		query.setParameter(1, course);
-		return query.getResultList();	
+//		List<Activity> a = (List<Activity>)query.getResultList();
+		return (List<Activity>)query.getResultList();	
 
 	}
 

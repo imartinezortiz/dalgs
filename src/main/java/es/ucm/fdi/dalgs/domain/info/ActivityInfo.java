@@ -10,8 +10,11 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import es.ucm.fdi.dalgs.domain.Copyable;
+import es.ucm.fdi.dalgs.domain.Course;
+
 @Embeddable
-public class ActivityInfo implements Serializable {
+public class ActivityInfo implements Serializable, Cloneable, Copyable<ActivityInfo>{
 
 	private static final long serialVersionUID = 1L;
 
@@ -78,6 +81,24 @@ public class ActivityInfo implements Serializable {
 			return false;
 		return true;
 	}
+
+	@Override
+	public ActivityInfo depth_copy() {
+		ActivityInfo copy = this.shallow_copy();
+		return copy;
+	}
+
+	@Override
+	public ActivityInfo shallow_copy() {
+		try {
+			return (ActivityInfo) super.clone();
+
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+
 
 	
 	
