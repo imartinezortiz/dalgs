@@ -154,7 +154,7 @@ public class TopicController {
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/modify.htm", method = RequestMethod.GET)
-	protected String modifyTopicGET(
+	public String modifyTopicGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
@@ -190,7 +190,7 @@ public class TopicController {
 	 * Methods for view topics
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}.htm", method = RequestMethod.GET)
-	protected ModelAndView getTopicGET(@PathVariable("topicId") Long id_topic,
+	public ModelAndView getTopicGET(@PathVariable("topicId") Long id_topic,
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean show)

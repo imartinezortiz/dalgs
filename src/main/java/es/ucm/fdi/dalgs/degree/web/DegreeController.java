@@ -184,7 +184,7 @@ public class DegreeController {
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/modify.htm", method = RequestMethod.GET)
-	protected String modifyDegreeGET(@PathVariable("degreeId") Long id,
+	public String modifyDegreeGET(@PathVariable("degreeId") Long id,
 			Model model) throws ServletException {
 
 		if (!model.containsAttribute("degree")) {
@@ -216,7 +216,7 @@ public class DegreeController {
 	 * Methods for view degrees
 	 */
 	@RequestMapping(value = "/degree/{degreeId}.htm", method = RequestMethod.GET)
-	protected ModelAndView degreeGET(
+	public ModelAndView degreeGET(
 			@PathVariable("degreeId") Long id_degree,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean show)
 			throws ServletException {

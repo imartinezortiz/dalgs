@@ -67,7 +67,7 @@ public class GroupController {
 	 */
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/add.htm", method = RequestMethod.GET)
-	protected String addGroupGET(@PathVariable("academicId") Long id_Long,
+	public String addGroupGET(@PathVariable("academicId") Long id_Long,
 			@PathVariable("courseId") Long id_course, Model model) {
 
 		model.addAttribute("valueButton", "Add");
@@ -156,7 +156,7 @@ public class GroupController {
 	 */
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/modify.htm", method = RequestMethod.GET)
-	protected String modifyGroupGET(
+	public String modifyGroupGET(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group, Model model)
@@ -228,7 +228,7 @@ public class GroupController {
 	 * Methods for view activities
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}.htm", method = RequestMethod.GET)
-	protected ModelAndView groupGET(
+	public ModelAndView groupGET(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") long id_group,
@@ -389,7 +389,7 @@ public class GroupController {
 	 * For binding the professor of the subject.
 	 */
 	@InitBinder
-	protected void initBinder(WebDataBinder binder) throws Exception {
+	public void initBinder(WebDataBinder binder) throws Exception {
 		binder.registerCustomEditor(Set.class, "professors",
 				new CustomCollectionEditor(Set.class) {
 					protected Object convertElement(Object element) {

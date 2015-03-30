@@ -64,7 +64,7 @@ public class AcademicTermController {
 	 * @return String
 	 */
 	@RequestMapping(value = "/academicTerm/add.htm", method = RequestMethod.GET)
-	protected String addAcademicTermGET(Model model) {
+	public String addAcademicTermGET(Model model) {
 
 		if (!model.containsAttribute("addAcademicTerm"))
 			model.addAttribute("addAcademicTerm", new AcademicTerm());
@@ -192,7 +192,7 @@ public class AcademicTermController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/academicTerm/page/{pageIndex}.htm")
-	protected ModelAndView academicTermsGET(
+	public ModelAndView academicTermsGET(
 			@PathVariable("pageIndex") Integer pageIndex,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean showAll)
 			throws ServletException, IOException {
@@ -220,7 +220,7 @@ public class AcademicTermController {
 	 * @throws ServletException
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}.htm", method = RequestMethod.GET)
-	protected ModelAndView academicTermGET(
+	public ModelAndView academicTermGET(
 			@PathVariable("academicId") Long id_academic,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean show)
 			throws ServletException {
@@ -248,7 +248,7 @@ public class AcademicTermController {
 	 * @throws ServletException
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/modify.htm", method = RequestMethod.GET)
-	protected String modifyAcademictermGET(
+	public String modifyAcademictermGET(
 			@PathVariable("academicId") Long id_academic, Model model)
 			throws ServletException {
 

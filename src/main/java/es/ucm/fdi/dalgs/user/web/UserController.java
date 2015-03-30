@@ -67,7 +67,7 @@ public class UserController {
 	 * Methods for list academic terms of a term
 	 */
 	@RequestMapping(value = "/user/page/{pageIndex}.htm")
-	protected ModelAndView getUsersGET(
+	public ModelAndView getUsersGET(
 			@PathVariable("pageIndex") Integer pageIndex,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean show,
 			@RequestParam(value = "typeOfUser") String typeOfUser)
@@ -89,7 +89,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/user/{userId}.htm", method = RequestMethod.GET)
-	protected ModelAndView getUserGET(@PathVariable("userId") Long id_user)
+	public ModelAndView getUserGET(@PathVariable("userId") Long id_user)
 			throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
@@ -125,7 +125,7 @@ public class UserController {
 	 * Methods for add a single user
 	 */
 	@RequestMapping(value = "/user/add.htm", method = RequestMethod.GET)
-	protected String addUserGET(Model model) {
+	public String addUserGET(Model model) {
 
 		User user = new User();
 
@@ -199,7 +199,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/user/{userId}/modify.htm", method = RequestMethod.GET)
-	protected String modifyUserGET(@PathVariable("userId") Long id_user, Model model) {
+	public String modifyUserGET(@PathVariable("userId") Long id_user, Model model) {
 
 		User user = serviceUser.getUser(id_user);
 
@@ -229,7 +229,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/user/{userId}/status.htm", method = RequestMethod.GET)
-	protected String disabledUser(@PathVariable("userId") Long id_user)
+	public String disabledUser(@PathVariable("userId") Long id_user)
 			throws ServletException {
 
 		User user = serviceUser.getUser(id_user);

@@ -75,7 +75,7 @@ public class ActivityController {
 	 */
 	@Secured({ "ROLE_ADMIN", "ROLE_PROFESSOR" })
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/add.htm", method = RequestMethod.GET)
-	protected String addActivityCourseGET(
+	public String addActivityCourseGET(
 			@PathVariable("academicId") Long id_Long,
 			@PathVariable("courseId") Long id_course, Model model) {
 
@@ -172,7 +172,7 @@ public class ActivityController {
 	 */
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/{activityId}/modify.htm", method = RequestMethod.GET)
-	protected String modifyActivityCourseGET(
+	public String modifyActivityCourseGET(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("activityId") Long id_activity, Model model)
@@ -242,7 +242,7 @@ public class ActivityController {
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{idCourse}/activity/{activityId}/addLearningStatus.htm", method = RequestMethod.POST)
-	protected String addLearningStatusPOST(
+	public String addLearningStatusPOST(
 			@PathVariable("academicId") Long id_academicTerm,
 			@PathVariable("idCourse") Long id_course,
 			@PathVariable("activityId") Long id,
@@ -307,7 +307,7 @@ public class ActivityController {
 	 * Methods for view activities
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/{activityId}.htm", method = RequestMethod.GET)
-	protected ModelAndView getActivityCourse(
+	public ModelAndView getActivityCourse(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("activityId") long id_activity)
@@ -359,7 +359,7 @@ public class ActivityController {
 	 */
 	@Secured({ "ROLE_ADMIN", "ROLE_PROFESSOR" })
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/activity/add.htm", method = RequestMethod.GET)
-	protected String addActivityGroupGET(
+	public String addActivityGroupGET(
 			@PathVariable("academicId") Long id_Long,
 			@PathVariable("groupId") Long id_group,
 			@PathVariable("courseId") Long id_course, Model model) {
@@ -459,7 +459,7 @@ public class ActivityController {
 	 */
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/activity/{activityId}/modify.htm", method = RequestMethod.GET)
-	protected String modifyActivityGroupGET(
+	public String modifyActivityGroupGET(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
@@ -531,7 +531,7 @@ public class ActivityController {
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{idCourse}/group/{groupId}/activity/{activityId}/addLearningStatus.htm", method = RequestMethod.POST)
-	protected String addLearningStatusGroupPOST(
+	public String addLearningStatusGroupPOST(
 			@PathVariable("academicId") Long id_academicTerm,
 			@PathVariable("idCourse") Long id_course,
 			@PathVariable("groupId") Long id_group,
@@ -602,7 +602,7 @@ public class ActivityController {
 	 * Methods for view activities
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/activity/{activityId}.htm", method = RequestMethod.GET)
-	protected ModelAndView getActivityGroup(
+	public ModelAndView getActivityGroup(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
@@ -654,7 +654,7 @@ public class ActivityController {
 	 * For binding the courses of the activity
 	 */
 	@InitBinder
-	protected void initBinder(WebDataBinder binder) throws Exception {
+	public void initBinder(WebDataBinder binder) throws Exception {
 		binder.registerCustomEditor(Set.class, "learningGoals",
 				new CustomCollectionEditor(Set.class) {
 					protected Object convertElement(Object element) {

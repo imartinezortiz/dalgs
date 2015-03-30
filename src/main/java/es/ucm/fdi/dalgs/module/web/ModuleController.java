@@ -153,7 +153,7 @@ public class ModuleController {
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/modify.htm", method = RequestMethod.GET)
-	protected String modifyModuleGET(
+	public String modifyModuleGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			Model model)
@@ -190,7 +190,7 @@ public class ModuleController {
 	 * Methods for view modules
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}.htm", method = RequestMethod.GET)
-	protected ModelAndView getModuleGET(@PathVariable("moduleId") Long id_module,
+	public ModelAndView getModuleGET(@PathVariable("moduleId") Long id_module,
 			@PathVariable("degreeId") Long id_degree,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean show)
 					throws ServletException {

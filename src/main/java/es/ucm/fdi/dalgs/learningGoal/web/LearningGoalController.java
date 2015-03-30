@@ -165,7 +165,7 @@ public class LearningGoalController {
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/{learninggoalId}/modify.htm", method = RequestMethod.GET)
-	protected String modifyLearningGoalGET(
+	public String modifyLearningGoalGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence, 
 			@PathVariable("learninggoalId") Long id_learningGoal,
@@ -190,7 +190,7 @@ public class LearningGoalController {
 	 * Methods for view LearningGoal
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/{learninggoalId}.htm", method = RequestMethod.GET)
-	protected ModelAndView getLearningGoalGET(
+	public ModelAndView getLearningGoalGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence,
 			@PathVariable("learninggoalId") Long id_learningGoal)

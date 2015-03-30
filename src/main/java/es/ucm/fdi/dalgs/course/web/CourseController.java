@@ -72,7 +72,7 @@ public class CourseController {
 	 * Methods for adding courses
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/add.htm", method = RequestMethod.GET)
-	protected String addCourseGET(@PathVariable("academicId") Long id_academic,
+	public String addCourseGET(@PathVariable("academicId") Long id_academic,
 			Model model) {
 
 		if (!model.containsAttribute("addCourse")) {
@@ -183,7 +183,7 @@ public class CourseController {
 	 * Methods for view courses
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}.htm", method = RequestMethod.GET)
-	protected ModelAndView viewCourseGET(
+	public ModelAndView viewCourseGET(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean showAll)
@@ -210,7 +210,7 @@ public class CourseController {
 	 */
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/modify.htm", method = RequestMethod.GET)
-	protected String modifyCourseGET(
+	public String modifyCourseGET(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id, Model model)
 			throws ServletException {
@@ -315,7 +315,7 @@ public class CourseController {
 	 * For binding subject and activities of the course.
 	 */
 	@InitBinder
-	protected void initBinder(WebDataBinder binder) throws Exception {
+	public void initBinder(WebDataBinder binder) throws Exception {
 		binder.registerCustomEditor(Set.class, "subject",
 				new CustomCollectionEditor(Set.class) {
 					protected Object convertElement(Object element) {

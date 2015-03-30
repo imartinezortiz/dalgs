@@ -72,7 +72,7 @@ public class SubjectController {
 	 * Methods for adding subjects
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/add.htm", method = RequestMethod.GET)
-	protected String addSubjectGET(Model model,
+	public String addSubjectGET(Model model,
 			@PathVariable("degreeId") Long id_degree) {
 		
 		if(!model.containsAttribute("subject"))
@@ -184,7 +184,7 @@ public class SubjectController {
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/modify.htm", method = RequestMethod.GET)
-	protected String modifySubjectGET(
+	public String modifySubjectGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
@@ -205,7 +205,7 @@ public class SubjectController {
 	 * Methods for view subjects
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}.htm", method = RequestMethod.GET)
-	protected ModelAndView getSubjectGET(
+	public ModelAndView getSubjectGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("subjectId") Long id_subject) throws ServletException {
 
@@ -243,7 +243,7 @@ public class SubjectController {
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/addCompetences.htm", method = RequestMethod.GET)
-	protected String addCompetenceToSubjectGET(
+	public String addCompetenceToSubjectGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("subjectId") Long id_subject, Model model) {
 
@@ -331,7 +331,7 @@ public class SubjectController {
 	 * For binding the competences of the subject.
 	 */
 	@InitBinder
-	protected void initBinder(WebDataBinder binder) throws Exception {
+	public void initBinder(WebDataBinder binder) throws Exception {
 		binder.registerCustomEditor(Set.class, "competences",
 				new CustomCollectionEditor(Set.class) {
 			protected Object convertElement(Object element) {
