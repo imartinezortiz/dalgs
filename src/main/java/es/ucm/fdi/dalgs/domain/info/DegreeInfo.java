@@ -11,8 +11,10 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import es.ucm.fdi.dalgs.domain.Copyable;
+
 @Embeddable
-public class DegreeInfo implements Serializable {
+public class DegreeInfo implements Serializable, Cloneable, Copyable<DegreeInfo> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -83,6 +85,21 @@ public class DegreeInfo implements Serializable {
 		return true;
 	}
 	
-	
+
+	@Override
+	public DegreeInfo depth_copy() {
+		DegreeInfo copy = this.shallow_copy();
+		return copy;
+	}
+
+	@Override
+	public DegreeInfo shallow_copy() {
+		try {
+			return (DegreeInfo) super.clone();
+
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
 }

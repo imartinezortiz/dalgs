@@ -251,26 +251,29 @@ public class AcademicTermService {
 			result.setErrorsList(errors);
 
 		} else {
-			copy.setTerm(academicTerm.getTerm() + " (copy)");
+			copy.setTerm(copy.getTerm() + " (copy)");
 
+			
 			for(Course c : copy.getCourses()){
+				
 //				c.setActivities(null);
 
 //TODO				// ---> Fallan las actividades
 				for(Activity a : c.getActivities()){
-						a.setGroup(null);
+		
+//						a.setGroup(null);
 						a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
 				}	
 
 				
 				for (Group g : c.getGroups()){
 					g.setName(g.getName() + " (copy)");
-					g.setActivities(null);
-//					for(Activity a : g.getActivities()){
-//						a.setCourse(null);
-////					a.setGroup(null);
-//						a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
-//					}
+//					g.setActivities(null);
+					for(Activity a : g.getActivities()){
+						a.setCourse(null);
+						a.setGroup(null);
+						a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
+					}
 				}
 				
 			}

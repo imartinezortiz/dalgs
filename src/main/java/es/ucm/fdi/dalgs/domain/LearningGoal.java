@@ -109,6 +109,10 @@ public class LearningGoal implements Cloneable, Copyable<LearningGoal>, Serializ
 		LearningGoal copy = this.shallow_copy();
 		copy.id = null;
 		copy.isDeleted=false;
+		
+		LearningGoalInfo lgInfo = copy.info.depth_copy();
+		copy.info = lgInfo;
+		
 		return copy;
 	}
 	

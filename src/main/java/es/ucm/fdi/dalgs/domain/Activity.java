@@ -33,6 +33,16 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 	@Column(name = "id_activity")
 	private Long id;
 	
+//	@Column(name = "code_activity", nullable = false, unique = true)
+//	private String code;
+//	public String getCode() {
+//		return code;
+//	}
+//
+//	public void setCode(String code) {
+//		this.code = code;
+//	}
+
 
 	@Embedded
 	private ActivityInfo info;
@@ -147,17 +157,17 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 		copy.id = null;
 		copy.isDeleted=false;
 
-//		copy.learningGoalStatus = new ArrayList<LearningGoalStatus>();
-//		for (LearningGoalStatus lgs : this.learningGoalStatus) {
-//			copy.learningGoalStatus.add(lgs.depth_copy());
-//		}
+		ActivityInfo aInfo = this.getInfo().depth_copy();
+		copy.info = aInfo;
+		copy.learningGoalStatus = new ArrayList<LearningGoalStatus>();
+
 		return copy;
 		
 	}
 
 	
 	public Activity shallow_copy() {
-		//	Shame reference
+		//	Same reference
 		try {
 			  return (Activity) super.clone();
 			

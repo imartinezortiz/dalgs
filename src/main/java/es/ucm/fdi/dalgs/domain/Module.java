@@ -132,6 +132,10 @@ public class Module implements Cloneable, Copyable<Module>, Serializable {
 		
 		copy.isDeleted=false;
 		copy.id=null;
+		
+		ModuleInfo mInfo = copy.info.depth_copy();
+		copy.info = mInfo;
+		
 		copy.topics = new ArrayList<>();
 		for (Topic t : this.topics) {
 			Topic topic  = t.depth_copy();

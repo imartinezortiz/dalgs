@@ -120,7 +120,14 @@ public class ActivityService {
 
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
-		Activity modifyActivity = daoActivity.getActivity(id_activity);
+		Activity modifyActivity = new Activity();
+		
+		if(group !=null){
+			modifyActivity  =daoActivity.getActivity(id_activity, null,group.getId());
+		}
+		else if (course!=null){
+			modifyActivity  =daoActivity.getActivity(id_activity, course.getId(), null);
+		}
 
 		Activity activityExists = daoActivity.existByCode(activity.getInfo()
 				.getCode());
@@ -154,16 +161,17 @@ public class ActivityService {
 	@Transactional(readOnly = false)
 	public ResultClass<Activity> getActivity(Long id, Long id_course, Long id_group) {
 		ResultClass<Activity> result = new ResultClass<Activity>();
-		Activity activity = daoActivity.getActivity(id);
+		Activity activity = new Activity();
+		if(id_course == null && id_group == null){
+			activity = daoActivity.getActivityFormatter(id);
+		}
+		else{
+			 activity = daoActivity.getActivity(id, id_course, id_group);
+		}
 		
-		if ((activity!=null) &&  
-				( (activity.getCourse() != null && activity.getCourse().getId() == id_course) || 
-				(activity.getGroup() != null && activity.getGroup().getId() == id_course)) )
-			
-			result.setSingleElement(activity);
-		
-		else result.setHasErrors(true);
-		
+		if (activity ==null)  result.setHasErrors(true);
+		else result.setSingleElement(activity);
+
 		return result;
 	}
 	
@@ -196,10 +204,17 @@ public class ActivityService {
 	@PreAuthorize("hasPermission(#course, 'ADMINISTRATION') or hasPermission(#group, 'ADMINISTRATION') ")
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean> deleteLearningActivity(Course course, Group group,
-			Long id_learningGoalStatus, Long id_Activity) {
+			Long id_learningGoalStatus, Long id_activity) {
 
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		Activity a = daoActivity.getActivity(id_Activity);
+		Activity a = new Activity();
+		
+		if(group !=null){
+			a  =daoActivity.getActivity(id_activity, null,group.getId());
+		}
+		else if (course!=null){
+			a  =daoActivity.getActivity(id_activity, course.getId(), null);
+		}
 
 		Collection<LearningGoalStatus> c = a.getLearningGoalStatus();
 		LearningGoal learningGoal = serviceLearningGoal.getLearningGoal(
@@ -225,15 +240,23 @@ public class ActivityService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> addLearningGoals(Course course, Group group, Long id,
 			LearningGoalStatus learningGoalStatus) {
-		Activity p = daoActivity.getActivity(id);
+		Activity activity  = new Activity();
+		
+		if(group !=null){
+			activity  =daoActivity.getActivity(id, null,group.getId());
+		}
+		else if (course!=null){
+			activity  =daoActivity.getActivity(id, course.getId(), null);
+		}
+		
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		if (learningGoalStatus.getWeight() <= 0.0
 				|| learningGoalStatus.getWeight() > 100.0) {
 			result.setSingleElement(false);
 
 		} else {
-			p.getLearningGoalStatus().add(learningGoalStatus);
-			result.setSingleElement(daoActivity.saveActivity(p));
+			activity.getLearningGoalStatus().add(learningGoalStatus);
+			result.setSingleElement(daoActivity.saveActivity(activity));
 		}
 
 		return result;

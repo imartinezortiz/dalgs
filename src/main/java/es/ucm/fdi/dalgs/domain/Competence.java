@@ -147,6 +147,10 @@ public class Competence implements Cloneable, Copyable<Competence>, Serializable
 		copy.isDeleted=false;
 		copy.id = null;
 		copy.learningGoals = new ArrayList<>();
+		
+		CompetenceInfo cInfo = copy.info.depth_copy();
+		copy.info = cInfo;
+		
 		for (LearningGoal lg : this.learningGoals) {
 			LearningGoal learningGoal = lg.depth_copy();
 			learningGoal.setCompetence(copy);

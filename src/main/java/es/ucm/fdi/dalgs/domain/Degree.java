@@ -124,6 +124,10 @@ public class Degree implements Cloneable ,Copyable<Degree>, Serializable {
 		copy.isDeleted=false;
 		copy.id = null;
 		copy.modules = new ArrayList<>();
+		
+		DegreeInfo dInfo = copy.info.depth_copy();
+		copy.info = dInfo;
+		
 		for (Module m : this.modules) {
 			Module module  = m.depth_copy();
 			module.setDegree(copy);

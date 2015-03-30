@@ -11,8 +11,10 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import es.ucm.fdi.dalgs.domain.Copyable;
+
 @Embeddable
-public class ModuleInfo implements Serializable {
+public class ModuleInfo implements Serializable,  Cloneable, Copyable<ModuleInfo> {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -83,6 +85,21 @@ public class ModuleInfo implements Serializable {
 		return true;
 	}
 	
-	
+
+	@Override
+	public ModuleInfo depth_copy() {
+		ModuleInfo copy = this.shallow_copy();
+		return copy;
+	}
+
+	@Override
+	public ModuleInfo shallow_copy() {
+		try {
+			return (ModuleInfo) super.clone();
+
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
 }

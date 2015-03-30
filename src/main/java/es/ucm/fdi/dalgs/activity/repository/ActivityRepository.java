@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import es.ucm.fdi.dalgs.domain.AcademicTerm;
 import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Group;
@@ -67,9 +68,32 @@ public class ActivityRepository {
 			return false;
 		}
 	}
-
-	public Activity getActivity(Long id) {
+	
+	public Activity getActivityFormatter(Long id) {
 		return em.find(Activity.class, id);
+	}
+
+	public Activity getActivity(Long id , Long id_course, Long id_group) {
+		
+		Query query = null;
+
+		if(id_course!=null){
+			Course course = em.getReference(Course.class, id_course);
+			query = em.createQuery("select a from Activity a where a.id=?1 and a.course=?2 and a.isDeleted='false' ");
+			query.setParameter(1, id);
+			query.setParameter(2, course);
+		} 
+		else if(id_group != null){
+			Group group = em.getReference(Group.class, id_group);
+			query = em.createQuery("select a from Activity a where a.id=?1 and a.group=?2 and a.isDeleted='false' ");
+			query.setParameter(1, id);
+			query.setParameter(2, group);
+		}
+		
+
+		if(query.getResultList().isEmpty()) return null;
+		
+		return (Activity) query.getSingleResult();		
 
 	}
 
@@ -103,7 +127,8 @@ public class ActivityRepository {
 		}
 
 		query.setParameter(1, course);
-		return query.getResultList();	
+//		List<Activity> a = (List<Activity>)query.getResultList();
+		return (List<Activity>)query.getResultList();	
 
 	}
 
@@ -219,5 +244,6 @@ public class ActivityRepository {
 		return true;
 	}
 
+	
 
 }

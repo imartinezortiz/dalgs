@@ -202,8 +202,8 @@ public class CourseService {
 	public ResultClass<Course> getCourseAll(Long id, Boolean showAll) {
 		ResultClass<Course> result = new ResultClass<>();
 		Course c = daoCourse.getCourse(id);
-		c.setActivities(serviceActivity.getActivitiesForCourse(id, showAll));
-		c.setGroups(serviceGroup.getGroupsForCourse(id, showAll));
+		c.getActivities().addAll(serviceActivity.getActivitiesForCourse(id, showAll));
+		c.getGroups().addAll(serviceGroup.getGroupsForCourse(id, showAll));
 		
 		result.setSingleElement(c);
 	

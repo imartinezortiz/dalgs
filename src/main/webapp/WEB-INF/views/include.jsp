@@ -1,5 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="org.springframework.security.core.context.SecurityContextHolder"%>
+<!-- archivo de cabecera para incluir en todos los archivos JSP que crearemos con posterioridad. -->
+<%@ page
+	import="org.springframework.security.core.context.SecurityContextHolder"%>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <%@ page session="false"%>

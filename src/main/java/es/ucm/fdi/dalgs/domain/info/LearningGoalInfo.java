@@ -11,8 +11,10 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import es.ucm.fdi.dalgs.domain.Copyable;
+
 @Embeddable
-public class LearningGoalInfo implements Serializable {
+public class LearningGoalInfo implements Serializable , Cloneable, Copyable<LearningGoalInfo>{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -83,5 +85,21 @@ public class LearningGoalInfo implements Serializable {
 		return true;
 	}
 	
+
+	@Override
+	public LearningGoalInfo depth_copy() {
+		LearningGoalInfo copy = this.shallow_copy();
+		return copy;
+	}
+
+	@Override
+	public LearningGoalInfo shallow_copy() {
+		try {
+			return (LearningGoalInfo) super.clone();
+
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
 }
