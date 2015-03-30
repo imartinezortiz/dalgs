@@ -270,8 +270,8 @@ public class AcademicTermService {
 					g.setName(g.getName() + " (copy)");
 //					g.setActivities(null);
 					for(Activity a : g.getActivities()){
-						a.setCourse(null);
-						a.setGroup(null);
+//						a.setCourse(null);
+//						a.setGroup(null);
 						a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
 					}
 				}
@@ -290,17 +290,17 @@ public class AcademicTermService {
 					for(Course c :exists.getCourses()){
 						success = success && manageAclService.addACLToObject(c.getId(), c.getClass().getName());
 					
-//						for(Activity a: c.getActivities()){
-//							success = success && manageAclService.addACLToObject(a.getId(), a.getClass().getName());
-//						}
+						for(Activity a: c.getActivities()){
+							success = success && manageAclService.addACLToObject(a.getId(), a.getClass().getName());
+						}
 					
 					
 						for(Group g: c.getGroups()){
 							success = success && manageAclService.addACLToObject(g.getId(), g.getClass().getName());
 
-//							for(Activity a: g.getActivities()){
-//								success = success && manageAclService.addACLToObject(a.getId(), a.getClass().getName());
-//							}
+							for(Activity a: g.getActivities()){
+								success = success && manageAclService.addACLToObject(a.getId(), a.getClass().getName());
+							}
 						}
 					}
 				}
