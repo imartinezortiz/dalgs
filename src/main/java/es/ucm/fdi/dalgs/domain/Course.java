@@ -176,7 +176,8 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 		for (Activity a : this.activities) {
 			Activity activity = a.depth_copy();
 			activity.setCourse(copy);
-			copy.getActivities().add(activity);
+//			activity.setGroup(null);
+			copy.activities.add(activity);
 		}
 		
 		copy.setCoordinator(null);
@@ -184,6 +185,7 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 		return copy;
 	
 	}
+	
 
 	public Course shallow_copy() {
 		try {

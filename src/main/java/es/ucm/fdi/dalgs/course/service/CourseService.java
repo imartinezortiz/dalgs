@@ -174,7 +174,9 @@ public class CourseService {
 	public ResultClass<Course> getCoursesByAcademicTerm(Long id_academic, Boolean showAll) {
 		ResultClass<Course> result = new ResultClass<>();
 
-		result.addAll(daoCourse.getCoursesByAcademicTerm(id_academic, showAll));
+		Collection<Course> courses = new ArrayList<Course>();
+		courses.addAll(daoCourse.getCoursesByAcademicTerm(id_academic, showAll)); 
+		result.addAll(courses);
 		return result;
 	}
 

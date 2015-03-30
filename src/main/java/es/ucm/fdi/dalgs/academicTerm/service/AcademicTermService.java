@@ -182,8 +182,10 @@ public class AcademicTermService {
 			Boolean showAll) {
 		ResultClass<AcademicTerm> result = new ResultClass<AcademicTerm>();
 		AcademicTerm aT = daoAcademicTerm.getAcademicTermById(id_academic);
-		aT.setCourses(serviceCourse.getCoursesByAcademicTerm(id_academic,
-				showAll));
+		Collection<Course> courses = new ArrayList<Course>();
+		courses.addAll(serviceCourse.getCoursesByAcademicTerm(id_academic,showAll));
+		
+		aT.setCourses(courses);
 		result.setSingleElement(aT);
 		return result;
 	}

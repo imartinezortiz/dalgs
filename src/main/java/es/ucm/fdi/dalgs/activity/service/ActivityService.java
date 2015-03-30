@@ -152,9 +152,18 @@ public class ActivityService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Activity> getActivity(Long id) {
+	public ResultClass<Activity> getActivity(Long id, Long id_course, Long id_group) {
 		ResultClass<Activity> result = new ResultClass<Activity>();
-		result.setSingleElement(daoActivity.getActivity(id));
+		Activity activity = daoActivity.getActivity(id);
+		
+		if ((activity!=null) &&  
+				( (activity.getCourse() != null && activity.getCourse().getId() == id_course) || 
+				(activity.getGroup() != null && activity.getGroup().getId() == id_course)) )
+			
+			result.setSingleElement(activity);
+		
+		else result.setHasErrors(true);
+		
 		return result;
 	}
 	

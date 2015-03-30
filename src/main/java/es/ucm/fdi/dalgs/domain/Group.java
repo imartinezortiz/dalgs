@@ -185,6 +185,7 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 		for(Activity a: this.activities){
 			Activity activity = a.depth_copy();
 			activity.setGroup(copy);
+			activity.setCourse(null);
 			copy.activities.add(activity);	
 		}
 		

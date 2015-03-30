@@ -37,7 +37,7 @@
 		<div class="alert alert-error">
 		<a href="#" class="close" data-dismiss="alert">&times;</a>
     	<c:if test="${!fn:contains(message, 'Success')}">
-    	<strong><fmt:message key="error.errors" />! </strong><fmt:message key="access.errorSub" /> <br>
+    	<strong><fmt:message key="common.errors" />! </strong><fmt:message key="error.errorSub" /> <br>
     	</c:if>
     	${message}
 		</div> 
