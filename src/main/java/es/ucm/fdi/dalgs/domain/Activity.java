@@ -147,7 +147,7 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 		copy.id = null;
 		copy.isDeleted=false;
 
-		copy.learningGoalStatus = new ArrayList<LearningGoalStatus>();
+//		copy.learningGoalStatus = new ArrayList<LearningGoalStatus>();
 //		for (LearningGoalStatus lgs : this.learningGoalStatus) {
 //			copy.learningGoalStatus.add(lgs.depth_copy());
 //		}

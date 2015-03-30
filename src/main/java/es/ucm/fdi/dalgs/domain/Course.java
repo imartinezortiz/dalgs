@@ -165,6 +165,7 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 		copy.id = null;
 		copy.groups = new ArrayList<Group>();
 		copy.isDeleted=false;
+		copy.activities = new ArrayList<Activity>();
 
 		for (Group g : this.groups) {
 			Group group = g.depth_copy();
@@ -172,12 +173,12 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 			copy.getGroups().add(group);
 		}
 		
-		copy.activities = new ArrayList<Activity>();
+//		copy.activities = new ArrayList<Activity>();
 		for (Activity a : this.activities) {
 			Activity activity = a.depth_copy();
 			activity.setCourse(copy);
-//			activity.setGroup(null);
-			copy.activities.add(activity);
+			activity.setGroup(null);
+			copy.getActivities().add(activity);
 		}
 		
 		copy.setCoordinator(null);
