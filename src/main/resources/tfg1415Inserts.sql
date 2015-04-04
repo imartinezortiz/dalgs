@@ -225,11 +225,11 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 
 	
 -- Competence Inserts 
-INSERT INTO competence (id_competence,code_competence,description,name,id_degree) VALUES (1,'COMP1','adquirir conocimientos en UML','UML',1);
-INSERT INTO competence (id_competence,code_competence,description,name,id_degree) VALUES (2,'COMP2','aprender diversos patrones de Ingenieria Software','Patrones',1);
-INSERT INTO competence (id_competence,code_competence,description,name,id_degree) VALUES (3,'COMP3','Saber diseñar una base de datos relacional','Base datos relacional',2);
-INSERT INTO competence (id_competence,code_competence,description,name,id_degree) VALUES (4,'COMP4','Adquirir conocimientos en consultas contra una base de datos','Consultas SQL',2);
-INSERT INTO competence (id_competence,code_competence,description,name,id_degree) VALUES (5,'COMP5','Aprendizaje de sincronizacion y comunicacion de procesos','Sincronizacion de Procesos',3);
+INSERT INTO competence (id_competence,code_competence,description,name, _type, id_degree) VALUES (1,'COMP1','adquirir conocimientos en UML','UML', 'básica', 1);
+INSERT INTO competence (id_competence,code_competence,description,name,_type,id_degree) VALUES (2,'COMP2','aprender diversos patrones de Ingenieria Software','Patrones','básica',1);
+INSERT INTO competence (id_competence,code_competence,description,name,_type,id_degree) VALUES (3,'COMP3','Saber diseñar una base de datos relacional','Base datos relacional','básica',2);
+INSERT INTO competence (id_competence,code_competence,description,name,_type,id_degree) VALUES (4,'COMP4','Adquirir conocimientos en consultas contra una base de datos','Consultas SQL','básica',2);
+INSERT INTO competence (id_competence,code_competence,description,name,_type,id_degree) VALUES (5,'COMP5','Aprendizaje de sincronizacion y comunicacion de procesos','Sincronizacion de Procesos','básica',3);
 
 -- Object Identity --
 INSERT INTO acl_object_identity (ID, ENTRIES_INHERITING, OBJECT_ID_IDENTITY, OBJECT_ID_CLASS, PARENT_OBJECT, OWNER_SID) VALUES (53,00000001,1,3,NULL,1);

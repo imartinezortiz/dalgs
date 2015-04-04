@@ -14,6 +14,7 @@ import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.domain.Competence;
 import es.ucm.fdi.dalgs.domain.Degree;
+import es.ucm.fdi.dalgs.domain.info.CompetenceInfo;
 
 public class CompetenceUpload {
 	
@@ -27,15 +28,17 @@ public class CompetenceUpload {
 			beanReader = new CsvBeanReader(new InputStreamReader(in,
 					Charset.forName(charsetName)), csvPreference);
 			// the name mapping provide the basis for bean setters
-			final String[] nameMapping = new String[] { "info.code", "info.name", "info.description"};
+			final String[] nameMapping = new String[] { "code","name", "description","type"};
 			// just read the header, so that it don't get mapped to User
 			// object
 			final String[] header = beanReader.getHeader(true);
 			final CellProcessor[] processors = getCompetenceProcessors();
 
-			Competence c;
+			CompetenceInfo info;
 
-			while ((c = beanReader.read(Competence.class, nameMapping, processors)) != null) {
+			while ((info = beanReader.read(CompetenceInfo.class, nameMapping, processors)) != null) {
+				Competence c = new Competence();
+				c.setInfo(info);
 				c.setDegree(degree);
 				competences.add(c);
 			}
@@ -54,8 +57,10 @@ public class CompetenceUpload {
 	        
 		final CellProcessor[] processors = new CellProcessor[] {
 				new NotNull(), //Code
-				new NotNull(), //Name
 				new NotNull(), // Description
+				new NotNull(), //Name
+				new NotNull(), //Type
+				
 		};
 		return processors;
 	}

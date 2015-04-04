@@ -14,6 +14,7 @@ import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.domain.Module;
 import es.ucm.fdi.dalgs.domain.Topic;
+import es.ucm.fdi.dalgs.domain.info.TopicInfo;
 
 public class TopicUpload {
 	
@@ -27,15 +28,17 @@ public class TopicUpload {
 			beanReader = new CsvBeanReader(new InputStreamReader(in,
 					Charset.forName(charsetName)), csvPreference);
 			// the name mapping provide the basis for bean setters
-			final String[] nameMapping = new String[] {"info.code", "info.name", "info.description"};
+			final String[] nameMapping = new String[] {"code", "name", "description"};
 			// just read the header, so that it don't get mapped to User
 			// object
 			final String[] header = beanReader.getHeader(true);
 			final CellProcessor[] processors = getTopicProcessors();
 
-			Topic t;
+			TopicInfo info;
 
-			while ((t = beanReader.read(Topic.class, nameMapping, processors)) != null) {
+			while ((info = beanReader.read(TopicInfo.class, nameMapping, processors)) != null) {
+				Topic t =  new Topic();
+				t.setInfo(info);
 				t.setModule(module);
 				topics.add(t);
 			}

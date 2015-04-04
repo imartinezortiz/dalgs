@@ -25,9 +25,9 @@ public class ModuleInfo implements Serializable,  Cloneable, Copyable<ModuleInfo
 	private String code;
 	
 	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=50)
+	@Size(min=1, max=100)
 	@Basic(optional = false)
-	@Column(name = "name", length = 50, nullable = false)
+	@Column(name = "name", length = 100, nullable = false)
 	private String name;
 
 	@NotEmpty @NotNull @NotBlank

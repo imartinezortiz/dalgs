@@ -85,6 +85,11 @@
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 					<fmt:message key="common.add" />
 				</a>
+				<a style="cursor: copy;" class="btn list-btn btn-warning2"
+					href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/upload.htm'/>">
+					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span> CSV
+			
+				</a>
 			</sec:authorize>
 
 		</div>
@@ -121,7 +126,7 @@
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 										<a class="btn btn-danger"
 											href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topic.id}/restore.htm'/>">
-											<fmt:message key="common.restore" /> </a>
+											<fmt:message key="common.restore" />  </a>
 									</sec:authorize>
 								</c:otherwise>
 							</c:choose></td>

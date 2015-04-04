@@ -93,6 +93,13 @@
 	<c:when test="${fn:contains(contextPath, 'module')}">
 		<c:url value="/upload/module.htm" var="uploadUrl" />
 	</c:when>
+	
+	<c:when test="${fn:contains(contextPath, 'degree')}">
+		<c:url value="/degree/upload.htm" var="uploadUrl" />
+	</c:when>
+	
+
+	
 	<c:otherwise>
 		<c:set value="disabled" var="upload" />
 	</c:otherwise>

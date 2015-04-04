@@ -22,21 +22,37 @@ public class CompetenceInfo implements Serializable, Cloneable, Copyable<Compete
 	
 
 	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=50)
+	@Size(min=1, max=100)
 	@Basic(optional = false)
-	@Column(name = "name", length = 50, nullable = false)
+	@Column(name = "name", length = 100, nullable = false)
 	private String name;
 
 	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=250)
+	@Size(min=1, max=1000)
 	@Basic(optional = false)
-	@Column(name = "description", length = 250, nullable = false)
+	@Column(name = "description", length = 1000, nullable = false)
 	private String description;
 	
 	@NotEmpty @NotNull @NotBlank
 	@Size(min=1, max=20)
 	@Column(name = "code_competence", nullable = false, unique = true)
 	private String code;
+	
+	@NotEmpty @NotNull @NotBlank
+	@Size(min=1, max=50)
+	@Basic(optional = false)
+	@Column(name = "_type", length = 50, nullable = false)
+	private String type;
+	
+	
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	public String getName() {
 		return name;

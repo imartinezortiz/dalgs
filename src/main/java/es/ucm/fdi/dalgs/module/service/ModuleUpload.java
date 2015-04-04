@@ -15,6 +15,7 @@ import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.domain.Module;
+import es.ucm.fdi.dalgs.domain.info.ModuleInfo;
 
 public class ModuleUpload {
 	
@@ -28,16 +29,18 @@ public class ModuleUpload {
 			beanReader = new CsvBeanReader(new InputStreamReader(in,
 					Charset.forName(charsetName)), csvPreference);
 			// the name mapping provide the basis for bean setters
-			final String[] nameMapping = new String[] { "info.code", "info.name", "info.description"};
+			final String[] nameMapping = new String[] { "code", "name", "description"};
 			// just read the header, so that it don't get mapped to User
 			// object
 			final String[] header = beanReader.getHeader(true);
 			final CellProcessor[] processors = getModuleProcessors();
 
-			Module m;
+			ModuleInfo info;
 
-			while ((m = beanReader.read(Module.class, nameMapping, processors)) != null) {
+			while ((info = beanReader.read(ModuleInfo.class, nameMapping, processors)) != null) {
+				Module m= new Module();
 				m.setDegree(degree);
+				m.setInfo(info);
 				modules.add(m);
 			}
 

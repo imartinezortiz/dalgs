@@ -256,7 +256,7 @@ public class SubjectService {
 		return result;
 		
 	}
-
+	@Transactional(readOnly = false)
 	public boolean uploadCSV(UploadForm upload, Long id_topic) {
 		CsvPreference prefers =
 				new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload

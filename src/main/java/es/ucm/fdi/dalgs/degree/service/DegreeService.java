@@ -237,7 +237,7 @@ public class DegreeService {
 		result.setSingleElement(daoDegree.numberOfPages(showAll));
 		return result;
 	}
-
+	@Transactional(readOnly = false)
 	public boolean uploadCSV(UploadForm upload) {
 		CsvPreference prefers =
 				new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload

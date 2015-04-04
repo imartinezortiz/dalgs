@@ -88,6 +88,11 @@
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 					<fmt:message key="common.add" />
 				</a>
+				<a style="cursor: copy;" class="btn list-btn btn-warning2"
+					href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/${topicId}/subject/upload.htm'/>">
+					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
+					<fmt:message key="common.add" />
+				</a>
 			</sec:authorize>
 
 		</div>

@@ -28,7 +28,7 @@
 			<spring:message code="competence.code" var="comCode" />
 			<spring:message code="competence.name" var="comName" />
 			<spring:message code="competence.desc" var="comDesc" />
-
+			<spring:message code="competence.type" var="comType" />
 			<form:form method="post" commandName="competence" role="form">
 				<div>
 					<form:hidden path="id" />
@@ -52,6 +52,13 @@
 					<form:input path="info.description" class="form-control"
 						placeholder="${comDesc}" required="true" />
 					<form:errors path="info.description" cssStyle="color: #ff0000" />
+
+				</div>
+				<div class="form-group">
+					<label><fmt:message key="input.type" />: </label>
+					<form:input path="info.type" class="form-control"
+						placeholder="${comType}" required="true" />
+					<form:errors path="info.type" cssStyle="color: #ff0000" />
 
 				</div>
 

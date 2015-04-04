@@ -19,9 +19,9 @@ public class SubjectInfo implements Serializable, Cloneable, Copyable<SubjectInf
 	private static final long serialVersionUID = 1L;
 	
 	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=50)
+	@Size(min=1, max=100)
 	@Basic(optional = false)
-	@Column(name = "name", length = 50, nullable = false)
+	@Column(name = "name", length = 100, nullable = false)
 	private String name;
 
 	@NotEmpty @NotNull @NotBlank

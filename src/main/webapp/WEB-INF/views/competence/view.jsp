@@ -19,33 +19,35 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
-			
-			<fmt:message key="competence.details" />			</h3>
+
+				<fmt:message key="competence.details" />
+			</h3>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<a class="btn list-btn btn-warning"
-					href="<c:url value='/degree/${degreeId}/competence/${competenceId}/modify.htm'/>"><fmt:message key="common.modify" /></a>
+					href="<c:url value='/degree/${degreeId}/competence/${competenceId}/modify.htm'/>"><fmt:message
+						key="common.modify" /></a>
 			</sec:authorize>
 			<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')">
-			<c:choose>
-				<c:when test="${model.showAll eq true}">
-					<a
-						href="<c:url value='/degree/${degreeId}/competence/${competenceId}.htm?showAll=false'>
+				<c:choose>
+					<c:when test="${model.showAll eq true}">
+						<a
+							href="<c:url value='/degree/${degreeId}/competence/${competenceId}.htm?showAll=false'>
     						</c:url>">
-						<img
-						src="<c:url value="/resources/images/theme/trash_open_view.png" /> "
-						style="float: right; margin-right: 1%; margin-top: -0.5%;">
-					</a>
-				</c:when>
-				<c:otherwise>
-					<a
-						href="<c:url value='/degree/${degreeId}/competence/${competenceId}.htm?showAll=true'> 
+							<img
+							src="<c:url value="/resources/images/theme/trash_open_view.png" /> "
+							style="float: right; margin-right: 1%; margin-top: -0.5%;">
+						</a>
+					</c:when>
+					<c:otherwise>
+						<a
+							href="<c:url value='/degree/${degreeId}/competence/${competenceId}.htm?showAll=true'> 
     							</c:url>">
-						<img
-						src="<c:url value="/resources/images/theme/trash_close_view.png" /> "
-						style="float: right; margin-right: 1%;">
-					</a>
-				</c:otherwise>
-			</c:choose>
+							<img
+							src="<c:url value="/resources/images/theme/trash_close_view.png" /> "
+							style="float: right; margin-right: 1%;">
+						</a>
+					</c:otherwise>
+				</c:choose>
 			</sec:authorize>
 		</div>
 
@@ -64,6 +66,10 @@
 				<div class="form-group view">
 					<label><fmt:message key="input.desc" />: </label>
 					<p class="details">${model.competence.info.description}</p>
+				</div>
+				<div class="form-group view">
+					<label><fmt:message key="input.type" />: </label>
+					<p class="details">${model.competence.info.type}</p>
 				</div>
 				<div class="form-group view">
 					<label><fmt:message key="degree.deg" />: </label>
@@ -93,8 +99,12 @@
 		<div class="panel-body">
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label"><fmt:message key="input.name" /></div></td>
-					<td width="50%"><div class="td-label"><fmt:message key="input.desc" /></div></td>
+					<td width="20%"><div class="td-label">
+							<fmt:message key="input.name" />
+						</div></td>
+					<td width="50%"><div class="td-label">
+							<fmt:message key="input.desc" />
+						</div></td>
 
 				</tr>
 				<c:forEach items="${model.learningGoals}" var="learningGoal">
@@ -112,13 +122,15 @@
 								<c:when test="${learningGoal.isDeleted eq false}">
 									<a class="btn list-btn btn-success"
 										href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}.htm'/>">
-									<fmt:message key="common.view" /></a>
+										<fmt:message key="common.view" />
+									</a>
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 
 										<a class="btn btn-danger"
 											href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}/delete.htm'/>">
 
-											<fmt:message key="common.delete" /> </a>
+											<fmt:message key="common.delete" />
+										</a>
 									</sec:authorize>
 								</c:when>
 								<c:otherwise>
@@ -126,7 +138,8 @@
 
 										<a class="btn btn-danger"
 											href="<c:url value='/degree/${degreeId}/competence/${competenceId}/learninggoal/${learningGoal.id}/restore.htm'/>">
-											<fmt:message key="common.restore" /></a>
+											<fmt:message key="common.restore" />
+										</a>
 									</sec:authorize>
 								</c:otherwise>
 							</c:choose></td>
