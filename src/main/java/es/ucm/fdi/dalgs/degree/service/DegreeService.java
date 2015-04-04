@@ -22,8 +22,6 @@ import es.ucm.fdi.dalgs.competence.service.CompetenceService;
 import es.ucm.fdi.dalgs.degree.repository.DegreeRepository;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
 import es.ucm.fdi.dalgs.domain.Degree;
-
-
 import es.ucm.fdi.dalgs.module.service.ModuleService;
 
 
@@ -239,6 +237,7 @@ public class DegreeService {
 	}
 	@Transactional(readOnly = false)
 	public boolean uploadCSV(UploadForm upload) {
+		boolean success=false;
 		CsvPreference prefers =
 				new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload
 						.getDelimiterChar().charAt(0), upload.getEndOfLineSymbols())
@@ -253,13 +252,25 @@ public class DegreeService {
 					list = degreeUpload.readCSVDegreeToBean(fileItem.getInputStream(),
 							upload.getCharset(), prefers);
 
-					return daoDegree.persistListDegrees(list);
+					
+					success= daoDegree.persistListDegrees(list);
+					if (success) {
+						for (Degree c : list) {
+							Degree aux = daoDegree.existByCode(c.getInfo().getCode());
+							success = success
+									&& manageAclService.addACLToObject(aux.getId(), aux
+											.getClass().getName());
+
+						}
+
+					}
+
 
 				} catch (IOException e) {
 					e.printStackTrace();
 					return false;
 				}
-		
+		return success;
 	
 	}
 	

@@ -169,17 +169,18 @@ public class UserController {
 
 	/** Method method to insert users massively */
 
-	@RequestMapping(value = "/upload/User.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "/user/upload.htm", method = RequestMethod.GET)
 	public String uploadGet(Model model) {
 		CharsetString charsets = new CharsetString();
 
 		model.addAttribute("className", "User");
 		model.addAttribute("listCharsets", charsets.ListCharsets());
 		model.addAttribute("newUpload", new UploadForm("User"));
+		model.addAttribute("typeOfUser", typeOfUser);
 		return "upload";
 	}
 
-	@RequestMapping(value = "/upload/User.htm", method = RequestMethod.POST)
+	@RequestMapping(value = "/user/upload.htm", method = RequestMethod.POST)
 	public String uploadPost(
 			@ModelAttribute("newUpload") @Valid UploadForm upload,
 			BindingResult result, Model model) {
@@ -192,7 +193,7 @@ public class UserController {
 			return "upload";
 		}
 
-		if (serviceUser.uploadCVS(upload))
+		if (serviceUser.uploadCVS(upload, typeOfUser))
 			return "home";
 		else
 			return "upload";

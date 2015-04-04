@@ -76,7 +76,7 @@ public class UserService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public boolean uploadCVS(UploadForm upload) {
+	public boolean uploadCVS(UploadForm upload, String typeOfUser) {
 		CsvPreference prefers =
 		new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload
 				.getDelimiterChar().charAt(0), upload.getEndOfLineSymbols())
@@ -87,9 +87,9 @@ public class UserService {
 			FileItem fileItem = upload.getFileData().getFileItem();
 			UserUpload userUpload = new UserUpload();
 			list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
-					upload.getCharset(), prefers);
+					upload.getCharset(), prefers , typeOfUser);
 
-			return daoUser.persistALotUsers(list);
+			return daoUser.persistListUsers(list);
 
 		} catch (IOException e) {
 			e.printStackTrace();

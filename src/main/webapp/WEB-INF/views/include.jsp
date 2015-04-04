@@ -76,34 +76,7 @@
 <c:url value="/admin.htm" var="adminUrl" />
 <c:url value="/logout.htm" var="logoutUrl" />
 
-<c:set var="contextPath"
-	value="${requestScope['javax.servlet.forward.request_uri']}" />
-<!-- Get URI -->
-<c:set value="enabled" var="upload" />
-<!-- Location Boolean  -->
 
-<!-- To do the same with the other entities -->
-
-<c:choose>
-	<c:when test="${fn:contains(contextPath, 'academicTerm')}">
-		<c:url value="/upload/academicTerm.htm" var="uploadUrl" />
-	</c:when>
-
-
-	<c:when test="${fn:contains(contextPath, 'module')}">
-		<c:url value="/upload/module.htm" var="uploadUrl" />
-	</c:when>
-	
-	<c:when test="${fn:contains(contextPath, 'degree')}">
-		<c:url value="/degree/upload.htm" var="uploadUrl" />
-	</c:when>
-	
-
-	
-	<c:otherwise>
-		<c:set value="disabled" var="upload" />
-	</c:otherwise>
-</c:choose>
 <%-- <c:out value="${upload}"></c:out>
 <c:out value="${contextPath}"></c:out>
  --%>
@@ -160,14 +133,9 @@
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
-					<c:if test="${upload == 'enabled'}">
-						<sec:authorize access="hasRole('ROLE_ADMIN')">
-
-							<li><a href="${uploadUrl}"> <span
-									class="glyphicon glyphicon-upload" aria-hidden="true"></span>
-									CVS <span class="sr-only">(current)</span></a></li>
-						</sec:authorize>
-					</c:if>
+					
+					
+					
 					<sec:authorize access="isAuthenticated()">
 					<p class="navbar-text navbar-right" style="font-size: 15px;">
 

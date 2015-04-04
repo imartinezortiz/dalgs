@@ -16,13 +16,14 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.domain.User;
+import es.ucm.fdi.dalgs.domain.UserRole;
 
 public class UserUpload {
 	
 	
 	@SuppressWarnings("unused")
 	public	 List<User> readCSVUserToBean(InputStream in,
-			String charsetName, CsvPreference csvPreference) throws IOException {
+			String charsetName, CsvPreference csvPreference, String typeOfUser) throws IOException {
 		CsvBeanReader beanReader = null;
 		List<User> users = new ArrayList<User>();
 		try {
@@ -30,7 +31,7 @@ public class UserUpload {
 					Charset.forName(charsetName)), csvPreference);
 			// the name mapping provide the basis for bean setters
 			final String[] nameMapping = new String[] { "id","email", "firstname",
-					"lastname", "password", "username"};
+					"lastname", "password", "username", "fullname"};
 			// just read the header, so that it don't get mapped to User
 			// object
 			final String[] header = beanReader.getHeader(true);
@@ -39,6 +40,8 @@ public class UserUpload {
 			User u;
 
 			while ((u = beanReader.read(User.class, nameMapping, processors)) != null) {
+				u.getRoles().add(new UserRole( "ROLE_USER"));
+				u.getRoles().add(new UserRole( typeOfUser));
 				users.add(u);
 			}
 
@@ -62,6 +65,7 @@ public class UserUpload {
 				new NotNull(), // Lastname
 				new UniqueHashCode(), // Username
 				new NotNull(), // Password
+				new NotNull(), // Fullname
 		};
 		return processors;
 	}

@@ -19,6 +19,8 @@
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 				<fmt:message key="common.add" /> 
 			</a>
+				<a class="btn btn-cvs " href="<c:url value='/user/upload.htm'/>"> 
+					<span class="glyphicon glyphicon-upload" aria-hidden="true"></span> CSV </a>
 			</sec:authorize><sec:authorize access="hasRole('ROLE_ADMIN')">
 			<c:choose>
    				<c:when  test="${model.showAll eq true}">

@@ -85,11 +85,10 @@
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 					<fmt:message key="common.add" />
 				</a>
-				<a style="cursor: copy;" class="btn list-btn btn-warning2"
-					href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/upload.htm'/>">
-					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span> CSV
-			
-				</a>
+				<a class="btn btn-cvs " href="<c:url value='/degree/${degreeId}/module/${moduleId}/topic/upload.htm'/>"> 
+					<span class="glyphicon glyphicon-upload" aria-hidden="true"></span> CSV </a>
+				
+				
 			</sec:authorize>
 
 		</div>

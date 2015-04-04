@@ -201,6 +201,7 @@ public class ModuleService {
 	}
 	@Transactional(readOnly = false)
 	public boolean uploadCSV(UploadForm upload, Long id_degree) {
+		boolean success= false;
 		CsvPreference prefers =
 				new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload
 						.getDelimiterChar().charAt(0), upload.getEndOfLineSymbols())
@@ -215,14 +216,24 @@ public class ModuleService {
 					list = moduleUpload.readCSVModuleToBean(fileItem.getInputStream(),
 							upload.getCharset(), prefers, d);
 
-					return daoModule.persistListModules(list);
+					success= daoModule.persistListModules(list);
+					if (success) {
+						for (Module c : list) {
+							Module aux = daoModule.existByCode(c.getInfo().getCode(),id_degree);
+							success = success
+									&& manageAclService.addACLToObject(aux.getId(), aux
+											.getClass().getName());
+
+						}
+
+					}
 
 				} catch (IOException e) {
 					e.printStackTrace();
 					return false;
 				}
 		
-	
+	return success;
 	}
 	
 }

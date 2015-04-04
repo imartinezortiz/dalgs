@@ -269,3 +269,9 @@ a.btn.btn-clone {
   margin-right: 1%;
 
 }
+
+a.btn.btn-cvs {
+  font-weight: bolder;
+  color: rgb(160, 13, 23);
+  font-size: large;
+}

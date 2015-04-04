@@ -22,10 +22,8 @@ import es.ucm.fdi.dalgs.competence.repository.CompetenceRepository;
 import es.ucm.fdi.dalgs.degree.service.DegreeService;
 import es.ucm.fdi.dalgs.domain.Competence;
 import es.ucm.fdi.dalgs.domain.Degree;
-
 import es.ucm.fdi.dalgs.learningGoal.service.LearningGoalService;
 import es.ucm.fdi.dalgs.subject.service.SubjectService;
-
 
 @Service
 public class CompetenceService {
@@ -38,56 +36,63 @@ public class CompetenceService {
 	@Autowired
 	private DegreeService serviceDegree;
 
-	@Autowired 
+	@Autowired
 	private LearningGoalService serviceLearning;
-	
+
 	@Autowired
 	private AclObjectService manageAclService;
-	
+
 	@Autowired
 	private MessageSource messageSource;
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Competence> addCompetence(Competence competence, Long id_degree, Locale locale) {
-		
-		boolean success  = false;
-		
-		competence.setDegree(serviceDegree.getDegree(id_degree).getSingleElement());
-		
-		Competence competenceExists = daoCompetence.existByCode(competence.getInfo().getCode(), competence.getDegree());
+	public ResultClass<Competence> addCompetence(Competence competence,
+			Long id_degree, Locale locale) {
+
+		boolean success = false;
+
+		competence.setDegree(serviceDegree.getDegree(id_degree)
+				.getSingleElement());
+
+		Competence competenceExists = daoCompetence.existByCode(competence
+				.getInfo().getCode(), competence.getDegree());
 		ResultClass<Competence> result = new ResultClass<>();
 
-		if( competenceExists != null){
+		if (competenceExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
 			errors.add(messageSource.getMessage("error.Code", null, locale));
 
-			if (competenceExists.getIsDeleted()){
+			if (competenceExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add(messageSource.getMessage("error.deleted", null, locale));
+				errors.add(messageSource.getMessage("error.deleted", null,
+						locale));
 				result.setSingleElement(competenceExists);
 
-			}
-			else result.setSingleElement(competence);
+			} else
+				result.setSingleElement(competence);
 			result.setErrorsList(errors);
-		}
-		else{
+		} else {
 
 			success = daoCompetence.addCompetence(competence);
-			
-			if(success){
-				competenceExists = daoCompetence.existByCode(competence.getInfo().getCode(), competence.getDegree());
-				success = manageAclService.addACLToObject(competenceExists.getId(), competenceExists.getClass().getName());
-				if (success) result.setSingleElement(competence);
-			
-			}else{
-				throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
+
+			if (success) {
+				competenceExists = daoCompetence.existByCode(competence
+						.getInfo().getCode(), competence.getDegree());
+				success = manageAclService.addACLToObject(competenceExists
+						.getId(), competenceExists.getClass().getName());
+				if (success)
+					result.setSingleElement(competence);
+
+			} else {
+				throw new IllegalArgumentException(
+						"Cannot create ACL. Object not set.");
 
 			}
-			
+
 		}
-		return result;	
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -97,8 +102,8 @@ public class CompetenceService {
 		result.addAll(daoCompetence.getAll());
 		return result;
 	}
-	
-	@PreAuthorize("hasRole('ROLE_USER')")	
+
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
 	public ResultClass<Competence> getCompetence(Long id) {
 		ResultClass<Competence> result = new ResultClass<Competence>();
@@ -119,11 +124,14 @@ public class CompetenceService {
 	public ResultClass<Boolean> deleteCompetence(Competence competence) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		Collection <Competence> competences= new ArrayList<>();
+		Collection<Competence> competences = new ArrayList<>();
 		competences.add(competence);
-		if(!serviceLearning.deleteLearningGoalForCompetences(competences).getSingleElement()) result.setSingleElement(false);
-		else result.setSingleElement(daoCompetence.deleteCompetence(competence));
-		 return result;
+		if (!serviceLearning.deleteLearningGoalForCompetences(competences)
+				.getSingleElement())
+			result.setSingleElement(false);
+		else
+			result.setSingleElement(daoCompetence.deleteCompetence(competence));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -136,7 +144,8 @@ public class CompetenceService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<Competence> getCompetencesForDegree(Long id_degree, Boolean show) {
+	public ResultClass<Competence> getCompetencesForDegree(Long id_degree,
+			Boolean show) {
 		ResultClass<Competence> result = new ResultClass<>();
 
 		result.addAll(daoCompetence.getCompetencesForDegree(id_degree, show));
@@ -145,133 +154,158 @@ public class CompetenceService {
 
 	@PreAuthorize("hasPermission(#competence, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifyCompetence(Competence competence, Long id_competence, Long id_degree, Locale locale) {
+	public ResultClass<Boolean> modifyCompetence(Competence competence,
+			Long id_competence, Long id_degree, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		
-		competence.setDegree(serviceDegree.getDegree(id_degree).getSingleElement());
-		Competence modifyCompetence = daoCompetence.getCompetence(id_competence);
-		
-		Competence competenceExists = daoCompetence.existByCode(competence.getInfo().getCode(),competence.getDegree() );
-		
-		if(!competence.getInfo().getCode().equalsIgnoreCase(modifyCompetence.getInfo().getCode()) && 
-				competenceExists != null){
+
+		competence.setDegree(serviceDegree.getDegree(id_degree)
+				.getSingleElement());
+		Competence modifyCompetence = daoCompetence
+				.getCompetence(id_competence);
+
+		Competence competenceExists = daoCompetence.existByCode(competence
+				.getInfo().getCode(), competence.getDegree());
+
+		if (!competence.getInfo().getCode()
+				.equalsIgnoreCase(modifyCompetence.getInfo().getCode())
+				&& competenceExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<>();
 			errors.add(messageSource.getMessage("error.newCode", null, locale));
 
-			if (competenceExists.getIsDeleted()){
+			if (competenceExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add(messageSource.getMessage("error.deleted", null, locale));
+				errors.add(messageSource.getMessage("error.deleted", null,
+						locale));
 
 			}
 			result.setErrorsList(errors);
 			result.setSingleElement(false);
-		}
-		else{
+		} else {
 			modifyCompetence.setInfo(competence.getInfo());
 			boolean r = daoCompetence.saveCompetence(modifyCompetence);
-			if (r) 
+			if (r)
 				result.setSingleElement(true);
 		}
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean> deleteCompetenceFromSubject(Long id_competence,
 			Long id_subject) {
 		// Subject subject = daoSubject.getSubject(id);
 		ResultClass<Boolean> result = new ResultClass<>();
-		Collection<Competence> c = serviceSubject.getSubject(id_subject).getSingleElement()
-				.getCompetences();
+		Collection<Competence> c = serviceSubject.getSubject(id_subject)
+				.getSingleElement().getCompetences();
 		try {
 			c.remove(daoCompetence.getCompetence(id_competence));
 			result.setSingleElement(true);
-			
 
 		} catch (Exception e) {
-			result.setSingleElement(false);;
+			result.setSingleElement(false);
+			;
 		}
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResultClass<Boolean> deleteCompetencesForDegree(Degree degree) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		if(serviceLearning.deleteLearningGoalForCompetences(degree.getCompetences()).getSingleElement()){
-			result.setSingleElement(daoCompetence.deleteCompetencesForDegree(degree));
+		if (serviceLearning.deleteLearningGoalForCompetences(
+				degree.getCompetences()).getSingleElement()) {
+			result.setSingleElement(daoCompetence
+					.deleteCompetencesForDegree(degree));
 		}
-			
-		else result.setSingleElement(false);
-		
+
+		else
+			result.setSingleElement(false);
+
 		return result;
 	}
-
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<Competence> getCompetenceAll(Long id_competence, Boolean show) {
+	public ResultClass<Competence> getCompetenceAll(Long id_competence,
+			Boolean show) {
 		ResultClass<Competence> result = new ResultClass<>();
 		Competence competence = daoCompetence.getCompetence(id_competence);
-		competence.setLearningGoals(serviceLearning.getLearningGoalsFromCompetence(competence, show));
+		competence.setLearningGoals(serviceLearning
+				.getLearningGoalsFromCompetence(competence, show));
 		result.setSingleElement(competence);
 		return result;
 	}
-	
+
 	@PreAuthorize("hasPermission(#competence, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Competence> unDeleteCompetence(Competence competence, Long id_degree, Locale locale) {
-		
-		competence.setDegree(serviceDegree.getDegree(id_degree).getSingleElement());
-		Competence c = daoCompetence.existByCode(competence.getInfo().getCode(), competence.getDegree());
+	public ResultClass<Competence> unDeleteCompetence(Competence competence,
+			Long id_degree, Locale locale) {
+
+		competence.setDegree(serviceDegree.getDegree(id_degree)
+				.getSingleElement());
+		Competence c = daoCompetence.existByCode(
+				competence.getInfo().getCode(), competence.getDegree());
 		ResultClass<Competence> result = new ResultClass<>();
-		if(c == null){
+		if (c == null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<>();
-			errors.add(messageSource.getMessage("error.ElementNoExists", null, locale));
+			errors.add(messageSource.getMessage("error.ElementNoExists", null,
+					locale));
 			result.setErrorsList(errors);
 
-		}
-		else{
-			if(!c.getIsDeleted()){
+		} else {
+			if (!c.getIsDeleted()) {
 				Collection<String> errors = new ArrayList<>();
-				errors.add(messageSource.getMessage("error.CodeNoDeleted", null, locale));
+				errors.add(messageSource.getMessage("error.CodeNoDeleted",
+						null, locale));
 				result.setErrorsList(errors);
 			}
 
 			c.setDeleted(false);
 			c.setInfo(competence.getInfo());
 			boolean r = daoCompetence.saveCompetence(c);
-			if(r) 
-				result.setSingleElement(c);	
+			if (r)
+				result.setSingleElement(c);
 
 		}
 		return result;
 	}
+
 	@Transactional(readOnly = false)
 	public boolean uploadCSV(UploadForm upload, Long id_degree) {
-		CsvPreference prefers =
-				new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload
-						.getDelimiterChar().charAt(0), upload.getEndOfLineSymbols())
-						.build();
+		boolean success = false;
+		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
+				.charAt(0), upload.getDelimiterChar().charAt(0),
+				upload.getEndOfLineSymbols()).build();
 
-				List<Competence> list = null;
-				try {
-					FileItem fileItem = upload.getFileData().getFileItem();
-					CompetenceUpload competenceUpload = new CompetenceUpload();
-					
-					Degree d = serviceDegree.getDegree(id_degree).getSingleElement();
-					list = competenceUpload.readCSVCompetenceToBean(fileItem.getInputStream(),
-							upload.getCharset(), prefers, d);
+		List<Competence> list = null;
+		try {
+			FileItem fileItem = upload.getFileData().getFileItem();
+			CompetenceUpload competenceUpload = new CompetenceUpload();
 
-					return daoCompetence.persistListCompetences(list);
+			Degree d = serviceDegree.getDegree(id_degree).getSingleElement();
+			list = competenceUpload.readCSVCompetenceToBean(
+					fileItem.getInputStream(), upload.getCharset(), prefers, d);
 
-				} catch (IOException e) {
-					e.printStackTrace();
-					return false;
+			success = daoCompetence.persistListCompetences(list);
+			if (success) {
+				for (Competence c : list) {
+					Competence aux = daoCompetence.existByCode(c.getInfo()
+							.getCode(), d);
+					success = success
+							&& manageAclService.addACLToObject(aux.getId(), aux
+									.getClass().getName());
+
 				}
-		
-	
+
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return success;
+
 	}
 }

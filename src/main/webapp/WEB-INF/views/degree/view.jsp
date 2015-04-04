@@ -28,6 +28,7 @@
 					class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
 					<fmt:message key="common.modify" />
 				</a>
+				
 			</sec:authorize>
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 			<c:choose>
@@ -85,13 +86,10 @@
 					class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 					<fmt:message key="common.add" />
 				</a>
-				<a style="cursor: copy;" class="btn list-btn btn-warning2"
-					href="<c:url value='/degree/${degreeId}/module/upload.htm'/>"> <span
-					class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span> CSV
-					
-				</a>
-				
-				
+
+				<a class="btn btn-cvs " href="<c:url value='/degree/${degreeId}/module/upload.htm'/>"> 
+					<span class="glyphicon glyphicon-upload" aria-hidden="true"></span> CSV </a>
+
 			</sec:authorize>
 
 		</div>
@@ -154,11 +152,10 @@
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
 					<fmt:message key="common.add" />
 				</a>
-				<a style="cursor: copy;" class="btn list-btn btn-warning2"
-					href="<c:url value='/degree/${degreeId}/competence/upload.htm'/>">
-					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					 CSV
-				</a>
+					<a class="btn btn-cvs " href="<c:url value='/degree/${degreeId}/competence/upload.htm'/>"> 
+					<span class="glyphicon glyphicon-upload" aria-hidden="true"></span> CSV </a>
+				
+				
 			</sec:authorize>
 
 		</div>

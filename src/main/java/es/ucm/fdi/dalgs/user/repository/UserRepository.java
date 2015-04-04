@@ -101,7 +101,7 @@ public class UserRepository {
 		return em.find(User.class, id_user);
 	}
 
-	public boolean persistALotUsers(List<User> users){
+	public boolean persistListUsers(List<User> users){
 		int i = 0;
 		for(User u : users) {
 			try{

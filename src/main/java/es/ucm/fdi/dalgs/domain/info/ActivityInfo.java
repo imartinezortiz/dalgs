@@ -18,12 +18,12 @@ public class ActivityInfo implements Serializable, Cloneable, Copyable<ActivityI
 	private static final long serialVersionUID = 1L;
 
 	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=20)
+	@Size(min=1, max=100)
 	@Column(name = "name")
 	private String name;
 	
 	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=50)
+	@Size(min=1, max=1000)
 	@Column(name = "description")
 	private String description;
 	

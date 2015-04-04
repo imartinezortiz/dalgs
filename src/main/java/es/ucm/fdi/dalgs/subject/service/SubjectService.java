@@ -258,6 +258,7 @@ public class SubjectService {
 	}
 	@Transactional(readOnly = false)
 	public boolean uploadCSV(UploadForm upload, Long id_topic) {
+		boolean success = false;
 		CsvPreference prefers =
 				new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload
 						.getDelimiterChar().charAt(0), upload.getEndOfLineSymbols())
@@ -272,14 +273,24 @@ public class SubjectService {
 					list = subjectUpload.readCSVSubjectToBean(fileItem.getInputStream(),
 							upload.getCharset(), prefers, t);
 
-					return daoSubject.persistListSubjects(list);
+					success = daoSubject.persistListSubjects(list);
+					if(success){
+						for(Subject s : list){
+							Subject aux = daoSubject.existByCode(s.getInfo().getCode());
+							success = success && 
+									manageAclService.addACLToObject(aux.getId(), aux.getClass().getName());
+	
+						}
+						
+					}
+					
 
 				} catch (IOException e) {
 					e.printStackTrace();
 					return false;
 				}
 		
-	
+				return success;
 	}
 
 

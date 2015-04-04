@@ -33,107 +33,117 @@ public class TopicService {
 
 	@Autowired
 	private SubjectService serviceSubject;
-	
+
 	@Autowired
 	private AclObjectService manageAclService;
-	
+
 	@Autowired
 	private MessageSource messageSource;
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@Transactional(readOnly=false)	
-	public ResultClass<Topic> addTopic(Topic topic, Long id_module, Locale locale) {
+	@Transactional(readOnly = false)
+	public ResultClass<Topic> addTopic(Topic topic, Long id_module,
+			Locale locale) {
 
 		boolean success = false;
-		
-		Topic topicExists = daoTopic.existByCode(topic.getInfo().getCode(), id_module);
+
+		Topic topicExists = daoTopic.existByCode(topic.getInfo().getCode(),
+				id_module);
 		ResultClass<Topic> result = new ResultClass<>();
 
-		if( topicExists != null){
+		if (topicExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
 			errors.add(messageSource.getMessage("error.Code", null, locale));
 
-			if (topicExists.getIsDeleted()){
+			if (topicExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add(messageSource.getMessage("error.deleted", null, locale));
+				errors.add(messageSource.getMessage("error.deleted", null,
+						locale));
 				result.setSingleElement(topicExists);
-			}
-			else result.setSingleElement(topic);
+			} else
+				result.setSingleElement(topic);
 			result.setErrorsList(errors);
-		}
-		else{
-			topic.setModule(serviceModule.getModule(id_module).getSingleElement());
+		} else {
+			topic.setModule(serviceModule.getModule(id_module)
+					.getSingleElement());
 			success = daoTopic.addTopic(topic);
-			
-			if(success){
-				topicExists = daoTopic.existByCode(topic.getInfo().getCode(), id_module);
-				success = manageAclService.addACLToObject(topicExists.getId(), topicExists.getClass().getName());
-				if (success) result.setSingleElement(topic);
-			
-			}else{
-				throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
+
+			if (success) {
+				topicExists = daoTopic.existByCode(topic.getInfo().getCode(),
+						id_module);
+				success = manageAclService.addACLToObject(topicExists.getId(),
+						topicExists.getClass().getName());
+				if (success)
+					result.setSingleElement(topic);
+
+			} else {
+				throw new IllegalArgumentException(
+						"Cannot create ACL. Object not set.");
 
 			}
 		}
-		return result;		
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@Transactional(readOnly=true)
+	@Transactional(readOnly = true)
 	public ResultClass<Topic> getAll() {
 		ResultClass<Topic> result = new ResultClass<>();
 		result.addAll(daoTopic.getAll());
 		return result;
 	}
 
-	
 	@PreAuthorize("hasPermission(#topic, 'WRITE') or hasPermission(#topic, 'ADMINISTRATION')")
-	@Transactional(readOnly=false)
-	public ResultClass<Boolean> modifyTopic(Topic topic, Long id_topic, Long id_module, Locale locale) {
+	@Transactional(readOnly = false)
+	public ResultClass<Boolean> modifyTopic(Topic topic, Long id_topic,
+			Long id_module, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
 		Topic modifyTopic = daoTopic.getTopic(id_topic);
 
-		Topic topicExists = daoTopic.existByCode(topic.getInfo().getCode(), id_module);
+		Topic topicExists = daoTopic.existByCode(topic.getInfo().getCode(),
+				id_module);
 
-		if(!topic.getInfo().getCode().equalsIgnoreCase(modifyTopic.getInfo().getCode()) && 
-				topicExists != null){
+		if (!topic.getInfo().getCode()
+				.equalsIgnoreCase(modifyTopic.getInfo().getCode())
+				&& topicExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<>();
 			errors.add(messageSource.getMessage("error.newCode", null, locale));
 
-			if (topicExists.getIsDeleted()){
+			if (topicExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add(messageSource.getMessage("error.deleted", null, locale));
+				errors.add(messageSource.getMessage("error.deleted", null,
+						locale));
 
 			}
 			result.setErrorsList(errors);
 			result.setSingleElement(false);
-		}
-		else{
+		} else {
 			modifyTopic.setInfo(topic.getInfo());
 			boolean r = daoTopic.saveTopic(modifyTopic);
-			if (r) 
+			if (r)
 				result.setSingleElement(true);
 		}
 		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@Transactional(readOnly=true)
+	@Transactional(readOnly = true)
 	public ResultClass<Topic> getTopic(Long id) {
 		ResultClass<Topic> result = new ResultClass<Topic>();
 		result.setSingleElement(daoTopic.getTopic(id));
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	@Transactional(readOnly=false)
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteTopic(Topic topic) {
 		ResultClass<Boolean> result = new ResultClass<>();
 		Collection<Topic> topics = new ArrayList<>();
 		topics.add(topic);
-		if (serviceSubject.deleteSubjectsForTopic(topics).getSingleElement()){
+		if (serviceSubject.deleteSubjectsForTopic(topics).getSingleElement()) {
 			result.setSingleElement(daoTopic.deleteTopic(topic));
 			return result;
 		}
@@ -143,7 +153,7 @@ public class TopicService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@Transactional(readOnly=true)
+	@Transactional(readOnly = true)
 	public ResultClass<Topic> getTopicAll(Long id_topic, Boolean show) {
 		ResultClass<Topic> result = new ResultClass<Topic>();
 		Topic p = daoTopic.getTopic(id_topic);
@@ -153,20 +163,21 @@ public class TopicService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@Transactional(readOnly=true)
+	@Transactional(readOnly = true)
 	public ResultClass<Topic> getTopicsForModule(Long id, Boolean show) {
 		ResultClass<Topic> result = new ResultClass<>();
 		result.addAll(daoTopic.getTopicsForModule(id, show));
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
-	@Transactional(readOnly=false)
-	public ResultClass<Boolean> deleteTopicsForModules(Collection<Module> modules) {
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = false)
+	public ResultClass<Boolean> deleteTopicsForModules(
+			Collection<Module> modules) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		Collection<Topic> topics = daoTopic.getTopicsForModules(modules);
 
-		if(serviceSubject.deleteSubjectsForTopic(topics).getSingleElement()){
+		if (serviceSubject.deleteSubjectsForTopic(topics).getSingleElement()) {
 			result.setSingleElement(daoTopic.deleteTopicsForModules(modules));
 			return result;
 		}
@@ -175,72 +186,86 @@ public class TopicService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteTopicsForModule(Module module) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		if(!module.getTopics().isEmpty())
-			if(serviceSubject.deleteSubjectsForTopic(module.getTopics()).getSingleElement()){
+		if (!module.getTopics().isEmpty())
+			if (serviceSubject.deleteSubjectsForTopic(module.getTopics())
+					.getSingleElement()) {
 				result.setSingleElement(daoTopic.deleteTopicsForModule(module));
 				return result;
-			}
-			else result.setSingleElement(false);
-		else result.setSingleElement(true);
-		
+			} else
+				result.setSingleElement(false);
+		else
+			result.setSingleElement(true);
+
 		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Topic> unDeleteTopic(Topic topic, Long id_module, Locale locale) {
+	public ResultClass<Topic> unDeleteTopic(Topic topic, Long id_module,
+			Locale locale) {
 		Topic t = daoTopic.existByCode(topic.getInfo().getCode(), id_module);
 		ResultClass<Topic> result = new ResultClass<>();
-		if(t == null){
+		if (t == null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add(messageSource.getMessage("error.ElementNoExists", null, locale));
+			errors.add(messageSource.getMessage("error.ElementNoExists", null,
+					locale));
 			result.setErrorsList(errors);
 
-		}
-		else{
-			if(!t.getIsDeleted()){
+		} else {
+			if (!t.getIsDeleted()) {
 				Collection<String> errors = new ArrayList<String>();
-				errors.add(messageSource.getMessage("error.CodeNoDeleted", null, locale));
+				errors.add(messageSource.getMessage("error.CodeNoDeleted",
+						null, locale));
 				result.setErrorsList(errors);
 			}
 
 			t.setDeleted(false);
 			t.setInfo(topic.getInfo());
 			boolean r = daoTopic.saveTopic(t);
-			if(r) 
-				result.setSingleElement(t);	
+			if (r)
+				result.setSingleElement(t);
 
 		}
 		return result;
 	}
-	
+
 	@Transactional(readOnly = false)
 	public boolean uploadCSV(UploadForm upload, Long id_module) {
-		CsvPreference prefers =
-				new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload
-						.getDelimiterChar().charAt(0), upload.getEndOfLineSymbols())
-						.build();
+		boolean success = false;
+		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
+				.charAt(0), upload.getDelimiterChar().charAt(0),
+				upload.getEndOfLineSymbols()).build();
 
-				List<Topic> list = null;
-				try {
-					FileItem fileItem = upload.getFileData().getFileItem();
-					TopicUpload topicUpload = new TopicUpload();
-					
-					Module m = serviceModule.getModule(id_module).getSingleElement();
-					list = topicUpload.readCSVTopicToBean(fileItem.getInputStream(),
-							upload.getCharset(), prefers, m);
+		List<Topic> list = null;
+		try {
+			FileItem fileItem = upload.getFileData().getFileItem();
+			TopicUpload topicUpload = new TopicUpload();
 
-					return daoTopic.persistListTopics(list);
+			Module m = serviceModule.getModule(id_module).getSingleElement();
+			list = topicUpload.readCSVTopicToBean(fileItem.getInputStream(),
+					upload.getCharset(), prefers, m);
 
-				} catch (IOException e) {
-					e.printStackTrace();
-					return false;
+			success = daoTopic.persistListTopics(list);
+			if (success) {
+				for (Topic c : list) {
+					Topic aux = daoTopic.existByCode(c.getInfo().getCode(),
+							id_module);
+					success = success
+							&& manageAclService.addACLToObject(aux.getId(), aux
+									.getClass().getName());
+
 				}
-		
+
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return success;
 	}
 }
-
