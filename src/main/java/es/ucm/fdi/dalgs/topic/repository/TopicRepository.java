@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.domain.Module;
 import es.ucm.fdi.dalgs.domain.Topic;
 
@@ -71,11 +72,14 @@ public class TopicRepository {
 		return em.find(Topic.class, id);
 	}
 	
-	public Topic getTopic(Long id, Long id_module) {
+	public Topic getTopic(Long id, Long id_module, Long id_degree) {
 		Module module = em.getReference(Module.class, id_module);
-		Query query = em.createQuery("select t from Topic t where t.id=?1 and t.module = ?2");
+		Degree degree = em.getReference(Degree.class, id_degree);
+		Query query = em.createQuery("select t from Topic t where t.id=?1 and t.module = ?2 and t.module.degree=?3");
 		query.setParameter(1, id);
 		query.setParameter(2, module);
+		query.setParameter(3, degree);
+		
 		if (query.getResultList().isEmpty())
 			return null;
 		else return (Topic) query.getSingleResult();

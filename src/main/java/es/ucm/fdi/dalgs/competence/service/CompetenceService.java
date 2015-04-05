@@ -193,10 +193,10 @@ public class CompetenceService {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean> deleteCompetenceFromSubject(Long id_competence,
-			Long id_subject, Long id_degree, Long id_topic) {
+			Long id_subject, Long id_degree,Long id_topic, Long id_module) {
 		// Subject subject = daoSubject.getSubject(id);
 		ResultClass<Boolean> result = new ResultClass<>();
-		Collection<Competence> c = serviceSubject.getSubject(id_subject, id_topic)
+		Collection<Competence> c = serviceSubject.getSubject(id_subject, id_topic, id_module, id_degree)
 				.getSingleElement().getCompetences();
 		try {
 			c.remove(daoCompetence.getCompetence(id_competence,id_degree));

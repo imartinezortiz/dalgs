@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Degree;
+import es.ucm.fdi.dalgs.domain.Module;
 import es.ucm.fdi.dalgs.domain.Subject;
 import es.ucm.fdi.dalgs.domain.Topic;
 
@@ -69,11 +70,16 @@ public class SubjectRepository {
 		}
 	}
 
-	public Subject getSubject(Long id, Long id_topic) {
+	public Subject getSubject(Long id, Long id_topic, Long id_module, Long id_degree) {
 		Topic topic = em.getReference(Topic.class, id_topic);
-		Query query = em.createQuery("Select s from Subject s where s.id=?1 and s.topic=?2");
+		Module module = em.getReference(Module.class, id_module);
+		Degree degree = em.getReference(Degree.class, id_degree);
+		
+		Query query = em.createQuery("Select s from Subject s where s.id=?1 and s.topic=?2 and s.topic.module=?3 and s.topic.module.degree=?4");
 		query.setParameter(1, id);
 		query.setParameter(2, topic);
+		query.setParameter(3, module);
+		query.setParameter(4, degree);
 
 		if (query.getResultList().isEmpty())
 			return null;

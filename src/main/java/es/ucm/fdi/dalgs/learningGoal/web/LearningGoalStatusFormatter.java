@@ -26,7 +26,7 @@ public class LearningGoalStatusFormatter implements Formatter<LearningGoalStatus
 	public LearningGoalStatus parse(String learningGoalId, Locale arg1)
 			throws ParseException {
 		LearningGoalStatus learningGoalStatus = new LearningGoalStatus();
-		learningGoalStatus.setLearningGoal(daoLearningGoal.getLearningGoal(Long
+		learningGoalStatus.setLearningGoal(daoLearningGoal.getLearningGoalFormatter(Long
 				.parseLong(learningGoalId)));
 		return learningGoalStatus;
 		// Else you can just return a new object by setting some values

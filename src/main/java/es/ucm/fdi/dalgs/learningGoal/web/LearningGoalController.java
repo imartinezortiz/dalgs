@@ -122,7 +122,7 @@ public class LearningGoalController {
 			@PathVariable("learninggoalId") Long id_learningGoal)
 					throws ServletException {
 
-		if (serviceLearningGoal.deleteLearningGoal(serviceLearningGoal.getLearningGoal(id_learningGoal).getSingleElement()).getSingleElement()) {
+		if (serviceLearningGoal.deleteLearningGoal(serviceLearningGoal.getLearningGoal(id_learningGoal, id_competence, id_degree).getSingleElement()).getSingleElement()) {
 			return "redirect:/degree/" + id_degree +"/competence/" +id_competence+ ".htm";
 		} else
 			return "redirect:/error.htm";
@@ -146,7 +146,7 @@ public class LearningGoalController {
 	{
 		if (!resultBinding.hasErrors()){
 
-			ResultClass<Boolean> result = serviceLearningGoal.modifyLearningGoal(modify, id_learningGoal, locale);
+			ResultClass<Boolean> result = serviceLearningGoal.modifyLearningGoal(modify, id_learningGoal,  id_competence, id_degree,locale);
 			if (!result.hasErrors())
 
 				return "redirect:/degree/" + id_degree +"/competence/"+ id_competence +".htm";
@@ -174,7 +174,7 @@ public class LearningGoalController {
 
 		if (!model.containsAttribute("learningGoal")){
 
-			LearningGoal p = serviceLearningGoal.getLearningGoal(id_learningGoal).getSingleElement();
+			LearningGoal p = serviceLearningGoal.getLearningGoal(id_learningGoal, id_competence, id_degree).getSingleElement();
 			model.addAttribute("learningGoal", p);
 		}
 		model.addAttribute("valueButton", "Modify");
@@ -198,10 +198,14 @@ public class LearningGoalController {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		LearningGoal p = serviceLearningGoal.getLearningGoal(id_learningGoal).getSingleElement();
+		LearningGoal p = serviceLearningGoal.getLearningGoal(id_learningGoal, id_competence, id_degree).getSingleElement();
+		if(p!=null){
 		myModel.put("learningGoal", p);
 
 		return new ModelAndView("learningGoal/view", "model", myModel);
+		}
+		return new ModelAndView("error", "model", myModel);
+
 	}
 	
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/{learninggoalId}/restore.htm")
@@ -210,7 +214,7 @@ public class LearningGoalController {
 			@PathVariable("competenceId") Long id_competence,
 			@PathVariable("learninggoalId") Long id_learningGoal, Locale locale) {
 		
-		ResultClass<LearningGoal> result = serviceLearningGoal.unDeleteLearningGoal(serviceLearningGoal.getLearningGoal(id_learningGoal).getSingleElement(), locale);
+		ResultClass<LearningGoal> result = serviceLearningGoal.unDeleteLearningGoal(serviceLearningGoal.getLearningGoal(id_learningGoal, id_competence, id_degree).getSingleElement(), locale);
 		if (!result.hasErrors())
 			return "redirect:/degree/"+id_degree+"/competence/"+id_competence+".htm";
 		else{

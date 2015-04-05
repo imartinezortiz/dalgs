@@ -178,7 +178,7 @@ public class ActivityController {
 			@PathVariable("activityId") Long id_activity, Model model)
 			throws ServletException {
 
-		Activity p = serviceActivity.getActivity(id_activity, id_course,null)
+		Activity p = serviceActivity.getActivity(id_activity, id_course,null, id_academic)
 				.getSingleElement();
 		model.addAttribute("courseId", id_course);
 
@@ -205,7 +205,7 @@ public class ActivityController {
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/{activityId}/modify.htm", method = RequestMethod.POST)
 	public String modifyActivityCoursePOST(
-			@PathVariable("academicId") Long id_academicTerm,
+			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("activityId") Long id_activity,
 			@ModelAttribute("modifyactivity") @Valid Activity activity,
@@ -214,13 +214,13 @@ public class ActivityController {
 	{
 
 		if (!resultBinding.hasErrors()) {
-			Course course = serviceCourse.getCourse(id_course,id_academicTerm).getSingleElement();
+			Course course = serviceCourse.getCourse(id_course,id_academic).getSingleElement();
 
 			ResultClass<Boolean> result = serviceActivity.modifyActivity(course,null,
-					activity, id_activity, locale);
+					activity, id_activity, id_course, id_academic, locale);
 			if (!result.hasErrors())
 
-				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
+				return "redirect:/academicTerm/" + id_academic + "/course/"
 						+ id_course + ".htm";
 			else {
 
@@ -237,13 +237,13 @@ public class ActivityController {
 		}
 		attr.addFlashAttribute("modifyactivity", activity);
 
-		return "redirect:/academicTerm/" + id_academicTerm + "/course/"
+		return "redirect:/academicTerm/" + id_academic + "/course/"
 				+ id_course + "/activity/" + id_activity + "/modify.htm";
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{idCourse}/activity/{activityId}/addLearningStatus.htm", method = RequestMethod.POST)
 	public String addLearningStatusPOST(
-			@PathVariable("academicId") Long id_academicTerm,
+			@PathVariable("academicId") Long id_academic,
 			@PathVariable("idCourse") Long id_course,
 			@PathVariable("activityId") Long id,
 			@ModelAttribute("addlearningstatus") @Valid LearningGoalStatus learningGoalStatus,
@@ -251,14 +251,14 @@ public class ActivityController {
 
 		// Activity p = serviceActivity.getActivity(id);
 		if (!result.hasErrors()){
-			Course course = serviceCourse.getCourse(id_course,id_academicTerm).getSingleElement();
+			Course course = serviceCourse.getCourse(id_course,id_academic).getSingleElement();
 
-			if (serviceActivity.addLearningGoals(course, null,id, learningGoalStatus)
+			if (serviceActivity.addLearningGoals(course, null,id, learningGoalStatus, id_course, id_academic)
 					.getSingleElement())
-				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
+				return "redirect:/academicTerm/" + id_academic + "/course/"
 						+ id_course + "/activity/" + id + "/modify.htm";
 		}
-		return "redirect:/academicTerm/" + id_academicTerm + "/course/"
+		return "redirect:/academicTerm/" + id_academic + "/course/"
 				+ id_course + "/activity/" + id + "/modify.htm";
 	}
 
@@ -288,16 +288,16 @@ public class ActivityController {
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/{activityId}/competenceStatus/{compStatusId}/delete.htm", method = RequestMethod.GET)
 	public String deleteCompetenceStatusActivityCourse(
-			@PathVariable("academicId") Long id_AcademicTerm,
+			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("activityId") long id_Activity,
 			@PathVariable("compStatusId") Long id_learningStatus)
 			throws ServletException {
-		Course course = serviceCourse.getCourse(id_course,id_AcademicTerm).getSingleElement();
+		Course course = serviceCourse.getCourse(id_course,id_academic).getSingleElement();
 
 		if (serviceActivity.deleteLearningActivity(course, null, id_learningStatus,
-				id_Activity).getSingleElement()) {
-			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
+				id_Activity, id_academic).getSingleElement()) {
+			return "redirect:/academicTerm/" + id_academic + "/course/"
 					+ id_course + "/activity/" + id_Activity + "/modify.htm";
 		} else
 			return "redirect:/error.htm";
@@ -315,7 +315,7 @@ public class ActivityController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		Activity a = serviceActivity.getActivity(id_activity, id_course, null).getSingleElement();
+		Activity a = serviceActivity.getActivity(id_activity, id_course, null, id_academic).getSingleElement();
 
 		if(a!=null){
 			model.put("activity", a);
@@ -337,7 +337,7 @@ public class ActivityController {
 		Course course = serviceCourse.getCourse(id_course,id_academic).getSingleElement();
 
 		ResultClass<Activity> result = serviceActivity
-				.unDeleteActivity(course, null, serviceActivity.getActivity(id_activity,id_course,null)
+				.unDeleteActivity(course, null, serviceActivity.getActivity(id_activity,id_course,null, id_academic)
 						.getSingleElement(), locale);
 
 		if (!result.hasErrors())
@@ -375,7 +375,7 @@ public class ActivityController {
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/activity/add.htm", method = RequestMethod.POST)
 	// Every Post have to return redirect
 	public String addActivityGroupPOST(
-			@PathVariable("academicId") Long id_academicTerm,
+			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
 			@ModelAttribute("addactivity") @Valid Activity newactivity,
@@ -383,11 +383,11 @@ public class ActivityController {
 			throws NotOwnerException {
 
 		if (!resultBinding.hasErrors()) {
-			Group group = serviceGroup.getGroup(id_group, id_course).getSingleElement();
+			Group group = serviceGroup.getGroup(id_group, id_course, id_academic).getSingleElement();
 
-			ResultClass<Activity> result = serviceActivity.addActivitytoGroup(group,newactivity, id_group, id_course);
+			ResultClass<Activity> result = serviceActivity.addActivitytoGroup(group,newactivity, id_group, id_course, id_academic);
 			if (!result.hasErrors())
-				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
+				return "redirect:/academicTerm/" + id_academic + "/course/"
 						+ id_course + "/group/" + id_group + "/activity/"
 						+  result.getSingleElement().getId() + "/modify.htm";
 			else {
@@ -419,7 +419,7 @@ public class ActivityController {
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/activity/add.htm", method = RequestMethod.POST, params = "Undelete")
 	// Every Post have to return redirect
 	public String undeleteActivityGroup(
-			@PathVariable("academicId") Long id_academicTerm,
+			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
 			@ModelAttribute("addActivity") @Valid Activity activity,
@@ -427,13 +427,13 @@ public class ActivityController {
 
 		if (!resultBinding.hasErrors()) {
 
-			Group group = serviceGroup.getGroup(id_group, id_course).getSingleElement();
+			Group group = serviceGroup.getGroup(id_group, id_course, id_academic).getSingleElement();
 
 			ResultClass<Activity> result = serviceActivity.unDeleteActivity(null,group,activity, locale);
 
 			if (!result.hasErrors())
 
-				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
+				return "redirect:/academicTerm/" + id_academic + "/course/"
 						+ id_course + "/group/" + id_group + "/activity/"
 						+ result.getSingleElement().getId() + "/modify.htm";
 			else {
@@ -466,7 +466,7 @@ public class ActivityController {
 			@PathVariable("activityId") Long id_activity, Model model)
 			throws ServletException {
 
-		Activity p = serviceActivity.getActivity(id_activity,null,id_group)
+		Activity p = serviceActivity.getActivity(id_activity,id_course,id_group, id_academic)
 				.getSingleElement();
 		
 		if(p !=null){
@@ -492,8 +492,8 @@ public class ActivityController {
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/activity/{activityId}/modify.htm", method = RequestMethod.POST)
-	public String modifyActivityCoursePOST(
-			@PathVariable("academicId") Long id_academicTerm,
+	public String modifyActivityGroupPOST(
+			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
 			@PathVariable("activityId") Long id_activity,
@@ -503,12 +503,12 @@ public class ActivityController {
 	{
 
 		if (!resultBinding.hasErrors()) {
-			Group group = serviceGroup.getGroup(id_group, id_course).getSingleElement();
+			Group group = serviceGroup.getGroup(id_group, id_course, id_academic).getSingleElement();
 
-			ResultClass<Boolean> result = serviceActivity.modifyActivity(null, group,activity, id_activity, locale);
+			ResultClass<Boolean> result = serviceActivity.modifyActivity(null, group,activity, id_activity, id_course, id_academic ,locale);
 			if (!result.hasErrors())
 
-				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
+				return "redirect:/academicTerm/" + id_academic + "/course/"
 						+ id_course + "/group/" + id_group + ".htm";
 			else {
 
@@ -525,14 +525,14 @@ public class ActivityController {
 		}
 		attr.addFlashAttribute("modifyactivity", activity);
 
-		return "redirect:/academicTerm/" + id_academicTerm + "/course/"
+		return "redirect:/academicTerm/" + id_academic + "/course/"
 				+ id_course + "/group/" + id_group + "/activity/" + id_activity
 				+ "/modify.htm";
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{idCourse}/group/{groupId}/activity/{activityId}/addLearningStatus.htm", method = RequestMethod.POST)
 	public String addLearningStatusGroupPOST(
-			@PathVariable("academicId") Long id_academicTerm,
+			@PathVariable("academicId") Long id_academic,
 			@PathVariable("idCourse") Long id_course,
 			@PathVariable("groupId") Long id_group,
 			@PathVariable("activityId") Long id,
@@ -540,15 +540,15 @@ public class ActivityController {
 			BindingResult result, Model model) throws ServletException {
 
 		if (!result.hasErrors()){
-			Group group = serviceGroup.getGroup(id_group, id_course).getSingleElement();
+			Group group = serviceGroup.getGroup(id_group, id_course,id_academic).getSingleElement();
 
-			if (serviceActivity.addLearningGoals(null, group,id, learningGoalStatus)
+			if (serviceActivity.addLearningGoals(null, group,id, learningGoalStatus,id_course, id_academic)
 					.getSingleElement())
-				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
+				return "redirect:/academicTerm/" + id_academic + "/course/"
 						+ id_course + "/group/" + id_group + "/activity/" + id
 						+ "/modify.htm";
 		}
-		return "redirect:/academicTerm/" + id_academicTerm + "/course/"
+		return "redirect:/academicTerm/" + id_academic + "/course/"
 				+ id_course + "/group/" + id_group + "/activity/" + id
 				+ "/modify.htm";
 	}
@@ -559,16 +559,16 @@ public class ActivityController {
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/activity/{activityId}/delete.htm", method = RequestMethod.GET)
 	public String deleteActivityGroupGET(
-			@PathVariable("academicId") Long id_AcademicTerm,
+			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
 			@PathVariable("activityId") Long id_activity)
 			throws ServletException {
 		
-		Group group = serviceGroup.getGroup(id_group, id_course).getSingleElement();
+		Group group = serviceGroup.getGroup(id_group, id_course,id_academic).getSingleElement();
 
 		if (serviceActivity.deleteActivity(null, group,id_activity).getSingleElement()) {
-			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
+			return "redirect:/academicTerm/" + id_academic + "/course/"
 					+ id_course + "/group/" + id_group + ".htm";
 		} else
 			return "redirect:/error.htm";
@@ -580,18 +580,18 @@ public class ActivityController {
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/activity/{activityId}/competenceStatus/{compStatusId}/delete.htm", method = RequestMethod.GET)
 	public String deleteCompetenceStatusActivityGroup(
-			@PathVariable("academicId") Long id_AcademicTerm,
+			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
 			@PathVariable("activityId") long id_Activity,
 			@PathVariable("compStatusId") Long id_learningStatus)
 			throws ServletException {
 
-		Group group = serviceGroup.getGroup(id_group, id_course).getSingleElement();
+		Group group = serviceGroup.getGroup(id_group, id_course, id_academic).getSingleElement();
 
 		if (serviceActivity.deleteLearningActivity(null, group,id_learningStatus,
-				id_Activity).getSingleElement()) {
-			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
+				id_Activity, id_academic).getSingleElement()) {
+			return "redirect:/academicTerm/" + id_academic + "/course/"
 					+ id_course + "/group/" + id_group + "/activity/"
 					+ id_Activity + "/modify.htm";
 		} else
@@ -611,7 +611,7 @@ public class ActivityController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		Activity a = serviceActivity.getActivity(id_activity,null,id_group)
+		Activity a = serviceActivity.getActivity(id_activity,id_course,id_group, id_academic)
 				.getSingleElement();
 
 		if(a!=null){
@@ -634,10 +634,10 @@ public class ActivityController {
 
 			@PathVariable("activityId") Long id_activity, Locale locale) {
 		
-		Group group = serviceGroup.getGroup(id_group, id_course).getSingleElement();
+		Group group = serviceGroup.getGroup(id_group, id_course, id_academic).getSingleElement();
 
 		ResultClass<Activity> result = serviceActivity
-				.unDeleteActivity(null, group,serviceActivity.getActivity(id_activity,null,id_group)
+				.unDeleteActivity(null, group,serviceActivity.getActivity(id_activity,id_course,id_group, id_academic)
 						.getSingleElement(), locale);
 
 		if (!result.hasErrors())

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import es.ucm.fdi.dalgs.domain.AcademicTerm;
 import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Group;
@@ -72,22 +73,27 @@ public class ActivityRepository {
 		return em.find(Activity.class, id);
 	}
 
-	public Activity getActivity(Long id , Long id_course, Long id_group) {
+	public Activity getActivity(Long id , Long id_course, Long id_group, Long id_academic) {
 		
 		Query query = null;
-
-		if(id_course!=null){
-			Course course = em.getReference(Course.class, id_course);
-			query = em.createQuery("select a from Activity a where a.id=?1 and a.course=?2  ");
+		Course course = em.getReference(Course.class, id_course);
+		AcademicTerm academicterm = em.getReference(AcademicTerm.class, id_academic);
+		
+		 if(id_group != null){
+				Group group = em.getReference(Group.class, id_group);
+				query = em.createQuery("select a from Activity a where a.id=?1 and a.group=?2 and a.group.course=?3 and a.group.course.academicTerm=?4");
+				query.setParameter(1, id);
+				query.setParameter(2, group);
+				query.setParameter(3, course);
+				query.setParameter(4, academicterm);
+			}
+		else if(id_course!=null){
+			query = em.createQuery("select a from Activity a where a.id=?1 and a.course=?2 and a.course.academicTerm=?3 ");
 			query.setParameter(1, id);
 			query.setParameter(2, course);
+			query.setParameter(3, academicterm);
+
 		} 
-		else if(id_group != null){
-			Group group = em.getReference(Group.class, id_group);
-			query = em.createQuery("select a from Activity a where a.id=?1 and a.group=?2");
-			query.setParameter(1, id);
-			query.setParameter(2, group);
-		}
 		
 
 		if(query.getResultList().isEmpty()) return null;

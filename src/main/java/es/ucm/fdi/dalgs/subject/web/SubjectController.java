@@ -62,7 +62,7 @@ public class SubjectController {
 			@PathVariable("topicId") Long id_topic,
 			@PathVariable("subjectId") Long id_subject) throws ServletException {
 
-		if (serviceSubject.deleteSubject(serviceSubject.getSubject(id_subject, id_topic).getSingleElement()).getSingleElement()) {
+		if (serviceSubject.deleteSubject(serviceSubject.getSubject(id_subject, id_topic,  id_module, id_degree).getSingleElement()).getSingleElement()) {
 			return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
 		} else
 			return "redirect:/error.htm";
@@ -94,7 +94,7 @@ public class SubjectController {
 
 		if (!resultBinding.hasErrors()){
 
-			ResultClass<Subject> result = serviceSubject.addSubject(newSubject, id_topic, id_module, locale);
+			ResultClass<Subject> result = serviceSubject.addSubject(newSubject, id_topic, id_module,id_degree, locale);
 			if (!result.hasErrors())
 				return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
 			else{
@@ -164,7 +164,7 @@ public class SubjectController {
 	{
 		if (!resultBinding.hasErrors()){	
 
-			ResultClass<Boolean> result = serviceSubject.modifySubject(modify, id_subject,id_topic, locale);
+			ResultClass<Boolean> result = serviceSubject.modifySubject(modify, id_subject,id_topic, id_module, id_degree, locale);
 			if (!result.hasErrors())
 				return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
 			else
@@ -192,7 +192,7 @@ public class SubjectController {
 			Model model) throws ServletException {
 
 		if (!model.containsAttribute("subject")){
-			Subject p = serviceSubject.getSubject(id_subject, id_topic).getSingleElement();
+			Subject p = serviceSubject.getSubject(id_subject, id_topic,  id_module, id_degree).getSingleElement();
 			model.addAttribute("subject", p);
 		}
 
@@ -208,11 +208,12 @@ public class SubjectController {
 	public ModelAndView getSubjectGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("topicId") Long id_topic,
+			@PathVariable("moduleId") Long id_module,
 			@PathVariable("subjectId") Long id_subject) throws ServletException {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		Subject p = serviceSubject.getSubjectAll(id_subject, id_topic).getSingleElement();
+		Subject p = serviceSubject.getSubjectAll(id_subject, id_topic,  id_module, id_degree).getSingleElement();
 
 		myModel.put("subject", p);
 		myModel.put("topic", p.getTopic());
@@ -237,7 +238,7 @@ public class SubjectController {
 					throws ServletException {
 
 		if (serviceCompetence.deleteCompetenceFromSubject(id_competence,
-				id_subject, id_degree, id_topic).getSingleElement()) {
+				id_subject, id_degree, id_topic, id_module).getSingleElement()) {
 			return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
 		} else
 			return "redirect:/error.htm";
@@ -245,10 +246,11 @@ public class SubjectController {
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/addCompetences.htm", method = RequestMethod.GET)
 	public String addCompetenceToSubjectGET(
-			@PathVariable("degreeId") Long id_degree,@PathVariable("topicId") Long id_topic,
+			@PathVariable("degreeId") Long id_degree,@PathVariable("moduleId") Long id_module,
+			@PathVariable("topicId") Long id_topic,
 			@PathVariable("subjectId") Long id_subject, Model model) {
 
-		Subject s = serviceSubject.getSubject(id_subject, id_topic).getSingleElement();
+		Subject s = serviceSubject.getSubject(id_subject, id_topic, id_module, id_degree).getSingleElement();
 		Collection<Competence> competences = serviceCompetence
 				.getCompetencesForDegree(id_degree, false);
 
@@ -270,13 +272,13 @@ public class SubjectController {
 
 		if (!result.hasErrors()){
 			try {
-				serviceSubject.addCompetences(subject, id_subject, id_topic);
+				serviceSubject.addCompetences(subject, id_subject, id_topic, id_module, id_degree);
 				return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
 			} catch (Exception e) {
 				return "redirect:/competence/add.htm";
 			}
 		}
-		else return "redirect:/error.htm";
+		 return "redirect:/error.htm";
 
 	}
 	
@@ -287,7 +289,7 @@ public class SubjectController {
 			@PathVariable("topicId") Long id_topic,
 			@PathVariable("subjectId") Long id_subject, Locale locale) {
 		
-		ResultClass<Subject> result = serviceSubject.unDeleteSubject(serviceSubject.getSubject(id_subject, id_topic).getSingleElement(), locale);
+		ResultClass<Subject> result = serviceSubject.unDeleteSubject(serviceSubject.getSubject(id_subject, id_topic,  id_module, id_degree).getSingleElement(), locale);
 		if (!result.hasErrors())
 			return "redirect:/degree/"+id_degree+"/module/"+id_module+".htm";
 		else{
@@ -311,6 +313,7 @@ public class SubjectController {
 	public String uploadPost(
 			@ModelAttribute("newUpload") @Valid UploadForm upload,
 			BindingResult result, Model model,
+			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic) {
 
@@ -322,7 +325,7 @@ public class SubjectController {
 			return "upload";
 		}
 
-		if (serviceSubject.uploadCSV(upload, id_topic, id_module))
+		if (serviceSubject.uploadCSV(upload, id_topic, id_module, id_degree))
 			return "home";
 		else
 			return "upload";

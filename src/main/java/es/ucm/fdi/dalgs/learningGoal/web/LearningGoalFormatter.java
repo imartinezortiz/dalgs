@@ -25,7 +25,7 @@ public class LearningGoalFormatter implements Formatter<LearningGoal>{
 
 	public LearningGoal parse(String learningGoalId, Locale arg1) throws ParseException {
 
-		return daoLearningGoal.getLearningGoal(Long.parseLong(learningGoalId));
+		return daoLearningGoal.getLearningGoalFormatter(Long.parseLong(learningGoalId));
 		// Else you can just return a new object by setting some values
 		// which you deem fit.
 	}

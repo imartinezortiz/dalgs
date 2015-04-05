@@ -118,7 +118,7 @@
 	
 			<c:if test="${not empty errors}">
 	<div align="center">
-		<h3 class="panel-title list">	<fmt:message key="error.errors" />: </h3>	
+		<h3 class="panel-title list">	<fmt:message key="common.errors" />: </h3>	
 			<br/>
 			<c:forEach items="${errors}" var="error">
 				<c:out  value="${error}" /><br/>

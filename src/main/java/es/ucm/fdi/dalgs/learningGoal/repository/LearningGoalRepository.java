@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Competence;
 import es.ucm.fdi.dalgs.domain.Course;
+import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.domain.LearningGoal;
 
 @Repository
@@ -75,7 +76,25 @@ public class LearningGoalRepository{
 	}
 
 
-	public LearningGoal getLearningGoal(Long id_learningGoal) {
+	public LearningGoal getLearningGoal(Long id_learningGoal, Long id_competence,Long id_degree) {
+		Degree degree = em.getReference(Degree.class, id_degree);
+		Competence competence = em.getReference(Competence.class, id_competence);
+
+		Query query = em
+				.createQuery("Select l from LearningGoal l where l.id=?1 and l.competence=?2 and l.competence.degree=?3");
+		query.setParameter(1, id_learningGoal);
+		query.setParameter(2, competence);
+		query.setParameter(3, degree);
+
+
+
+		if (query.getResultList().isEmpty())
+			return null;
+		else
+			return (LearningGoal) query.getSingleResult();
+	}
+	
+	public LearningGoal getLearningGoalFormatter(Long id_learningGoal) {
 		return em.find(LearningGoal.class, id_learningGoal);
 	}
 

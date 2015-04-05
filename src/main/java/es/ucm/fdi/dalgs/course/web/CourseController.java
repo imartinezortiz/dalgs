@@ -201,8 +201,11 @@ public class CourseController {
 
 			if (!p.getGroups().isEmpty())
 				myModel.put("groups", p.getGroups());
-		}
+	
 		return new ModelAndView("course/view", "model", myModel);
+		} 
+		return new ModelAndView("error", "model",myModel);
+
 	}
 
 	/**

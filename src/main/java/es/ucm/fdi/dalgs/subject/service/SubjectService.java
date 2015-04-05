@@ -50,7 +50,7 @@ public class SubjectService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Subject> addSubject(Subject subject, Long id_topic, Long id_module, Locale locale) {
+	public ResultClass<Subject> addSubject(Subject subject, Long id_topic, Long id_module, Long id_degree, Locale locale) {
 		
 		boolean success = false;
 		Subject subjectExists = daoSubject.existByCode(subject.getInfo().getCode());
@@ -70,7 +70,7 @@ public class SubjectService {
 			result.setErrorsList(errors);
 		}
 		else{
-			subject.setTopic(serviceTopic.getTopic(id_topic, id_module).getSingleElement());
+			subject.setTopic(serviceTopic.getTopic(id_topic, id_module, id_degree).getSingleElement());
 			success = daoSubject.addSubject(subject);
 			
 			
@@ -99,9 +99,9 @@ public class SubjectService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
-	public ResultClass<Subject> getSubject(Long id, Long id_topic) {
+	public ResultClass<Subject> getSubject(Long id, Long id_topic, Long  id_module,  Long id_degree) {
 		ResultClass<Subject> result = new ResultClass<>();
-		result.setSingleElement(daoSubject.getSubject(id, id_topic));
+		result.setSingleElement(daoSubject.getSubject(id, id_topic, id_module, id_degree));
 		return result;
 	}
 
@@ -133,10 +133,10 @@ public class SubjectService {
 
 	@PreAuthorize("hasPermission(#subject, 'WRITE') or hasPermission(#subject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifySubject(Subject subject, Long id_subject, Long id_topic, Locale locale) {
+	public ResultClass<Boolean> modifySubject(Subject subject, Long id_subject, Long id_topic, Long id_module, Long id_degree,Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		Subject modifySubject = daoSubject.getSubject(id_subject, id_topic);
+		Subject modifySubject = daoSubject.getSubject(id_subject, id_topic,  id_module, id_degree);
 		
 		Subject subjectExists = daoSubject.existByCode(subject.getInfo().getCode());
 		
@@ -165,9 +165,9 @@ public class SubjectService {
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> addCompetences(Subject modify, Long id_subject, Long id_topic) {
+	public ResultClass<Boolean> addCompetences(Subject modify, Long id_subject, Long id_topic, Long id_module,Long id_degree) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		Subject subject = daoSubject.getSubject(id_subject, id_topic);
+		Subject subject = daoSubject.getSubject(id_subject, id_topic,  id_module, id_degree);
 		subject.setInfo(modify.getInfo());
 		subject.setCompetences(modify.getCompetences());		
 		result.setSingleElement(daoSubject.saveSubject(subject));
@@ -193,9 +193,9 @@ public class SubjectService {
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<Subject> getSubjectAll(Long id_subject, Long id_topic) {
+	public ResultClass<Subject> getSubjectAll(Long id_subject, Long id_topic,Long id_module, Long id_degree) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
-		Subject p = daoSubject.getSubject(id_subject, id_topic);
+		Subject p = daoSubject.getSubject(id_subject, id_topic,  id_module, id_degree);
 		p.setCompetences(serviceCompetence.getCompetencesForSubject(id_subject));
 		result.setSingleElement(p);
 		return result;
@@ -257,7 +257,7 @@ public class SubjectService {
 		
 	}
 	@Transactional(readOnly = false)
-	public boolean uploadCSV(UploadForm upload, Long id_topic, Long id_module) {
+	public boolean uploadCSV(UploadForm upload, Long id_topic, Long id_module, Long id_degree) {
 		boolean success = false;
 		CsvPreference prefers =
 				new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload
@@ -269,7 +269,7 @@ public class SubjectService {
 					FileItem fileItem = upload.getFileData().getFileItem();
 					SubjectUpload subjectUpload = new SubjectUpload();
 					
-					Topic t = serviceTopic.getTopic(id_topic, id_module).getSingleElement();
+					Topic t = serviceTopic.getTopic(id_topic, id_module, id_degree).getSingleElement();
 					list = subjectUpload.readCSVSubjectToBean(fileItem.getInputStream(),
 							upload.getCharset(), prefers, t);
 

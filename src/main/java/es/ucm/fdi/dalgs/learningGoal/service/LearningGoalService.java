@@ -78,18 +78,21 @@ public class LearningGoalService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<LearningGoal> getLearningGoal(Long id_learningGoal) {
+	public ResultClass<LearningGoal> getLearningGoal(Long id_learningGoal, Long id_competence, Long id_degree) {
 		ResultClass<LearningGoal> result = new ResultClass<>();
-		result.setSingleElement(daoLearningGoal.getLearningGoal(id_learningGoal));
+		if(id_competence == null && id_degree==null)
+			result.setSingleElement(daoLearningGoal.getLearningGoalFormatter(id_learningGoal));
+		else 
+			result.setSingleElement(daoLearningGoal.getLearningGoal(id_learningGoal, id_competence, id_degree));
 		return result;
 	}
 
 	@PreAuthorize("hasPermission(#learningGoal, 'WRITE') or hasPermission(#learningGoal, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifyLearningGoal(LearningGoal learningGoal, Long id_learningGoal, Locale locale) {
+	public ResultClass<Boolean> modifyLearningGoal(LearningGoal learningGoal, Long id_learningGoal, Long id_competence, Long id_degree, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		LearningGoal modifyLearning = daoLearningGoal.getLearningGoal(id_learningGoal);
+		LearningGoal modifyLearning = daoLearningGoal.getLearningGoal(id_learningGoal, id_competence, id_degree);
 		
 		LearningGoal learningExists = daoLearningGoal.existByCode(learningGoal.getInfo().getCode());
 		

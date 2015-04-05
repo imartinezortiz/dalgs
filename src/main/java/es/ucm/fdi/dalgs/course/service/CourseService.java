@@ -19,7 +19,9 @@ import es.ucm.fdi.dalgs.activity.service.ActivityService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.repository.CourseRepository;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
+import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
+import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.Subject;
 import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.group.service.GroupService;
@@ -202,8 +204,12 @@ public class CourseService {
 	public ResultClass<Course> getCourseAll(Long id, Long id_academic, Boolean showAll) {
 		ResultClass<Course> result = new ResultClass<>();
 		Course c = daoCourse.getCourse(id, id_academic);
+		if(c!=null){
+		c.setActivities(new ArrayList<Activity>());c.setGroups(new ArrayList<Group>());
 		c.getActivities().addAll(serviceActivity.getActivitiesForCourse(id, showAll));
 		c.getGroups().addAll(serviceGroup.getGroupsForCourse(id, showAll));
+		}
+		else result.setHasErrors(true);
 		
 		result.setSingleElement(c);
 	

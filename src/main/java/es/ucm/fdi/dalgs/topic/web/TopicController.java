@@ -134,7 +134,7 @@ public class TopicController {
 	{
 
 		if (!resultBinding.hasErrors()){	
-			ResultClass<Boolean> result = serviceTopic.modifyTopic(modify, id_topic, id_module, locale);
+			ResultClass<Boolean> result = serviceTopic.modifyTopic(modify, id_topic, id_module, id_degree, locale);
 			if (!result.hasErrors())
 				return "redirect:/degree/" + id_degree + "/module/" + id_module + ".htm";
 			else{
@@ -161,7 +161,7 @@ public class TopicController {
 			Model model)throws ServletException {
 
 		if (!model.containsAttribute("topic")){
-			Topic p = serviceTopic.getTopic(id_topic, id_module).getSingleElement();
+			Topic p = serviceTopic.getTopic(id_topic, id_module, id_degree).getSingleElement();
 			model.addAttribute("topic", p);
 		}
 		model.addAttribute("valueButton", "Modify");
@@ -180,7 +180,7 @@ public class TopicController {
 			@PathVariable("degreeId") Long id_degree)
 					throws ServletException {
 
-		if (serviceTopic.deleteTopic(serviceTopic.getTopic(id_topic, id_module).getSingleElement()).getSingleElement()) {
+		if (serviceTopic.deleteTopic(serviceTopic.getTopic(id_topic, id_module, id_degree).getSingleElement()).getSingleElement()) {
 			return "redirect:/degree/" + id_degree + "/module/"+ id_module + ".htm";
 		} else
 			return "redirect:/error.htm";
@@ -198,7 +198,7 @@ public class TopicController {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		Topic p = serviceTopic.getTopicAll(id_topic, id_module,show).getSingleElement();
+		Topic p = serviceTopic.getTopicAll(id_topic, id_module, id_degree, show).getSingleElement();
 		myModel.put("showAll", show);
 		myModel.put("topic", p);
 		if (p.getSubjects() != null)
@@ -213,7 +213,7 @@ public class TopicController {
 	public String restoreTopic(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic, Locale locale) {
-		ResultClass<Topic> result = serviceTopic.unDeleteTopic(serviceTopic.getTopic(id_topic, id_module).getSingleElement(), id_module, locale);
+		ResultClass<Topic> result = serviceTopic.unDeleteTopic(serviceTopic.getTopic(id_topic, id_module, id_degree).getSingleElement(), id_module, locale);
 		if (!result.hasErrors())
 			return "redirect:/degree/"+id_degree+"/module/"+id_module+".htm";
 		else{
