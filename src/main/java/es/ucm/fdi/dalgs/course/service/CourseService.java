@@ -108,7 +108,7 @@ public class CourseService {
 		
 		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic, false).getSingleElement());
 		
-		Course modifyCourse = daoCourse.getCourse(id_course);
+		Course modifyCourse = daoCourse.getCourse(id_course, id_academic);
 		
 		Course courseExists = daoCourse.exist(course);
 		
@@ -150,17 +150,17 @@ public class CourseService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
-	public ResultClass<Course> getCourse(Long id) {
+	public ResultClass<Course> getCourse(Long id, Long id_academic) {
 		ResultClass<Course> result = new ResultClass<Course>();
-		result.setSingleElement(daoCourse.getCourse(id));
+		result.setSingleElement(daoCourse.getCourse(id, id_academic));
 		return result;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public ResultClass<Boolean> deleteCourse(Long id) {
+	public ResultClass<Boolean> deleteCourse(Long id, Long id_academic) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		Course course = daoCourse.getCourse(id);
+		Course course = daoCourse.getCourse(id , id_academic);
 		if (serviceActivity.deleteActivitiesFromCourse(course).getSingleElement()){
 			result.setSingleElement(daoCourse.deleteCourse(course));
 			return result;
@@ -199,9 +199,9 @@ public class CourseService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
-	public ResultClass<Course> getCourseAll(Long id, Boolean showAll) {
+	public ResultClass<Course> getCourseAll(Long id, Long id_academic, Boolean showAll) {
 		ResultClass<Course> result = new ResultClass<>();
-		Course c = daoCourse.getCourse(id);
+		Course c = daoCourse.getCourse(id, id_academic);
 		c.getActivities().addAll(serviceActivity.getActivitiesForCourse(id, showAll));
 		c.getGroups().addAll(serviceGroup.getGroupsForCourse(id, showAll));
 		

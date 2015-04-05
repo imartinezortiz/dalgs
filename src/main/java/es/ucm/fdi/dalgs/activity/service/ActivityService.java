@@ -51,7 +51,7 @@ public class ActivityService {
 	@PreAuthorize("hasPermission(#course, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Activity> addActivityCourse(Course course, Activity activity,
-			Long id_course, Locale locale) {
+			Long id_course, Long id_academic, Locale locale) {
 
 		boolean success = false;
 
@@ -73,7 +73,7 @@ public class ActivityService {
 				result.setSingleElement(activity);
 			result.setErrorsList(errors);
 		} else {
-			activity.setCourse(serviceCourse.getCourse(id_course)
+			activity.setCourse(serviceCourse.getCourse(id_course,id_academic)
 					.getSingleElement());
 			success = daoActivity.addActivity(activity);
 
@@ -332,7 +332,7 @@ public class ActivityService {
 	@PreAuthorize("hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Activity> addActivitytoGroup(Group group,
-			Activity activity, Long id_group) {
+			Activity activity, Long id_group, Long id_course) {
 		boolean success = false;
 
 		Activity activityExists = daoActivity.existByCode(activity.getInfo().getCode());
@@ -352,7 +352,7 @@ public class ActivityService {
 				result.setSingleElement(activity);
 			result.setErrorsList(errors);
 		} else {
-			activity.setGroup(serviceGroup.getGroup(id_group)
+			activity.setGroup(serviceGroup.getGroup(id_group, id_course)
 					.getSingleElement());
 			success = daoActivity.addActivity(activity);
 
@@ -383,10 +383,10 @@ public class ActivityService {
 
 	@PreAuthorize("hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Activity> addActivitiestoGroup(Group group, Collection<Activity> activities, Long id_group) {
+	public ResultClass<Activity> addActivitiestoGroup(Group group, Collection<Activity> activities, Long id_group, Long id_course) {
 		ResultClass<Activity> result = null;
 		for(Activity a:activities )
-			result =this.addActivitytoGroup(group, a, id_group);
+			result =this.addActivitytoGroup(group, a, id_group,  id_course);
 		
 		result.setHasErrors(false);
 		return result;

@@ -42,7 +42,7 @@ public class TopicService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Topic> addTopic(Topic topic, Long id_module,
+	public ResultClass<Topic> addTopic(Topic topic, Long id_module, Long id_degree,
 			Locale locale) {
 
 		boolean success = false;
@@ -65,7 +65,7 @@ public class TopicService {
 				result.setSingleElement(topic);
 			result.setErrorsList(errors);
 		} else {
-			topic.setModule(serviceModule.getModule(id_module)
+			topic.setModule(serviceModule.getModule(id_module, id_degree)
 					.getSingleElement());
 			success = daoTopic.addTopic(topic);
 
@@ -100,7 +100,7 @@ public class TopicService {
 			Long id_module, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		Topic modifyTopic = daoTopic.getTopic(id_topic);
+		Topic modifyTopic = daoTopic.getTopic(id_topic, id_module);
 
 		Topic topicExists = daoTopic.existByCode(topic.getInfo().getCode(),
 				id_module);
@@ -131,9 +131,9 @@ public class TopicService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<Topic> getTopic(Long id) {
+	public ResultClass<Topic> getTopic(Long id, Long id_module) {
 		ResultClass<Topic> result = new ResultClass<Topic>();
-		result.setSingleElement(daoTopic.getTopic(id));
+		result.setSingleElement(daoTopic.getTopic(id, id_module));
 		return result;
 	}
 
@@ -154,9 +154,9 @@ public class TopicService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<Topic> getTopicAll(Long id_topic, Boolean show) {
+	public ResultClass<Topic> getTopicAll(Long id_topic,Long id_module, Boolean show) {
 		ResultClass<Topic> result = new ResultClass<Topic>();
-		Topic p = daoTopic.getTopic(id_topic);
+		Topic p = daoTopic.getTopic(id_topic, id_module);
 		p.setSubjects(serviceSubject.getSubjectsForTopic(id_topic, show));
 		result.setSingleElement(p);
 		return result;
@@ -234,7 +234,7 @@ public class TopicService {
 	}
 
 	@Transactional(readOnly = false)
-	public boolean uploadCSV(UploadForm upload, Long id_module) {
+	public boolean uploadCSV(UploadForm upload, Long id_module, Long id_degree) {
 		boolean success = false;
 		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
 				.charAt(0), upload.getDelimiterChar().charAt(0),
@@ -245,7 +245,7 @@ public class TopicService {
 			FileItem fileItem = upload.getFileData().getFileItem();
 			TopicUpload topicUpload = new TopicUpload();
 
-			Module m = serviceModule.getModule(id_module).getSingleElement();
+			Module m = serviceModule.getModule(id_module, id_degree).getSingleElement();
 			list = topicUpload.readCSVTopicToBean(fileItem.getInputStream(),
 					upload.getCharset(), prefers, m);
 

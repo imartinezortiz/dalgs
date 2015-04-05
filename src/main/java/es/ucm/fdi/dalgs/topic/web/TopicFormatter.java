@@ -27,7 +27,7 @@ public class TopicFormatter implements Formatter<Topic>{
 	
 	public Topic parse(String topicId, Locale arg1) throws ParseException {
 
-		return topicDao.getTopic(Long.parseLong(topicId));
+		return topicDao.getTopicFormatter(Long.parseLong(topicId));
 		// Else you can just return a new object by setting some values
 		// which you deem fit.
 	}

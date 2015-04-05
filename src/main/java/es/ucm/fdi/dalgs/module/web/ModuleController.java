@@ -161,7 +161,7 @@ public class ModuleController {
 
 		//		ModelAndView model = new ModelAndView();
 		if (!model.containsAttribute("module")){
-			Module p = serviceModule.getModule(id_module).getSingleElement();
+			Module p = serviceModule.getModule(id_module, id_degree).getSingleElement();
 			model.addAttribute("module", p);
 		}	
 		model.addAttribute("valueButton", "Modify");
@@ -179,7 +179,7 @@ public class ModuleController {
 			@PathVariable("degreeId") Long id_degree)
 					throws ServletException {
 
-		if (serviceModule.deleteModule(serviceModule.getModule(id_module).getSingleElement()
+		if (serviceModule.deleteModule(serviceModule.getModule(id_module, id_degree).getSingleElement()
 				).getSingleElement()) {
 			return "redirect:/degree/" + id_degree + ".htm";
 		} else
@@ -197,7 +197,7 @@ public class ModuleController {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		Module p = serviceModule.getModuleAll(id_module, show).getSingleElement();
+		Module p = serviceModule.getModuleAll(id_module, id_degree, show).getSingleElement();
 		myModel.put("showAll", show);
 		myModel.put("module", p);
 		if (p.getTopics() != null)
@@ -210,7 +210,7 @@ public class ModuleController {
 	// Every Post have to return redirect
 	public String restoreModule(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module, Locale locale) {
-		ResultClass<Module> result = serviceModule.unDeleteModule(serviceModule.getModule(id_module).getSingleElement(), id_degree, locale);
+		ResultClass<Module> result = serviceModule.unDeleteModule(serviceModule.getModule(id_module, id_degree).getSingleElement(), id_degree, locale);
 		if (!result.hasErrors())
 			return "redirect:/degree/"+id_degree+".htm";
 		else{

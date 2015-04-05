@@ -66,7 +66,20 @@ public class CourseRepository {
 	}
 
 	
-	public Course getCourse(Long id) {
+	public Course getCourse(Long id_course, Long id_academic) {
+		AcademicTerm academic=  em.getReference(AcademicTerm.class, id_academic);
+		Query query = em
+				.createQuery("select c from Course c  where c.academicTerm=?1 and c.id=?2 ");
+		query.setParameter(1, academic);
+		query.setParameter(2, id_course);
+
+		if (query.getResultList().isEmpty())
+			return null;
+		else
+			return (Course)query.getSingleResult();
+	}
+	
+	public Course getCourseFormatter(Long id) {
 		return em.find(Course.class, id);
 	}
 

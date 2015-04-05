@@ -67,8 +67,18 @@ public class TopicRepository {
 	}
 
 
-	public Topic getTopic(Long id) {
+	public Topic getTopicFormatter(Long id) {
 		return em.find(Topic.class, id);
+	}
+	
+	public Topic getTopic(Long id, Long id_module) {
+		Module module = em.getReference(Module.class, id_module);
+		Query query = em.createQuery("select t from Topic t where t.id=?1 and t.module = ?2");
+		query.setParameter(1, id);
+		query.setParameter(2, module);
+		if (query.getResultList().isEmpty())
+			return null;
+		else return (Topic) query.getSingleResult();
 	}
 
 

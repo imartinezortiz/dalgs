@@ -94,7 +94,7 @@ public class ModuleService {
 	public ResultClass<Boolean> modifyModule(Module module, Long id_module, Long id_degree, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
-		Module modifyModule = daoModule.getModule(id_module);
+		Module modifyModule = daoModule.getModule(id_module, id_degree);
 		
 		Module moduleExists = daoModule.existByCode(module.getInfo().getCode(), id_degree);
 		
@@ -123,9 +123,9 @@ public class ModuleService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
-	public ResultClass<Module> getModule(Long id) {
+	public ResultClass<Module> getModule(Long id, Long id_degree) {
 		ResultClass<Module> result = new ResultClass<Module>();
-		result.setSingleElement(daoModule.getModule(id));
+		result.setSingleElement(daoModule.getModule(id, id_degree));
 		return result;
 	}
 
@@ -143,14 +143,15 @@ public class ModuleService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
-	public ResultClass<Module> getModuleAll(Long id_module, Boolean show) {
+	public ResultClass<Module> getModuleAll(Long id_module,Long id_degree, Boolean show) {
 		ResultClass<Module> result = new ResultClass<Module>();
-		Module p = daoModule.getModule(id_module);
+		Module p = daoModule.getModule(id_module, id_degree);
 		p.setTopics(serviceTopic.getTopicsForModule(id_module, show));
 		result.setSingleElement(p);
 		return result;
 	}
 
+	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly=true)
 	public ResultClass<Module> getModulesForDegree(Long id, Boolean show) {

@@ -40,7 +40,7 @@ public class LearningGoalService {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")	
 	@Transactional(readOnly = false)
 	public ResultClass<LearningGoal> addLearningGoal(LearningGoal learningGoal,
-			Long id_competence, Locale locale) {
+			Long id_competence, Long id_degree, Locale locale) {
 		
 		boolean success = false;
 		
@@ -61,7 +61,7 @@ public class LearningGoalService {
 			result.setErrorsList(errors);
 		}
 		else{
-			learningGoal.setCompetence(serviceCompetence.getCompetence(id_competence).getSingleElement());
+			learningGoal.setCompetence(serviceCompetence.getCompetence(id_competence, id_degree).getSingleElement());
 			success = daoLearningGoal.addLearningGoal(learningGoal);
 			if(success){
 				learningExists = daoLearningGoal.existByCode(learningGoal.getInfo().getCode());

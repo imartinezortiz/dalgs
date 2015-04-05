@@ -27,7 +27,7 @@ public class SubjectFormatter implements Formatter<Subject> {
 	@Override
 	public Subject parse(String subjectId, Locale arg1) throws ParseException {
 
-		return subjectService.getSubject(Long.parseLong(subjectId));
+		return subjectService.getSubjectFormatter(Long.parseLong(subjectId));
 		// Else you can just return a new object by setting some values
 		// which you deem fit.
 	}

@@ -116,7 +116,7 @@ public class CompetenceController {
 			@PathVariable("competenceId") Long id_competence)
 					throws ServletException {
 
-		if (serviceCompetence.deleteCompetence(serviceCompetence.getCompetence(id_competence).getSingleElement()).getSingleElement()) {
+		if (serviceCompetence.deleteCompetence(serviceCompetence.getCompetence(id_competence, id_degree).getSingleElement()).getSingleElement()) {
 			return "redirect:/degree/" + id_degree + ".htm";
 		} else
 			return "redirect:/error.htm";
@@ -194,7 +194,7 @@ public class CompetenceController {
 					throws ServletException {
 		if (!model.containsAttribute("competence")){
 
-			Competence p = serviceCompetence.getCompetence(id_competence).getSingleElement();
+			Competence p = serviceCompetence.getCompetence(id_competence, id_degree).getSingleElement();
 			model.addAttribute("competence", p);
 		}
 		model.addAttribute("valueButton", "Modify");
@@ -216,7 +216,7 @@ public class CompetenceController {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		Competence p = serviceCompetence.getCompetenceAll(id_competence, show).getSingleElement();
+		Competence p = serviceCompetence.getCompetenceAll(id_competence, id_degree,show).getSingleElement();
 
 		myModel.put("showAll", show);
 		myModel.put("competence", p);
@@ -229,7 +229,7 @@ public class CompetenceController {
 	// Every Post have to return redirect
 	public String restoreCompetence(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence, Locale locale) {
-		ResultClass<Competence> result = serviceCompetence.unDeleteCompetence(serviceCompetence.getCompetence(id_competence).getSingleElement(), id_degree, locale);
+		ResultClass<Competence> result = serviceCompetence.unDeleteCompetence(serviceCompetence.getCompetence(id_competence, id_degree).getSingleElement(), id_degree, locale);
 		if (!result.hasErrors())
 			return "redirect:/degree/"+id_degree+".htm";
 		else{

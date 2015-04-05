@@ -54,7 +54,7 @@ public class LearningGoalController {
 
 		if (!resultBinding.hasErrors()){
 
-			ResultClass<LearningGoal> result = serviceLearningGoal.addLearningGoal(newLearningGoal, id_competence, locale);
+			ResultClass<LearningGoal> result = serviceLearningGoal.addLearningGoal(newLearningGoal, id_competence,id_degree, locale);
 			if (!result.hasErrors())
 				return "redirect:/degree/" + id_degree + "/competence/"+ id_competence +".htm";	
 			else{

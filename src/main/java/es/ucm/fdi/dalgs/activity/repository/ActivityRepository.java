@@ -78,13 +78,13 @@ public class ActivityRepository {
 
 		if(id_course!=null){
 			Course course = em.getReference(Course.class, id_course);
-			query = em.createQuery("select a from Activity a where a.id=?1 and a.course=?2 and a.isDeleted='false' ");
+			query = em.createQuery("select a from Activity a where a.id=?1 and a.course=?2  ");
 			query.setParameter(1, id);
 			query.setParameter(2, course);
 		} 
 		else if(id_group != null){
 			Group group = em.getReference(Group.class, id_group);
-			query = em.createQuery("select a from Activity a where a.id=?1 and a.group=?2 and a.isDeleted='false' ");
+			query = em.createQuery("select a from Activity a where a.id=?1 and a.group=?2");
 			query.setParameter(1, id);
 			query.setParameter(2, group);
 		}

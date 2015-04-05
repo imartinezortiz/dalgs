@@ -46,7 +46,7 @@ public class GroupService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Group> addGroup(Group group, Long id_course,
+	public ResultClass<Group> addGroup(Group group, Long id_course, Long id_academic,
 			Locale locale) {
 
 		boolean success = false;
@@ -68,7 +68,7 @@ public class GroupService {
 				result.setSingleElement(group);
 			result.setErrorsList(errors);
 		} else {
-			group.setCourse(serviceCourse.getCourse(id_course)
+			group.setCourse(serviceCourse.getCourse(id_course, id_academic)
 					.getSingleElement());
 			success = daoGroup.addGroup(group);
 
@@ -91,9 +91,9 @@ public class GroupService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
-	public ResultClass<Group> getGroup(Long id_group) {
+	public ResultClass<Group> getGroup(Long id_group, Long id_course) {
 		ResultClass<Group> result = new ResultClass<Group>();
-		result.setSingleElement(daoGroup.getGroup(id_group));
+		result.setSingleElement(daoGroup.getGroup(id_group, id_course));
 		return result;
 	}
 
@@ -103,7 +103,7 @@ public class GroupService {
 			Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
-		Group modifyGroup = daoGroup.getGroup(id_group);
+		Group modifyGroup = daoGroup.getGroup(id_group,  id_course);
 
 		Group groupExists = daoGroup.existInCourse(id_course, group.getName());
 
@@ -261,7 +261,7 @@ public class GroupService {
 			Long id_course, Long id_academic) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		Group modifyGroup = daoGroup.getGroup(id_group);
+		Group modifyGroup = daoGroup.getGroup(id_group, id_course);
 
 		Collection<User> old_professors = modifyGroup.getProfessors(); // To
 																		// delete
@@ -298,7 +298,7 @@ public class GroupService {
 	public ResultClass<Boolean> setStudents(Group group, Long id_group,
 			Long id_course, Long id_academic) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		Group modifyGroup = daoGroup.getGroup(id_group);
+		Group modifyGroup = daoGroup.getGroup(id_group, id_course);
 		Collection<User> old_students = modifyGroup.getStudents();
 
 		modifyGroup.setStudents(group.getStudents());
@@ -328,7 +328,7 @@ public class GroupService {
 	public ResultClass<Boolean> deleteUserGroup(Long id_group, Long id_user,
 			Long id_course, Long id_academic, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		Group g = daoGroup.getGroup(id_group);
+		Group g = daoGroup.getGroup(id_group, id_course);
 
 		User u = serviceUser.getUser(id_user);
 		if (serviceUser.hasRole(u, "ROLE_PROFESSOR")

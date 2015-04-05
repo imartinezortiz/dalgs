@@ -78,7 +78,25 @@ public class CompetenceRepository {
 		}
 	}
 
-	public Competence getCompetence(Long id) {
+	public Competence getCompetence(Long id, Long id_degree  ) {
+		Query query = null;
+
+	
+			Degree degree = em.getReference(Degree.class, id_degree);
+			query = em.createQuery("select c from Competence c where c.id=?1 and c.degree=?2 ");
+			query.setParameter(1, id);
+			query.setParameter(2, degree);
+		
+		
+
+	if(query.getResultList().isEmpty()) return null;
+	
+	return (Competence) query.getSingleResult();		
+
+
+	}
+
+	public Competence getCompetenceFormatter(Long id) {
 		return em.find(Competence.class, id);
 
 	}

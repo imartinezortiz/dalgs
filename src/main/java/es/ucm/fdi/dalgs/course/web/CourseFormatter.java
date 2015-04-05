@@ -27,7 +27,7 @@ public class CourseFormatter implements Formatter<Course> {
 
 	@Override
 	public Course parse(String courseId, Locale arg1) throws ParseException {
-		return courseService.getCourse(Long.parseLong(courseId));
+		return courseService.getCourseFormatter(Long.parseLong(courseId));
 		// Else you can just return a new object by setting some values
 		// which you deem fit.
 	}

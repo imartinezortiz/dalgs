@@ -26,7 +26,7 @@ public class ModuleFormatter implements Formatter<Module>{
 
 	public Module parse(String moduleId, Locale arg1) throws ParseException {
 
-		return moduleDao.getModule(Long.parseLong(moduleId));
+		return moduleDao.getModuleFormatter(Long.parseLong(moduleId));
 		// Else you can just return a new object by setting some values
 		// which you deem fit.
 	}

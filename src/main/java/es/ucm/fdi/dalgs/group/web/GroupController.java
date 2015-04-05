@@ -88,7 +88,7 @@ public class GroupController {
 
 		if (!resultBinding.hasErrors()) {
 			ResultClass<Group> result = serviceGroup.addGroup(newgroup,
-					id_course, locale);
+					id_course, id_academicTerm,locale);
 			if (!result.hasErrors())
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
 						+ id_course + ".htm";
@@ -167,7 +167,7 @@ public class GroupController {
 		model.addAttribute("valueButton", "Modify");
 
 		if (!model.containsAttribute("group")) {
-			Group p = serviceGroup.getGroup(id_group).getSingleElement();
+			Group p = serviceGroup.getGroup(id_group, id_course).getSingleElement();
 			model.addAttribute("group", p);
 
 		}
@@ -216,7 +216,7 @@ public class GroupController {
 			@PathVariable("groupId") Long id_group) throws ServletException {
 
 		if (serviceGroup.deleteGroup(
-				serviceGroup.getGroup(id_group).getSingleElement())
+				serviceGroup.getGroup(id_group, id_course).getSingleElement())
 				.getSingleElement()) {
 			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
 					+ id_course + ".htm";
@@ -237,7 +237,7 @@ public class GroupController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		Group a = serviceGroup.getGroup(id_group).getSingleElement();
+		Group a = serviceGroup.getGroup(id_group, id_course).getSingleElement();
 		model.put("showAll", show);
 
 		model.put("group", a);
@@ -256,9 +256,9 @@ public class GroupController {
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/professor/add.htm", method = RequestMethod.GET)
 	public String addProfessorToGroupGET(
-			@PathVariable("groupId") Long id_group, Model model) {
+			@PathVariable("groupId") Long id_group,@PathVariable("courseId") Long id_course, Model model) {
 
-		Group group = serviceGroup.getGroup(id_group).getSingleElement();
+		Group group = serviceGroup.getGroup(id_group, id_course).getSingleElement();
 		List<String> professors = serviceUser.getAllByRole("ROLE_PROFESSOR");
 
 		model.addAttribute("group", group);
@@ -297,10 +297,10 @@ public class GroupController {
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/student/add.htm", method = RequestMethod.GET)
-	public String addStudentToGroupGET(@PathVariable("groupId") Long id_group,
+	public String addStudentToGroupGET(@PathVariable("groupId") Long id_group,@PathVariable("courseId") Long id_course,
 			Model model) {
 
-		Group group = serviceGroup.getGroup(id_group).getSingleElement();
+		Group group = serviceGroup.getGroup(id_group, id_course).getSingleElement();
 		List<String> students = serviceUser.getAllByRole("ROLE_STUDENT");
 
 		model.addAttribute("group", group);
@@ -344,7 +344,7 @@ public class GroupController {
 			@PathVariable("groupId") Long id_group, Locale locale) {
 
 		ResultClass<Group> result = serviceGroup.unDeleteGroup(serviceGroup
-				.getGroup(id_group).getSingleElement(), id_course, locale);
+				.getGroup(id_group, id_course).getSingleElement(), id_course, locale);
 
 		if (!result.hasErrors())
 
@@ -376,7 +376,7 @@ public class GroupController {
 	// Every Post have to return redirect
 	public String copyGroup(@PathVariable("academicId") Long id_academic,@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group, Locale locale) {
-		Group aux_group = serviceGroup.getGroup(id_group).getSingleElement();
+		Group aux_group = serviceGroup.getGroup(id_group, id_course).getSingleElement();
 		ResultClass<Group> result = serviceGroup.copyGroup(aux_group, id_course, locale);
 		
 		if (!result.hasErrors())

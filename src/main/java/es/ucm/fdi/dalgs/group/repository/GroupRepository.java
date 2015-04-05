@@ -35,19 +35,23 @@ public class GroupRepository {
 		}
 	}
 
-/*	public Group getGroupAll(Long id_group) {
+	public Group getGroup(Long id_group, Long id_course) {
+		Course course = em.getReference(Course.class, id_course);
+
 		Query query = null;
-		
-		query = em.createQuery("select g from Group g  join g.course c join c.subject join c.academicTerm a where g.id = ?1");
-		query.setParameter(1, id_group);
+
+		query = em.createQuery("select g from Group g  where g.course = ?1 and g.id = ?2");
+		query.setParameter(1, course);
+		query.setParameter(2, id_course);
+
 
 		if (query.getResultList().isEmpty())
 			return null;
 		else
 			return (Group) query.getSingleResult();
 	}
-	*/
-	public Group getGroup(Long id_group) {
+	
+	public Group getGroupFormatter(Long id_group) {
 		return em.find(Group.class, id_group);
 	}
 

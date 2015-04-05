@@ -50,7 +50,7 @@ public class SubjectService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Subject> addSubject(Subject subject, Long id_topic, Locale locale) {
+	public ResultClass<Subject> addSubject(Subject subject, Long id_topic, Long id_module, Locale locale) {
 		
 		boolean success = false;
 		Subject subjectExists = daoSubject.existByCode(subject.getInfo().getCode());
@@ -70,7 +70,7 @@ public class SubjectService {
 			result.setErrorsList(errors);
 		}
 		else{
-			subject.setTopic(serviceTopic.getTopic(id_topic).getSingleElement());
+			subject.setTopic(serviceTopic.getTopic(id_topic, id_module).getSingleElement());
 			success = daoSubject.addSubject(subject);
 			
 			
@@ -99,9 +99,9 @@ public class SubjectService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
-	public ResultClass<Subject> getSubject(Long id) {
+	public ResultClass<Subject> getSubject(Long id, Long id_topic) {
 		ResultClass<Subject> result = new ResultClass<>();
-		result.setSingleElement(daoSubject.getSubject(id));
+		result.setSingleElement(daoSubject.getSubject(id, id_topic));
 		return result;
 	}
 
@@ -133,10 +133,10 @@ public class SubjectService {
 
 	@PreAuthorize("hasPermission(#subject, 'WRITE') or hasPermission(#subject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifySubject(Subject subject, Long id_subject, Locale locale) {
+	public ResultClass<Boolean> modifySubject(Subject subject, Long id_subject, Long id_topic, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		Subject modifySubject = daoSubject.getSubject(id_subject);
+		Subject modifySubject = daoSubject.getSubject(id_subject, id_topic);
 		
 		Subject subjectExists = daoSubject.existByCode(subject.getInfo().getCode());
 		
@@ -165,9 +165,9 @@ public class SubjectService {
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> addCompetences(Subject modify, Long id_subject) {
+	public ResultClass<Boolean> addCompetences(Subject modify, Long id_subject, Long id_topic) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		Subject subject = daoSubject.getSubject(id_subject);
+		Subject subject = daoSubject.getSubject(id_subject, id_topic);
 		subject.setInfo(modify.getInfo());
 		subject.setCompetences(modify.getCompetences());		
 		result.setSingleElement(daoSubject.saveSubject(subject));
@@ -193,9 +193,9 @@ public class SubjectService {
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<Subject> getSubjectAll(Long id_subject) {
+	public ResultClass<Subject> getSubjectAll(Long id_subject, Long id_topic) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
-		Subject p = daoSubject.getSubject(id_subject);;
+		Subject p = daoSubject.getSubject(id_subject, id_topic);
 		p.setCompetences(serviceCompetence.getCompetencesForSubject(id_subject));
 		result.setSingleElement(p);
 		return result;
@@ -257,7 +257,7 @@ public class SubjectService {
 		
 	}
 	@Transactional(readOnly = false)
-	public boolean uploadCSV(UploadForm upload, Long id_topic) {
+	public boolean uploadCSV(UploadForm upload, Long id_topic, Long id_module) {
 		boolean success = false;
 		CsvPreference prefers =
 				new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload
@@ -269,7 +269,7 @@ public class SubjectService {
 					FileItem fileItem = upload.getFileData().getFileItem();
 					SubjectUpload subjectUpload = new SubjectUpload();
 					
-					Topic t = serviceTopic.getTopic(id_topic).getSingleElement();
+					Topic t = serviceTopic.getTopic(id_topic, id_module).getSingleElement();
 					list = subjectUpload.readCSVSubjectToBean(fileItem.getInputStream(),
 							upload.getCharset(), prefers, t);
 

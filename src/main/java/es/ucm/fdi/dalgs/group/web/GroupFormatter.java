@@ -25,7 +25,7 @@ public class GroupFormatter implements Formatter<Group> {
 
 	public Group parse(String groupId, Locale arg1) throws ParseException {
 
-		return daoGroup.getGroup(Long.parseLong(groupId));
+		return daoGroup.getGroupFormatter(Long.parseLong(groupId));
 		// Else you can just return a new object by setting some values
 		// which you deem fit.
 	}

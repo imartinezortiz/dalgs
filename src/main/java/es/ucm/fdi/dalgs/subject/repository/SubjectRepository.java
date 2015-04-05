@@ -69,7 +69,20 @@ public class SubjectRepository {
 		}
 	}
 
-	public Subject getSubject(Long id) {
+	public Subject getSubject(Long id, Long id_topic) {
+		Topic topic = em.getReference(Topic.class, id_topic);
+		Query query = em.createQuery("Select s from Subject s where s.id=?1 and s.topic=?2");
+		query.setParameter(1, id);
+		query.setParameter(2, topic);
+
+		if (query.getResultList().isEmpty())
+			return null;
+		else
+			return (Subject) query.getSingleResult();
+
+	}
+	
+	public Subject getSubjectFormatter(Long id) {
 		return em.find(Subject.class, id);
 
 	}

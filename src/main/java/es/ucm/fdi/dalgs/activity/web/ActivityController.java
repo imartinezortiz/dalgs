@@ -98,10 +98,10 @@ public class ActivityController {
 			throws NotOwnerException {
 
 		if (!resultBinding.hasErrors()) {
-			Course course = serviceCourse.getCourse(id_course).getSingleElement();
+			Course course = serviceCourse.getCourse(id_course, id_academicTerm).getSingleElement();
 			
 			ResultClass<Activity> result = serviceActivity.addActivityCourse(course,
-					newactivity, id_course, locale);
+					newactivity, id_course,id_academicTerm, locale);
 			if (!result.hasErrors())
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
 						+ id_course + "/activity/" + result.getSingleElement().getId()
@@ -139,7 +139,7 @@ public class ActivityController {
 			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		if (!resultBinding.hasErrors()) {
-			Course course = serviceCourse.getCourse(id_course).getSingleElement();
+			Course course = serviceCourse.getCourse(id_course,id_academicTerm).getSingleElement();
 
 			ResultClass<Activity> result = serviceActivity
 					.unDeleteActivity(course, null,activity, locale);
@@ -214,7 +214,7 @@ public class ActivityController {
 	{
 
 		if (!resultBinding.hasErrors()) {
-			Course course = serviceCourse.getCourse(id_course).getSingleElement();
+			Course course = serviceCourse.getCourse(id_course,id_academicTerm).getSingleElement();
 
 			ResultClass<Boolean> result = serviceActivity.modifyActivity(course,null,
 					activity, id_activity, locale);
@@ -251,7 +251,7 @@ public class ActivityController {
 
 		// Activity p = serviceActivity.getActivity(id);
 		if (!result.hasErrors()){
-			Course course = serviceCourse.getCourse(id_course).getSingleElement();
+			Course course = serviceCourse.getCourse(id_course,id_academicTerm).getSingleElement();
 
 			if (serviceActivity.addLearningGoals(course, null,id, learningGoalStatus)
 					.getSingleElement())
@@ -273,7 +273,7 @@ public class ActivityController {
 			@PathVariable("activityId") Long id_activity)
 			throws ServletException {
 
-		Course course = serviceCourse.getCourse(id_course).getSingleElement();
+		Course course = serviceCourse.getCourse(id_course, id_AcademicTerm).getSingleElement();
 
 		if (serviceActivity.deleteActivity(course,null, id_activity).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
@@ -293,7 +293,7 @@ public class ActivityController {
 			@PathVariable("activityId") long id_Activity,
 			@PathVariable("compStatusId") Long id_learningStatus)
 			throws ServletException {
-		Course course = serviceCourse.getCourse(id_course).getSingleElement();
+		Course course = serviceCourse.getCourse(id_course,id_AcademicTerm).getSingleElement();
 
 		if (serviceActivity.deleteLearningActivity(course, null, id_learningStatus,
 				id_Activity).getSingleElement()) {
@@ -334,7 +334,7 @@ public class ActivityController {
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("activityId") Long id_activity, Locale locale) {
-		Course course = serviceCourse.getCourse(id_course).getSingleElement();
+		Course course = serviceCourse.getCourse(id_course,id_academic).getSingleElement();
 
 		ResultClass<Activity> result = serviceActivity
 				.unDeleteActivity(course, null, serviceActivity.getActivity(id_activity,id_course,null)
@@ -383,9 +383,9 @@ public class ActivityController {
 			throws NotOwnerException {
 
 		if (!resultBinding.hasErrors()) {
-			Group group = serviceGroup.getGroup(id_group).getSingleElement();
+			Group group = serviceGroup.getGroup(id_group, id_course).getSingleElement();
 
-			ResultClass<Activity> result = serviceActivity.addActivitytoGroup(group,newactivity, id_group);
+			ResultClass<Activity> result = serviceActivity.addActivitytoGroup(group,newactivity, id_group, id_course);
 			if (!result.hasErrors())
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
 						+ id_course + "/group/" + id_group + "/activity/"
@@ -427,7 +427,7 @@ public class ActivityController {
 
 		if (!resultBinding.hasErrors()) {
 
-			Group group = serviceGroup.getGroup(id_group).getSingleElement();
+			Group group = serviceGroup.getGroup(id_group, id_course).getSingleElement();
 
 			ResultClass<Activity> result = serviceActivity.unDeleteActivity(null,group,activity, locale);
 
@@ -503,7 +503,7 @@ public class ActivityController {
 	{
 
 		if (!resultBinding.hasErrors()) {
-			Group group = serviceGroup.getGroup(id_group).getSingleElement();
+			Group group = serviceGroup.getGroup(id_group, id_course).getSingleElement();
 
 			ResultClass<Boolean> result = serviceActivity.modifyActivity(null, group,activity, id_activity, locale);
 			if (!result.hasErrors())
@@ -540,7 +540,7 @@ public class ActivityController {
 			BindingResult result, Model model) throws ServletException {
 
 		if (!result.hasErrors()){
-			Group group = serviceGroup.getGroup(id_group).getSingleElement();
+			Group group = serviceGroup.getGroup(id_group, id_course).getSingleElement();
 
 			if (serviceActivity.addLearningGoals(null, group,id, learningGoalStatus)
 					.getSingleElement())
@@ -565,7 +565,7 @@ public class ActivityController {
 			@PathVariable("activityId") Long id_activity)
 			throws ServletException {
 		
-		Group group = serviceGroup.getGroup(id_group).getSingleElement();
+		Group group = serviceGroup.getGroup(id_group, id_course).getSingleElement();
 
 		if (serviceActivity.deleteActivity(null, group,id_activity).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
@@ -587,7 +587,7 @@ public class ActivityController {
 			@PathVariable("compStatusId") Long id_learningStatus)
 			throws ServletException {
 
-		Group group = serviceGroup.getGroup(id_group).getSingleElement();
+		Group group = serviceGroup.getGroup(id_group, id_course).getSingleElement();
 
 		if (serviceActivity.deleteLearningActivity(null, group,id_learningStatus,
 				id_Activity).getSingleElement()) {
@@ -634,7 +634,7 @@ public class ActivityController {
 
 			@PathVariable("activityId") Long id_activity, Locale locale) {
 		
-		Group group = serviceGroup.getGroup(id_group).getSingleElement();
+		Group group = serviceGroup.getGroup(id_group, id_course).getSingleElement();
 
 		ResultClass<Activity> result = serviceActivity
 				.unDeleteActivity(null, group,serviceActivity.getActivity(id_activity,null,id_group)

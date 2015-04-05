@@ -191,7 +191,7 @@ public class CourseController {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		Course p = serviceCourse.getCourseAll(id, showAll).getSingleElement();
+		Course p = serviceCourse.getCourseAll(id, id_academic, showAll).getSingleElement();
 		myModel.put("course", p);
 		myModel.put("showAll", showAll);
 
@@ -216,7 +216,7 @@ public class CourseController {
 			throws ServletException {
 
 		if (!model.containsAttribute("modifyCourse")) {
-			Course p = serviceCourse.getCourse(id).getSingleElement();
+			Course p = serviceCourse.getCourse(id, id_academic).getSingleElement();
 
 			AcademicTerm academic = serviceAcademic.getAcademicTerm(
 					id_academic, false).getSingleElement();
@@ -279,7 +279,7 @@ public class CourseController {
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course, Locale locale) {
 		ResultClass<Course> result = serviceCourse.unDeleteCourse(serviceCourse
-				.getCourse(id_course).getSingleElement(), id_academic, locale);
+				.getCourse(id_course, id_academic).getSingleElement(), id_academic, locale);
 
 		if (!result.hasErrors())
 
@@ -301,7 +301,7 @@ public class CourseController {
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course) throws ServletException {
 
-		if (serviceCourse.deleteCourse(id_course).getSingleElement()) {
+		if (serviceCourse.deleteCourse(id_course, id_academic).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_academic + ".htm";
 		} else
 			return "redirect:/error.htm";

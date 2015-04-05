@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+
 import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.domain.Module;
 
@@ -47,13 +48,13 @@ public class ModuleRepository {
 		return true;
 	}
 
-
 	@SuppressWarnings("unchecked")
 	public List<Module> getAll() {
-		return em.createQuery("select m from Module m where m.isDeleted = false order by m.id ")
+		return em
+				.createQuery(
+						"select m from Module m where m.isDeleted = false order by m.id ")
 				.getResultList();
 	}
-
 
 	public boolean saveModule(Module module) {
 		try {
@@ -65,15 +66,28 @@ public class ModuleRepository {
 		return true;
 	}
 
+	public Module getModule(Long id, Long id_degree) {
 
-	public Module getModule(Long id) {
+		Degree degree = em.getReference(Degree.class, id_degree);
+		Query query = em
+				.createQuery("select m from Module m where m.id=?1 and m.degree=?2  ");
+		query.setParameter(1, id);
+		query.setParameter(2, degree);
+
+		if (query.getResultList().isEmpty())
+			return null;
+
+		return (Module) query.getSingleResult();
+	}
+	
+	public Module getModuleFormatter(Long id){
 		return em.find(Module.class, id);
 	}
-
+	
 
 	public boolean deleteModule(Module module) {
 		try {
-			//			Module module = em.getReference(Module.class, id_module);
+			// Module module = em.getReference(Module.class, id_module);
 			module.setDeleted(true);
 			em.merge(module);
 
@@ -84,34 +98,33 @@ public class ModuleRepository {
 		}
 	}
 
-
 	public String getNextCode() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-
 	public Module existByCode(String code, Long id_degree) {
 		Degree d = em.getReference(Degree.class, id_degree);
-		Query query = em.createQuery("select m from Module m where m.info.code=?1 and m.degree = ?2");
+		Query query = em
+				.createQuery("select m from Module m where m.info.code=?1 and m.degree = ?2");
 		query.setParameter(1, code);
 		query.setParameter(2, d);
 		if (query.getResultList().isEmpty())
 			return null;
-		else return (Module) query.getSingleResult();
+		else
+			return (Module) query.getSingleResult();
 	}
 
 	@SuppressWarnings("unchecked")
-
 	public Collection<Module> getModulesForDegree(Long id, Boolean show) {
 		Degree degree = em.getReference(Degree.class, id);
 
-		if(!show){
+		if (!show) {
 			Query query = em
 					.createQuery("select m from Module m where m.degree=?1 and m.isDeleted='false'");
 			query.setParameter(1, degree);
 			return (List<Module>) query.getResultList();
-		}else{
+		} else {
 			Query query = em
 					.createQuery("select m from Module m where m.degree=?1");
 			query.setParameter(1, degree);
@@ -119,7 +132,6 @@ public class ModuleRepository {
 			return (List<Module>) query.getResultList();
 		}
 	}
-
 
 	public boolean deleteModulesForDegree(Degree d) {
 		try {
@@ -137,31 +149,30 @@ public class ModuleRepository {
 	}
 
 	public boolean persistListModules(List<Module> modules) {
-	
-			int i = 0;
-			for(Module m : modules) {
-				try{
-					
-					//In this case we have to hash the password (SHA-256)
-					//StringSHA sha = new StringSHA();
-					//String pass = sha.getStringMessageDigest(u.getPassword());
-					//u.setPassword(pass);
-					
-					m.setId(null); //If not  a detached entity is passed to persist
-					em.persist(m);
-			    	//em.flush();
 
+		int i = 0;
+		for (Module m : modules) {
+			try {
 
-			    if(++i % 20 == 0) {
-			    	em.flush();
-			    }
-				}catch(Exception e){
-					logger.error(e.getMessage());
-					return false;
+				// In this case we have to hash the password (SHA-256)
+				// StringSHA sha = new StringSHA();
+				// String pass = sha.getStringMessageDigest(u.getPassword());
+				// u.setPassword(pass);
+
+				m.setId(null); // If not a detached entity is passed to persist
+				em.persist(m);
+				// em.flush();
+
+				if (++i % 20 == 0) {
+					em.flush();
 				}
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+				return false;
 			}
-			
-			return true;
-
 		}
+
+		return true;
+
+	}
 }

@@ -63,7 +63,7 @@ public class TopicController {
 
 		if (!resultBinding.hasErrors()){
 
-			ResultClass<Topic> result = serviceTopic.addTopic(newTopic, id_module, locale);
+			ResultClass<Topic> result = serviceTopic.addTopic(newTopic, id_module, id_degree, locale);
 			if (!result.hasErrors())
 				return "redirect:/degree/" + id_degree + "/module/" + id_module + ".htm";
 			else{
@@ -161,7 +161,7 @@ public class TopicController {
 			Model model)throws ServletException {
 
 		if (!model.containsAttribute("topic")){
-			Topic p = serviceTopic.getTopic(id_topic).getSingleElement();
+			Topic p = serviceTopic.getTopic(id_topic, id_module).getSingleElement();
 			model.addAttribute("topic", p);
 		}
 		model.addAttribute("valueButton", "Modify");
@@ -180,7 +180,7 @@ public class TopicController {
 			@PathVariable("degreeId") Long id_degree)
 					throws ServletException {
 
-		if (serviceTopic.deleteTopic(serviceTopic.getTopic(id_topic).getSingleElement()).getSingleElement()) {
+		if (serviceTopic.deleteTopic(serviceTopic.getTopic(id_topic, id_module).getSingleElement()).getSingleElement()) {
 			return "redirect:/degree/" + id_degree + "/module/"+ id_module + ".htm";
 		} else
 			return "redirect:/error.htm";
@@ -198,7 +198,7 @@ public class TopicController {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		Topic p = serviceTopic.getTopicAll(id_topic, show).getSingleElement();
+		Topic p = serviceTopic.getTopicAll(id_topic, id_module,show).getSingleElement();
 		myModel.put("showAll", show);
 		myModel.put("topic", p);
 		if (p.getSubjects() != null)
@@ -213,7 +213,7 @@ public class TopicController {
 	public String restoreTopic(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic, Locale locale) {
-		ResultClass<Topic> result = serviceTopic.unDeleteTopic(serviceTopic.getTopic(id_topic).getSingleElement(), id_module, locale);
+		ResultClass<Topic> result = serviceTopic.unDeleteTopic(serviceTopic.getTopic(id_topic, id_module).getSingleElement(), id_module, locale);
 		if (!result.hasErrors())
 			return "redirect:/degree/"+id_degree+"/module/"+id_module+".htm";
 		else{
@@ -237,7 +237,8 @@ public class TopicController {
 	public String uploadPost(
 			@ModelAttribute("newUpload") @Valid UploadForm upload,
 			BindingResult result, Model model,
-			@PathVariable("moduleId") Long id_module) {
+			@PathVariable("moduleId") Long id_module,
+			@PathVariable("degreeId") Long id_degree){
 
 		if (result.hasErrors() || upload.getCharset().isEmpty()) {
 			for (ObjectError error : result.getAllErrors()) {
@@ -247,7 +248,7 @@ public class TopicController {
 			return "upload";
 		}
 
-		if (serviceTopic.uploadCSV(upload, id_module))
+		if (serviceTopic.uploadCSV(upload, id_module, id_degree))
 			return "home";
 		else
 			return "upload";
