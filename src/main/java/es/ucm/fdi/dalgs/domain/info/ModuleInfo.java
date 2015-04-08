@@ -14,24 +14,31 @@ import org.hibernate.validator.constraints.NotEmpty;
 import es.ucm.fdi.dalgs.domain.Copyable;
 
 @Embeddable
-public class ModuleInfo implements Serializable,  Cloneable, Copyable<ModuleInfo> {
+public class ModuleInfo implements Serializable, Cloneable,
+		Copyable<ModuleInfo> {
 
 	private static final long serialVersionUID = 1L;
-	
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=20)
+
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 20)
 	@Basic(optional = false)
 	@Column(name = "code_module", nullable = false)
 	private String code;
-	
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=100)
+
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 100)
 	@Basic(optional = false)
 	@Column(name = "name", length = 100, nullable = false)
 	private String name;
 
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=250)
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 250)
 	@Basic(optional = false)
 	@Column(name = "description", length = 250, nullable = false)
 	private String description;
@@ -84,7 +91,6 @@ public class ModuleInfo implements Serializable,  Cloneable, Copyable<ModuleInfo
 			return false;
 		return true;
 	}
-	
 
 	@Override
 	public ModuleInfo depth_copy() {
@@ -101,5 +107,5 @@ public class ModuleInfo implements Serializable,  Cloneable, Copyable<ModuleInfo
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 }

@@ -49,13 +49,13 @@ public class TopicRepository {
 		return true;
 	}
 
-
 	@SuppressWarnings("unchecked")
 	public List<Topic> getAll() {
-		return em.createQuery("select t from Topic t where t.isDeleted = false order by t.id ")
+		return em
+				.createQuery(
+						"select t from Topic t where t.isDeleted = false order by t.id ")
 				.getResultList();
 	}
-
 
 	public boolean saveTopic(Topic topic) {
 		try {
@@ -67,24 +67,24 @@ public class TopicRepository {
 		return true;
 	}
 
-
 	public Topic getTopicFormatter(Long id) {
 		return em.find(Topic.class, id);
 	}
-	
+
 	public Topic getTopic(Long id, Long id_module, Long id_degree) {
 		Module module = em.getReference(Module.class, id_module);
 		Degree degree = em.getReference(Degree.class, id_degree);
-		Query query = em.createQuery("select t from Topic t where t.id=?1 and t.module = ?2 and t.module.degree=?3");
+		Query query = em
+				.createQuery("select t from Topic t where t.id=?1 and t.module = ?2 and t.module.degree=?3");
 		query.setParameter(1, id);
 		query.setParameter(2, module);
 		query.setParameter(3, degree);
-		
+
 		if (query.getResultList().isEmpty())
 			return null;
-		else return (Topic) query.getSingleResult();
+		else
+			return (Topic) query.getSingleResult();
 	}
-
 
 	public boolean deleteTopic(Topic topic) {
 		try {
@@ -98,33 +98,32 @@ public class TopicRepository {
 		}
 	}
 
-
 	public String getNextCode() {
 		return "";
 	}
 
-
 	public Topic existByCode(String code, Long id_module) {
 		Module module = em.getReference(Module.class, id_module);
-		Query query = em.createQuery("select t from Topic t where t.info.code=?1 and t.module = ?2");
+		Query query = em
+				.createQuery("select t from Topic t where t.info.code=?1 and t.module = ?2");
 		query.setParameter(1, code);
 		query.setParameter(2, module);
 		if (query.getResultList().isEmpty())
 			return null;
-		else return (Topic) query.getSingleResult();
+		else
+			return (Topic) query.getSingleResult();
 	}
-
 
 	@SuppressWarnings("unchecked")
 	public Collection<Topic> getTopicsForModule(Long id, Boolean show) {
 		Module module = em.getReference(Module.class, id);
-		if(show){
+		if (show) {
 			Query query = em
 					.createQuery("select t from Topic t where t.module=?1");
 			query.setParameter(1, module);
 
 			return (List<Topic>) query.getResultList();
-		}else{
+		} else {
 
 			Query query = em
 					.createQuery("select t from Topic t where t.module=?1 and t.isDeleted='false'");
@@ -135,17 +134,18 @@ public class TopicRepository {
 		}
 	}
 
-
 	@SuppressWarnings("unchecked")
 	public Collection<Topic> getTopicsForModules(Collection<Module> modules) {
-		Query query = em.createQuery("SELECT t  FROM Topic t WHERE t.isDeleted = false  AND t.module in ?1");
+		Query query = em
+				.createQuery("SELECT t  FROM Topic t WHERE t.isDeleted = false  AND t.module in ?1");
 		query.setParameter(1, modules);
 
-		if (query.getResultList().isEmpty()) return null;
-		else return (Collection<Topic>) query.getResultList();
+		if (query.getResultList().isEmpty())
+			return null;
+		else
+			return (Collection<Topic>) query.getResultList();
 
 	}
-
 
 	public boolean deleteTopicsForModules(Collection<Module> modules) {
 		try {
@@ -161,7 +161,6 @@ public class TopicRepository {
 		}
 
 	}
-
 
 	public boolean deleteTopicsForModule(Module module) {
 		try {
@@ -180,23 +179,22 @@ public class TopicRepository {
 	public boolean persistListTopics(List<Topic> topics) {
 
 		int i = 0;
-		for(Topic t : topics) {
-			try{
+		for (Topic t : topics) {
+			try {
 
-				//In this case we have to hash the password (SHA-256)
-				//StringSHA sha = new StringSHA();
-				//String pass = sha.getStringMessageDigest(u.getPassword());
-				//u.setPassword(pass);
+				// In this case we have to hash the password (SHA-256)
+				// StringSHA sha = new StringSHA();
+				// String pass = sha.getStringMessageDigest(u.getPassword());
+				// u.setPassword(pass);
 
-				t.setId(null); //If not  a detached entity is passed to persist
+				t.setId(null); // If not a detached entity is passed to persist
 				em.persist(t);
-				//em.flush();
+				// em.flush();
 
-
-				if(++i % 20 == 0) {
+				if (++i % 20 == 0) {
 					em.flush();
 				}
-			}catch(Exception e){
+			} catch (Exception e) {
 				logger.error(e.getMessage());
 				return false;
 			}
@@ -205,7 +203,5 @@ public class TopicRepository {
 		return true;
 
 	}
-
-
 
 }

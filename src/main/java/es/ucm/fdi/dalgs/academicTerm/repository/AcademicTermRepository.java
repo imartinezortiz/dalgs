@@ -17,7 +17,7 @@ import es.ucm.fdi.dalgs.domain.AcademicTerm;
 import es.ucm.fdi.dalgs.domain.Degree;
 
 @Repository
-public class AcademicTermRepository{
+public class AcademicTermRepository {
 
 	protected EntityManager em;
 
@@ -32,7 +32,7 @@ public class AcademicTermRepository{
 
 	@PersistenceContext
 	public void setEntityManager(EntityManager entityManager) {
-		
+
 		try {
 			this.em = entityManager;
 		} catch (Exception e) {
@@ -58,7 +58,6 @@ public class AcademicTermRepository{
 		}
 	}
 
-	
 	public boolean saveAcademicTerm(AcademicTerm academicTerm) {
 		try {
 			em.merge(academicTerm);
@@ -71,12 +70,17 @@ public class AcademicTermRepository{
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex, Boolean showAll) {// String
-																	// term) {
+	public List<AcademicTerm> getAcademicsTerm(Integer pageIndex,
+			Boolean showAll) {// String
+		// term) {
 		Query query = null;
-		
-		if (showAll) query =em.createQuery("select a from AcademicTerm a  order by a.term DESC");
-		else query =em.createQuery("select a from AcademicTerm a  where a.isDeleted='false' order by a.term DESC");
+
+		if (showAll)
+			query = em
+					.createQuery("select a from AcademicTerm a  order by a.term DESC");
+		else
+			query = em
+					.createQuery("select a from AcademicTerm a  where a.isDeleted='false' order by a.term DESC");
 
 		if (query.getResultList().isEmpty())
 			return null;
@@ -104,24 +108,20 @@ public class AcademicTermRepository{
 
 	}
 
-	public boolean existByTerm(String term) {
-		Query query = em.createQuery("from AcademicTerm a where a.term=?1");
-		query.setParameter(1, term);
+	// public boolean existByTerm(String term) {
+	// Query query = em.createQuery("from AcademicTerm a where a.term=?1");
+	// query.setParameter(1, term);
+	//
+	// if (query.getResultList().isEmpty())
+	// return false;
+	//
+	// return true;
+	// }
 
-		if (query.getResultList().isEmpty())
-			return false;
-		
-		return true;
-	}
-
-
-	
 	public AcademicTerm getAcademicTermById(Long id) {
 		return em.find(AcademicTerm.class, id);
 	}
 
-
-	
 	public boolean modifyTerm(String term, String newTerm) {
 		Query query = em
 				.createQuery("UPDATE AcademicTerm SET term =?1 WHERE term=?2");
@@ -135,22 +135,23 @@ public class AcademicTermRepository{
 	}
 
 	public Integer numberOfPages(Boolean showAll) {
-		
-		Query query =null;
+
+		Query query = null;
 		if (showAll)
-			query = em.createNativeQuery(
-				"select count(*) from academicterm");
-		else query = em.createNativeQuery(
-				"select count(*) from academicterm where isDeleted='false'");
-		
+			query = em.createNativeQuery("select count(*) from academicterm");
+		else
+			query = em
+					.createNativeQuery("select count(*) from academicterm where isDeleted='false'");
+
 		logger.info(query.getSingleResult().toString());
-		double dou = Double.parseDouble(query.getSingleResult().toString())/ ((double) noOfRecords);
+		double dou = Double.parseDouble(query.getSingleResult().toString())
+				/ ((double) noOfRecords);
 		return (int) Math.ceil(dou);
 
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AcademicTerm> getAcademicTermsByDegree(Degree  degree) {
+	public List<AcademicTerm> getAcademicTermsByDegree(Degree degree) {
 		Query query = em
 				.createQuery("select a from AcademicTerm a where a.isDeleted='false' and  a.degree=?1");
 		query.setParameter(1, degree);
@@ -161,22 +162,25 @@ public class AcademicTermRepository{
 
 	public AcademicTerm exists(String term, Degree degree) {
 		Query query = null;
-			query = em.createQuery("select a from AcademicTerm a where  a.term=?1 and a.degree = ?2");
-			query.setParameter(1, term);
-			query.setParameter(2, degree);
+		query = em
+				.createQuery("select a from AcademicTerm a where  a.term=?1 and a.degree = ?2");
+		query.setParameter(1, term);
+		query.setParameter(2, degree);
 
 		if (query.getResultList().isEmpty())
 			return null;
-		else return (AcademicTerm)query.getSingleResult();
-		
+		else
+			return (AcademicTerm) query.getSingleResult();
+
 	}
 
-
 	public boolean deleteAcademicTerm(Collection<AcademicTerm> academicList) {
-		Query query = em.createQuery("UPDATE AcademicTerm a SET isDeleted = true WHERE a in ?1");
+		Query query = em
+				.createQuery("UPDATE AcademicTerm a SET isDeleted = true WHERE a in ?1");
 		query.setParameter(1, academicList);
 		int n = query.executeUpdate();
-		if (n > 0) return true;
+		if (n > 0)
+			return true;
 		return false;
 	}
 }

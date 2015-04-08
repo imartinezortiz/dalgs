@@ -24,7 +24,6 @@ import es.ucm.fdi.dalgs.domain.AcademicTerm;
 import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.module.service.ModuleService;
 
-
 @Service
 public class DegreeService {
 
@@ -42,7 +41,7 @@ public class DegreeService {
 
 	@Autowired
 	private AcademicTermService serviceAcademicTerm;
-	
+
 	@Autowired
 	private MessageSource messageSource;
 
@@ -62,7 +61,8 @@ public class DegreeService {
 
 			if (degreeExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add(messageSource.getMessage("error.deleted", null, locale));
+				errors.add(messageSource.getMessage("error.deleted", null,
+						locale));
 				result.setSingleElement(degreeExists);
 			}
 			result.setErrorsList(errors);
@@ -110,7 +110,8 @@ public class DegreeService {
 
 	@PreAuthorize("hasPermission(#degree, 'WRITE') or hasPermission(#degree, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifyDegree(Degree degree, Long id_degree, Locale locale) {
+	public ResultClass<Boolean> modifyDegree(Degree degree, Long id_degree,
+			Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
 		Degree modifydegree = daoDegree.getDegree(id_degree);
@@ -126,7 +127,8 @@ public class DegreeService {
 
 			if (degreeExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add(messageSource.getMessage("error.deleted", null, locale));
+				errors.add(messageSource.getMessage("error.deleted", null,
+						locale));
 
 			}
 			result.setErrorsList(errors);
@@ -171,16 +173,14 @@ public class DegreeService {
 		}
 	}
 
-//	@PreAuthorize("hasRole('ROLE_USER')")
-//	@Transactional(readOnly = true)
-//	public ResultClass<Degree> getDegreeSubject(Degree p) {
-//		ResultClass<Degree> result = new ResultClass<>();
-//		result.setSingleElement(daoDegree.getDegreeSubject(p));
-//		return result;
-//	}
+	// @PreAuthorize("hasRole('ROLE_USER')")
+	// @Transactional(readOnly = true)
+	// public ResultClass<Degree> getDegreeSubject(Degree p) {
+	// ResultClass<Degree> result = new ResultClass<>();
+	// result.setSingleElement(daoDegree.getDegreeSubject(p));
+	// return result;
+	// }
 
-
-	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResultClass<Degree> getDegree(Long id) {
 		ResultClass<Degree> result = new ResultClass<>();
@@ -195,9 +195,12 @@ public class DegreeService {
 		ResultClass<Degree> result = new ResultClass<Degree>();
 
 		Degree d = daoDegree.getDegree(id);
-		d.setModules(serviceModule.getModulesForDegree(id, show));
-		d.setCompetences(serviceCompetence.getCompetencesForDegree(id, show));
-		result.setSingleElement(d);
+		if (d != null) {
+			d.setModules(serviceModule.getModulesForDegree(id, show));
+			d.setCompetences(serviceCompetence
+					.getCompetencesForDegree(id, show));
+			result.setSingleElement(d);
+		}
 		return result;
 	}
 
@@ -209,13 +212,15 @@ public class DegreeService {
 		if (d == null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add(messageSource.getMessage("error.ElementNoExists", null, locale));
+			errors.add(messageSource.getMessage("error.ElementNoExists", null,
+					locale));
 			result.setErrorsList(errors);
 
 		} else {
 			if (!d.getIsDeleted()) {
 				Collection<String> errors = new ArrayList<String>();
-				errors.add(messageSource.getMessage("error.CodeNoDeleted", null, locale));
+				errors.add(messageSource.getMessage("error.CodeNoDeleted",
+						null, locale));
 				result.setErrorsList(errors);
 			}
 
@@ -235,44 +240,40 @@ public class DegreeService {
 		result.setSingleElement(daoDegree.numberOfPages(showAll));
 		return result;
 	}
+
 	@Transactional(readOnly = false)
 	public boolean uploadCSV(UploadForm upload) {
-		boolean success=false;
-		CsvPreference prefers =
-				new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload
-						.getDelimiterChar().charAt(0), upload.getEndOfLineSymbols())
-						.build();
+		boolean success = false;
+		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
+				.charAt(0), upload.getDelimiterChar().charAt(0),
+				upload.getEndOfLineSymbols()).build();
 
-				List<Degree> list = null;
-				try {
-					FileItem fileItem = upload.getFileData().getFileItem();
-					DegreeUpload degreeUpload = new DegreeUpload();
-					
-					
-					list = degreeUpload.readCSVDegreeToBean(fileItem.getInputStream(),
-							upload.getCharset(), prefers);
+		List<Degree> list = null;
+		try {
+			FileItem fileItem = upload.getFileData().getFileItem();
+			DegreeUpload degreeUpload = new DegreeUpload();
 
-					
-					success= daoDegree.persistListDegrees(list);
-					if (success) {
-						for (Degree c : list) {
-							Degree aux = daoDegree.existByCode(c.getInfo().getCode());
-							success = success
-									&& manageAclService.addACLToObject(aux.getId(), aux
-											.getClass().getName());
+			list = degreeUpload.readCSVDegreeToBean(fileItem.getInputStream(),
+					upload.getCharset(), prefers);
 
-						}
+			success = daoDegree.persistListDegrees(list);
+			if (success) {
+				for (Degree c : list) {
+					Degree aux = daoDegree.existByCode(c.getInfo().getCode());
+					success = success
+							&& manageAclService.addACLToObject(aux.getId(), aux
+									.getClass().getName());
 
-					}
-
-
-				} catch (IOException e) {
-					e.printStackTrace();
-					return false;
 				}
+
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 		return success;
-	
+
 	}
-	
 
 }

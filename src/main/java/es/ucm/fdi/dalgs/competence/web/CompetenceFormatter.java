@@ -26,7 +26,8 @@ public class CompetenceFormatter implements Formatter<Competence> {
 	public Competence parse(String competenceId, Locale arg1)
 			throws ParseException {
 
-		return competenceDao.getCompetenceFormatter(Long.parseLong(competenceId));
+		return competenceDao.getCompetenceFormatter(Long
+				.parseLong(competenceId));
 		// Else you can just return a new object by setting some values
 		// which you deem fit.
 	}

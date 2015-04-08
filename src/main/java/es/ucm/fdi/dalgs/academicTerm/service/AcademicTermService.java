@@ -31,25 +31,26 @@ public class AcademicTermService {
 
 	@Autowired
 	private AcademicTermRepository daoAcademicTerm;
-	
+
 	@Autowired
 	private ActivityService serviceActivity;
 
 	@Autowired
 	private GroupService serviceGroup;
-	
+
 	@Autowired
 	private CourseService serviceCourse;
-	
+
 	@Autowired
 	private MessageSource messageSource;
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<AcademicTerm> addAcademicTerm(AcademicTerm academicTerm, Locale locale) {
+	public ResultClass<AcademicTerm> addAcademicTerm(AcademicTerm academicTerm,
+			Locale locale) {
 
 		boolean success = false;
-		
+
 		AcademicTerm academicExists = daoAcademicTerm.exists(
 				academicTerm.getTerm(), academicTerm.getDegree());
 		ResultClass<AcademicTerm> result = new ResultClass<>();
@@ -58,12 +59,15 @@ public class AcademicTermService {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
 			errors.add(messageSource.getMessage("error.Code", null, locale));
-//			errors.add(messageSource.getMessage("academicTermExists", null, "default Error", locale));
-//			errors.add(messageSource.getMessage("academicTermExists", null,"Default Error", Locale.US));
+			// errors.add(messageSource.getMessage("academicTermExists", null,
+			// "default Error", locale));
+			// errors.add(messageSource.getMessage("academicTermExists",
+			// null,"Default Error", Locale.US));
 
 			if (academicExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add(messageSource.getMessage("error.deleted", null, locale));
+				errors.add(messageSource.getMessage("error.deleted", null,
+						locale));
 				result.setSingleElement(academicExists);
 
 			} else
@@ -74,8 +78,10 @@ public class AcademicTermService {
 			success = daoAcademicTerm.addAcademicTerm(academicTerm);
 
 			if (success) {
-				academicExists = daoAcademicTerm.exists(academicTerm.getTerm(),academicTerm.getDegree());
-				success = manageAclService.addACLToObject(academicExists.getId(), academicExists.getClass().getName());
+				academicExists = daoAcademicTerm.exists(academicTerm.getTerm(),
+						academicTerm.getDegree());
+				success = manageAclService.addACLToObject(academicExists
+						.getId(), academicExists.getClass().getName());
 				if (success)
 					result.setSingleElement(academicTerm);
 
@@ -109,7 +115,8 @@ public class AcademicTermService {
 
 			if (academicExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add(messageSource.getMessage("error.deleted", null, locale));
+				errors.add(messageSource.getMessage("error.deleted", null,
+						locale));
 
 			}
 			result.setErrorsList(errors);
@@ -182,11 +189,14 @@ public class AcademicTermService {
 			Boolean showAll) {
 		ResultClass<AcademicTerm> result = new ResultClass<AcademicTerm>();
 		AcademicTerm aT = daoAcademicTerm.getAcademicTermById(id_academic);
-		Collection<Course> courses = new ArrayList<Course>();
-		courses.addAll(serviceCourse.getCoursesByAcademicTerm(id_academic,showAll));
-		
-		aT.setCourses(courses);
-		result.setSingleElement(aT);
+		if (aT != null) {
+			Collection<Course> courses = new ArrayList<Course>();
+			courses.addAll(serviceCourse.getCoursesByAcademicTerm(id_academic,
+					showAll));
+
+			aT.setCourses(courses);
+			result.setSingleElement(aT);
+		}
 		return result;
 	}
 
@@ -208,7 +218,8 @@ public class AcademicTermService {
 
 	@PreAuthorize("hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<AcademicTerm> restoreAcademic(AcademicTerm academicTerm, Locale locale) {
+	public ResultClass<AcademicTerm> restoreAcademic(AcademicTerm academicTerm,
+			Locale locale) {
 		AcademicTerm a = daoAcademicTerm.exists(academicTerm.getTerm(),
 				academicTerm.getDegree());
 		ResultClass<AcademicTerm> result = new ResultClass<>();
@@ -216,13 +227,15 @@ public class AcademicTermService {
 		if (a == null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add(messageSource.getMessage("error.ElementNoExists", null, locale));
+			errors.add(messageSource.getMessage("error.ElementNoExists", null,
+					locale));
 			result.setErrorsList(errors);
 
 		} else {
 			if (!a.getIsDeleted()) {
 				Collection<String> errors = new ArrayList<String>();
-				errors.add(messageSource.getMessage("error.CodeNoDeleted", null, locale));
+				errors.add(messageSource.getMessage("error.CodeNoDeleted",
+						null, locale));
 				result.setErrorsList(errors);
 			}
 
@@ -239,7 +252,8 @@ public class AcademicTermService {
 
 	@PreAuthorize("hasPermission(#academicTerm, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<AcademicTerm> copyAcademicTerm(AcademicTerm academicTerm, Locale locale) {
+	public ResultClass<AcademicTerm> copyAcademicTerm(
+			AcademicTerm academicTerm, Locale locale) {
 		AcademicTerm copy = academicTerm.depth_copy();
 
 		ResultClass<AcademicTerm> result = new ResultClass<>();
@@ -253,63 +267,65 @@ public class AcademicTermService {
 		} else {
 			copy.setTerm(copy.getTerm() + " (copy)");
 
-			
-			for(Course c : copy.getCourses()){
-				
-//				c.setActivities(null);
+			for (Course c : copy.getCourses()) {
 
-//TODO				// ---> Fallan las actividades
-				for(Activity a : c.getActivities()){
-		
-//						a.setGroup(null);
-						a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
-				}	
+				// c.setActivities(null);
 
-				
-				for (Group g : c.getGroups()){
+				for (Activity a : c.getActivities()) {
+
+					// a.setGroup(null);
+					a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
+				}
+
+				for (Group g : c.getGroups()) {
 					g.setName(g.getName() + " (copy)");
-//					g.setActivities(null);
-					for(Activity a : g.getActivities()){
-//						a.setCourse(null);
-//						a.setGroup(null);
+					for (Activity a : g.getActivities()) {
+;
 						a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
 					}
 				}
-				
-			}
-			
-	
-			
-			boolean success = daoAcademicTerm.addAcademicTerm(copy);
-			if(success){
-				AcademicTerm exists = daoAcademicTerm.exists(copy.getTerm(), copy.getDegree());
-				if(exists!=null){
-					result.setSingleElement(exists);
-					manageAclService.addACLToObject(exists.getId(), exists.getClass().getName());
-				
-					for(Course c :exists.getCourses()){
-						success = success && manageAclService.addACLToObject(c.getId(), c.getClass().getName());
-					
-						for(Activity a: c.getActivities()){
-							success = success && manageAclService.addACLToObject(a.getId(), a.getClass().getName());
-						}
-					
-					
-						for(Group g: c.getGroups()){
-							success = success && manageAclService.addACLToObject(g.getId(), g.getClass().getName());
 
-							for(Activity a: g.getActivities()){
-								success = success && manageAclService.addACLToObject(a.getId(), a.getClass().getName());
+			}
+
+			boolean success = daoAcademicTerm.addAcademicTerm(copy);
+			if (success) {
+				AcademicTerm exists = daoAcademicTerm.exists(copy.getTerm(),
+						copy.getDegree());
+				if (exists != null) {
+					result.setSingleElement(exists);
+					manageAclService.addACLToObject(exists.getId(), exists
+							.getClass().getName());
+
+					for (Course c : exists.getCourses()) {
+						success = success
+								&& manageAclService.addACLToObject(c.getId(), c
+										.getClass().getName());
+
+						for (Activity a : c.getActivities()) {
+							success = success
+									&& manageAclService.addACLToObject(
+											a.getId(), a.getClass().getName());
+						}
+
+						for (Group g : c.getGroups()) {
+							success = success
+									&& manageAclService.addACLToObject(
+											g.getId(), g.getClass().getName());
+
+							for (Activity a : g.getActivities()) {
+								success = success
+										&& manageAclService.addACLToObject(a
+												.getId(), a.getClass()
+												.getName());
 							}
 						}
 					}
 				}
 			}
-			
+
 			result.setHasErrors(!success);
 
-
-		} 
+		}
 		return result;
 	}
 

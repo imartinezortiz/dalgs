@@ -46,8 +46,6 @@ public class SubjectController {
 	@Autowired
 	private CompetenceService serviceCompetence;
 
-
-
 	private static final Logger logger = LoggerFactory
 			.getLogger(SubjectController.class);
 
@@ -56,14 +54,16 @@ public class SubjectController {
 	 */
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/delete.htm", method = RequestMethod.GET)
-	public String deleteSubjectGET(
-			@PathVariable("degreeId") Long id_degree,
+	public String deleteSubjectGET(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
 			@PathVariable("subjectId") Long id_subject) throws ServletException {
 
-		if (serviceSubject.deleteSubject(serviceSubject.getSubject(id_subject, id_topic,  id_module, id_degree).getSingleElement()).getSingleElement()) {
-			return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
+		if (serviceSubject.deleteSubject(
+				serviceSubject.getSubject(id_subject, id_topic, id_module,
+						id_degree).getSingleElement()).getSingleElement()) {
+			return "redirect:/degree/" + id_degree + "/module/" + id_module
+					+ "/topic/" + id_topic + ".htm";
 		} else
 			return "redirect:/error.htm";
 	}
@@ -74,8 +74,8 @@ public class SubjectController {
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/add.htm", method = RequestMethod.GET)
 	public String addSubjectGET(Model model,
 			@PathVariable("degreeId") Long id_degree) {
-		
-		if(!model.containsAttribute("subject"))
+
+		if (!model.containsAttribute("subject"))
 			model.addAttribute("subject", new Subject());
 		model.addAttribute("valueButton", "Add");
 		model.addAttribute("typeform", "form.add");
@@ -83,78 +83,82 @@ public class SubjectController {
 		return "subject/form";
 	}
 
-	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/add", method = RequestMethod.POST, params="Add")
+	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/add", method = RequestMethod.POST, params = "Add")
 	// Every Post have to return redirect
-	public String addSubjectPOST(
-			@ModelAttribute("subject") Subject newSubject,
+	public String addSubjectPOST(@ModelAttribute("subject") Subject newSubject,
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
 			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
-		if (!resultBinding.hasErrors()){
+		if (!resultBinding.hasErrors()) {
 
-			ResultClass<Subject> result = serviceSubject.addSubject(newSubject, id_topic, id_module,id_degree, locale);
+			ResultClass<Subject> result = serviceSubject.addSubject(newSubject,
+					id_topic, id_module, id_degree, locale);
 			if (!result.hasErrors())
-				return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
-			else{
+				return "redirect:/degree/" + id_degree + "/module/" + id_module
+						+ "/topic/" + id_topic + ".htm";
+			else {
 
-				if (result.isElementDeleted()){
-					attr.addFlashAttribute("unDelete", result.isElementDeleted()); 
+				if (result.isElementDeleted()) {
+					attr.addFlashAttribute("unDelete",
+							result.isElementDeleted());
 					attr.addFlashAttribute("subject", result.getSingleElement());
 
-				}else attr.addFlashAttribute("subject", newSubject);
+				} else
+					attr.addFlashAttribute("subject", newSubject);
 				attr.addFlashAttribute("errors", result.getErrorsList());
 
-
 			}
-		}else{
+		} else {
 			attr.addFlashAttribute("subject", newSubject);
 			attr.addFlashAttribute(
 					"org.springframework.validation.BindingResult.subject",
-					resultBinding);			
+					resultBinding);
 		}
-		return "redirect:/degree/"+ id_degree+"/module/"+ id_module+"/topic/"+id_topic+"/subject/add.htm";
+		return "redirect:/degree/" + id_degree + "/module/" + id_module
+				+ "/topic/" + id_topic + "/subject/add.htm";
 	}
 
-
-	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/add", method = RequestMethod.POST, params="Undelete")
+	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/add", method = RequestMethod.POST, params = "Undelete")
 	// Every Post have to return redirect
-	public String undeleteSubject(
-			@ModelAttribute("subject") Subject subject, 
+	public String undeleteSubject(@ModelAttribute("subject") Subject subject,
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
 			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
-		if (!resultBinding.hasErrors()){
-			ResultClass<Subject> result = serviceSubject.unDeleteSubject(subject, locale);
+		if (!resultBinding.hasErrors()) {
+			ResultClass<Subject> result = serviceSubject.unDeleteSubject(
+					subject, locale);
 
-			if (!result.hasErrors()){
+			if (!result.hasErrors()) {
 				attr.addFlashAttribute("subject", result.getSingleElement());
-				return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + "/subject/"
-						+result.getSingleElement().getId()+"/modify.htm";
-			}else{
+				return "redirect:/degree/" + id_degree + "/module/" + id_module
+						+ "/topic/" + id_topic + "/subject/"
+						+ result.getSingleElement().getId() + "/modify.htm";
+			} else {
 
 				if (result.isElementDeleted())
-					attr.addFlashAttribute("unDelete", true); 
+					attr.addFlashAttribute("unDelete", true);
 				attr.addFlashAttribute("errors", result.getErrorsList());
 
 			}
-		}else{
+		} else {
 			attr.addFlashAttribute(
 					"org.springframework.validation.BindingResult.topic",
 					resultBinding);
 		}
 		attr.addFlashAttribute("subject", subject);
-		return "/degree/"+ id_degree+"/module/"+ id_module+"/topic/"+id_topic+"/subject/add.htm";
+		return "/degree/" + id_degree + "/module/" + id_module + "/topic/"
+				+ id_topic + "/subject/add.htm";
 	}
+
 	/**
 	 * Methods for modify subjects
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/modify.htm", method = RequestMethod.POST)
-	public String modifySubjectPOST(
-			@PathVariable("degreeId") Long id_degree,
+	public String modifySubjectPOST(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
 			@PathVariable("subjectId") Long id_subject,
@@ -162,37 +166,38 @@ public class SubjectController {
 			BindingResult resultBinding, RedirectAttributes attr, Locale locale)
 
 	{
-		if (!resultBinding.hasErrors()){	
+		if (!resultBinding.hasErrors()) {
 
-			ResultClass<Boolean> result = serviceSubject.modifySubject(modify, id_subject,id_topic, id_module, id_degree, locale);
+			ResultClass<Boolean> result = serviceSubject.modifySubject(modify,
+					id_subject, id_topic, id_module, id_degree, locale);
 			if (!result.hasErrors())
-				return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
+				return "redirect:/degree/" + id_degree + "/module/" + id_module
+						+ "/topic/" + id_topic + ".htm";
 			else
 				attr.addFlashAttribute("errors", result.getErrorsList());
 		}
-		
-		else{
+
+		else {
 			attr.addFlashAttribute(
 					"org.springframework.validation.BindingResult.topic",
 					resultBinding);
 		}
 		attr.addFlashAttribute("subject", modify);
-		return "/degree/"+ id_degree+"/module/"+ id_module+"/topic/"+id_topic+"/subject/"+id_subject+"/modify.htm";
-
-
+		return "/degree/" + id_degree + "/module/" + id_module + "/topic/"
+				+ id_topic + "/subject/" + id_subject + "/modify.htm";
 
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/modify.htm", method = RequestMethod.GET)
-	public String modifySubjectGET(
-			@PathVariable("degreeId") Long id_degree,
+	public String modifySubjectGET(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
-			@PathVariable("subjectId") Long id_subject,
-			Model model) throws ServletException {
+			@PathVariable("subjectId") Long id_subject, Model model)
+			throws ServletException {
 
-		if (!model.containsAttribute("subject")){
-			Subject p = serviceSubject.getSubject(id_subject, id_topic,  id_module, id_degree).getSingleElement();
+		if (!model.containsAttribute("subject")) {
+			Subject p = serviceSubject.getSubject(id_subject, id_topic,
+					id_module, id_degree).getSingleElement();
 			model.addAttribute("subject", p);
 		}
 
@@ -205,23 +210,26 @@ public class SubjectController {
 	 * Methods for view subjects
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}.htm", method = RequestMethod.GET)
-	public ModelAndView getSubjectGET(
-			@PathVariable("degreeId") Long id_degree,
+	public ModelAndView getSubjectGET(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("topicId") Long id_topic,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("subjectId") Long id_subject) throws ServletException {
 
-		Map<String, Object> myModel = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
-		Subject p = serviceSubject.getSubjectAll(id_subject, id_topic,  id_module, id_degree).getSingleElement();
+		Subject p = serviceSubject.getSubjectAll(id_subject, id_topic,
+				id_module, id_degree).getSingleElement();
+		if (p != null) {
+			model.put("subject", p);
+			model.put("topic", p.getTopic());
 
-		myModel.put("subject", p);
-		myModel.put("topic", p.getTopic());
+			if (p.getCompetences() != null)
+				model.put("competences", p.getCompetences());
 
-		if (p.getCompetences() != null)
-			myModel.put("competences", p.getCompetences());
+			return new ModelAndView("subject/view", "model", model);
+		}
+		return new ModelAndView("exception/notFound", "model", model);
 
-		return new ModelAndView("subject/view", "model", myModel);
 	}
 
 	/**
@@ -235,22 +243,25 @@ public class SubjectController {
 			@PathVariable("moduleId") Long id_topic,
 			@PathVariable("subjectId") Long id_subject,
 			@PathVariable("competenceId") Long id_competence)
-					throws ServletException {
+			throws ServletException {
 
 		if (serviceCompetence.deleteCompetenceFromSubject(id_competence,
 				id_subject, id_degree, id_topic, id_module).getSingleElement()) {
-			return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
+			return "redirect:/degree/" + id_degree + "/module/" + id_module
+					+ "/topic/" + id_topic + ".htm";
 		} else
 			return "redirect:/error.htm";
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/addCompetences.htm", method = RequestMethod.GET)
 	public String addCompetenceToSubjectGET(
-			@PathVariable("degreeId") Long id_degree,@PathVariable("moduleId") Long id_module,
+			@PathVariable("degreeId") Long id_degree,
+			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
 			@PathVariable("subjectId") Long id_subject, Model model) {
 
-		Subject s = serviceSubject.getSubject(id_subject, id_topic, id_module, id_degree).getSingleElement();
+		Subject s = serviceSubject.getSubject(id_subject, id_topic, id_module,
+				id_degree).getSingleElement();
 		Collection<Competence> competences = serviceCompetence
 				.getCompetencesForDegree(id_degree, false);
 
@@ -270,35 +281,40 @@ public class SubjectController {
 			@ModelAttribute("subject") Subject subject, BindingResult result,
 			Model model) {
 
-		if (!result.hasErrors()){
+		if (!result.hasErrors()) {
 			try {
-				serviceSubject.addCompetences(subject, id_subject, id_topic, id_module, id_degree);
-				return "redirect:/degree/" + id_degree + "/module/"+ id_module + "/topic/" + id_topic + ".htm";
+				serviceSubject.addCompetences(subject, id_subject, id_topic,
+						id_module, id_degree);
+				return "redirect:/degree/" + id_degree + "/module/" + id_module
+						+ "/topic/" + id_topic + ".htm";
 			} catch (Exception e) {
 				return "redirect:/competence/add.htm";
 			}
 		}
-		 return "redirect:/error.htm";
+		return "redirect:/error.htm";
 
 	}
-	
+
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/{subjectId}/restore.htm")
 	// Every Post have to return redirect
 	public String restoreSubject(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
 			@PathVariable("subjectId") Long id_subject, Locale locale) {
-		
-		ResultClass<Subject> result = serviceSubject.unDeleteSubject(serviceSubject.getSubject(id_subject, id_topic,  id_module, id_degree).getSingleElement(), locale);
+
+		ResultClass<Subject> result = serviceSubject.unDeleteSubject(
+				serviceSubject.getSubject(id_subject, id_topic, id_module,
+						id_degree).getSingleElement(), locale);
 		if (!result.hasErrors())
-			return "redirect:/degree/"+id_degree+"/module/"+id_module+".htm";
-		else{
+			return "redirect:/degree/" + id_degree + "/module/" + id_module
+					+ ".htm";
+		else {
 			return "redirect:/error.htm";
 
 		}
 
 	}
-	
+
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/upload.htm", method = RequestMethod.GET)
 	public String uploadGet(Model model) {
 		CharsetString charsets = new CharsetString();
@@ -330,7 +346,6 @@ public class SubjectController {
 		else
 			return "upload";
 	}
-	
 
 	/**
 	 * For binding the competences of the subject.
@@ -339,24 +354,25 @@ public class SubjectController {
 	public void initBinder(WebDataBinder binder) throws Exception {
 		binder.registerCustomEditor(Set.class, "competences",
 				new CustomCollectionEditor(Set.class) {
-			protected Object convertElement(Object element) {
-				if (element instanceof Competence) {
-					logger.info("Converting...{}", element);
-					return element;
-				}
-				if (element instanceof String) {
-					Competence competence = serviceCompetence
-							.getCompetenceByName(element.toString()).getSingleElement();
-					logger.info("Loking up {} to {}", element,
-							competence);
+					protected Object convertElement(Object element) {
+						if (element instanceof Competence) {
+							logger.info("Converting...{}", element);
+							return element;
+						}
+						if (element instanceof String) {
+							Competence competence = serviceCompetence
+									.getCompetenceByName(element.toString())
+									.getSingleElement();
+							logger.info("Loking up {} to {}", element,
+									competence);
 
-					return competence;
-				}
-				System.out.println("Don't know what to do with: "
-						+ element);
-				return null;
-			}
-		});
+							return competence;
+						}
+						System.out.println("Don't know what to do with: "
+								+ element);
+						return null;
+					}
+				});
 	}
 
 }

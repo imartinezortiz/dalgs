@@ -42,8 +42,8 @@ public class TopicService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Topic> addTopic(Topic topic, Long id_module, Long id_degree,
-			Locale locale) {
+	public ResultClass<Topic> addTopic(Topic topic, Long id_module,
+			Long id_degree, Locale locale) {
 
 		boolean success = false;
 
@@ -154,11 +154,15 @@ public class TopicService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<Topic> getTopicAll(Long id_topic,Long id_module,Long id_degree, Boolean show) {
+	public ResultClass<Topic> getTopicAll(Long id_topic, Long id_module,
+			Long id_degree, Boolean show) {
 		ResultClass<Topic> result = new ResultClass<Topic>();
 		Topic p = daoTopic.getTopic(id_topic, id_module, id_degree);
-		p.setSubjects(serviceSubject.getSubjectsForTopic(id_topic, show));
-		result.setSingleElement(p);
+		if (p != null) {
+			p.setSubjects(serviceSubject.getSubjectsForTopic(id_topic, show));
+
+			result.setSingleElement(p);
+		}
 		return result;
 	}
 
@@ -245,7 +249,8 @@ public class TopicService {
 			FileItem fileItem = upload.getFileData().getFileItem();
 			TopicUpload topicUpload = new TopicUpload();
 
-			Module m = serviceModule.getModule(id_module, id_degree).getSingleElement();
+			Module m = serviceModule.getModule(id_module, id_degree)
+					.getSingleElement();
 			list = topicUpload.readCSVTopicToBean(fileItem.getInputStream(),
 					upload.getCharset(), prefers, m);
 

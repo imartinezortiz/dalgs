@@ -51,8 +51,6 @@ public class AclObjectService {
 		this.mutableAclService = mutableAclService;
 	}
 
-	
-	
 	public boolean addACLToObject(Long id_object, String name_class) {
 
 		Authentication authentication = null;

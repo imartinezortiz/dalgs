@@ -12,7 +12,7 @@ import es.ucm.fdi.dalgs.group.repository.GroupRepository;
 
 @Component
 public class GroupFormatter implements Formatter<Group> {
-	
+
 	@Autowired
 	private GroupRepository daoGroup;
 
@@ -29,5 +29,5 @@ public class GroupFormatter implements Formatter<Group> {
 		// Else you can just return a new object by setting some values
 		// which you deem fit.
 	}
-	
+
 }

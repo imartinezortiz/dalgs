@@ -28,40 +28,39 @@ public class MediatorController {
 
 	@Autowired
 	private UserService serviceUser;
-	
+
 	@Autowired
 	private GroupService serviceGroup;
-	
+
 	@Autowired
 	private CourseService serviceCourse;
-	
+
 	@RequestMapping(value = "/user.htm")
 	public ModelAndView getUserPage(Model model) {
 		Map<String, Object> myModel = new HashMap<String, Object>();
-		
-		String username =  SecurityContextHolder.getContext().getAuthentication().getName();
+
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		User u = serviceUser.findByUsername(username);
 		logger.info(username + "  " + u.getEmail());
 		myModel.put("userDetails", u);
 
-		ResultClass<Group> groups =new ResultClass<Group>();
+		ResultClass<Group> groups = new ResultClass<Group>();
 
-		if(serviceUser.hasRole(u,"ROLE_PROFESSOR")){	
+		if (serviceUser.hasRole(u, "ROLE_PROFESSOR")) {
 			ResultClass<Course> courses = new ResultClass<Course>();
 			courses = serviceCourse.getCourseForCoordinator(u.getId());
-			
-			if(!courses.isEmpty()){
+
+			if (!courses.isEmpty()) {
 				myModel.put("courses", courses);
 			}
 			groups = serviceGroup.getGroupsForProfessor(u.getId());
 
-		}
-		else if(serviceUser.hasRole(u,"ROLE_STUDENT")){
+		} else if (serviceUser.hasRole(u, "ROLE_STUDENT")) {
 			groups = serviceGroup.getGroupsForStudent(u.getId());
 
-
 		}
-		if(!groups.isEmpty())
+		if (!groups.isEmpty())
 			myModel.put("groups", groups);
 
 		return new ModelAndView("user/view", "model", myModel);
@@ -71,7 +70,8 @@ public class MediatorController {
 	public ModelAndView getAdminPage(Model model) {
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		String username =  SecurityContextHolder.getContext().getAuthentication().getName();
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		User u = serviceUser.findByUsername(username);
 		logger.info(username + "  " + u.getEmail());
 		model.addAttribute("userDetails", u);

@@ -36,7 +36,6 @@ public class CourseRepository {
 		}
 	}
 
-	
 	public boolean addCourse(Course course) {
 		try {
 			em.persist(course);
@@ -50,11 +49,12 @@ public class CourseRepository {
 
 	@SuppressWarnings("unchecked")
 	public List<Course> getAll() {
-		return em.createQuery("select d from Course d where d.isDeleted='false' order by d.id")
+		return em
+				.createQuery(
+						"select d from Course d where d.isDeleted='false' order by d.id")
 				.getResultList();
 	}
 
-	
 	public boolean saveCourse(Course course) {
 		try {
 			em.merge(course);
@@ -65,9 +65,9 @@ public class CourseRepository {
 		return true;
 	}
 
-	
 	public Course getCourse(Long id_course, Long id_academic) {
-		AcademicTerm academic=  em.getReference(AcademicTerm.class, id_academic);
+		AcademicTerm academic = em
+				.getReference(AcademicTerm.class, id_academic);
 		Query query = em
 				.createQuery("select c from Course c  where c.academicTerm=?1 and c.id=?2 ");
 		query.setParameter(1, academic);
@@ -76,14 +76,13 @@ public class CourseRepository {
 		if (query.getResultList().isEmpty())
 			return null;
 		else
-			return (Course)query.getSingleResult();
+			return (Course) query.getSingleResult();
 	}
-	
+
 	public Course getCourseFormatter(Long id) {
 		return em.find(Course.class, id);
 	}
 
-	
 	public boolean deleteCourse(Course course) {
 		try {
 			course.setDeleted(true);
@@ -96,8 +95,6 @@ public class CourseRepository {
 		}
 	}
 
-
-
 	public Course exist(Course course) {
 		Query query = em
 				.createQuery("select c from Course c  where c.academicTerm=?1 and c.subject=?2");
@@ -107,21 +104,25 @@ public class CourseRepository {
 		if (query.getResultList().isEmpty())
 			return null;
 		else
-			return (Course)query.getSingleResult();
+			return (Course) query.getSingleResult();
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Course> getCoursesByAcademicTerm(Long academic_id, Boolean showAll) {
+	public List<Course> getCoursesByAcademicTerm(Long academic_id,
+			Boolean showAll) {
 		AcademicTerm academic = em
 				.getReference(AcademicTerm.class, academic_id);
-		
-		Query query = null;
-		
-		if (showAll) query =em.createQuery("select c from Course c  join c.academicTerm a  where a=?1 ");
-		else query = em.createQuery("select c from Course c  join c.academicTerm a  where a=?1 and c.isDeleted='false'");
-		
-		query.setParameter(1, academic);
 
+		Query query = null;
+
+		if (showAll)
+			query = em
+					.createQuery("select c from Course c  join c.academicTerm a  where a=?1 ");
+		else
+			query = em
+					.createQuery("select c from Course c  join c.academicTerm a  where a=?1 and c.isDeleted='false'");
+
+		query.setParameter(1, academic);
 
 		return query.getResultList();
 
@@ -144,7 +145,6 @@ public class CourseRepository {
 		return aux.getId();
 	}
 
-	
 	public boolean deleteCoursesFromAcademic(AcademicTerm academic) {
 		try {
 			Query query = em
@@ -161,56 +161,62 @@ public class CourseRepository {
 
 	}
 
-
 	@SuppressWarnings("unchecked")
 	public Collection<Course> getCoursesFromListAcademic(
 			Collection<AcademicTerm> academicList) {
-		Query query = em.createQuery("SELECT c  FROM Course c WHERE c.isDeleted = false  AND c.academicTerm in ?1");
+		Query query = em
+				.createQuery("SELECT c  FROM Course c WHERE c.isDeleted = false  AND c.academicTerm in ?1");
 		query.setParameter(1, academicList);
-		
-		if (query.getResultList().isEmpty()) return null;
-		else return (Collection<Course>) query.getResultList();
+
+		if (query.getResultList().isEmpty())
+			return null;
+		else
+			return (Collection<Course>) query.getResultList();
 	}
 
-	
 	public boolean deleteCourses(Collection<AcademicTerm> academicList) {
-		
-		try{
-			Query query = em.createQuery("UPDATE Course c SET c.isDeleted = true WHERE c.academicTerm in ?1");
+
+		try {
+			Query query = em
+					.createQuery("UPDATE Course c SET c.isDeleted = true WHERE c.academicTerm in ?1");
 			query.setParameter(1, academicList);
 			int n = query.executeUpdate();
-			if (n>0)return true;
-			else return false;	
-			
-		}catch(Exception e){
+			if (n > 0)
+				return true;
+			else
+				return false;
+
+		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return false;
 		}
-		
+
 	}
 
 	@SuppressWarnings("unchecked")
 	public Collection<Course> getCoursesBySubject(Subject subject) {
-		
-				
-		Query query =em.createQuery(
-				"select c from Course c  join c.subject s  where s=?1 and c.isDeleted='false'");
-		
+
+		Query query = em
+				.createQuery("select c from Course c  join c.subject s  where s=?1 and c.isDeleted='false'");
+
 		query.setParameter(1, subject);
 
 		return query.getResultList();
 	}
 
 	public Boolean deleteCoursesForSubject(Collection<Subject> subjects) {
-	
-		try{
-			Query query = em.createQuery("UPDATE Course c SET c.isDeleted = true WHERE c.subject in ?1");
+
+		try {
+			Query query = em
+					.createQuery("UPDATE Course c SET c.isDeleted = true WHERE c.subject in ?1");
 			query.setParameter(1, subjects);
 			int n = query.executeUpdate();
-			if (n>0)return true;
-			else return false;	
-			
-		}catch(Exception e){
+			if (n > 0)
+				return true;
+			else
+				return false;
+
+		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return false;
 		}
@@ -220,10 +226,10 @@ public class CourseRepository {
 	public Collection<Course> getCoursesByUser(Long id_user) {
 		User user = em.getReference(User.class, id_user);
 
-		Query query =em.createQuery("select c from Course c   where c.coordinator=?1 and c.isDeleted='false'");
+		Query query = em
+				.createQuery("select c from Course c   where c.coordinator=?1 and c.isDeleted='false'");
 		query.setParameter(1, user);
 		return query.getResultList();
 	}
-
 
 }

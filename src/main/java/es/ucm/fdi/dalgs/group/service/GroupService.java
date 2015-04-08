@@ -46,12 +46,12 @@ public class GroupService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Group> addGroup(Group group, Long id_course, Long id_academic,
-			Locale locale) {
+	public ResultClass<Group> addGroup(Group group, Long id_course,
+			Long id_academic, Locale locale) {
 
 		boolean success = false;
 
-		Group groupExists = daoGroup.existInCourse(id_course,group.getName());
+		Group groupExists = daoGroup.existInCourse(id_course, group.getName());
 		ResultClass<Group> result = new ResultClass<>();
 
 		if (groupExists != null) {
@@ -73,7 +73,8 @@ public class GroupService {
 			success = daoGroup.addGroup(group);
 
 			if (success) {
-				groupExists = daoGroup.existInCourse(id_course,group.getName());
+				groupExists = daoGroup
+						.existInCourse(id_course, group.getName());
 				success = manageAclService.addACLToObject(groupExists.getId(),
 						groupExists.getClass().getName());
 				if (success)
@@ -91,19 +92,21 @@ public class GroupService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
-	public ResultClass<Group> getGroup(Long id_group, Long id_course, Long id_academic) {
+	public ResultClass<Group> getGroup(Long id_group, Long id_course,
+			Long id_academic) {
 		ResultClass<Group> result = new ResultClass<Group>();
-		result.setSingleElement(daoGroup.getGroup(id_group, id_course, id_academic));
+		result.setSingleElement(daoGroup.getGroup(id_group, id_course,
+				id_academic));
 		return result;
 	}
 
 	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifyGroup(Group group, Long id_group,Long id_course, Long id_academic,
-			Locale locale) {
+	public ResultClass<Boolean> modifyGroup(Group group, Long id_group,
+			Long id_course, Long id_academic, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
-		Group modifyGroup = daoGroup.getGroup(id_group,  id_course, id_academic);
+		Group modifyGroup = daoGroup.getGroup(id_group, id_course, id_academic);
 
 		Group groupExists = daoGroup.existInCourse(id_course, group.getName());
 
@@ -200,9 +203,10 @@ public class GroupService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Group> unDeleteGroup(Group group, Long id_course, Locale locale) {
+	public ResultClass<Group> unDeleteGroup(Group group, Long id_course,
+			Locale locale) {
 
-		Group g = daoGroup.existInCourse(id_course,group.getName());
+		Group g = daoGroup.existInCourse(id_course, group.getName());
 
 		ResultClass<Group> result = new ResultClass<>();
 		if (g == null) {
@@ -335,14 +339,17 @@ public class GroupService {
 				&& !serviceUser.hasRole(u, "ROLE_COORDINATOR")) {
 
 			g.getProfessors().remove(serviceUser.getUser(id_user));
-			result = this.modifyGroup(g, id_group, id_course,id_academic, locale);
+			result = this.modifyGroup(g, id_group, id_course, id_academic,
+					locale);
 		} else if (serviceUser.hasRole(u, "ROLE_STUDENT")) {
 			g.getStudents().remove(serviceUser.getUser(id_user));
-			result = this.modifyGroup(g, id_group,id_course, id_academic,locale);
+			result = this.modifyGroup(g, id_group, id_course, id_academic,
+					locale);
 		}
 		if (!result.hasErrors()) {
 			// Removing the authorities to the student
-			manageAclService.removePermissionCASCADE(u, g, id_academic,id_course, id_group);
+			manageAclService.removePermissionCASCADE(u, g, id_academic,
+					id_course, id_group);
 		}
 		return result;
 	}
@@ -371,14 +378,18 @@ public class GroupService {
 
 			boolean success = daoGroup.addGroup(copy);
 			if (success) {
-				Group exists = daoGroup.existInCourse(id_course, copy.getName());
+				Group exists = daoGroup
+						.existInCourse(id_course, copy.getName());
 
 				if (exists != null) {
 					result.setSingleElement(exists);
-					manageAclService.addACLToObject(exists.getId(), exists.getClass().getName());
+					manageAclService.addACLToObject(exists.getId(), exists
+							.getClass().getName());
 
 					for (Activity a : exists.getActivities()) {
-						success = success && manageAclService.addACLToObject(a.getId(), a.getClass().getName());
+						success = success
+								&& manageAclService.addACLToObject(a.getId(), a
+										.getClass().getName());
 
 					}
 				}

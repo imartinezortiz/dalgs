@@ -21,7 +21,6 @@ import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.domain.LearningGoal;
 import es.ucm.fdi.dalgs.learningGoal.service.LearningGoalService;
 
-
 @Controller
 public class LearningGoalController {
 
@@ -31,20 +30,19 @@ public class LearningGoalController {
 	/**
 	 * Methods for adding LearningGoals
 	 */
-																				
+
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/add.htm", method = RequestMethod.GET)
 	public String addLearningGoalGET(Model model,
 			@PathVariable("degreeId") Long id) {
-		if(!model.containsAttribute("learningGoal"))
+		if (!model.containsAttribute("learningGoal"))
 			model.addAttribute("learningGoal", new LearningGoal());
 		model.addAttribute("valueButton", "Add");
 		model.addAttribute("typeform", "form.add");
 
-		
 		return "learningGoal/form";
 	}
 
-	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/add.htm", method = RequestMethod.POST, params="Add")
+	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/add.htm", method = RequestMethod.POST, params = "Add")
 	// Every Post have to return redirect
 	public String addLearningGoalPOST(
 			@ModelAttribute("learningGoal") LearningGoal newLearningGoal,
@@ -52,31 +50,37 @@ public class LearningGoalController {
 			@PathVariable("degreeId") Long id_degree,
 			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
-		if (!resultBinding.hasErrors()){
+		if (!resultBinding.hasErrors()) {
 
-			ResultClass<LearningGoal> result = serviceLearningGoal.addLearningGoal(newLearningGoal, id_competence,id_degree, locale);
+			ResultClass<LearningGoal> result = serviceLearningGoal
+					.addLearningGoal(newLearningGoal, id_competence, id_degree,
+							locale);
 			if (!result.hasErrors())
-				return "redirect:/degree/" + id_degree + "/competence/"+ id_competence +".htm";	
-			else{
+				return "redirect:/degree/" + id_degree + "/competence/"
+						+ id_competence + ".htm";
+			else {
 
-				if (result.isElementDeleted()){
-					attr.addFlashAttribute("unDelete", result.isElementDeleted()); 
-					attr.addFlashAttribute("learningGoal", result.getSingleElement());
-				}else attr.addFlashAttribute("learningGoal", newLearningGoal);
-
+				if (result.isElementDeleted()) {
+					attr.addFlashAttribute("unDelete",
+							result.isElementDeleted());
+					attr.addFlashAttribute("learningGoal",
+							result.getSingleElement());
+				} else
+					attr.addFlashAttribute("learningGoal", newLearningGoal);
 
 			}
-		}else{
+		} else {
 			attr.addFlashAttribute("learningGoal", newLearningGoal);
 			attr.addFlashAttribute(
 					"org.springframework.validation.BindingResult.learningGoal",
-					resultBinding);			
+					resultBinding);
 		}
-		return "redirect:/degree/"+ id_degree+"/competence/"+ id_competence+"/learninggoal/add.htm";
+		return "redirect:/degree/" + id_degree + "/competence/" + id_competence
+				+ "/learninggoal/add.htm";
 
 	}
 
-	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/add.htm", method = RequestMethod.POST, params="Undelete")
+	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/add.htm", method = RequestMethod.POST, params = "Undelete")
 	// Every Post have to return redirect
 	public String undeleteLearningGoalPOST(
 			@PathVariable("competenceId") Long id_competence,
@@ -84,32 +88,34 @@ public class LearningGoalController {
 			@ModelAttribute("learningGoal") LearningGoal learningGoal,
 			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
+		if (!resultBinding.hasErrors()) {
 
-		if (!resultBinding.hasErrors()){
+			ResultClass<LearningGoal> result = serviceLearningGoal
+					.unDeleteLearningGoal(learningGoal, locale);
 
-			ResultClass<LearningGoal> result = serviceLearningGoal.unDeleteLearningGoal(learningGoal, locale);
+			if (!result.hasErrors()) {
+				attr.addFlashAttribute("learningGoal",
+						result.getSingleElement());
 
-			if (!result.hasErrors()){
-				attr.addFlashAttribute("learningGoal", result.getSingleElement());
-
-				return "redirect:/degree/" + id_degree + "/competence/" + id_competence + "/learninggoal/"+result.getSingleElement().getId()+"/modify.htm";
-			}else{
+				return "redirect:/degree/" + id_degree + "/competence/"
+						+ id_competence + "/learninggoal/"
+						+ result.getSingleElement().getId() + "/modify.htm";
+			} else {
 
 				if (result.isElementDeleted())
-					attr.addFlashAttribute("unDelete", true); 
+					attr.addFlashAttribute("unDelete", true);
 				attr.addFlashAttribute("errors", result.getErrorsList());
 
-
 			}
-		}else{
+		} else {
 			attr.addFlashAttribute(
 					"org.springframework.validation.BindingResult.learningGoal",
 					resultBinding);
 		}
 
-
 		attr.addFlashAttribute("learningGoal", learningGoal);
-		return "reidrect:/degree/"+ id_degree+"/competence/"+ id_competence+"/learninggoal/add.htm";
+		return "reidrect:/degree/" + id_degree + "/competence/" + id_competence
+				+ "/learninggoal/add.htm";
 	}
 
 	/**
@@ -120,17 +126,17 @@ public class LearningGoalController {
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence,
 			@PathVariable("learninggoalId") Long id_learningGoal)
-					throws ServletException {
+			throws ServletException {
 
-		if (serviceLearningGoal.deleteLearningGoal(serviceLearningGoal.getLearningGoal(id_learningGoal, id_competence, id_degree).getSingleElement()).getSingleElement()) {
-			return "redirect:/degree/" + id_degree +"/competence/" +id_competence+ ".htm";
+		if (serviceLearningGoal.deleteLearningGoal(
+				serviceLearningGoal.getLearningGoal(id_learningGoal,
+						id_competence, id_degree).getSingleElement())
+				.getSingleElement()) {
+			return "redirect:/degree/" + id_degree + "/competence/"
+					+ id_competence + ".htm";
 		} else
 			return "redirect:/error.htm";
 	}
-
-
-
-
 
 	/**
 	 * Methods for modify LearningGoals
@@ -144,37 +150,42 @@ public class LearningGoalController {
 			BindingResult resultBinding, RedirectAttributes attr, Locale locale)
 
 	{
-		if (!resultBinding.hasErrors()){
+		if (!resultBinding.hasErrors()) {
 
-			ResultClass<Boolean> result = serviceLearningGoal.modifyLearningGoal(modify, id_learningGoal,  id_competence, id_degree,locale);
+			ResultClass<Boolean> result = serviceLearningGoal
+					.modifyLearningGoal(modify, id_learningGoal, id_competence,
+							id_degree, locale);
 			if (!result.hasErrors())
 
-				return "redirect:/degree/" + id_degree +"/competence/"+ id_competence +".htm";
-			else{
+				return "redirect:/degree/" + id_degree + "/competence/"
+						+ id_competence + ".htm";
+			else {
 				attr.addFlashAttribute("errors", result.getErrorsList());
 
 			}
-		}else{
+		} else {
 			attr.addFlashAttribute(
 					"org.springframework.validation.BindingResult.learningGoal",
 					resultBinding);
 		}
 		attr.addFlashAttribute("learningGoal", modify);
-		return "redirect:/degree/"+id_degree+"/competence/"+id_competence+"/learninggoal/"+id_learningGoal+"/modify.htm";
+		return "redirect:/degree/" + id_degree + "/competence/" + id_competence
+				+ "/learninggoal/" + id_learningGoal + "/modify.htm";
 
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/{learninggoalId}/modify.htm", method = RequestMethod.GET)
 	public String modifyLearningGoalGET(
 			@PathVariable("degreeId") Long id_degree,
-			@PathVariable("competenceId") Long id_competence, 
-			@PathVariable("learninggoalId") Long id_learningGoal,
-			Model model)
-					throws ServletException {
+			@PathVariable("competenceId") Long id_competence,
+			@PathVariable("learninggoalId") Long id_learningGoal, Model model)
+			throws ServletException {
 
-		if (!model.containsAttribute("learningGoal")){
+		if (!model.containsAttribute("learningGoal")) {
 
-			LearningGoal p = serviceLearningGoal.getLearningGoal(id_learningGoal, id_competence, id_degree).getSingleElement();
+			LearningGoal p = serviceLearningGoal.getLearningGoal(
+					id_learningGoal, id_competence, id_degree)
+					.getSingleElement();
 			model.addAttribute("learningGoal", p);
 		}
 		model.addAttribute("valueButton", "Modify");
@@ -184,8 +195,6 @@ public class LearningGoalController {
 
 	}
 
-
-
 	/**
 	 * Methods for view LearningGoal
 	 */
@@ -194,30 +203,36 @@ public class LearningGoalController {
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence,
 			@PathVariable("learninggoalId") Long id_learningGoal)
-					throws ServletException {
+			throws ServletException {
 
-		Map<String, Object> myModel = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
-		LearningGoal p = serviceLearningGoal.getLearningGoal(id_learningGoal, id_competence, id_degree).getSingleElement();
-		if(p!=null){
-		myModel.put("learningGoal", p);
+		LearningGoal p = serviceLearningGoal.getLearningGoal(id_learningGoal,
+				id_competence, id_degree).getSingleElement();
+		if (p != null) {
+			model.put("learningGoal", p);
 
-		return new ModelAndView("learningGoal/view", "model", myModel);
+			return new ModelAndView("learningGoal/view", "model", model);
 		}
-		return new ModelAndView("error", "model", myModel);
+		return new ModelAndView("exception/notFound", "model", model);
 
 	}
-	
+
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/learninggoal/{learninggoalId}/restore.htm")
 	// Every Post have to return redirect
 	public String restoreLearningGoal(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence,
 			@PathVariable("learninggoalId") Long id_learningGoal, Locale locale) {
-		
-		ResultClass<LearningGoal> result = serviceLearningGoal.unDeleteLearningGoal(serviceLearningGoal.getLearningGoal(id_learningGoal, id_competence, id_degree).getSingleElement(), locale);
+
+		ResultClass<LearningGoal> result = serviceLearningGoal
+				.unDeleteLearningGoal(
+						serviceLearningGoal.getLearningGoal(id_learningGoal,
+								id_competence, id_degree).getSingleElement(),
+						locale);
 		if (!result.hasErrors())
-			return "redirect:/degree/"+id_degree+"/competence/"+id_competence+".htm";
-		else{
+			return "redirect:/degree/" + id_degree + "/competence/"
+					+ id_competence + ".htm";
+		else {
 			return "redirect:/error.htm";
 
 		}

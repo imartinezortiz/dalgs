@@ -33,8 +33,8 @@ public class CompetenceController {
 	@Autowired
 	private CompetenceService serviceCompetence;
 
-	//	@Autowired
-	//	private SubjectService serviceSubject;
+	// @Autowired
+	// private SubjectService serviceSubject;
 
 	@Autowired
 	private DegreeService serviceDegree;
@@ -48,14 +48,15 @@ public class CompetenceController {
 	public void setShowAll(Boolean showAll) {
 		this.showAll = showAll;
 	}
+
 	/*
 	 * private static final Logger logger = LoggerFactory
 	 * .getLogger(CompetenceController.class);
 	 */
-	//	@ModelAttribute("degrees")
-	//	public List<Degree> degrees() {
-	//		return serviceDegree.getAll().getE();
-	//	}
+	// @ModelAttribute("degrees")
+	// public List<Degree> degrees() {
+	// return serviceDegree.getAll().getE();
+	// }
 
 	/**
 	 * Methods for adding competences
@@ -64,9 +65,9 @@ public class CompetenceController {
 	@RequestMapping(value = "/degree/{degreeId}/competence/add.htm", method = RequestMethod.GET)
 	public String addCompetenceGET(Model model,
 			@PathVariable("degreeId") Long id) {
-		//		Competence newCompetence = new Competence();
+		// Competence newCompetence = new Competence();
 
-		if(!model.containsAttribute("competence"))
+		if (!model.containsAttribute("competence"))
 			model.addAttribute("competence", new Competence());
 
 		model.addAttribute("valueButton", "Add");
@@ -75,35 +76,39 @@ public class CompetenceController {
 		return "competence/form";
 	}
 
-	@RequestMapping(value = "/degree/{degreeId}/competence/add.htm", method = RequestMethod.POST, params="Add")
+	@RequestMapping(value = "/degree/{degreeId}/competence/add.htm", method = RequestMethod.POST, params = "Add")
 	// Every Post have to return redirect
 	public String addCompetencePOST(
 			@ModelAttribute("competence") Competence newCompetence,
 			@PathVariable("degreeId") Long id_degree,
-			BindingResult resultBinding, RedirectAttributes attr, Locale locale ) {
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
-		if (!resultBinding.hasErrors()){
-			ResultClass<Competence> result = serviceCompetence.addCompetence(newCompetence, id_degree, locale);
+		if (!resultBinding.hasErrors()) {
+			ResultClass<Competence> result = serviceCompetence.addCompetence(
+					newCompetence, id_degree, locale);
 			if (!result.hasErrors())
 				return "redirect:/degree/" + id_degree + ".htm";
-			else{
+			else {
 
-				if (result.isElementDeleted()){
-					attr.addFlashAttribute("unDelete", result.isElementDeleted()); 
-					attr.addFlashAttribute("competence", result.getSingleElement());
+				if (result.isElementDeleted()) {
+					attr.addFlashAttribute("unDelete",
+							result.isElementDeleted());
+					attr.addFlashAttribute("competence",
+							result.getSingleElement());
 
-				}else attr.addFlashAttribute("competence", newCompetence);
+				} else
+					attr.addFlashAttribute("competence", newCompetence);
 				attr.addFlashAttribute("errors", result.getErrorsList());
 
 			}
-		}else{
+		} else {
 			attr.addFlashAttribute("competence", newCompetence);
 			attr.addFlashAttribute(
 					"org.springframework.validation.BindingResult.competence",
 					resultBinding);
 
 		}
-		return "redirect:/degree/"+id_degree+"/competence/add.htm";
+		return "redirect:/degree/" + id_degree + "/competence/add.htm";
 
 	}
 
@@ -111,49 +116,50 @@ public class CompetenceController {
 	 * Methods for delete competences
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/delete.htm", method = RequestMethod.GET)
-	public String deleteCompetenceGET(
-			@PathVariable("degreeId") Long id_degree,
+	public String deleteCompetenceGET(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence)
-					throws ServletException {
+			throws ServletException {
 
-		if (serviceCompetence.deleteCompetence(serviceCompetence.getCompetence(id_competence, id_degree).getSingleElement()).getSingleElement()) {
+		if (serviceCompetence.deleteCompetence(
+				serviceCompetence.getCompetence(id_competence, id_degree)
+						.getSingleElement()).getSingleElement()) {
 			return "redirect:/degree/" + id_degree + ".htm";
 		} else
 			return "redirect:/error.htm";
 	}
 
-
-	@RequestMapping(value = "/degree/{degreeId}/competence/add.htm", method = RequestMethod.POST, params="Undelete")
+	@RequestMapping(value = "/degree/{degreeId}/competence/add.htm", method = RequestMethod.POST, params = "Undelete")
 	// Every Post have to return redirect
-	public String undeleteDegreePOST(
-			@PathVariable("degreeId") Long id_degree,
+	public String undeleteDegreePOST(@PathVariable("degreeId") Long id_degree,
 			@ModelAttribute("competence") Competence competence,
 			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
-		if (!resultBinding.hasErrors()){
+		if (!resultBinding.hasErrors()) {
 
-			ResultClass<Competence> result = serviceCompetence.unDeleteCompetence(competence, id_degree, locale);
+			ResultClass<Competence> result = serviceCompetence
+					.unDeleteCompetence(competence, id_degree, locale);
 
-			if (!result.hasErrors()){
+			if (!result.hasErrors()) {
 				attr.addFlashAttribute("competence", result.getSingleElement());
-				return "redirect:/degree/" + id_degree +  "/competence/" + result.getSingleElement().getId() + "/modify.htm";
-			}
-			else{
+				return "redirect:/degree/" + id_degree + "/competence/"
+						+ result.getSingleElement().getId() + "/modify.htm";
+			} else {
 
 				if (result.isElementDeleted())
-					attr.addFlashAttribute("unDelete", true); 
+					attr.addFlashAttribute("unDelete", true);
 				attr.addFlashAttribute("errors", result.getErrorsList());
 
 			}
-		}else{
+		} else {
 			attr.addFlashAttribute(
 					"org.springframework.validation.BindingResult.competence",
 					resultBinding);
 
 		}
 		attr.addFlashAttribute("competence", competence);
-		return "redirect:/degree/"+id_degree+"/competence/add.htm";
+		return "redirect:/degree/" + id_degree + "/competence/add.htm";
 	}
+
 	/**
 	 * Methods for modify competences
 	 */
@@ -165,25 +171,25 @@ public class CompetenceController {
 			BindingResult resultBinding, RedirectAttributes attr, Locale locale)
 
 	{
-		if (!resultBinding.hasErrors()){
+		if (!resultBinding.hasErrors()) {
 
-			ResultClass<Boolean> result = serviceCompetence.modifyCompetence(modify, id_competence, id_degree, locale);
+			ResultClass<Boolean> result = serviceCompetence.modifyCompetence(
+					modify, id_competence, id_degree, locale);
 			if (!result.hasErrors())
 				return "redirect:/degree/" + id_degree + ".htm";
-			else{
+			else {
 				attr.addFlashAttribute("errors", result.getErrorsList());
-			}	
+			}
 
-		}
-		else{
+		} else {
 			attr.addFlashAttribute(
 					"org.springframework.validation.BindingResult.competence",
 					resultBinding);
 		}
-		
-		attr.addFlashAttribute("module", modify);
-		return "redirect:/degree/"+id_degree+"/competence/"+id_competence+"/modify.htm";
 
+		attr.addFlashAttribute("module", modify);
+		return "redirect:/degree/" + id_degree + "/competence/" + id_competence
+				+ "/modify.htm";
 
 	}
 
@@ -191,10 +197,11 @@ public class CompetenceController {
 	protected String modifyCompetenceGET(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence, Model model)
-					throws ServletException {
-		if (!model.containsAttribute("competence")){
+			throws ServletException {
+		if (!model.containsAttribute("competence")) {
 
-			Competence p = serviceCompetence.getCompetence(id_competence, id_degree).getSingleElement();
+			Competence p = serviceCompetence.getCompetence(id_competence,
+					id_degree).getSingleElement();
 			model.addAttribute("competence", p);
 		}
 		model.addAttribute("valueButton", "Modify");
@@ -212,33 +219,41 @@ public class CompetenceController {
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean show)
-					throws ServletException {
+			throws ServletException {
 
-		Map<String, Object> myModel = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
-		Competence p = serviceCompetence.getCompetenceAll(id_competence, id_degree,show).getSingleElement();
+		Competence p = serviceCompetence.getCompetenceAll(id_competence,
+				id_degree, show).getSingleElement();
 
-		myModel.put("showAll", show);
-		myModel.put("competence", p);
-		myModel.put("learningGoals", p.getLearningGoals());
+		if (p != null) {
+			model.put("showAll", show);
 
-		return new ModelAndView("competence/view", "model", myModel);
+			model.put("competence", p);
+			model.put("learningGoals", p.getLearningGoals());
+
+			return new ModelAndView("competence/view", "model", model);
+		}
+		return new ModelAndView("exception/notFound", "model", model);
+
 	}
-	
+
 	@RequestMapping(value = "/degree/{degreeId}/competence/{competenceId}/restore.htm")
 	// Every Post have to return redirect
 	public String restoreCompetence(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("competenceId") Long id_competence, Locale locale) {
-		ResultClass<Competence> result = serviceCompetence.unDeleteCompetence(serviceCompetence.getCompetence(id_competence, id_degree).getSingleElement(), id_degree, locale);
+		ResultClass<Competence> result = serviceCompetence.unDeleteCompetence(
+				serviceCompetence.getCompetence(id_competence, id_degree)
+						.getSingleElement(), id_degree, locale);
 		if (!result.hasErrors())
-			return "redirect:/degree/"+id_degree+".htm";
-		else{
+			return "redirect:/degree/" + id_degree + ".htm";
+		else {
 			return "redirect:/error.htm";
 
 		}
 
 	}
-	
+
 	@RequestMapping(value = "/degree/{degreeId}/competence/upload.htm", method = RequestMethod.GET)
 	public String uploadGet(Model model) {
 		CharsetString charsets = new CharsetString();

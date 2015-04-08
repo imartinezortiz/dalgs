@@ -17,18 +17,19 @@ import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.domain.info.CompetenceInfo;
 
 public class CompetenceUpload {
-	
-	
+
 	@SuppressWarnings("unused")
-	public	 List<Competence> readCSVCompetenceToBean(InputStream in,
-			String charsetName, CsvPreference csvPreference, Degree degree) throws IOException {
+	public List<Competence> readCSVCompetenceToBean(InputStream in,
+			String charsetName, CsvPreference csvPreference, Degree degree)
+			throws IOException {
 		CsvBeanReader beanReader = null;
 		List<Competence> competences = new ArrayList<Competence>();
 		try {
 			beanReader = new CsvBeanReader(new InputStreamReader(in,
 					Charset.forName(charsetName)), csvPreference);
 			// the name mapping provide the basis for bean setters
-			final String[] nameMapping = new String[] { "code","name", "description","type"};
+			final String[] nameMapping = new String[] { "code", "name",
+					"description", "type" };
 			// just read the header, so that it don't get mapped to User
 			// object
 			final String[] header = beanReader.getHeader(true);
@@ -36,7 +37,8 @@ public class CompetenceUpload {
 
 			CompetenceInfo info;
 
-			while ((info = beanReader.read(CompetenceInfo.class, nameMapping, processors)) != null) {
+			while ((info = beanReader.read(CompetenceInfo.class, nameMapping,
+					processors)) != null) {
 				Competence c = new Competence();
 				c.setInfo(info);
 				c.setDegree(degree);
@@ -53,14 +55,12 @@ public class CompetenceUpload {
 
 	/* CellProcessors have to correspond to the entity database fields */
 	private static CellProcessor[] getCompetenceProcessors() {
-	
-	        
-		final CellProcessor[] processors = new CellProcessor[] {
-				new NotNull(), //Code
+
+		final CellProcessor[] processors = new CellProcessor[] { new NotNull(), // Code
 				new NotNull(), // Description
-				new NotNull(), //Name
-				new NotNull(), //Type
-				
+				new NotNull(), // Name
+				new NotNull(), // Type
+
 		};
 		return processors;
 	}

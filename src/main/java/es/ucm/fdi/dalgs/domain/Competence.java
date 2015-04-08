@@ -24,10 +24,10 @@ import es.ucm.fdi.dalgs.domain.info.CompetenceInfo;
 @Entity
 @Table(name = "competence", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"code_competence", "id_degree" }))
-public class Competence implements Cloneable, Copyable<Competence>, Serializable {
+public class Competence implements Cloneable, Copyable<Competence>,
+		Serializable {
 
 	private static final long serialVersionUID = 1L;
-
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,17 +37,15 @@ public class Competence implements Cloneable, Copyable<Competence>, Serializable
 	@Embedded
 	private CompetenceInfo info;
 
-	@ManyToMany(mappedBy = "competences", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "competences", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Collection<Subject> subjects;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "competence",cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "competence", cascade = CascadeType.ALL)
 	private Collection<LearningGoal> learningGoals;
 
-	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_degree")
 	private Degree degree;
-
-
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
@@ -107,9 +105,6 @@ public class Competence implements Cloneable, Copyable<Competence>, Serializable
 		this.learningGoals = learningGoals;
 	}
 
-	
-
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -144,13 +139,13 @@ public class Competence implements Cloneable, Copyable<Competence>, Serializable
 	public Competence depth_copy() {
 		Competence copy = this.shallow_copy();
 
-		copy.isDeleted=false;
+		copy.isDeleted = false;
 		copy.id = null;
 		copy.learningGoals = new ArrayList<>();
-		
+
 		CompetenceInfo cInfo = copy.info.depth_copy();
 		copy.info = cInfo;
-		
+
 		for (LearningGoal lg : this.learningGoals) {
 			LearningGoal learningGoal = lg.depth_copy();
 			learningGoal.setCompetence(copy);
@@ -159,15 +154,13 @@ public class Competence implements Cloneable, Copyable<Competence>, Serializable
 		return copy;
 	}
 
-
 	public Competence shallow_copy() {
 		try {
-			return  (Competence) super.clone();
+			return (Competence) super.clone();
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
-		
-	}
 
+	}
 
 }

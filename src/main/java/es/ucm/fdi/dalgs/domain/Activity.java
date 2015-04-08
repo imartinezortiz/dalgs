@@ -22,27 +22,26 @@ import javax.persistence.Table;
 import es.ucm.fdi.dalgs.domain.info.ActivityInfo;
 
 @Entity
-@Table(name = "activity", uniqueConstraints =  @UniqueConstraint(columnNames = {"code_activity", "id_course", "id_group" }) )
+@Table(name = "activity", uniqueConstraints = @UniqueConstraint(columnNames = {
+		"code_activity", "id_course", "id_group" }))
 public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 
 	private static final long serialVersionUID = 1L;
-
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_activity")
 	private Long id;
-	
-//	@Column(name = "code_activity", nullable = false, unique = true)
-//	private String code;
-//	public String getCode() {
-//		return code;
-//	}
-//
-//	public void setCode(String code) {
-//		this.code = code;
-//	}
 
+	// @Column(name = "code_activity", nullable = false, unique = true)
+	// private String code;
+	// public String getCode() {
+	// return code;
+	// }
+	//
+	// public void setCode(String code) {
+	// this.code = code;
+	// }
 
 	@Embedded
 	private ActivityInfo info;
@@ -62,7 +61,7 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)
 	@JoinColumn(name = "id_group")
 	private Group group;
-	
+
 	public Activity() {
 		super();
 		this.isDeleted = false;
@@ -121,9 +120,6 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-	
-	
-	
 
 	@Override
 	public int hashCode() {
@@ -150,27 +146,25 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 		return true;
 	}
 
-
 	public Activity depth_copy() {
 		Activity copy = this.shallow_copy();
-		
+
 		copy.id = null;
-		copy.isDeleted=false;
+		copy.isDeleted = false;
 
 		ActivityInfo aInfo = this.getInfo().depth_copy();
 		copy.info = aInfo;
 		copy.learningGoalStatus = new ArrayList<LearningGoalStatus>();
 
 		return copy;
-		
+
 	}
 
-	
 	public Activity shallow_copy() {
-		//	Same reference
+		// Same reference
 		try {
-			  return (Activity) super.clone();
-			
+			return (Activity) super.clone();
+
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}

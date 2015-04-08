@@ -38,37 +38,36 @@ public class GroupRepository {
 
 	public Group getGroup(Long id_group, Long id_course, Long id_academic) {
 		Course course = em.getReference(Course.class, id_course);
-		AcademicTerm academic = em.getReference(AcademicTerm.class, id_academic);
+		AcademicTerm academic = em
+				.getReference(AcademicTerm.class, id_academic);
 
 		Query query = null;
 
-		query = em.createQuery("select g from Group g  where g.course = ?1 and g.id = ?2 and g.course.academicTerm=?3");
+		query = em
+				.createQuery("select g from Group g  where g.course = ?1 and g.id = ?2 and g.course.academicTerm=?3");
 		query.setParameter(1, course);
 		query.setParameter(2, id_course);
 		query.setParameter(3, academic);
-
 
 		if (query.getResultList().isEmpty())
 			return null;
 		else
 			return (Group) query.getSingleResult();
 	}
-	
+
 	public Group getGroupFormatter(Long id_group) {
 		return em.find(Group.class, id_group);
 	}
 
-
-	
 	public Group existInCourse(Long id_course, String name) {// , Long id) {
 		Course course = em.getReference(Course.class, id_course);
 
 		Query query = null;
 
-		query = em.createQuery("select g from Group g  where g.course = ?1 and g.name = ?2");
+		query = em
+				.createQuery("select g from Group g  where g.course = ?1 and g.name = ?2");
 		query.setParameter(1, course);
 		query.setParameter(2, name);
-
 
 		if (query.getResultList().isEmpty())
 			return null;

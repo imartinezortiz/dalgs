@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Embeddable;
 
-
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -19,19 +18,21 @@ public class UserRole implements GrantedAuthority, Serializable {
 	 * @see java.io.Serializable
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	@NotEmpty @NotNull @NotBlank
+
+	@NotEmpty
+	@NotNull
+	@NotBlank
 	@Basic
 	private String role;
-	
+
 	UserRole() {
-		
+
 	}
-	
+
 	public UserRole(String role) {
 		this.role = role;
 	}
-	
+
 	@Override
 	public String getAuthority() {
 		return this.role;
@@ -66,6 +67,5 @@ public class UserRole implements GrantedAuthority, Serializable {
 	public String toString() {
 		return "UserRole [role=" + role + "]";
 	}
-
 
 }

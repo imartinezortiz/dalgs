@@ -21,14 +21,12 @@ import javax.persistence.UniqueConstraint;
 import es.ucm.fdi.dalgs.domain.info.ModuleInfo;
 
 @Entity
-
 @Table(name = "module", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"code_module", "id_degree" }))
 public class Module implements Cloneable, Copyable<Module>, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_module")
@@ -37,15 +35,14 @@ public class Module implements Cloneable, Copyable<Module>, Serializable {
 	@Embedded
 	private ModuleInfo info;
 
-
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_degree")
 	private Degree degree;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "module",cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "module", cascade = CascadeType.ALL)
 	private Collection<Topic> topics;
 
 	public Module() {
@@ -94,8 +91,7 @@ public class Module implements Cloneable, Copyable<Module>, Serializable {
 	public void setTopics(Collection<Topic> topics) {
 		this.topics = topics;
 	}
-	
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -129,21 +125,22 @@ public class Module implements Cloneable, Copyable<Module>, Serializable {
 
 	public Module depth_copy() {
 		Module copy = this.shallow_copy();
-		
-		copy.isDeleted=false;
-		copy.id=null;
-		
+
+		copy.isDeleted = false;
+		copy.id = null;
+
 		ModuleInfo mInfo = copy.info.depth_copy();
 		copy.info = mInfo;
-		
+
 		copy.topics = new ArrayList<>();
 		for (Topic t : this.topics) {
-			Topic topic  = t.depth_copy();
+			Topic topic = t.depth_copy();
 			topic.setModule(copy);
 			copy.topics.add(topic);
 		}
 		return copy;
 	}
+
 	public Module shallow_copy() {
 		try {
 			return (Module) super.clone();
@@ -151,5 +148,5 @@ public class Module implements Cloneable, Copyable<Module>, Serializable {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 }

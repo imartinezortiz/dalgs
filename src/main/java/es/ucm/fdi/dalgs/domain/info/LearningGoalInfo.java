@@ -14,24 +14,31 @@ import org.hibernate.validator.constraints.NotEmpty;
 import es.ucm.fdi.dalgs.domain.Copyable;
 
 @Embeddable
-public class LearningGoalInfo implements Serializable , Cloneable, Copyable<LearningGoalInfo>{
+public class LearningGoalInfo implements Serializable, Cloneable,
+		Copyable<LearningGoalInfo> {
 
 	private static final long serialVersionUID = 1L;
-	
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=20)
+
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 20)
 	@Basic(optional = false)
-	@Column(name = "code_learning", nullable = false, unique=true)
+	@Column(name = "code_learning", nullable = false, unique = true)
 	private String code;
-	
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=100)
+
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 100)
 	@Basic(optional = false)
 	@Column(name = "name", length = 100, nullable = false)
 	private String name;
 
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=250)
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 250)
 	@Basic(optional = false)
 	@Column(name = "description", length = 250, nullable = false)
 	private String description;
@@ -84,7 +91,6 @@ public class LearningGoalInfo implements Serializable , Cloneable, Copyable<Lear
 			return false;
 		return true;
 	}
-	
 
 	@Override
 	public LearningGoalInfo depth_copy() {
@@ -101,5 +107,5 @@ public class LearningGoalInfo implements Serializable , Cloneable, Copyable<Lear
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 }

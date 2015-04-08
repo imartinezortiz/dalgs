@@ -54,8 +54,9 @@ public class SubjectRepository {
 	@SuppressWarnings("unchecked")
 	public List<Subject> getAll() {
 
-		return em.createQuery(
-				"select s from Subject s inner join s.topic d where s.isDeleted='false' order by s.id")
+		return em
+				.createQuery(
+						"select s from Subject s inner join s.topic d where s.isDeleted='false' order by s.id")
 				.getResultList();
 	}
 
@@ -70,12 +71,14 @@ public class SubjectRepository {
 		}
 	}
 
-	public Subject getSubject(Long id, Long id_topic, Long id_module, Long id_degree) {
+	public Subject getSubject(Long id, Long id_topic, Long id_module,
+			Long id_degree) {
 		Topic topic = em.getReference(Topic.class, id_topic);
 		Module module = em.getReference(Module.class, id_module);
 		Degree degree = em.getReference(Degree.class, id_degree);
-		
-		Query query = em.createQuery("Select s from Subject s where s.id=?1 and s.topic=?2 and s.topic.module=?3 and s.topic.module.degree=?4");
+
+		Query query = em
+				.createQuery("Select s from Subject s where s.id=?1 and s.topic=?2 and s.topic.module=?3 and s.topic.module.degree=?4");
 		query.setParameter(1, id);
 		query.setParameter(2, topic);
 		query.setParameter(3, module);
@@ -87,7 +90,7 @@ public class SubjectRepository {
 			return (Subject) query.getSingleResult();
 
 	}
-	
+
 	public Subject getSubjectFormatter(Long id) {
 		return em.find(Subject.class, id);
 
@@ -110,13 +113,13 @@ public class SubjectRepository {
 	@SuppressWarnings("unchecked")
 	public List<Subject> getSubjectsForTopic(Long id_topic, Boolean show) {
 		Topic topic = em.getReference(Topic.class, id_topic);
-		if (show){
+		if (show) {
 			Query query = em
 					.createQuery("select s from Subject s where s.topic=?1");
 			query.setParameter(1, topic);
 
 			return (List<Subject>) query.getResultList();
-		}else{
+		} else {
 
 			Query query = em
 					.createQuery("select s from Subject s where s.topic=?1 and s.isDeleted='false'");
@@ -126,9 +129,9 @@ public class SubjectRepository {
 		}
 	}
 
-
 	public Subject existByCode(String code) {
-		Query query = em.createQuery("Select s from Subject s where s.info.code=?1");
+		Query query = em
+				.createQuery("Select s from Subject s where s.info.code=?1");
 		query.setParameter(1, code);
 
 		if (query.getResultList().isEmpty())
@@ -158,7 +161,6 @@ public class SubjectRepository {
 
 	}
 
-
 	public boolean addSubjects(List<Subject> s) {
 		try {
 			for (Subject subject : s)
@@ -170,7 +172,6 @@ public class SubjectRepository {
 		}
 	}
 
-
 	@SuppressWarnings("unchecked")
 	public Collection<Subject> getSubjectForDegree(Degree degree) {
 		Query query = em.createQuery("SELECT s FROM Subject s JOIN s.topic t "
@@ -179,7 +180,6 @@ public class SubjectRepository {
 
 		return (Collection<Subject>) query.getResultList();
 	}
-
 
 	public boolean deleteSubjectsForTopics(Collection<Topic> topics) {
 		try {
@@ -209,17 +209,16 @@ public class SubjectRepository {
 	public boolean persistListSubjects(List<Subject> subjects) {
 
 		int i = 0;
-		for(Subject s : subjects) {
-			try{
+		for (Subject s : subjects) {
+			try {
 
-				s.setId(null); //If not  a detached entity is passed to persist
+				s.setId(null); // If not a detached entity is passed to persist
 				em.persist(s);
 
-
-				if(++i % 20 == 0) {
+				if (++i % 20 == 0) {
 					em.flush();
 				}
-			}catch(Exception e){
+			} catch (Exception e) {
 				logger.error(e.getMessage());
 				return false;
 			}
@@ -228,6 +227,5 @@ public class SubjectRepository {
 		return true;
 
 	}
-
 
 }

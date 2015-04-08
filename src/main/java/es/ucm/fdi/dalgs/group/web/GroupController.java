@@ -88,7 +88,7 @@ public class GroupController {
 
 		if (!resultBinding.hasErrors()) {
 			ResultClass<Group> result = serviceGroup.addGroup(newgroup,
-					id_course, id_academicTerm,locale);
+					id_course, id_academicTerm, locale);
 			if (!result.hasErrors())
 				return "redirect:/academicTerm/" + id_academicTerm + "/course/"
 						+ id_course + ".htm";
@@ -123,7 +123,8 @@ public class GroupController {
 			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		if (!resultBinding.hasErrors()) {
-			ResultClass<Group> result = serviceGroup.unDeleteGroup(group,id_course, locale);
+			ResultClass<Group> result = serviceGroup.unDeleteGroup(group,
+					id_course, locale);
 
 			if (!result.hasErrors()) {
 				attr.addFlashAttribute("group", result.getSingleElement());
@@ -156,8 +157,7 @@ public class GroupController {
 	 */
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/modify.htm", method = RequestMethod.GET)
-	public String modifyGroupGET(
-			@PathVariable("academicId") Long id_academic,
+	public String modifyGroupGET(@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group, Model model)
 			throws ServletException {
@@ -167,7 +167,8 @@ public class GroupController {
 		model.addAttribute("valueButton", "Modify");
 
 		if (!model.containsAttribute("group")) {
-			Group p = serviceGroup.getGroup(id_group, id_course, id_academic).getSingleElement();
+			Group p = serviceGroup.getGroup(id_group, id_course, id_academic)
+					.getSingleElement();
 			model.addAttribute("group", p);
 
 		}
@@ -176,8 +177,7 @@ public class GroupController {
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/modify.htm", method = RequestMethod.POST)
-	public String modifyGroupPOST(
-			@PathVariable("academicId") Long id_academic,
+	public String modifyGroupPOST(@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
 			@ModelAttribute("modifyGroup") @Valid Group group,
@@ -188,7 +188,7 @@ public class GroupController {
 		if (!resultBinding.hasErrors()) {
 
 			ResultClass<Boolean> result = serviceGroup.modifyGroup(group,
-					id_group, id_course,id_academic,locale);
+					id_group, id_course, id_academic, locale);
 			if (!result.hasErrors())
 
 				return "redirect:/academicTerm/" + id_academic + "/course/"
@@ -205,19 +205,18 @@ public class GroupController {
 
 		}
 		attr.addFlashAttribute("group", group);
-		return "redirect:/academicTerm/" + id_academic+ "/course/"
-				+ id_course + "/group/" + id_group + "/modify.htm";
+		return "redirect:/academicTerm/" + id_academic + "/course/" + id_course
+				+ "/group/" + id_group + "/modify.htm";
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/delete.htm", method = RequestMethod.GET)
-	public String deleteGroupGET(
-			@PathVariable("academicId") Long id_academic,
+	public String deleteGroupGET(@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group) throws ServletException {
 
 		if (serviceGroup.deleteGroup(
-				serviceGroup.getGroup(id_group, id_course, id_academic).getSingleElement())
-				.getSingleElement()) {
+				serviceGroup.getGroup(id_group, id_course, id_academic)
+						.getSingleElement()).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_academic + "/course/"
 					+ id_course + ".htm";
 		} else
@@ -228,7 +227,7 @@ public class GroupController {
 	 * Methods for view activities
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}.htm", method = RequestMethod.GET)
-	public ModelAndView groupGET(
+	public ModelAndView getGroupGET(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") long id_group,
@@ -237,16 +236,17 @@ public class GroupController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		Group a = serviceGroup.getGroup(id_group, id_course, id_academic).getSingleElement();
+		Group a = serviceGroup.getGroup(id_group, id_course, id_academic)
+				.getSingleElement();
 		model.put("showAll", show);
 
-		if(a !=null){
+		if (a != null) {
 			model.put("group", a);
 			model.put("groupId", id_group);
-	
+
 			ResultClass<Activity> activitiesGroup = serviceActivity
 					.getActivitiesForGroup(id_group, show);
-	
+
 			ResultClass<Activity> activitiesCourse = serviceActivity
 					.getActivitiesForCourse(id_course, show);
 			model.put("activitiesGroup", activitiesGroup);
@@ -254,14 +254,17 @@ public class GroupController {
 			this.setShowAll(show);
 			return new ModelAndView("group/view", "model", model);
 		}
-		return new ModelAndView("error", "model",model);
+		return new ModelAndView("exception/notFound", "model", model);
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/professor/add.htm", method = RequestMethod.GET)
 	public String addProfessorToGroupGET(
-			@PathVariable("groupId") Long id_group,@PathVariable("courseId") Long id_course,@PathVariable("academicId") Long id_academic, Model model) {
+			@PathVariable("groupId") Long id_group,
+			@PathVariable("courseId") Long id_course,
+			@PathVariable("academicId") Long id_academic, Model model) {
 
-		Group group = serviceGroup.getGroup(id_group, id_course,id_academic).getSingleElement();
+		Group group = serviceGroup.getGroup(id_group, id_course, id_academic)
+				.getSingleElement();
 		List<String> professors = serviceUser.getAllByRole("ROLE_PROFESSOR");
 
 		model.addAttribute("group", group);
@@ -300,10 +303,12 @@ public class GroupController {
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/student/add.htm", method = RequestMethod.GET)
-	public String addStudentToGroupGET(@PathVariable("groupId") Long id_group,@PathVariable("courseId") Long id_course, @PathVariable("academicId") Long id_academic,
-			Model model) {
+	public String addStudentToGroupGET(@PathVariable("groupId") Long id_group,
+			@PathVariable("courseId") Long id_course,
+			@PathVariable("academicId") Long id_academic, Model model) {
 
-		Group group = serviceGroup.getGroup(id_group, id_course, id_academic).getSingleElement();
+		Group group = serviceGroup.getGroup(id_group, id_course, id_academic)
+				.getSingleElement();
 		List<String> students = serviceUser.getAllByRole("ROLE_STUDENT");
 
 		model.addAttribute("group", group);
@@ -347,7 +352,8 @@ public class GroupController {
 			@PathVariable("groupId") Long id_group, Locale locale) {
 
 		ResultClass<Group> result = serviceGroup.unDeleteGroup(serviceGroup
-				.getGroup(id_group, id_course,id_academic).getSingleElement(), id_course, locale);
+				.getGroup(id_group, id_course, id_academic).getSingleElement(),
+				id_course, locale);
 
 		if (!result.hasErrors())
 
@@ -377,17 +383,21 @@ public class GroupController {
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/clone.htm")
 	// Every Post have to return redirect
-	public String copyGroup(@PathVariable("academicId") Long id_academic,@PathVariable("courseId") Long id_course,
+	public String copyGroup(@PathVariable("academicId") Long id_academic,
+			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group, Locale locale) {
-		Group aux_group = serviceGroup.getGroup(id_group, id_course,id_academic).getSingleElement();
-		ResultClass<Group> result = serviceGroup.copyGroup(aux_group, id_course, locale);
-		
+		Group aux_group = serviceGroup.getGroup(id_group, id_course,
+				id_academic).getSingleElement();
+		ResultClass<Group> result = serviceGroup.copyGroup(aux_group,
+				id_course, locale);
+
 		if (!result.hasErrors())
-			return "redirect:/academicTerm/"+id_academic+"/course/"+ id_course+".htm";
-		
+			return "redirect:/academicTerm/" + id_academic + "/course/"
+					+ id_course + ".htm";
+
 		return "redirect:/error.htm";
 	}
-	
+
 	/**
 	 * For binding the professor of the subject.
 	 */

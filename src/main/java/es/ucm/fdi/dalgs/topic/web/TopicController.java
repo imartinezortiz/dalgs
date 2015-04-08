@@ -46,122 +46,128 @@ public class TopicController {
 	 * methods for adding topics
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/add.htm", method = RequestMethod.GET)
-	public String addTopicGET(Model model, @PathVariable("degreeId") Long id_degree) {
-		if(!model.containsAttribute("topic"))
+	public String addTopicGET(Model model,
+			@PathVariable("degreeId") Long id_degree) {
+		if (!model.containsAttribute("topic"))
 			model.addAttribute("topic", new Topic());
 		model.addAttribute("valueButton", "Add");
 		model.addAttribute("typeform", "form.add");
 		return "topic/form";
 	}
 
-	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/add.htm", method = RequestMethod.POST, params="Add")
-	public String addTopicPOST(
-			@PathVariable("degreeId") Long id_degree,
+	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/add.htm", method = RequestMethod.POST, params = "Add")
+	public String addTopicPOST(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@ModelAttribute("topic") Topic newTopic,
 			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
-		if (!resultBinding.hasErrors()){
+		if (!resultBinding.hasErrors()) {
 
-			ResultClass<Topic> result = serviceTopic.addTopic(newTopic, id_module, id_degree, locale);
+			ResultClass<Topic> result = serviceTopic.addTopic(newTopic,
+					id_module, id_degree, locale);
 			if (!result.hasErrors())
-				return "redirect:/degree/" + id_degree + "/module/" + id_module + ".htm";
-			else{
+				return "redirect:/degree/" + id_degree + "/module/" + id_module
+						+ ".htm";
+			else {
 
-				if (result.isElementDeleted()){
-					attr.addFlashAttribute("unDelete", result.isElementDeleted()); 
+				if (result.isElementDeleted()) {
+					attr.addFlashAttribute("unDelete",
+							result.isElementDeleted());
 					attr.addFlashAttribute("topic", result.getSingleElement());
-				}else attr.addFlashAttribute("topic", newTopic);
+				} else
+					attr.addFlashAttribute("topic", newTopic);
 				attr.addFlashAttribute("errors", result.getErrorsList());
 
 			}
-		}else{
+		} else {
 			attr.addFlashAttribute("topic", newTopic);
-			attr.addFlashAttribute(
-					"org.springframework.validation.BindingResult.topic",
-					resultBinding);			
-		}
-		
-		return "redirect:/degree/"+ id_degree+"/module/"+ id_module+"/topic/add.htm";
-	}
-	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/add.htm", method = RequestMethod.POST, params="Undelete")
-	// Every Post have to return redirect
-	public String undeleteTopic(
-			@ModelAttribute("topic") Topic topic, 
-			@PathVariable("degreeId") Long id_degree,
-			@PathVariable("moduleId") Long id_module,
-			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
-
-
-		if (!resultBinding.hasErrors()){
-			ResultClass<Topic> result = serviceTopic.unDeleteTopic(topic, id_module, locale);
-
-
-			if (!result.hasErrors()){
-				attr.addFlashAttribute("topic", result.getSingleElement());
-
-				return "redirect:/degree/" + id_degree + "/module/" + id_module + "/topic/"+result.getSingleElement().getId()+"/modify.htm";
-			}else{
-
-				if (result.isElementDeleted())
-					attr.addFlashAttribute("unDelete", true); 
-				attr.addFlashAttribute("errors", result.getErrorsList());
-		
-			}
-		}else{
 			attr.addFlashAttribute(
 					"org.springframework.validation.BindingResult.topic",
 					resultBinding);
 		}
 
-
-		attr.addFlashAttribute("topic", topic);
-		return "reidrect:/degree/"+ id_degree+"/module/"+ id_module+"/topic/add.htm";
+		return "redirect:/degree/" + id_degree + "/module/" + id_module
+				+ "/topic/add.htm";
 	}
 
+	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/add.htm", method = RequestMethod.POST, params = "Undelete")
+	// Every Post have to return redirect
+	public String undeleteTopic(@ModelAttribute("topic") Topic topic,
+			@PathVariable("degreeId") Long id_degree,
+			@PathVariable("moduleId") Long id_module,
+			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
+
+		if (!resultBinding.hasErrors()) {
+			ResultClass<Topic> result = serviceTopic.unDeleteTopic(topic,
+					id_module, locale);
+
+			if (!result.hasErrors()) {
+				attr.addFlashAttribute("topic", result.getSingleElement());
+
+				return "redirect:/degree/" + id_degree + "/module/" + id_module
+						+ "/topic/" + result.getSingleElement().getId()
+						+ "/modify.htm";
+			} else {
+
+				if (result.isElementDeleted())
+					attr.addFlashAttribute("unDelete", true);
+				attr.addFlashAttribute("errors", result.getErrorsList());
+
+			}
+		} else {
+			attr.addFlashAttribute(
+					"org.springframework.validation.BindingResult.topic",
+					resultBinding);
+		}
+
+		attr.addFlashAttribute("topic", topic);
+		return "reidrect:/degree/" + id_degree + "/module/" + id_module
+				+ "/topic/add.htm";
+	}
 
 	/**
 	 * Methods for modify topics
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/modify.htm", method = RequestMethod.POST)
-	public String modifyTopicPOST(
-			@PathVariable("degreeId") Long id_degree,
+	public String modifyTopicPOST(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic,
-			@ModelAttribute("topic") Topic modify,
-			BindingResult resultBinding, RedirectAttributes attr, Locale locale)
+			@ModelAttribute("topic") Topic modify, BindingResult resultBinding,
+			RedirectAttributes attr, Locale locale)
 
 	{
 
-		if (!resultBinding.hasErrors()){	
-			ResultClass<Boolean> result = serviceTopic.modifyTopic(modify, id_topic, id_module, id_degree, locale);
+		if (!resultBinding.hasErrors()) {
+			ResultClass<Boolean> result = serviceTopic.modifyTopic(modify,
+					id_topic, id_module, id_degree, locale);
 			if (!result.hasErrors())
-				return "redirect:/degree/" + id_degree + "/module/" + id_module + ".htm";
-			else{
+				return "redirect:/degree/" + id_degree + "/module/" + id_module
+						+ ".htm";
+			else {
 				attr.addFlashAttribute("errors", result.getErrorsList());
 
-
 			}
-		}else{
+		} else {
 			attr.addFlashAttribute(
 					"org.springframework.validation.BindingResult.topic",
 					resultBinding);
 		}
 
 		attr.addFlashAttribute("topic", modify);
-		return "redirect:/degree/"+id_degree+"/module/"+id_module+"/topic/"+id_topic+"/modify.htm";
+		return "redirect:/degree/" + id_degree + "/module/" + id_module
+				+ "/topic/" + id_topic + "/modify.htm";
 
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/modify.htm", method = RequestMethod.GET)
-	public String modifyTopicGET(
-			@PathVariable("degreeId") Long id_degree,
+	public String modifyTopicGET(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
-			@PathVariable("topicId") Long id_topic,
-			Model model)throws ServletException {
+			@PathVariable("topicId") Long id_topic, Model model)
+			throws ServletException {
 
-		if (!model.containsAttribute("topic")){
-			Topic p = serviceTopic.getTopic(id_topic, id_module, id_degree).getSingleElement();
+		if (!model.containsAttribute("topic")) {
+			Topic p = serviceTopic.getTopic(id_topic, id_module, id_degree)
+					.getSingleElement();
 			model.addAttribute("topic", p);
 		}
 		model.addAttribute("valueButton", "Modify");
@@ -177,11 +183,13 @@ public class TopicController {
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/delete.htm", method = RequestMethod.GET)
 	public String deleteTopicGET(@PathVariable("topicId") Long id_topic,
 			@PathVariable("moduleId") Long id_module,
-			@PathVariable("degreeId") Long id_degree)
-					throws ServletException {
+			@PathVariable("degreeId") Long id_degree) throws ServletException {
 
-		if (serviceTopic.deleteTopic(serviceTopic.getTopic(id_topic, id_module, id_degree).getSingleElement()).getSingleElement()) {
-			return "redirect:/degree/" + id_degree + "/module/"+ id_module + ".htm";
+		if (serviceTopic.deleteTopic(
+				serviceTopic.getTopic(id_topic, id_module, id_degree)
+						.getSingleElement()).getSingleElement()) {
+			return "redirect:/degree/" + id_degree + "/module/" + id_module
+					+ ".htm";
 		} else
 			return "redirect:/error.htm";
 	}
@@ -190,39 +198,49 @@ public class TopicController {
 	 * Methods for view topics
 	 */
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}.htm", method = RequestMethod.GET)
-	public ModelAndView getTopicGET(@PathVariable("topicId") Long id_topic,
+	public ModelAndView getTopicGET(
+			@PathVariable("topicId") Long id_topic,
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean show)
-					throws ServletException {
+			throws ServletException {
 
-		Map<String, Object> myModel = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
-		Topic p = serviceTopic.getTopicAll(id_topic, id_module, id_degree, show).getSingleElement();
-		myModel.put("showAll", show);
-		myModel.put("topic", p);
-		if (p.getSubjects() != null)
-			myModel.put("subjects", p.getSubjects());
+		Topic p = serviceTopic
+				.getTopicAll(id_topic, id_module, id_degree, show)
+				.getSingleElement();
+		if (p != null) {
+			model.put("showAll", show);
 
+			model.put("topic", p);
+			if (p.getSubjects() != null)
+				model.put("subjects", p.getSubjects());
 
-		return new ModelAndView("topic/view", "model", myModel);
+			return new ModelAndView("topic/view", "model", model);
+		}
+		return new ModelAndView("exception/notFound", "model", model);
+
 	}
-	
+
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/restore.htm")
 	// Every Post have to return redirect
 	public String restoreTopic(@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
 			@PathVariable("topicId") Long id_topic, Locale locale) {
-		ResultClass<Topic> result = serviceTopic.unDeleteTopic(serviceTopic.getTopic(id_topic, id_module, id_degree).getSingleElement(), id_module, locale);
+		ResultClass<Topic> result = serviceTopic.unDeleteTopic(serviceTopic
+				.getTopic(id_topic, id_module, id_degree).getSingleElement(),
+				id_module, locale);
 		if (!result.hasErrors())
-			return "redirect:/degree/"+id_degree+"/module/"+id_module+".htm";
-		else{
+			return "redirect:/degree/" + id_degree + "/module/" + id_module
+					+ ".htm";
+		else {
 			return "redirect:/error.htm";
 
 		}
 
 	}
-	
+
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/upload.htm", method = RequestMethod.GET)
 	public String uploadGet(Model model) {
 		CharsetString charsets = new CharsetString();
@@ -238,7 +256,7 @@ public class TopicController {
 			@ModelAttribute("newUpload") @Valid UploadForm upload,
 			BindingResult result, Model model,
 			@PathVariable("moduleId") Long id_module,
-			@PathVariable("degreeId") Long id_degree){
+			@PathVariable("degreeId") Long id_degree) {
 
 		if (result.hasErrors() || upload.getCharset().isEmpty()) {
 			for (ObjectError error : result.getAllErrors()) {

@@ -44,14 +44,14 @@ public class ActivityService {
 
 	@Autowired
 	private LearningGoalService serviceLearningGoal;
-	
+
 	@Autowired
 	private MessageSource messageSource;
 
 	@PreAuthorize("hasPermission(#course, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Activity> addActivityCourse(Course course, Activity activity,
-			Long id_course, Long id_academic, Locale locale) {
+	public ResultClass<Activity> addActivityCourse(Course course,
+			Activity activity, Long id_course, Long id_academic, Locale locale) {
 
 		boolean success = false;
 
@@ -66,32 +66,39 @@ public class ActivityService {
 
 			if (activityExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add(messageSource.getMessage("error.deleted", null, locale));
+				errors.add(messageSource.getMessage("error.deleted", null,
+						locale));
 				result.setSingleElement(activityExists);
 
 			} else
 				result.setSingleElement(activity);
 			result.setErrorsList(errors);
 		} else {
-			activity.setCourse(serviceCourse.getCourse(id_course,id_academic)
+			activity.setCourse(serviceCourse.getCourse(id_course, id_academic)
 					.getSingleElement());
 			success = daoActivity.addActivity(activity);
 
 			if (success) {
-				activityExists = daoActivity.existByCode(activity.getInfo().getCode());
-				success = manageAclService.addACLToObject(activityExists.getId(), activityExists.getClass().getName());
-				
-				manageAclService.addPermissionToAnObject_ADMINISTRATION(course.getCoordinator(), activityExists
-								.getId(), activityExists.getClass().getName());
-				
-				//Rest of users which belong to this course need READ permission
-				for(Group g : course.getGroups()){
-					manageAclService.addPermissionToAnObjectCollection_READ(g.getProfessors(),activityExists
-							.getId(), activityExists.getClass().getName());
-					manageAclService.addPermissionToAnObjectCollection_READ(g.getStudents(),activityExists
-							.getId(), activityExists.getClass().getName());
+				activityExists = daoActivity.existByCode(activity.getInfo()
+						.getCode());
+				success = manageAclService.addACLToObject(activityExists
+						.getId(), activityExists.getClass().getName());
+
+				manageAclService.addPermissionToAnObject_ADMINISTRATION(
+						course.getCoordinator(), activityExists.getId(),
+						activityExists.getClass().getName());
+
+				// Rest of users which belong to this course need READ
+				// permission
+				for (Group g : course.getGroups()) {
+					manageAclService.addPermissionToAnObjectCollection_READ(
+							g.getProfessors(), activityExists.getId(),
+							activityExists.getClass().getName());
+					manageAclService.addPermissionToAnObjectCollection_READ(
+							g.getStudents(), activityExists.getId(),
+							activityExists.getClass().getName());
 				}
-				
+
 				if (success)
 					result.setSingleElement(activityExists);
 
@@ -103,7 +110,7 @@ public class ActivityService {
 		}
 		return result;
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
@@ -115,18 +122,20 @@ public class ActivityService {
 
 	@PreAuthorize("hasPermission(#course, 'ADMINISTRATION') or hasPermission(#group, 'ADMINISTRATION') ")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifyActivity(Course course, Group group, Activity activity,
-			Long id_activity,Long id_course, Long id_academic, Locale locale) {
+	public ResultClass<Boolean> modifyActivity(Course course, Group group,
+			Activity activity, Long id_activity, Long id_course,
+			Long id_academic, Locale locale) {
 
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
 		Activity modifyActivity = new Activity();
-		
-		if(group !=null){
-			modifyActivity  =daoActivity.getActivity(id_activity, id_course,group.getId(), id_academic);
-		}
-		else if (course!=null){
-			modifyActivity  =daoActivity.getActivity(id_activity, course.getId(), null, id_academic);
+
+		if (group != null) {
+			modifyActivity = daoActivity.getActivity(id_activity, id_course,
+					group.getId(), id_academic);
+		} else if (course != null) {
+			modifyActivity = daoActivity.getActivity(id_activity,
+					course.getId(), null, id_academic);
 		}
 
 		Activity activityExists = daoActivity.existByCode(activity.getInfo()
@@ -141,7 +150,8 @@ public class ActivityService {
 
 			if (activityExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add(messageSource.getMessage("error.deleted", null, locale));
+				errors.add(messageSource.getMessage("error.deleted", null,
+						locale));
 
 			}
 			result.setErrorsList(errors);
@@ -159,25 +169,29 @@ public class ActivityService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Activity> getActivity(Long id, Long id_course, Long id_group, Long id_academic) {
+	public ResultClass<Activity> getActivity(Long id, Long id_course,
+			Long id_group, Long id_academic) {
 		ResultClass<Activity> result = new ResultClass<Activity>();
-		Activity activity = daoActivity.getActivity(id, id_course, id_group, id_academic);
-		
-		
-		if (activity ==null)  result.setHasErrors(true);
-		else result.setSingleElement(activity);
+		Activity activity = daoActivity.getActivity(id, id_course, id_group,
+				id_academic);
+
+		if (activity == null)
+			result.setHasErrors(true);
+		else
+			result.setSingleElement(activity);
 
 		return result;
 	}
-	
+
 	@PreAuthorize("hasPermission(#course, 'ADMINISTRATION') or hasPermission(#group, 'ADMINISTRATION') ")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public ResultClass<Boolean> deleteActivity(Course course,Group group, Long id) {
+	public ResultClass<Boolean> deleteActivity(Course course, Group group,
+			Long id) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		result.setSingleElement(daoActivity.deleteActivity(id));
 		return result;
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Activity> getActivitiesForCourse(Long id_course,
@@ -198,22 +212,24 @@ public class ActivityService {
 
 	@PreAuthorize("hasPermission(#course, 'ADMINISTRATION') or hasPermission(#group, 'ADMINISTRATION') ")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public ResultClass<Boolean> deleteLearningActivity(Course course, Group group,
-			Long id_learningGoalStatus, Long id_activity, Long id_academic) {
+	public ResultClass<Boolean> deleteLearningActivity(Course course,
+			Group group, Long id_learningGoalStatus, Long id_activity,
+			Long id_academic) {
 
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		Activity a = new Activity();
-		
-		if(group !=null){
-			a  =daoActivity.getActivity(id_activity, null,group.getId(), id_academic);
-		}
-		else if (course!=null){
-			a  =daoActivity.getActivity(id_activity, course.getId(), null, id_academic);
+
+		if (group != null) {
+			a = daoActivity.getActivity(id_activity, null, group.getId(),
+					id_academic);
+		} else if (course != null) {
+			a = daoActivity.getActivity(id_activity, course.getId(), null,
+					id_academic);
 		}
 
 		Collection<LearningGoalStatus> c = a.getLearningGoalStatus();
 		LearningGoal learningGoal = serviceLearningGoal.getLearningGoal(
-				id_learningGoalStatus,  null, null).getSingleElement();
+				id_learningGoalStatus, null, null).getSingleElement();
 		try {
 			for (LearningGoalStatus aux : c) {
 				if (aux.getLearningGoal().equals(learningGoal)) {
@@ -233,17 +249,19 @@ public class ActivityService {
 
 	@PreAuthorize("hasPermission(#course, 'ADMINISTRATION') or hasPermission(#group, 'ADMINISTRATION') ")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> addLearningGoals(Course course, Group group, Long id,
-			LearningGoalStatus learningGoalStatus,Long id_course, Long id_academic) {
-		Activity activity  = new Activity();
-		
-		if(group !=null){
-			activity  =daoActivity.getActivity(id, id_course,group.getId(), id_academic);
+	public ResultClass<Boolean> addLearningGoals(Course course, Group group,
+			Long id, LearningGoalStatus learningGoalStatus, Long id_course,
+			Long id_academic) {
+		Activity activity = new Activity();
+
+		if (group != null) {
+			activity = daoActivity.getActivity(id, id_course, group.getId(),
+					id_academic);
+		} else if (course != null) {
+			activity = daoActivity
+					.getActivity(id, id_course, null, id_academic);
 		}
-		else if (course!=null){
-			activity  =daoActivity.getActivity(id, id_course, null, id_academic);
-		}
-		
+
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		if (learningGoalStatus.getWeight() <= 0.0
 				|| learningGoalStatus.getWeight() > 100.0) {
@@ -261,10 +279,11 @@ public class ActivityService {
 	public ResultClass<Boolean> deleteActivitiesFromCourses(
 			Collection<Course> courses) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setSingleElement(daoActivity.deleteActivitiesFromCourses(courses));
+		result.setSingleElement(daoActivity
+				.deleteActivitiesFromCourses(courses));
 		return result;
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResultClass<Boolean> deleteActivitiesFromGroups(
 			Collection<Group> groups) {
@@ -282,19 +301,22 @@ public class ActivityService {
 
 	@PreAuthorize("hasPermission(#course, 'ADMINISTRATION') or hasPermission(#group, 'ADMINISTRATION') ")
 	@Transactional(readOnly = false)
-	public ResultClass<Activity> unDeleteActivity(Course course, Group group, Activity activity, Locale locale) {
+	public ResultClass<Activity> unDeleteActivity(Course course, Group group,
+			Activity activity, Locale locale) {
 		Activity a = daoActivity.existByCode(activity.getInfo().getCode());
 		ResultClass<Activity> result = new ResultClass<>();
 		if (a == null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
-			errors.add(messageSource.getMessage("error.ElementNoExists", null, locale));
+			errors.add(messageSource.getMessage("error.ElementNoExists", null,
+					locale));
 			result.setErrorsList(errors);
 
 		} else {
 			if (!a.getIsDeleted()) {
 				Collection<String> errors = new ArrayList<String>();
-				errors.add(messageSource.getMessage("error.CodeNoDeleted", null, locale));
+				errors.add(messageSource.getMessage("error.CodeNoDeleted",
+						null, locale));
 				result.setErrorsList(errors);
 			}
 
@@ -307,7 +329,7 @@ public class ActivityService {
 		}
 		return result;
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Activity> getActivitiesForGroup(Long id_group,
@@ -330,7 +352,8 @@ public class ActivityService {
 			Activity activity, Long id_group, Long id_course, Long id_academic) {
 		boolean success = false;
 
-		Activity activityExists = daoActivity.existByCode(activity.getInfo().getCode());
+		Activity activityExists = daoActivity.existByCode(activity.getInfo()
+				.getCode());
 		ResultClass<Activity> result = new ResultClass<>();
 
 		if (activityExists != null) {
@@ -347,22 +370,25 @@ public class ActivityService {
 				result.setSingleElement(activity);
 			result.setErrorsList(errors);
 		} else {
-			activity.setGroup(serviceGroup.getGroup(id_group, id_course,id_academic)
-					.getSingleElement());
+			activity.setGroup(serviceGroup.getGroup(id_group, id_course,
+					id_academic).getSingleElement());
 			success = daoActivity.addActivity(activity);
 
 			if (success) {
 				activityExists = daoActivity.existByCode(activity.getInfo()
 						.getCode());
-				success = manageAclService.addACLToObject(activityExists.getId(), activityExists.getClass().getName());
-				
-				//Rest of users which belong to this course need READ permission
-				manageAclService.addPermissionToAnObjectCollection_READ(group.getProfessors(),activityExists
-							.getId(), activityExists.getClass().getName());
-				manageAclService.addPermissionToAnObjectCollection_READ(group.getStudents(),activityExists
-							.getId(), activityExists.getClass().getName());
-				
-				
+				success = manageAclService.addACLToObject(activityExists
+						.getId(), activityExists.getClass().getName());
+
+				// Rest of users which belong to this course need READ
+				// permission
+				manageAclService.addPermissionToAnObjectCollection_READ(
+						group.getProfessors(), activityExists.getId(),
+						activityExists.getClass().getName());
+				manageAclService.addPermissionToAnObjectCollection_READ(
+						group.getStudents(), activityExists.getId(),
+						activityExists.getClass().getName());
+
 				if (success)
 					result.setSingleElement(activityExists);
 
@@ -374,17 +400,19 @@ public class ActivityService {
 		}
 		return result;
 	}
-	
 
 	@PreAuthorize("hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Activity> addActivitiestoGroup(Group group, Collection<Activity> activities, Long id_group, Long id_course, Long id_academic) {
+	public ResultClass<Activity> addActivitiestoGroup(Group group,
+			Collection<Activity> activities, Long id_group, Long id_course,
+			Long id_academic) {
 		ResultClass<Activity> result = null;
-		for(Activity a:activities )
-			result =this.addActivitytoGroup(group, a, id_group,  id_course, id_academic);
-		
+		for (Activity a : activities)
+			result = this.addActivitytoGroup(group, a, id_group, id_course,
+					id_academic);
+
 		result.setHasErrors(false);
 		return result;
 	}
-	
+
 }

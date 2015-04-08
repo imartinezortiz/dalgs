@@ -51,8 +51,6 @@ public class AcademicTermController {
 		this.showAll = showAll;
 	}
 
-
-
 	/**
 	 * Methods for adding academicTerms
 	 */
@@ -80,6 +78,7 @@ public class AcademicTermController {
 	 * @param newAcademicTerm
 	 * @param resultBinding
 	 * @param attr
+	 * @param locale
 	 * @return String
 	 */
 	@RequestMapping(value = "/academicTerm/add.htm", method = RequestMethod.POST, params = "Add")
@@ -135,6 +134,7 @@ public class AcademicTermController {
 	 * @param academicTerm
 	 * @param resultBinding
 	 * @param attr
+	 * @param locale
 	 * @return String
 	 */
 
@@ -199,7 +199,8 @@ public class AcademicTermController {
 
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-		ResultClass<AcademicTerm> p = serviceAcademicTerm.getAcademicTerms(pageIndex, showAll);
+		ResultClass<AcademicTerm> p = serviceAcademicTerm.getAcademicTerms(
+				pageIndex, showAll);
 		myModel.put("showAll", showAll);
 		myModel.put("academicTerms", p);
 		Integer numberOfPages = serviceAcademicTerm.numberOfPages(showAll)
@@ -224,15 +225,22 @@ public class AcademicTermController {
 			@PathVariable("academicId") Long id_academic,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean show)
 			throws ServletException {
-		Map<String, Object> myModel = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
-		AcademicTerm a = serviceAcademicTerm.getAcademicTerm(id_academic,show).getSingleElement();
-		myModel.put("academicTerm", a);
-		myModel.put("showAll", show);
-		myModel.put("courses", a.getCourses());
-		
-		setShowAll(show);
-		return new ModelAndView("academicTerm/view", "model", myModel);
+		ResultClass<AcademicTerm> result = serviceAcademicTerm.getAcademicTerm(
+				id_academic, show);
+		AcademicTerm a = result.getSingleElement();
+		if (a != null) {
+			model.put("academicTerm", a);
+			model.put("showAll", show);
+			model.put("courses", a.getCourses());
+
+			setShowAll(show);
+			return new ModelAndView("academicTerm/view", "model", model);
+		}
+
+		return new ModelAndView("exception/notFound", "model", model);
+
 	}
 
 	/**
@@ -253,8 +261,8 @@ public class AcademicTermController {
 			throws ServletException {
 
 		if (!model.containsAttribute("academicTerm")) {
-			AcademicTerm aT = serviceAcademicTerm.getAcademicTerm(id_academic,false)
-					.getSingleElement();
+			AcademicTerm aT = serviceAcademicTerm.getAcademicTerm(id_academic,
+					false).getSingleElement();
 
 			model.addAttribute("academicTerm", aT);
 
@@ -277,12 +285,11 @@ public class AcademicTermController {
 	public String modifyAcademictermPOST(
 			@PathVariable("academicId") Long id_academic,
 			@ModelAttribute("academicTerm") @Valid AcademicTerm newTerm,
-			BindingResult bindingResult, Model model, RedirectAttributes attr, Locale locale) {
+			BindingResult bindingResult, Model model, RedirectAttributes attr,
+			Locale locale) {
 
-	
-		
-
-		if (!bindingResult.hasErrors() || bindingResult.hasFieldErrors("degree")) {
+		if (!bindingResult.hasErrors()
+				|| bindingResult.hasFieldErrors("degree")) {
 
 			ResultClass<Boolean> resultReturned = serviceAcademicTerm
 					.modifyAcademicTerm(newTerm, id_academic, locale);
@@ -322,7 +329,7 @@ public class AcademicTermController {
 			throws ServletException {
 
 		if (serviceAcademicTerm.deleteAcademicTerm(
-				serviceAcademicTerm.getAcademicTerm(id_academic,false)
+				serviceAcademicTerm.getAcademicTerm(id_academic, false)
 						.getSingleElement()).getSingleElement()) {
 			return "redirect:/academicTerm/page/0.htm?showAll=" + showAll;
 		} else
@@ -339,9 +346,9 @@ public class AcademicTermController {
 	// Every Post have to return redirect
 	public String restoreAcademicTerm(
 			@PathVariable("academicId") Long id_academic, Locale locale) {
-		ResultClass<AcademicTerm> result = serviceAcademicTerm
-				.restoreAcademic((serviceAcademicTerm
-						.getAcademicTerm(id_academic,false).getSingleElement()), locale);
+		ResultClass<AcademicTerm> result = serviceAcademicTerm.restoreAcademic(
+				(serviceAcademicTerm.getAcademicTerm(id_academic, false)
+						.getSingleElement()), locale);
 		if (!result.hasErrors())
 
 			return "redirect:/academicTerm/page/0.htm?showAll=" + showAll;
@@ -351,20 +358,29 @@ public class AcademicTermController {
 		}
 
 	}
-	
+
 	@RequestMapping(value = "/academicTerm/{academicId}/clone.htm")
 	// Every Post have to return redirect
-	public String copyAcademicTerm(@PathVariable("academicId") Long id_academic, Locale locale) {
-		
+	public String copyAcademicTerm(
+			@PathVariable("academicId") Long id_academic, Locale locale) {
+
 		AcademicTerm at_aux = new AcademicTerm();
-		at_aux = serviceAcademicTerm.getAcademicTerm(id_academic,false).getSingleElement();
-		if(serviceAcademicTerm.copyAcademicTerm( at_aux, locale).getSingleElement() != null){
-		
+		at_aux = serviceAcademicTerm.getAcademicTerm(id_academic, false)
+				.getSingleElement();
+		if (serviceAcademicTerm.copyAcademicTerm(at_aux, locale)
+				.getSingleElement() != null) {
+
 			return "redirect:/academicTerm/page/0.htm?showAll=" + showAll;
 		}
 		return "redirect:/error.htm";
 	}
 
+	/**
+	 * Validate a new Academic Term
+	 * 
+	 * @param academicTerm
+	 * @param errors
+	 */
 	public void validate(AcademicTerm academicTerm, Errors errors) {
 
 		if (academicTerm.getDegree() == null) {
@@ -372,7 +388,7 @@ public class AcademicTermController {
 					"You must select a degree");
 		}
 
-		if (!errors.hasFieldErrors("term")) { 
+		if (!errors.hasFieldErrors("term")) {
 			String pattern = "\\b\\d{4}\\b *\\/\\b\\d{4}\\b";
 			// Create a Pattern object
 			Pattern r = Pattern.compile(pattern);
@@ -380,14 +396,15 @@ public class AcademicTermController {
 			// Now create matcher object.
 			Matcher m = r.matcher(academicTerm.getTerm());
 			if (!m.find()) {
-				errors.rejectValue("term", "validation.negative", "Pattern dismatch (yyyy/yyyy)");
-			}
-			else{
+				errors.rejectValue("term", "validation.negative",
+						"Pattern dismatch (yyyy/yyyy)");
+			} else {
 				String[] years = academicTerm.getTerm().split("/");
-				String year1 = years[0]; 
+				String year1 = years[0];
 				String year2 = years[1];
-				if( (Integer.parseInt(year2) - Integer.parseInt(year1) ) !=1 ){
-					errors.rejectValue("term", "validation.negative", "The term must be 2 consecutive years");
+				if ((Integer.parseInt(year2) - Integer.parseInt(year1)) != 1) {
+					errors.rejectValue("term", "validation.negative",
+							"The term must be 2 consecutive years");
 				}
 			}
 		}

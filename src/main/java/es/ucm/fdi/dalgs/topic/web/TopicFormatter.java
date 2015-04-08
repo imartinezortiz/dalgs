@@ -11,7 +11,7 @@ import es.ucm.fdi.dalgs.domain.Topic;
 import es.ucm.fdi.dalgs.topic.repository.TopicRepository;
 
 @Component
-public class TopicFormatter implements Formatter<Topic>{
+public class TopicFormatter implements Formatter<Topic> {
 
 	@Autowired
 	private TopicRepository topicDao;
@@ -19,12 +19,10 @@ public class TopicFormatter implements Formatter<Topic>{
 	// Some service class which can give the Actor after
 	// fetching from Database
 
-	
 	public String print(Topic topic, Locale arg1) {
 		return topic.getInfo().getName();
 	}
 
-	
 	public Topic parse(String topicId, Locale arg1) throws ParseException {
 
 		return topicDao.getTopicFormatter(Long.parseLong(topicId));

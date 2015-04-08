@@ -20,7 +20,6 @@ public class DegreeRepository {
 
 	private static final Integer noOfRecords = 5;
 
-
 	public EntityManager getEntityManager() {
 		return em;
 	}
@@ -52,11 +51,12 @@ public class DegreeRepository {
 	@SuppressWarnings("unchecked")
 	public List<Degree> getAll() {
 
-		return em.createQuery("select d from Degree d where d.isDeleted = false order by d.id ")
+		return em
+				.createQuery(
+						"select d from Degree d where d.isDeleted = false order by d.id ")
 				.getResultList();
 
 	}
-
 
 	public boolean saveDegree(Degree degree) {
 		try {
@@ -68,12 +68,10 @@ public class DegreeRepository {
 		return true;
 	}
 
-
 	public Degree getDegree(Long id) {
 
 		return em.find(Degree.class, id);
 	}
-
 
 	public boolean deleteDegree(Degree degree) {
 		// Degree degree = em.getReference(Degree.class, id);
@@ -88,15 +86,14 @@ public class DegreeRepository {
 		}
 	}
 
-
-//	public Degree getDegreeSubject(Subject p) {
-//		Query query = em
-//				.createQuery("select d from Degree d join d.subjects s where s=?1");
-//		query.setParameter(1, p);
-//		if (query.getResultList().isEmpty())
-//			return null;
-//		return (Degree) query.getSingleResult();
-//	}
+	// public Degree getDegreeSubject(Subject p) {
+	// Query query = em
+	// .createQuery("select d from Degree d join d.subjects s where s=?1");
+	// query.setParameter(1, p);
+	// if (query.getResultList().isEmpty())
+	// return null;
+	// return (Degree) query.getSingleResult();
+	// }
 
 	public String getNextCode() {
 		Query query = em.createQuery("Select MAX(e.id ) from Degree e");
@@ -112,60 +109,67 @@ public class DegreeRepository {
 	}
 
 	public Degree existByCode(String code) {
-		Query query = em.createQuery("select d from Degree d where d.info.code=?1");
+		Query query = em
+				.createQuery("select d from Degree d where d.info.code=?1");
 		query.setParameter(1, code);
 		if (query.getResultList().isEmpty())
 			return null;
-		else return (Degree) query.getSingleResult();
+		else
+			return (Degree) query.getSingleResult();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Degree> getDegrees(Integer pageIndex, Boolean showAll) {
 		Query query = null;
 
-		if (showAll) query =em.createQuery("select a from Degree a  order by a.id DESC");
-		else query =em.createQuery("select a from Degree a  where a.isDeleted='false' order by a.id DESC");
+		if (showAll)
+			query = em
+					.createQuery("select a from Degree a  order by a.id DESC");
+		else
+			query = em
+					.createQuery("select a from Degree a  where a.isDeleted='false' order by a.id DESC");
 
 		if (query.getResultList().isEmpty())
 			return null;
 
-		return query.setMaxResults(noOfRecords).setFirstResult(pageIndex * noOfRecords).getResultList();
+		return query.setMaxResults(noOfRecords)
+				.setFirstResult(pageIndex * noOfRecords).getResultList();
 
 	}
 
 	public Integer numberOfPages(Boolean showAll) {
-		Query query =null;
+		Query query = null;
 		if (showAll)
-			query = em.createNativeQuery(
-					"select count(*) from degree");
-		else query = em.createNativeQuery(
-				"select count(*) from degree where isDeleted='false'");
+			query = em.createNativeQuery("select count(*) from degree");
+		else
+			query = em
+					.createNativeQuery("select count(*) from degree where isDeleted='false'");
 
 		logger.info(query.getSingleResult().toString());
-		double dou = Double.parseDouble(query.getSingleResult().toString())/ ((double) noOfRecords);
+		double dou = Double.parseDouble(query.getSingleResult().toString())
+				/ ((double) noOfRecords);
 		return (int) Math.ceil(dou);
 	}
 
 	public boolean persistListDegrees(List<Degree> degrees) {
 
 		int i = 0;
-		for(Degree d : degrees) {
-			try{
+		for (Degree d : degrees) {
+			try {
 
-				//In this case we have to hash the password (SHA-256)
-				//StringSHA sha = new StringSHA();
-				//String pass = sha.getStringMessageDigest(u.getPassword());
-				//u.setPassword(pass);
+				// In this case we have to hash the password (SHA-256)
+				// StringSHA sha = new StringSHA();
+				// String pass = sha.getStringMessageDigest(u.getPassword());
+				// u.setPassword(pass);
 
-				d.setId(null); //If not  a detached entity is passed to persist
+				d.setId(null); // If not a detached entity is passed to persist
 				em.persist(d);
-				//em.flush();
+				// em.flush();
 
-
-				if(++i % 20 == 0) {
+				if (++i % 20 == 0) {
 					em.flush();
 				}
-			}catch(Exception e){
+			} catch (Exception e) {
 				logger.error(e.getMessage());
 				return false;
 			}

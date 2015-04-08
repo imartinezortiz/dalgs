@@ -34,11 +34,10 @@ public class Subject implements Cloneable, Copyable<Subject>, Serializable {
 	@Embedded
 	private SubjectInfo info;
 
-
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_topic")
 	private Topic topic;
 
@@ -93,8 +92,6 @@ public class Subject implements Cloneable, Copyable<Subject>, Serializable {
 		this.topic = topic;
 	}
 
-	
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -122,13 +119,13 @@ public class Subject implements Cloneable, Copyable<Subject>, Serializable {
 
 	public Subject depth_copy() {
 		Subject copy = this.shallow_copy();
-		
+
 		copy.id = null;
-		copy.isDeleted=false;
-		
+		copy.isDeleted = false;
+
 		SubjectInfo sInfo = copy.info.depth_copy();
 		copy.info = sInfo;
-		
+
 		copy.competences = new ArrayList<>();
 		for (Competence c : this.competences) {
 			Competence competence = c.depth_copy();
@@ -136,9 +133,10 @@ public class Subject implements Cloneable, Copyable<Subject>, Serializable {
 			competence.getSubjects().add(copy);
 			copy.competences.add(competence);
 		}
-		
+
 		return copy;
 	}
+
 	public Subject shallow_copy() {
 		try {
 			return (Subject) super.clone();
@@ -146,5 +144,5 @@ public class Subject implements Cloneable, Copyable<Subject>, Serializable {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 }

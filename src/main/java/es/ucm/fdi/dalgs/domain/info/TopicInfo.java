@@ -18,20 +18,26 @@ public class TopicInfo implements Serializable, Cloneable, Copyable<TopicInfo> {
 
 	private static final long serialVersionUID = 1L;
 
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=20)
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 20)
 	@Basic(optional = false)
 	@Column(name = "code_topic", nullable = false)
 	private String code;
-	
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=100)
+
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 100)
 	@Basic(optional = false)
 	@Column(name = "name", length = 100, nullable = false)
 	private String name;
 
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=250)
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 250)
 	@Basic(optional = false)
 	@Column(name = "description", length = 250, nullable = false)
 	private String description;
@@ -84,7 +90,6 @@ public class TopicInfo implements Serializable, Cloneable, Copyable<TopicInfo> {
 			return false;
 		return true;
 	}
-	
 
 	@Override
 	public TopicInfo depth_copy() {
@@ -101,5 +106,5 @@ public class TopicInfo implements Serializable, Cloneable, Copyable<TopicInfo> {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 }

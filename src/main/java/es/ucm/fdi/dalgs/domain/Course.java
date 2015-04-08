@@ -19,8 +19,9 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "course", uniqueConstraints = { @UniqueConstraint(columnNames = {"id_subject", "id_academicterm" }) })
-public class Course implements Cloneable ,Copyable<Course>, Serializable {
+@Table(name = "course", uniqueConstraints = { @UniqueConstraint(columnNames = {
+		"id_subject", "id_academicterm" }) })
+public class Course implements Cloneable, Copyable<Course>, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -31,7 +32,7 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
-	
+
 	@NotNull
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_subject")
@@ -43,16 +44,15 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
 	private Collection<Group> groups;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false,cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_academicterm")
 	private AcademicTerm academicTerm;
 
-//	@NotNull
+	// @NotNull
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_coordinator")
 	private User coordinator;
 
-	
 	public Course() {
 		super();
 		this.isDeleted = false;
@@ -60,8 +60,7 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 		this.groups = new ArrayList<Group>();
 
 	}
-	
-	
+
 	public User getCoordinator() {
 		return coordinator;
 	}
@@ -73,8 +72,6 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-
-
 
 	public AcademicTerm getAcademicTerm() {
 		return academicTerm;
@@ -123,9 +120,7 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 	public void setGroups(Collection<Group> groups) {
 		this.groups = groups;
 	}
-	
-	
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -160,11 +155,10 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 
 	public Course depth_copy() {
 		Course copy = this.shallow_copy();
-		
-		
+
 		copy.id = null;
 		copy.groups = new ArrayList<Group>();
-		copy.isDeleted=false;
+		copy.isDeleted = false;
 		copy.activities = new ArrayList<Activity>();
 
 		for (Group g : this.groups) {
@@ -172,21 +166,20 @@ public class Course implements Cloneable ,Copyable<Course>, Serializable {
 			group.setCourse(copy);
 			copy.getGroups().add(group);
 		}
-		
-//		copy.activities = new ArrayList<Activity>();
+
+		// copy.activities = new ArrayList<Activity>();
 		for (Activity a : this.activities) {
 			Activity activity = a.depth_copy();
 			activity.setCourse(copy);
 			activity.setGroup(null);
 			copy.getActivities().add(activity);
 		}
-		
+
 		copy.setCoordinator(null);
 
 		return copy;
-	
+
 	}
-	
 
 	public Course shallow_copy() {
 		try {

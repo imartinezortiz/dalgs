@@ -1,7 +1,5 @@
 package es.ucm.fdi.dalgs.user.service;
 
-
-
 import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.user.repository.UserRepository;
 
@@ -16,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
  * A custom {@link UserDetailsService} where user information is retrieved from
  * a JPA repository
  */
-@Service (value="customUserDetailsService")
+@Service(value = "customUserDetailsService")
 @Transactional(readOnly = true)
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -30,28 +28,26 @@ public class CustomUserDetailsService implements UserDetailsService {
 	 */
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
-		
-		try {
-			
-			User domainUser = userRepository.findByUsername(username);			
 
+		try {
+
+			User domainUser = userRepository.findByUsername(username);
 
 			if (domainUser == null) {
 				domainUser = userRepository.findByEmail(username);
-			
+
 			}
-			
+
 			if (domainUser == null) {
-				throw new UsernameNotFoundException(String.format("User %s not found", username));
+				throw new UsernameNotFoundException(String.format(
+						"User %s not found", username));
 			}
-			
+
 			return domainUser;
-			
-			
+
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	
 }

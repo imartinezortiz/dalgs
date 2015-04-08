@@ -25,9 +25,14 @@
 			<span class="glyphicon  glyphicon-road" aria-hidden="true">&nbsp;</span>
 			<h3 class="panel-title list pError">
 				
-					<fmt:message key="error.statusCode" />:
-					<%=request.getAttribute("javax.servlet.error.status_code")%>
-			</h3> 
+					<fmt:message key="error.statusCode" />: 404
+					<!--<c:choose>
+						<c:when test="${not empty javax.servlet.error.status_code}">
+							<%-- <%=request.getAttribute("javax.servlet.error.status_code")%> --%>
+						</c:when>
+						<c:otherwise>404</c:otherwise>
+					</c:choose>	-->		
+				</h3> 
 
 		</div>
 
@@ -38,8 +43,16 @@
 						src="<c:url value="/resources/images/404.png" /> ">
 				</div>
 				<div class="col-md-6">
+				<c:choose>
+				<c:when test="${not empty javax.servlet.error.message}">
 					<p class="pError" > <fmt:message key="error.reason" />:</p>
 					<p style=" font-family: monospace;"><%=request.getAttribute("javax.servlet.error.message")%></p>
+				</c:when>
+				<c:otherwise>
+					<h3 class="nf_error"><fmt:message key="error.notFound" /></h3>
+				
+				</c:otherwise>
+				</c:choose>
 				</div>
 			</div>
 
