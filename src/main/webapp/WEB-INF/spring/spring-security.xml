@@ -13,20 +13,12 @@
 		http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
 
- 	<!-- Loads ACL related configurations -->
-<!--  	<import resource="/WEB-INF/spring/acl-context.xml" />
- -->
-	<!--This contains the core Spring Security configuration. -->
-	
-<!-- 	<global-method-security secured-annotations="enabled" pre-post-annotations="enabled"  proxy-target-class="true"/>
- --><!-- 		proxy-target-class="true" access-decision-manager-ref="customAccessDecisionManager" />
- -->
 
 	<!-- the http tag This means the path /resources should be ignored by Spring 
 		Security; therefore it will not be secured. Why do you want to do this? Mainly 
 		because these are static images, CSS, and JavaScript files that don't need 
 		to be secured. -->
-	<http pattern="/resources" security="none" />
+		<http pattern="/resources" security="none" />
 
 	<!-- the second http tag This contains the core security rules of our application. -->
 
@@ -35,20 +27,10 @@
 		<!-- intercept urls Here we declare URL patterns to be protected. Notice 
 			the use of SPEL hasRole and permitAll (see more) -->
 		<intercept-url pattern="/login.htm" access="permitAll" />
-		<intercept-url pattern="/logout.htm" access="permitAll" />
-		
-				
+		<intercept-url pattern="/logout.htm" access="permitAll" />		
 		<intercept-url pattern="/rest/*" access="permitAll" />
-		
-		
 		<intercept-url pattern="/*" access="hasRole('ROLE_USER')" />
 
-
-		<!-- 
-		<intercept-url pattern="/user_home.htm" access="hasRole('ROLE_STUDENT')" />
-		<intercept-url pattern="/user_home.htm" access="hasRole('ROLE_PROFESSOR')" />
-		<intercept-url pattern="/*" access="hasRole('ROLE_ADMIN')" />
-		 -->
 		<!-- form login This declares our login settings: login-page: the URL path 
 			of our login page authentication-failure-url: the URL where a user will be 
 			redirected after a failed login default-target-url: the URL where a user 

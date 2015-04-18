@@ -7,6 +7,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 
 public class ActivityREST implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+	
 	private long id_course;
 	private long id_group;
 	private String name;
