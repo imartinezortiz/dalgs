@@ -26,7 +26,7 @@ public class AccessController {
 		return "redirect:/login.htm?message=" + message;
 	}
 
-	@RequestMapping(value = "/logout/success.htm")
+	@RequestMapping(value = "/logout/success")
 	public String logoutSuccess() {
 		String message = "Logout Success!";
 		return "redirect:/login.htm?message=" + message;

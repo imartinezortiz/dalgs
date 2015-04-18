@@ -36,7 +36,13 @@
 			the use of SPEL hasRole and permitAll (see more) -->
 		<intercept-url pattern="/login.htm" access="permitAll" />
 		<intercept-url pattern="/logout.htm" access="permitAll" />
+		
+				
+		<intercept-url pattern="/rest/*" access="permitAll" />
+		
+		
 		<intercept-url pattern="/*" access="hasRole('ROLE_USER')" />
+
 
 		<!-- 
 		<intercept-url pattern="/user_home.htm" access="hasRole('ROLE_STUDENT')" />

@@ -1,24 +1,6 @@
 ---		TFG Project (March)	---
 
-//NOT WORKING
-1.- Implements the copy of activities
-
-
 //TO-DO
-2.- Change messages in all services
-3.-	To Finish JSP messages:
-	**** typeOfUser 
-	**** Except value="${valueButton}
-4.- CSV (eliminar o incluir en la verificacion  a los usuarios)
-5.- Hacer mas comprobaciones a la hora de acceder a una entitie. Verificar con su id y el de su padre
-6.- new Collection -- addAll -- setCollection
-
-
-//¿?¿?	
-1.- Permitir darse de alta (solo con role user)
-
--------------------------------------------------------
-
 
 Optional: Change the pagination
 
@@ -41,3 +23,8 @@ Optional: Change the pagination
 15.- Use the shame JSP to add and modify (when it is possible)
 16.- UTF-8 en todas las JSP
 17.- Finish User Module
+18.- Manage CSV
+19.- Clone AcademicTerm
+20.- Support multiple languages
+21.- Access control  to an entity
+
