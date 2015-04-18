@@ -46,7 +46,7 @@ public class GroupRepository {
 		query = em
 				.createQuery("select g from Group g  where g.course = ?1 and g.id = ?2 and g.course.academicTerm=?3");
 		query.setParameter(1, course);
-		query.setParameter(2, id_course);
+		query.setParameter(2, id_group);
 		query.setParameter(3, academic);
 
 		if (query.getResultList().isEmpty())

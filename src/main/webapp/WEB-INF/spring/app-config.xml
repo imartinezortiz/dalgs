@@ -35,8 +35,9 @@
 	<context:component-scan base-package="es.ucm.fdi.dalgs.subject.web" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.topic.web" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.user.web" />
-
-	<!-- Configures the @Controller programming model -->
+    <context:component-scan base-package="es.ucm.fdi.dalgs.rest" /> 
+     <mvc:annotation-driven />  
+     
 
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -90,10 +91,38 @@
 		<property name="paramName" value="lang" />
 	</bean>
 </mvc:interceptors>
+     <mvc:annotation-driven />  
+
 	<!-- <bean id="handlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"> 
 		<property name="interceptors"> <ref bean="localeChangeInterceptor" /> </property> 
 		</bean> -->
 
+ <!-- Configure to plugin JSON as request and response in method handler -->
+ <!--    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="jsonMessageConverter"/>
+
+            </list>
+        </property>
+    </bean>
+     
+    Configure bean to convert JSON to POJO and vice versa
+    <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+    </bean>
+   
+    <mvc:annotation-driven />
+    
+    
+     -->
+    <!-- activates annotation driven binding -->
+<!-- <mvc:annotation-driven ignoreDefaultModelOnRedirect="true" validator="validator"> -->
+<!--     <mvc:message-converters> -->
+<!--         <bean id="jsonMessageConverter" class="org.springframework.http.converter.ResourceHttpMessageConverter"/> -->
+<!--         <bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/> -->
+<!--         <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/> -->
+<!--     </mvc:message-converters> -->
+<!-- </mvc:annotation-driven> -->
 </beans>
 
 
