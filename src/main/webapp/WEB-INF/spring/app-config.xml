@@ -93,10 +93,10 @@
 </mvc:interceptors>
      <mvc:annotation-driven /> 
      
-     <bean id="jsonHttpMessageConverter"
+<!--      <bean id="jsonHttpMessageConverter"
     class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
 
-		<!-- Bind the return value of the Rest service to the ResponseBody. -->
+		Bind the return value of the Rest service to the ResponseBody.
      
      <bean id="jacksonMessageConverter"
     class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"></bean>
@@ -107,7 +107,7 @@
                 <ref bean="jacksonMessageConverter" />
             </list>
         </property>
-    </bean>  
+    </bean>  --> 
 
 	<!-- <bean id="handlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"> 
 		<property name="interceptors"> <ref bean="localeChangeInterceptor" /> </property> 

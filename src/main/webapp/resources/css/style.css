@@ -282,3 +282,8 @@ h3.nf_error {
   vertical-align: middle;
   margin-top: 10%;
 }
+
+a.btn.list-btn.doc {
+  margin-left: -6%;
+  cursor: pointer;
+}

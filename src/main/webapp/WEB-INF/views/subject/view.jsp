@@ -47,6 +47,15 @@
 					<label><fmt:message key="topic.top" />: </label>
 					<p class="details">${model.subject.topic.info.name}</p>
 				</div>
+				<div class="form-group view">
+					<label><fmt:message key="subject.credits" />: </label>
+					<p class="details">${model.subject.info.credits}</p>
+				</div>
+				<div class="form-group view">
+					<a  class="btn list-btn doc" href='//${model.subject.info.url_doc}' >
+					<label style="cursor: pointer;"><fmt:message key="subject.url" /> </label></a>
+					
+				</div>
 			</div>
 
 		</div>

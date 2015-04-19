@@ -1,6 +1,8 @@
 package es.ucm.fdi.dalgs.competence.web;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -26,6 +28,7 @@ import es.ucm.fdi.dalgs.classes.UploadForm;
 import es.ucm.fdi.dalgs.competence.service.CompetenceService;
 import es.ucm.fdi.dalgs.degree.service.DegreeService;
 import es.ucm.fdi.dalgs.domain.Competence;
+import es.ucm.fdi.dalgs.domain.info.CompetenceInfo.TypeOfCompetence;
 
 @Controller
 public class CompetenceController {
@@ -69,9 +72,12 @@ public class CompetenceController {
 
 		if (!model.containsAttribute("competence"))
 			model.addAttribute("competence", new Competence());
-
+		
+		List<TypeOfCompetence> list = Arrays.asList(TypeOfCompetence.values());
+		
 		model.addAttribute("valueButton", "Add");
 		model.addAttribute("typeform", "form.add");
+		model.addAttribute("typeofCompetence", list);
 
 		return "competence/form";
 	}

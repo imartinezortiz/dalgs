@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -41,6 +43,20 @@ public class SubjectInfo implements Serializable, Cloneable,
 	@Size(min = 1, max = 20)
 	@Column(name = "code_subject", nullable = false, unique = true)
 	private String code;
+	
+
+	@Size(min = 1, max = 250)
+	@Basic(optional = false)
+	@Column(name = "url_doc", length = 250, nullable = false)
+	private String url_doc;
+	
+
+	@NotNull
+	@Min(0)
+	@Max(12)
+	@Basic
+	@Column(name = "credits", length = 250, nullable = false)
+	private Integer credits;
 
 	public String getName() {
 		return name;
@@ -64,6 +80,25 @@ public class SubjectInfo implements Serializable, Cloneable,
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+	
+	
+	
+
+	public String getUrl_doc() {
+		return url_doc;
+	}
+
+	public void setUrl_doc(String url_doc) {
+		this.url_doc = url_doc;
+	}
+
+	public Integer getCredits() {
+		return credits;
+	}
+
+	public void setCredits(Integer credits) {
+		this.credits = credits;
 	}
 
 	@Override

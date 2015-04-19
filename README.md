@@ -4,9 +4,8 @@
 0.- Export csv
 1.- POST activities to a group and/or course
 2.- Securing Web Service (exception in Spring Security ???) call header
-3.- Change type of competence to an enum
-4.- Add credits attribute to subject
-5.- Add url for the "ficha docente" 
+3.- Add credits attribute to subject
+4.- Add url for the "ficha docente" 
 
 
 Optional: Change the pagination
@@ -17,4 +16,4 @@ Optional: Change the pagination
 // DONE
 0.-	Fixed Group bug
 1.- Simple GET&POST (dummy)
-2.- 
+2.- Change type of competence to an enum
