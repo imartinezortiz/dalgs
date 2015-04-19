@@ -275,3 +275,10 @@ a.btn.btn-cvs {
   color: rgb(160, 13, 23);
   font-size: large;
 }
+
+h3.nf_error {
+  font-family: Helvetica;
+  font-size: 35px;
+  vertical-align: middle;
+  margin-top: 10%;
+}

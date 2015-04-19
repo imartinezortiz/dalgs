@@ -17,18 +17,18 @@ import es.ucm.fdi.dalgs.domain.Topic;
 import es.ucm.fdi.dalgs.domain.info.TopicInfo;
 
 public class TopicUpload {
-	
-	
+
 	@SuppressWarnings("unused")
-	public	 List<Topic> readCSVTopicToBean(InputStream in,
-			String charsetName, CsvPreference csvPreference, Module module) throws IOException {
+	public List<Topic> readCSVTopicToBean(InputStream in, String charsetName,
+			CsvPreference csvPreference, Module module) throws IOException {
 		CsvBeanReader beanReader = null;
 		List<Topic> topics = new ArrayList<Topic>();
 		try {
 			beanReader = new CsvBeanReader(new InputStreamReader(in,
 					Charset.forName(charsetName)), csvPreference);
 			// the name mapping provide the basis for bean setters
-			final String[] nameMapping = new String[] {"code", "name", "description"};
+			final String[] nameMapping = new String[] { "code", "name",
+					"description" };
 			// just read the header, so that it don't get mapped to User
 			// object
 			final String[] header = beanReader.getHeader(true);
@@ -36,8 +36,9 @@ public class TopicUpload {
 
 			TopicInfo info;
 
-			while ((info = beanReader.read(TopicInfo.class, nameMapping, processors)) != null) {
-				Topic t =  new Topic();
+			while ((info = beanReader.read(TopicInfo.class, nameMapping,
+					processors)) != null) {
+				Topic t = new Topic();
 				t.setInfo(info);
 				t.setModule(module);
 				topics.add(t);
@@ -54,12 +55,10 @@ public class TopicUpload {
 	/* CellProcessors have to correspond to the entity database fields */
 	private static CellProcessor[] getTopicProcessors() {
 
-	        
-		final CellProcessor[] processors = new CellProcessor[] {
-				new NotNull(), //Code
-				new NotNull(), //Name
+		final CellProcessor[] processors = new CellProcessor[] { new NotNull(), // Code
+				new NotNull(), // Name
 				new NotNull(), // Description
-				
+
 		};
 		return processors;
 	}

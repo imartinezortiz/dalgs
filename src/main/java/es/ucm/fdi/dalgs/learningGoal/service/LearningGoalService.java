@@ -30,120 +30,143 @@ public class LearningGoalService {
 
 	@Autowired
 	ActivityService serviceActivity;
-	
+
 	@Autowired
 	private AclObjectService manageAclService;
 
 	@Autowired
 	private MessageSource messageSource;
-	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<LearningGoal> addLearningGoal(LearningGoal learningGoal,
 			Long id_competence, Long id_degree, Locale locale) {
-		
+
 		boolean success = false;
-		
-		LearningGoal learningExists = daoLearningGoal.existByCode(learningGoal.getInfo().getCode());
+
+		LearningGoal learningExists = daoLearningGoal.existByCode(learningGoal
+				.getInfo().getCode());
 		ResultClass<LearningGoal> result = new ResultClass<>();
 
-		if( learningExists != null){
+		if (learningExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<>();
 			errors.add(messageSource.getMessage("error.Code", null, locale));
 
-			if (learningExists.getIsDeleted()){
+			if (learningExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add(messageSource.getMessage("error.deleted", null, locale));
+				errors.add(messageSource.getMessage("error.deleted", null,
+						locale));
 				result.setSingleElement(learningExists);
-			}
-			else result.setSingleElement(learningGoal);
+			} else
+				result.setSingleElement(learningGoal);
 			result.setErrorsList(errors);
-		}
-		else{
-			learningGoal.setCompetence(serviceCompetence.getCompetence(id_competence, id_degree).getSingleElement());
+		} else {
+			learningGoal.setCompetence(serviceCompetence.getCompetence(
+					id_competence, id_degree).getSingleElement());
 			success = daoLearningGoal.addLearningGoal(learningGoal);
-			if(success){
-				learningExists = daoLearningGoal.existByCode(learningGoal.getInfo().getCode());
-				success = manageAclService.addACLToObject(learningExists.getId(), learningExists.getClass().getName());
-				if (success) result.setSingleElement(learningGoal);
-			
-			}else{
-				throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
+			if (success) {
+				learningExists = daoLearningGoal.existByCode(learningGoal
+						.getInfo().getCode());
+				success = manageAclService.addACLToObject(learningExists
+						.getId(), learningExists.getClass().getName());
+				if (success)
+					result.setSingleElement(learningGoal);
+
+			} else {
+				throw new IllegalArgumentException(
+						"Cannot create ACL. Object not set.");
 
 			}
 		}
-		return result;		
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<LearningGoal> getLearningGoal(Long id_learningGoal) {
+	public ResultClass<LearningGoal> getLearningGoal(Long id_learningGoal,
+			Long id_competence, Long id_degree) {
 		ResultClass<LearningGoal> result = new ResultClass<>();
-		result.setSingleElement(daoLearningGoal.getLearningGoal(id_learningGoal));
+		if (id_competence == null && id_degree == null)
+			result.setSingleElement(daoLearningGoal
+					.getLearningGoalFormatter(id_learningGoal));
+		else
+			result.setSingleElement(daoLearningGoal.getLearningGoal(
+					id_learningGoal, id_competence, id_degree));
 		return result;
 	}
 
 	@PreAuthorize("hasPermission(#learningGoal, 'WRITE') or hasPermission(#learningGoal, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifyLearningGoal(LearningGoal learningGoal, Long id_learningGoal, Locale locale) {
+	public ResultClass<Boolean> modifyLearningGoal(LearningGoal learningGoal,
+			Long id_learningGoal, Long id_competence, Long id_degree,
+			Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		LearningGoal modifyLearning = daoLearningGoal.getLearningGoal(id_learningGoal);
-		
-		LearningGoal learningExists = daoLearningGoal.existByCode(learningGoal.getInfo().getCode());
-		
-		if(!learningGoal.getInfo().getCode().equalsIgnoreCase(modifyLearning.getInfo().getCode()) && 
-				learningExists != null){
+		LearningGoal modifyLearning = daoLearningGoal.getLearningGoal(
+				id_learningGoal, id_competence, id_degree);
+
+		LearningGoal learningExists = daoLearningGoal.existByCode(learningGoal
+				.getInfo().getCode());
+
+		if (!learningGoal.getInfo().getCode()
+				.equalsIgnoreCase(modifyLearning.getInfo().getCode())
+				&& learningExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<>();
 			errors.add(messageSource.getMessage("error.newCode", null, locale));
 
-			if (learningExists.getIsDeleted()){
+			if (learningExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add(messageSource.getMessage("error.deleted", null, locale));
+				errors.add(messageSource.getMessage("error.deleted", null,
+						locale));
 
 			}
 			result.setErrorsList(errors);
 			result.setSingleElement(false);
-		}
-		else{
+		} else {
 			modifyLearning.setInfo(learningGoal.getInfo());
 			boolean r = daoLearningGoal.saveLearningGoal(modifyLearning);
-			if (r) 
+			if (r)
 				result.setSingleElement(true);
 		}
 		return result;
 
 	}
 
-	@PreAuthorize("hasPermission(#learningGoal, 'DELETE') or hasPermission(#learningGoal, 'ADMINISTRATION')" )
+	@PreAuthorize("hasPermission(#learningGoal, 'DELETE') or hasPermission(#learningGoal, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteLearningGoal(LearningGoal learningGoal) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		result.setSingleElement(daoLearningGoal.deleteLearningGoal(learningGoal));
+		result.setSingleElement(daoLearningGoal
+				.deleteLearningGoal(learningGoal));
 		return result;
 
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
-	public ResultClass<Boolean> deleteLearningGoalForCompetence(Competence competence) {
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResultClass<Boolean> deleteLearningGoalForCompetence(
+			Competence competence) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		result.setSingleElement(daoLearningGoal.deleteLearningGoalForCompetence(competence));
+		result.setSingleElement(daoLearningGoal
+				.deleteLearningGoalForCompetence(competence));
 		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<LearningGoal> getLearningGoalsFromCourse(Long id_course, Activity activity) {
+	public ResultClass<LearningGoal> getLearningGoalsFromCourse(Long id_course,
+			Activity activity) {
 		ResultClass<LearningGoal> result = new ResultClass<>();
-		Collection<LearningGoal> learningGoals = daoLearningGoal.getLearningGoalsFromActivity(activity);
-		if(!learningGoals.isEmpty()){
-			result.addAll(daoLearningGoal.getLearningGoalsFromCourse(id_course, learningGoals));
+		Collection<LearningGoal> learningGoals = daoLearningGoal
+				.getLearningGoalsFromActivity(activity);
+		if (!learningGoals.isEmpty()) {
+			result.addAll(daoLearningGoal.getLearningGoalsFromCourse(id_course,
+					learningGoals));
 			return result;
 		}
-			
-		else{
+
+		else {
 			result.addAll(daoLearningGoal.getLearningGoalsFromCourse(id_course));
 			return result;
 		}
@@ -161,46 +184,50 @@ public class LearningGoalService {
 	public ResultClass<LearningGoal> getLearningGoalsFromCompetence(
 			Competence competence, Boolean show) {
 		ResultClass<LearningGoal> result = new ResultClass<>();
-		result.addAll(daoLearningGoal.getLearningGoalsFromCompetence(competence, show));
+		result.addAll(daoLearningGoal.getLearningGoalsFromCompetence(
+				competence, show));
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResultClass<Boolean> deleteLearningGoalForCompetences(
 			Collection<Competence> competences) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setSingleElement(daoLearningGoal.deleteLearningGoalsForCompetences(competences));
+		result.setSingleElement(daoLearningGoal
+				.deleteLearningGoalsForCompetences(competences));
 		return result;
 	}
-	
+
 	@PreAuthorize("hasPermission(#learningGoal, 'WRITE') or hasPermission(#learningGoal, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<LearningGoal> unDeleteLearningGoal(LearningGoal learningGoal, Locale locale) {
-		LearningGoal l = daoLearningGoal.existByCode(learningGoal.getInfo().getCode());
+	public ResultClass<LearningGoal> unDeleteLearningGoal(
+			LearningGoal learningGoal, Locale locale) {
+		LearningGoal l = daoLearningGoal.existByCode(learningGoal.getInfo()
+				.getCode());
 		ResultClass<LearningGoal> result = new ResultClass<>();
-		if(l == null){
+		if (l == null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<>();
-			errors.add(messageSource.getMessage("error.ElementNoExists", null, locale));
+			errors.add(messageSource.getMessage("error.ElementNoExists", null,
+					locale));
 			result.setErrorsList(errors);
 
-		}
-		else{
-			if(!l.getIsDeleted()){
+		} else {
+			if (!l.getIsDeleted()) {
 				Collection<String> errors = new ArrayList<>();
-				errors.add(messageSource.getMessage("error.CodeNoDeleted", null, locale));
+				errors.add(messageSource.getMessage("error.CodeNoDeleted",
+						null, locale));
 				result.setErrorsList(errors);
 			}
 
 			l.setDeleted(false);
 			l.setInfo(learningGoal.getInfo());
 			boolean r = daoLearningGoal.saveLearningGoal(l);
-			if(r) 
-				result.setSingleElement(l);	
+			if (r)
+				result.setSingleElement(l);
 
 		}
 		return result;
 	}
-
 
 }

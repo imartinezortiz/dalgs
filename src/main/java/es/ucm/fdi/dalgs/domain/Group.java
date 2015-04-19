@@ -25,61 +25,57 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
-
 @Entity
-@Table(name = "_group" , uniqueConstraints = { @UniqueConstraint(columnNames = {"id_course", "name" }) })
+@Table(name = "_group", uniqueConstraints = { @UniqueConstraint(columnNames = {
+		"id_course", "name" }) })
 public class Group implements Cloneable, Copyable<Group>, Serializable {
 
 	private static final long serialVersionUID = 1L;
-
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_group")
 	private Long id;
-	
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=5, max=50)
+
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 5, max = 50)
 	@Basic(optional = false)
-	@Column(name = "name", length = 50, nullable = false)//, unique=true)
+	@Column(name = "name", length = 50, nullable = false)
+	// , unique=true)
 	private String name;
-	
-	//@NotNull
-	@ManyToOne(fetch = FetchType.LAZY, optional = false,cascade = CascadeType.ALL)
+
+	// @NotNull
+	@ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_course")
 	private Course course;
-	
-	//@NotNull
-	//@Valid
+
+	// @NotNull
+	// @Valid
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "group_professor", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_user") })
 	private Collection<User> professors;
-	
-	//@NotNull
-	//@Valid
+
+	// @NotNull
+	// @Valid
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "group_student", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_user") })
 	private Collection<User> students;
-	
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-	
 	@OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
 	private Collection<Activity> activities;
-	
-	
+
 	public Group() {
 		super();
-		this.isDeleted=false;
+		this.isDeleted = false;
 		this.professors = new ArrayList<User>();
 		this.students = new ArrayList<User>();
 		this.activities = new ArrayList<Activity>();
 	}
-
-	
-
 
 	public Long getId() {
 		return id;
@@ -128,7 +124,7 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 	public void setCourse(Course course) {
 		this.course = course;
 	}
-	
+
 	public Collection<Activity> getActivities() {
 		return activities;
 	}
@@ -140,9 +136,7 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-	
-	
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -174,27 +168,25 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 		return true;
 	}
 
-	
 	public Group depth_copy() {
 		Group copy = this.shallow_copy();
-		
+
 		copy.id = null;
 		copy.activities = new ArrayList<Activity>();
-		copy.isDeleted=false;
-		
-		for(Activity a: this.activities){
+		copy.isDeleted = false;
+
+		for (Activity a : this.activities) {
 			Activity activity = a.depth_copy();
 			activity.setGroup(copy);
 			activity.setCourse(null);
-			copy.activities.add(activity);	
+			copy.activities.add(activity);
 		}
-		
+
 		copy.students = new ArrayList<User>();
 		copy.professors = new ArrayList<User>();
-		
+
 		return copy;
 	}
-
 
 	public Group shallow_copy() {
 		try {
@@ -203,8 +195,5 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	
-	
-}
 
+}

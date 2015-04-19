@@ -15,7 +15,10 @@
 			src="<c:url value="/resources/images/error.jpeg" /> ">
 
 		<div class="inlineImage">
-			<h3 class="error"><fmt:message key="error.msgError" /></h3>
+			
+				<h3 class="error"><fmt:message key="error.msgError" /></h3>
+			
+
 		</div>
 		
 	

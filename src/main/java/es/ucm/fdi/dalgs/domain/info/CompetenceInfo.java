@@ -14,37 +14,41 @@ import org.hibernate.validator.constraints.NotEmpty;
 import es.ucm.fdi.dalgs.domain.Copyable;
 
 @Embeddable
-public class CompetenceInfo implements Serializable, Cloneable, Copyable<CompetenceInfo> {
+public class CompetenceInfo implements Serializable, Cloneable,
+		Copyable<CompetenceInfo> {
 
 	private static final long serialVersionUID = 1L;
 
-	
-	
-
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=100)
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 100)
 	@Basic(optional = false)
 	@Column(name = "name", length = 100, nullable = false)
 	private String name;
 
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=1000)
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 1000)
 	@Basic(optional = false)
 	@Column(name = "description", length = 1000, nullable = false)
 	private String description;
-	
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=20)
+
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 20)
 	@Column(name = "code_competence", nullable = false, unique = true)
 	private String code;
-	
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=50)
+
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 50)
 	@Basic(optional = false)
 	@Column(name = "_type", length = 50, nullable = false)
 	private String type;
-	
-	
 
 	public String getType() {
 		return type;
@@ -102,7 +106,7 @@ public class CompetenceInfo implements Serializable, Cloneable, Copyable<Compete
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public CompetenceInfo depth_copy() {
 		CompetenceInfo copy = this.shallow_copy();
@@ -118,7 +122,5 @@ public class CompetenceInfo implements Serializable, Cloneable, Copyable<Compete
 			throw new RuntimeException(e);
 		}
 	}
-
-
 
 }

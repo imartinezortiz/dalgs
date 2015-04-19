@@ -25,7 +25,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @Table(name = "academicterm", uniqueConstraints = { @UniqueConstraint(columnNames = {
 		"term", "id_degree" }) })
-public class AcademicTerm implements Cloneable, Copyable<AcademicTerm>, Serializable {
+public class AcademicTerm implements Cloneable, Copyable<AcademicTerm>,
+		Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,20 +43,16 @@ public class AcademicTerm implements Cloneable, Copyable<AcademicTerm>, Serializ
 	@Column(name = "term", nullable = false, columnDefinition = "varchar(32) default '2014/2015'")
 	private String term;
 
-	
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-	@NotNull(message="field null")
+	@NotNull(message = "field null")
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_degree")
 	private Degree degree;
 
-
-
-	
-	//@NotNull
-	//@Valid
+	// @NotNull
+	// @Valid
 	@OneToMany(mappedBy = "academicTerm", cascade = CascadeType.ALL)
 	private Collection<Course> courses = new ArrayList<Course>();
 
@@ -64,7 +61,6 @@ public class AcademicTerm implements Cloneable, Copyable<AcademicTerm>, Serializ
 		this.isDeleted = false;
 	}
 
-	
 	public Collection<Course> getCourses() {
 		return courses;
 	}
@@ -105,9 +101,6 @@ public class AcademicTerm implements Cloneable, Copyable<AcademicTerm>, Serializ
 		this.degree = degree;
 	}
 
-
-
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -116,7 +109,6 @@ public class AcademicTerm implements Cloneable, Copyable<AcademicTerm>, Serializ
 		result = prime * result + ((term == null) ? 0 : term.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -140,13 +132,12 @@ public class AcademicTerm implements Cloneable, Copyable<AcademicTerm>, Serializ
 		return true;
 	}
 
-
 	public AcademicTerm depth_copy() {
 		AcademicTerm copy = this.shallow_copy();
 		copy.id = null;
 		copy.courses = new ArrayList<Course>();
-		copy.isDeleted=false;
-		
+		copy.isDeleted = false;
+
 		for (Course c : this.courses) {
 			Course course = c.depth_copy();
 			course.setAcademicTerm(copy);
@@ -155,14 +146,13 @@ public class AcademicTerm implements Cloneable, Copyable<AcademicTerm>, Serializ
 		return copy;
 	}
 
-
 	public AcademicTerm shallow_copy() {
 		try {
-			return  (AcademicTerm) super.clone();
-	
+			return (AcademicTerm) super.clone();
+
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 }

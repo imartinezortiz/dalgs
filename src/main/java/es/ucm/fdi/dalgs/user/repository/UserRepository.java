@@ -19,7 +19,7 @@ public class UserRepository {
 
 	protected static final Logger logger = LoggerFactory
 			.getLogger(UserRepository.class);
-	
+
 	protected EntityManager em;
 
 	public EntityManager getEntityManager() {
@@ -30,8 +30,7 @@ public class UserRepository {
 	public void setEntityManager(EntityManager entityManager) {
 		this.em = entityManager;
 	}
-	
-	
+
 	public boolean addUser(User user) {
 		try {
 
@@ -45,15 +44,17 @@ public class UserRepository {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<User> getAll(Integer pageIndex, Boolean showAll, String typeOfUser) {
+	public List<User> getAll(Integer pageIndex, Boolean showAll,
+			String typeOfUser) {
 		Query query = null;
-		if(showAll){
-			query = em.createQuery("select u from User u join u.roles ur where ur.role =?1 order by u.id");
+		if (showAll) {
+			query = em
+					.createQuery("select u from User u join u.roles ur where ur.role =?1 order by u.id");
 			query.setParameter(1, typeOfUser);
-			
-		}
-		else{
-			query = em.createQuery("select u from User u join u.roles ur where ur.role =?1 and u.enabled = '00000001' order by u.id");
+
+		} else {
+			query = em
+					.createQuery("select u from User u join u.roles ur where ur.role =?1 and u.enabled = '00000001' order by u.id");
 			query.setParameter(1, typeOfUser);
 
 		}
@@ -61,7 +62,6 @@ public class UserRepository {
 				.setFirstResult(pageIndex * noOfRecords).getResultList();
 	}
 
-	
 	public boolean deleteUser(Long id) {
 		User user = em.getReference(User.class, id);
 		try {
@@ -75,7 +75,6 @@ public class UserRepository {
 		}
 	}
 
-	
 	public boolean saveUser(User user) {
 		try {
 			em.merge(user);
@@ -86,13 +85,12 @@ public class UserRepository {
 		return true;
 	}
 
-
 	public Integer numberOfPages() {
 
-		Query query =em.createNativeQuery(
-				"select count(*) from user");
+		Query query = em.createNativeQuery("select count(*) from user");
 		logger.info(query.getSingleResult().toString());
-		double dou = Double.parseDouble(query.getSingleResult().toString())/ ((double) noOfRecords);
+		double dou = Double.parseDouble(query.getSingleResult().toString())
+				/ ((double) noOfRecords);
 		return (int) Math.ceil(dou);
 
 	}
@@ -101,41 +99,40 @@ public class UserRepository {
 		return em.find(User.class, id_user);
 	}
 
-	public boolean persistListUsers(List<User> users){
+	public boolean persistListUsers(List<User> users) {
 		int i = 0;
-		for(User u : users) {
-			try{
-				
-				//In this case we have to hash the password (SHA-256)
-				//StringSHA sha = new StringSHA();
-				//String pass = sha.getStringMessageDigest(u.getPassword());
-				//u.setPassword(pass);
-				
-				u.setId(null); //If not  a detached entity is passed to persist
+		for (User u : users) {
+			try {
+
+				// In this case we have to hash the password (SHA-256)
+				// StringSHA sha = new StringSHA();
+				// String pass = sha.getStringMessageDigest(u.getPassword());
+				// u.setPassword(pass);
+
+				u.setId(null); // If not a detached entity is passed to persist
 				em.persist(u);
-		    	//em.flush();
+				// em.flush();
 
-
-		    if(++i % 20 == 0) {
-		    	em.flush();
-		    }
-			}catch(Exception e){
+				if (++i % 20 == 0) {
+					em.flush();
+				}
+			} catch (Exception e) {
 				logger.error(e.getMessage());
 				return false;
 			}
 		}
-		
+
 		return true;
 
 	}
-	
+
 	// Logging
 	public User findByUsername(String username) {
 		Query query = em
 				.createQuery("select s from User s where s.username=?1");
 		query.setParameter(1, username);
-		
-		if(query.getResultList().isEmpty()){
+
+		if (query.getResultList().isEmpty()) {
 			logger.error("User not found by username " + username);
 			return null;
 		}
@@ -144,11 +141,10 @@ public class UserRepository {
 	}
 
 	public User findByEmail(String email) {
-		Query query = em
-				.createQuery("select s from User s where s.email=?1");
+		Query query = em.createQuery("select s from User s where s.email=?1");
 		query.setParameter(1, email);
 
-		if(query.getResultList().isEmpty()) {
+		if (query.getResultList().isEmpty()) {
 			logger.error("User not found by email " + email);
 			return null;
 		}
@@ -157,10 +153,10 @@ public class UserRepository {
 
 	@SuppressWarnings("unchecked")
 	public List<String> getAllByRole(String user_role) {
-		Query query = em.createQuery("select u from User u join u.roles ur where ur.role = ?1 order by u.id");
+		Query query = em
+				.createQuery("select u from User u join u.roles ur where ur.role = ?1 order by u.id");
 		query.setParameter(1, user_role);
 		return query.getResultList();
 	}
-
 
 }

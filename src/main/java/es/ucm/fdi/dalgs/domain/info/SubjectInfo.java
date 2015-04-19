@@ -14,24 +14,31 @@ import org.hibernate.validator.constraints.NotEmpty;
 import es.ucm.fdi.dalgs.domain.Copyable;
 
 @Embeddable
-public class SubjectInfo implements Serializable, Cloneable, Copyable<SubjectInfo> {
+public class SubjectInfo implements Serializable, Cloneable,
+		Copyable<SubjectInfo> {
 
 	private static final long serialVersionUID = 1L;
-	
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=100)
+
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 100)
 	@Basic(optional = false)
 	@Column(name = "name", length = 100, nullable = false)
 	private String name;
 
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=250)
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 250)
 	@Basic(optional = false)
 	@Column(name = "description", length = 250, nullable = false)
 	private String description;
-	
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=20)
+
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 20)
 	@Column(name = "code_subject", nullable = false, unique = true)
 	private String code;
 
@@ -83,7 +90,6 @@ public class SubjectInfo implements Serializable, Cloneable, Copyable<SubjectInf
 			return false;
 		return true;
 	}
-	
 
 	@Override
 	public SubjectInfo depth_copy() {
@@ -100,5 +106,5 @@ public class SubjectInfo implements Serializable, Cloneable, Copyable<SubjectInf
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 }

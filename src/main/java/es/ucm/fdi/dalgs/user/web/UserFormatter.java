@@ -12,7 +12,7 @@ import es.ucm.fdi.dalgs.user.repository.UserRepository;
 
 @Component
 public class UserFormatter implements Formatter<User> {
-	
+
 	@Autowired
 	private UserRepository daoUser;
 
@@ -29,5 +29,5 @@ public class UserFormatter implements Formatter<User> {
 		// Else you can just return a new object by setting some values
 		// which you deem fit.
 	}
-	
+
 }

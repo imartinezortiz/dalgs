@@ -27,7 +27,6 @@ public class Topic implements Cloneable, Copyable<Topic>, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_topic")
@@ -39,17 +38,17 @@ public class Topic implements Cloneable, Copyable<Topic>, Serializable {
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_module")
 	private Module module;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "topic",cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "topic", cascade = CascadeType.ALL)
 	private Collection<Subject> subjects;
 
 	public Topic() {
 		super();
 		this.isDeleted = false;
-		this. subjects = new ArrayList<Subject>();
+		this.subjects = new ArrayList<Subject>();
 
 	}
 
@@ -92,9 +91,7 @@ public class Topic implements Cloneable, Copyable<Topic>, Serializable {
 	public void setSubjects(Collection<Subject> subjects) {
 		this.subjects = subjects;
 	}
-	
-	
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -127,20 +124,20 @@ public class Topic implements Cloneable, Copyable<Topic>, Serializable {
 	}
 
 	public Topic depth_copy() {
-		Topic copy =  this.shallow_copy();
-		
+		Topic copy = this.shallow_copy();
+
 		copy.subjects = new ArrayList<Subject>();
-		
+
 		TopicInfo tInfo = copy.info.depth_copy();
-		copy.info= tInfo;
-		
+		copy.info = tInfo;
+
 		for (Subject s : this.subjects) {
-			Subject subject  = s.depth_copy();
+			Subject subject = s.depth_copy();
 			subject.setTopic(copy);
 		}
 		return copy;
 	}
-	
+
 	public Topic shallow_copy() {
 		try {
 			return (Topic) super.clone();

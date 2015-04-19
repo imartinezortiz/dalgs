@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import es.ucm.fdi.dalgs.domain.AcademicTerm;
 import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Group;
@@ -55,7 +56,7 @@ public class ActivityRepository {
 		return em
 				.createQuery(
 						"select a from Activity a inner join a.course s  where a.isDeleted='false' order by a.course")
-						.getResultList();
+				.getResultList();
 	}
 
 	public boolean saveActivity(Activity activity) {
@@ -67,32 +68,40 @@ public class ActivityRepository {
 			return false;
 		}
 	}
-	
+
 	public Activity getActivityFormatter(Long id) {
 		return em.find(Activity.class, id);
 	}
 
-	public Activity getActivity(Long id , Long id_course, Long id_group) {
-		
-		Query query = null;
+	public Activity getActivity(Long id, Long id_course, Long id_group,
+			Long id_academic) {
 
-		if(id_course!=null){
-			Course course = em.getReference(Course.class, id_course);
-			query = em.createQuery("select a from Activity a where a.id=?1 and a.course=?2  ");
-			query.setParameter(1, id);
-			query.setParameter(2, course);
-		} 
-		else if(id_group != null){
+		Query query = null;
+		Course course = em.getReference(Course.class, id_course);
+		AcademicTerm academicterm = em.getReference(AcademicTerm.class,
+				id_academic);
+
+		if (id_group != null) {
 			Group group = em.getReference(Group.class, id_group);
-			query = em.createQuery("select a from Activity a where a.id=?1 and a.group=?2");
+			query = em
+					.createQuery("select a from Activity a where a.id=?1 and a.group=?2 and a.group.course=?3 and a.group.course.academicTerm=?4");
 			query.setParameter(1, id);
 			query.setParameter(2, group);
-		}
-		
+			query.setParameter(3, course);
+			query.setParameter(4, academicterm);
+		} else if (id_course != null) {
+			query = em
+					.createQuery("select a from Activity a where a.id=?1 and a.course=?2 and a.course.academicTerm=?3 ");
+			query.setParameter(1, id);
+			query.setParameter(2, course);
+			query.setParameter(3, academicterm);
 
-		if(query.getResultList().isEmpty()) return null;
-		
-		return (Activity) query.getSingleResult();		
+		}
+
+		if (query.getResultList().isEmpty())
+			return null;
+
+		return (Activity) query.getSingleResult();
 
 	}
 
@@ -114,42 +123,45 @@ public class ActivityRepository {
 
 	@SuppressWarnings("unchecked")
 	public List<Activity> getActivitiesForCourse(Long id_course, Boolean showAll) {
-		
+
 		Course course = em.getReference(Course.class, id_course);
 		Query query = null;
 
-		if(!showAll){
-			query = em.createQuery("select a from Activity a where a.course=?1 and a.isDeleted='false' ");
-		}
-		else {
-			query = em.createQuery("select a from Activity a where a.course=?1");
+		if (!showAll) {
+			query = em
+					.createQuery("select a from Activity a where a.course=?1 and a.isDeleted='false' ");
+		} else {
+			query = em
+					.createQuery("select a from Activity a where a.course=?1");
 		}
 
 		query.setParameter(1, course);
-//		List<Activity> a = (List<Activity>)query.getResultList();
-		return (List<Activity>)query.getResultList();	
+		// List<Activity> a = (List<Activity>)query.getResultList();
+		return (List<Activity>) query.getResultList();
 
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Activity> getActivitiesForGroup(Long id_group, Boolean showAll) {
-		
+
 		Group group = em.getReference(Group.class, id_group);
 		Query query = null;
-		
-		if(!showAll){
-			 query = em.createQuery("select a from Activity a where a.group=?1 and a.isDeleted='false' ");
+
+		if (!showAll) {
+			query = em
+					.createQuery("select a from Activity a where a.group=?1 and a.isDeleted='false' ");
+		} else {
+			query = em.createQuery("select a from Activity a where a.group=?1");
 		}
-		else {
-			 query = em.createQuery("select a from Activity a where a.group=?1");
-		}
-		
+
 		query.setParameter(1, group);
 		return query.getResultList();
 
 	}
+
 	public Activity existByCode(String code) {
-		Query query = em.createQuery("Select a from Activity a where a.info.code=?1");
+		Query query = em
+				.createQuery("Select a from Activity a where a.info.code=?1");
 		query.setParameter(1, code);
 
 		if (query.getResultList().isEmpty())
@@ -170,12 +182,15 @@ public class ActivityRepository {
 	@SuppressWarnings("unchecked")
 	public Collection<Activity> getActivitiesForLearningGoal(
 			LearningGoal learningGoal) {
-		//		LearningGoal learning =em.getReference(LearningGoal.class, id_learningGoal);
-		Query query = em.createQuery("SELECT a FROM Activity a JOIN a.learningGoalStatus l WHERE l.learningGoal = ?1");
+		// LearningGoal learning =em.getReference(LearningGoal.class,
+		// id_learningGoal);
+		Query query = em
+				.createQuery("SELECT a FROM Activity a JOIN a.learningGoalStatus l WHERE l.learningGoal = ?1");
 		query.setParameter(1, learningGoal);
 
-		return (Collection<Activity>)query.getResultList();
+		return (Collection<Activity>) query.getResultList();
 	}
+
 	public boolean deleteActivitiesFromCourses(Collection<Course> courses) {
 
 		try {
@@ -227,7 +242,7 @@ public class ActivityRepository {
 	}
 
 	public boolean deleteActivitiesFromGroups(Collection<Group> groups) {
- 
+
 		try {
 			Query query = em
 					.createQuery("UPDATE Activity a SET a.isDeleted = true where a.group in ?1");
@@ -242,7 +257,5 @@ public class ActivityRepository {
 		}
 		return true;
 	}
-
-	
 
 }

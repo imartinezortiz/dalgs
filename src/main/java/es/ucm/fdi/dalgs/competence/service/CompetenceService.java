@@ -160,8 +160,8 @@ public class CompetenceService {
 
 		competence.setDegree(serviceDegree.getDegree(id_degree)
 				.getSingleElement());
-		Competence modifyCompetence = daoCompetence
-				.getCompetence(id_competence, id_degree);
+		Competence modifyCompetence = daoCompetence.getCompetence(
+				id_competence, id_degree);
 
 		Competence competenceExists = daoCompetence.existByCode(competence
 				.getInfo().getCode(), competence.getDegree());
@@ -193,13 +193,14 @@ public class CompetenceService {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean> deleteCompetenceFromSubject(Long id_competence,
-			Long id_subject, Long id_degree, Long id_topic) {
+			Long id_subject, Long id_degree, Long id_topic, Long id_module) {
 		// Subject subject = daoSubject.getSubject(id);
 		ResultClass<Boolean> result = new ResultClass<>();
-		Collection<Competence> c = serviceSubject.getSubject(id_subject, id_topic)
+		Collection<Competence> c = serviceSubject
+				.getSubject(id_subject, id_topic, id_module, id_degree)
 				.getSingleElement().getCompetences();
 		try {
-			c.remove(daoCompetence.getCompetence(id_competence,id_degree));
+			c.remove(daoCompetence.getCompetence(id_competence, id_degree));
 			result.setSingleElement(true);
 
 		} catch (Exception e) {
@@ -227,10 +228,11 @@ public class CompetenceService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<Competence> getCompetenceAll(Long id_competence, Long id_degree,
-			Boolean show) {
+	public ResultClass<Competence> getCompetenceAll(Long id_competence,
+			Long id_degree, Boolean show) {
 		ResultClass<Competence> result = new ResultClass<>();
-		Competence competence = daoCompetence.getCompetence(id_competence, id_degree);
+		Competence competence = daoCompetence.getCompetence(id_competence,
+				id_degree);
 		competence.setLearningGoals(serviceLearning
 				.getLearningGoalsFromCompetence(competence, show));
 		result.setSingleElement(competence);

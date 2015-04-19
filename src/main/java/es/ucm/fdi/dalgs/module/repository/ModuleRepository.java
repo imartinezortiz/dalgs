@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-
 import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.domain.Module;
 
@@ -79,11 +78,10 @@ public class ModuleRepository {
 
 		return (Module) query.getSingleResult();
 	}
-	
-	public Module getModuleFormatter(Long id){
+
+	public Module getModuleFormatter(Long id) {
 		return em.find(Module.class, id);
 	}
-	
 
 	public boolean deleteModule(Module module) {
 		try {

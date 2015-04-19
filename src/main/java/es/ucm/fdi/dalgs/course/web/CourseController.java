@@ -183,26 +183,30 @@ public class CourseController {
 	 * Methods for view courses
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}.htm", method = RequestMethod.GET)
-	public ModelAndView viewCourseGET(
+	public ModelAndView getCourseGET(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean showAll)
 			throws ServletException {
 
-		Map<String, Object> myModel = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
-		Course p = serviceCourse.getCourseAll(id, id_academic, showAll).getSingleElement();
-		myModel.put("course", p);
-		myModel.put("showAll", showAll);
+		Course p = serviceCourse.getCourseAll(id, id_academic, showAll)
+				.getSingleElement();
+		model.put("course", p);
+		model.put("showAll", showAll);
 
 		if (p != null) {
 			if (!p.getActivities().isEmpty())
-				myModel.put("activities", p.getActivities());
+				model.put("activities", p.getActivities());
 
 			if (!p.getGroups().isEmpty())
-				myModel.put("groups", p.getGroups());
+				model.put("groups", p.getGroups());
+
+			return new ModelAndView("course/view", "model", model);
 		}
-		return new ModelAndView("course/view", "model", myModel);
+		return new ModelAndView("exception/notFound", "model", model);
+
 	}
 
 	/**
@@ -210,13 +214,13 @@ public class CourseController {
 	 */
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/modify.htm", method = RequestMethod.GET)
-	public String modifyCourseGET(
-			@PathVariable("academicId") Long id_academic,
+	public String modifyCourseGET(@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id, Model model)
 			throws ServletException {
 
 		if (!model.containsAttribute("modifyCourse")) {
-			Course p = serviceCourse.getCourse(id, id_academic).getSingleElement();
+			Course p = serviceCourse.getCourse(id, id_academic)
+					.getSingleElement();
 
 			AcademicTerm academic = serviceAcademic.getAcademicTerm(
 					id_academic, false).getSingleElement();
@@ -279,7 +283,8 @@ public class CourseController {
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course, Locale locale) {
 		ResultClass<Course> result = serviceCourse.unDeleteCourse(serviceCourse
-				.getCourse(id_course, id_academic).getSingleElement(), id_academic, locale);
+				.getCourse(id_course, id_academic).getSingleElement(),
+				id_academic, locale);
 
 		if (!result.hasErrors())
 
@@ -301,7 +306,8 @@ public class CourseController {
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course) throws ServletException {
 
-		if (serviceCourse.deleteCourse(id_course, id_academic).getSingleElement()) {
+		if (serviceCourse.deleteCourse(id_course, id_academic)
+				.getSingleElement()) {
 			return "redirect:/academicTerm/" + id_academic + ".htm";
 		} else
 			return "redirect:/error.htm";
@@ -358,6 +364,12 @@ public class CourseController {
 				});
 	}
 
+	/**
+	 * Validate a new Course
+	 * 
+	 * @param course
+	 * @param errors
+	 */
 	public void validate(Course course, Errors errors) {
 
 		if (course.getCoordinator() == null) {

@@ -1,6 +1,5 @@
 package es.ucm.fdi.dalgs.classes;
 
-
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,12 +7,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 
-
-
 public class CharsetString {
-	
-	
-	
+
 	public CharsetString() {
 		super();
 	}
@@ -30,10 +25,5 @@ public class CharsetString {
 		}
 		return listCharsets;
 	}
-
-
-
-
-	
 
 }

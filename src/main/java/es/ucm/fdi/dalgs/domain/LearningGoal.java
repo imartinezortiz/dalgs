@@ -1,6 +1,5 @@
 package es.ucm.fdi.dalgs.domain;
 
-
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
@@ -19,32 +18,29 @@ import es.ucm.fdi.dalgs.domain.info.LearningGoalInfo;
 
 @Entity
 @Table(name = "learninggoal")
-public class LearningGoal implements Cloneable, Copyable<LearningGoal>, Serializable {
+public class LearningGoal implements Cloneable, Copyable<LearningGoal>,
+		Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_learninggoal")
 	private Long id;
-	
+
 	@Embedded
 	private LearningGoalInfo info;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_competence")
 	private Competence competence;
-	
-	
+
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-	
-	
 	public LearningGoal() {
 		super();
-		this.isDeleted=false;
+		this.isDeleted = false;
 	}
 
 	public Long getId() {
@@ -78,7 +74,7 @@ public class LearningGoal implements Cloneable, Copyable<LearningGoal>, Serializ
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -103,19 +99,18 @@ public class LearningGoal implements Cloneable, Copyable<LearningGoal>, Serializ
 			return false;
 		return true;
 	}
-	
-	
+
 	public LearningGoal depth_copy() {
 		LearningGoal copy = this.shallow_copy();
 		copy.id = null;
-		copy.isDeleted=false;
-		
+		copy.isDeleted = false;
+
 		LearningGoalInfo lgInfo = copy.info.depth_copy();
 		copy.info = lgInfo;
-		
+
 		return copy;
 	}
-	
+
 	public LearningGoal shallow_copy() {
 		try {
 			return (LearningGoal) super.clone();

@@ -24,63 +24,70 @@ import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
 @Entity
 @Table(name = "user")
 public class User implements UserDetails, CredentialsContainer, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_user")
 	private Long id;
 
-	@NotEmpty @NotNull @NotBlank
+	@NotEmpty
+	@NotNull
+	@NotBlank
 	@Column(name = "firstname")
 	private String firstName;
-	
-	@NotEmpty @NotNull @NotBlank
+
+	@NotEmpty
+	@NotNull
+	@NotBlank
 	@Column(name = "lastname")
 	private String lastName;
 
-	@NotEmpty @NotNull @NotBlank
-	@Column(name="username", unique = true)
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Column(name = "username", unique = true)
 	private String username;
-	
-	@NotEmpty @NotNull @NotBlank
+
+	@NotEmpty
+	@NotNull
+	@NotBlank
 	@Column(name = "password")
 	private String password;
 
-	@NotEmpty @NotNull @NotBlank
-	@Column(name="email", unique = true)
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Column(name = "email", unique = true)
 	private String email;
-	
+
 	@Column(name = "fullname")
 	private String fullName;
-	
-	//  User Credentials
+
+	// User Credentials
 	private String salt;
 
 	@Column(name = "enabled")
 	private boolean enabled;
 
 	private boolean accountNonExpired;
-	
+
 	private boolean accountNonLocked;
-	
+
 	private boolean credentialsNonExpired;
-	
-	
+
 	// User Roles
 
-	@ElementCollection(fetch=FetchType.EAGER)
-	@CollectionTable(name="user_roles", joinColumns=@JoinColumn(name="user"),  uniqueConstraints=@UniqueConstraint(columnNames={"user", "role"}))
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user"), uniqueConstraints = @UniqueConstraint(columnNames = {
+			"user", "role" }))
 	private Collection<UserRole> roles;
-	
-	//Constructor
+
+	// Constructor
 	public User() {
 		this.accountNonExpired = true;
 		this.credentialsNonExpired = true;
@@ -88,9 +95,7 @@ public class User implements UserDetails, CredentialsContainer, Serializable {
 		this.accountNonLocked = true;
 		this.roles = new ArrayList<UserRole>();
 	}
-	
 
-	
 	public Long getId() {
 		return id;
 	}
@@ -131,7 +136,6 @@ public class User implements UserDetails, CredentialsContainer, Serializable {
 		this.password = password;
 	}
 
-
 	public String getEmail() {
 		return email;
 	}
@@ -139,8 +143,6 @@ public class User implements UserDetails, CredentialsContainer, Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-
 
 	@Override
 	public int hashCode() {
@@ -177,6 +179,7 @@ public class User implements UserDetails, CredentialsContainer, Serializable {
 		this.password = null;
 		this.setSalt(null);
 	}
+
 	@Override
 	public boolean isAccountNonExpired() {
 		return this.accountNonExpired;
@@ -207,53 +210,38 @@ public class User implements UserDetails, CredentialsContainer, Serializable {
 	}
 
 	public String getFullName() {
-		return fullName ;
+		return fullName;
 	}
-
-
 
 	public void setFullName(String fullName) {
-		this.fullName= fullName;// = this.lastName + ", " + this.firstName+ " - " + this.username;
+		this.fullName = fullName;// = this.lastName + ", " + this.firstName+
+									// " - " + this.username;
 
 	}
-
-
 
 	public void setSalt(String salt) {
 		this.salt = salt;
 	}
 
-
-
 	public Collection<UserRole> getRoles() {
 		return roles;
 	}
-
-
 
 	public void setRoles(Collection<UserRole> roles) {
 		this.roles = roles;
 	}
 
-
-
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-
-
 
 	public void setAccountNonExpired(boolean accountNonExpired) {
 		this.accountNonExpired = accountNonExpired;
 	}
 
-
-
 	public void setAccountNonLocked(boolean accountNonLocked) {
 		this.accountNonLocked = accountNonLocked;
 	}
-
-
 
 	public void setCredentialsNonExpired(boolean credentialsNonExpired) {
 		this.credentialsNonExpired = credentialsNonExpired;

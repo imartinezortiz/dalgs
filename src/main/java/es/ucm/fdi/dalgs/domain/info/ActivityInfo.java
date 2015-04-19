@@ -13,22 +13,29 @@ import org.hibernate.validator.constraints.NotEmpty;
 import es.ucm.fdi.dalgs.domain.Copyable;
 
 @Embeddable
-public class ActivityInfo implements Serializable, Cloneable, Copyable<ActivityInfo>{
+public class ActivityInfo implements Serializable, Cloneable,
+		Copyable<ActivityInfo> {
 
 	private static final long serialVersionUID = 1L;
 
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=100)
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 100)
 	@Column(name = "name")
 	private String name;
-	
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=1000)
+
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 1000)
 	@Column(name = "description")
 	private String description;
-	
-	@NotEmpty @NotNull @NotBlank
-	@Size(min=1, max=20)
+
+	@NotEmpty
+	@NotNull
+	@NotBlank
+	@Size(min = 1, max = 20)
 	@Column(name = "code_activity", nullable = false, unique = true)
 	private String code;
 
@@ -97,8 +104,4 @@ public class ActivityInfo implements Serializable, Cloneable, Copyable<ActivityI
 		}
 	}
 
-
-
-	
-	
 }

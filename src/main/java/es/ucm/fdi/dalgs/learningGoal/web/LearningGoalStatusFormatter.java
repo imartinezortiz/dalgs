@@ -11,7 +11,8 @@ import es.ucm.fdi.dalgs.domain.LearningGoalStatus;
 import es.ucm.fdi.dalgs.learningGoal.repository.LearningGoalRepository;
 
 @Component
-public class LearningGoalStatusFormatter implements Formatter<LearningGoalStatus> {
+public class LearningGoalStatusFormatter implements
+		Formatter<LearningGoalStatus> {
 
 	@Autowired
 	private LearningGoalRepository daoLearningGoal;
@@ -26,8 +27,8 @@ public class LearningGoalStatusFormatter implements Formatter<LearningGoalStatus
 	public LearningGoalStatus parse(String learningGoalId, Locale arg1)
 			throws ParseException {
 		LearningGoalStatus learningGoalStatus = new LearningGoalStatus();
-		learningGoalStatus.setLearningGoal(daoLearningGoal.getLearningGoal(Long
-				.parseLong(learningGoalId)));
+		learningGoalStatus.setLearningGoal(daoLearningGoal
+				.getLearningGoalFormatter(Long.parseLong(learningGoalId)));
 		return learningGoalStatus;
 		// Else you can just return a new object by setting some values
 		// which you deem fit.

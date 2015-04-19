@@ -9,26 +9,23 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Embeddable
-public class LearningGoalStatus implements Cloneable, Copyable<LearningGoalStatus>{
+public class LearningGoalStatus implements Cloneable,
+		Copyable<LearningGoalStatus> {
 
 	@NotNull
 	@ManyToOne
 	private LearningGoal learningGoal;
 
 	@NotNull
-    @Min(0)
+	@Min(0)
 	@Max(100)
 	@Basic
 	@Column(name = "weight", nullable = false, columnDefinition = "INTEGER DEFAULT 0")
 	private Integer weight;
 
-
-
 	public LearningGoalStatus() {
 		super();
 	}
-	
-	
 
 	public LearningGoal getLearningGoal() {
 		return learningGoal;
@@ -45,15 +42,13 @@ public class LearningGoalStatus implements Cloneable, Copyable<LearningGoalStatu
 	public void setWeight(Integer weight) {
 		this.weight = weight;
 	}
-	
-	
-	
+
 	public LearningGoalStatus depth_copy() {
 		LearningGoalStatus copy = this.shallow_copy();
 
 		return copy;
 	}
-	
+
 	public LearningGoalStatus shallow_copy() {
 		try {
 			return (LearningGoalStatus) super.clone();
@@ -61,6 +56,5 @@ public class LearningGoalStatus implements Cloneable, Copyable<LearningGoalStatu
 			throw new RuntimeException(e);
 		}
 	}
-
 
 }

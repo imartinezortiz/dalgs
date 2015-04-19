@@ -58,7 +58,8 @@ public class DegreeController {
 			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		if (!resultBinding.hasErrors()) {
-			ResultClass<Degree> result = serviceDegree.addDegree(newDegree, locale);
+			ResultClass<Degree> result = serviceDegree.addDegree(newDegree,
+					locale);
 			if (!result.hasErrors())
 				return "redirect:/degree/page/0.htm?showAll=" + showAll;
 			else {
@@ -88,7 +89,8 @@ public class DegreeController {
 			BindingResult resultBinding, RedirectAttributes attr, Locale locale) {
 
 		if (!resultBinding.hasErrors()) {
-			ResultClass<Degree> result = serviceDegree.unDeleteDegree(degree, locale);
+			ResultClass<Degree> result = serviceDegree.unDeleteDegree(degree,
+					locale);
 
 			if (!result.hasErrors()) {
 				// if (created)
@@ -114,7 +116,8 @@ public class DegreeController {
 
 	@RequestMapping(value = "/degree/{id_degree}/restore.htm")
 	// Every Post have to return redirect
-	public String restoreDegree(@PathVariable("id_degree") Long id_degree, Locale locale) {
+	public String restoreDegree(@PathVariable("id_degree") Long id_degree,
+			Locale locale) {
 		ResultClass<Degree> result = serviceDegree.unDeleteDegree(serviceDegree
 				.getDegree(id_degree).getSingleElement(), locale);
 		if (!result.hasErrors())
@@ -136,21 +139,21 @@ public class DegreeController {
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean showAll)
 			throws ServletException, IOException {
 
-		Map<String, Object> myModel = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
 		ResultClass<Degree> result = serviceDegree.getDegrees(pageIndex,
 				showAll);
 		ResultClass<Integer> numberOfPages = serviceDegree
 				.numberOfPages(showAll);
-		myModel.put("showAll", showAll);
+		model.put("showAll", showAll);
 
-		myModel.put("numberOfPages", numberOfPages.getSingleElement());
-		myModel.put("currentPage", pageIndex);
-		myModel.put("degrees", result);
+		model.put("numberOfPages", numberOfPages.getSingleElement());
+		model.put("currentPage", pageIndex);
+		model.put("degrees", result);
 
 		setShowAll(showAll);
 
-		return new ModelAndView("degree/list", "model", myModel);
+		return new ModelAndView("degree/list", "model", model);
 	}
 
 	/**
@@ -184,8 +187,8 @@ public class DegreeController {
 	}
 
 	@RequestMapping(value = "/degree/{degreeId}/modify.htm", method = RequestMethod.GET)
-	public String modifyDegreeGET(@PathVariable("degreeId") Long id,
-			Model model) throws ServletException {
+	public String modifyDegreeGET(@PathVariable("degreeId") Long id, Model model)
+			throws ServletException {
 
 		if (!model.containsAttribute("degree")) {
 			Degree p = serviceDegree.getDegree(id).getSingleElement();
@@ -204,8 +207,8 @@ public class DegreeController {
 	public String deleteDegreeGET(@PathVariable("degreeId") Long id_degree)
 			throws ServletException {
 
-		Degree degree= serviceDegree.getDegree(id_degree).getSingleElement();
-		
+		Degree degree = serviceDegree.getDegree(id_degree).getSingleElement();
+
 		if (serviceDegree.deleteDegree(degree).getSingleElement()) {
 			return "redirect:/degree/page/0.htm?showAll=" + showAll;
 		} else
@@ -216,25 +219,29 @@ public class DegreeController {
 	 * Methods for view degrees
 	 */
 	@RequestMapping(value = "/degree/{degreeId}.htm", method = RequestMethod.GET)
-	public ModelAndView degreeGET(
+	public ModelAndView getDegreeGET(
 			@PathVariable("degreeId") Long id_degree,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean show)
 			throws ServletException {
 
-		Map<String, Object> myModel = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
 		Degree p = serviceDegree.getDegreeAll(id_degree, show)
 				.getSingleElement();
-		myModel.put("showAll", show);
-		myModel.put("degree", p);
-		if (p.getModules() != null)
-			myModel.put("modules", p.getModules());
-		if (p.getCompetences() != null)
-			myModel.put("competences", p.getCompetences());
+		if (p != null) {
+			model.put("showAll", show);
+			model.put("degree", p);
+			if (p.getModules() != null)
+				model.put("modules", p.getModules());
+			if (p.getCompetences() != null)
+				model.put("competences", p.getCompetences());
 
-		return new ModelAndView("degree/view", "model", myModel);
+			return new ModelAndView("degree/view", "model", model);
+		}
+		return new ModelAndView("exception/notFound", "model", model);
+
 	}
-	
+
 	@RequestMapping(value = "/degree/upload.htm", method = RequestMethod.GET)
 	public String uploadGet(Model model) {
 		CharsetString charsets = new CharsetString();

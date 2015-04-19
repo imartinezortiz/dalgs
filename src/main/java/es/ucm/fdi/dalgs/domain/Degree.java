@@ -19,7 +19,7 @@ import es.ucm.fdi.dalgs.domain.info.DegreeInfo;
 
 @Entity
 @Table(name = "degree")
-public class Degree implements Cloneable ,Copyable<Degree>, Serializable {
+public class Degree implements Cloneable, Copyable<Degree>, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -31,17 +31,13 @@ public class Degree implements Cloneable ,Copyable<Degree>, Serializable {
 	@Embedded
 	private DegreeInfo info;
 
-
-
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree",cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree", cascade = CascadeType.ALL)
 	private Collection<Module> modules;
 
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree",cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree", cascade = CascadeType.ALL)
 	private Collection<Competence> competences;
 
 	public Degree() {
@@ -92,7 +88,6 @@ public class Degree implements Cloneable ,Copyable<Degree>, Serializable {
 		this.modules = modules;
 	}
 
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -119,31 +114,30 @@ public class Degree implements Cloneable ,Copyable<Degree>, Serializable {
 	}
 
 	public Degree depth_copy() {
-		Degree copy =this.shallow_copy();
-		
-		copy.isDeleted=false;
+		Degree copy = this.shallow_copy();
+
+		copy.isDeleted = false;
 		copy.id = null;
 		copy.modules = new ArrayList<>();
-		
+
 		DegreeInfo dInfo = copy.info.depth_copy();
 		copy.info = dInfo;
-		
+
 		for (Module m : this.modules) {
-			Module module  = m.depth_copy();
+			Module module = m.depth_copy();
 			module.setDegree(copy);
 			copy.modules.add(module);
 		}
-		
+
 		copy.competences = new ArrayList<>();
 		for (Competence c : this.competences) {
 			Competence competence = c.depth_copy();
 			competence.setDegree(copy);
 			copy.competences.add(competence);
 		}
-		
+
 		return copy;
 	}
-
 
 	public Degree shallow_copy() {
 		try {
@@ -152,6 +146,5 @@ public class Degree implements Cloneable ,Copyable<Degree>, Serializable {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	
+
 }

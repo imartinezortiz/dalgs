@@ -42,8 +42,8 @@ public class TopicService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Topic> addTopic(Topic topic, Long id_module, Long id_degree,
-			Locale locale) {
+	public ResultClass<Topic> addTopic(Topic topic, Long id_module,
+			Long id_degree, Locale locale) {
 
 		boolean success = false;
 
@@ -97,10 +97,10 @@ public class TopicService {
 	@PreAuthorize("hasPermission(#topic, 'WRITE') or hasPermission(#topic, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyTopic(Topic topic, Long id_topic,
-			Long id_module, Locale locale) {
+			Long id_module, Long id_degree, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		Topic modifyTopic = daoTopic.getTopic(id_topic, id_module);
+		Topic modifyTopic = daoTopic.getTopic(id_topic, id_module, id_degree);
 
 		Topic topicExists = daoTopic.existByCode(topic.getInfo().getCode(),
 				id_module);
@@ -131,9 +131,9 @@ public class TopicService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<Topic> getTopic(Long id, Long id_module) {
+	public ResultClass<Topic> getTopic(Long id, Long id_module, Long id_degree) {
 		ResultClass<Topic> result = new ResultClass<Topic>();
-		result.setSingleElement(daoTopic.getTopic(id, id_module));
+		result.setSingleElement(daoTopic.getTopic(id, id_module, id_degree));
 		return result;
 	}
 
@@ -154,11 +154,15 @@ public class TopicService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<Topic> getTopicAll(Long id_topic,Long id_module, Boolean show) {
+	public ResultClass<Topic> getTopicAll(Long id_topic, Long id_module,
+			Long id_degree, Boolean show) {
 		ResultClass<Topic> result = new ResultClass<Topic>();
-		Topic p = daoTopic.getTopic(id_topic, id_module);
-		p.setSubjects(serviceSubject.getSubjectsForTopic(id_topic, show));
-		result.setSingleElement(p);
+		Topic p = daoTopic.getTopic(id_topic, id_module, id_degree);
+		if (p != null) {
+			p.setSubjects(serviceSubject.getSubjectsForTopic(id_topic, show));
+
+			result.setSingleElement(p);
+		}
 		return result;
 	}
 
@@ -245,7 +249,8 @@ public class TopicService {
 			FileItem fileItem = upload.getFileData().getFileItem();
 			TopicUpload topicUpload = new TopicUpload();
 
-			Module m = serviceModule.getModule(id_module, id_degree).getSingleElement();
+			Module m = serviceModule.getModule(id_module, id_degree)
+					.getSingleElement();
 			list = topicUpload.readCSVTopicToBean(fileItem.getInputStream(),
 					upload.getCharset(), prefers, m);
 

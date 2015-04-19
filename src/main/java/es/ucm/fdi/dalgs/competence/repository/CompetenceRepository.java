@@ -66,7 +66,7 @@ public class CompetenceRepository {
 				.createQuery(
 						"select c from Competence c inner join c.degree where c.isDeleted='false' order by c.id")
 
-						.getResultList();
+				.getResultList();
 	}
 
 	public boolean saveCompetence(Competence competence) {
@@ -78,21 +78,19 @@ public class CompetenceRepository {
 		}
 	}
 
-	public Competence getCompetence(Long id, Long id_degree  ) {
+	public Competence getCompetence(Long id, Long id_degree) {
 		Query query = null;
 
-	
-			Degree degree = em.getReference(Degree.class, id_degree);
-			query = em.createQuery("select c from Competence c where c.id=?1 and c.degree=?2 ");
-			query.setParameter(1, id);
-			query.setParameter(2, degree);
-		
-		
+		Degree degree = em.getReference(Degree.class, id_degree);
+		query = em
+				.createQuery("select c from Competence c where c.id=?1 and c.degree=?2 ");
+		query.setParameter(1, id);
+		query.setParameter(2, degree);
 
-	if(query.getResultList().isEmpty()) return null;
-	
-	return (Competence) query.getSingleResult();		
+		if (query.getResultList().isEmpty())
+			return null;
 
+		return (Competence) query.getSingleResult();
 
 	}
 
@@ -102,8 +100,9 @@ public class CompetenceRepository {
 	}
 
 	public boolean deleteCompetence(Competence competence) {
-		//		Competence competence = em.getReference(Competence.class, competence2);
-		//		Competence competence = this.getCompetence(id);
+		// Competence competence = em.getReference(Competence.class,
+		// competence2);
+		// Competence competence = this.getCompetence(id);
 		competence.setDeleted(true);
 
 		try {
@@ -125,19 +124,19 @@ public class CompetenceRepository {
 				.createQuery("select c from Subject s join s.competences c where s = ?1 and c.isDeleted='false'");
 		query.setParameter(1, subject);
 
-		return (List<Competence>)query.getResultList();
+		return (List<Competence>) query.getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Competence> getCompetencesForDegree(Long id_degree, Boolean show) {
 		Degree degree = em.getReference(Degree.class, id_degree);
-		if(show){
+		if (show) {
 
 			Query query = em
 					.createQuery("select c from Competence c where c.degree=?1");
 			query.setParameter(1, degree);
 			return query.getResultList();
-		}else{
+		} else {
 			Query query = em
 					.createQuery("select c from Competence c where c.degree=?1 and c.isDeleted='false'");
 			query.setParameter(1, degree);
@@ -171,31 +170,30 @@ public class CompetenceRepository {
 	}
 
 	public boolean persistListCompetences(List<Competence> competences) {
-			int i = 0;
-			for(Competence c : competences) {
-				try{
-					
-					//In this case we have to hash the password (SHA-256)
-					//StringSHA sha = new StringSHA();
-					//String pass = sha.getStringMessageDigest(u.getPassword());
-					//u.setPassword(pass);
-					
-					c.setId(null); //If not  a detached entity is passed to persist
-					em.persist(c);
-			    	//em.flush();
+		int i = 0;
+		for (Competence c : competences) {
+			try {
 
+				// In this case we have to hash the password (SHA-256)
+				// StringSHA sha = new StringSHA();
+				// String pass = sha.getStringMessageDigest(u.getPassword());
+				// u.setPassword(pass);
 
-			    if(++i % 20 == 0) {
-			    	em.flush();
-			    }
-				}catch(Exception e){
-					logger.error(e.getMessage());
-					return false;
+				c.setId(null); // If not a detached entity is passed to persist
+				em.persist(c);
+				// em.flush();
+
+				if (++i % 20 == 0) {
+					em.flush();
 				}
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+				return false;
 			}
-			
-			return true;
-
 		}
+
+		return true;
+
+	}
 
 }

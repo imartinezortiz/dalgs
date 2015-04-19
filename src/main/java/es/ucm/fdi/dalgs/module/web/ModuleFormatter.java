@@ -11,8 +11,7 @@ import es.ucm.fdi.dalgs.domain.Module;
 import es.ucm.fdi.dalgs.module.repository.ModuleRepository;
 
 @Component
-public class ModuleFormatter implements Formatter<Module>{
-
+public class ModuleFormatter implements Formatter<Module> {
 
 	@Autowired
 	private ModuleRepository moduleDao;
@@ -30,5 +29,5 @@ public class ModuleFormatter implements Formatter<Module>{
 		// Else you can just return a new object by setting some values
 		// which you deem fit.
 	}
-	
+
 }

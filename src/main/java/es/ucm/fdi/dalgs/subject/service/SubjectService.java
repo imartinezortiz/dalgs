@@ -32,16 +32,16 @@ public class SubjectService {
 
 	@Autowired
 	private SubjectRepository daoSubject;
-	
+
 	@Autowired
 	private TopicService serviceTopic;
 
 	@Autowired
 	private CompetenceService serviceCompetence;
-	
+
 	@Autowired
 	private CourseService serviceCourse;
-	
+
 	@Autowired
 	private AclObjectService manageAclService;
 
@@ -50,48 +50,54 @@ public class SubjectService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Subject> addSubject(Subject subject, Long id_topic, Long id_module, Locale locale) {
-		
+	public ResultClass<Subject> addSubject(Subject subject, Long id_topic,
+			Long id_module, Long id_degree, Locale locale) {
+
 		boolean success = false;
-		Subject subjectExists = daoSubject.existByCode(subject.getInfo().getCode());
+		Subject subjectExists = daoSubject.existByCode(subject.getInfo()
+				.getCode());
 		ResultClass<Subject> result = new ResultClass<>();
 
-		if( subjectExists != null){
+		if (subjectExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<>();
 			errors.add(messageSource.getMessage("error.Code", null, locale));
 
-			if (subjectExists.getIsDeleted()){
+			if (subjectExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add(messageSource.getMessage("error.deleted", null, locale));
+				errors.add(messageSource.getMessage("error.deleted", null,
+						locale));
 				result.setSingleElement(subjectExists);
-			}
-			else result.setSingleElement(subject);
+			} else
+				result.setSingleElement(subject);
 			result.setErrorsList(errors);
-		}
-		else{
-			subject.setTopic(serviceTopic.getTopic(id_topic, id_module).getSingleElement());
+		} else {
+			subject.setTopic(serviceTopic.getTopic(id_topic, id_module,
+					id_degree).getSingleElement());
 			success = daoSubject.addSubject(subject);
-			
-			
-			if(success){
-				subjectExists = daoSubject.existByCode(subject.getInfo().getCode());
-				success = manageAclService.addACLToObject(subjectExists.getId(), subjectExists.getClass().getName());
-				if (success) result.setSingleElement(subject);
-			
-			}else{
-				throw new IllegalArgumentException(	"Cannot create ACL. Object not set.");
+
+			if (success) {
+				subjectExists = daoSubject.existByCode(subject.getInfo()
+						.getCode());
+				success = manageAclService.addACLToObject(
+						subjectExists.getId(), subjectExists.getClass()
+								.getName());
+				if (success)
+					result.setSingleElement(subject);
+
+			} else {
+				throw new IllegalArgumentException(
+						"Cannot create ACL. Object not set.");
 
 			}
 		}
-		return result;		
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getAll() {
-		
-		
+
 		ResultClass<Subject> result = new ResultClass<>();
 		result.addAll(daoSubject.getAll());
 		return result;
@@ -99,27 +105,32 @@ public class SubjectService {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
-	public ResultClass<Subject> getSubject(Long id, Long id_topic) {
+	public ResultClass<Subject> getSubject(Long id, Long id_topic,
+			Long id_module, Long id_degree) {
 		ResultClass<Subject> result = new ResultClass<>();
-		result.setSingleElement(daoSubject.getSubject(id, id_topic));
+		result.setSingleElement(daoSubject.getSubject(id, id_topic, id_module,
+				id_degree));
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")	@Transactional(propagation = Propagation.REQUIRED)
-	public ResultClass<Boolean>deleteSubject(Subject subject) {
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(propagation = Propagation.REQUIRED)
+	public ResultClass<Boolean> deleteSubject(Subject subject) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		ResultClass<Course> courses = serviceCourse.getCoursesBySubject(subject);
-		if (!courses.isEmpty()){
-				Collection<Subject> subjects = new ArrayList<>();
-				subjects.add(subject);
-					ResultClass<Boolean> deleteCourses= serviceCourse.deleteCoursesForSubject(subjects); 
-					if (deleteCourses.getSingleElement()){
-						subject.getCompetences().clear();
-						result.setSingleElement(daoSubject.deleteSubject(subject));
-					}
-		}
-		else result.setSingleElement(daoSubject.deleteSubject(subject));
+		ResultClass<Course> courses = serviceCourse
+				.getCoursesBySubject(subject);
+		if (!courses.isEmpty()) {
+			Collection<Subject> subjects = new ArrayList<>();
+			subjects.add(subject);
+			ResultClass<Boolean> deleteCourses = serviceCourse
+					.deleteCoursesForSubject(subjects);
+			if (deleteCourses.getSingleElement()) {
+				subject.getCompetences().clear();
+				result.setSingleElement(daoSubject.deleteSubject(subject));
+			}
+		} else
+			result.setSingleElement(daoSubject.deleteSubject(subject));
 		return result;
 	}
 
@@ -133,47 +144,52 @@ public class SubjectService {
 
 	@PreAuthorize("hasPermission(#subject, 'WRITE') or hasPermission(#subject, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> modifySubject(Subject subject, Long id_subject, Long id_topic, Locale locale) {
+	public ResultClass<Boolean> modifySubject(Subject subject, Long id_subject,
+			Long id_topic, Long id_module, Long id_degree, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		Subject modifySubject = daoSubject.getSubject(id_subject, id_topic);
-		
-		Subject subjectExists = daoSubject.existByCode(subject.getInfo().getCode());
-		
-		if(!subject.getInfo().getCode().equalsIgnoreCase(modifySubject.getInfo().getCode()) && 
-				subjectExists != null){
+		Subject modifySubject = daoSubject.getSubject(id_subject, id_topic,
+				id_module, id_degree);
+
+		Subject subjectExists = daoSubject.existByCode(subject.getInfo()
+				.getCode());
+
+		if (!subject.getInfo().getCode()
+				.equalsIgnoreCase(modifySubject.getInfo().getCode())
+				&& subjectExists != null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<String>();
 			errors.add(messageSource.getMessage("error.newCode", null, locale));
 
-			if (subjectExists.getIsDeleted()){
+			if (subjectExists.getIsDeleted()) {
 				result.setElementDeleted(true);
-				errors.add(messageSource.getMessage("error.deleted", null, locale));
+				errors.add(messageSource.getMessage("error.deleted", null,
+						locale));
 
 			}
 			result.setErrorsList(errors);
 			result.setSingleElement(false);
-		}
-		else{
+		} else {
 			modifySubject.setInfo(subject.getInfo());
 			boolean r = daoSubject.saveSubject(modifySubject);
-			if (r) 
+			if (r)
 				result.setSingleElement(true);
 		}
 		return result;
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> addCompetences(Subject modify, Long id_subject, Long id_topic) {
+	public ResultClass<Boolean> addCompetences(Subject modify, Long id_subject,
+			Long id_topic, Long id_module, Long id_degree) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		Subject subject = daoSubject.getSubject(id_subject, id_topic);
+		Subject subject = daoSubject.getSubject(id_subject, id_topic,
+				id_module, id_degree);
 		subject.setInfo(modify.getInfo());
-		subject.setCompetences(modify.getCompetences());		
+		subject.setCompetences(modify.getCompetences());
 		result.setSingleElement(daoSubject.saveSubject(subject));
 		return result;
 	}
-	
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
@@ -190,17 +206,22 @@ public class SubjectService {
 		result.setSingleElement(daoSubject.getSubjectByName(string));
 		return result;
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public ResultClass<Subject> getSubjectAll(Long id_subject, Long id_topic) {
+	public ResultClass<Subject> getSubjectAll(Long id_subject, Long id_topic,
+			Long id_module, Long id_degree) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
-		Subject p = daoSubject.getSubject(id_subject, id_topic);
-		p.setCompetences(serviceCompetence.getCompetencesForSubject(id_subject));
-		result.setSingleElement(p);
+		Subject p = daoSubject.getSubject(id_subject, id_topic, id_module,
+				id_degree);
+		if (p != null) {
+			p.setCompetences(serviceCompetence
+					.getCompetencesForSubject(id_subject));
+
+			result.setSingleElement(p);
+		}
 		return result;
 	}
-
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
@@ -212,86 +233,91 @@ public class SubjectService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> deleteSubjectsForTopic(Collection<Topic> topics) {	
-		
+	public ResultClass<Boolean> deleteSubjectsForTopic(Collection<Topic> topics) {
+
 		ResultClass<Boolean> result = new ResultClass<>();
 		Collection<Subject> subjects = daoSubject.getSubjectsForTopics(topics);
-		
+
 		if (!subjects.isEmpty()) {
-			ResultClass<Boolean> deleteCourses= serviceCourse.deleteCoursesForSubject(subjects);
-			if(deleteCourses.getSingleElement())
-				result.setSingleElement(daoSubject.deleteSubjectsForTopics(topics));
-			else result.setSingleElement(false);
-		}
-		else result.setSingleElement(daoSubject.deleteSubjectsForTopics(topics));
+			ResultClass<Boolean> deleteCourses = serviceCourse
+					.deleteCoursesForSubject(subjects);
+			if (deleteCourses.getSingleElement())
+				result.setSingleElement(daoSubject
+						.deleteSubjectsForTopics(topics));
+			else
+				result.setSingleElement(false);
+		} else
+			result.setSingleElement(daoSubject.deleteSubjectsForTopics(topics));
 		return result;
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Subject> unDeleteSubject(Subject subject, Locale locale){
+	public ResultClass<Subject> unDeleteSubject(Subject subject, Locale locale) {
 		Subject s = daoSubject.existByCode(subject.getInfo().getCode());
 		ResultClass<Subject> result = new ResultClass<>();
-		if(s == null){
+		if (s == null) {
 			result.setHasErrors(true);
 			Collection<String> errors = new ArrayList<>();
-			errors.add(messageSource.getMessage("error.ElementNoExists", null, locale));
+			errors.add(messageSource.getMessage("error.ElementNoExists", null,
+					locale));
 			result.setErrorsList(errors);
 
-		}
-		else{
-			if(!s.getIsDeleted()){
+		} else {
+			if (!s.getIsDeleted()) {
 				Collection<String> errors = new ArrayList<>();
-				errors.add(messageSource.getMessage("error.CodeNoDeleted", null, locale));
+				errors.add(messageSource.getMessage("error.CodeNoDeleted",
+						null, locale));
 				result.setErrorsList(errors);
 			}
 
 			s.setDeleted(false);
 			s.setInfo(subject.getInfo());
 			boolean r = daoSubject.saveSubject(s);
-			if(r) 
-				result.setSingleElement(s);	
+			if (r)
+				result.setSingleElement(s);
 
 		}
 		return result;
-		
+
 	}
+
 	@Transactional(readOnly = false)
-	public boolean uploadCSV(UploadForm upload, Long id_topic, Long id_module) {
+	public boolean uploadCSV(UploadForm upload, Long id_topic, Long id_module,
+			Long id_degree) {
 		boolean success = false;
-		CsvPreference prefers =
-				new CsvPreference.Builder(upload.getQuoteChar().charAt(0), upload
-						.getDelimiterChar().charAt(0), upload.getEndOfLineSymbols())
-						.build();
+		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
+				.charAt(0), upload.getDelimiterChar().charAt(0),
+				upload.getEndOfLineSymbols()).build();
 
-				List<Subject> list = null;
-				try {
-					FileItem fileItem = upload.getFileData().getFileItem();
-					SubjectUpload subjectUpload = new SubjectUpload();
-					
-					Topic t = serviceTopic.getTopic(id_topic, id_module).getSingleElement();
-					list = subjectUpload.readCSVSubjectToBean(fileItem.getInputStream(),
-							upload.getCharset(), prefers, t);
+		List<Subject> list = null;
+		try {
+			FileItem fileItem = upload.getFileData().getFileItem();
+			SubjectUpload subjectUpload = new SubjectUpload();
 
-					success = daoSubject.persistListSubjects(list);
-					if(success){
-						for(Subject s : list){
-							Subject aux = daoSubject.existByCode(s.getInfo().getCode());
-							success = success && 
-									manageAclService.addACLToObject(aux.getId(), aux.getClass().getName());
-	
-						}
-						
-					}
-					
+			Topic t = serviceTopic.getTopic(id_topic, id_module, id_degree)
+					.getSingleElement();
+			list = subjectUpload.readCSVSubjectToBean(
+					fileItem.getInputStream(), upload.getCharset(), prefers, t);
 
-				} catch (IOException e) {
-					e.printStackTrace();
-					return false;
+			success = daoSubject.persistListSubjects(list);
+			if (success) {
+				for (Subject s : list) {
+					Subject aux = daoSubject.existByCode(s.getInfo().getCode());
+					success = success
+							&& manageAclService.addACLToObject(aux.getId(), aux
+									.getClass().getName());
+
 				}
-		
-				return success;
-	}
 
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return success;
+	}
 
 }

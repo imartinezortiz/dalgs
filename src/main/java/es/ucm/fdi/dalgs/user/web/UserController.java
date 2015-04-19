@@ -73,52 +73,52 @@ public class UserController {
 			@RequestParam(value = "typeOfUser") String typeOfUser)
 			throws ServletException {
 
-		Map<String, Object> myModel = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
 		List<User> p = serviceUser.getAll(pageIndex, show, typeOfUser);
 
-		myModel.put("users", p);
-		myModel.put("numberOfPages", serviceUser.numberOfPages());
-		myModel.put("currentPage", pageIndex);
-		myModel.put("showAll", show);
-		myModel.put("typeOfUser", typeOfUser);
+		model.put("users", p);
+		model.put("numberOfPages", serviceUser.numberOfPages());
+		model.put("currentPage", pageIndex);
+		model.put("showAll", show);
+		model.put("typeOfUser", typeOfUser);
 
 		setTypeOfUser(typeOfUser);
 		setShowAll(show);
-		return new ModelAndView("user/list", "model", myModel);
+		return new ModelAndView("user/list", "model", model);
 	}
 
 	@RequestMapping(value = "/user/{userId}.htm", method = RequestMethod.GET)
 	public ModelAndView getUserGET(@PathVariable("userId") Long id_user)
 			throws ServletException {
 
-		Map<String, Object> myModel = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
 		User user = serviceUser.getUser(id_user);
 		if (user != null) {
-			myModel.put("userDetails", user);
-			
+			model.put("userDetails", user);
+
 			ResultClass<Group> groups = new ResultClass<Group>();
 			if (serviceUser.hasRole(user, "ROLE_PROFESSOR")) {
 				ResultClass<Course> courses = new ResultClass<Course>();
 				courses = serviceCourse.getCourseForCoordinator(id_user);
 				groups = serviceGroup.getGroupsForProfessor(id_user);
 
-				if(!courses.isEmpty()){
-					myModel.put("courses", courses);
+				if (!courses.isEmpty()) {
+					model.put("courses", courses);
 				}
-				
+
 			} else if (serviceUser.hasRole(user, "ROLE_STUDENT")) {
 				groups = serviceGroup.getGroupsForStudent(id_user);
 			}
-			
-			if(!groups.isEmpty())
-			myModel.put("groups", groups);
 
-			return new ModelAndView("user/view", "model", myModel); // Admin
+			if (!groups.isEmpty())
+				model.put("groups", groups);
+
+			return new ModelAndView("user/view", "model", model); // Admin
 																	// view
 		}
-		return new ModelAndView("error", "model", myModel);
+		return new ModelAndView("exception/notFound", "model", model);
 	}
 
 	/**
@@ -200,7 +200,8 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/user/{userId}/modify.htm", method = RequestMethod.GET)
-	public String modifyUserGET(@PathVariable("userId") Long id_user, Model model) {
+	public String modifyUserGET(@PathVariable("userId") Long id_user,
+			Model model) {
 
 		User user = serviceUser.getUser(id_user);
 
@@ -211,24 +212,25 @@ public class UserController {
 
 	@RequestMapping(value = "/user/{userId}/modify.htm", method = RequestMethod.POST)
 	// Every Post have to return redirect
-	public String modifyUserPOST(@PathVariable("userId") Long id_user, @ModelAttribute("modifyUser") @Valid User user,
+	public String modifyUserPOST(@PathVariable("userId") Long id_user,
+			@ModelAttribute("modifyUser") @Valid User user,
 			BindingResult result, Model model) {
-		
+
 		User user_aux = serviceUser.getUser(id_user);
 
 		user_aux.setUsername(user.getUsername());
 		user_aux.setFirstName(user.getFirstName());
 		user_aux.setLastName(user.getLastName());
-	
+
 		if (serviceUser.saveUser(user_aux)) {
 
-				return "redirect:/user/page/0.htm?showAll=" + showAll
-						+ "&typeOfUser=" + typeOfUser;
+			return "redirect:/user/page/0.htm?showAll=" + showAll
+					+ "&typeOfUser=" + typeOfUser;
 		}
-		
+
 		return "redirect:/error.htm";
 	}
-	
+
 	@RequestMapping(value = "/user/{userId}/status.htm", method = RequestMethod.GET)
 	public String disabledUser(@PathVariable("userId") Long id_user)
 			throws ServletException {
