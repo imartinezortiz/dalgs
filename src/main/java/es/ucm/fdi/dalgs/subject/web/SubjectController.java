@@ -1,5 +1,7 @@
 package es.ucm.fdi.dalgs.subject.web;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
@@ -7,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -25,6 +28,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.classes.CharsetString;
 import es.ucm.fdi.dalgs.classes.ResultClass;
@@ -347,6 +353,45 @@ public class SubjectController {
 			return "upload";
 	}
 
+	
+	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/download.htm")
+	public void downloadCSV(HttpServletResponse response,
+			@PathVariable("degreeId") Long id_degree,
+			@PathVariable("moduleId") Long id_module,
+			@PathVariable("topicId") Long id_topic) throws IOException {
+
+		 String csvFileName = "subject.csv";
+		 
+	        response.setContentType("text/csv");
+	 
+	        // creates mock data
+	        String headerKey = "Content-Disposition";
+	        String headerValue = String.format("attachment; filename=\"%s\"",
+	                csvFileName);
+	        response.setHeader(headerKey, headerValue);
+	 
+	    
+	 
+	        Collection<Subject> subjects = new ArrayList<Subject>();
+	        subjects =  serviceSubject.getAll();
+	    
+	 
+	        
+	        // uses the Super CSV API to generate CSV data from the model data
+	        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(),
+	                CsvPreference.STANDARD_PREFERENCE);
+	         
+	        String[] header = {"code", "name", "description", "credits", "url_doc"};
+	 
+	        csvWriter.writeHeader(header);
+	 
+	        for (Subject sub : subjects) {
+	            csvWriter.write(sub.getInfo(), header);
+	        }
+	 
+	        csvWriter.close();
+	    
+	}
 	/**
 	 * For binding the competences of the subject.
 	 */
