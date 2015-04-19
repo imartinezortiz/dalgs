@@ -24,17 +24,29 @@
 				
 				<div class="form-group">
 					<label><fmt:message key="input.code" />: </label>
-					<form:input path="info.code" class="form-control" readonly="true" required="true"/>
+					<form:input path="info.code" class="form-control" readonly="true" />
 				</div>
 				<div class="form-group">
 					<label><fmt:message key="input.name" />: </label>
-					<form:input path="info.name" class="form-control" id="name" readonly="true" required="true"/>
+					<form:input path="info.name" class="form-control" id="name" readonly="true" />
 
 				</div>
 				<div class="form-group">
 					<label><fmt:message key="input.desc" />: </label>
 					<form:input class="form-control" path="info.description"
-						id="description" readonly="true" required="true"/>
+						id="description" readonly="true"/>
+				</div>
+				
+				<div class="form-group view">
+					<label><fmt:message key="subject.credits" />: </label>
+						<form:input class="form-control" path="info.credits"
+						id="credits" readonly="true"/>
+				</div>
+				<div class="form-group view">				
+					<label style="cursor: pointer;"><fmt:message key="subject.url" /> </label>
+						<form:input class="form-control" path="info.url_doc"
+						id="url_doc" readonly="true"/>
+					
 				</div>
 
 				<div class="form-group">

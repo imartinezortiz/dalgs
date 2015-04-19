@@ -46,8 +46,8 @@ public class SubjectInfo implements Serializable, Cloneable,
 	
 
 	@Size(min = 1, max = 250)
-	@Basic(optional = false)
-	@Column(name = "url_doc", length = 250, nullable = false)
+	@Basic(optional = true)
+	@Column(name = "url_doc", length = 250, nullable = true)
 	private String url_doc;
 	
 

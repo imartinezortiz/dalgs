@@ -279,25 +279,28 @@ public class GroupController {
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/professor/add.htm", method = RequestMethod.POST, params = "AddProfessors")
 	// Every Post have to return redirect
 	public String addProfessorToGroupPOST(
-			@PathVariable("academicId") Long academicId,
-			@PathVariable("courseId") Long courseId,
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
 			@ModelAttribute("group") @Valid Group group,
 			BindingResult resultBinding, RedirectAttributes attr) {
 
-		if (!resultBinding.hasErrors()) {
-			return "redirect:/academicTerm/" + academicId + "/course/"
-					+ courseId + "/group/" + id_group + "/professor/add.htm";
-		} else {
+		ResultClass<Group> gr = serviceGroup.getGroup(id_group, id_course, id_academic);
+		
+		if (gr.getSingleElement()==null || gr.hasErrors()) {
+			return "redirect:/error.htm";
 
-			ResultClass<Boolean> result = serviceGroup.setProfessors(group,
-					id_group, courseId, academicId);
+		} else {
+			gr.getSingleElement().setProfessors(group.getProfessors());
+			
+			ResultClass<Boolean> result = serviceGroup.setProfessors(gr.getSingleElement(),
+					id_group, id_course, id_academic);
 			if (!result.hasErrors())
-				return "redirect:/academicTerm/" + academicId + "/course/"
-						+ courseId + "/group/" + id_group + ".htm";
+				return "redirect:/academicTerm/" + id_academic + "/course/"
+						+ id_course + "/group/" + id_group + ".htm";
 			else
-				return "redirect:/academicTerm/" + academicId + "/course/"
-						+ courseId + "/group/" + id_group
+				return "redirect:/academicTerm/" + id_academic + "/course/"
+						+ id_course + "/group/" + id_group
 						+ "/professor/add.htm";
 		}
 	}
@@ -322,25 +325,29 @@ public class GroupController {
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/student/add.htm", method = RequestMethod.POST, params = "AddProfessors")
 	// Every Post have to return redirect
 	public String addStudentsToGroupPOST(
-			@PathVariable("academicId") Long academicId,
-			@PathVariable("courseId") Long courseId,
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
 			@ModelAttribute("group") @Valid Group group,
 			BindingResult resultBinding, RedirectAttributes attr) {
 
-		if (!resultBinding.hasErrors()) {
-			return "redirect:/academicTerm/" + academicId + "/course/"
-					+ courseId + "/group/" + id_group + "/student/add.htm";
+		ResultClass<Group> gr = serviceGroup.getGroup(id_group, id_course, id_academic);
+		
+		if (gr.getSingleElement()==null || gr.hasErrors()) {
+			return "redirect:/error.htm";
+
+		
 		} else {
 
-			ResultClass<Boolean> result = serviceGroup.setStudents(group,
-					id_group, courseId, academicId);
+			gr.getSingleElement().setStudents(group.getStudents());
+			ResultClass<Boolean> result = serviceGroup.setStudents(gr.getSingleElement(),
+					id_group, id_course, id_academic);
 			if (!result.hasErrors())
-				return "redirect:/academicTerm/" + academicId + "/course/"
-						+ courseId + "/group/" + id_group + ".htm";
+				return "redirect:/academicTerm/" + id_academic + "/course/"
+						+ id_course + "/group/" + id_group + ".htm";
 			else
-				return "redirect:/academicTerm/" + academicId + "/course/"
-						+ courseId + "/group/" + id_group + "/student/add.htm";
+				return "redirect:/academicTerm/" + id_academic + "/course/"
+						+ id_course + "/group/" + id_group + "/student/add.htm";
 		}
 	}
 

@@ -276,7 +276,7 @@ public class SubjectController {
 	public String addCompetenceToSubjectPOST(
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
-			@PathVariable("topicId") Long id_topic,
+			@PathVariable("topicId")  Long id_topic,
 			@PathVariable("subjectId") Long id_subject,
 			@ModelAttribute("subject") Subject subject, BindingResult result,
 			Model model) {
@@ -288,7 +288,7 @@ public class SubjectController {
 				return "redirect:/degree/" + id_degree + "/module/" + id_module
 						+ "/topic/" + id_topic + ".htm";
 			} catch (Exception e) {
-				return "redirect:/competence/add.htm";
+				return "redirect:competence/add.htm";
 			}
 		}
 		return "redirect:/error.htm";
@@ -342,7 +342,7 @@ public class SubjectController {
 		}
 
 		if (serviceSubject.uploadCSV(upload, id_topic, id_module, id_degree))
-			return "home";
+			 return "redirect:/degree/"+ id_degree +"/module/"+id_module+"/topic/"+id_topic+".htm";
 		else
 			return "upload";
 	}

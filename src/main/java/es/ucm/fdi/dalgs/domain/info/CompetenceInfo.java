@@ -19,7 +19,7 @@ public class CompetenceInfo implements Serializable, Cloneable,
 
 	private static final long serialVersionUID = 1L;
 	
-	public enum TypeOfCompetence { General, Transversal, Básica, Específica };
+	public enum TypeOfCompetence { General, Transversal, Basica, Especifica };
 
 	@NotEmpty
 	@NotNull
