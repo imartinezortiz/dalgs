@@ -182,6 +182,16 @@ public class ActivityService {
 
 		return result;
 	}
+	
+	
+
+	@Transactional(readOnly = true)
+	public ResultClass<Activity> getActivityREST(Long id) {
+		ResultClass<Activity> result = new ResultClass<Activity>();
+		result.setSingleElement(daoActivity.getActivityFormatter(id));
+
+		return result;
+	}
 
 	@PreAuthorize("hasPermission(#course, 'ADMINISTRATION') or hasPermission(#group, 'ADMINISTRATION') ")
 	@Transactional(propagation = Propagation.REQUIRED)

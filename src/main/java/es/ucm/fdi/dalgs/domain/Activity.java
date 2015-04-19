@@ -66,6 +66,7 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 		super();
 		this.isDeleted = false;
 		this.learningGoalStatus = new ArrayList<LearningGoalStatus>();
+		this.info = new ActivityInfo();
 	}
 
 	public Long getId() {
