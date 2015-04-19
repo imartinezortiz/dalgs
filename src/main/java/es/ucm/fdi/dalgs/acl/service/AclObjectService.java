@@ -76,9 +76,19 @@ public class AclObjectService {
 			return false;
 		}
 
-		User user = (User) authentication.getPrincipal();
-		acl.insertAce(0, BasePermission.ADMINISTRATION,
-				new PrincipalSid(user.getUsername()), true);
+		
+		
+		if(authentication.getPrincipal() !="anonymousUser"){
+			User user = (User) authentication.getPrincipal();
+
+			acl.insertAce(0, BasePermission.ADMINISTRATION,
+					new PrincipalSid(user.getUsername()), true);
+			acl.insertAce(1, BasePermission.DELETE, new GrantedAuthoritySid(
+					"ROLE_ADMIN"), true);
+
+		}
+		acl.insertAce(0, BasePermission.ADMINISTRATION, new GrantedAuthoritySid(
+				"ROLE_ADMIN"), true);
 		acl.insertAce(1, BasePermission.DELETE, new GrantedAuthoritySid(
 				"ROLE_ADMIN"), true);
 

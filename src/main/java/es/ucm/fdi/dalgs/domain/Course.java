@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @Entity
 @Table(name = "course", uniqueConstraints = { @UniqueConstraint(columnNames = {
 		"id_subject", "id_academicterm" }) })
@@ -44,6 +46,7 @@ public class Course implements Cloneable, Copyable<Course>, Serializable {
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
 	private Collection<Group> groups;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_academicterm")
 	private AcademicTerm academicTerm;

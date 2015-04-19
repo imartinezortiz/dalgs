@@ -1,4 +1,4 @@
-package es.ucm.fdi.dalgs.rest;
+package es.ucm.fdi.dalgs.rest.classes;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -6,7 +6,7 @@ import java.util.Date;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 
-public class ActivityREST implements Serializable{
+public class Activity_Request implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -14,10 +14,11 @@ public class ActivityREST implements Serializable{
 	private long id_group;
 	private String name;
 	private String description;
+	private String code;
 	
     private Date createdDate;
 
-	public ActivityREST() {
+	public Activity_Request() {
 		super();
 	}
 	
@@ -47,7 +48,15 @@ public class ActivityREST implements Serializable{
 	}
 	
 	 
-    @JsonSerialize(using=DateSerializer.class)
+    public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	@JsonSerialize(using=DateSerializer.class)
     public Date getCreatedDate() {
         return createdDate;
     }
