@@ -1,12 +1,16 @@
 package es.ucm.fdi.dalgs.competence.web;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.classes.CharsetString;
 import es.ucm.fdi.dalgs.classes.ResultClass;
@@ -288,6 +295,37 @@ public class CompetenceController {
 			return "home";
 		else
 			return "upload";
+	}
+	
+	@RequestMapping(value = "/competence/download.htm")
+	public void downloadCSV(HttpServletResponse response) throws IOException {
+
+		 String csvFileName = "competences.csv";
+		 
+	        response.setContentType("text/csv");
+	 
+	        // creates mock data
+	        String headerKey = "Content-Disposition";
+	        String headerValue = String.format("attachment; filename=\"%s\"",
+	                csvFileName);
+	        response.setHeader(headerKey, headerValue);
+	 
+
+	        Collection<Competence> competences = new ArrayList<Competence>();
+	        competences =  serviceCompetence.getAll();
+
+	        // uses the Super CSV API to generate CSV data from the model data
+	        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(),
+	                CsvPreference.STANDARD_PREFERENCE);
+	         
+	        String[] header = {"code", "name", "description", "type"};
+	 
+	        csvWriter.writeHeader(header);
+	 
+	        for (Competence comp : competences) {
+	            csvWriter.write(comp.getInfo(), header);
+	        }
+	        csvWriter.close();  
 	}
 
 }

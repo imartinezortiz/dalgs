@@ -5,61 +5,6 @@
 <head>
 <title><fmt:message key="common.title" /></title>
 
-   
-
-<script type="text/javascript" >
-$(document).ready(function(){
- sendAjax();
-
-});
- 
-function getDummyAjax() {
- 
-$.ajax({ 
-    url: "${pageContext.request.contextPath}/rest/activity", 
-    type: 'GET', 
-    dataType: 'json', 
-    //data: "{\"id_group\":\"1L\",\"id_course\":\"null\",\"name\":\"name\",\"description\":\"description\"}", 
-    contentType: 'application/json',
-    mimeType: 'application/json',
-    success: function(data) { 
-        alert( data.name);
-    },
-    error:function(data,status,er) { 
-        alert("error: "+data+" status: "+status+" er:"+er);
-    }
-});
-}
-
-function postAjax() {
-	var header = $("meta[name='_csrf_header']").attr("content");
-	var token = $("meta[name='_csrf']").attr("content");
-	
-	$.ajax({ 
-	    url: "${pageContext.request.contextPath}/rest/activity", 
-	    type: 'POST', 
-	    dataType: 'json', 
-	    data: "{\"id_group\":\"1L\",\"id_course\":\"null\",\"name\":\"name\",\"description\":\"description\"}", 
-	    contentType: 'application/json',
-	    mimeType: 'application/json',
-	    beforeSend: function(xhr){
-	    	alert(header);
-	    	alert(token);
-	        xhr.setRequestHeader(header, token);
-	    },
-	    success: function(data) { 
-	        alert( data.name);
-	    },
-	    error:function(data,status,er) { 
-	        alert("error: "+data+" status: "+status+" er:"+er);
-	    }
-	});
-	}
-</script>
-
-
-
-
 </head>
 <body>
 	<div class="list-group index">
@@ -101,7 +46,9 @@ function postAjax() {
 			</a>
 	
 		
-		<br><br>
+		
+		
+				<br><br>
 		
 		Direct Access to delete
 		<a  class="list-group-item " 

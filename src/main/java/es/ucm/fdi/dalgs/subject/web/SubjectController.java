@@ -354,13 +354,10 @@ public class SubjectController {
 	}
 
 	
-	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/download.htm")
-	public void downloadCSV(HttpServletResponse response,
-			@PathVariable("degreeId") Long id_degree,
-			@PathVariable("moduleId") Long id_module,
-			@PathVariable("topicId") Long id_topic) throws IOException {
+	@RequestMapping(value = "/subject/download.htm")
+	public void downloadCSV(HttpServletResponse response) throws IOException {
 
-		 String csvFileName = "subject.csv";
+		 String csvFileName = "subjects.csv";
 		 
 	        response.setContentType("text/csv");
 	 
@@ -370,13 +367,10 @@ public class SubjectController {
 	                csvFileName);
 	        response.setHeader(headerKey, headerValue);
 	 
-	    
-	 
+
 	        Collection<Subject> subjects = new ArrayList<Subject>();
 	        subjects =  serviceSubject.getAll();
-	    
-	 
-	        
+
 	        // uses the Super CSV API to generate CSV data from the model data
 	        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(),
 	                CsvPreference.STANDARD_PREFERENCE);
@@ -388,10 +382,9 @@ public class SubjectController {
 	        for (Subject sub : subjects) {
 	            csvWriter.write(sub.getInfo(), header);
 	        }
-	 
-	        csvWriter.close();
-	    
+	        csvWriter.close();  
 	}
+	
 	/**
 	 * For binding the competences of the subject.
 	 */
