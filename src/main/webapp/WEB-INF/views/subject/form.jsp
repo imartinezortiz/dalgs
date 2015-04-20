@@ -29,6 +29,11 @@
 				<spring:message code="subject.code" var="codSub"/>
 				<spring:message code="subject.name" var="nameSub"/>
 				<spring:message code="subject.desc" var="descSub"/>
+				<spring:message code="subject.url" var="urlSub"/>
+				<spring:message code="subject.credits" var="credSub"/>
+
+
+
 
 				
 				<div class="form-group">
@@ -36,22 +41,33 @@
 					<form:input path="info.code" class="form-control"
 						placeholder="${codSub}" required="true" />
 					<form:errors path="info.code" cssStyle="color: #ff0000" />
-
 				</div>
 				<div class="form-group">
 					<label><fmt:message key="input.name" />: </label>
 					<form:input path="info.name" class="form-control"
 						placeholder="${nameSub}" required="true" />
 					<form:errors path="info.name" cssStyle="color: #ff0000" />
-
 				</div>
 				<div class="form-group">
 					<label><fmt:message key="input.desc" />: </label>
 					<form:input path="info.description" class="form-control"
 						placeholder="${descSub}" required="true" />
 					<form:errors path="info.description" cssStyle="color: #ff0000" />
-
 				</div>
+				<div class="form-group">
+					<label><fmt:message key="input.desc" />: </label>
+					<form:input path="info.url_doc" class="form-control"
+						placeholder="${credSub}" required="true" />
+					<form:errors path="info.credits" cssStyle="color: #ff0000" />
+				</div>
+				
+				<div class="form-group">
+					<label><fmt:message key="input.desc" />: </label>
+					<form:input path="info.description" class="form-control"
+						placeholder="${urlSub}" required="true" />
+					<form:errors path="info.url_doc" cssStyle="color: #ff0000" />
+				</div>
+				
 
 
 				<input type="submit" class="btn btn-success" value="<fmt:message key="${typeform}"/>"

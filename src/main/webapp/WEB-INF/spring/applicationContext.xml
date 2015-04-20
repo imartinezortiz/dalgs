@@ -88,7 +88,8 @@
 	<context:component-scan base-package="es.ucm.fdi.dalgs.module.service" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.subject.service" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.topic.service" />
-	<context:component-scan base-package="es.ucm.fdi.dalgs.user.service" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.user.service" />	
+	<context:component-scan base-package="es.ucm.fdi.dalgs.rest.service" />
 
 	<bean id="passwordEncoder"
 		class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
@@ -101,7 +102,6 @@
 		<property name="fallbackToSystemLocale" value="false" />
 		<property name="defaultEncoding" value="ISO-8859-1" />
 	</bean>
-
 
 
 

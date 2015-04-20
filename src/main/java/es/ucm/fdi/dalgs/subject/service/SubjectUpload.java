@@ -7,6 +7,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.supercsv.cellprocessor.Optional;
+import org.supercsv.cellprocessor.ParseInt;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanReader;
@@ -29,7 +31,7 @@ public class SubjectUpload {
 					Charset.forName(charsetName)), csvPreference);
 			// the name mapping provide the basis for bean setters
 			final String[] nameMapping = new String[] { "code", "name",
-					"description" };
+					"description" , "credits", "url_doc"};
 			// just read the header, so that it don't get mapped to User
 			// object
 			final String[] header = beanReader.getHeader(true);
@@ -56,9 +58,12 @@ public class SubjectUpload {
 	/* CellProcessors have to correspond to the entity database fields */
 	private static CellProcessor[] getSubjectProcessors() {
 
-		final CellProcessor[] processors = new CellProcessor[] { new NotNull(), // Code
+		final CellProcessor[] processors = new CellProcessor[] { 
+				new NotNull(), // Code
 				new NotNull(), // Name
 				new NotNull(), // Description
+				new ParseInt(),
+				new Optional()
 		};
 		return processors;
 	}

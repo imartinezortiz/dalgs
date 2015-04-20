@@ -7,6 +7,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.supercsv.cellprocessor.ParseEnum;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanReader;
@@ -56,13 +57,18 @@ public class CompetenceUpload {
 	/* CellProcessors have to correspond to the entity database fields */
 	private static CellProcessor[] getCompetenceProcessors() {
 
-		final CellProcessor[] processors = new CellProcessor[] { new NotNull(), // Code
-				new NotNull(), // Description
+		final CellProcessor[] processors = new CellProcessor[] { 
+				new NotNull(), // Code
 				new NotNull(), // Name
-				new NotNull(), // Type
+				new NotNull(), // Description
+				new ParseEnum(CompetenceInfo.TypeOfCompetence.class, true)
+				// Type
 
 		};
 		return processors;
 	}
+		
+	
 
 }
+

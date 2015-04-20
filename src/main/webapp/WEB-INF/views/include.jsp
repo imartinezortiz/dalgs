@@ -41,6 +41,11 @@
 </script>
 
 <script type="text/javascript"
+	src=" <c:url value="/resources/scripts/bootstrap-dropdown.js" /> ">
+	
+</script>
+
+<script type="text/javascript"
 	src=" <c:url value="/resources/scripts/bootstrap-filestyle.js" /> ">
 	
 </script>
@@ -132,9 +137,41 @@
 
 				</ul>
 
+
+
 				<ul class="nav navbar-nav navbar-right">
-					
-					
+				
+				<c:url value="/activity/download.htm" var="activitiesUrl" />
+				<c:url value="/competence/download.htm" var="competencestUrl" />
+				<c:url value="/degree/download.htm" var="degreesUrl" />
+				<c:url value="/module/download.htm" var="modulesUrl" />
+				<c:url value="/subject/download.htm" var="subjectsUrl" />
+				<c:url value="/topic/download.htm" var="topicstUrl" />
+				<c:url value="/user/download.htm" var="usersUrl" />
+								
+				<sec:authorize access="hasRole('ROLE_ADMIN')">	
+				  <li class="dropdown" id="menu1">
+				    <a class="dropdown-toggle" data-toggle="dropdown" href="#menu1">
+				     <span class="glyphicon glyphicon-download" aria-hidden="true"></span>  CSV
+				      <b class="caret"></b>
+				    </a>
+				    <ul class="dropdown-menu">	
+				     <li><a href="${activitiesUrl}"><fmt:message key="activity.ac" /></a></li>
+				      <li class="divider"></li>    
+				      <li><a href="${competencestUrl}"><fmt:message key="competence.com" /></a></li>
+				      <li class="divider"></li>
+				      <li><a href="${degreesUrl}"><fmt:message key="degree.deg" /></a></li>
+				      <li class="divider"></li>
+				      <li><a href="${modulesUrl}"><fmt:message key="module.module" /></a></li>
+				      <li class="divider"></li>
+				      <li><a href="${subjectsUrl}"><fmt:message key="subject.sub" /></a></li>
+				      <li class="divider"></li>
+				      <li><a href="${topicstUrl}"><fmt:message key="topic.top" /></a></li>
+				      <li class="divider"></li>
+				      <li><a href="${usersUrl}"><fmt:message key="user.user" /></a></li>
+				    </ul>
+				  </li>
+			  </sec:authorize>
 					
 					<sec:authorize access="isAuthenticated()">
 					<p class="navbar-text navbar-right" style="font-size: 15px;">

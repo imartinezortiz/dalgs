@@ -6,11 +6,16 @@ import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Handles requests for the application home page.
@@ -50,5 +55,16 @@ public class MainController {
 		// do something
 		return "exception/notFound";
 	}
+	
+	 @ExceptionHandler
+	 @ResponseBody
+	 @ResponseStatus(value= HttpStatus.BAD_REQUEST)
+	 public ModelAndView handleException(Exception exception){
+		ModelAndView model = new ModelAndView("error");
+		model.addObject("reason", exception.getMessage());
+		return model;
+		  
+	 }
+	
 
 }

@@ -18,6 +18,8 @@ public class CompetenceInfo implements Serializable, Cloneable,
 		Copyable<CompetenceInfo> {
 
 	private static final long serialVersionUID = 1L;
+	
+	public enum TypeOfCompetence { General, Transversal, Basica, Especifica };
 
 	@NotEmpty
 	@NotNull
@@ -48,13 +50,13 @@ public class CompetenceInfo implements Serializable, Cloneable,
 	@Size(min = 1, max = 50)
 	@Basic(optional = false)
 	@Column(name = "_type", length = 50, nullable = false)
-	private String type;
+	private TypeOfCompetence type;
 
-	public String getType() {
+	public TypeOfCompetence getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(TypeOfCompetence type) {
 		this.type = type;
 	}
 

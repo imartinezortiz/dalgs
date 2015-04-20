@@ -132,4 +132,11 @@ public class UserService {
 		return findByUsername(fullnamesplit[0]);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = true)
+	public Collection<User> getAll() {
+		// TODO Auto-generated method stub
+		return daoUser.getAllUsers();
+	}
+
 }

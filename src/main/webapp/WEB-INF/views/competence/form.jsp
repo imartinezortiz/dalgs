@@ -56,8 +56,12 @@
 				</div>
 				<div class="form-group">
 					<label><fmt:message key="input.type" />: </label>
-					<form:input path="info.type" class="form-control"
-						placeholder="${comType}" required="true" />
+					
+						<form:select path="info.type">					
+							<form:options items="${typeofCompetence}" />
+						</form:select>
+						
+						
 					<form:errors path="info.type" cssStyle="color: #ff0000" />
 
 				</div>

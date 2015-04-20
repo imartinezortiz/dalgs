@@ -4,13 +4,7 @@
 <html>
 <head>
 <title><fmt:message key="common.title" /></title>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="css/bootstrap.css">
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="scripts/jquery-1.11.1.min.js" type="text/javascript"></script>
-
-<script src="scripts/bootstrap.js" type="text/javascript"></script>
 </head>
 <body>
 	<div class="list-group index">
@@ -52,7 +46,9 @@
 			</a>
 	
 		
-		<br><br>
+		
+		
+				<br><br>
 		
 		Direct Access to delete
 		<a  class="list-group-item " 

@@ -282,3 +282,13 @@ h3.nf_error {
   vertical-align: middle;
   margin-top: 10%;
 }
+
+a.btn.doc:hover {
+  font-size: 16px;
+  color: rgb(160, 13, 23);
+  font-weight: bold;
+}
+
+a.btn.doc {
+  color: rgb(111, 123, 159);
+}

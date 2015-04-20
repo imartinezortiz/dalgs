@@ -163,15 +163,15 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (98,1,00000000,00000000,00000001,16,37,1);
 
 -- Subject Inserts
-INSERT INTO subject (id_subject,code_subject,description,name, id_topic) VALUES (1,'SUB1','Ingenieria Software','IS',7);
-INSERT INTO subject (id_subject,code_subject,description,name, id_topic) VALUES (2,'SUB2','Bases de Datos','BD',7);
-INSERT INTO subject (id_subject,code_subject,description,name, id_topic) VALUES (3,'SUB3','Sistemas Operativos','SO',3);
-INSERT INTO subject (id_subject,code_subject,description,name, id_topic) VALUES (4,'SUB4','Ingenieria Software','IS',3);
-INSERT INTO subject (id_subject,code_subject,description,name, id_topic) VALUES (5,'SUB5','Bases de Datos','BD',3);
-INSERT INTO subject (id_subject,code_subject,description,name, id_topic) VALUES (6,'SUB6','Sistemas Operativos','SO',1); 
-INSERT INTO subject (id_subject,code_subject,description,name, id_topic) VALUES (7,'SUB7','Ingenieria Software','IS',1);
-INSERT INTO subject (id_subject,code_subject,description,name, id_topic) VALUES (8,'SUB8','Bases de Datos','BD',5);
-INSERT INTO subject (id_subject,code_subject,description,name, id_topic) VALUES (9,'SUB9','Sistemas Operativos','SO',5);
+INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (1,'SUB1',12,'Ingenieria Software','IS', 'url',7);
+INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (2,'SUB2',6,'Bases de Datos','BD','url',7);
+INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (3,'SUB3',6,'Sistemas Operativos','SO','url',3);
+INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (4,'SUB4',9,'Ingenieria Software','IS','url',3);
+INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (5,'SUB5',6,'Bases de Datos','BD','url',3);
+INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (6,'SUB6',6,'Sistemas Operativos','SO','url',1); 
+INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (7,'SUB7',12,'Ingenieria Software','IS','url',1);
+INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (8,'SUB8',6,'Bases de Datos','BD','url',5);
+INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (9,'SUB9',6,'Sistemas Operativos','SO','url',5);
 
 -- Object Identity --
 INSERT INTO acl_object_identity (ID, ENTRIES_INHERITING, OBJECT_ID_IDENTITY, OBJECT_ID_CLASS, PARENT_OBJECT, OWNER_SID) VALUES (38,00000001,1,9,NULL,1);
@@ -225,11 +225,11 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 
 	
 -- Competence Inserts 
-INSERT INTO competence (id_competence,code_competence,description,name, _type, id_degree) VALUES (1,'COMP1','adquirir conocimientos en UML','UML', 'básica', 1);
-INSERT INTO competence (id_competence,code_competence,description,name,_type,id_degree) VALUES (2,'COMP2','aprender diversos patrones de Ingenieria Software','Patrones','básica',1);
-INSERT INTO competence (id_competence,code_competence,description,name,_type,id_degree) VALUES (3,'COMP3','Saber diseñar una base de datos relacional','Base datos relacional','básica',2);
-INSERT INTO competence (id_competence,code_competence,description,name,_type,id_degree) VALUES (4,'COMP4','Adquirir conocimientos en consultas contra una base de datos','Consultas SQL','básica',2);
-INSERT INTO competence (id_competence,code_competence,description,name,_type,id_degree) VALUES (5,'COMP5','Aprendizaje de sincronizacion y comunicacion de procesos','Sincronizacion de Procesos','básica',3);
+INSERT INTO competence (id_competence,code_competence,description,name, _type, id_degree) VALUES (1,'COMP1','adquirir conocimientos en UML','UML', 0, 1);
+INSERT INTO competence (id_competence,code_competence,description,name,_type,id_degree) VALUES (2,'COMP2','aprender diversos patrones de Ingenieria Software','Patrones', 1,1);
+INSERT INTO competence (id_competence,code_competence,description,name,_type,id_degree) VALUES (3,'COMP3','Saber diseñar una base de datos relacional','Base datos relacional',0,2);
+INSERT INTO competence (id_competence,code_competence,description,name,_type,id_degree) VALUES (4,'COMP4','Adquirir conocimientos en consultas contra una base de datos','Consultas SQL',2,2);
+INSERT INTO competence (id_competence,code_competence,description,name,_type,id_degree) VALUES (5,'COMP5','Aprendizaje de sincronizacion y comunicacion de procesos','Sincronizacion de Procesos',3,3);
 
 -- Object Identity --
 INSERT INTO acl_object_identity (ID, ENTRIES_INHERITING, OBJECT_ID_IDENTITY, OBJECT_ID_CLASS, PARENT_OBJECT, OWNER_SID) VALUES (53,00000001,1,3,NULL,1);

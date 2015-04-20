@@ -1,5 +1,6 @@
 package es.ucm.fdi.dalgs.user.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -157,6 +158,11 @@ public class UserRepository {
 				.createQuery("select u from User u join u.roles ur where ur.role = ?1 order by u.id");
 		query.setParameter(1, user_role);
 		return query.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<User> getAllUsers() {
+		return em.createQuery("select u from User u join u.roles").getResultList();
 	}
 
 }
