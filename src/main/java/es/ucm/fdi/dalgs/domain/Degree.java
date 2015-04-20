@@ -15,6 +15,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonManagedReference;
+
+
 import es.ucm.fdi.dalgs.domain.info.DegreeInfo;
 
 @Entity
@@ -34,10 +37,14 @@ public class Degree implements Cloneable, Copyable<Degree>, Serializable {
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree", cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private Collection<Module> modules;
 
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "degree", cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private Collection<Competence> competences;
 
 	public Degree() {

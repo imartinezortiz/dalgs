@@ -18,13 +18,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property ="@id")
 @Table(name = "user")
 public class User implements UserDetails, CredentialsContainer, Serializable {
 
@@ -85,6 +90,7 @@ public class User implements UserDetails, CredentialsContainer, Serializable {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user"), uniqueConstraints = @UniqueConstraint(columnNames = {
 			"user", "role" }))
+	@JsonManagedReference
 	private Collection<UserRole> roles;
 
 	// Constructor

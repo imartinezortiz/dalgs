@@ -21,6 +21,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "academicterm", uniqueConstraints = { @UniqueConstraint(columnNames = {
@@ -49,11 +51,11 @@ public class AcademicTerm implements Cloneable, Copyable<AcademicTerm>,
 	@NotNull(message = "field null")
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_degree")
+	@JsonBackReference
 	private Degree degree;
 
-	// @NotNull
-	// @Valid
 	@OneToMany(mappedBy = "academicTerm", cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private Collection<Course> courses = new ArrayList<Course>();
 
 	public AcademicTerm() {

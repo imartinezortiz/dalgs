@@ -18,6 +18,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.codehaus.jackson.annotate.JsonManagedReference;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import es.ucm.fdi.dalgs.domain.info.ModuleInfo;
 
 @Entity
@@ -38,11 +42,15 @@ public class Module implements Cloneable, Copyable<Module>, Serializable {
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
+	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_degree")
+	@JsonBackReference
 	private Degree degree;
 
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "module", cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private Collection<Topic> topics;
 
 	public Module() {
