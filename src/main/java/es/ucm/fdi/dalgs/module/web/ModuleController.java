@@ -257,7 +257,7 @@ public class ModuleController {
 		}
 
 		if (serviceModule.uploadCSV(upload, id_degree))
-			return "home";
+			return "redirect:/degree/" + id_degree + ".htm";
 		else
 			return "upload";
 	}

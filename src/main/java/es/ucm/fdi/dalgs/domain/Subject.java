@@ -18,6 +18,10 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonManagedReference;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import es.ucm.fdi.dalgs.domain.info.SubjectInfo;
 
 @Entity
@@ -37,12 +41,16 @@ public class Subject implements Cloneable, Copyable<Subject>, Serializable {
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
+	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_topic")
+	@JsonBackReference
 	private Topic topic;
 
+	
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "subject_competence", joinColumns = { @JoinColumn(name = "id_subject") }, inverseJoinColumns = { @JoinColumn(name = "id_competence") })
+	@JsonManagedReference
 	private Collection<Competence> competences;
 
 	public Subject() {

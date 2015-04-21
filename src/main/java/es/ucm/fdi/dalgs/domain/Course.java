@@ -18,7 +18,9 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "course", uniqueConstraints = { @UniqueConstraint(columnNames = {
@@ -38,22 +40,26 @@ public class Course implements Cloneable, Copyable<Course>, Serializable {
 	@NotNull
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_subject")
+	@JsonBackReference
 	private Subject subject;
 
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private Collection<Activity> activities;
 
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private Collection<Group> groups;
 
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_academicterm")
+	@JsonBackReference
 	private AcademicTerm academicTerm;
 
-	// @NotNull
+	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_coordinator")
+	@JsonBackReference
 	private User coordinator;
 
 	public Course() {

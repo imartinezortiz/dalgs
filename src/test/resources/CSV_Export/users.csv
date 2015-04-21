@@ -1,0 +1,18 @@
+firstName,lastName,email,roles
+adminFirst,adminLast,admin@ucm.es,"[UserRole [role=ROLE_ADMIN], UserRole [role=ROLE_USER]]"
+adminFirst,adminLast,admin@ucm.es,"[UserRole [role=ROLE_ADMIN], UserRole [role=ROLE_USER]]"
+studentFirst,studentLast,student@ucm.es,"[UserRole [role=ROLE_STUDENT], UserRole [role=ROLE_USER]]"
+studentFirst,studentLast,student@ucm.es,"[UserRole [role=ROLE_STUDENT], UserRole [role=ROLE_USER]]"
+professorFirst,professorLast,professor@ucm.es,"[UserRole [role=ROLE_PROFESSOR], UserRole [role=ROLE_USER]]"
+professorFirst,professorLast,professor@ucm.es,"[UserRole [role=ROLE_PROFESSOR], UserRole [role=ROLE_USER]]"
+userFirst,userLast,user@ucm.es,[UserRole [role=ROLE_USER]]
+professor2First,professor2Last,professor2@ucm.es,"[UserRole [role=ROLE_PROFESSOR], UserRole [role=ROLE_USER]]"
+professor2First,professor2Last,professor2@ucm.es,"[UserRole [role=ROLE_PROFESSOR], UserRole [role=ROLE_USER]]"
+coordinatorFirst,coordinatorLast,coordinator@ucm.es,"[UserRole [role=ROLE_PROFESSOR], UserRole [role=ROLE_USER]]"
+coordinatorFirst,coordinatorLast,coordinator@ucm.es,"[UserRole [role=ROLE_PROFESSOR], UserRole [role=ROLE_USER]]"
+professor3First,professor3Last,professor3@ucm.es,"[UserRole [role=ROLE_PROFESSOR], UserRole [role=ROLE_USER]]"
+professor3First,professor3Last,professor3@ucm.es,"[UserRole [role=ROLE_PROFESSOR], UserRole [role=ROLE_USER]]"
+student2First,student2Last,student2@ucm.es,"[UserRole [role=ROLE_STUDENT], UserRole [role=ROLE_USER]]"
+student2First,student2Last,student2@ucm.es,"[UserRole [role=ROLE_STUDENT], UserRole [role=ROLE_USER]]"
+student3First,student3Last,student3@ucm.es,"[UserRole [role=ROLE_STUDENT], UserRole [role=ROLE_USER]]"
+student3First,student3Last,student3@ucm.es,"[UserRole [role=ROLE_STUDENT], UserRole [role=ROLE_USER]]"

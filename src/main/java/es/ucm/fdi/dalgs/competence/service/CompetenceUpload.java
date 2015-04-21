@@ -13,6 +13,7 @@ import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
+import es.ucm.fdi.dalgs.classes.TypeWithEnum;
 import es.ucm.fdi.dalgs.domain.Competence;
 import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.domain.info.CompetenceInfo;
@@ -61,7 +62,7 @@ public class CompetenceUpload {
 				new NotNull(), // Code
 				new NotNull(), // Name
 				new NotNull(), // Description
-				new ParseEnum(CompetenceInfo.TypeOfCompetence.class, true)
+				new ParseEnum(TypeWithEnum.TypeOfCompetence.class, true)
 				// Type
 
 		};

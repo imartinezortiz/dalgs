@@ -274,7 +274,8 @@ public class TopicController {
 		}
 
 		if (serviceTopic.uploadCSV(upload, id_module, id_degree))
-			return "home";
+			 return "redirect:/degree/"+ id_degree +"/module/"+id_module+".htm";
+
 		else
 			return "upload";
 	}
@@ -282,7 +283,7 @@ public class TopicController {
 	@RequestMapping(value = "/topic/download.htm")
 	public void downloadCSV(HttpServletResponse response) throws IOException {
 
-		 String csvFileName = "subject.csv";
+		 String csvFileName = "topics.csv";
 		 
 	        response.setContentType("text/csv");
 	 

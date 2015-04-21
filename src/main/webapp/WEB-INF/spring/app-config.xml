@@ -120,6 +120,7 @@
 
             </list>
         </property>
+        <property name="requireSession" value="false"></property>
     </bean>
      
    <!-- Configure bean to convert JSON to POJO and vice versa-->

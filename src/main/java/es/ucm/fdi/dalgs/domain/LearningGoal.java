@@ -14,6 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import es.ucm.fdi.dalgs.domain.info.LearningGoalInfo;
 
 @Entity
@@ -31,8 +34,10 @@ public class LearningGoal implements Cloneable, Copyable<LearningGoal>,
 	@Embedded
 	private LearningGoalInfo info;
 
+	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_competence")
+	@JsonBackReference
 	private Competence competence;
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")

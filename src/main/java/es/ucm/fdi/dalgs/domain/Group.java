@@ -22,8 +22,11 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "_group", uniqueConstraints = { @UniqueConstraint(columnNames = {
@@ -43,30 +46,29 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 	@Size(min = 5, max = 50)
 	@Basic(optional = false)
 	@Column(name = "name", length = 50, nullable = false)
-	// , unique=true)
 	private String name;
 
-	// @NotNull
+	@JsonBackReference
 	@ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_course")
 	private Course course;
-
-	// @NotNull
-	// @Valid
+	
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "group_professor", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_user") })
+	@JsonManagedReference
 	private Collection<User> professors;
 
-	// @NotNull
-	// @Valid
+	
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinTable(name = "group_student", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_user") })
+	@JsonManagedReference
 	private Collection<User> students;
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
 	@OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private Collection<Activity> activities;
 
 	public Group() {

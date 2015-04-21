@@ -31,11 +31,11 @@ import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.classes.CharsetString;
 import es.ucm.fdi.dalgs.classes.ResultClass;
+import es.ucm.fdi.dalgs.classes.TypeWithEnum.TypeOfCompetence;
 import es.ucm.fdi.dalgs.classes.UploadForm;
 import es.ucm.fdi.dalgs.competence.service.CompetenceService;
 import es.ucm.fdi.dalgs.degree.service.DegreeService;
 import es.ucm.fdi.dalgs.domain.Competence;
-import es.ucm.fdi.dalgs.domain.info.CompetenceInfo.TypeOfCompetence;
 
 @Controller
 public class CompetenceController {
@@ -292,7 +292,7 @@ public class CompetenceController {
 		}
 
 		if (serviceCompetence.uploadCSV(upload, id_degree))
-			return "home";
+			return "redirect:/degree/"+ id_degree+".htm" ;
 		else
 			return "upload";
 	}

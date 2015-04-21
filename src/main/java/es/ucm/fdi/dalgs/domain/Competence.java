@@ -19,6 +19,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import es.ucm.fdi.dalgs.domain.info.CompetenceInfo;
 
 @Entity
@@ -37,14 +41,18 @@ public class Competence implements Cloneable, Copyable<Competence>,
 	@Embedded
 	private CompetenceInfo info;
 
+	
 	@ManyToMany(mappedBy = "competences", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private Collection<Subject> subjects;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "competence", cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private Collection<LearningGoal> learningGoals;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_degree")
+	@JsonBackReference
 	private Degree degree;
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")

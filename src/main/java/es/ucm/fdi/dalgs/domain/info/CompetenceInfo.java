@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import es.ucm.fdi.dalgs.classes.TypeWithEnum.TypeOfCompetence;
 import es.ucm.fdi.dalgs.domain.Copyable;
 
 @Embeddable
@@ -19,7 +20,6 @@ public class CompetenceInfo implements Serializable, Cloneable,
 
 	private static final long serialVersionUID = 1L;
 	
-	public enum TypeOfCompetence { General, Transversal, Basica, Especifica };
 
 	@NotEmpty
 	@NotNull

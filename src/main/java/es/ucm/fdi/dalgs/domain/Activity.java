@@ -3,8 +3,8 @@ package es.ucm.fdi.dalgs.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import javax.persistence.UniqueConstraint;
 
+import javax.persistence.UniqueConstraint;
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -19,6 +19,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import es.ucm.fdi.dalgs.domain.info.ActivityInfo;
 
 @Entity
@@ -33,26 +35,18 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 	@Column(name = "id_activity")
 	private Long id;
 
-	// @Column(name = "code_activity", nullable = false, unique = true)
-	// private String code;
-	// public String getCode() {
-	// return code;
-	// }
-	//
-	// public void setCode(String code) {
-	// this.code = code;
-	// }
-
 	@Embedded
 	private ActivityInfo info;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)
 	@JoinColumn(name = "id_course")
+	@JsonBackReference
 	private Course course;
 
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
+	
 	@ElementCollection(fetch = FetchType.LAZY)
 	@CollectionTable(name = "activity_learninggoalstatus", joinColumns = @JoinColumn(name = "id_activity"))
 	@Column(nullable = false)
@@ -60,6 +54,7 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)
 	@JoinColumn(name = "id_group")
+	@JsonBackReference
 	private Group group;
 
 	public Activity() {
