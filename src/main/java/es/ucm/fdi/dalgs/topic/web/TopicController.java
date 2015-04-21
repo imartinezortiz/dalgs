@@ -1,8 +1,6 @@
 package es.ucm.fdi.dalgs.topic.web;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -23,9 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.supercsv.io.CsvBeanWriter;
-import org.supercsv.io.ICsvBeanWriter;
-import org.supercsv.prefs.CsvPreference;
+
 
 import es.ucm.fdi.dalgs.classes.CharsetString;
 import es.ucm.fdi.dalgs.classes.ResultClass;
@@ -282,33 +278,7 @@ public class TopicController {
 	
 	@RequestMapping(value = "/topic/download.htm")
 	public void downloadCSV(HttpServletResponse response) throws IOException {
-
-		 String csvFileName = "topics.csv";
-		 
-	        response.setContentType("text/csv");
-	 
-	        // creates mock data
-	        String headerKey = "Content-Disposition";
-	        String headerValue = String.format("attachment; filename=\"%s\"",
-	                csvFileName);
-	        response.setHeader(headerKey, headerValue);
-	 
-
-	        Collection<Topic> topics = new ArrayList<Topic>();
-	        topics =  serviceTopic.getAll();
-
-	        // uses the Super CSV API to generate CSV data from the model data
-	        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(),
-	                CsvPreference.STANDARD_PREFERENCE);
-	         
-	        String[] header = {"code", "name", "description"};
-	 
-	        csvWriter.writeHeader(header);
-	 
-	        for (Topic top : topics) {
-	            csvWriter.write(top.getInfo(), header);
-	        }
-	        csvWriter.close();  
+		serviceTopic.downloadCSV(response);
 	}
 
 }

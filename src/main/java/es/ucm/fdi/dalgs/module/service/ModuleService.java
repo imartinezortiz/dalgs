@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.fileupload.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -216,6 +218,7 @@ public class ModuleService {
 		return result;
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public boolean uploadCSV(UploadForm upload, Long id_degree) {
 		boolean success = false;
@@ -226,7 +229,7 @@ public class ModuleService {
 		List<Module> list = null;
 		try {
 			FileItem fileItem = upload.getFileData().getFileItem();
-			ModuleUpload moduleUpload = new ModuleUpload();
+			ModuleCSV moduleUpload = new ModuleCSV();
 
 			Degree d = serviceDegree.getDegree(id_degree).getSingleElement();
 			list = moduleUpload.readCSVModuleToBean(fileItem.getInputStream(),
@@ -253,4 +256,18 @@ public class ModuleService {
 		return success;
 	}
 
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = false)
+	public void downloadCSV(HttpServletResponse response) throws IOException {
+
+        Collection<Module> modules = new ArrayList<Module>();
+        modules =  daoModule.getAll();
+        
+        if(!modules.isEmpty()){
+        	ModuleCSV moduleCSV = new ModuleCSV();
+        	moduleCSV.downloadCSV(response, modules);
+        }
+      
+	}
 }

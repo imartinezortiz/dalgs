@@ -19,6 +19,23 @@
 		because these are static images, CSS, and JavaScript files that don't need 
 		to be secured. -->
 		<http pattern="/resources" security="none" />
+		
+		
+		 <!-- REST services security -->
+    <http  use-expressions="true" pattern="/rest/**">
+            <http-basic />
+            <intercept-url pattern="/rest/**"
+                access="hasRole('ROLE_ADMIN') or hasRole('ROLE_PROFESSOR')" />
+    </http>
+ 
+<!--       <authentication-manager id="restAuthenticationManager">
+      <authentication-provider>
+            <user-service>
+                <user name="admin" password="admin" authorities="ROLE_ADMIN" />
+            </user-service>
+        </authentication-provider> 
+    </authentication-manager> -->
+		
 
 	<!-- the second http tag This contains the core security rules of our application. -->
 
@@ -28,8 +45,8 @@
 			the use of SPEL hasRole and permitAll (see more) -->
 		<intercept-url pattern="/login.htm" access="permitAll" />
 		<intercept-url pattern="/logout.htm" access="permitAll" />		
-		<intercept-url pattern="/rest/*" access="permitAll" />
-		<intercept-url pattern="/*" access="hasRole('ROLE_USER')" />
+<!-- 		<intercept-url pattern="/rest/*" access="permitAll" />
+ -->		<intercept-url pattern="/*" access="hasRole('ROLE_USER')" />
 
 		<!-- form login This declares our login settings: login-page: the URL path 
 			of our login page authentication-failure-url: the URL where a user will be 
@@ -60,16 +77,9 @@
 		<authentication-provider user-service-ref="customUserDetailsService">
 			<password-encoder ref="passwordEncoder"/> 
 		</authentication-provider>
-		<!-- <authentication-provider>
-			<user-service>
-				<user name="user" password="user" authorities="ROLE_USER" />
-				<user name="admin" password="admin" authorities="ROLE_ADMIN" />
-			</user-service>
-		</authentication-provider> -->
 	</authentication-manager>
 	
 	
-
 </beans:beans>
 	
 	

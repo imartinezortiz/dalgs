@@ -5,17 +5,22 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanReader;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.domain.info.DegreeInfo;
 
-public class DegreeUpload {
+public class DegreeCSV {
 
 	@SuppressWarnings("unused")
 	public List<Degree> readCSVDegreeToBean(InputStream in, String charsetName,
@@ -57,6 +62,33 @@ public class DegreeUpload {
 				new NotNull(), // Description
 		};
 		return processors;
+	}
+	
+	public void downloadCSV(HttpServletResponse response,Collection<Degree> degrees ) throws IOException {
+
+		 String csvFileName = "degrees.csv";
+		 
+	        response.setContentType("text/csv");
+	 
+	        // creates mock data
+	        String headerKey = "Content-Disposition";
+	        String headerValue = String.format("attachment; filename=\"%s\"",
+	                csvFileName);
+	        response.setHeader(headerKey, headerValue);
+	 
+
+	        // uses the Super CSV API to generate CSV data from the model data
+	        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(),
+	                CsvPreference.STANDARD_PREFERENCE);
+	         
+	        String[] header = {"code", "name", "description"};
+	 
+	        csvWriter.writeHeader(header);
+	 
+	        for (Degree deg : degrees) {
+	            csvWriter.write(deg.getInfo(), header);
+	        }
+	        csvWriter.close();  
 	}
 
 }

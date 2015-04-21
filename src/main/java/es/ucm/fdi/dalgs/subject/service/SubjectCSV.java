@@ -5,20 +5,25 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseInt;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanReader;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.domain.Subject;
 import es.ucm.fdi.dalgs.domain.Topic;
 import es.ucm.fdi.dalgs.domain.info.SubjectInfo;
 
-public class SubjectUpload {
+public class SubjectCSV {
 
 	@SuppressWarnings("unused")
 	public List<Subject> readCSVSubjectToBean(InputStream in,
@@ -67,5 +72,32 @@ public class SubjectUpload {
 		};
 		return processors;
 	}
+	
+	public void downloadCSV(HttpServletResponse response,Collection<Subject> subjects ) throws IOException {
+
+		 String csvFileName = "subjects.csv";
+		 
+	        response.setContentType("text/csv");
+	 
+	        // creates mock data
+	        String headerKey = "Content-Disposition";
+	        String headerValue = String.format("attachment; filename=\"%s\"",
+	                csvFileName);
+	        response.setHeader(headerKey, headerValue);
+	 
+	        // uses the Super CSV API to generate CSV data from the model data
+	        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(),
+	                CsvPreference.STANDARD_PREFERENCE);
+	         
+	        String[] header = {"code", "name", "description", "credits", "url_doc"};
+	 
+	        csvWriter.writeHeader(header);
+	 
+	        for (Subject sub : subjects) {
+	            csvWriter.write(sub.getInfo(), header);
+	        }
+	        csvWriter.close();  
+	}
+	
 
 }

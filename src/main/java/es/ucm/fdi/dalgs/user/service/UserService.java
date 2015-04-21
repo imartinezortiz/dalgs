@@ -1,8 +1,11 @@
 package es.ucm.fdi.dalgs.user.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +88,7 @@ public class UserService {
 		List<User> list = null;
 		try {
 			FileItem fileItem = upload.getFileData().getFileItem();
-			UserUpload userUpload = new UserUpload();
+			UserCSV userUpload = new UserCSV();
 			list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
 					upload.getCharset(), prefers, typeOfUser);
 
@@ -138,5 +141,22 @@ public class UserService {
 		// TODO Auto-generated method stub
 		return daoUser.getAllUsers();
 	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = true)
+	public void downloadCSV(HttpServletResponse response) throws IOException {
+
+		
+	        Collection<User> users = new ArrayList<User>();
+	        users =  daoUser.getAllUsers();
+	        
+	        if(!users.isEmpty()){
+	        	UserCSV userCSV = new UserCSV();
+	        	userCSV.downloadCSV(response, users);
+	        }
+
+	        
+	}
+	
 
 }
