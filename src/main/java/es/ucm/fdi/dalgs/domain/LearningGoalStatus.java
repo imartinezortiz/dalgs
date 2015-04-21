@@ -9,7 +9,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Embeddable
 public class LearningGoalStatus implements Cloneable,

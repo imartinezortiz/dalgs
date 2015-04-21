@@ -272,7 +272,7 @@ public class DegreeController {
 		}
 
 		if (serviceDegree.uploadCSV(upload))
-			return "home";
+			return "redirect:/degree/page/0.htm";
 		else
 			return "upload";
 	}

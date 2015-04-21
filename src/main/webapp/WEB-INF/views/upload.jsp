@@ -25,6 +25,7 @@
 					<div class="form-group view">
 						<label>Encoding</label><br>
 						<form:select path="charset">
+							<form:option value="UTF-8">ISO-8859-1</form:option>
 							<form:option value="UTF-8">UTF-8</form:option>
 							<form:option value="">--------------------</form:option>
 							
@@ -45,7 +46,7 @@
 							</tr>
 							<tr>
 								<td><p><fmt:message key="upload.delimiter" /></p></td>
-								<td><form:input path="delimiterChar" type="text" value=',' /></td>
+								<td><form:input path="delimiterChar" type="text" value=';' /></td>
 							</tr>
 							<tr>
 								<td><p><fmt:message key="upload.eol" /></p></td>

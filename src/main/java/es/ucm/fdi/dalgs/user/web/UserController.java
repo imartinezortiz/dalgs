@@ -200,7 +200,7 @@ public class UserController {
 		}
 
 		if (serviceUser.uploadCVS(upload, typeOfUser))
-			return "home";
+			 return "redirect:/user/page/0.htm";
 		else
 			return "upload";
 	}
