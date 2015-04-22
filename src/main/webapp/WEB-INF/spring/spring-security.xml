@@ -20,13 +20,29 @@
 		to be secured. -->
 		<http pattern="/resources" security="none" />
 		
-		
 		 <!-- REST services security -->
-    <http  use-expressions="true" pattern="/rest/**">
+    <!-- <http  use-expressions="true" pattern="/rest/**" create-session="stateless">
             <http-basic />
-            <intercept-url pattern="/rest/**"
-                access="hasRole('ROLE_ADMIN') or hasRole('ROLE_PROFESSOR')" />
+            <intercept-url pattern="/rest/**" access="hasRole('ROLE_ADMIN') or hasRole('ROLE_PROFESSOR')" />      
+    </http> -->
+    
+    
+    <!-- Rest authentication entry point configuration -->
+    <http use-expressions="true" pattern="/rest/**" entry-point-ref="restAuthenticationEntryPoint">
+        <http-basic/>
+        <intercept-url pattern="/rest/**" />
+        <form-login authentication-success-handler-ref="mySuccessHandler"
+            authentication-failure-handler-ref="myFailureHandler" />
+ 
+        <logout />
     </http>
+ 
+    <!-- Connect the custom authentication success handler -->
+    <beans:bean id="mySuccessHandler" class="es.ucm.fdi.dalgs.rest.security.RestAuthenticationSuccessHandler" />
+    <!-- Using default failure handler -->
+    <beans:bean id="myFailureHandler"
+        class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler" />
+ 
  
 <!--       <authentication-manager id="restAuthenticationManager">
       <authentication-provider>
@@ -45,8 +61,7 @@
 			the use of SPEL hasRole and permitAll (see more) -->
 		<intercept-url pattern="/login.htm" access="permitAll" />
 		<intercept-url pattern="/logout.htm" access="permitAll" />		
-<!-- 		<intercept-url pattern="/rest/*" access="permitAll" />
- -->		<intercept-url pattern="/*" access="hasRole('ROLE_USER')" />
+ 		<intercept-url pattern="/*" access="hasRole('ROLE_USER')" />
 
 		<!-- form login This declares our login settings: login-page: the URL path 
 			of our login page authentication-failure-url: the URL where a user will be 
@@ -73,21 +88,20 @@
 		user information from a UserDetailsService (see more) - user-service-ref: 
 		this allows us to declare a custom UserDetailsService - password-encoder: 
 		this allows us to declare various password encoders such as md5 and sha -->
+
 	<authentication-manager>
 		<authentication-provider user-service-ref="customUserDetailsService">
 			<password-encoder ref="passwordEncoder"/> 
 		</authentication-provider>
 	</authentication-manager>
 	
+	<beans:bean id="passwordEncoder"
+		class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
+		<beans:constructor-arg value="256" />
+	</beans:bean>
+
 	
-</beans:beans>
-	
-	
-	
-	
-	
-	
-	
+</beans:beans>	
 	
 	
 	

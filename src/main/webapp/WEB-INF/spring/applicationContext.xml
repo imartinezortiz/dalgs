@@ -90,11 +90,14 @@
 	<context:component-scan base-package="es.ucm.fdi.dalgs.topic.service" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.user.service" />	
 	<context:component-scan base-package="es.ucm.fdi.dalgs.rest.service" />
+	
+		<context:component-scan base-package="es.ucm.fdi.dalgs.rest.security" />
+	
 
-	<bean id="passwordEncoder"
+	<!-- <bean id="passwordEncoder"
 		class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
 		<constructor-arg value="256" />
-	</bean>
+	</bean>-->
 	
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">

@@ -1,12 +1,10 @@
 package es.ucm.fdi.dalgs.rest.web;
 
-import java.util.Date;
 import java.util.Locale;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,26 +31,9 @@ public class WebhookController {
 	 * response body. Once the response object is returned by the handler
 	 * method, MappingJackson2HttpMessageConverter kicks in and convert it to
 	 * JSON response.
-	 */
+*/
 
-	@RequestMapping(value = WebhookUriConstants.GET_ACTIVITY_DUMMY, headers = { "Accept=text/xml, application/json" }, produces = "application/json", method = RequestMethod.GET)
-	@ResponseBody
-	public Activity_Request getDummy() {
 
-		Activity_Request activity = new Activity_Request();
-
-		activity.setId_course(1L);
-		activity.setName("Activity_name");
-		activity.setCreatedDate(new Date());
-		return activity;
-	}
-
-	@RequestMapping(value = WebhookUriConstants.POST_ACTIVITY_DUMMY, headers = "Accept=application/json", produces = "application/json", method = RequestMethod.POST)
-	@ResponseBody
-	public Activity_Request setDummy(@RequestBody Activity_Request activity) {
-		System.out.println(activity.getName());
-		return activity;
-	}
 
 	@RequestMapping(value = WebhookUriConstants.GET_ACTIVITY, headers = { "Accept=text/xml, application/json" }, produces = "application/json", method = RequestMethod.GET)
 	public @ResponseBody Activity_Response get(
