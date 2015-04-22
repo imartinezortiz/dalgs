@@ -2,7 +2,6 @@ package es.ucm.fdi.dalgs.activity.web;
 
 import java.io.IOException;
 import java.security.acl.NotOwnerException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
@@ -29,9 +28,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.supercsv.io.CsvBeanWriter;
-import org.supercsv.io.ICsvBeanWriter;
-import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.activity.service.ActivityService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
@@ -686,33 +682,7 @@ public class ActivityController {
 
 	@RequestMapping(value = "/activity/download.htm")
 	public void downloadCSV(HttpServletResponse response) throws IOException {
-
-		 String csvFileName = "activities.csv";
-		 
-	        response.setContentType("text/csv");
-	 
-	        // creates mock data
-	        String headerKey = "Content-Disposition";
-	        String headerValue = String.format("attachment; filename=\"%s\"",
-	                csvFileName);
-	        response.setHeader(headerKey, headerValue);
-	 
-
-	        Collection<Activity> activities = new ArrayList<Activity>();
-	        activities =  serviceActivity.getAll();
-
-	        // uses the Super CSV API to generate CSV data from the model data
-	        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(),
-	                CsvPreference.STANDARD_PREFERENCE);
-	         
-	        String[] header = {"code", "name", "description"};
-	 
-	        csvWriter.writeHeader(header);
-	 
-	        for (Activity act : activities) {
-	            csvWriter.write(act.getInfo(), header);
-	        }
-	        csvWriter.close();  
+		serviceActivity.dowloadCSV(response);
 	}
 	
 	

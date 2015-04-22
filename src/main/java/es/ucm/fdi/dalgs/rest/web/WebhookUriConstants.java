@@ -4,10 +4,10 @@ public class WebhookUriConstants {
 
 	 
 	    public static final String POST_ACTIVITY = "/rest/activity";
-	    public static final String POST_ACTIVITY_DUMMY = "/rest/activity/dummy";
 
 	    public static final String GET_ACTIVITY = "/rest/activity/{id}";
-	    public static final String GET_ACTIVITY_DUMMY = "/rest/activity";
+	    
+	    public static final String AUTH_DENIED = "/rest/denied";
 	
 }
 

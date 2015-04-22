@@ -2,7 +2,6 @@ package es.ucm.fdi.dalgs.user.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,9 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.supercsv.io.CsvBeanWriter;
-import org.supercsv.io.ICsvBeanWriter;
-import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.classes.CharsetString;
 import es.ucm.fdi.dalgs.classes.ResultClass;
@@ -256,33 +252,7 @@ public class UserController {
 	
 	@RequestMapping(value = "/user/download.htm")
 	public void downloadCSV(HttpServletResponse response) throws IOException {
-
-		 String csvFileName = "users.csv";
-		 
-	        response.setContentType("text/csv");
-	 
-	        // creates mock data
-	        String headerKey = "Content-Disposition";
-	        String headerValue = String.format("attachment; filename=\"%s\"",
-	                csvFileName);
-	        response.setHeader(headerKey, headerValue);
-	 
-
-	        Collection<User> users = new ArrayList<User>();
-	        users =  serviceUser.getAll();
-
-	        // uses the Super CSV API to generate CSV data from the model data
-	        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(),
-	                CsvPreference.STANDARD_PREFERENCE);
-	         
-	        String[] header = {"firstName", "lastName", "email", "roles"};
-	 
-	        csvWriter.writeHeader(header);
-	 
-	        for (User usr : users) {
-	            csvWriter.write(usr, header);
-	        }
-	        csvWriter.close();  
+		serviceUser.downloadCSV(response);
 	}
 	
 

@@ -1,8 +1,11 @@
 package es.ucm.fdi.dalgs.activity.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -424,5 +427,19 @@ public class ActivityService {
 		result.setHasErrors(false);
 		return result;
 	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = false)
+	public void dowloadCSV(HttpServletResponse response) throws IOException {
+		Collection<Activity> activities = new ArrayList<Activity>();
+		activities = daoActivity.getAll();
+		
+		if(!activities.isEmpty()){
+			ActivityCSV activityCSV = new ActivityCSV();
+			activityCSV.dowloadCSV(response, activities);
+		}
+	}
 
 }
+
+

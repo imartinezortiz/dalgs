@@ -253,4 +253,11 @@ public class User implements UserDetails, CredentialsContainer, Serializable {
 		this.credentialsNonExpired = credentialsNonExpired;
 	}
 
+	public User(String username) {
+		super();
+		this.username = username;
+	}
+	
+	
+
 }

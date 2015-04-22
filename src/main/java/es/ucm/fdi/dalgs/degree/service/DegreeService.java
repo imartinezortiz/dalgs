@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.fileupload.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -241,6 +243,7 @@ public class DegreeService {
 		return result;
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public boolean uploadCSV(UploadForm upload) {
 		boolean success = false;
@@ -251,7 +254,7 @@ public class DegreeService {
 		List<Degree> list = null;
 		try {
 			FileItem fileItem = upload.getFileData().getFileItem();
-			DegreeUpload degreeUpload = new DegreeUpload();
+			DegreeCSV degreeUpload = new DegreeCSV();
 
 			list = degreeUpload.readCSVDegreeToBean(fileItem.getInputStream(),
 					upload.getCharset(), prefers);
@@ -274,6 +277,19 @@ public class DegreeService {
 		}
 		return success;
 
+	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = false)
+	public void downloadCSV(HttpServletResponse response) throws IOException {
+
+        Collection<Degree> degrees = new ArrayList<Degree>();
+        degrees =  daoDegree.getAll();
+        
+        if(!degrees.isEmpty()){
+	        DegreeCSV degreeCSV = new DegreeCSV();
+	        degreeCSV.downloadCSV(response, degrees);
+        }
 	}
 
 }

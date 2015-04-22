@@ -6,12 +6,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.fileupload.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.acl.service.AclObjectService;
@@ -237,6 +240,7 @@ public class TopicService {
 		return result;
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public boolean uploadCSV(UploadForm upload, Long id_module, Long id_degree) {
 		boolean success = false;
@@ -247,7 +251,7 @@ public class TopicService {
 		List<Topic> list = null;
 		try {
 			FileItem fileItem = upload.getFileData().getFileItem();
-			TopicUpload topicUpload = new TopicUpload();
+			TopicCSV topicUpload = new TopicCSV();
 
 			Module m = serviceModule.getModule(id_module, id_degree)
 					.getSingleElement();
@@ -273,4 +277,18 @@ public class TopicService {
 		}
 		return success;
 	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = false)
+	public void downloadCSV(HttpServletResponse response) throws IOException {
+	
+	        Collection<Topic> topics = new ArrayList<Topic>();
+	        topics =  daoTopic.getAll();
+
+	       if(!topics.isEmpty()){
+	    	 TopicCSV topicCSV = new TopicCSV();
+	    	 topicCSV.downloadCSV(response, topics);
+	       }
+	}
+
 }
