@@ -10,6 +10,9 @@
 	</configs>
 	<autoconfigs>
 		<config>src/main/webapp/WEB-INF/spring/applicationContext.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/acl-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/spring-security.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/app-config.xml</config>
 	</autoconfigs>
 	<configSets>
 	</configSets>

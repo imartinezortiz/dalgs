@@ -28,20 +28,20 @@
     
     
     <!-- Rest authentication entry point configuration -->
-    <http use-expressions="true" pattern="/rest/**" entry-point-ref="restAuthenticationEntryPoint">
-        <http-basic/>
-        <intercept-url pattern="/rest/**" />
-        <form-login authentication-success-handler-ref="mySuccessHandler"
-            authentication-failure-handler-ref="myFailureHandler" />
+<!--     <http use-expressions="true" pattern="/rest/**" entry-point-ref="restAuthenticationEntryPoint"> -->
+<!--         <http-basic/> -->
+<!--         <intercept-url pattern="/rest/**" /> -->
+<!--         <form-login authentication-success-handler-ref="mySuccessHandler" -->
+<!--             authentication-failure-handler-ref="myFailureHandler" /> -->
  
-        <logout />
-    </http>
+<!--         <logout /> -->
+<!--     </http> -->
  
-    <!-- Connect the custom authentication success handler -->
-    <beans:bean id="mySuccessHandler" class="es.ucm.fdi.dalgs.rest.security.RestAuthenticationSuccessHandler" />
-    <!-- Using default failure handler -->
-    <beans:bean id="myFailureHandler"
-        class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler" />
+<!--     Connect the custom authentication success handler -->
+<!--     <beans:bean id="mySuccessHandler" class="es.ucm.fdi.dalgs.rest.security.RestAuthenticationSuccessHandler" /> -->
+<!--     Using default failure handler -->
+<!--     <beans:bean id="myFailureHandler" -->
+<!--         class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler" /> -->
  
  
 <!--       <authentication-manager id="restAuthenticationManager">
@@ -100,8 +100,8 @@
 		<beans:constructor-arg value="256" />
 	</beans:bean>
 
-	
-</beans:beans>	
+<!-- 	<beans:import resource="spring-security-oauth.xml"/>
+ --></beans:beans>	
 	
 	
 	
