@@ -21,9 +21,3 @@ Optional: Change the pagination
 9.- Securing Web Service (exception in Spring Security ???) call header (BASIC)
 
 
-//SPRING SECURITY FOR API REST
-
-//Basic 
-
-//JSESSIONID
-curl -i -X POST -d j_username=admin -d j_password=admin -c ./cookies.txt http://localhost:8081/dalgs/j_spring_security_check
