@@ -74,15 +74,10 @@
 				</form:form>
 			</div>
 
-<<<<<<< HEAD
 
-			<div class="panel-body">
-				<h4 style="text-align:center"><fmt:message key="upload.commonDel" /></h4>
-=======
 			<div class="panel-body">					
 			<h4 style="text-align:center;"><fmt:message key="upload.commonDel" /></h4>
 			
->>>>>>> oauth2
 				<table class="table table-striped">
 					<tr>
 						<td align="left"><b><fmt:message key="upload.constant" /></b></td>
