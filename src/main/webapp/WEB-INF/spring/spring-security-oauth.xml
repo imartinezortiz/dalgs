@@ -72,7 +72,7 @@
  </authentication-manager>
 
  
- <authentication-manager alias="authenticationManager"
+<!--  <authentication-manager alias="authenticationManager"
   xmlns="http://www.springframework.org/schema/security">
 		<authentication-provider user-service-ref="customUserDetailsService">
 			<password-encoder ref="passwordEncoder"/> 
@@ -83,118 +83,7 @@
 		class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
 		<constructor-arg value="256" />
 	</bean>
-<<<<<<< HEAD
-
-	<!-- This the service class which is used to access the function of JdbcTokenStore 
-		class. This is like MVC structure JdbcTokenStore is Dao layer and DefaultTokenServices 
-		is service layer -->
-	<bean id="tokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
-		<property name="tokenStore" ref="tokenStore" />
-		<property name="supportRefreshToken" value="true" />
-		<property name="clientDetailsService" ref="clientDetails" />
-		<property name="accessTokenValiditySeconds" value="4500" />
-	</bean>
-
-
-
-
-
-	<!-- A user approval handler that remembers approval decisions by consulting 
-		existing tokens -->
-	<!-- <bean id="oAuth2RequestFactory"
-		class="org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory">
-		<constructor-arg ref="clientDetails" />
-	</bean> -->
-	<bean id="oAuth2RequestFactory"
-		class="org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory">
-		<constructor-arg ref="clientDetails" />
-	</bean>
-	
-	
-	<bean id="userApprovalHandler"
-		class="org.springframework.security.oauth2.provider.approval.TokenStoreUserApprovalHandler">
- 		<property name="requestFactory" ref="oAuth2RequestFactory" />
-		<property name="tokenStore" ref="tokenStore" />
-	</bean>
-
-
-
-
-<!-- Token management -->
-
-
-
-	<!-- Authorization Server Configuration of the server is used to provide 
-		implementations of the client details service and token services and to enable 
-		or disable certain aspects of the mechanism globally. -->
-	<oauth:authorization-server
-		client-details-service-ref="clientDetails" token-services-ref="tokenServices"
-		user-approval-handler-ref="userApprovalHandler">
-		<oauth:authorization-code />
-		<oauth:implicit />
-		<oauth:refresh-token />
-		<oauth:client-credentials />
-		<oauth:password />
-	</oauth:authorization-server>
-
-	<!-- A Resource Server serves resources that are protected by the OAuth2 
-		token. Spring OAuth provides a Spring Security authentication filter that 
-		implements this protection. -->
-	<oauth:resource-server id="resourceServerFilter"
-		token-services-ref="tokenServices" resource-id="rsourceId" />
-		
-<!-- 	
-<bean id="clientDetails"
-		class="org.springframework.security.oauth2.provider.client.JdbcClientDetailsService">
-		<constructor-arg index="0">
-			<ref bean="dataSource" />
-		</constructor-arg>
-	</bean>  -->
-		
-		<!-- Client Definition -->
-	<oauth:client-details-service id="clientDetails">
-
-    <oauth:client client-id="my-trusted-client"
-                  authorized-grant-types="password,authorization_code,refresh_token,implicit,redirect"
-                  authorities="ROLE_CLIENT, ROLE_TRUSTED_CLIENT"
-                  redirect-uri="/web" 
-                  secret="secret" 
-                  scope="read,write,trust"
-                  access-token-validity="30"
-                  refresh-token-validity="600"/>
-
-</oauth:client-details-service>
-	
-
-
-
-
-	<sec:global-method-security pre-post-annotations="enabled"
-		proxy-target-class="true">
-    <sec:expression-handler ref="oauthExpressionHandler"/>
-</sec:global-method-security>
-	<oauth:expression-handler id="oauthExpressionHandler"/>
-<oauth:web-expression-handler id="oauthWebExpressionHandler"/>
-
-
-	<!-- Grants access if only grant (or abstain) votes were received. We can 
-		protect REST resource methods with JSR-250 annotations such as @RolesAllowed -->
-<!-- 	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
-		<property name="decisionVoters">
-			<list>
-				<bean class="org.springframework.security.access.annotation.Jsr250Voter" />
-			</list>
-		</property>
-	</bean> -->
-
-
-
-	<!-- <sec:authentication-manager> <sec:authentication-provider> <sec:user-service> 
-		<user name="tmain" password="123456" authorities="ROLE_USER" /> </sec:user-service> 
-		</sec:authentication-provider> </sec:authentication-manager> -->
-
-=======
->>>>>>> oauth2
+ -->
 	
 
  <bean id="clientDetailsUserService"
@@ -256,13 +145,4 @@
  <oauth:web-expression-handler id="oauthWebExpressionHandler" />
 </beans>
 
-<<<<<<< HEAD
-	<!-- This tag is used for creating InMemory Client-Details-Service -->
-	<!-- <oauth:client-details-service id="clientDetailService"> <oauth:client 
-		client-id="my-client-with-registered-redirect" authorized-grant-types="authorization_code,,client_credentials" 
-		authorities="ROLE_CLIENT" redirect-uri="http://anywhere?key=value" scope="read,trust" 
-		/> </oauth:client-details-service> $2a$11$/s4ymyxwLLUxafPRR15v3.tWv.zmEkZj8IV09qPOD9oQ3SmilmtPy -->
-		</beans>
 
-=======
->>>>>>> oauth2

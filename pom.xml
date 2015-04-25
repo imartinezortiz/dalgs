@@ -320,12 +320,8 @@
 		<dependency>
 			<groupId>org.springframework.security.oauth</groupId>
 			<artifactId>spring-security-oauth2</artifactId>
-<<<<<<< HEAD
-			<version>2.0.7.RELEASE</version>
 
-=======
 			<version>1.0.0.RELEASE</version>
->>>>>>> oauth2
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
