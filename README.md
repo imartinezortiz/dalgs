@@ -22,3 +22,6 @@ curl -X GET -vu client_id=my-trusted-client http://localhost:8081/dalgs/oauth/to
 "error": "invalid_client",
 "error_description": "Bad client credentials"
 }
+
+
+ curl -X POST -vu clientapp:secret  http://localhost:8081/dalgs/oauth/token -H "Accept: application/json"  -d "password=admin&username=admin&grant_type=password&scope=read%20write&client_secret=secret&client_id=clientapp" 
