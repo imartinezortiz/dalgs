@@ -2,9 +2,11 @@ package es.ucm.fdi.dalgs.rest.web;
 
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,7 @@ import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Group;
+
 import es.ucm.fdi.dalgs.rest.classes.Activity_Request;
 import es.ucm.fdi.dalgs.rest.classes.Activity_Response;
 import es.ucm.fdi.dalgs.rest.service.WebhookService;
@@ -72,4 +75,14 @@ public class WebhookController {
 				result.getErrorsList());
 	}
 
+	  
+    /** 
+     * Error if user try to access to any other url. 
+     */  
+    @RequestMapping(value = "/api/**", method = RequestMethod.GET)  
+    public void notExistsUrlHandler(HttpServletRequest request) {  
+        throw new IllegalArgumentException("Requested url not exists: " + request.getRequestURI());  
+    }  
+
+     
 }

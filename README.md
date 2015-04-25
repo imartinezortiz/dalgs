@@ -21,3 +21,15 @@ Optional: Change the pagination
 9.- Securing Web Service (exception in Spring Security ???) call header (BASIC)
 
 
+<<<<<<< HEAD
+=======
+curl -X GET -vu client_id=my-trusted-client http://localhost:8081/dalgs/oauth/token -H "Accept: application/json" -d "password=admin&username=admin&grant_type=password&scope=read%20write%20trust&client_id=my-trusted-client" 
+
+{
+"error": "invalid_client",
+"error_description": "Bad client credentials"
+}
+
+
+ curl -X POST -vu clientapp:secret  http://localhost:8081/dalgs/oauth/token -H "Accept: application/json"  -d "password=admin&username=admin&grant_type=password&scope=read%20write&client_secret=secret&client_id=clientapp" 
+>>>>>>> oauth2
