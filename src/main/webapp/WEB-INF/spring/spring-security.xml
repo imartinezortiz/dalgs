@@ -69,7 +69,15 @@
 		<access-denied-handler error-page="/denied.htm" />
 
 		<logout invalidate-session="true" logout-success-url="/logout/success.htm"
-			logout-url="/logout.htm" delete-cookies="true" />
+			logout-url="/logout.htm" delete-cookies="JSESSIONID"  />
+				<!-- enable csrf protection -->
+		<csrf />
+		
+		 <!--Remember me for: Half an hour -->
+			<remember-me 
+		    token-validity-seconds="1209600"
+			remember-me-parameter="remember-me" 
+			data-source-ref="dataSource" />
 	</http>
 
 
