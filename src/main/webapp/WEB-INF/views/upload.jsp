@@ -74,9 +74,11 @@
 				</form:form>
 			</div>
 
-			<div class="panel-body">
-				<table border='0' class="table table-striped">
-					<h4 style="text-align:center;"><fmt:message key="upload.commonDel" /></h4>
+
+			<div class="panel-body">					
+			<h4 style="text-align:center;"><fmt:message key="upload.commonDel" /></h4>
+			
+				<table class="table table-striped">
 					<tr>
 						<td align="left"><b><fmt:message key="upload.constant" /></b></td>
 						<th align="center">	<fmt:message key="upload.quote" /></th>

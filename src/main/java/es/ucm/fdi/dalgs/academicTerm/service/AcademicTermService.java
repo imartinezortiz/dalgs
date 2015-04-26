@@ -164,7 +164,6 @@ public class AcademicTermService {
 		return result;
 	}
 
-	// TODO Contemplar el filtrado de objectos
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
 	public ResultClass<Integer> numberOfPages(Boolean showAll) {

@@ -23,7 +23,12 @@
 		<class>es.ucm.fdi.dalgs.domain.acl.AclEntry</class>
 		<class>es.ucm.fdi.dalgs.domain.acl.AclObjectIdentity</class>
 		<class>es.ucm.fdi.dalgs.domain.acl.AclSid</class>
-		
+
+<!-- 		<class>es.ucm.fdi.dalgs.domain.OAuthAccessToken</class>
+		<class>es.ucm.fdi.dalgs.domain.OAuthClientDetails</class>
+		<class>es.ucm.fdi.dalgs.domain.OAuthRefreshToken</class>
+
+		 -->
 		
 	</persistence-unit>
 	
