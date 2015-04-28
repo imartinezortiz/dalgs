@@ -48,7 +48,7 @@ public class WebhookController {
 				result.getErrorsList());
 	}
 
-	@RequestMapping(value = WebhookUriConstants.POST_ACTIVITY, headers = "Accept=text/xml, application/json", produces = "application/json", method = RequestMethod.POST)
+	@RequestMapping(value = WebhookUriConstants.POST_ACTIVITY, headers = {"Accept=text/xml, application/json"}, produces = "application/json", method = RequestMethod.POST)
 	public @ResponseBody Activity_Response activity(
 			@Valid @RequestBody Activity_Request activity_rest) {
 
