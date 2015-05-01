@@ -16,10 +16,13 @@
  */
 package es.ucm.fdi.dalgs.group.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.fileupload.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PostFilter;
@@ -27,16 +30,19 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.activity.service.ActivityService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
+import es.ucm.fdi.dalgs.classes.UploadForm;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.group.repository.GroupRepository;
+import es.ucm.fdi.dalgs.user.service.UserCSV;
 import es.ucm.fdi.dalgs.user.service.UserService;
 
 @Service
@@ -368,6 +374,41 @@ public class GroupService {
 					id_course, id_group);
 		}
 		return result;
+	}
+	
+	//@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
+	@Transactional(readOnly = false)
+	public boolean uploadUserCVS(Group group, UploadForm upload, String typeOfUser) {
+		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
+				.charAt(0), upload.getDelimiterChar().charAt(0),
+				upload.getEndOfLineSymbols()).build();
+
+		List<User> list = null;
+		try {
+			FileItem fileItem = upload.getFileData().getFileItem();
+			UserCSV userUpload = new UserCSV();
+			list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
+					upload.getCharset(), prefers, typeOfUser);
+			
+			if(serviceUser.persistListUsers(group, list) && list!=null){
+				if(typeOfUser.equalsIgnoreCase("professor")){
+					group.setProfessors(list);
+					return setProfessors( group, group.getId(), group.getCourse().getId() , group.getCourse().getAcademicTerm().getId()).hasErrors(); 
+				}
+				else if(typeOfUser.equalsIgnoreCase("student")){
+					group.setStudents(list);
+					return setStudents( group, group.getId(), group.getCourse().getId() , group.getCourse().getAcademicTerm().getId()).hasErrors(); 
+
+				}
+				return daoGroup.saveGroup(group);
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return false;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
