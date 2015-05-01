@@ -72,6 +72,9 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 	@JoinColumn(name = "id_group")
 	@JsonBackReference
 	private Group group;
+	
+	
+	
 
 	public Activity() {
 		super();

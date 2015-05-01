@@ -62,6 +62,10 @@ public class Course implements Cloneable, Copyable<Course>, Serializable {
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private Collection<Activity> activities;
+	
+	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+	@JsonManagedReference
+	private Collection<Activity> external_activities;
 
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
 	@JsonManagedReference
@@ -144,6 +148,15 @@ public class Course implements Cloneable, Copyable<Course>, Serializable {
 
 	public void setGroups(Collection<Group> groups) {
 		this.groups = groups;
+	}
+	
+
+	public Collection<Activity> getExternal_activities() {
+		return external_activities;
+	}
+
+	public void setExternal_activities(Collection<Activity> external_activities) {
+		this.external_activities = external_activities;
 	}
 
 	@Override

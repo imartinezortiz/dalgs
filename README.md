@@ -1,24 +1,22 @@
----		TFG Project (April)	---
+---		TFG Project (May)	---
 
 //TO-DO
-
+0.- Añadir coleccion de actividades externas a curso y grupo (mover de una coleccion a otra)
+1.- Permitir a profesores y coordinadores importar users a un grupo concreto
+2.- Añadir archivos pdf, doc....  enunciados de las actividades (campo url). 
+		Para ello rutas relativas a WEB-INF/attachments
+		Hay que declarar en el xml el rootpath, el nombre del doc sera el codigo de la actividad
+3.- Memoria
 
 //NOT WORKING
 
 Optional: Change the pagination
 0.- XAPI --> http://experienceapi.com
+1.- OAuth mediante Google - Gestionar un buzón de correo
+2.- eGarante
+3.- Notificacion de actividades nuevas pnotify
 
 // DONE
-0.-	Fixed Group bug
-1.- Simple GET&POST (dummy)
-2.- Change type of competence to an enum
-3.- Add credits attribute to subject
-4.- Add url for the "ficha docente" 
-5.- POST activities to a group and/or course
-6.- Subject View CSV Download --> http://localhost:8081/dalgs/degree/1/module/1/topic/1/subject/download.htm
-7.- Upload CSV of Competences --> encoding?? That's why ParseEnum fails
-8.- Export csv
-9.- Securing Web Service (exception in Spring Security ???) call header (BASIC)
 
 
 //   OAUTH2

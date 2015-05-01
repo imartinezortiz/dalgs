@@ -18,6 +18,7 @@ package es.ucm.fdi.dalgs.domain.info;
 
 import java.io.Serializable;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
@@ -55,6 +56,12 @@ public class ActivityInfo implements Serializable, Cloneable,
 	@Column(name = "code_activity", nullable = false, unique = true)
 	private String code;
 
+	@Size(min = 1, max = 250)
+	@Basic(optional = true)
+	@Column(name = "url", length = 250, nullable = true)
+	private String url;
+	
+	
 	public String getName() {
 		return name;
 	}
@@ -77,6 +84,16 @@ public class ActivityInfo implements Serializable, Cloneable,
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+	
+	
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	@Override
