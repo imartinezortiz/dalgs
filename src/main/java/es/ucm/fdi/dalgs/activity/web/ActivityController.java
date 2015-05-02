@@ -602,7 +602,7 @@ public class ActivityController {
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("idCourse") Long id_course,
 			@PathVariable("activityId") Long id,
-			@ModelAttribute("addfileupload")  FileUpload fileupload,
+			@ModelAttribute("addfileupload") @Valid FileUpload fileupload,
 			BindingResult result, Model model) throws ServletException {
 
 		if (!result.hasErrors()) {
