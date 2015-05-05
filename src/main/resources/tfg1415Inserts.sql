@@ -277,11 +277,11 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (182,1,00000000,00000000,00000001,16,65,1);
 
 --Activity Inserts 
-INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (1,'ACT1','Desarrollar diagramas de casos de uso','Casos de Uso',1);
-INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (2,'ACT2','Elaborar un diagrama Entidad-Relacion','Entidad-Relacion',1);
-INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (3,'ACT3','Diagramas de secuencia','Secuencia',2);
-INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (4,'ACT4','Diagramas de activitidades','actividades',2);
-INSERT INTO activity (id_activity,code_activity,description,name,id_course) VALUES (5,'ACT5','Diagrama de clases','clases',3);
+INSERT INTO _activity (id_activity,code_activity,description,name,id_course) VALUES (1,'ACT1','Desarrollar diagramas de casos de uso','Casos de Uso',1);
+INSERT INTO _activity (id_activity,code_activity,description,name,id_course) VALUES (2,'ACT2','Elaborar un diagrama Entidad-Relacion','Entidad-Relacion',1);
+INSERT INTO _activity (id_activity,code_activity,description,name,id_course) VALUES (3,'ACT3','Diagramas de secuencia','Secuencia',2);
+INSERT INTO _activity (id_activity,code_activity,description,name,id_course) VALUES (4,'ACT4','Diagramas de activitidades','actividades',2);
+INSERT INTO _activity (id_activity,code_activity,description,name,id_course) VALUES (5,'ACT5','Diagrama de clases','clases',3);
 
 -- Object Identity --
 INSERT INTO acl_object_identity (ID, ENTRIES_INHERITING, OBJECT_ID_IDENTITY, OBJECT_ID_CLASS, PARENT_OBJECT, OWNER_SID) VALUES (66,00000001,1,2,NULL,1);

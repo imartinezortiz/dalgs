@@ -87,9 +87,7 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 	@JsonManagedReference
 	private Collection<Activity> activities;
 	
-	@OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-	@JsonManagedReference
-	private Collection<Activity> external_activities;
+
 
 	public Group() {
 		super();
@@ -161,13 +159,6 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 	
 	
 
-	public Collection<Activity> getExternal_activities() {
-		return external_activities;
-	}
-
-	public void setExternal_activities(Collection<Activity> external_activities) {
-		this.external_activities = external_activities;
-	}
 
 	@Override
 	public int hashCode() {
