@@ -20,9 +20,7 @@ package es.ucm.fdi.dalgs.rest.service;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import es.ucm.fdi.dalgs.acl.service.AclObjectService;
@@ -32,7 +30,9 @@ import es.ucm.fdi.dalgs.course.repository.CourseRepository;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
+import es.ucm.fdi.dalgs.domain.ExternalActivity;
 import es.ucm.fdi.dalgs.domain.Group;
+import es.ucm.fdi.dalgs.externalActivity.repository.ExternalActivityRepository;
 import es.ucm.fdi.dalgs.group.repository.GroupRepository;
 import es.ucm.fdi.dalgs.group.service.GroupService;
 import es.ucm.fdi.dalgs.user.service.UserService;
@@ -41,6 +41,9 @@ import es.ucm.fdi.dalgs.user.service.UserService;
 public class WebhookService {
 	@Autowired
 	private ActivityRepository daoActivity;
+	
+	@Autowired
+	private ExternalActivityRepository daoExternalActivity;
 	
 	@Autowired
 	private CourseRepository daoCourse;
@@ -76,92 +79,95 @@ public class WebhookService {
 	}
 
 	@Transactional(readOnly = false)
-	public ResultClass<Activity> addActivityCourseREST(Course course,
-			Activity activity, Long id_course, Long id_academic, Locale locale) {
+	public ResultClass<ExternalActivity> addActivityCourseREST(Course course,
+			ExternalActivity act, Long id_course, Long id_academic, Locale locale) {
 
 		boolean success = false;
 
-		Activity activityExists = daoActivity.existByCode(activity.getInfo()
-				.getCode());
-		ResultClass<Activity> result = new ResultClass<>();
+//		Activity activityExists = daoActivity.existByCode(act.getInfo()
+//				.getCode());
+		ResultClass<ExternalActivity> result = new ResultClass<>();
 
-		if (activityExists ==null){
-			activity.setCourse(getCourseREST(id_course)
-					.getSingleElement());
-			success = daoActivity.addActivity(activity);
-
-			if (success) {
-				activityExists = daoActivity.existByCode(activity.getInfo()
-						.getCode());
-				success = manageAclService.addACLToObject(activityExists
-						.getId(), activityExists.getClass().getName());
-
-				manageAclService.addPermissionToAnObject_ADMINISTRATION(
-						course.getCoordinator(), activityExists.getId(),
-						activityExists.getClass().getName());
-
-				// Rest of users which belong to this course need READ
-				// permission
-				for (Group g : course.getGroups()) {
-					manageAclService.addPermissionToAnObjectCollection_READ(
-							g.getProfessors(), activityExists.getId(),
-							activityExists.getClass().getName());
-					manageAclService.addPermissionToAnObjectCollection_READ(
-							g.getStudents(), activityExists.getId(),
-							activityExists.getClass().getName());
-				}
-
-				if (success)
-					result.setSingleElement(activityExists);
-
-			} 
-		}
+//		if (activityExists ==null){
+//			act.setCourse(getCourseREST(id_course)
+//					.getSingleElement());
+			success = daoExternalActivity.addActivity(act);
+			
+//			if (success) {
+//				ExternalActivity externalActivityExists = daoExternalActivity.existByCode(act.getInfo()
+//						.getCode());
+//				success = manageAclService.addACLToObject(externalActivityExists
+//						.getId(), externalActivityExists.getClass().getName());
+//
+//				manageAclService.addPermissionToAnObject_ADMINISTRATION(
+//						course.getCoordinator(), externalActivityExists.getId(),
+//						externalActivityExists.getClass().getName());
+//
+//				// Rest of users which belong to this course need READ
+//				// permission
+//				for (Group g : course.getGroups()) {
+//					manageAclService.addPermissionToAnObjectCollection_READ(
+//							g.getProfessors(), externalActivityExists.getId(),
+//							externalActivityExists.getClass().getName());
+//					manageAclService.addPermissionToAnObjectCollection_READ(
+//							g.getStudents(), externalActivityExists.getId(),
+//							externalActivityExists.getClass().getName());
+//				}
+//
+//				if (success)
+//					result.setSingleElement(externalActivityExists);
+//
+//			} 
+//		}
 		return result;
 	}
 
 
 	@Transactional(readOnly = false)
-	public ResultClass<Activity> addActivitytoGroupREST(Group group,
-			Activity activity, Long id_group, Long id_course, Long id_academic) {
+	public ResultClass<ExternalActivity> addActivitytoGroupREST(Group group,
+			ExternalActivity act, Long id_group, Long id_course, Long id_academic) {
+		
+		
 		boolean success = false;
 
-		Activity activityExists = daoActivity.existByCode(activity.getInfo()
-				.getCode());
-		ResultClass<Activity> result = new ResultClass<>();
+	
+//		Activity activityExists = daoActivity.existByCode(act.getInfo()
+//				.getCode());
+		ResultClass<ExternalActivity> result = new ResultClass<>();
 
-		if (activityExists == null) {
+//		if (activityExists == null) {
 			
-			activity.setGroup(getGroupREST(id_group).getSingleElement());
-			success = daoActivity.addActivity(activity);
+			act.setGroup(getGroupREST(id_group).getSingleElement());
+			success = daoExternalActivity.addActivity(act);
 
-			if (success) {
-				activityExists = daoActivity.existByCode(activity.getInfo()
-						.getCode());
-				success = manageAclService.addACLToObject(activityExists
-						.getId(), activityExists.getClass().getName());
-
-				// Rest of users which belong to this course need READ
-				// permission
-				manageAclService.addPermissionToAnObjectCollection_READ(
-						group.getProfessors(), activityExists.getId(),
-						activityExists.getClass().getName());
-				manageAclService.addPermissionToAnObjectCollection_READ(
-						group.getStudents(), activityExists.getId(),
-						activityExists.getClass().getName());
-
-				if (success)
-					result.setSingleElement(activityExists);
-				else result.getErrorsList().add("Cannot creat ACL to Object");
-
-			
-			}
-			else {
-				result.getErrorsList().add("Cannot add the new activity");
-			}
-		}
-		else result.getErrorsList().add("Code already exist");
-		
-		result.setHasErrors(result.getErrorsList().size()>0);
+//			if (success) {
+//				ExternalActivity ExternalActivityExists = daoExternalActivity.existByCode(act.getInfo()
+//						.getCode());
+//				success = manageAclService.addACLToObject(ExternalActivityExists
+//						.getId(), ExternalActivityExists.getClass().getName());
+//
+//				// Rest of users which belong to this course need READ
+//				// permission
+//				manageAclService.addPermissionToAnObjectCollection_READ(
+//						group.getProfessors(), ExternalActivityExists.getId(),
+//						ExternalActivityExists.getClass().getName());
+//				manageAclService.addPermissionToAnObjectCollection_READ(
+//						group.getStudents(), ExternalActivityExists.getId(),
+//						ExternalActivityExists.getClass().getName());
+//
+//				if (success)
+//					result.setSingleElement(ExternalActivityExists);
+//				else result.getErrorsList().add("Cannot creat ACL to Object");
+//
+//			
+//			}
+//			else {
+//				result.getErrorsList().add("Cannot add the new activity");
+//			}
+//		}
+//		else result.getErrorsList().add("Code already exist");
+//		
+//		result.setHasErrors(result.getErrorsList().size()>0);
 		return result;
 
 	}

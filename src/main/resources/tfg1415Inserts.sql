@@ -10,6 +10,7 @@ INSERT INTO acl_class (id, class) VALUES (8,'es.ucm.fdi.dalgs.domain.Module');
 INSERT INTO acl_class (id, class) VALUES (9,'es.ucm.fdi.dalgs.domain.Subject');
 INSERT INTO acl_class (id, class) VALUES (10,'es.ucm.fdi.dalgs.domain.Topic');
 INSERT INTO acl_class (id, class) VALUES (11,'es.ucm.fdi.dalgs.domain.User');
+INSERT INTO acl_class (id, class) VALUES (12,'es.ucm.fdi.dalgs.domain.ExternalActivity');
 -- ---------------------------------------------------
 
 -- ACL Sid -- Authorizations - Roles

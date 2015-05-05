@@ -20,9 +20,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+
+
 import es.ucm.fdi.dalgs.domain.Activity;
 
+
 public class Activity_Response implements Serializable{
+	
 	
 	private static final long serialVersionUID = 1L;
 	

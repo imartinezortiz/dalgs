@@ -37,6 +37,7 @@ import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
+import es.ucm.fdi.dalgs.domain.ExternalActivity;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.LearningGoal;
 import es.ucm.fdi.dalgs.domain.LearningGoalStatus;
@@ -455,6 +456,7 @@ public class ActivityService {
 			activityCSV.dowloadCSV(response, activities);
 		}
 	}
+	
 
 }
 

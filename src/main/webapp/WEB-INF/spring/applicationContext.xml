@@ -92,7 +92,7 @@
 	<context:component-scan base-package="es.ucm.fdi.dalgs.subject.repository" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.topic.repository" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.user.repository" />
-
+	<context:component-scan base-package="es.ucm.fdi.dalgs.externalActivity.repository" />
 
 
 	<context:component-scan base-package="es.ucm.fdi.dalgs.academicTerm.service" />
@@ -108,6 +108,8 @@
 	<context:component-scan base-package="es.ucm.fdi.dalgs.topic.service" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.user.service" />	
 	<context:component-scan base-package="es.ucm.fdi.dalgs.rest.service" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.externalActivity.service" />
+	
 	
 		<context:component-scan base-package="es.ucm.fdi.dalgs.rest.security" />
 	

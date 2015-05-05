@@ -46,8 +46,10 @@ import es.ucm.fdi.dalgs.activity.service.ActivityService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.Activity;
+import es.ucm.fdi.dalgs.domain.ExternalActivity;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
+import es.ucm.fdi.dalgs.externalActivity.service.ExternalActivityService;
 import es.ucm.fdi.dalgs.group.service.GroupService;
 import es.ucm.fdi.dalgs.user.service.UserService;
 
@@ -62,6 +64,9 @@ public class GroupController {
 
 	@Autowired
 	private CourseService serviceCourse;
+	
+	@Autowired
+	private ExternalActivityService serviceExternalActivity;
 
 	@Autowired
 	private UserService serviceUser;
@@ -265,8 +270,11 @@ public class GroupController {
 
 			ResultClass<Activity> activitiesCourse = serviceActivity
 					.getActivitiesForCourse(id_course, show);
+			
+			ResultClass<ExternalActivity> externalActivities = serviceExternalActivity.getExternalActivitiesForGroup(id_group);
 			model.put("activitiesGroup", activitiesGroup);
 			model.put("activitiesCourse", activitiesCourse);
+			model.put("externalActivities", externalActivities);
 			this.setShowAll(show);
 			return new ModelAndView("group/view", "model", model);
 		}

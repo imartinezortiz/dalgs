@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,10 +32,11 @@ import org.springframework.web.bind.annotation.RestController;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
+import es.ucm.fdi.dalgs.domain.ExternalActivity;
 import es.ucm.fdi.dalgs.domain.Group;
-
 import es.ucm.fdi.dalgs.rest.classes.Activity_Request;
 import es.ucm.fdi.dalgs.rest.classes.Activity_Response;
+import es.ucm.fdi.dalgs.rest.classes.ExternalActivity_Response;
 import es.ucm.fdi.dalgs.rest.service.WebhookService;
 
 @RestController
@@ -65,14 +65,14 @@ public class WebhookController {
 	}
 
 	@RequestMapping(value = WebhookUriConstants.POST_ACTIVITY, headers = {"Accept=text/xml, application/json"}, produces = "application/json", method = RequestMethod.POST)
-	public @ResponseBody Activity_Response activity(
+	public @ResponseBody ExternalActivity_Response externalActivity(
 			@Valid @RequestBody Activity_Request activity_rest) {
 
-		Activity act = new Activity();
+		ExternalActivity act = new ExternalActivity();
 		act.getInfo().setName(activity_rest.getName());
 		act.getInfo().setDescription(activity_rest.getDescription());
 		act.getInfo().setCode(activity_rest.getCode());
-		ResultClass<Activity> result = new ResultClass<Activity>();
+		ResultClass<ExternalActivity> result = new ResultClass<ExternalActivity>();
 
 		Course course = service_rest.getCourseREST(activity_rest.getId_course())
 				.getSingleElement();
@@ -86,8 +86,9 @@ public class WebhookController {
 					.addActivityCourseREST(course, act, course.getId(), course
 							.getAcademicTerm().getId(), Locale.UK);
 		}
-
-		return new Activity_Response(result.getSingleElement(),
+	
+		
+		return new ExternalActivity_Response(result.getSingleElement(),
 				result.getErrorsList());
 	}
 
