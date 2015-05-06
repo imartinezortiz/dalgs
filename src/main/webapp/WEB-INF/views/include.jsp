@@ -145,7 +145,14 @@
 						<li><a href="${adminUrl}"> <span
 								class="glyphicon glyphicon-user" aria-hidden="true"></span>
 								Admin
-						</a></li>
+						</a>
+					</li>	
+ 						<!-- TODO -->
+				 <li><a class="navbar-link" data-toggle="navbar-link" href="#">
+				     <span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> External
+				  </a>
+						</li>
+						
 					</sec:authorize>
 					<sec:authorize access="hasAnyRole('ROLE_ADMIN' ,  'ROLE_USER')">
 						<li><a href="${logoutUrl}"> <span
@@ -170,6 +177,7 @@
 				<c:url value="/user/download.htm" var="usersUrl" />
 								
 				<sec:authorize access="hasRole('ROLE_ADMIN')">	
+				
 				  <li class="dropdown" id="menu1">
 				    <a class="dropdown-toggle" data-toggle="dropdown" href="#menu1">
 				     <span class="glyphicon glyphicon-download" aria-hidden="true"></span>  CSV
@@ -195,13 +203,19 @@
 					
 					<sec:authorize access="isAuthenticated()">
 					<p class="navbar-text navbar-right" style="font-size: 15px;">
-
+					
 						<span class="glyphicon glyphicon-eye-open" aria-hidden="true">
 						</span> <fmt:message key="access.signedIn" />
  						<a href="#" class="navbar-link">
  						<%=SecurityContextHolder.getContext().getAuthentication().getName()%>
  						</a>&nbsp;&nbsp;
+ 			
+ 						
+ 					
+ 						
 					</p></sec:authorize>
+			
+ 						
 				</ul>
 
 			</div>
