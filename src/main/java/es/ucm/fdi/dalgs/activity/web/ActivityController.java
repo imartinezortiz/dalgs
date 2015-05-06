@@ -522,7 +522,9 @@ public class ActivityController {
 
 			model.addAttribute("learningGoalStatus", p.getLearningGoalStatus());
 			model.addAttribute("learningGoals", lg);
-
+			FileUpload file = new FileUpload();
+			
+			model.addAttribute("addfileupload",file);
 			LearningGoalStatus cs = new LearningGoalStatus();
 			model.addAttribute("addlearningstatus", cs);
 

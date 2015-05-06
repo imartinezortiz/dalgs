@@ -276,6 +276,32 @@ public class GroupController {
 		return new ModelAndView("exception/notFound", "model", model);
 	}
 
+	
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/{typeOfUser}/view.htm", method = RequestMethod.GET)
+	public ModelAndView getUserGroupGET(
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("courseId") Long id_course,
+			@PathVariable("groupId") long id_group,
+			@PathVariable("typeOfUser") String typeOfUser,
+			@RequestParam(value = "showAll", defaultValue = "false") Boolean show)
+			throws ServletException {
+
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		Group a = serviceGroup.getGroup(id_group, id_course, id_academic)
+				.getSingleElement();
+		model.put("showAll", show);
+
+		if (a != null) {
+			model.put("group", a);
+			model.put("groupId", id_group);
+			model.put("typeOfUser", typeOfUser);
+			this.setShowAll(show);
+			return new ModelAndView("group/viewUser", "model", model);
+		}
+		return new ModelAndView("exception/notFound", "model", model);
+	}
+	
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/professor/add.htm", method = RequestMethod.GET)
 	public String addProfessorToGroupGET(
 			@PathVariable("groupId") Long id_group,
@@ -304,16 +330,17 @@ public class GroupController {
 			@ModelAttribute("group") @Valid Group group,
 			BindingResult resultBinding, RedirectAttributes attr) {
 
-		ResultClass<Group> gr = serviceGroup.getGroup(id_group, id_course, id_academic);
-		
-		if (gr.getSingleElement()==null || gr.hasErrors()) {
+		ResultClass<Group> gr = serviceGroup.getGroup(id_group, id_course,
+				id_academic);
+
+		if (gr.getSingleElement() == null || gr.hasErrors()) {
 			return "redirect:/error.htm";
 
 		} else {
 			gr.getSingleElement().setProfessors(group.getProfessors());
-			
-			ResultClass<Boolean> result = serviceGroup.setProfessors(gr.getSingleElement(),
-					id_group, id_course, id_academic);
+
+			ResultClass<Boolean> result = serviceGroup.setProfessors(
+					gr.getSingleElement(), id_group, id_course, id_academic,null);
 			if (!result.hasErrors())
 				return "redirect:/academicTerm/" + id_academic + "/course/"
 						+ id_course + "/group/" + id_group + ".htm";
@@ -350,17 +377,17 @@ public class GroupController {
 			@ModelAttribute("group") @Valid Group group,
 			BindingResult resultBinding, RedirectAttributes attr) {
 
-		ResultClass<Group> gr = serviceGroup.getGroup(id_group, id_course, id_academic);
-		
-		if (gr.getSingleElement()==null || gr.hasErrors()) {
+		ResultClass<Group> gr = serviceGroup.getGroup(id_group, id_course,
+				id_academic);
+
+		if (gr.getSingleElement() == null || gr.hasErrors()) {
 			return "redirect:/error.htm";
 
-		
 		} else {
 
 			gr.getSingleElement().setStudents(group.getStudents());
-			ResultClass<Boolean> result = serviceGroup.setStudents(gr.getSingleElement(),
-					id_group, id_course, id_academic);
+			ResultClass<Boolean> result = serviceGroup.setStudents(
+					gr.getSingleElement(), id_group, id_course, id_academic,null);
 			if (!result.hasErrors())
 				return "redirect:/academicTerm/" + id_academic + "/course/"
 						+ id_course + "/group/" + id_group + ".htm";
@@ -423,15 +450,16 @@ public class GroupController {
 
 		return "redirect:/error.htm";
 	}
-	
-	
-	
-	// 	/academicTerm/${academicId}/course/${courseId}/group/${groupId}/student/upload.htm
+
+	// /academicTerm/${academicId}/course/${courseId}/group/${groupId}/student/upload.htm
 	/** Method method to insert users massively */
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/{typeOfUser}/upload.htm", method = RequestMethod.GET)
-	public String uploadGet(Model model, @PathVariable("academicId") Long id_academic, @PathVariable("courseId") Long id_course,
-			@PathVariable("groupId") Long id_group, @PathVariable("typeOfUser") String typeOfUser) {
+	public String uploadGet(Model model,
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("courseId") Long id_course,
+			@PathVariable("groupId") Long id_group,
+			@PathVariable("typeOfUser") String typeOfUser) {
 		CharsetString charsets = new CharsetString();
 
 		model.addAttribute("className", "User");
@@ -444,9 +472,12 @@ public class GroupController {
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/{typeOfUser}/upload.htm", method = RequestMethod.POST)
 	public String uploadPost(
 			@ModelAttribute("newUpload") @Valid UploadForm upload,
-			BindingResult result, Model model, @PathVariable("academicId") Long id_academic, @PathVariable("courseId") Long id_course,
-			@PathVariable("groupId") Long id_group, @PathVariable("typeOfUser") String typeOfUser) {
-		
+			BindingResult result, Model model,
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("courseId") Long id_course,
+			@PathVariable("groupId") Long id_group,
+			@PathVariable("typeOfUser") String typeOfUser) {
+
 		System.out.println("Upload POST USERS: " + typeOfUser);
 
 		if (result.hasErrors() || upload.getCharset().isEmpty()) {
@@ -457,11 +488,13 @@ public class GroupController {
 			return "upload";
 		}
 
-		Group group = serviceGroup.getGroup(id_group, id_course,id_academic).getSingleElement();
-		if (serviceGroup.uploadUserCVS(group, upload, typeOfUser)){
+		Group group = serviceGroup.getGroup(id_group, id_course, id_academic)
+				.getSingleElement();
+		boolean success = serviceGroup.uploadUserCVS(group, upload, typeOfUser);
+		if (success) {
 			return "redirect:/academicTerm/" + id_academic + "/course/"
-					+ id_course + "/group/" + id_group + ".htm";		}
-		else
+					+ id_course + "/group/" + id_group + ".htm";
+		} else
 			return "upload";
 	}
 

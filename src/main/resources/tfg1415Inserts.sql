@@ -14,7 +14,7 @@ INSERT INTO acl_class (id, class) VALUES (11,'es.ucm.fdi.dalgs.domain.User');
 
 -- ACL Sid -- Authorizations - Roles
 INSERT INTO acl_sid (id, principal, sid) VALUES	(1,00000001,'admin');
-	
+		
 -- -------------------------------------------------------
 
 -- Degree Inserts 

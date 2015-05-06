@@ -143,7 +143,9 @@ public class AclObjectService {
 			}
 
 			// Now grant some permissions via an access control entry (ACE)
-			acl.insertAce(acl.getEntries().size(), p, sid, true);
+			if(!acl.getEntries().isEmpty())
+				acl.insertAce(acl.getEntries().size(), p, sid, true);
+			else acl.insertAce(2, p, sid, true);
 			mutableAclService.updateAcl(acl);
 
 		}
@@ -249,7 +251,10 @@ public class AclObjectService {
 			}
 
 			// Now grant some permissions via an access control entry (ACE)
-			acl.insertAce(acl.getEntries().size(), p, sid, true);
+			if(!acl.getEntries().isEmpty())
+				acl.insertAce(acl.getEntries().size(), p, sid, true);
+			else acl.insertAce(2, p, sid, true);
+
 			mutableAclService.updateAcl(acl);
 		}
 	}
@@ -275,8 +280,20 @@ public class AclObjectService {
 				acl = mutableAclService.createAcl(oi);
 			}
 
+			
 			// Now grant some permissions via an access control entry (ACE)
-			acl.insertAce(acl.getEntries().size(), p, sid, true);
+			//TODO AQUIIIIIIIII
+			/*if(!acl.getEntries().isEmpty())
+				try {	
+					acl.insertAce(acl.getEntries().size(), p, sid, true);
+				} catch (NotFoundException nfe) {
+					acl = mutableAclService.createAcl(oi);
+					acl.insertAce(0, p, sid, true);
+
+				}*/
+			if(!acl.getEntries().isEmpty())
+				acl.insertAce(acl.getEntries().size(), p, sid, true);
+			else acl.insertAce(2, p, sid, true);
 			mutableAclService.updateAcl(acl);
 		}
 
@@ -303,7 +320,10 @@ public class AclObjectService {
 			}
 
 			// Now grant some permissions via an access control entry (ACE)
-			acl.insertAce(acl.getEntries().size(), p, sid, true);
+			if(!acl.getEntries().isEmpty())
+				acl.insertAce(acl.getEntries().size(), p, sid, true);
+			else acl.insertAce(2, p, sid, true);
+
 			mutableAclService.updateAcl(acl);
 
 		}
@@ -409,7 +429,8 @@ public class AclObjectService {
 				for (Group g : groups_aux) {
 					this.addPermissionToAnObject_READ(user, g.getId(), g
 							.getClass().getName());
-
+					this.addPermissionToAnObject_ADMINISTRATION(user, g.getId(), g
+							.getClass().getName());
 					activities_aux.clear();
 
 					// Group activities
@@ -423,7 +444,14 @@ public class AclObjectService {
 			}
 
 			else if (object instanceof Group) {
+				
+				this.addPermissionToAnObject_READ(user, id_academic,
+						AcademicTerm.class.getName());
+				
+				this.addPermissionToAnObject_READ(user, id_course,
+						Course.class.getName());
 
+				
 				if (userService.hasRole(user, "ROLE_STUDENT"))
 					this.addPermissionToAnObject_READ(user, id_group,
 							Group.class.getName());
@@ -431,10 +459,7 @@ public class AclObjectService {
 					this.addPermissionToAnObject_ADMINISTRATION(user, id_group,
 							Group.class.getName());
 
-				this.addPermissionToAnObject_READ(user, id_course,
-						Course.class.getName());
-				this.addPermissionToAnObject_READ(user, id_academic,
-						AcademicTerm.class.getName());
+
 
 				// Group activities
 				Collection<Activity> activities_aux = activityService
@@ -485,6 +510,9 @@ public class AclObjectService {
 					this.removePermissionToAnObject_READ(user, g.getId(), g
 							.getClass().getName());
 
+					this.removePermissionToAnObject_ADMINISTRATION(user, g.getId(), g
+							.getClass().getName());
+					
 					activities_aux.clear();
 
 					// Group activities
@@ -531,6 +559,20 @@ public class AclObjectService {
 							.getClass().getName());
 			}
 		}
+	}
+	
+	public void removePermissionGroupCoordinator(User coordinator, Long id_group){
+		this.removePermissionToAnObject_READ(coordinator, id_group,
+				Group.class.getName());
+		this.removePermissionToAnObject_ADMINISTRATION(coordinator, id_group,
+				Group.class.getName());
+	}
+	
+	public void addPermissionGroupCoordinator(User coordinator, Long id_group){
+		this.addPermissionToAnObject_READ(coordinator, id_group,
+				Group.class.getName());
+		this.addPermissionToAnObject_ADMINISTRATION(coordinator, id_group,
+				Group.class.getName());
 	}
 
 	public void removePermissionCollectionCASCADE(Collection<User> users,

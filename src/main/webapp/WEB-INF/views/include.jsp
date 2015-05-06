@@ -81,9 +81,11 @@
 		src="<c:url value="/resources/images/en_UK.png" /> ">
 	</a></div>
 <div class="page-header logo">
-
+<img alt="tfg" class="img-rounded logo2" style="margin-top: -0.9%;" 
+		src="<c:url value="/resources/images/theme/Education_-_Grad_Hat.png" /> ">	
 	<h1 class="logo">
-		Badges for Subjects <small>TFG 2014/ 2015</small>
+
+		DALGS <small>TFG 2014/ 2015</small>
 	</h1>
 	<img alt="tfg" class="img-rounded logo" style="margin-top: 0.25%;"
 		src="<c:url value="/resources/images/theme/ucm-ws.png" /> "> <img

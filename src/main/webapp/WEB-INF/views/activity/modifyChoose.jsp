@@ -61,7 +61,11 @@
 					<form:errors path="info.description" cssStyle="color: #ff0000" />
 				</div>
 
-								
+					<div class="form-group view">
+					<label><fmt:message key="activity.doc" />: </label>
+					<form:input class="form-control" path="info.url"
+						id="url" readonly=true />
+				</div>			
 
 				<div class="panel-body">
 					<label><fmt:message key="learninggoalstatus.list" /></label>
@@ -135,7 +139,7 @@
 					<spring:message code="upload.choosefile" var="choose"/>
 					<spring:message code="upload.upload" var="upload"/>
 					
-						<label>Doc</label>
+						<label><fmt:message key="activity.doc" />:</label>
 						<form:input type="file" path="filepath" class="filestyle"
 							data-classButton="btn btn-primary" data-input="true"
 							data-classIcon="icon-plus" data-buttonText="${choose}" />

@@ -54,7 +54,7 @@
     						</c:url>">
 						<img
 						src="<c:url value="/resources/images/theme/trash_open_view.png" /> "
-						style="float: right; margin-right: 1%; margin-top: -0.5%;">
+						style="float: right; margin-right: 1%; margin-top: -6px;">
 					</a>
 				</c:when>
 				<c:otherwise>
@@ -63,7 +63,7 @@
     							</c:url>">
 						<img
 						src="<c:url value="/resources/images/theme/trash_close_view.png" /> "
-						style="float: right; margin-right: 1%;">
+						style="float: right; margin-right: 1%; margin-top:-2px;">
 					</a>
 				</c:otherwise>
 			</c:choose></sec:authorize>
@@ -194,14 +194,15 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td> </td>
+								<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+					<td> </td></sec:authorize>
 					<td><div class="td-label"><fmt:message key="input.name" /></div></td>
 				</tr>
 				<c:forEach items="${model.groups}" var="group">
 					<tr align="center">
-					<td> <sec:authorize access="hasRole('ROLE_ADMIN')">
+					<sec:authorize access="hasRole('ROLE_ADMIN')"><td> 
 					<a	href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${group.id}/clone.htm'/>"
-								class="btn btn-clone"><fmt:message key="common.copy" /></a> </sec:authorize></td>
+								class="btn btn-clone"><fmt:message key="common.copy" /></a></td> </sec:authorize>
 						<td><div class="td-content">
 								<c:out value="${group.name}" />
 							</div></td>
