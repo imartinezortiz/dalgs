@@ -219,7 +219,7 @@
 			<div class="panel-heading">
 				<h3 class="panel-title list">
 					<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="activityExternal.list" />
+					<fmt:message key="externalActivity.list" />
 					-
 					<fmt:message key="group.gr" />
 				</h3>

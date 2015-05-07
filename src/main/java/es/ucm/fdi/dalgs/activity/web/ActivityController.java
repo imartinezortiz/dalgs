@@ -525,6 +525,9 @@ public class ActivityController {
 
 			LearningGoalStatus cs = new LearningGoalStatus();
 			model.addAttribute("addlearningstatus", cs);
+			
+			FileUpload file = new FileUpload();
+			model.addAttribute("addfileupload",file);
 
 			return "activity/modifyChoose";
 		}
@@ -615,6 +618,8 @@ public class ActivityController {
 		return "redirect:/academicTerm/" + id_academic + "/course/" + id_course
 				 + "/activity/" + id + "/modify.htm";
 	}
+	
+
 
 	/**
 	 * Method for delete an activities

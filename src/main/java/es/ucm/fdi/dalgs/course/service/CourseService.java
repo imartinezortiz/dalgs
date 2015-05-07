@@ -37,9 +37,11 @@ import es.ucm.fdi.dalgs.course.repository.CourseRepository;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
 import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
+import es.ucm.fdi.dalgs.domain.ExternalActivity;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.Subject;
 import es.ucm.fdi.dalgs.domain.User;
+import es.ucm.fdi.dalgs.externalActivity.service.ExternalActivityService;
 import es.ucm.fdi.dalgs.group.service.GroupService;
 
 @Service
@@ -52,6 +54,9 @@ public class CourseService {
 
 	@Autowired
 	ActivityService serviceActivity;
+	
+	@Autowired
+	ExternalActivityService serviceExternalActivity;
 
 	@Autowired
 	GroupService serviceGroup;
@@ -241,9 +246,11 @@ public class CourseService {
 			c.getActivities().addAll(
 					serviceActivity.getActivitiesForCourse(id, showAll));
 			c.getGroups().addAll(serviceGroup.getGroupsForCourse(id, showAll));
+			 
+			c.getExternal_activities().addAll(serviceExternalActivity.getExternalActivitiesForCourse(c));
 		} else
 			result.setHasErrors(true);
-
+		
 		result.setSingleElement(c);
 
 		return result;

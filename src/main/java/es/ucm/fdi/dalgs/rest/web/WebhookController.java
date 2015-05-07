@@ -16,8 +16,6 @@
  */
 package es.ucm.fdi.dalgs.rest.web;
 
-import java.util.Locale;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -84,7 +82,7 @@ public class WebhookController {
 		} else if (course != null) {
 			result = service_rest
 					.addActivityCourseREST(course, act, course.getId(), course
-							.getAcademicTerm().getId(), Locale.UK);
+							.getAcademicTerm().getId());
 		}
 	
 		

@@ -6,6 +6,8 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -102,24 +104,69 @@ public class ExternalActivityService {
 		}
 		return result;
 	}
+
 	@Transactional(readOnly=false)
-	public boolean move(Long id_externalActivity, Long id_academic,
+	public ResultClass<Activity> moveGroup(Long id_externalActivity, Long id_academic,
 			Long id_course, Long id_group) {
 		
 		Group group = serviceGroup.getGroup(id_group, id_course, id_academic).getSingleElement();
-		Course course= serviceCourse.getCourse(id_course, id_academic).getSingleElement();
 		ExternalActivity externalActivity = daoExternalActivity.getExternalActivity(id_externalActivity, id_course, id_group, id_academic);
+		ResultClass<Activity> result = new ResultClass<>();
+//		Course course= serviceCourse.getCourse(id_course, id_academic).getSingleElement();
 		
-		group.getExternal_activities().remove(externalActivity);
+//		group.getExternal_activities().remove(externalActivity);
+//		Activity activity =new Activity();
+//		activity.setCourse(course);
+//		activity.setGroup(externalActivity.getGroup());
+//		activity.setInfo(externalActivity.getInfo());
+//		activity.getInfo().setCode(externalActivity.getInfo().getCode());
+//		activity.getInfo().setName(externalActivity.getInfo().getName());
+//		activity.getInfo().setDescription(externalActivity.getInfo().getDescription());
+//		group.getActivities().add(activity);
+		
+//		Activity activity = serviceActivity.existActivityBycode(externalActivity.getInfo().getCode()).getSingleElement();
+//		if (activity == null){
+			Activity activity =new Activity();
+			activity.setInfo(externalActivity.getInfo());
+			activity.setGroup(group);
+			externalActivity.setIsDeleted(true);
+			if(daoExternalActivity.deleteExternalActivity(id_externalActivity))
+				result = serviceActivity.addActivitytoGroup(group, activity, id_group, id_course, id_academic);
+				
+//		}
+			
+//			if(serviceActivity.addActivitytoGroup(group, activity, id_group, id_course, id_academic).getSingleElement() != null) 
+//			if (serviceGroup.modifyGroupActivities(group).getSingleElement()) 
+//				return true;
+//		
+		return result;
+	}
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	public ResultClass<ExternalActivity> getExternalActivitiesForCourse(
+			Course c) {
+		ResultClass<ExternalActivity> result = new ResultClass<>();
+		result.addAll(daoExternalActivity.getExternalActivitiesForCourse(c));
+		return result;
+	}
+
+	public ResultClass<Activity> moveCourse(Long id_externalActivity,
+			Long id_academic, Long id_course, Locale locale) {
+		
+		Course course = serviceCourse.getCourse(id_course, id_academic).getSingleElement();
+		ExternalActivity externalActivity = daoExternalActivity.getExternalActivity(id_externalActivity, id_course, null, id_academic);
+		ResultClass<Activity> result = new ResultClass<>();
+		
 		Activity activity =new Activity();
 		activity.setCourse(course);
-		activity.setGroup(externalActivity.getGroup());
 		activity.setInfo(externalActivity.getInfo());
-		group.getActivities().add(activity);
-		if(!serviceActivity.addActivitytoGroup(group, activity, id_group, id_course, id_academic).isEmpty()) 
-			if (serviceGroup.modifyGroupActivities(group).isEmpty()) return true;
+		externalActivity.setIsDeleted(true);
+		if(daoExternalActivity.deleteExternalActivity(id_externalActivity))
+			result = serviceActivity.addActivityCourse(course, activity, id_course, id_academic, locale);
 		
-		return false;
+		
+		
+		return result;
 	}
 	
 }

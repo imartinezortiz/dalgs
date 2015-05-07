@@ -173,6 +173,58 @@
 			</table>
 		</div>
 	</div>
+	<sec:accesscontrollist hasPermission="ADMINISTRATION" domainObject="${model.course}">
+	<div class="panel panel-primary group">
+		<div class="panel-heading">
+			<h3 class="panel-title list">
+				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
+				<fmt:message key="externalActivity.list" />
+			</h3>
+
+
+		</div>
+		
+		<div class="panel-body">
+
+			<table class="table table-striped table-bordered">
+				<tr align="center">
+					<td width="20%"><div class="td-label"><fmt:message key="input.name" /></div></td>
+					<td width="50%"><div class="td-label"><fmt:message key="input.desc" /></div></td>
+				</tr>
+				<c:forEach items="${model.externalActivities}" var="externalActivity">
+					<tr align="center">
+						<td><div class="td-content">
+								<c:out value="${externalActivity.info.name}" />
+							</div></td>
+						<td>
+							<div class="td-content">
+								<c:out value="${externalActivity.info.description}" />
+							</div>
+						</td>
+
+						<td>
+				
+									<a class="btn btn-success"
+										href="<c:url value='/academicTerm/${academicId}/course/${courseId}/externalactivity/${externalActivity.id}.htm'/>">
+										<fmt:message key="common.view" /> </a>
+									<a class="btn btn-success"
+										href="<c:url value='/academicTerm/${academicId}/course/${courseId}/externalactivity/${externalActivity.id}/move.htm'/>">
+										<fmt:message key="common.move" /> </a>
+
+										<a class="btn btn-danger"
+											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/externalactivity/${externalActivity.id}/delete.htm'/>">
+											<fmt:message key="common.delete" /> </a>
+								
+								</td>
+
+					</tr>
+				</c:forEach>
+
+
+			</table>
+		</div>
+	</div>
+	</sec:accesscontrollist>
 
 	<div class="panel panel-primary group">
 		<div class="panel-heading">

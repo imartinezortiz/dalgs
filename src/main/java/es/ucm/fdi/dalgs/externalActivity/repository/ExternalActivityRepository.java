@@ -2,9 +2,9 @@ package es.ucm.fdi.dalgs.externalActivity.repository;
 
 import java.util.Collection;
 
-import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import es.ucm.fdi.dalgs.activity.repository.ActivityRepository;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
-import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.ExternalActivity;
 import es.ucm.fdi.dalgs.domain.Group;
@@ -128,6 +127,16 @@ public class ExternalActivityRepository {
 			logger.error(e.getMessage());
 			return false;
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<? extends ExternalActivity> getExternalActivitiesForCourse(
+			Course c) {
+	
+		Query query = em.createQuery("from ExternalActivity ea where ea.course=?1 and ea.isDeleted='false'");
+
+		query.setParameter(1, c);
+		return (Collection<ExternalActivity>)query.getResultList();
 	}
 	
 	

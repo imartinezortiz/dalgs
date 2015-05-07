@@ -37,7 +37,6 @@ import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
-import es.ucm.fdi.dalgs.domain.ExternalActivity;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.LearningGoal;
 import es.ucm.fdi.dalgs.domain.LearningGoalStatus;
@@ -400,8 +399,9 @@ public class ActivityService {
 				result.setSingleElement(activity);
 			result.setErrorsList(errors);
 		} else {
-			activity.setGroup(serviceGroup.getGroup(id_group, id_course,
-					id_academic).getSingleElement());
+//			activity.setGroup(serviceGroup.getGroup(id_group, id_course,
+//					id_academic).getSingleElement());
+			activity.setGroup(group);
 			success = daoActivity.addActivity(activity);
 
 			if (success) {
@@ -456,6 +456,8 @@ public class ActivityService {
 			activityCSV.dowloadCSV(response, activities);
 		}
 	}
+
+
 	
 
 }

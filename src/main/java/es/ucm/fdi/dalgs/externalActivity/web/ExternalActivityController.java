@@ -59,7 +59,7 @@ public class ExternalActivityController {
 	 * Method for delete an activities
 	 */
 
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/externalActivity/{externalActivityId}/delete.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/externalactivity/{externalActivityId}/delete.htm", method = RequestMethod.GET)
 	public String deleteExternalActivityCourseGET(
 			@PathVariable("academicId") Long id_AcademicTerm,
 			@PathVariable("courseId") Long id_course,
@@ -80,11 +80,11 @@ public class ExternalActivityController {
 	/**
 	 * Methods for view activities
 	 */
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/externalActivity/{externalActivityId}.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/externalactivity/{externalActivityId}.htm", method = RequestMethod.GET)
 	public ModelAndView getExternalActivityCourse(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
-			@PathVariable("externalActivityId") long id_externalActivity)
+			@PathVariable("externalActivityId") Long id_externalActivity)
 			throws ServletException {
 
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -93,7 +93,7 @@ public class ExternalActivityController {
 				id_academic).getSingleElement();
 
 		if (a != null) {
-			model.put("externalEexternalActivity", a);
+			model.put("externalActivity", a);
 			model.put("externalActivityId", id_externalActivity);
 //			model.put("learningStatus", a.getLearningGoalStatus());
 
@@ -103,7 +103,7 @@ public class ExternalActivityController {
 		return new ModelAndView("exception/notFound", "model", model);
 	}
 
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/externalActivity/{externalActivityId}/restore.htm")
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/externalactivity/{externalActivityId}/restore.htm")
 	// Every Post have to return redirect
 	public String restoreExternalActivityCourse(
 			@PathVariable("academicId") Long id_academic,
@@ -120,6 +120,23 @@ public class ExternalActivityController {
 
 		if (!result.hasErrors())
 
+			return "redirect:/academicTerm/" + id_academic + "/course/"
+					+ id_course + ".htm";
+		else {
+			return "redirect:/error.htm";
+
+		}
+	}
+	
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/externalactivity/{externalActivityId}/move.htm", method=RequestMethod.GET)
+	// Every Post have to return redirect
+	public String moveExternalActivityCourse(
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("courseId") Long id_course,
+			@PathVariable("externalActivityId") Long id_externalActivity, Locale locale) {
+
+		if (!serviceExternalActivity.moveCourse(id_externalActivity, id_academic, id_course, locale).hasErrors())
+		
 			return "redirect:/academicTerm/" + id_academic + "/course/"
 					+ id_course + ".htm";
 		else {
@@ -215,7 +232,7 @@ public class ExternalActivityController {
 		}
 	}
 	
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/externalactivity/{externalActivityId}/move.htm")
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/externalactivity/{externalActivityId}/move.htm", method=RequestMethod.GET)
 	// Every Post have to return redirect
 	public String moveExternalActivityGroup(
 			@PathVariable("academicId") Long id_academic,
@@ -223,7 +240,7 @@ public class ExternalActivityController {
 			@PathVariable("groupId") Long id_group,
 			@PathVariable("externalActivityId") Long id_externalActivity, Locale locale) {
 
-		if (serviceExternalActivity.move(id_externalActivity, id_academic, id_course, id_group))
+		if (!serviceExternalActivity.moveGroup(id_externalActivity, id_academic, id_course, id_group).hasErrors())
 		
 			return "redirect:/academicTerm/" + id_academic + "/course/"
 					+ id_course + "/group/" + id_group + ".htm";
