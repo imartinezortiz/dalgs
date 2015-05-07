@@ -177,8 +177,7 @@ public class ExternalActivityController {
 	 * Methods for view activities
 	 */
 	
-//						/academicTerm/${academicId}/course/${courseId}/group/${groupId}/externalactivity/${externalActivity.id}.htm
-//						academicTerm/1/course/1/group/1/externalactivity/1.htm
+
 	
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/externalactivity/{externalActivityId}.htm", method = RequestMethod.GET)
 	public ModelAndView getExternalActivityGroup(

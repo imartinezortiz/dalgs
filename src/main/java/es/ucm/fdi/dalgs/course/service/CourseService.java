@@ -246,7 +246,7 @@ public class CourseService {
 			c.getActivities().addAll(
 					serviceActivity.getActivitiesForCourse(id, showAll));
 			c.getGroups().addAll(serviceGroup.getGroupsForCourse(id, showAll));
-			 
+			c.getExternal_activities().clear();
 			c.getExternal_activities().addAll(serviceExternalActivity.getExternalActivitiesForCourse(c));
 		} else
 			result.setHasErrors(true);
