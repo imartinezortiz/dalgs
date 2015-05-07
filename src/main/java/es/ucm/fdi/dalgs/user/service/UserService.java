@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.classes.UploadForm;
+import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.user.repository.UserRepository;
 
@@ -114,7 +115,6 @@ public class UserService {
 			e.printStackTrace();
 			return false;
 		}
-
 	}
 
 	@SuppressWarnings("unchecked")
@@ -172,6 +172,12 @@ public class UserService {
 	        }
 
 	        
+	}
+	
+	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
+	public boolean persistListUsers(Group group, List<User> list) {
+		// TODO Auto-generated method stub
+		return daoUser.persistListUsers(list);
 	}
 	
 

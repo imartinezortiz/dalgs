@@ -82,6 +82,7 @@
 				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
 				Group 1 - C1 (Student, Professor)</h4>
 		</a>
+		
 	</div>
 </body>
 </html>

@@ -32,6 +32,7 @@ import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -43,7 +44,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import es.ucm.fdi.dalgs.activity.service.ActivityService;
+import es.ucm.fdi.dalgs.classes.CharsetString;
 import es.ucm.fdi.dalgs.classes.ResultClass;
+import es.ucm.fdi.dalgs.classes.UploadForm;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.ExternalActivity;
@@ -428,7 +431,51 @@ public class GroupController {
 
 		return "redirect:/error.htm";
 	}
+	
+	
+	
+	// 	/academicTerm/${academicId}/course/${courseId}/group/${groupId}/student/upload.htm
+	/** Method method to insert users massively */
 
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/{typeOfUser}/upload.htm", method = RequestMethod.GET)
+	public String uploadGet(Model model, @PathVariable("academicId") Long id_academic, @PathVariable("courseId") Long id_course,
+			@PathVariable("groupId") Long id_group, @PathVariable("typeOfUser") String typeOfUser) {
+		CharsetString charsets = new CharsetString();
+
+		model.addAttribute("className", "User");
+		model.addAttribute("listCharsets", charsets.ListCharsets());
+		model.addAttribute("newUpload", new UploadForm("User"));
+		model.addAttribute("typeOfUser", typeOfUser);
+		return "upload";
+	}
+
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/{typeOfUser}/upload.htm", method = RequestMethod.POST)
+	public String uploadPost(
+			@ModelAttribute("newUpload") @Valid UploadForm upload,
+			BindingResult result, Model model, @PathVariable("academicId") Long id_academic, @PathVariable("courseId") Long id_course,
+			@PathVariable("groupId") Long id_group, @PathVariable("typeOfUser") String typeOfUser) {
+		
+		System.out.println("Upload POST USERS: " + typeOfUser);
+
+		if (result.hasErrors() || upload.getCharset().isEmpty()) {
+			for (ObjectError error : result.getAllErrors()) {
+				System.err.println("Error: " + error.getCode() + " - "
+						+ error.getDefaultMessage());
+			}
+			return "upload";
+		}
+
+		Group group = serviceGroup.getGroup(id_group, id_course,id_academic).getSingleElement();
+		if (serviceGroup.uploadUserCVS(group, upload, typeOfUser)){
+			return "redirect:/academicTerm/" + id_academic + "/course/"
+					+ id_course + "/group/" + id_group + ".htm";		}
+		else
+			return "upload";
+	}
+
+
+	
+	
 	/**
 	 * For binding the professor of the subject.
 	 */

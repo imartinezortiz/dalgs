@@ -44,7 +44,7 @@ public class ExternalActivityRepository {
 			long id_group) {
 		Group group = em.getReference(Group.class, id_group);
 		Query query = em.createQuery("from ExternalActivity ea where ea.group=?1 and ea.isDeleted='false'");
-		
+
 		query.setParameter(1, group);
 		return (Collection<ExternalActivity>)query.getResultList();
 	}

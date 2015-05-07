@@ -46,6 +46,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import es.ucm.fdi.dalgs.activity.service.ActivityService;
+import es.ucm.fdi.dalgs.classes.FileUpload;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.Activity;
@@ -217,6 +218,9 @@ public class ActivityController {
 
 			LearningGoalStatus cs = new LearningGoalStatus();
 			model.addAttribute("addlearningstatus", cs);
+			
+			FileUpload file = new FileUpload();
+			model.addAttribute("addfileupload",file);
 
 			return "activity/modifyChoose";
 		}
@@ -591,6 +595,25 @@ public class ActivityController {
 		}
 		return "redirect:/academicTerm/" + id_academic + "/course/" + id_course
 				+ "/group/" + id_group + "/activity/" + id + "/modify.htm";
+	}
+	
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{idCourse}/activity/{activityId}/addFileUpload.htm", method = RequestMethod.POST)
+	public String addFileCoursePOST(
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("idCourse") Long id_course,
+			@PathVariable("activityId") Long id,
+			@ModelAttribute("addfileupload") @Valid FileUpload fileupload,
+			BindingResult result, Model model) throws ServletException {
+
+		if (!result.hasErrors()) {
+			//Se almacena, se guarda el nombre del archivo en activity.info.url
+			fileupload.getFilepath();
+			
+			fileupload.getFilepath().getName();
+				
+		}
+		return "redirect:/academicTerm/" + id_academic + "/course/" + id_course
+				 + "/activity/" + id + "/modify.htm";
 	}
 
 	/**

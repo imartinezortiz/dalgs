@@ -130,6 +130,18 @@
 						style="  cursor: copy;" value="${lgsAdd}" /> 
 
 			</form:form>
+			
+			<form:form method="post" action="addFileUpload.htm" commandName="addfileupload" enctype="multipart/form-data">
+					<spring:message code="upload.choosefile" var="choose"/>
+					<spring:message code="upload.upload" var="upload"/>
+					
+						<label>Doc</label>
+						<form:input type="file" path="filepath" class="filestyle"
+							data-classButton="btn btn-primary" data-input="true"
+							data-classIcon="icon-plus" data-buttonText="${choose}" />
+
+					<input class="btn btn-success" type="submit" value="${upload}" />
+			</form:form>
 			</div>
 		</div>
 	</div>

@@ -259,6 +259,10 @@
 											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/externalactivity/${externalActivity.id}.htm'/>">
 											<fmt:message key="common.view" />
 										</a>
+										<a class="btn btn-success"
+											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/externalactivity/${externalActivity.id}/move.htm'/>">
+											<fmt:message key="common.move" />
+										</a>
 										<sec:accesscontrollist hasPermission="ADMINISTRATION"
 											domainObject="${model.group}">
 
@@ -294,8 +298,10 @@
 				<fmt:message key="group.profList" />
 			</h3>
 
-			<sec:authorize access="hasRole('ROLE_ADMIN')">
-
+ 			<sec:authorize access="hasAnyRole('ROLE_PROFESSOR', 'ROLE_ADMIN')">
+				<a class="btn btn-cvs " href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/professor/upload.htm'/>"> 
+					<span class="glyphicon glyphicon-upload" aria-hidden="true"></span> CSV </a>
+					
 				<a style="cursor: copy;" class="btn list-btn btn-warning2"
 					href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/professor/add.htm'/>">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
@@ -356,7 +362,10 @@
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 				<fmt:message key="group.studList" />
 			</h3>
-			<sec:authorize access="hasRole('ROLE_ADMIN')">
+			<sec:authorize access="hasAnyRole('ROLE_PROFESSOR', 'ROLE_ADMIN')">
+				<a class="btn btn-cvs " href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/student/upload.htm'/>"> 
+					<span class="glyphicon glyphicon-upload" aria-hidden="true"></span> CSV </a>
+					
 
 				<a style="cursor: copy;" class="btn list-btn btn-warning2"
 					href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/student/add.htm'/>">

@@ -137,7 +137,7 @@ public class ExternalActivityController {
 	 * Method for delete an activities
 	 */
 
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/externalActivity/{externalActivityId}/delete.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/externalactivity/{externalActivityId}/delete.htm", method = RequestMethod.GET)
 	public String deleteExternalActivityGroupGET(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
@@ -159,12 +159,16 @@ public class ExternalActivityController {
 	/**
 	 * Methods for view activities
 	 */
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/externalActivity/{externalActivityId}.htm", method = RequestMethod.GET)
+	
+//						/academicTerm/${academicId}/course/${courseId}/group/${groupId}/externalactivity/${externalActivity.id}.htm
+//						academicTerm/1/course/1/group/1/externalactivity/1.htm
+	
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/externalactivity/{externalActivityId}.htm", method = RequestMethod.GET)
 	public ModelAndView getExternalActivityGroup(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
-			@PathVariable("externalActivityId") long id_externalActivity)
+			@PathVariable("externalActivityId") Long id_externalActivity)
 			throws ServletException {
 
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -183,7 +187,7 @@ public class ExternalActivityController {
 		return new ModelAndView("exception/notFound", "model", model);
 	}
 
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/externalActivity/{externalActivityId}/restore.htm")
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/externalactivity/{externalActivityId}/restore.htm")
 	// Every Post have to return redirect
 	public String restoreExternalActivityGroup(
 			@PathVariable("academicId") Long id_academic,
@@ -203,6 +207,24 @@ public class ExternalActivityController {
 
 		if (!result.hasErrors())
 
+			return "redirect:/academicTerm/" + id_academic + "/course/"
+					+ id_course + "/group/" + id_group + ".htm";
+		else {
+			return "redirect:/error.htm";
+
+		}
+	}
+	
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/externalactivity/{externalActivityId}/move.htm")
+	// Every Post have to return redirect
+	public String moveExternalActivityGroup(
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("courseId") Long id_course,
+			@PathVariable("groupId") Long id_group,
+			@PathVariable("externalActivityId") Long id_externalActivity, Locale locale) {
+
+		if (serviceExternalActivity.move(id_externalActivity, id_academic, id_course, id_group))
+		
 			return "redirect:/academicTerm/" + id_academic + "/course/"
 					+ id_course + "/group/" + id_group + ".htm";
 		else {

@@ -44,6 +44,7 @@
 	<context:component-scan base-package="es.ucm.fdi.dalgs.web" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.academicTerm.web" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.activity.web" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.externalActivity.web" />	
 	<context:component-scan base-package="es.ucm.fdi.dalgs.competence.web" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.course.web" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.degree.web" />
