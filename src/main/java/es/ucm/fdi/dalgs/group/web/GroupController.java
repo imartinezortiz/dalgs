@@ -17,7 +17,6 @@
 package es.ucm.fdi.dalgs.group.web;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -302,101 +301,9 @@ public class GroupController {
 		return new ModelAndView("exception/notFound", "model", model);
 	}
 	
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/professor/add.htm", method = RequestMethod.GET)
-	public String addProfessorToGroupGET(
-			@PathVariable("groupId") Long id_group,
-			@PathVariable("courseId") Long id_course,
-			@PathVariable("academicId") Long id_academic, Model model) {
+	
 
-		Group group = serviceGroup.getGroup(id_group, id_course, id_academic)
-				.getSingleElement();
-		List<String> professors = serviceUser.getAllByRole("ROLE_PROFESSOR");
-
-		model.addAttribute("group", group);
-		model.addAttribute("typeOfUser", "Proffesors");
-
-		model.addAttribute("users", professors);
-
-		return "group/addUsers";
-
-	}
-
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/professor/add.htm", method = RequestMethod.POST, params = "AddProfessors")
-	// Every Post have to return redirect
-	public String addProfessorToGroupPOST(
-			@PathVariable("academicId") Long id_academic,
-			@PathVariable("courseId") Long id_course,
-			@PathVariable("groupId") Long id_group,
-			@ModelAttribute("group") @Valid Group group,
-			BindingResult resultBinding, RedirectAttributes attr) {
-
-		ResultClass<Group> gr = serviceGroup.getGroup(id_group, id_course,
-				id_academic);
-
-		if (gr.getSingleElement() == null || gr.hasErrors()) {
-			return "redirect:/error.htm";
-
-		} else {
-			gr.getSingleElement().setProfessors(group.getProfessors());
-
-			ResultClass<Boolean> result = serviceGroup.setProfessors(
-					gr.getSingleElement(), id_group, id_course, id_academic,null);
-			if (!result.hasErrors())
-				return "redirect:/academicTerm/" + id_academic + "/course/"
-						+ id_course + "/group/" + id_group + ".htm";
-			else
-				return "redirect:/academicTerm/" + id_academic + "/course/"
-						+ id_course + "/group/" + id_group
-						+ "/professor/add.htm";
-		}
-	}
-
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/student/add.htm", method = RequestMethod.GET)
-	public String addStudentToGroupGET(@PathVariable("groupId") Long id_group,
-			@PathVariable("courseId") Long id_course,
-			@PathVariable("academicId") Long id_academic, Model model) {
-
-		Group group = serviceGroup.getGroup(id_group, id_course, id_academic)
-				.getSingleElement();
-		List<String> students = serviceUser.getAllByRole("ROLE_STUDENT");
-
-		model.addAttribute("group", group);
-		model.addAttribute("typeOfUser", "Students");
-		model.addAttribute("users", students);
-
-		return "group/addUsers";
-
-	}
-
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/student/add.htm", method = RequestMethod.POST, params = "AddProfessors")
-	// Every Post have to return redirect
-	public String addStudentsToGroupPOST(
-			@PathVariable("academicId") Long id_academic,
-			@PathVariable("courseId") Long id_course,
-			@PathVariable("groupId") Long id_group,
-			@ModelAttribute("group") @Valid Group group,
-			BindingResult resultBinding, RedirectAttributes attr) {
-
-		ResultClass<Group> gr = serviceGroup.getGroup(id_group, id_course,
-				id_academic);
-
-		if (gr.getSingleElement() == null || gr.hasErrors()) {
-			return "redirect:/error.htm";
-
-		} else {
-
-			gr.getSingleElement().setStudents(group.getStudents());
-			ResultClass<Boolean> result = serviceGroup.setStudents(
-					gr.getSingleElement(), id_group, id_course, id_academic,null);
-			if (!result.hasErrors())
-				return "redirect:/academicTerm/" + id_academic + "/course/"
-						+ id_course + "/group/" + id_group + ".htm";
-			else
-				return "redirect:/academicTerm/" + id_academic + "/course/"
-						+ id_course + "/group/" + id_group + "/student/add.htm";
-		}
-	}
-
+	
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/restore.htm")
 	// Every Post have to return redirect
 	public String restoreAcademicTerm(
@@ -478,7 +385,7 @@ public class GroupController {
 			@PathVariable("groupId") Long id_group,
 			@PathVariable("typeOfUser") String typeOfUser) {
 
-		System.out.println("Upload POST USERS: " + typeOfUser);
+		logger.info("Upload POST USERS: " + typeOfUser);
 
 		if (result.hasErrors() || upload.getCharset().isEmpty()) {
 			for (ObjectError error : result.getAllErrors()) {

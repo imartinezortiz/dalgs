@@ -39,7 +39,7 @@
 				<fmt:message key="group.details" />
 			</h3>
 
-			
+
 		</div>
 
 		<div class="panel-body">
@@ -76,23 +76,16 @@
 						<fmt:message key="group.profList" />
 					</h3>
 
-				<%-- 	<sec:accesscontrollist hasPermission="ADMINISTRATION"
-						domainObject="${model.group}"> --%>			<sec:authorize access="hasRole('ROLE_ADMIN')">
-						
-						<a class="btn btn-cvs "
+					<sec:accesscontrollist hasPermission="ADMINISTRATION"
+						domainObject="${model.group}">
+						<a class="btn btn-cvs 2" style="float: right; margin-top: -10px;"
 							href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/ROLE_PROFESSOR/upload.htm'/>">
 							<span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
 							CSV
 						</a>
 
-						<a style="cursor: copy;" class="btn list-btn btn-warning2"
-							href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/professor/add.htm'/>">
-							<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-							<fmt:message key="common.modify" />
-						</a>
-						</sec:authorize>
-<%-- 					</sec:accesscontrollist>
- --%>
+
+					</sec:accesscontrollist>
 				</div>
 				<div class="panel-body">
 
@@ -122,14 +115,16 @@
 								<td><c:if test="${prof.enabled eq true}">
 										<a class="btn list-btn btn-success"
 											href="<c:url value='/user/${prof.id}.htm'/>"><fmt:message
-												key="common.view" /></a>
-										<sec:authorize access="hasRole('ROLE_ADMIN')">
+												key="common.view" />
+												</a>
+										<sec:accesscontrollist hasPermission="ADMINISTRATION"
+											domainObject="${model.group}">
 
 											<a class="btn btn-danger"
 												href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/user/${prof.id}/delete.htm'/>">
 												<fmt:message key="common.delete" />
 											</a>
-										</sec:authorize>
+										</sec:accesscontrollist>
 									</c:if></td>
 
 							</tr>
@@ -148,25 +143,17 @@
 						<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 						<fmt:message key="group.studList" />
 					</h3>
-				<%-- 	<sec:accesscontrollist hasPermission="ADMINISTRATION"
-						domainObject="${model.group}"> --%>
-									<sec:authorize access="hasRole('ROLE_ADMIN')">
-						
-						<a class="btn btn-cvs "
+					<sec:accesscontrollist hasPermission="ADMINISTRATION"
+						domainObject="${model.group}">
+
+						<a class="btn btn-cvs 2" style="float: right; margin-top: -10px;"
 							href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/ROLE_STUDENT/upload.htm'/>">
 							<span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
 							CSV
 						</a>
 
+					</sec:accesscontrollist>
 
-						<a style="cursor: copy;" class="btn list-btn btn-warning2"
-							href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/student/add.htm'/>">
-							<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-							<fmt:message key="common.modify" />
-						</a>
-<%-- 					</sec:accesscontrollist>
- --%>
- </sec:authorize>
 				</div>
 				<div class="panel-body">
 
@@ -194,21 +181,17 @@
 											<a class="btn list-btn btn-success"
 												href="<c:url value='/user/${student.id}.htm'/>"><fmt:message
 													key="common.view" /></a>
-											<sec:authorize access="hasRole('ROLE_ADMIN')">
+											<sec:accesscontrollist hasPermission="ADMINISTRATION"
+												domainObject="${model.group}">
 
 												<a class="btn btn-danger"
 													href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/user/${student.id}/delete.htm'/>">
 													<fmt:message key="common.delete" />
 												</a>
-											</sec:authorize>
+											</sec:accesscontrollist>
 										</c:when>
 										<c:otherwise>
-											<sec:authorize access="hasRole('ROLE_ADMIN')">
-												<a class="btn btn-danger"
-													href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/user/${student.id}/restore.htm'/>">
-													<fmt:message key="common.restore" />
-												</a>
-											</sec:authorize>
+
 										</c:otherwise>
 									</c:choose></td>
 

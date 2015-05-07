@@ -123,7 +123,7 @@ public class CourseService {
 		return daoCourse.getAll();
 	}
 
-	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#course, 'ADMINISTRATION')")
+	@PreAuthorize("hasPermission(#course, 'WRITE') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyCourse(Course course, Long id_academic,
 			Long id_course, Locale locale) {
@@ -161,7 +161,7 @@ public class CourseService {
 				// Deleting the authorities to the old coordinator
 				if (old_coordinator != null) {
 					manageAclService.removePermissionCASCADE(
-							modifyCourse.getCoordinator(), modifyCourse,
+							old_coordinator, modifyCourse,
 							id_academic, id_course, null);
 					
 					/*for (Group g : modifyCourse.getGroups()){

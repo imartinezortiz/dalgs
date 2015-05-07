@@ -100,9 +100,12 @@ public class GroupService {
 				success = manageAclService.addACLToObject(groupExists.getId(),
 						groupExists.getClass().getName());
 
-				if(success && (groupExists.getCourse().getCoordinator() !=null))
-					manageAclService.addPermissionCASCADE(groupExists.getCourse().getCoordinator(), groupExists,id_academic, id_course, groupExists.getId());
-				
+				if (success
+						&& (groupExists.getCourse().getCoordinator() != null))
+					manageAclService.addPermissionCASCADE(groupExists
+							.getCourse().getCoordinator(), groupExists,
+							id_academic, id_course, groupExists.getId());
+
 				if (success)
 					result.setSingleElement(group);
 
@@ -190,11 +193,12 @@ public class GroupService {
 					.getProfessors(), group, group.getCourse()
 					.getAcademicTerm().getId(), group.getCourse().getId(),
 					group.getId());
-			
-			if(group.getCourse().getCoordinator() !=null){
-				manageAclService.removePermissionGroupCoordinator(group.getCourse().getCoordinator(), group.getId());
+
+			if (group.getCourse().getCoordinator() != null) {
+				manageAclService.removePermissionGroupCoordinator(group
+						.getCourse().getCoordinator(), group.getId());
 			}
-			
+
 			result.setSingleElement(daoGroup.deleteGroup(group));
 
 			return result;
@@ -217,7 +221,7 @@ public class GroupService {
 	public ResultClass<Boolean> deleteGroupsFromCourses(
 			Collection<Course> coursesList) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		for (Course course : coursesList){
+		for (Course course : coursesList) {
 			for (Group group : course.getGroups()) {
 				manageAclService.removePermissionCollectionCASCADE(group
 						.getStudents(), group,
@@ -227,11 +231,13 @@ public class GroupService {
 						.getProfessors(), group, course.getAcademicTerm()
 						.getId(), course.getId(), group.getId());
 			}
-			if(course.getCoordinator()!=null)
-				manageAclService.removePermissionCASCADE(course.getCoordinator(), course, course.getAcademicTerm().getId(), course.getId(), null);
-				
+			if (course.getCoordinator() != null)
+				manageAclService.removePermissionCASCADE(course
+						.getCoordinator(), course, course.getAcademicTerm()
+						.getId(), course.getId(), null);
+
 		}
-		
+
 		result.setSingleElement(daoGroup.deleteGroupsFromCourses(coursesList));
 		return result;
 	}
@@ -257,17 +263,17 @@ public class GroupService {
 				errors.add(messageSource.getMessage("error.CodeNoDeleted",
 						null, locale));
 				result.setErrorsList(errors);
-			}
-			else{
+			} else {
 				g.setDeleted(false);
 				g.setName(group.getName());
 				boolean r = daoGroup.saveGroup(g);
-				if (r){
+				if (r) {
 					result.setSingleElement(g);
-					if(group.getCourse().getCoordinator() !=null){
-						manageAclService.addPermissionGroupCoordinator(group.getCourse().getCoordinator(), group.getId());
+					if (group.getCourse().getCoordinator() != null) {
+						manageAclService.addPermissionGroupCoordinator(group
+								.getCourse().getCoordinator(), group.getId());
 					}
-					
+
 				}
 			}
 
@@ -299,89 +305,74 @@ public class GroupService {
 		return result;
 	}
 
-//	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> setProfessors(Group group, Long id_group,
-			Long id_course, Long id_academic,Collection<User> users) {
+			Long id_course, Long id_academic, Collection<User> users) {
 		ResultClass<Boolean> result = new ResultClass<>();
-//TODO old professor == new professor
+
 		Group modifyGroup = daoGroup.getGroup(id_group, id_course, id_academic);
-		Collection<User> old_professors = modifyGroup.getProfessors(); 
-//		modifyGroup.setProfessors(group.getProfessors());
+		Collection<User> old_professors = modifyGroup.getProfessors();
 
-//		result.setHasErrors(!daoGroup.saveGroup(group));
-//		result.setSingleElement(result.hasErrors());
+		// Deleting the authorities to the old professor list
+		if (!old_professors.isEmpty()) {
+			manageAclService.removePermissionCollectionCASCADE(old_professors,
+					group, id_academic, id_course, id_group);
 
-//		if (!result.hasErrors()) {
-//			result.setSingleElement(true);
+			// TODO borrar tabla intermedia
+		}
+		// Adding the authorities to the professor list
+		// Adding the READ permissions in cascade to see through the general
+		// view
+		modifyGroup.getProfessors().clear();
+		daoGroup.saveGroup(modifyGroup);
+		modifyGroup.setProfessors(users);
 
-			// Deleting the authorities to the old professor list
-			if (!old_professors.isEmpty()) {
-				//TODO
-				manageAclService.removePermissionCollectionCASCADE(
-						old_professors, group, id_academic, id_course,
-						id_group);
-			}
-			// Adding the authorities to the professor list
-			// Adding the READ permissions in cascade to see through the general
-			// view
-			modifyGroup.setProfessors(users);
-			result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
+		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
 
-			if (!result.hasErrors()){
-				manageAclService.addPermissionCollectionCASCADE(
-						users, group, id_academic,
-						id_course, id_group);
-				result.setSingleElement(result.hasErrors());
+		if (!result.hasErrors()) {
+			manageAclService.addPermissionCollectionCASCADE(users, group,
+					id_academic, id_course, id_group);
+			result.setSingleElement(result.hasErrors());
 
-			}
-			else {
-				//TODO msg
-				result.getErrorsList().add("Error manageAclService");
-				result.setHasErrors(true);
-			}
-//		}
+		} else {
+			result.getErrorsList().add("Error manageAclService");
+			result.setHasErrors(true);
+		}
+		// }
 		return result;
 	}
 
-//	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> setStudents(Group group, Long id_group,
 			Long id_course, Long id_academic, Collection<User> users) {
+		
 		ResultClass<Boolean> result = new ResultClass<>();
 		Group modifyGroup = daoGroup.getGroup(id_group, id_course, id_academic);
 		Collection<User> old_students = modifyGroup.getStudents();
 
-
-//		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
-//		result.setSingleElement(result.hasErrors());
-//
-//		if (!result.hasErrors()) {
-//			result.setSingleElement(true);
-
-			// Deleting the authorities to the old students list
-			if (!old_students.isEmpty()) {
-				manageAclService.removePermissionCollectionCASCADE(
-						old_students, modifyGroup, id_academic, id_course,
-						id_group);
-			}
+		// Deleting the authorities to the old students list
+		if (!old_students.isEmpty()) {
+			manageAclService.removePermissionCollectionCASCADE(old_students,
+					modifyGroup, id_academic, id_course, id_group);
 			
-			modifyGroup.setStudents(users);
-			result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
+			// TODO borrar tabla intermedia
 
-			if (!result.hasErrors()){
-				manageAclService.addPermissionCollectionCASCADE(
-						modifyGroup.getStudents(), modifyGroup, id_academic,
-						id_course, id_group);
-			}
-			else {
-				//TODO msg
-				result.getErrorsList().add("Error manageAclService");
-				result.setHasErrors(true);
-			}
-//		}
+		}
+
+		modifyGroup.setStudents(users);
+		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
+
+		if (!result.hasErrors()) {
+			manageAclService.addPermissionCollectionCASCADE(
+					users, modifyGroup, id_academic,
+					id_course, id_group);
+		} else {
+			result.getErrorsList().add("Error manageAclService");
+			result.setHasErrors(true);
+		}
+		// }
 
 		return result;
 	}
@@ -412,41 +403,43 @@ public class GroupService {
 		}
 		return result;
 	}
-	
-//	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+
+	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public boolean uploadUserCVS(Group group, UploadForm upload, String typeOfUser) {
+	public boolean uploadUserCVS(Group group, UploadForm upload,
+			String typeOfUser) {
 		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
 				.charAt(0), upload.getDelimiterChar().charAt(0),
 				upload.getEndOfLineSymbols()).build();
 
-		
 		List<User> list = null;
 		try {
 			FileItem fileItem = upload.getFileData().getFileItem();
 			UserCSV userUpload = new UserCSV();
 			list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
 					upload.getCharset(), prefers, typeOfUser);
-			//TODO Si el ususario ya existe, referencia al usuario
-			if(serviceUser.persistListUsers(group, list) && list!=null){ //Added correctly
-				 ResultClass<Boolean>  success = new ResultClass<Boolean>();
-				if(typeOfUser.equalsIgnoreCase("ROLE_PROFESSOR")){
-					//group.setProfessors(list);
-					success = setProfessors( group, group.getId(), group.getCourse().getId() , group.getCourse().getAcademicTerm().getId(),list); 
-				}
-				else if(typeOfUser.equalsIgnoreCase("ROLE_STUDENT")){
-					//group.setStudents(list);
-					success= setStudents( group, group.getId(), group.getCourse().getId() , group.getCourse().getAcademicTerm().getId(), list); 
+			if (serviceUser.persistListUsers(group, list) && list != null) { // Added
+																				// correctly
+				ResultClass<Boolean> success = new ResultClass<Boolean>();
+				if (typeOfUser.equalsIgnoreCase("ROLE_PROFESSOR")) {
+					// group.setProfessors(list);
+					success = setProfessors(group, group.getId(), group
+							.getCourse().getId(), group.getCourse()
+							.getAcademicTerm().getId(), list);
+				} else if (typeOfUser.equalsIgnoreCase("ROLE_STUDENT")) {
+					// group.setStudents(list);
+					success = setStudents(group, group.getId(), group
+							.getCourse().getId(), group.getCourse()
+							.getAcademicTerm().getId(), list);
 
 				}
-				return  !success.hasErrors();
+				return !success.hasErrors();
 			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
-		}catch(final IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			e.printStackTrace();
 			return false;
 		}

@@ -112,7 +112,7 @@
 			</h3>
 
 			<!-- If you are a professor who belongs to this course you can edit -->
-			<sec:accesscontrollist hasPermission="ADMINISTRATION"
+			<sec:accesscontrollist hasPermission="WRITE"
 				domainObject="${model.course}">
 
 
@@ -148,7 +148,7 @@
 									<a class="btn btn-success"
 										href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}.htm'/>">
 										<fmt:message key="common.view" /> </a>
-									<sec:accesscontrollist hasPermission="ADMINISTRATION"
+									<sec:accesscontrollist hasPermission="WRITE"
 										domainObject="${model.course}">
 
 										<a class="btn btn-danger"
@@ -157,7 +157,7 @@
 									</sec:accesscontrollist>
 								</c:when>
 								<c:otherwise>
-									<sec:accesscontrollist hasPermission="ADMINISTRATION"
+									<sec:accesscontrollist hasPermission="WRITE"
 										domainObject="${model.course}">
 										<a class="btn btn-danger"
 											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}/restore.htm'/>">
