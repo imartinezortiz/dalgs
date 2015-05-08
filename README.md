@@ -1,8 +1,9 @@
 ---		TFG Project (May)	---
 
 //TO-DO
-0.- Añadir coleccion de actividades externas a curso y grupo (mover de una coleccion a otra)
-1.- Permitir a profesores y coordinadores importar users a un grupo concreto
+0.- Listado con todas las actividades externas 
+1.- Borrar tablas intermedias de usuarios de un grupo al modifciar el listado
+
 2.- Añadir archivos pdf, doc....  enunciados de las actividades (campo url). 
 		Para ello rutas relativas a WEB-INF/attachments
 		Hay que declarar en el xml el rootpath, el nombre del doc sera el codigo de la actividad
@@ -17,7 +18,8 @@ Optional: Change the pagination
 3.- Notificacion de actividades nuevas pnotify
 
 // DONE
-
+0.- Añadir coleccion de actividades externas a curso y grupo (mover de una coleccion a otra)
+1.- Permitir a profesores y coordinadores importar users a un grupo concreto
 
 //   OAUTH2
 

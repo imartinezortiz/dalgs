@@ -44,6 +44,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -524,11 +525,16 @@ public class ActivityController {
 
 			model.addAttribute("learningGoalStatus", p.getLearningGoalStatus());
 			model.addAttribute("learningGoals", lg);
-			FileUpload file = new FileUpload();
 			
+			FileUpload file = new FileUpload();
 			model.addAttribute("addfileupload",file);
+			
 			LearningGoalStatus cs = new LearningGoalStatus();
 			model.addAttribute("addlearningstatus", cs);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 64746ec401ce8df896e6680f1a033d18cb2ab69e
 
 			return "activity/modifyChoose";
 		}
@@ -609,29 +615,40 @@ public class ActivityController {
 			@PathVariable("activityId") Long id_activity,
 			@ModelAttribute("addfileupload")  FileUpload fileupload,
 			BindingResult result, Model model,HttpServletRequest request) throws ServletException, IllegalStateException, IOException {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 64746ec401ce8df896e6680f1a033d18cb2ab69e
 
 		if (!result.hasErrors()) {
 			
-			String fileName =fileupload.getFilepath().getFileItem().getName();
 			
-			//Se almacena, se guarda el nombre del archivo en activity.info.url
-		
-			String filePath = "/dalgs/WEB-INF/wordings/"; //Please note that I am going to remove hardcoaded path to get it from resource/property file
-			System.out.println(filePath);
+			File file = multipartToFile(fileupload.getFilepath(), request);
 			
-			File dest = new File(filePath, fileName);
-			 //NOT WORKING!!	 
-			fileupload.getFilepath().transferTo(dest);
-			
-			Activity act = serviceActivity.getActivity(id_activity, id_course, null, id_academic).getSingleElement();
-			act.getInfo().setUrl(fileName);
-			if(serviceActivity.modifyActivity(act.getCourse(), null, act, id_activity, id_course, id_academic, null).hasErrors()) //Locale
-				return "redirect:/error.htm";
-			}
+			if (file != null){
+
+				Activity act = serviceActivity.getActivity(id_activity, id_course, null, id_academic).getSingleElement();
+				act.getInfo().setUrl(file.getAbsolutePath());
+				
+				
+				if(serviceActivity.modifyActivity(act.getCourse(), null, act, id_activity, id_course, id_academic, null).hasErrors()) //Locale
+					return "redirect:/error.htm";
+				}
+		}
 		return "redirect:/academicTerm/" + id_academic + "/course/" + id_course
 				 + "/activity/" + id_activity + "/modify.htm";
 	}
 
+	///-------------
+	public File multipartToFile(MultipartFile multipart, HttpServletRequest request) throws IllegalStateException, IOException {
+	        File convFile = new File( request.getSession().
+	        		getServletContext().getRealPath("/WEB-INF/"), multipart.getOriginalFilename());
+	        multipart.transferTo(convFile);
+	        return convFile;
+	}
+	
+	///---------------
+	
 	/**
 	 * Method for delete an activities
 	 */

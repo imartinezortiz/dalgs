@@ -127,12 +127,8 @@ public class WebhookService {
 		
 		boolean success = false;
 
-	
-//		Activity activityExists = daoActivity.existByCode(act.getInfo()
-//				.getCode());
 		ResultClass<ExternalActivity> result = new ResultClass<>();
 
-//		if (activityExists == null) {
 			
 			act.setGroup(getGroupREST(id_group).getSingleElement());
 			success = daoExternalActivity.addActivity(act);

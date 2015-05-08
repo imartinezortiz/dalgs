@@ -100,7 +100,7 @@
 <c:url value="/user.htm" var="userUrl" />
 <c:url value="/admin.htm" var="adminUrl" />
 <c:url value="/logout.htm" var="logoutUrl" />
-
+<c:url value="/externalActivities.htm" var="externals" />
 
 <%-- <c:out value="${upload}"></c:out>
 <c:out value="${contextPath}"></c:out>
@@ -147,8 +147,9 @@
 								Admin
 						</a>
 					</li>	
- 						<!-- TODO -->
-				 <li><a class="navbar-link" data-toggle="navbar-link" href="#">
+ 						<!-- TODO --> 
+				 <li><a class="navbar-link" data-toggle="navbar-link" 
+				 href="${externals}">
 				     <span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> External
 				  </a>
 						</li>

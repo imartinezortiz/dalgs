@@ -67,7 +67,7 @@ public class ActivityService {
 	@Autowired
 	private MessageSource messageSource;
 
-	@PreAuthorize("hasPermission(#course, 'WRITE')")
+	@PreAuthorize("hasPermission(#course, 'WRITE') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Activity> addActivityCourse(Course course,
 			Activity activity, Long id_course, Long id_academic, Locale locale) {
@@ -139,7 +139,7 @@ public class ActivityService {
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#group, 'ADMINISTRATION') ")
+	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#group, 'ADMINISTRATION') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyActivity(Course course, Group group,
 			Activity activity, Long id_activity, Long id_course,
@@ -212,7 +212,7 @@ public class ActivityService {
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#group, 'ADMINISTRATION') ")
+	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#group, 'ADMINISTRATION') or hasRole('ROLE_ADMIN')")
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean> deleteActivity(Course course, Group group,
 			Long id) {
@@ -276,7 +276,7 @@ public class ActivityService {
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#group, 'ADMINISTRATION') ")
+	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#group, 'ADMINISTRATION') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> addLearningGoals(Course course, Group group,
 			Long id, LearningGoalStatus learningGoalStatus, Long id_course,
@@ -321,14 +321,14 @@ public class ActivityService {
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#course, 'WRITE')")
+	@PreAuthorize("hasPermission(#course, 'WRITE') or hasRole('ROLE_ADMIN')")
 	public ResultClass<Boolean> deleteActivitiesFromCourse(Course course) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		result.setSingleElement(daoActivity.deleteActivitiesFromCourse(course));
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#group, 'ADMINISTRATION') ")
+	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#group, 'ADMINISTRATION') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Activity> unDeleteActivity(Course course, Group group,
 			Activity activity, Locale locale) {
