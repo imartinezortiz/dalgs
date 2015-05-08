@@ -48,7 +48,6 @@ import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
 import es.ucm.fdi.dalgs.domain.Course;
-import es.ucm.fdi.dalgs.domain.ExternalActivity;
 import es.ucm.fdi.dalgs.domain.Subject;
 import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.externalActivity.service.ExternalActivityService;
@@ -133,8 +132,7 @@ public class CourseController {
 					attr.addFlashAttribute("academicTerm", resultReturned
 							.getSingleElement().getAcademicTerm());
 				}
-//				ResultClass<Subject> s = serviceSubject.getSubjectForDegree(
-//						resultReturned.getSingleElement().getAcademicTerm().getDegree());
+
 						
 				attr.addFlashAttribute(
 						"subjects",
