@@ -133,12 +133,14 @@ public class CourseController {
 					attr.addFlashAttribute("academicTerm", resultReturned
 							.getSingleElement().getAcademicTerm());
 				}
+//				ResultClass<Subject> s = serviceSubject.getSubjectForDegree(
+//						resultReturned.getSingleElement().getAcademicTerm().getDegree());
+						
 				attr.addFlashAttribute(
 						"subjects",
 						serviceSubject.getSubjectForDegree(
 								resultReturned.getSingleElement()
-										.getAcademicTerm().getDegree())
-								.getSingleElement());
+										.getAcademicTerm().getDegree()));
 
 				attr.addFlashAttribute("errors", resultReturned.getErrorsList());
 			}
