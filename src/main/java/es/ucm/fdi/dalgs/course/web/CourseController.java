@@ -283,7 +283,7 @@ public class CourseController {
 					modify, id_academic, id_course, locale);
 			if (!resultReturned.hasErrors())
 
-				return "redirect:/academicTerm/" + id_academic + ".htm";
+				return "redirect:/academicTerm/" + id_academic + "/course/"+id_course +".htm";
 			else {
 
 				attr.addFlashAttribute("errors", resultReturned.getErrorsList());
@@ -324,7 +324,7 @@ public class CourseController {
 	 * Delete a course of an academicTerm
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/delete.htm", method = RequestMethod.GET)
-	public String formDeleteAcademicTermCourse(
+	public String deleteCourseGET(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course) throws ServletException {
 

@@ -180,5 +180,7 @@ public class UserService {
 		return daoUser.persistListUsers(list);
 	}
 	
+	
+	
 
 }

@@ -64,7 +64,10 @@
 					<label><fmt:message key="input.desc" /> :</label>
 					<p class="details">${model.activity.info.description}</p>
 				</div>
-
+				<div class="form-group view">
+					<label><fmt:message key="activity.doc" />: </label>
+					<p class="details">${model.activity.info.url}</p>
+				</div>
 
 			</div>
 

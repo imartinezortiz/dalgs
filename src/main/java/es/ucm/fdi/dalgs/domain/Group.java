@@ -91,6 +91,7 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 	@JsonManagedReference
 	private Collection<ExternalActivity> external_activities;
 
+
 	public Group() {
 		super();
 		this.isDeleted = false;

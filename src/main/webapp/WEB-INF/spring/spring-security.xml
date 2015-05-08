@@ -58,7 +58,11 @@
 		<logout invalidate-session="true" logout-success-url="/logout/success.htm"
 			logout-url="/logout.htm" delete-cookies="JSESSIONID"  />
 		<!-- enable csrf protection -->
+<<<<<<< HEAD
 	<!--  	<csrf />-->
+=======
+		<!-- <csrf /> -->
+>>>>>>> b5d0ef5d9f96e076445369438ea314a0e9c9d941
 		
 		 <!--Remember me for: Half an hour -->
 			<remember-me 

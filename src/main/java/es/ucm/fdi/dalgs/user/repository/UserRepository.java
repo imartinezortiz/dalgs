@@ -127,8 +127,10 @@ public class UserRepository {
 				// u.setPassword(pass);
 
 				u.setId(null); // If not a detached entity is passed to persist
-				em.persist(u);
-				// em.flush();
+				
+				if (findByEmail(u.getEmail())==null)
+					em.persist(u);
+					// em.flush();
 
 				if (++i % 20 == 0) {
 					em.flush();

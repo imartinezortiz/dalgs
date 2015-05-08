@@ -16,6 +16,7 @@
  */
 package es.ucm.fdi.dalgs.activity.web;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.acl.NotOwnerException;
 import java.util.Collection;
@@ -25,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -522,12 +524,11 @@ public class ActivityController {
 
 			model.addAttribute("learningGoalStatus", p.getLearningGoalStatus());
 			model.addAttribute("learningGoals", lg);
-
+			FileUpload file = new FileUpload();
+			
+			model.addAttribute("addfileupload",file);
 			LearningGoalStatus cs = new LearningGoalStatus();
 			model.addAttribute("addlearningstatus", cs);
-			
-			FileUpload file = new FileUpload();
-			model.addAttribute("addfileupload",file);
 
 			return "activity/modifyChoose";
 		}
@@ -600,26 +601,36 @@ public class ActivityController {
 				+ "/group/" + id_group + "/activity/" + id + "/modify.htm";
 	}
 	
+	//TODO and for group too
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{idCourse}/activity/{activityId}/addFileUpload.htm", method = RequestMethod.POST)
 	public String addFileCoursePOST(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("idCourse") Long id_course,
-			@PathVariable("activityId") Long id,
-			@ModelAttribute("addfileupload") @Valid FileUpload fileupload,
-			BindingResult result, Model model) throws ServletException {
+			@PathVariable("activityId") Long id_activity,
+			@ModelAttribute("addfileupload")  FileUpload fileupload,
+			BindingResult result, Model model,HttpServletRequest request) throws ServletException, IllegalStateException, IOException {
 
 		if (!result.hasErrors()) {
-			//Se almacena, se guarda el nombre del archivo en activity.info.url
-			fileupload.getFilepath();
 			
-			fileupload.getFilepath().getName();
-				
-		}
+			String fileName =fileupload.getFilepath().getFileItem().getName();
+			
+			//Se almacena, se guarda el nombre del archivo en activity.info.url
+		
+			String filePath = "/dalgs/WEB-INF/wordings/"; //Please note that I am going to remove hardcoaded path to get it from resource/property file
+			System.out.println(filePath);
+			
+			File dest = new File(filePath, fileName);
+			 //NOT WORKING!!	 
+			fileupload.getFilepath().transferTo(dest);
+			
+			Activity act = serviceActivity.getActivity(id_activity, id_course, null, id_academic).getSingleElement();
+			act.getInfo().setUrl(fileName);
+			if(serviceActivity.modifyActivity(act.getCourse(), null, act, id_activity, id_course, id_academic, null).hasErrors()) //Locale
+				return "redirect:/error.htm";
+			}
 		return "redirect:/academicTerm/" + id_academic + "/course/" + id_course
-				 + "/activity/" + id + "/modify.htm";
+				 + "/activity/" + id_activity + "/modify.htm";
 	}
-	
-
 
 	/**
 	 * Method for delete an activities

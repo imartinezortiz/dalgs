@@ -61,7 +61,11 @@
 					<form:errors path="info.description" cssStyle="color: #ff0000" />
 				</div>
 
-								
+					<div class="form-group view">
+					<label><fmt:message key="activity.doc" />: </label>
+					<form:input class="form-control" path="info.url"
+						id="url" readonly="true"/>
+				</div>			
 
 				<div class="panel-body">
 					<label><fmt:message key="learninggoalstatus.list" /></label>
@@ -132,15 +136,17 @@
 			</form:form>
 			
 			<form:form method="post" action="addFileUpload.htm" commandName="addfileupload" enctype="multipart/form-data">
+					<h4 style=" color: rgb(76, 76, 76); text-decoration: underline; cursor: default;">   		
+					<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
+					<fmt:message key="activity.doc" /></h4>
+					<br>
 					<spring:message code="upload.choosefile" var="choose"/>
 					<spring:message code="upload.upload" var="upload"/>
 					
-						<label>Doc</label>
 						<form:input type="file" path="filepath" class="filestyle"
 							data-classButton="btn btn-primary" data-input="true"
 							data-classIcon="icon-plus" data-buttonText="${choose}" />
-
-					<input class="btn btn-success" type="submit" value="${upload}" />
+						<input class="btn " type="submit"  value="${upload}"style=" margin: -2.8% 0 0 34%;">
 			</form:form>
 			</div>
 		</div>

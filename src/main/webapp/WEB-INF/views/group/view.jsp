@@ -55,7 +55,7 @@
     						</c:url>">
 							<img
 							src="<c:url value="/resources/images/theme/trash_open_view.png" /> "
-							style="float: right; margin-right: 1%; margin-top: -0.5%;">
+							style="float: right; margin-right: 1%; margin-top: -10px;">
 						</a>
 					</c:when>
 					<c:otherwise>
@@ -64,7 +64,7 @@
     							</c:url>">
 							<img
 							src="<c:url value="/resources/images/theme/trash_close_view.png" /> "
-							style="float: right; margin-right: 1%;">
+							style="float: right; margin-right: 1%; margin-top:-2px;">
 						</a>
 					</c:otherwise>
 				</c:choose>
