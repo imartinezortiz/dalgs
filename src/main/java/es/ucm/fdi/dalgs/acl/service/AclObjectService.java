@@ -16,6 +16,7 @@
  */
 package es.ucm.fdi.dalgs.acl.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -92,19 +93,17 @@ public class AclObjectService {
 			return false;
 		}
 
-		
-		
-		if(authentication.getPrincipal() !="anonymousUser"){
+		if (authentication.getPrincipal() != "anonymousUser") {
 			User user = (User) authentication.getPrincipal();
 
-			acl.insertAce(0, BasePermission.ADMINISTRATION,
-					new PrincipalSid(user.getUsername()), true);
+			acl.insertAce(0, BasePermission.ADMINISTRATION, new PrincipalSid(
+					user.getUsername()), true);
 			acl.insertAce(1, BasePermission.DELETE, new GrantedAuthoritySid(
 					"ROLE_ADMIN"), true);
 
 		}
-		acl.insertAce(0, BasePermission.ADMINISTRATION, new GrantedAuthoritySid(
-				"ROLE_ADMIN"), true);
+		acl.insertAce(0, BasePermission.ADMINISTRATION,
+				new GrantedAuthoritySid("ROLE_ADMIN"), true);
 		acl.insertAce(1, BasePermission.DELETE, new GrantedAuthoritySid(
 				"ROLE_ADMIN"), true);
 
@@ -143,7 +142,10 @@ public class AclObjectService {
 			}
 
 			// Now grant some permissions via an access control entry (ACE)
-			acl.insertAce(acl.getEntries().size(), p, sid, true);
+			if (!acl.getEntries().isEmpty())
+				acl.insertAce(acl.getEntries().size(), p, sid, true);
+			else
+				acl.insertAce(2, p, sid, true);
 			mutableAclService.updateAcl(acl);
 
 		}
@@ -249,15 +251,19 @@ public class AclObjectService {
 			}
 
 			// Now grant some permissions via an access control entry (ACE)
-			acl.insertAce(acl.getEntries().size(), p, sid, true);
+			if (!acl.getEntries().isEmpty())
+				acl.insertAce(acl.getEntries().size(), p, sid, true);
+			else
+				acl.insertAce(2, p, sid, true);
+
 			mutableAclService.updateAcl(acl);
 		}
 	}
 
-	// Authorize professors to manage his course
-	public void addPermissionToAnObject_READ(User user, Long id_object,
+	public void addPermissionToAnObject_WRITE(User coordinator, Long id_object,
 			String name_class) {
-		if (user != null) {
+
+		if (coordinator != null) {
 			// Create or update the relevant ACL
 			MutableAcl acl = null;
 			// Prepare the information we'd like in our access control entry
@@ -266,8 +272,8 @@ public class AclObjectService {
 
 			Sid sid = null;
 
-			sid = new PrincipalSid(user.getUsername());
-			Permission p = BasePermission.READ;
+			sid = new PrincipalSid(coordinator.getUsername());
+			Permission p = BasePermission.WRITE;
 
 			try {
 				acl = (MutableAcl) mutableAclService.readAclById(oi);
@@ -276,7 +282,48 @@ public class AclObjectService {
 			}
 
 			// Now grant some permissions via an access control entry (ACE)
-			acl.insertAce(acl.getEntries().size(), p, sid, true);
+			if (!acl.getEntries().isEmpty())
+				acl.insertAce(acl.getEntries().size(), p, sid, true);
+			else
+				acl.insertAce(2, p, sid, true);
+
+			mutableAclService.updateAcl(acl);
+		}
+	}
+
+	// Authorize professors to manage his course
+	public void addPermissionToAnObject_READ(User user, Long id_object,
+			String name_class) {
+
+		if (user != null) {
+			// Create or update the relevant ACL
+			MutableAcl acl = null;
+
+			// Prepare the information we'd like in our access control entry
+			// (ACE)
+			ObjectIdentity oi = new ObjectIdentityImpl(name_class, id_object);
+
+			User admin = userService.findByUsername("admin");
+			Sid admin_sid = new PrincipalSid(admin.getUsername());
+			List<Sid> sids = new ArrayList<Sid>();
+			sids.add(admin_sid);
+
+			Sid sid = null;
+
+			sid = new PrincipalSid(user.getUsername());
+			Permission p = BasePermission.READ;
+
+			try {
+
+				acl = (MutableAcl) mutableAclService.readAclById(oi, sids);
+			} catch (NotFoundException nfe) {
+				acl = mutableAclService.createAcl(oi);
+			}
+
+			if (!acl.getEntries().isEmpty())
+				acl.insertAce(acl.getEntries().size(), p, sid, true);
+			else
+				acl.insertAce(2, p, sid, true);
 			mutableAclService.updateAcl(acl);
 		}
 
@@ -303,7 +350,11 @@ public class AclObjectService {
 			}
 
 			// Now grant some permissions via an access control entry (ACE)
-			acl.insertAce(acl.getEntries().size(), p, sid, true);
+			if (!acl.getEntries().isEmpty())
+				acl.insertAce(acl.getEntries().size(), p, sid, true);
+			else
+				acl.insertAce(2, p, sid, true);
+
 			mutableAclService.updateAcl(acl);
 
 		}
@@ -324,6 +375,43 @@ public class AclObjectService {
 
 			sid = new PrincipalSid(user.getUsername());
 			Permission p = BasePermission.READ;
+
+			try {
+				acl = (MutableAcl) mutableAclService.readAclById(oi);
+			} catch (NotFoundException nfe) {
+				acl = mutableAclService.createAcl(oi);
+			}
+
+			Integer aceIndex = 0;
+			for (AccessControlEntry ace : acl.getEntries()) {
+				if ((ace.getSid().equals(sid))
+						&& (ace.getPermission().equals(p))) {
+					acl.deleteAce(aceIndex);
+					break;
+				} else
+					aceIndex++;
+			}
+
+			// Now grant some permissions via an access control entry (ACE)
+			if (acl != null)
+				mutableAclService.updateAcl(acl);
+		}
+	}
+
+	public void removePermissionToAnObject_WRITE(User user, Long id_object,
+			String name_class) {
+		if (user != null) {
+
+			// Create or update the relevant ACL
+			MutableAcl acl = null;
+			// Prepare the information we'd like in our access control entry
+			// (ACE)
+			ObjectIdentity oi = new ObjectIdentityImpl(name_class, id_object);
+
+			Sid sid = null;
+
+			sid = new PrincipalSid(user.getUsername());
+			Permission p = BasePermission.WRITE;
 
 			try {
 				acl = (MutableAcl) mutableAclService.readAclById(oi);
@@ -392,7 +480,13 @@ public class AclObjectService {
 
 				this.addPermissionToAnObject_READ(user, id_academic,
 						AcademicTerm.class.getName());
+				this.addPermissionToAnObject_ADMINISTRATION(user, id_academic,
+						AcademicTerm.class.getName());
+
 				this.addPermissionToAnObject_ADMINISTRATION(user, id_course,
+						Course.class.getName());
+
+				this.addPermissionToAnObject_WRITE(user, id_course,
 						Course.class.getName());
 
 				// Course Activities
@@ -401,6 +495,8 @@ public class AclObjectService {
 				for (Activity a : activities_aux) {
 					this.addPermissionToAnObject_ADMINISTRATION(user,
 							a.getId(), a.getClass().getName());
+					this.addPermissionToAnObject_WRITE(user, a.getId(), a
+							.getClass().getName());
 				}
 
 				// Groups
@@ -409,13 +505,18 @@ public class AclObjectService {
 				for (Group g : groups_aux) {
 					this.addPermissionToAnObject_READ(user, g.getId(), g
 							.getClass().getName());
-
+					this.addPermissionToAnObject_WRITE(user, g.getId(), g
+							.getClass().getName());
+					this.addPermissionToAnObject_ADMINISTRATION(user,
+							g.getId(), g.getClass().getName());
 					activities_aux.clear();
 
 					// Group activities
 					activities_aux = activityService.getActivitiesForGroup(
 							g.getId(), true);
 					for (Activity a : activities_aux) {
+						this.addPermissionToAnObject_WRITE(user, a.getId(), a
+								.getClass().getName());
 						this.addPermissionToAnObject_ADMINISTRATION(user,
 								a.getId(), a.getClass().getName());
 					}
@@ -424,17 +525,27 @@ public class AclObjectService {
 
 			else if (object instanceof Group) {
 
-				if (userService.hasRole(user, "ROLE_STUDENT"))
-					this.addPermissionToAnObject_READ(user, id_group,
-							Group.class.getName());
-				else if (userService.hasRole(user, "ROLE_PROFESSOR"))
-					this.addPermissionToAnObject_ADMINISTRATION(user, id_group,
-							Group.class.getName());
+				this.addPermissionToAnObject_READ(user, id_academic,
+						AcademicTerm.class.getName());
 
 				this.addPermissionToAnObject_READ(user, id_course,
 						Course.class.getName());
-				this.addPermissionToAnObject_READ(user, id_academic,
-						AcademicTerm.class.getName());
+
+				if (userService.hasRole(user, "ROLE_STUDENT"))
+					this.addPermissionToAnObject_READ(user, id_group,
+							Group.class.getName());
+				else if (userService.hasRole(user, "ROLE_PROFESSOR")) {
+					this.addPermissionToAnObject_ADMINISTRATION(user, id_group,
+							Group.class.getName());
+					this.addPermissionToAnObject_WRITE(user, id_group,
+							Group.class.getName());
+
+					this.addPermissionToAnObject_ADMINISTRATION(user,
+							id_academic, AcademicTerm.class.getName());
+
+					this.addPermissionToAnObject_ADMINISTRATION(user,
+							id_course, Course.class.getName());
+				}
 
 				// Group activities
 				Collection<Activity> activities_aux = activityService
@@ -443,31 +554,42 @@ public class AclObjectService {
 					if (userService.hasRole(user, "ROLE_STUDENT"))
 						this.addPermissionToAnObject_READ(user, a.getId(), a
 								.getClass().getName());
-					else if (userService.hasRole(user, "ROLE_PROFESSOR"))
+					else if (userService.hasRole(user, "ROLE_PROFESSOR")) {
 						this.addPermissionToAnObject_ADMINISTRATION(user,
 								a.getId(), a.getClass().getName());
+						this.addPermissionToAnObject_WRITE(user, a.getId(), a
+								.getClass().getName());
+					}
 				}
 				activities_aux.clear();
 
 				// Course activities
 				activities_aux = activityService.getActivitiesForCourse(
 						id_course, true);
-				for (Activity a : activities_aux)
+				for (Activity a : activities_aux) {
 					this.addPermissionToAnObject_READ(user, a.getId(), a
 							.getClass().getName());
+					this.addPermissionToAnObject_ADMINISTRATION(user,
+							a.getId(), a.getClass().getName());
+				}
 			}
 		}
 	}
 
 	public void removePermissionCASCADE(User user, Object object,
 			Long id_academic, Long id_course, Long id_group) {
-
 		if (user != null) {
 			if (object instanceof Course) { // Coordinator
 
 				this.removePermissionToAnObject_READ(user, id_academic,
 						AcademicTerm.class.getName());
+				this.removePermissionToAnObject_ADMINISTRATION(user, id_academic,
+						AcademicTerm.class.getName());
+
 				this.removePermissionToAnObject_ADMINISTRATION(user, id_course,
+						Course.class.getName());
+
+				this.removePermissionToAnObject_WRITE(user, id_course,
 						Course.class.getName());
 
 				// Course Activities
@@ -476,6 +598,8 @@ public class AclObjectService {
 				for (Activity a : activities_aux) {
 					this.removePermissionToAnObject_ADMINISTRATION(user,
 							a.getId(), a.getClass().getName());
+					this.removePermissionToAnObject_WRITE(user, a.getId(), a
+							.getClass().getName());
 				}
 
 				// Groups
@@ -484,13 +608,18 @@ public class AclObjectService {
 				for (Group g : groups_aux) {
 					this.removePermissionToAnObject_READ(user, g.getId(), g
 							.getClass().getName());
-
+					this.removePermissionToAnObject_WRITE(user, g.getId(), g
+							.getClass().getName());
+					this.removePermissionToAnObject_ADMINISTRATION(user,
+							g.getId(), g.getClass().getName());
 					activities_aux.clear();
 
 					// Group activities
 					activities_aux = activityService.getActivitiesForGroup(
 							g.getId(), true);
 					for (Activity a : activities_aux) {
+						this.removePermissionToAnObject_WRITE(user, a.getId(), a
+								.getClass().getName());
 						this.removePermissionToAnObject_ADMINISTRATION(user,
 								a.getId(), a.getClass().getName());
 					}
@@ -499,16 +628,27 @@ public class AclObjectService {
 
 			else if (object instanceof Group) {
 
-				this.removePermissionToAnObject_READ(user, id_course,
-						Course.class.getName());
 				this.removePermissionToAnObject_READ(user, id_academic,
 						AcademicTerm.class.getName());
+
+				this.removePermissionToAnObject_READ(user, id_course,
+						Course.class.getName());
+
 				if (userService.hasRole(user, "ROLE_STUDENT"))
 					this.removePermissionToAnObject_READ(user, id_group,
 							Group.class.getName());
-				else if (userService.hasRole(user, "ROLE_PROFESSOR"))
+				else if (userService.hasRole(user, "ROLE_PROFESSOR")) {
+					this.removePermissionToAnObject_ADMINISTRATION(user, id_group,
+							Group.class.getName());
+					this.removePermissionToAnObject_WRITE(user, id_group,
+							Group.class.getName());
+
 					this.removePermissionToAnObject_ADMINISTRATION(user,
-							id_group, Group.class.getName());
+							id_academic, AcademicTerm.class.getName());
+
+					this.removePermissionToAnObject_ADMINISTRATION(user,
+							id_course, Course.class.getName());
+				}
 
 				// Group activities
 				Collection<Activity> activities_aux = activityService
@@ -517,20 +657,40 @@ public class AclObjectService {
 					if (userService.hasRole(user, "ROLE_STUDENT"))
 						this.removePermissionToAnObject_READ(user, a.getId(), a
 								.getClass().getName());
-					else if (userService.hasRole(user, "ROLE_PROFESSOR"))
+					else if (userService.hasRole(user, "ROLE_PROFESSOR")) {
 						this.removePermissionToAnObject_ADMINISTRATION(user,
 								a.getId(), a.getClass().getName());
+						this.removePermissionToAnObject_WRITE(user, a.getId(), a
+								.getClass().getName());
+					}
 				}
 				activities_aux.clear();
 
 				// Course activities
 				activities_aux = activityService.getActivitiesForCourse(
 						id_course, true);
-				for (Activity a : activities_aux)
+				for (Activity a : activities_aux) {
 					this.removePermissionToAnObject_READ(user, a.getId(), a
 							.getClass().getName());
+					this.removePermissionToAnObject_ADMINISTRATION(user,
+							a.getId(), a.getClass().getName());
+				}
 			}
 		}
+	}
+
+	public void removePermissionGroupCoordinator(User coordinator, Long id_group) {
+		this.removePermissionToAnObject_READ(coordinator, id_group,
+				Group.class.getName());
+		this.removePermissionToAnObject_ADMINISTRATION(coordinator, id_group,
+				Group.class.getName());
+	}
+
+	public void addPermissionGroupCoordinator(User coordinator, Long id_group) {
+		this.addPermissionToAnObject_READ(coordinator, id_group,
+				Group.class.getName());
+		this.addPermissionToAnObject_ADMINISTRATION(coordinator, id_group,
+				Group.class.getName());
 	}
 
 	public void removePermissionCollectionCASCADE(Collection<User> users,

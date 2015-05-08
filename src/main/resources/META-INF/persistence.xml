@@ -9,6 +9,7 @@
 	<persistence-unit name="tfgPU" transaction-type="RESOURCE_LOCAL">
 	
 		<class>es.ucm.fdi.dalgs.domain.AcademicTerm</class>
+ 		
  		<class>es.ucm.fdi.dalgs.domain.Activity</class>
 		<class>es.ucm.fdi.dalgs.domain.Competence</class>
 		<class>es.ucm.fdi.dalgs.domain.LearningGoal</class>

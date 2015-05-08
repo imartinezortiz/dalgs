@@ -55,7 +55,7 @@
     						</c:url>">
 							<img
 							src="<c:url value="/resources/images/theme/trash_open_view.png" /> "
-							style="float: right; margin-right: 1%; margin-top: -0.5%;">
+							style="float: right; margin-right: 1%; margin-top: -10px;">
 						</a>
 					</c:when>
 					<c:otherwise>
@@ -64,7 +64,7 @@
     							</c:url>">
 							<img
 							src="<c:url value="/resources/images/theme/trash_close_view.png" /> "
-							style="float: right; margin-right: 1%;">
+							style="float: right; margin-right: 1%; margin-top:-2px;">
 						</a>
 					</c:otherwise>
 				</c:choose>
@@ -213,6 +213,7 @@
 			</table>
 		</div>
 	</div>
+	
 	<sec:accesscontrollist hasPermission="ADMINISTRATION"
 		domainObject="${model.group}">
 		<div class="panel panel-primary group">
@@ -225,10 +226,6 @@
 				</h3>
 
 				<!-- If you are a professor who belongs to this course you can edit -->
-
-
-
-
 
 			</div>
 			<div class="panel-body">
@@ -289,143 +286,41 @@
 				</table>
 			</div>
 		</div>
-	</sec:accesscontrollist>
+		</sec:accesscontrollist>
+	
+	
+	
+	<table id="groupUser" class="panel panel-primary group">
+	<tr>
+	<td>
+	<a 
+		href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/professor/view.htm'/>">
+		<div class="panel panel-primary group" id="classListUser">
+			<div class="panel-heading">
+				<h3 class="panel-title list">
+					<span class="glyphicon glyphicon-user" aria-hidden="true">&nbsp;</span>
+					<fmt:message key="group.profList" />
+				</h3>
 
-	<div class="panel panel-primary group">
-		<div class="panel-heading">
-			<h3 class="panel-title list">
-				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="group.profList" />
-			</h3>
-
- 			<sec:authorize access="hasAnyRole('ROLE_PROFESSOR', 'ROLE_ADMIN')">
-				<a class="btn btn-cvs " href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/professor/upload.htm'/>"> 
-					<span class="glyphicon glyphicon-upload" aria-hidden="true"></span> CSV </a>
-					
-				<a style="cursor: copy;" class="btn list-btn btn-warning2"
-					href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/professor/add.htm'/>">
-					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="common.modify" />
-				</a>
-			</sec:authorize>
+			</div>
 
 		</div>
-		<div class="panel-body">
-
-			<table class="table table-striped table-bordered">
-				<tr align="center">
-					<td width="20%"><div class="td-label">
-							<fmt:message key="user.lastN" />
-						</div></td>
-					<td width="50%"><div class="td-label">
-							<fmt:message key="user.firstN" />
-						</div></td>
-				</tr>
-				<c:forEach items="${model.group.professors}" var="prof">
-					<tr align="center">
-						<td><div class="td-content">
-								<c:out value="${prof.lastName}" />
-							</div></td>
-						<td><div class="td-content">
-								<c:out value="${prof.firstName}" />
-							</div></td>
-
-
-						<%-- 		<td>
-						<a class="btn list-btn btn-success"
-										href="<c:url value='/user/${prof.id}.htm'/>">View </a>
-						</td> --%>
-						<td><c:if test="${prof.enabled eq true}">
-								<a class="btn list-btn btn-success"
-									href="<c:url value='/user/${prof.id}.htm'/>"><fmt:message
-										key="common.view" /></a>
-								<sec:authorize access="hasRole('ROLE_ADMIN')">
-
-									<a class="btn btn-danger"
-										href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/user/${prof.id}/delete.htm'/>">
-										<fmt:message key="common.delete" />
-									</a>
-								</sec:authorize>
-							</c:if></td>
-
-					</tr>
-				</c:forEach>
-
-
-			</table>
+	</a>
+	</td><td>
+	<a
+		href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/student/view.htm'/>">
+		<div class="panel panel-primary group" id="classListUser">
+			<div class="panel-heading">
+				<h3 class="panel-title list">
+					<span class="glyphicon glyphicon-user" aria-hidden="true">&nbsp;</span>
+					<fmt:message key="group.studList" />
+				</h3>
+			</div>
 		</div>
-	</div>
+	</a></td>
+	</tr>
+</table>
 
-	<div class="panel panel-primary group">
-		<div class="panel-heading">
-			<h3 class="panel-title list">
-				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="group.studList" />
-			</h3>
-			<sec:authorize access="hasAnyRole('ROLE_PROFESSOR', 'ROLE_ADMIN')">
-				<a class="btn btn-cvs " href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/student/upload.htm'/>"> 
-					<span class="glyphicon glyphicon-upload" aria-hidden="true"></span> CSV </a>
-					
-
-				<a style="cursor: copy;" class="btn list-btn btn-warning2"
-					href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/student/add.htm'/>">
-					<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="common.modify" />
-				</a>
-			</sec:authorize>
-
-		</div>
-		<div class="panel-body">
-
-			<table class="table table-striped table-bordered">
-				<tr align="center">
-					<td width="20%"><div class="td-label">
-							<fmt:message key="user.lastN" />
-						</div></td>
-					<td width="50%"><div class="td-label">
-							<fmt:message key="user.firstN" />
-						</div></td>
-				</tr>
-				<c:forEach items="${model.group.students}" var="student">
-					<tr align="center">
-						<td><div class="td-content">
-								<c:out value="${student.lastName}" />
-							</div></td>
-						<td><div class="td-content">
-								<c:out value="${student.firstName}" />
-							</div></td>
-
-
-						<td><c:choose>
-								<c:when test="${student.enabled eq true}">
-									<a class="btn list-btn btn-success"
-										href="<c:url value='/user/${student.id}.htm'/>"><fmt:message
-											key="common.view" /></a>
-									<sec:authorize access="hasRole('ROLE_ADMIN')">
-
-										<a class="btn btn-danger"
-											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/user/${student.id}/delete.htm'/>">
-											<fmt:message key="common.delete" />
-										</a>
-									</sec:authorize>
-								</c:when>
-								<c:otherwise>
-									<sec:authorize access="hasRole('ROLE_ADMIN')">
-										<a class="btn btn-danger"
-											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/user/${student.id}/restore.htm'/>">
-											<fmt:message key="common.restore" />
-										</a>
-									</sec:authorize>
-								</c:otherwise>
-							</c:choose></td>
-
-					</tr>
-				</c:forEach>
-			</table>
-		</div>
-
-
-	</div>
 </body>
 
 </html>

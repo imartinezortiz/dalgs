@@ -91,6 +91,7 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 	@JsonManagedReference
 	private Collection<ExternalActivity> external_activities;
 
+
 	public Group() {
 		super();
 		this.isDeleted = false;
@@ -159,7 +160,6 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 		this.isDeleted = isDeleted;
 	}
 	
-	
 
 	public Collection<ExternalActivity> getExternal_activities() {
 		return external_activities;
@@ -168,6 +168,7 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 	public void setExternal_activities(Collection<ExternalActivity> external_activities) {
 		this.external_activities = external_activities;
 	}
+
 
 	@Override
 	public int hashCode() {
@@ -205,6 +206,7 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 
 		copy.id = null;
 		copy.activities = new ArrayList<Activity>();
+		copy.external_activities = new ArrayList<ExternalActivity>();
 		copy.isDeleted = false;
 
 		for (Activity a : this.activities) {

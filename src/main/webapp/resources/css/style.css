@@ -308,3 +308,18 @@ a.btn.doc:hover {
 a.btn.doc {
   color: rgb(111, 123, 159);
 }
+
+div#classListUser {
+  margin-top: 18px;
+  text-align: center;
+  background: rgb(10, 2, 40);
+  border: 2px outset whitesmoke;
+  
+}
+  
+img.img-rounded.logo2 {
+  max-width: 95px;
+  margin-left: 8%;
+  margin-right: -3%;
+}
+

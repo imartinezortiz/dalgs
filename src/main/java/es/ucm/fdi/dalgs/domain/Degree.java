@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with D.A.L.G.S.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package es.ucm.fdi.dalgs.domain;
 
 import java.io.Serializable;

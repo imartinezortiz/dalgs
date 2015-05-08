@@ -111,7 +111,7 @@ public class AcademicTermService {
 
 	}
 
-	@PreAuthorize("hasPermission(#academicTerm, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyAcademicTerm(AcademicTerm academicTerm,
 			Long id_academic, Locale locale) {
@@ -231,7 +231,7 @@ public class AcademicTermService {
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#academicTerm, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<AcademicTerm> restoreAcademic(AcademicTerm academicTerm,
 			Locale locale) {
@@ -265,7 +265,7 @@ public class AcademicTermService {
 
 	}
 
-	@PreAuthorize("hasPermission(#academicTerm, 'ADMINISTRATION')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<AcademicTerm> copyAcademicTerm(
 			AcademicTerm academicTerm, Locale locale) {

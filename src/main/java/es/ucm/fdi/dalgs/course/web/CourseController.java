@@ -48,7 +48,6 @@ import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
 import es.ucm.fdi.dalgs.domain.Course;
-import es.ucm.fdi.dalgs.domain.ExternalActivity;
 import es.ucm.fdi.dalgs.domain.Subject;
 import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.externalActivity.service.ExternalActivityService;
@@ -283,7 +282,7 @@ public class CourseController {
 					modify, id_academic, id_course, locale);
 			if (!resultReturned.hasErrors())
 
-				return "redirect:/academicTerm/" + id_academic + ".htm";
+				return "redirect:/academicTerm/" + id_academic + "/course/"+id_course +".htm";
 			else {
 
 				attr.addFlashAttribute("errors", resultReturned.getErrorsList());
@@ -324,7 +323,7 @@ public class CourseController {
 	 * Delete a course of an academicTerm
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/delete.htm", method = RequestMethod.GET)
-	public String formDeleteAcademicTermCourse(
+	public String deleteCourseGET(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course) throws ServletException {
 

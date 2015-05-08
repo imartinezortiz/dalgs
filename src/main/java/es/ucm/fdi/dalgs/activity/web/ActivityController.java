@@ -16,6 +16,7 @@
  */
 package es.ucm.fdi.dalgs.activity.web;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.acl.NotOwnerException;
 import java.util.Collection;
@@ -25,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -42,6 +44,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -522,12 +525,13 @@ public class ActivityController {
 
 			model.addAttribute("learningGoalStatus", p.getLearningGoalStatus());
 			model.addAttribute("learningGoals", lg);
-
-			LearningGoalStatus cs = new LearningGoalStatus();
-			model.addAttribute("addlearningstatus", cs);
 			
 			FileUpload file = new FileUpload();
 			model.addAttribute("addfileupload",file);
+			
+			LearningGoalStatus cs = new LearningGoalStatus();
+			model.addAttribute("addlearningstatus", cs);
+
 
 			return "activity/modifyChoose";
 		}
@@ -600,27 +604,47 @@ public class ActivityController {
 				+ "/group/" + id_group + "/activity/" + id + "/modify.htm";
 	}
 	
+	//TODO and for group too
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{idCourse}/activity/{activityId}/addFileUpload.htm", method = RequestMethod.POST)
 	public String addFileCoursePOST(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("idCourse") Long id_course,
-			@PathVariable("activityId") Long id,
-			@ModelAttribute("addfileupload") @Valid FileUpload fileupload,
-			BindingResult result, Model model) throws ServletException {
+			@PathVariable("activityId") Long id_activity,
+			@ModelAttribute("addfileupload")  FileUpload fileupload,
+			BindingResult result, Model model,HttpServletRequest request) throws ServletException, IllegalStateException, IOException {
+
 
 		if (!result.hasErrors()) {
-			//Se almacena, se guarda el nombre del archivo en activity.info.url
-			fileupload.getFilepath();
 			
-			fileupload.getFilepath().getName();
+			
+			File file = multipartToFile(fileupload.getFilepath(), request);
+			
+			if (file != null){
+
+				Activity act = serviceActivity.getActivity(id_activity, id_course, null, id_academic).getSingleElement();
+				act.getInfo().setUrl(file.getAbsolutePath());
 				
+				
+				if(serviceActivity.modifyActivity(act.getCourse(), null, act, id_activity, id_course, id_academic, null).hasErrors()) //Locale
+					return "redirect:/error.htm";
+				}
 		}
 		return "redirect:/academicTerm/" + id_academic + "/course/" + id_course
-				 + "/activity/" + id + "/modify.htm";
+				 + "/activity/" + id_activity + "/modify.htm";
 	}
 	
 
 
+	///-------------
+	public File multipartToFile(MultipartFile multipart, HttpServletRequest request) throws IllegalStateException, IOException {
+	        File convFile = new File( request.getSession().
+	        		getServletContext().getRealPath("/WEB-INF/"), multipart.getOriginalFilename());
+	        multipart.transferTo(convFile);
+	        return convFile;
+	}
+	
+	///---------------
+	
 	/**
 	 * Method for delete an activities
 	 */

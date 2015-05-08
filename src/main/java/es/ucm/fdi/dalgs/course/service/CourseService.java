@@ -37,7 +37,6 @@ import es.ucm.fdi.dalgs.course.repository.CourseRepository;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
 import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
-import es.ucm.fdi.dalgs.domain.ExternalActivity;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.Subject;
 import es.ucm.fdi.dalgs.domain.User;
@@ -128,7 +127,7 @@ public class CourseService {
 		return daoCourse.getAll();
 	}
 
-	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#course, 'ADMINISTRATION')")
+	@PreAuthorize("hasPermission(#course, 'WRITE') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> modifyCourse(Course course, Long id_academic,
 			Long id_course, Locale locale) {
@@ -166,8 +165,15 @@ public class CourseService {
 				// Deleting the authorities to the old coordinator
 				if (old_coordinator != null) {
 					manageAclService.removePermissionCASCADE(
-							modifyCourse.getCoordinator(), modifyCourse,
+							old_coordinator, modifyCourse,
 							id_academic, id_course, null);
+					
+					/*for (Group g : modifyCourse.getGroups()){
+						manageAclService.removePermissionCASCADE(
+								old_coordinator, g,
+								id_academic, id_course, g.getId());
+					}*/
+					
 				}
 
 				// Adding the authorities to the new coordinator
@@ -176,6 +182,12 @@ public class CourseService {
 				manageAclService.addPermissionCASCADE(
 						modifyCourse.getCoordinator(), modifyCourse,
 						id_academic, id_course, null);
+				
+				/*for (Group g : modifyCourse.getGroups()){
+					manageAclService.addPermissionCASCADE(
+							modifyCourse.getCoordinator(), g,
+							id_academic, id_course, g.getId());
+				}*/
 			}
 		}
 		return result;
@@ -197,9 +209,15 @@ public class CourseService {
 		Course course = daoCourse.getCourse(id, id_academic);
 		if (serviceActivity.deleteActivitiesFromCourse(course)
 				.getSingleElement()) {
+			
+			if(course.getCoordinator() !=null)
+				manageAclService.removePermissionCASCADE(course.getCoordinator(), course, id_academic, course.getId(), null);
+			
 			result.setSingleElement(daoCourse.deleteCourse(course));
 			return result;
 		}
+		
+		
 		result.setSingleElement(false);
 		return result;
 	}
@@ -311,7 +329,13 @@ public class CourseService {
 			}
 
 			c.setDeleted(false);
-			c.setSubject(course.getSubject());
+			c.setSubject(course.getSubject());	
+			
+			if(course.getCoordinator() !=null){
+				manageAclService.addPermissionCASCADE(course.getCoordinator(), course, id_academic, course.getId(), null);
+				c.setCoordinator(course.getCoordinator());
+			}
+			
 			boolean r = daoCourse.saveCourse(c);
 			if (r)
 				result.setSingleElement(c);
