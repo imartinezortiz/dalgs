@@ -18,7 +18,6 @@ package es.ucm.fdi.dalgs.domain.info;
 
 import java.io.Serializable;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
@@ -26,6 +25,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+
 
 import es.ucm.fdi.dalgs.domain.Copyable;
 
@@ -55,11 +55,8 @@ public class ActivityInfo implements Serializable, Cloneable,
 	@Size(min = 1, max = 20)
 	@Column(name = "code_activity", nullable = false, unique = true)
 	private String code;
+	
 
-	@Size(min = 1, max = 250)
-	@Basic(optional = true)
-	@Column(name = "url", length = 250, nullable = true)
-	private String url;
 	
 	
 	public String getName() {
@@ -86,15 +83,6 @@ public class ActivityInfo implements Serializable, Cloneable,
 		this.code = code;
 	}
 	
-	
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
 
 	@Override
 	public int hashCode() {

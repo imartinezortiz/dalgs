@@ -312,21 +312,11 @@ public class GroupService {
 		ResultClass<Boolean> result = new ResultClass<>();
 
 		Group modifyGroup = daoGroup.getGroup(id_group, id_course, id_academic);
-		Collection<User> old_professors = modifyGroup.getProfessors();
-
-		// Deleting the authorities to the old professor list
-		if (!old_professors.isEmpty()) {
-			manageAclService.removePermissionCollectionCASCADE(old_professors,
-					group, id_academic, id_course, id_group);
-
-			// TODO borrar tabla intermedia
-		}
-		// Adding the authorities to the professor list
-		// Adding the READ permissions in cascade to see through the general
-		// view
-		modifyGroup.getProfessors().clear();
-		daoGroup.saveGroup(modifyGroup);
 		modifyGroup.setProfessors(users);
+		
+		Collection<User> users_with_id = new  ArrayList<User>();
+		 
+		//TODO Necesito el id de  los usuarios
 
 		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
 
@@ -343,31 +333,54 @@ public class GroupService {
 		return result;
 	}
 
+	/*
+	 * // Delete the authorities to the old user list
+	 */
+	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
+	@Transactional(readOnly = false)
+	public ResultClass<Boolean> removeUsersFromGroup(Group group,
+			String typeOfUser, Long id_academic, Long id_course) {
+		ResultClass<Boolean> result = new ResultClass<>();
+
+		Collection<User> users = new ArrayList<User>();
+
+		if (typeOfUser.equalsIgnoreCase("ROLE_PROFESSOR")) {
+			users = group.getProfessors();
+			if (!users.isEmpty()) {
+				manageAclService.removePermissionCollectionCASCADE(users,
+						group, id_academic, id_course, group.getId());
+				group.getProfessors().clear();
+
+			}
+		} else if (typeOfUser.equalsIgnoreCase("ROLE_STUDENT")) {
+			users = group.getStudents();
+			if (!users.isEmpty()) {
+				manageAclService.removePermissionCollectionCASCADE(users,
+						group, id_academic, id_course, group.getId());
+				group.getStudents().clear();
+
+			}
+		}
+
+		result.setHasErrors(!daoGroup.saveGroup(group));
+
+		return result;
+	}
+
 	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> setStudents(Group group, Long id_group,
 			Long id_course, Long id_academic, Collection<User> users) {
-		
+
 		ResultClass<Boolean> result = new ResultClass<>();
 		Group modifyGroup = daoGroup.getGroup(id_group, id_course, id_academic);
-		Collection<User> old_students = modifyGroup.getStudents();
-
-		// Deleting the authorities to the old students list
-		if (!old_students.isEmpty()) {
-			manageAclService.removePermissionCollectionCASCADE(old_students,
-					modifyGroup, id_academic, id_course, id_group);
-			
-			// TODO borrar tabla intermedia
-
-		}
 
 		modifyGroup.setStudents(users);
 		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
 
 		if (!result.hasErrors()) {
-			manageAclService.addPermissionCollectionCASCADE(
-					users, modifyGroup, id_academic,
-					id_course, id_group);
+			manageAclService.addPermissionCollectionCASCADE(users, modifyGroup,
+					id_academic, id_course, id_group);
 		} else {
 			result.getErrorsList().add("Error manageAclService");
 			result.setHasErrors(true);
@@ -377,10 +390,10 @@ public class GroupService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> deleteUserGroup(Long id_group, Long id_user,
-			Long id_course, Long id_academic, Locale locale) {
+	public ResultClass<Boolean> deleteUserGroup(Group group, Long id_group,
+			Long id_user, Long id_course, Long id_academic, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		Group g = daoGroup.getGroup(id_group, id_course, id_academic);
 
@@ -419,15 +432,14 @@ public class GroupService {
 			list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
 					upload.getCharset(), prefers, typeOfUser);
 			if (serviceUser.persistListUsers(group, list) && list != null) { // Added
-																				// correctly
+				list = (List<User>) serviceUser.getListUsersWithId(group,list);													// correctly
+				
 				ResultClass<Boolean> success = new ResultClass<Boolean>();
 				if (typeOfUser.equalsIgnoreCase("ROLE_PROFESSOR")) {
-					// group.setProfessors(list);
 					success = setProfessors(group, group.getId(), group
 							.getCourse().getId(), group.getCourse()
 							.getAcademicTerm().getId(), list);
 				} else if (typeOfUser.equalsIgnoreCase("ROLE_STUDENT")) {
-					// group.setStudents(list);
 					success = setStudents(group, group.getId(), group
 							.getCourse().getId(), group.getCourse()
 							.getAcademicTerm().getId(), list);

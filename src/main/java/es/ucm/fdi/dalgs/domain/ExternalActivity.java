@@ -32,6 +32,7 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import es.ucm.fdi.dalgs.domain.info.ActivityInfo;
+import es.ucm.fdi.dalgs.domain.info.ExternalActivityInfo;
 
 @Entity
 public class ExternalActivity implements Serializable {
@@ -45,7 +46,7 @@ public class ExternalActivity implements Serializable {
 	private Long id;
 
 	@Embedded
-	private ActivityInfo info;
+	private ExternalActivityInfo info;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)
 	@JoinColumn(name = "id_course")
@@ -63,7 +64,7 @@ public class ExternalActivity implements Serializable {
 
 	
 	public ExternalActivity() {
-		info = new ActivityInfo();
+		info = new ExternalActivityInfo();
 		isDeleted=false;
 	}
 	
@@ -75,11 +76,11 @@ public class ExternalActivity implements Serializable {
 		this.id = id;
 	}
 
-	public ActivityInfo getInfo() {
+	public ExternalActivityInfo getInfo() {
 		return info;
 	}
 
-	public void setInfo(ActivityInfo info) {
+	public void setInfo(ExternalActivityInfo info) {
 		this.info = info;
 	}
 

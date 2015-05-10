@@ -35,8 +35,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import es.ucm.fdi.dalgs.domain.info.ActivityInfo;
 
 @Entity
@@ -74,6 +74,11 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 	private Group group;
 	
 	
+
+	@ElementCollection
+	@CollectionTable(name="activity_attachments", joinColumns=@JoinColumn(name="id_activity"))
+	@Column(name="attachment")
+	private Collection<String> attachments;
 	
 
 	public Activity() {
@@ -81,7 +86,19 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 		this.isDeleted = false;
 		this.learningGoalStatus = new ArrayList<LearningGoalStatus>();
 		this.info = new ActivityInfo();
+		this.attachments = new ArrayList<String>();
 	}
+	
+
+	public Collection<String> getAttachments() {
+		return attachments;
+	}
+
+
+	public void setAttachments(Collection<String> attachments) {
+		this.attachments = attachments;
+	}
+
 
 	public Long getId() {
 		return id;

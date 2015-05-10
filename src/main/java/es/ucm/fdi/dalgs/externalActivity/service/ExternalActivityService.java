@@ -144,7 +144,7 @@ public class ExternalActivityService {
 //		Activity activity = serviceActivity.existActivityBycode(externalActivity.getInfo().getCode()).getSingleElement();
 //		if (activity == null){
 			Activity activity =new Activity();
-			activity.setInfo(externalActivity.getInfo());
+// COMENTADO POR ERROR			activity.setInfo(externalActivity.getInfo());
 			activity.setGroup(group);
 			externalActivity.setIsDeleted(true);
 			if(daoExternalActivity.deleteExternalActivity(id_externalActivity))
@@ -176,7 +176,7 @@ public class ExternalActivityService {
 		
 		Activity activity =new Activity();
 		activity.setCourse(course);
-		activity.setInfo(externalActivity.getInfo());
+//COMENTADO POR ERROR		activity.setInfo(externalActivity.getInfo());
 		externalActivity.setIsDeleted(true);
 		if(daoExternalActivity.deleteExternalActivity(id_externalActivity))
 			result = serviceActivity.addActivityCourse(course, activity, id_course, id_academic, locale);

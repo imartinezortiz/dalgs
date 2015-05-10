@@ -64,17 +64,46 @@
 					<label><fmt:message key="input.desc" /> :</label>
 					<p class="details">${model.activity.info.description}</p>
 				</div>
-				<div class="form-group view">
+			<%-- 	<div class="form-group view">
 					<label><fmt:message key="activity.doc" />: </label>
 					<p class="details">${model.activity.info.url}</p>
 					<a href="/dalgs/WEB-INF/Enunciado.docx"> Doc
 	</a>
 				</div>
-
+ --%>
 			</div>
 
 		</div>
 	</div>
+	
+	<div class="panel panel-primary group">
+		<div class="panel-heading">
+			<h3 class="panel-title list">
+				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
+				<fmt:message key="attachment.list" />
+			</h3>
+		</div>
+		<div class="panel-body">
+			<table class="table table-striped table-bordered">
+				<tr align="center">
+					<td><div class="td-label">
+							<fmt:message key="common.file" />
+						</div></td>
+					
+
+				</tr>
+				<c:forEach items="${model.activity.attachments}" var="att" varStatus="attachment">		
+					<tr align="center">
+						<td><div class="td-content">
+									<a href="<c:url value='dalgs/WEB-INF/${att}/view.htm'/>">${att}</a>
+							</div></td>
+						
+					</tr>
+				</c:forEach>
+			</table>
+		</div>
+	</div>
+	
 
 	<div class="panel panel-primary group">
 		<div class="panel-heading">
