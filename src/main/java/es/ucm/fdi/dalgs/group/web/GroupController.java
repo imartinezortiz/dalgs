@@ -266,17 +266,17 @@ public class GroupController {
 			model.put("group", a);
 			model.put("groupId", id_group);
 
-			ResultClass<Activity> activitiesGroup = serviceActivity
-					.getActivitiesForGroup(id_group, show);
-
-			ResultClass<Activity> activitiesCourse = serviceActivity
-					.getActivitiesForCourse(id_course, show);
+//			ResultClass<Activity> activitiesGroup = serviceActivity
+//					.getActivitiesForGroup(id_group, show);
+//
+//			ResultClass<Activity> activitiesCourse = serviceActivity
+//					.getActivitiesForCourse(id_course, show);
 			
 			
 			
 //			ResultClass<Activity> externalActivities = serviceExternalActivity.getExternalActivitiesForGroup(id_group);
 			model.put("activitiesGroup", a.getActivities());
-			model.put("activitiesCourse", activitiesCourse);
+			model.put("activitiesCourse", a.getCourse().getActivities());
 			model.put("externalActivities", a.getExternal_activities());
 			this.setShowAll(show);
 			return new ModelAndView("group/view", "model", model);
