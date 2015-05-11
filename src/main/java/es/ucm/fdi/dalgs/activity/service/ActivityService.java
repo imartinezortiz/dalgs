@@ -402,7 +402,10 @@ public class ActivityService {
 //			activity.setGroup(serviceGroup.getGroup(id_group, id_course,
 //					id_academic).getSingleElement());
 			activity.setGroup(group);
-			success = daoActivity.addActivity(activity);
+			group.getActivities().add(activity);
+//			success = daoActivity.addActivity(activity);
+			success = serviceGroup.modifyGroupActivities(group).getSingleElement();
+			
 
 			if (success) {
 				activityExists = daoActivity.existByCode(activity.getInfo()

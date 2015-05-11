@@ -320,11 +320,12 @@ public class GroupService {
 					group, id_academic, id_course, id_group);
 
 			// TODO borrar tabla intermedia
+			old_professors.clear();
 		}
 		// Adding the authorities to the professor list
 		// Adding the READ permissions in cascade to see through the general
 		// view
-		modifyGroup.getProfessors().clear();
+//		modifyGroup.getProfessors().clear();
 		daoGroup.saveGroup(modifyGroup);
 		modifyGroup.setProfessors(users);
 
@@ -356,7 +357,7 @@ public class GroupService {
 		if (!old_students.isEmpty()) {
 			manageAclService.removePermissionCollectionCASCADE(old_students,
 					modifyGroup, id_academic, id_course, id_group);
-			
+			old_students.clear();
 			// TODO borrar tabla intermedia
 
 		}
@@ -423,6 +424,8 @@ public class GroupService {
 				ResultClass<Boolean> success = new ResultClass<Boolean>();
 				if (typeOfUser.equalsIgnoreCase("ROLE_PROFESSOR")) {
 					// group.setProfessors(list);
+
+
 					success = setProfessors(group, group.getId(), group
 							.getCourse().getId(), group.getCourse()
 							.getAcademicTerm().getId(), list);
@@ -492,5 +495,11 @@ public class GroupService {
 		}
 		return result;
 
+	}
+
+	public ResultClass<Boolean> updateGroup(Group group) {
+		ResultClass<Boolean> result = new ResultClass<>();
+		result.setSingleElement(daoGroup.saveGroup(group));
+		return result;
 	}
 }

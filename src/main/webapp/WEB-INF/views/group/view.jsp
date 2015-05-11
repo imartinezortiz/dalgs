@@ -259,14 +259,13 @@
 											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/externalactivity/${externalActivity.id}/move.htm'/>">
 											<fmt:message key="common.move" />
 										</a>
-										<sec:accesscontrollist hasPermission="ADMINISTRATION"
-											domainObject="${model.group}">
+									
 
 											<a class="btn btn-danger"
 												href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/externalactivity/${externalActivity.id}/delete.htm'/>">
 												<fmt:message key="common.delete" />
 											</a>
-										</sec:accesscontrollist>
+										
 									</c:when>
 									<c:otherwise>
 										<sec:accesscontrollist hasPermission="ADMINISTRATION"

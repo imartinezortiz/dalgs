@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
+import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
@@ -57,14 +58,19 @@ public class GroupRepository {
 		AcademicTerm academic = em
 				.getReference(AcademicTerm.class, id_academic);
 
+		
 		Query query = null;
-
+		
+	
 		query = em
-				.createQuery("select g from Group g  where g.course = ?1 and g.id = ?2 and g.course.academicTerm=?3");
+				.createQuery("select g from Group g  left join g.activities a where g.id = ?2 and g.course = ?1 and g.id = ?2 and g.course.academicTerm=?3"); //and (a.id is null or a.isDeleted='false')");
 		query.setParameter(1, course);
 		query.setParameter(2, id_group);
 		query.setParameter(3, academic);
-
+		
+		
+	Collection<Object>s = 	query.getResultList();
+		
 		if (query.getResultList().isEmpty())
 			return null;
 		else

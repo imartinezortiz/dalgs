@@ -52,7 +52,7 @@ public class ActivityInfo implements Serializable, Cloneable,
 	@NotEmpty
 	@NotNull
 	@NotBlank
-	@Size(min = 1, max = 20)
+	@Size(min = 1, max = 40)
 	@Column(name = "code_activity", nullable = false, unique = true)
 	private String code;
 

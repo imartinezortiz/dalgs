@@ -30,13 +30,10 @@ import org.springframework.web.bind.annotation.RestController;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
-import es.ucm.fdi.dalgs.domain.ExternalActivity;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.rest.classes.Activity_Request;
 import es.ucm.fdi.dalgs.rest.classes.Activity_Response;
-import es.ucm.fdi.dalgs.rest.classes.ExternalActivity_Response;
 import es.ucm.fdi.dalgs.rest.service.WebhookService;
-
 @RestController
 public class WebhookController {
 
@@ -63,14 +60,14 @@ public class WebhookController {
 	}
 
 	@RequestMapping(value = WebhookUriConstants.POST_ACTIVITY, headers = {"Accept=text/xml, application/json"}, produces = "application/json", method = RequestMethod.POST)
-	public @ResponseBody ExternalActivity_Response externalActivity(
+	public @ResponseBody Activity_Response externalActivity(
 			@Valid @RequestBody Activity_Request activity_rest) {
 
-		ExternalActivity act = new ExternalActivity();
+		Activity act = new Activity();
 		act.getInfo().setName(activity_rest.getName());
 		act.getInfo().setDescription(activity_rest.getDescription());
 		act.getInfo().setCode(activity_rest.getCode());
-		ResultClass<ExternalActivity> result = new ResultClass<ExternalActivity>();
+		ResultClass<Activity> result = new ResultClass<Activity>();
 
 		Course course = service_rest.getCourseREST(activity_rest.getId_course())
 				.getSingleElement();
@@ -86,7 +83,7 @@ public class WebhookController {
 		}
 	
 		
-		return new ExternalActivity_Response(result.getSingleElement(),
+		return new Activity_Response(result.getSingleElement(),
 				result.getErrorsList());
 	}
 

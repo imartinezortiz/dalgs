@@ -39,6 +39,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.codehaus.jackson.annotate.JsonManagedReference;
+import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -83,13 +84,18 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-	@OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+	@Where(clause="isDeleted = 'false'")
+	@OneToMany( cascade = CascadeType.MERGE)
+	@JoinTable(name = "group_activities", joinColumns ={@JoinColumn(name = "id_group")},
+    inverseJoinColumns ={@JoinColumn(name = "id_activity")})
 	@JsonManagedReference
 	private Collection<Activity> activities;
 	
-	@OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.MERGE)//(mappedBy = "group", cascade = CascadeType.MERGE)
+	@JoinTable(name = "group_external", joinColumns ={@JoinColumn(name = "id_group")},
+    inverseJoinColumns ={@JoinColumn(name = "id_activity")})
 	@JsonManagedReference
-	private Collection<ExternalActivity> external_activities;
+	private Collection<Activity> external_activities;
 
 
 	public Group() {
@@ -147,7 +153,8 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 	public void setCourse(Course course) {
 		this.course = course;
 	}
-
+	
+	
 	public Collection<Activity> getActivities() {
 		return activities;
 	}
@@ -161,17 +168,14 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 	}
 	
 
-	public Collection<ExternalActivity> getExternal_activities() {
+	public Collection<Activity> getExternal_activities() {
 		return external_activities;
 	}
 
-	public void setExternal_activities(Collection<ExternalActivity> external_activities) {
+	public void setExternal_activities(Collection<Activity> external_activities) {
 		this.external_activities = external_activities;
 	}
-<<<<<<< HEAD
-=======
 
->>>>>>> 64746ec401ce8df896e6680f1a033d18cb2ab69e
 
 	@Override
 	public int hashCode() {
@@ -209,7 +213,7 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 
 		copy.id = null;
 		copy.activities = new ArrayList<Activity>();
-		copy.external_activities = new ArrayList<ExternalActivity>();
+		copy.external_activities = new ArrayList<Activity>();
 		copy.isDeleted = false;
 
 		for (Activity a : this.activities) {

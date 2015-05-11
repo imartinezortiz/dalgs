@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.JoinTable;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -35,13 +36,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import es.ucm.fdi.dalgs.domain.info.ActivityInfo;
 
 @Entity
 @Table(name = "_activity", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"code_activity", "id_course", "id_group" }))
+
 public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -68,6 +73,8 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 	@Column(nullable = false)
 	private Collection<LearningGoalStatus> learningGoalStatus;
 
+//	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)
+	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)
 	@JoinColumn(name = "id_group")
 	@JsonBackReference

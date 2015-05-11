@@ -284,6 +284,10 @@ INSERT INTO _activity (id_activity,code_activity,description,name,id_course) VAL
 INSERT INTO _activity (id_activity,code_activity,description,name,id_course) VALUES (4,'ACT4','Diagramas de activitidades','actividades',2);
 INSERT INTO _activity (id_activity,code_activity,description,name,id_course) VALUES (5,'ACT5','Diagrama de clases','clases',3);
 
+
+INSERT INTO course_activities (id_course,id_activity) VALUES (1,1);
+INSERT INTO course_activities (id_course,id_activity) VALUES (1,2);
+
 -- Object Identity --
 INSERT INTO acl_object_identity (ID, ENTRIES_INHERITING, OBJECT_ID_IDENTITY, OBJECT_ID_CLASS, PARENT_OBJECT, OWNER_SID) VALUES (66,00000001,1,2,NULL,1);
 INSERT INTO acl_object_identity (ID, ENTRIES_INHERITING, OBJECT_ID_IDENTITY, OBJECT_ID_CLASS, PARENT_OBJECT, OWNER_SID) VALUES (67,00000001,2,2,NULL,1);

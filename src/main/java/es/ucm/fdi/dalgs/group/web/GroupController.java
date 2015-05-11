@@ -48,7 +48,6 @@ import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.classes.UploadForm;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.Activity;
-import es.ucm.fdi.dalgs.domain.ExternalActivity;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.externalActivity.service.ExternalActivityService;
@@ -273,10 +272,12 @@ public class GroupController {
 			ResultClass<Activity> activitiesCourse = serviceActivity
 					.getActivitiesForCourse(id_course, show);
 			
-			ResultClass<ExternalActivity> externalActivities = serviceExternalActivity.getExternalActivitiesForGroup(id_group);
-			model.put("activitiesGroup", activitiesGroup);
+			
+			
+//			ResultClass<Activity> externalActivities = serviceExternalActivity.getExternalActivitiesForGroup(id_group);
+			model.put("activitiesGroup", a.getActivities());
 			model.put("activitiesCourse", activitiesCourse);
-			model.put("externalActivities", externalActivities);
+			model.put("externalActivities", a.getExternal_activities());
 			this.setShowAll(show);
 			return new ModelAndView("group/view", "model", model);
 		}

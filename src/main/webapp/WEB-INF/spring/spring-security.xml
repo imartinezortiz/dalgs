@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-
     This file is part of D.A.L.G.S.
-
     D.A.L.G.S is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-
     D.A.L.G.S is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
-
     You should have received a copy of the GNU Affero General Public License
     along with D.A.L.G.S.  If not, see <http://www.gnu.org/licenses/>.
-
 -->
 <beans:beans xmlns="http://www.springframework.org/schema/security"
 
@@ -57,18 +52,9 @@
 
 		<logout invalidate-session="true" logout-success-url="/logout/success.htm"
 			logout-url="/logout.htm" delete-cookies="JSESSIONID"  />
-<<<<<<< HEAD
-		<!-- enable csrf protection -->
-<<<<<<< HEAD
-	<!--  	<csrf />-->
-=======
-		<!-- <csrf /> -->
->>>>>>> b5d0ef5d9f96e076445369438ea314a0e9c9d941
-=======
 		<!-- enable csrf protection -->
 		<!-- <csrf /> -->
 
->>>>>>> 64746ec401ce8df896e6680f1a033d18cb2ab69e
 		
 		 <!--Remember me for: Half an hour -->
 			<remember-me 
@@ -102,9 +88,5 @@
 
 
 </beans:beans>	
-	
-	
-	
-	
 	
 	

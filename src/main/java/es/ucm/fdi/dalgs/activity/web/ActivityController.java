@@ -531,10 +531,7 @@ public class ActivityController {
 			
 			LearningGoalStatus cs = new LearningGoalStatus();
 			model.addAttribute("addlearningstatus", cs);
-<<<<<<< HEAD
-=======
 
->>>>>>> 64746ec401ce8df896e6680f1a033d18cb2ab69e
 
 			return "activity/modifyChoose";
 		}
@@ -615,10 +612,7 @@ public class ActivityController {
 			@PathVariable("activityId") Long id_activity,
 			@ModelAttribute("addfileupload")  FileUpload fileupload,
 			BindingResult result, Model model,HttpServletRequest request) throws ServletException, IllegalStateException, IOException {
-<<<<<<< HEAD
-=======
 
->>>>>>> 64746ec401ce8df896e6680f1a033d18cb2ab69e
 
 		if (!result.hasErrors()) {
 			

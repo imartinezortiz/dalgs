@@ -50,15 +50,15 @@
 			<div class="form-group">
 				<div class="form-group view">
 					<label><fmt:message key="input.code" /> : </label>
-					<p class="details">${model.externalActivity.info.code}</p>
+					<p class="details">${model.activity.info.code}</p>
 				</div>
 				<div class="form-group view">
 					<label><fmt:message key="input.name" /> :</label>
-					<p class="details">${model.externalActivity.info.name}</p>
+					<p class="details">${model.activity.info.name}</p>
 				</div>
 				<div class="form-group view">
 					<label><fmt:message key="input.desc" /> :</label>
-					<p class="details">${model.externalActivity.info.description}</p>
+					<p class="details">${model.activity.info.description}</p>
 				</div>
 
 

@@ -26,8 +26,8 @@ public class Activity_Request implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
-	private long id_course;
-	private long id_group;
+	private Long id_course;
+	private Long id_group;
 	private String name;
 	private String description;
 	private String code;
@@ -38,13 +38,13 @@ public class Activity_Request implements Serializable{
 		super();
 	}
 	
-	public long getId_course() {
+	public Long getId_course() {
 		return id_course;
 	}
 	public void setId_course(long id_course) {
 		this.id_course = id_course;
 	}
-	public long getId_group() {
+	public Long getId_group() {
 		return id_group;
 	}
 	public void setId_group(long id_group) {

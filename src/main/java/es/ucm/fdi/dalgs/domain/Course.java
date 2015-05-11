@@ -28,14 +28,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.Where;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
@@ -58,14 +60,19 @@ public class Course implements Cloneable, Copyable<Course>, Serializable {
 	@JoinColumn(name = "id_subject")
 	@JsonBackReference
 	private Subject subject;
-
-	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+	
+	@OneToMany(cascade = CascadeType.MERGE)
+	@JoinTable(name = "course_activities", joinColumns ={@JoinColumn(name = "id_course")},
+    inverseJoinColumns ={@JoinColumn(name = "id_activity")})
+	@Where(clause="isDeleted = 'false'")
 	@JsonManagedReference
 	private Collection<Activity> activities;
 	
-	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.MERGE)
+	@JoinTable(name = "course_external", joinColumns ={@JoinColumn(name = "id_course")},
+    inverseJoinColumns ={@JoinColumn(name = "id_activity")})
 	@JsonManagedReference
-	private Collection<ExternalActivity> external_activities;
+	private Collection<Activity> external_activities;
 
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
 	@JsonManagedReference
@@ -86,7 +93,7 @@ public class Course implements Cloneable, Copyable<Course>, Serializable {
 		super();
 		this.isDeleted = false;
 		this.activities = new ArrayList<Activity>();
-		this.external_activities = new ArrayList<ExternalActivity>();
+		this.external_activities = new ArrayList<Activity>();
 		this.groups = new ArrayList<Group>();
 
 	}
@@ -152,12 +159,13 @@ public class Course implements Cloneable, Copyable<Course>, Serializable {
 	}
 	
 
-	public Collection<ExternalActivity> getExternal_activities() {
+	public Collection<Activity> getExternal_activities() {
 		return external_activities;
 	}
 
-	public void setExternal_activities(Collection<ExternalActivity> external_activities) {
-		this.external_activities = external_activities;
+	public void setExternal_activities(Collection<Activity> external_activities) {
+		this.external_activities.clear();		
+		this.external_activities.addAll(external_activities);
 	}
 
 	@Override

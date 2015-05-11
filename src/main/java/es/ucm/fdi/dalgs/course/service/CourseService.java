@@ -35,7 +35,6 @@ import es.ucm.fdi.dalgs.activity.service.ActivityService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.repository.CourseRepository;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
-import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.Subject;
@@ -259,13 +258,13 @@ public class CourseService {
 		ResultClass<Course> result = new ResultClass<>();
 		Course c = daoCourse.getCourse(id, id_academic);
 		if (c != null) {
-			c.setActivities(new ArrayList<Activity>());
+//			c.setActivities(new ArrayList<Activity>());
 			c.setGroups(new ArrayList<Group>());
-			c.getActivities().addAll(
-					serviceActivity.getActivitiesForCourse(id, showAll));
+//			c.getActivities().addAll(
+//					serviceActivity.getActivitiesForCourse(id, showAll));
 			c.getGroups().addAll(serviceGroup.getGroupsForCourse(id, showAll));
-			c.getExternal_activities().clear();
-			c.getExternal_activities().addAll(serviceExternalActivity.getExternalActivitiesForCourse(c));
+//			c.getExternal_activities().clear();
+//			c.getExternal_activities().addAll(serviceExternalActivity.getExternalActivitiesForCourse(c));
 		} else
 			result.setHasErrors(true);
 		
@@ -366,6 +365,12 @@ public class CourseService {
 	public ResultClass<Course> getCourseForCoordinator(Long id_user) {
 		ResultClass<Course> result = new ResultClass<>();
 		result.addAll(daoCourse.getCoursesByUser(id_user));
+		return result;
+	}
+
+	public ResultClass<Boolean> updateCourse(Course course) {
+		ResultClass<Boolean> result = new ResultClass<>();
+		result.setSingleElement(daoCourse.saveCourse(course));
 		return result;
 	}
 }

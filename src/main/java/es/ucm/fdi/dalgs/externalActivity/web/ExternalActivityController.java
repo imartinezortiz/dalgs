@@ -33,11 +33,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
-import es.ucm.fdi.dalgs.domain.Course;
-import es.ucm.fdi.dalgs.domain.ExternalActivity;
-import es.ucm.fdi.dalgs.domain.Group;
+import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.externalActivity.service.ExternalActivityService;
 import es.ucm.fdi.dalgs.group.service.GroupService;
 import es.ucm.fdi.dalgs.learningGoal.service.LearningGoalService;
@@ -84,10 +81,10 @@ public class ExternalActivityController {
 			@PathVariable("externalActivityId") Long id_externalActivity)
 			throws ServletException {
 
-		Course course = serviceCourse.getCourse(id_course, id_AcademicTerm)
-				.getSingleElement();
+//		Course course = serviceCourse.getCourse(id_course, id_AcademicTerm)
+//				.getSingleElement();
 
-		if (serviceExternalActivity.deleteExternalActivity(course, null, id_externalActivity)
+		if (serviceExternalActivity.deleteExternalActivity(id_AcademicTerm,id_course, id_externalActivity)
 				.getSingleElement()!=null) {
 			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
 					+ id_course + ".htm";
@@ -107,11 +104,11 @@ public class ExternalActivityController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		ExternalActivity a = serviceExternalActivity.getExternalActivity(id_externalActivity, id_course, null,
+		Activity a = serviceExternalActivity.getExternalActivity(id_externalActivity, id_course, null,
 				id_academic).getSingleElement();
 
 		if (a != null) {
-			model.put("externalActivity", a);
+			model.put("activity", a);
 			model.put("externalActivityId", id_externalActivity);
 //			model.put("learningStatus", a.getLearningGoalStatus());
 
@@ -121,30 +118,7 @@ public class ExternalActivityController {
 		return new ModelAndView("exception/notFound", "model", model);
 	}
 
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/externalactivity/{externalActivityId}/restore.htm")
-	// Every Post have to return redirect
-	public String restoreExternalActivityCourse(
-			@PathVariable("academicId") Long id_academic,
-			@PathVariable("courseId") Long id_course,
-			@PathVariable("externalActivityId") Long id_externalActivity, Locale locale) {
-		Course course = serviceCourse.getCourse(id_course, id_academic)
-				.getSingleElement();
 
-		ResultClass<ExternalActivity> result = serviceExternalActivity.unDeleteExternalActivity(
-				course,
-				null,
-				serviceExternalActivity.getExternalActivity(id_externalActivity, id_course, null,
-						id_academic).getSingleElement(), locale);
-
-		if (!result.hasErrors())
-
-			return "redirect:/academicTerm/" + id_academic + "/course/"
-					+ id_course + ".htm";
-		else {
-			return "redirect:/error.htm";
-
-		}
-	}
 	
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/externalactivity/{externalActivityId}/move.htm", method=RequestMethod.GET)
 	// Every Post have to return redirect
@@ -153,7 +127,7 @@ public class ExternalActivityController {
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("externalActivityId") Long id_externalActivity, Locale locale) {
 
-		if (!serviceExternalActivity.moveCourse(id_externalActivity, id_academic, id_course, locale).hasErrors())
+		if (serviceExternalActivity.moveCourse(id_externalActivity, id_academic, id_course, locale).getSingleElement())
 		
 			return "redirect:/academicTerm/" + id_academic + "/course/"
 					+ id_course + ".htm";
@@ -180,10 +154,10 @@ public class ExternalActivityController {
 			@PathVariable("externalActivityId") Long id_externalActivity)
 			throws ServletException {
 
-		Group group = serviceGroup.getGroup(id_group, id_course, id_academic)
-				.getSingleElement();
+//		Group group = serviceGroup.getGroup(id_group, id_course, id_academic)
+//				.getSingleElement();
 
-		if (serviceExternalActivity.deleteExternalActivity(null, group, id_externalActivity)
+		if (serviceExternalActivity.deleteExternalActivity(id_academic, id_course, id_group, id_externalActivity)
 				.getSingleElement()) {
 			return "redirect:/academicTerm/" + id_academic + "/course/"
 					+ id_course + "/group/" + id_group + ".htm";
@@ -207,11 +181,11 @@ public class ExternalActivityController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		ExternalActivity a = serviceExternalActivity.getExternalActivity(id_externalActivity, id_course,
+		Activity a = serviceExternalActivity.getExternalActivity(id_externalActivity, id_course,
 				id_group, id_academic).getSingleElement();
 
 		if (a != null) {
-			model.put("externalActivity", a);
+			model.put("activity", a);
 			model.put("externalActivityId", id_externalActivity);
 
 //			model.put("learningStatus", a.getLearningGoalStatus());
@@ -221,33 +195,7 @@ public class ExternalActivityController {
 		return new ModelAndView("exception/notFound", "model", model);
 	}
 
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/externalactivity/{externalActivityId}/restore.htm")
-	// Every Post have to return redirect
-	public String restoreExternalActivityGroup(
-			@PathVariable("academicId") Long id_academic,
-			@PathVariable("courseId") Long id_course,
-			@PathVariable("groupId") Long id_group,
 
-			@PathVariable("externalActivityId") Long id_externalActivity, Locale locale) {
-
-		Group group = serviceGroup.getGroup(id_group, id_course, id_academic)
-				.getSingleElement();
-
-		ResultClass<ExternalActivity> result = serviceExternalActivity.unDeleteExternalActivity(
-				null,
-				group,
-				serviceExternalActivity.getExternalActivity(id_externalActivity, id_course, id_group,
-						id_academic).getSingleElement(), locale);
-
-		if (!result.hasErrors())
-
-			return "redirect:/academicTerm/" + id_academic + "/course/"
-					+ id_course + "/group/" + id_group + ".htm";
-		else {
-			return "redirect:/error.htm";
-
-		}
-	}
 	
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/externalactivity/{externalActivityId}/move.htm", method=RequestMethod.GET)
 	// Every Post have to return redirect
@@ -257,7 +205,7 @@ public class ExternalActivityController {
 			@PathVariable("groupId") Long id_group,
 			@PathVariable("externalActivityId") Long id_externalActivity, Locale locale) {
 
-		if (!serviceExternalActivity.moveGroup(id_externalActivity, id_academic, id_course, id_group).hasErrors())
+		if (serviceExternalActivity.moveGroup(id_externalActivity, id_academic, id_course, id_group).getSingleElement())
 		
 			return "redirect:/academicTerm/" + id_academic + "/course/"
 					+ id_course + "/group/" + id_group + ".htm";
@@ -273,7 +221,7 @@ public class ExternalActivityController {
 			throws ServletException {
 
 		Map<String, Object> model = new HashMap<String, Object>();
-		Collection<ExternalActivity> externals = serviceExternalActivity.getExternalActivitiesAll();
+		Collection<Activity> externals = serviceExternalActivity.getExternalActivitiesAll();
 
 		if (externals != null) {
 			model.put("externalActivities", externals);

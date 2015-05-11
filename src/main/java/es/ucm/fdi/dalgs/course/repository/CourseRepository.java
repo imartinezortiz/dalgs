@@ -85,7 +85,7 @@ public class CourseRepository {
 		AcademicTerm academic = em
 				.getReference(AcademicTerm.class, id_academic);
 		Query query = em
-				.createQuery("select c from Course c  where c.academicTerm=?1 and c.id=?2 ");
+				.createQuery("select c from Course c left join c.activities a where c.academicTerm=?1 and c.id=?2");
 		query.setParameter(1, academic);
 		query.setParameter(2, id_course);
 
