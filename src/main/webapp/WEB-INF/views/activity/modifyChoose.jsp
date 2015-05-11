@@ -39,6 +39,7 @@
 			<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
 			<fmt:message key="activity.mod" /></h3>
 		</div>
+		
 		<div class="panel-body">
 			<%-- 	<form:form  method="post" modelAttribute="modifyProduct" > (ResquestParam)  --%>
 
@@ -61,10 +62,42 @@
 					<form:errors path="info.description" cssStyle="color: #ff0000" />
 				</div>
 
-					<div class="form-group view">
-					<label><fmt:message key="activity.doc" />: </label>
-					<form:input class="form-control" path="info.url"
-						id="url" readonly="true"/>
+				<div class="panel-body">
+					<label><fmt:message key="attachment.list" /></label>
+				
+					<table class="table table-condensed">
+						<tr align="center">
+							<td width="20%"><div class="td-label"><fmt:message key="common.file" /></div></td>
+						</tr>
+						
+						
+						<c:forEach items="${attachments}" var="att" varStatus="attachment">		
+							<tr align="center">
+								<td><div class="td-content">
+									<a href="<c:url value='dalgs/WEB-INF/${att}/view.htm'/>">${att}</a>
+
+								
+									</div></td>
+								
+								<td>
+								
+									<a href="<c:url value='attachment/${att}/delete.htm'/>">
+										
+										<button type="button" class="btn btn-default btn-lg" 
+										style=" padding: 2px; margin-top: 1.2%;  background: rgb(236, 236, 236);">
+  										<span class="glyphicon glyphicon-remove" aria-hidden="true" ></span> 
+										</button>
+									</a>
+							</td>
+								
+							</tr>
+							
+						</c:forEach>
+						
+						
+
+
+					</table>
 				</div>			
 
 				<div class="panel-body">

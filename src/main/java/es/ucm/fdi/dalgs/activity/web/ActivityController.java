@@ -219,11 +219,13 @@ public class ActivityController {
 			model.addAttribute("learningGoalStatus", p.getLearningGoalStatus());
 			model.addAttribute("learningGoals", lg);
 
+			model.addAttribute("attachments", p.getAttachments());
+
 			LearningGoalStatus cs = new LearningGoalStatus();
 			model.addAttribute("addlearningstatus", cs);
-			
+
 			FileUpload file = new FileUpload();
-			model.addAttribute("addfileupload",file);
+			model.addAttribute("addfileupload", file);
 
 			return "activity/modifyChoose";
 		}
@@ -272,7 +274,7 @@ public class ActivityController {
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{idCourse}/activity/{activityId}/addLearningStatus.htm", method = RequestMethod.POST)
-	public String addLearningStatusPOST(
+	public String addLearningStatusCoursePOST(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("idCourse") Long id_course,
 			@PathVariable("activityId") Long id,
@@ -339,6 +341,28 @@ public class ActivityController {
 	}
 
 	/**
+	 * Method for delete an attachment of an activity
+	 */
+
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/{activityId}/attachment/{attachment}/delete.htm", method = RequestMethod.GET)
+	public String deleteAttachmentActivityCourse(
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("courseId") Long id_course,
+			@PathVariable("activityId") Long id_Activity,
+			@PathVariable("attachment") String attachment)
+			throws ServletException {
+		Course course = serviceCourse.getCourse(id_course, id_academic)
+				.getSingleElement();
+
+		if (serviceActivity.deleteAttachmentActivity(course, null, attachment,
+				id_Activity, id_academic).getSingleElement()) {
+			return "redirect:/academicTerm/" + id_academic + "/course/"
+					+ id_course + "/activity/" + id_Activity + "/modify.htm";
+		} else
+			return "redirect:/error.htm";
+	}
+
+	/**
 	 * Methods for view activities
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/{activityId}.htm", method = RequestMethod.GET)
@@ -357,6 +381,8 @@ public class ActivityController {
 			model.put("activity", a);
 			model.put("activityId", id_activity);
 			model.put("learningStatus", a.getLearningGoalStatus());
+			model.put("attachments", a.getAttachments());
+
 
 			return new ModelAndView("activity/view", "model", model);
 		}
@@ -525,13 +551,14 @@ public class ActivityController {
 
 			model.addAttribute("learningGoalStatus", p.getLearningGoalStatus());
 			model.addAttribute("learningGoals", lg);
-			
+
+			model.addAttribute("attachments", p.getAttachments());
+
 			FileUpload file = new FileUpload();
-			model.addAttribute("addfileupload",file);
-			
+			model.addAttribute("addfileupload", file);
+
 			LearningGoalStatus cs = new LearningGoalStatus();
 			model.addAttribute("addlearningstatus", cs);
-
 
 			return "activity/modifyChoose";
 		}
@@ -603,46 +630,81 @@ public class ActivityController {
 		return "redirect:/academicTerm/" + id_academic + "/course/" + id_course
 				+ "/group/" + id_group + "/activity/" + id + "/modify.htm";
 	}
-	
-	//TODO and for group too
+
+	// TODO and for group too
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{idCourse}/activity/{activityId}/addFileUpload.htm", method = RequestMethod.POST)
-	public String addFileCoursePOST(
+	public String addAttachmentCoursePOST(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("idCourse") Long id_course,
 			@PathVariable("activityId") Long id_activity,
-			@ModelAttribute("addfileupload")  FileUpload fileupload,
-			BindingResult result, Model model,HttpServletRequest request) throws ServletException, IllegalStateException, IOException {
-
+			@ModelAttribute("addfileupload") FileUpload fileupload,
+			BindingResult result, Model model, HttpServletRequest request)
+			throws ServletException, IllegalStateException, IOException {
 
 		if (!result.hasErrors()) {
-			
-			
-			File file = multipartToFile(fileupload.getFilepath(), request);
-			
-			if (file != null){
 
-				Activity act = serviceActivity.getActivity(id_activity, id_course, null, id_academic).getSingleElement();
-				act.getInfo().setUrl(file.getAbsolutePath());
-				
-				
-				if(serviceActivity.modifyActivity(act.getCourse(), null, act, id_activity, id_course, id_academic, null).hasErrors()) //Locale
+			File file = multipartToFile(fileupload.getFilepath(), request);
+
+			if (file != null) {
+
+				Activity act = serviceActivity.getActivity(id_activity,
+						id_course, null, id_academic).getSingleElement();
+				act.getAttachments().add(file.getName());
+
+				if (serviceActivity.modifyActivity(act.getCourse(), null, act,
+						id_activity, id_course, id_academic, null).hasErrors()) // Locale
 					return "redirect:/error.htm";
-				}
+			}
 		}
 		return "redirect:/academicTerm/" + id_academic + "/course/" + id_course
-				 + "/activity/" + id_activity + "/modify.htm";
+				+ "/activity/" + id_activity + "/modify.htm";
 	}
 
-	///-------------
-	public File multipartToFile(MultipartFile multipart, HttpServletRequest request) throws IllegalStateException, IOException {
-	        File convFile = new File( request.getSession().
-	        		getServletContext().getRealPath("/WEB-INF/"), multipart.getOriginalFilename());
-	        multipart.transferTo(convFile);
-	        return convFile;
+	//TODO Add File to activity
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{idCourse}/group/{groupId}/activity/{activityId}/addFileUpload.htm", method = RequestMethod.POST)
+	public String addAttachmentGroupPOST(
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("idCourse") Long id_course,
+			@PathVariable("groupId") Long id_group,
+			@PathVariable("activityId") Long id_activity,
+			@ModelAttribute("addfileupload") FileUpload fileupload,
+			BindingResult result, Model model, HttpServletRequest request)
+			throws ServletException, IllegalStateException, IOException {
+
+		if (!result.hasErrors()) {
+
+			File file = multipartToFile(fileupload.getFilepath(), request);
+			Group group = serviceGroup.getGroup(id_group, id_course,
+					id_academic).getSingleElement();
+			
+			if (file != null && group !=null) {
+
+				Activity activity = serviceActivity.getActivity(id_activity,
+						id_course, null, id_academic).getSingleElement();
+				activity.getAttachments().add(file.getName());
+				
+				if ( serviceActivity.modifyActivity(null,
+						group, activity, id_activity, id_course, id_academic,
+						null).hasErrors()) // Locale
+					return "redirect:/error.htm";
+			}
+		}
+		return "redirect:/academicTerm/" + id_academic + "/course/" + id_course + "/group/" + id_group
+				+ "/activity/" + id_activity + "/modify.htm";
 	}
-	
-	///---------------
-	
+
+	// /-------------
+	public File multipartToFile(MultipartFile multipart,
+			HttpServletRequest request) throws IllegalStateException,
+			IOException {
+		File convFile = new File(request.getSession().getServletContext()
+				.getRealPath("/WEB-INF/"), multipart.getOriginalFilename());
+		multipart.transferTo(convFile);
+		return convFile;
+	}
+
+	// /---------------
+
 	/**
 	 * Method for delete an activities
 	 */
@@ -692,6 +754,30 @@ public class ActivityController {
 	}
 
 	/**
+	 * Method for delete an attachment of an activity
+	 */
+
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/activity/{activityId}/attachment/{attachment}/delete.htm", method = RequestMethod.GET)
+	public String deleteAttachmentActivityGroup(
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("courseId") Long id_course,
+			@PathVariable("groupId") Long id_group,
+			@PathVariable("activityId") Long id_Activity,
+			@PathVariable("attachment") String attachment)
+			throws ServletException {
+		Group group = serviceGroup.getGroup(id_group, id_course, id_academic)
+				.getSingleElement();
+
+		if (serviceActivity.deleteAttachmentActivity(null, group, attachment,
+				id_Activity, id_academic).getSingleElement()) {
+			return "redirect:/academicTerm/" + id_academic + "/course/"
+					+ id_course + "/group/" + id_group + "/activity/"
+					+ id_Activity + "/modify.htm";
+		} else
+			return "redirect:/error.htm";
+	}
+
+	/**
 	 * Methods for view activities
 	 */
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/activity/{activityId}.htm", method = RequestMethod.GET)
@@ -710,6 +796,7 @@ public class ActivityController {
 		if (a != null) {
 			model.put("activity", a);
 			model.put("activityId", id_activity);
+			model.put("attachments", a.getAttachments());
 
 			model.put("learningStatus", a.getLearningGoalStatus());
 
@@ -750,8 +837,7 @@ public class ActivityController {
 	public void downloadCSV(HttpServletResponse response) throws IOException {
 		serviceActivity.dowloadCSV(response);
 	}
-	
-	
+
 	/**
 	 * For binding the courses of the activity
 	 * 

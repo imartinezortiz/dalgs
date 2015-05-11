@@ -180,6 +180,16 @@ public class UserService {
 		return daoUser.persistListUsers(list);
 	}
 	
+	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
+	public Collection<User> getListUsersWithId(Group group, List<User> list) {
+		// TODO Auto-generated method stub
+		Collection<User> usersId = new ArrayList<User>();
+		for (User u: list){
+			usersId.add(daoUser.findByUsername(u.getUsername()));
+		}
+		return usersId;
+	}
+	
 	
 	
 

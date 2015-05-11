@@ -41,12 +41,19 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label">
+					<td><div class="td-label">
 							<fmt:message key="input.name" />
-						</div></td>
-					<td width="50%"><div class="td-label">
-							<fmt:message key="input.desc" />
-						</div></td>
+						</div>
+					</td>
+					
+					<td><div class="td-label">
+							<fmt:message key="course.cour" />
+						</div>
+					</td>
+						<td><div class="td-label">
+							<fmt:message key="group.gr" />
+						</div>
+					</td>
 				</tr>
 				<c:forEach items="${model.externalActivities}"
 					var="externalActivity">
@@ -54,50 +61,67 @@
 						<td><div class="td-content">
 								<c:out value="${externalActivity.info.name}" />
 							</div></td>
-						<td>
-							<div class="td-content">
-								<c:out value="${externalActivity.info.description}" />
-							</div>
-						</td>
-						<td><c:choose>
-					
+						
+					<c:choose>
 
-										<c:when test="${empty fn:trim(externalActivity.group)}">course
+
+								<c:when test="${empty fn:trim(externalActivity.group)}">
+								
+								<td>
+									<div class="td-content">
+										<c:out value="${externalActivity.course.academicTerm.term}" /> - 
+										<c:out value="${externalActivity.course.subject.name}" />
+									</div>
+								</td>
+								<td></td>
+								
+								<td>			<a class="btn btn-success"
+										href="<c:url value='/academicTerm/${externalActivity.course.academicTerm.id}/course/${externalActivity.course.id}/externalactivity/${externalActivity.id}.htm'/>">
+										<fmt:message key="common.view" />
+									</a>
+									<a class="btn btn-success"
+										href="<c:url value='/academicTerm/${externalActivity.course.academicTerm.id}/course/${externalActivity.course.id}/externalactivity/${externalActivity.id}/move.htm'/>">
+										<fmt:message key="common.move" />
+									</a>
+
+
+									<a class="btn btn-danger"
+										href="<c:url value='/academicTerm/${externalActivity.course.academicTerm.id}/course/${externalActivity.course.id}/externalactivity/${externalActivity.id}/delete.htm'/>">
+										<fmt:message key="common.delete" />
+									</a>
+								</td>
+								</c:when>
+								<c:otherwise>
+									<td>
+									<div class="td-content">
+										<c:out value="${externalActivity.group.course.academicTerm.term}" /> - 
+										<c:out value="${externalActivity.group.course.subject.name}" />
+									</div>
+								</td>
+								<td>
+								<div class="td-content">
+										<c:out value="${externalActivity.group.name}" /> - 
+									</div>
+								</td>
+								<td>
 											<a class="btn btn-success"
-												href="<c:url value='/academicTerm/${externalActivity.course.academicTerm.id}/course/${externalActivity.course.id}/externalactivity/${externalActivity.id}.htm'/>">
-												<fmt:message key="common.view" />
-											</a>
-											<a class="btn btn-success"
-												href="<c:url value='/academicTerm/${externalActivity.course.academicTerm.id}/course/${externalActivity.course.id}/externalactivity/${externalActivity.id}/move.htm'/>">
-												<fmt:message key="common.move" />
-											</a>
+										href="<c:url value='/academicTerm/${externalActivity.group.course.academicTerm.id}/course/${externalActivity.group.course.id}/group/${externalActivity.group.id}/externalactivity/${externalActivity.id}.htm'/>">
+										<fmt:message key="common.view" />
+									</a>
+									<a class="btn btn-success"
+										href="<c:url value='/academicTerm/${externalActivity.group.course.academicTerm.id}/course/${externalActivity.group.course.id}/group/${externalActivity.group.id}/externalactivity/${externalActivity.id}/move.htm'/>">
+										<fmt:message key="common.move" />
+									</a>
+
+									<a class="btn btn-danger"
+										href="<c:url value='/academicTerm/${externalActivity.course.academicTerm.id}/course/${externalActivity.course.id}/group/${externalActivity.group.id}/externalactivity/${externalActivity.id}/delete.htm'/>">
+										<fmt:message key="common.delete" />
+									</a>
+								</td>
+								</c:otherwise>
 
 
-											<a class="btn btn-danger"
-												href="<c:url value='/academicTerm/${externalActivity.course.academicTerm.id}/course/${externalActivity.course.id}/externalactivity/${externalActivity.id}/delete.htm'/>">
-												<fmt:message key="common.delete" />
-											</a>
-
-										</c:when>
-										<c:otherwise>group
-											<a class="btn btn-success"
-												href="<c:url value='/academicTerm/${externalActivity.group.course.academicTerm.id}/course/${externalActivity.group.course.id}/group/${externalActivity.group.id}/externalactivity/${externalActivity.id}.htm'/>">
-												<fmt:message key="common.view" />
-											</a>
-											<a class="btn btn-success"
-												href="<c:url value='/academicTerm/${externalActivity.group.course.academicTerm.id}/course/${externalActivity.group.course.id}/group/${externalActivity.group.id}/externalactivity/${externalActivity.id}/move.htm'/>">
-												<fmt:message key="common.move" />
-											</a>
-
-											<a class="btn btn-danger"
-												href="<c:url value='/academicTerm/${externalActivity.course.academicTerm.id}/course/${externalActivity.course.id}/group/${externalActivity.group.id}/externalactivity/${externalActivity.id}/delete.htm'/>">
-												<fmt:message key="common.delete" />
-											</a>
-
-										</c:otherwise>
-
-			
-							</c:choose></td>
+							</c:choose>
 
 
 					</tr>

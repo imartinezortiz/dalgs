@@ -337,14 +337,15 @@ public class GroupController {
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/user/{userId}/delete.htm", method = RequestMethod.GET)
 	public String deleteUserGroupGET(
-			@PathVariable("academicId") Long id_AcademicTerm,
+			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
 			@PathVariable("userId") Long id_user, Locale locale) {
 
-		if (serviceGroup.deleteUserGroup(id_group, id_user, id_course,
-				id_AcademicTerm, locale).getSingleElement()) {
-			return "redirect:/academicTerm/" + id_AcademicTerm + "/course/"
+		Group group = serviceGroup.getGroup(id_group, id_course, id_academic).getSingleElement();
+		if (group !=null && serviceGroup.deleteUserGroup(group, id_group, id_user, id_course,
+				id_academic, locale).getSingleElement()) {
+			return "redirect:/academicTerm/" + id_academic + "/course/"
 					+ id_course + "/group/" + id_group + ".htm";
 		} else
 			return "redirect:/error.htm";
@@ -371,7 +372,7 @@ public class GroupController {
 	/** Method method to insert users massively */
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/{typeOfUser}/upload.htm", method = RequestMethod.GET)
-	public String uploadGet(Model model,
+	public String uploadUserGet(Model model,
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
@@ -386,7 +387,7 @@ public class GroupController {
 	}
 
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/{typeOfUser}/upload.htm", method = RequestMethod.POST)
-	public String uploadPost(
+	public String uploadUserPost(
 			@ModelAttribute("newUpload") @Valid UploadForm upload,
 			BindingResult result, Model model,
 			@PathVariable("academicId") Long id_academic,
@@ -406,7 +407,10 @@ public class GroupController {
 
 		Group group = serviceGroup.getGroup(id_group, id_course, id_academic)
 				.getSingleElement();
-		boolean success = serviceGroup.uploadUserCVS(group, upload, typeOfUser);
+		
+		boolean success = !serviceGroup.removeUsersFromGroup(group, typeOfUser, id_academic,id_course).hasErrors();
+		
+		success = success && serviceGroup.uploadUserCVS(group, upload, typeOfUser);
 		if (success) {
 			return "redirect:/academicTerm/" + id_academic + "/course/"
 					+ id_course + "/group/" + id_group + ".htm";

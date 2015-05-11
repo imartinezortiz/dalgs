@@ -150,7 +150,8 @@
  						<!-- TODO --> 
 				 <li><a class="navbar-link" data-toggle="navbar-link" 
 				 href="${externals}">
-				     <span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> External
+				     <span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> 
+				     <fmt:message key="common.external" />
 				  </a>
 						</li>
 						

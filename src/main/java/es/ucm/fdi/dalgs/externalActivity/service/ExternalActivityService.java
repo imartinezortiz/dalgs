@@ -108,6 +108,7 @@ public class ExternalActivityService {
 			Long id_course, Long id_group) {
 		
 		Group group = serviceGroup.getGroup(id_group, id_course, id_academic).getSingleElement();
+<<<<<<< HEAD
 		Activity externalActivity = serviceActivity.getActivity(id_externalActivity, id_course, id_group, id_academic).getSingleElement();
 		ResultClass<Boolean> result = new ResultClass<>();
 
@@ -116,6 +117,45 @@ public class ExternalActivityService {
 
 			result = serviceGroup.updateGroup(group);
 
+=======
+		ExternalActivity externalActivity = daoExternalActivity.getExternalActivity(id_externalActivity, id_course, id_group, id_academic);
+		ResultClass<Activity> result = new ResultClass<>();
+//		Course course= serviceCourse.getCourse(id_course, id_academic).getSingleElement();
+		
+//		group.getExternal_activities().remove(externalActivity);
+//		Activity activity =new Activity();
+//		activity.setCourse(course);
+//		activity.setGroup(externalActivity.getGroup());
+//		activity.setInfo(externalActivity.getInfo());
+//		activity.getInfo().setCode(externalActivity.getInfo().getCode());
+//		activity.getInfo().setName(externalActivity.getInfo().getName());
+//		activity.getInfo().setDescription(externalActivity.getInfo().getDescription());
+//		group.getActivities().add(activity);
+		
+//		Activity activity = serviceActivity.existActivityBycode(externalActivity.getInfo().getCode()).getSingleElement();
+//		if (activity == null){
+			Activity activity =new Activity();
+// COMENTADO POR ERROR			activity.setInfo(externalActivity.getInfo());
+			activity.setGroup(group);
+			externalActivity.setIsDeleted(true);
+			if(daoExternalActivity.deleteExternalActivity(id_externalActivity))
+				result = serviceActivity.addActivitytoGroup(group, activity, id_group, id_course, id_academic);
+				
+//		}
+			
+//			if(serviceActivity.addActivitytoGroup(group, activity, id_group, id_course, id_academic).getSingleElement() != null) 
+//			if (serviceGroup.modifyGroupActivities(group).getSingleElement()) 
+//				return true;
+//		
+		return result;
+	}
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	public ResultClass<ExternalActivity> getExternalActivitiesForCourse(
+			Course c) {
+		ResultClass<ExternalActivity> result = new ResultClass<>();
+		result.addAll(daoExternalActivity.getExternalActivitiesForCourse(c));
+>>>>>>> a4e7dec84112d71b41d22eb2c174ce7c9fe1fbec
 		return result;
 	}
 
@@ -126,7 +166,19 @@ public class ExternalActivityService {
 			Long id_academic, Long id_course, Locale locale) {
 		
 		Course course = serviceCourse.getCourse(id_course, id_academic).getSingleElement();
+<<<<<<< HEAD
 		Activity externalActivity = serviceActivity.getActivity(id_externalActivity, id_course, null, id_academic).getSingleElement();
+=======
+		ExternalActivity externalActivity = daoExternalActivity.getExternalActivity(id_externalActivity, id_course, null, id_academic);
+		ResultClass<Activity> result = new ResultClass<>();
+		
+		Activity activity =new Activity();
+		activity.setCourse(course);
+//COMENTADO POR ERROR		activity.setInfo(externalActivity.getInfo());
+		externalActivity.setIsDeleted(true);
+		if(daoExternalActivity.deleteExternalActivity(id_externalActivity))
+			result = serviceActivity.addActivityCourse(course, activity, id_course, id_academic, locale);
+>>>>>>> a4e7dec84112d71b41d22eb2c174ce7c9fe1fbec
 		
 		ResultClass<Boolean> result = new ResultClass<>();
 		

@@ -73,14 +73,17 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 	@Column(nullable = false)
 	private Collection<LearningGoalStatus> learningGoalStatus;
 
-//	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)
-	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)
 	@JoinColumn(name = "id_group")
 	@JsonBackReference
 	private Group group;
 	
 	
+
+	@ElementCollection
+	@CollectionTable(name="activity_attachments", joinColumns=@JoinColumn(name="id_activity"))
+	@Column(name="attachment")
+	private Collection<String> attachments;
 	
 
 	public Activity() {
@@ -88,7 +91,19 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 		this.isDeleted = false;
 		this.learningGoalStatus = new ArrayList<LearningGoalStatus>();
 		this.info = new ActivityInfo();
+		this.attachments = new ArrayList<String>();
 	}
+	
+
+	public Collection<String> getAttachments() {
+		return attachments;
+	}
+
+
+	public void setAttachments(Collection<String> attachments) {
+		this.attachments = attachments;
+	}
+
 
 	public Long getId() {
 		return id;

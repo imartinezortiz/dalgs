@@ -239,7 +239,7 @@ public class ActivityService {
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#course, 'ADMINISTRATION') or hasPermission(#group, 'ADMINISTRATION') ")
+	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#group, 'ADMINISTRATION') or hasRole('ROLE_ADMIN') ")
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean> deleteLearningActivity(Course course,
 			Group group, Long id_learningGoalStatus, Long id_activity,
@@ -276,6 +276,42 @@ public class ActivityService {
 		return result;
 	}
 
+	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#group, 'ADMINISTRATION') or hasRole('ROLE_ADMIN') ")
+	@Transactional(propagation = Propagation.REQUIRED)
+	public ResultClass<Boolean> deleteAttachmentActivity(Course course,
+			Group group, String attachment, Long id_activity,
+			Long id_academic) {
+
+		ResultClass<Boolean> result = new ResultClass<Boolean>();
+		Activity a = new Activity();
+
+		if (group != null) {
+			a = daoActivity.getActivity(id_activity, null, group.getId(),
+					id_academic);
+		} else if (course != null) {
+			a = daoActivity.getActivity(id_activity, course.getId(), null,
+					id_academic);
+		}
+
+		Collection<String> attachs = a.getAttachments();
+
+		try {
+			for (String aux : attachs) {
+				if (aux.compareToIgnoreCase(attachment) == 0) {
+					a.getAttachments().remove(aux);
+					break;
+
+				}
+
+			}
+			result.setSingleElement(daoActivity.saveActivity(a));
+
+		} catch (Exception e) {
+			result.setSingleElement(false);
+		}
+		return result;
+	}
+	
 	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#group, 'ADMINISTRATION') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> addLearningGoals(Course course, Group group,
