@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
-import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
@@ -68,9 +67,7 @@ public class GroupRepository {
 		query.setParameter(2, id_group);
 		query.setParameter(3, academic);
 		
-		
-	Collection<Object>s = 	query.getResultList();
-		
+				
 		if (query.getResultList().isEmpty())
 			return null;
 		else

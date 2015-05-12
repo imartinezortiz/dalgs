@@ -17,7 +17,6 @@
 
 package es.ucm.fdi.dalgs.externalActivity.service;
 
-import java.util.Collection;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,7 +143,8 @@ public class ExternalActivityService {
 
 	public ResultClass<Activity> getExternalActivitiesAll() {
 		ResultClass<Activity> result = new ResultClass<>();
-		
+		result.addAll(daoExternalActivity.getExternalActivitiesAll());
+
 		return result;
 	}
 	
