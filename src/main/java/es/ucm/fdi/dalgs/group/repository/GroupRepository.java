@@ -67,9 +67,13 @@ public class GroupRepository {
 		query.setParameter(2, id_group);
 		query.setParameter(3, academic);
 		
+<<<<<<< HEAD
 		
 	
 		
+=======
+				
+>>>>>>> bd099d14a70ef1b2fbc08ca04e28aaf0407a738f
 		if (query.getResultList().isEmpty())
 			return null;
 		else

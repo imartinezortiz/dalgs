@@ -27,8 +27,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -83,29 +81,5 @@ public class MainController {
 		return model;
 		  
 	 }
-		@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/prueba.htm", method = RequestMethod.GET)
-		public String pruebaGet(Model model, @PathVariable("academicId") Long id_academic, @PathVariable("courseId") Long id_course,
-				@PathVariable("groupId") Long id_group) {
-
-//			model.addAttribute("className", "User");
-//			model.addAttribute("listCharsets", charsets.ListCharsets());
-//			model.addAttribute("newUpload", new UploadForm("User"));
-			model.addAttribute("mensaje", "prueba");
-			model.addAttribute("otro", new String());
-			
-			
-			return "prueba";
-		}	
-		
-		@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/prueba.htm", method = RequestMethod.POST)
-		public String pruebaPost(Model model, @PathVariable("academicId") Long id_academic, @PathVariable("courseId") Long id_course,
-				@PathVariable("groupId") Long id_group, @ModelAttribute("otro") String otro) {
-
-//			model.addAttribute("className", "User");
-//			model.addAttribute("listCharsets", charsets.ListCharsets());
-//			model.addAttribute("newUpload", new UploadForm("User"));
-			model.addAttribute("otro", "prueba 2");
-			return "prueba";
-		}
-
+	
 }

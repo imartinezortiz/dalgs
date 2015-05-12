@@ -44,6 +44,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import es.ucm.fdi.dalgs.academicTerm.service.AcademicTermService;
+import es.ucm.fdi.dalgs.activity.service.ActivityService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.AcademicTerm;
@@ -71,6 +72,9 @@ public class CourseController {
 
 	@Autowired
 	private UserService serviceUser;
+	
+	@Autowired
+	private ActivityService serviceActivity;
 
 	@Autowired
 	private AcademicTermService serviceAcademic;
@@ -206,19 +210,19 @@ public class CourseController {
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}.htm", method = RequestMethod.GET)
 	public ModelAndView getCourseGET(
 			@PathVariable("academicId") Long id_academic,
-			@PathVariable("courseId") Long id,
+			@PathVariable("courseId") Long id_course,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean showAll)
 			throws ServletException {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		Course p = serviceCourse.getCourseAll(id, id_academic, showAll)
+		Course p = serviceCourse.getCourseAll(id_course, id_academic, showAll)
 				.getSingleElement();
 		model.put("course", p);
 		model.put("showAll", showAll);
 		if (p != null) {
 			if (!p.getActivities().isEmpty())
-				model.put("activities", p.getActivities());
+				model.put("activities", serviceActivity.getActivitiesForCourse(id_course, showAll));
 
 			if (!p.getGroups().isEmpty())
 				model.put("groups", p.getGroups());

@@ -20,6 +20,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+<<<<<<< HEAD
+=======
+import javax.persistence.UniqueConstraint;
+>>>>>>> bd099d14a70ef1b2fbc08ca04e28aaf0407a738f
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -33,7 +37,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+<<<<<<< HEAD
 import javax.persistence.UniqueConstraint;
+=======
+
+>>>>>>> bd099d14a70ef1b2fbc08ca04e28aaf0407a738f
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 

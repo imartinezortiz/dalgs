@@ -29,7 +29,6 @@ import es.ucm.fdi.dalgs.course.repository.CourseRepository;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
-import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.externalActivity.repository.ExternalActivityRepository;
 import es.ucm.fdi.dalgs.group.repository.GroupRepository;

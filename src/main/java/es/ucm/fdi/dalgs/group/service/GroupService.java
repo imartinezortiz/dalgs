@@ -315,10 +315,11 @@ public class GroupService {
 
 		modifyGroup.setProfessors(users);
 		
+<<<<<<< HEAD
 //		Collection<User> users_with_id = new  ArrayList<User>();
+=======
+>>>>>>> bd099d14a70ef1b2fbc08ca04e28aaf0407a738f
 		 
-		//TODO Necesito el id de  los usuarios
-
 		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
 
 		if (!result.hasErrors()) {

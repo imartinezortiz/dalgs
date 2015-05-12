@@ -70,7 +70,7 @@
 								<td>
 									<div class="td-content">
 										<c:out value="${externalActivity.course.academicTerm.term}" /> - 
-										<c:out value="${externalActivity.course.subject.name}" />
+										<c:out value="${externalActivity.course.subject.info.name}" />
 									</div>
 								</td>
 								<td></td>
@@ -95,12 +95,12 @@
 									<td>
 									<div class="td-content">
 										<c:out value="${externalActivity.group.course.academicTerm.term}" /> - 
-										<c:out value="${externalActivity.group.course.subject.name}" />
+										<c:out value="${externalActivity.group.course.subject.info.name}" />
 									</div>
 								</td>
 								<td>
 								<div class="td-content">
-										<c:out value="${externalActivity.group.name}" /> - 
+										<c:out value="${externalActivity.group.name}" />  
 									</div>
 								</td>
 								<td>
