@@ -37,7 +37,7 @@ public class TopicInfo implements Serializable, Cloneable, Copyable<TopicInfo> {
 	@NotEmpty
 	@NotNull
 	@NotBlank
-	@Size(min = 1, max = 20)
+	@Size(min = 1, max = 50)
 	@Basic(optional = false)
 	@Column(name = "code_topic", nullable = false)
 	private String code;
