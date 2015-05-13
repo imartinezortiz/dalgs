@@ -35,7 +35,6 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -64,7 +63,7 @@ public class Course implements Cloneable, Copyable<Course>, Serializable {
 	@OneToMany(cascade = CascadeType.MERGE)
 	@JoinTable(name = "course_activities", joinColumns ={@JoinColumn(name = "id_course")},
     inverseJoinColumns ={@JoinColumn(name = "id_activity")})
-	@Where(clause="isDeleted = 'false'")
+//	@Where(clause="isDeleted = 'false'")
 	@JsonManagedReference
 	private Collection<Activity> activities;
 	
@@ -147,7 +146,8 @@ public class Course implements Cloneable, Copyable<Course>, Serializable {
 	}
 
 	public void setActivities(Collection<Activity> activities) {
-		this.activities = activities;
+		this.activities.clear();
+		this.activities.addAll(activities);
 	}
 
 	public Collection<Group> getGroups() {

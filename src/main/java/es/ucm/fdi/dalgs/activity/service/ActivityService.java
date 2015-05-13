@@ -93,9 +93,15 @@ public class ActivityService {
 				result.setSingleElement(activity);
 			result.setErrorsList(errors);
 		} else {
-			activity.setCourse(serviceCourse.getCourse(id_course, id_academic)
-					.getSingleElement());
-			success = daoActivity.addActivity(activity);
+			activity.setCourse(course);
+			
+			course.getActivities().add(activity);
+
+//			
+
+//					
+			success = serviceCourse.updateCourse(course).getSingleElement();
+//			success = daoActivity.addActivity(activity);
 
 			if (success) {
 				activityExists = daoActivity.existByCode(activity.getInfo()

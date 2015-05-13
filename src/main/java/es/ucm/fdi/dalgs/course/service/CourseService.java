@@ -260,10 +260,10 @@ public class CourseService {
 		if (c != null) {
 //			c.setActivities(new ArrayList<Activity>());
 			c.setGroups(new ArrayList<Group>());
-//			c.getActivities().addAll(
-//					serviceActivity.getActivitiesForCourse(id, showAll));
+			c.setActivities(
+					serviceActivity.getActivitiesForCourse(id, showAll));
 			c.getGroups().addAll(serviceGroup.getGroupsForCourse(id, showAll));
-//			c.getExternal_activities().clear();
+		
 //			c.getExternal_activities().addAll(serviceExternalActivity.getExternalActivitiesForCourse(c));
 		} else
 			result.setHasErrors(true);

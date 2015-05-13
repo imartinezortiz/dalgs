@@ -264,7 +264,7 @@ public class GroupController {
 		if (a != null) {
 			model.put("group", a);
 			model.put("groupId", id_group);
-
+			
 			
 			model.put("activitiesGroup", serviceActivity.getActivitiesForGroup(id_group, show));
 			model.put("activitiesCourse", a.getCourse().getActivities());

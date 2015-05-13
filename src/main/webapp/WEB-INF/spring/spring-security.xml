@@ -53,11 +53,11 @@
 		<logout invalidate-session="true" logout-success-url="/logout/success.htm"
 			logout-url="/logout.htm" delete-cookies="JSESSIONID"  />
 		<!-- enable csrf protection -->
-		<!-- <csrf /> -->
+		<!--    <csrf />-->
 
 		
 		 <!--Remember me for: Half an hour -->
-			<remember-me 
+	 	<remember-me 
 			user-service-ref="customUserDetailsService"
 		    token-validity-seconds="1209600"
 			remember-me-parameter="remember-me" 

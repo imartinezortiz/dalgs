@@ -315,6 +315,7 @@ public class GroupService {
 
 		modifyGroup.setProfessors(users);
 		
+
 		 
 		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
 

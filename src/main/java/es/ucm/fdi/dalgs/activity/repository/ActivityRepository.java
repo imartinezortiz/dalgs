@@ -144,11 +144,11 @@ public class ActivityRepository {
 		Query query = null;
 
 		if (!showAll) {
-			query = em
-					.createQuery("select a from Activity a where a.course=?1 and a.isDeleted='false' ");
+			query = em.createQuery("select aa from Activity  aa inner join aa.course c inner join c.activities eaa where  aa = eaa and aa.isDeleted=false and c=?1");
+//					.createQuery("select a from Activity a where a.course=?1 and a.isDeleted='false' ");
 		} else {
-			query = em
-					.createQuery("select a from Activity a where a.course=?1");
+			query = em.createQuery("select aa from Activity  aa inner join aa.course c inner join c.activities eaa where  aa = eaa and c=?1");
+//					.createQuery("select a from Activity a where a.course=?1");
 		}
 
 		query.setParameter(1, course);
@@ -162,16 +162,18 @@ public class ActivityRepository {
 
 		Group group = em.getReference(Group.class, id_group);
 		Query query = null;
-
+//		select aa from Activity  aa inner join aa.group  g inner join g.external_activities eaa where  aa = eaa)
 		if (!showAll) {
-			query = em
-					.createQuery("select a from Activity a where a.group=?1 and a.isDeleted='false' ");
+			query = em.createQuery("select aa from Activity  aa inner join aa.group g inner join g.activities eaa where  aa = eaa and aa.isDeleted=false and g=?1");
+//					.createQuery("select a from Activity a where a.group=?1 and a.isDeleted='false'");
 		} else {
-			query = em.createQuery("select a from Activity a where a.group=?1");
+			query = em.createQuery("select aa from Activity  aa inner join aa.group g inner join g.activities eaa where  aa = eaa and g=?1");
+//			query = em.createQuery("select a from Activity a where a.group=?1");
 		}
 
 		query.setParameter(1, group);
 		
+
 		return query.getResultList();
 
 	}
