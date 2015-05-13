@@ -222,7 +222,7 @@ public class CourseController {
 		model.put("showAll", showAll);
 		if (p != null) {
 			if (!p.getActivities().isEmpty())
-				model.put("activities", serviceActivity.getActivitiesForCourse(id_course, showAll));
+				model.put("activities", p.getActivities());
 
 			if (!p.getGroups().isEmpty())
 				model.put("groups", p.getGroups());

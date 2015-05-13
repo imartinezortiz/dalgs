@@ -62,18 +62,12 @@ public class GroupRepository {
 		
 	
 		query = em
-				.createQuery("select g from Group g  left join g.activities a where g.id = ?2 and g.course = ?1 and g.id = ?2 and g.course.academicTerm=?3"); //and (a.id is null or a.isDeleted='false')");
+				.createQuery("select g from Group g where g.course = ?1 and g.id = ?2 and g.course.academicTerm=?3"); 
 		query.setParameter(1, course);
 		query.setParameter(2, id_group);
 		query.setParameter(3, academic);
 		
-<<<<<<< HEAD
-		
-	
-		
-=======
-				
->>>>>>> bd099d14a70ef1b2fbc08ca04e28aaf0407a738f
+
 		if (query.getResultList().isEmpty())
 			return null;
 		else
