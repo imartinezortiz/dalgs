@@ -52,8 +52,7 @@
 
 	<!-- Declare a custom PermissionEvaluator We'll rely on the standard AclPermissionEvaluator 
 		implementation -->
-	<!-- <bean class="com.example.tfg.domain.acl.BasePermission" id="permissionEvaluator"> 
-		<constructor-arg ref="aclService" /> </bean> -->
+
 	<bean class="org.springframework.security.acls.AclPermissionEvaluator"
 		id="permissionEvaluator">
 		<constructor-arg ref="aclService" />
@@ -121,8 +120,5 @@
 		</property>
 	</bean>
 	
-		<!-- <bean id="passwordEncoder"
-		class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
-		<constructor-arg value="256" />
-	</bean>-->
+
 </beans>

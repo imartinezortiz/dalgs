@@ -45,7 +45,7 @@
 					<label><fmt:message key="access.username" />: </label>
 					<p class="details">${model.userDetails.username}</p>
 					<br>
-					<br> <label><fmt:message key="user.firstN" />: </label>
+					<label><fmt:message key="user.firstN" />: </label>
 					<p class="details">${model.userDetails.firstName}</p>
 					<br>
 					<label><fmt:message key="user.lastN" />: </label>

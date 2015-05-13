@@ -241,9 +241,7 @@ public class UserController {
 		user_aux.setLastName(user.getLastName());
 
 		if (serviceUser.saveUser(user_aux)) {
-
-			return "redirect:/user/page/0.htm?showAll=" + showAll
-					+ "&typeOfUser=" + typeOfUser;
+			 return "redirect:/user/{userId}.htm";
 		}
 
 		return "redirect:/error.htm";

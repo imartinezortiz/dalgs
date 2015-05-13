@@ -15,7 +15,7 @@ INSERT INTO acl_class (id, class) VALUES (12,'es.ucm.fdi.dalgs.domain.ExternalAc
 
 -- ACL Sid -- Authorizations - Roles
 INSERT INTO acl_sid (id, principal, sid) VALUES	(1,00000001,'admin');
-		
+
 -- -------------------------------------------------------
 
 -- Degree Inserts 
@@ -377,7 +377,6 @@ INSERT INTO user_roles (user, role) VALUES(8, 'ROLE_USER');
 INSERT INTO user (id_user, accountNonExpired, accountNonLocked, credentialsNonExpired, email, enabled, firstname, lastname, password, salt, username, fullname) VALUES (9, true, true, true, 'student3@ucm.es', true, 'student3First', 'student3Last', '264c8c381bf16c982a4e59b0dd4c6f7808c51a05f64c35db42cc78a2a72875bb', null, 'student3', 'student3Last, student3First - student3');
 INSERT INTO user_roles (user, role) VALUES(9, 'ROLE_STUDENT');
 INSERT INTO user_roles (user, role) VALUES(9, 'ROLE_USER');
-
 
 
 

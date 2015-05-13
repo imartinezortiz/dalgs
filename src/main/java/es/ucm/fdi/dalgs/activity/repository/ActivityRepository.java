@@ -172,7 +172,6 @@ public class ActivityRepository {
 
 		query.setParameter(1, group);
 		
-		Collection<Object> s = query.getResultList();
 		return query.getResultList();
 
 	}

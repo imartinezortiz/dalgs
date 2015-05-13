@@ -43,7 +43,7 @@
 				<div class="form-group view">
 					<label><fmt:message key="access.username" />: </label>
 					<p class="details">${userDetails.username}</p>
-					<br> <br> <label><fmt:message key="user.firstN" />: </label>
+					<br> <label><fmt:message key="user.firstN" />: </label>
 					<p class="details">${userDetails.firstName}</p>
 					<br> <label><fmt:message key="user.lastN" />: </label>
 					<p class="details">${userDetails.lastName}</p>

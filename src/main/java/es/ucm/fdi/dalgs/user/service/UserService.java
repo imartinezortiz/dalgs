@@ -33,6 +33,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.supercsv.prefs.CsvPreference;
 
+import es.ucm.fdi.dalgs.acl.service.AclObjectService;
+import es.ucm.fdi.dalgs.classes.StringSHA;
 import es.ucm.fdi.dalgs.classes.UploadForm;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
@@ -42,6 +44,9 @@ import es.ucm.fdi.dalgs.user.repository.UserRepository;
 public class UserService {
 	@Autowired
 	private UserRepository daoUser;
+	
+	@Autowired
+	private AclObjectService manageAclService;
 
 	@PreAuthorize("permitAll")
 	@Transactional(readOnly = true)
@@ -68,7 +73,7 @@ public class UserService {
 		return daoUser.deleteUser(id);
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#user, 'WRITE') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public boolean saveUser(User user) {
 		return daoUser.saveUser(user);
@@ -89,10 +94,17 @@ public class UserService {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public boolean addUser(User user) {
-		// StringSHA sha = new StringSHA();
-		// String pass = sha.getStringMessageDigest(user.getPassword());
-		// user.setPassword(pass);
-		return (daoUser.addUser(user));
+		 StringSHA sha = new StringSHA();
+		 String pass = sha.getStringMessageDigest(user.getPassword());
+		 user.setPassword(pass);
+		if(daoUser.addUser(user)){
+			User u = findByUsername(user.getUsername());
+			manageAclService.addACLToObject(u.getId(), u.getClass().getName());
+
+			manageAclService.addPermissionToAnObject_WRITE(u, u.getId(), u.getClass().getName());
+			return true;
+		}
+		return false;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -109,12 +121,21 @@ public class UserService {
 			list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
 					upload.getCharset(), prefers, typeOfUser);
 
-			return daoUser.persistListUsers(list);
+			if( daoUser.persistListUsers(list)){
+				for(User u : list){
+					User aux = findByUsername(u.getUsername());
+					manageAclService.addACLToObject(u.getId(), u.getClass().getName());
+					manageAclService.addPermissionToAnObject_WRITE(aux, aux.getId(), aux.getClass().getName());
+				}
+				return true;
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		}
+		
+		return false;
 	}
 
 	@SuppressWarnings("unchecked")
