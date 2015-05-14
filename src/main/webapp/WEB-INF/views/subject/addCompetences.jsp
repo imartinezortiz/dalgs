@@ -23,11 +23,7 @@
 <html>
 <head>
 <title><fmt:message key="common.title" /></title>
-<style>
-.error {
-	color: red;
-}
-</style>
+
 
 </head>
 <body>
