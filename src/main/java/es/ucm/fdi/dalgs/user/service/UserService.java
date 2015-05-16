@@ -20,11 +20,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.core.GrantedAuthority;
@@ -45,9 +47,12 @@ import es.ucm.fdi.dalgs.user.repository.UserRepository;
 public class UserService {
 	@Autowired
 	private UserRepository daoUser;
-	
+
 	@Autowired
 	private AclObjectService manageAclService;
+
+	@Autowired
+	private MessageSource messageSource;
 
 	@PreAuthorize("permitAll")
 	@Transactional(readOnly = true)
@@ -110,9 +115,9 @@ public class UserService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> addUser(User user) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		 StringSHA sha = new StringSHA();
-		 String pass = sha.getStringMessageDigest(user.getPassword());
-		 user.setPassword(pass);
+		StringSHA sha = new StringSHA();
+		String pass = sha.getStringMessageDigest(user.getPassword());
+		user.setPassword(pass);
 		if(daoUser.addUser(user)){
 			User u = findByUsername(user.getUsername()).getSingleElement();
 			manageAclService.addACLToObject(u.getId(), u.getClass().getName());
@@ -121,13 +126,13 @@ public class UserService {
 			result.setSingleElement(true);
 		}
 		else result.setSingleElement(false);
-		
+
 		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public ResultClass<Boolean> uploadCVS(UploadForm upload, String typeOfUser) {
+	public ResultClass<Boolean> uploadCVS(UploadForm upload, String typeOfUser, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
 		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
@@ -140,21 +145,25 @@ public class UserService {
 			UserCSV userUpload = new UserCSV();
 			list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
 					upload.getCharset(), prefers, typeOfUser);
-
-			if( daoUser.persistListUsers(list)){
-				for(User u : list){
-					User aux = findByUsername(u.getUsername()).getSingleElement();
-					manageAclService.addACLToObject(u.getId(), u.getClass().getName());
-					manageAclService.addPermissionToAnObject_WRITE(aux, aux.getId(), aux.getClass().getName());
-				}
-				result.setSingleElement(true);
+			if (list == null){
+				result.setHasErrors(true);
+				result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
 			}
-
+			else{
+				if( daoUser.persistListUsers(list)){
+					for(User u : list){
+						User aux = findByUsername(u.getUsername()).getSingleElement();
+						manageAclService.addACLToObject(u.getId(), u.getClass().getName());
+						manageAclService.addPermissionToAnObject_WRITE(aux, aux.getId(), aux.getClass().getName());
+					}
+					result.setSingleElement(true);
+				}
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			result.setSingleElement(false);
 		}
-		
+
 		return result;
 	}
 
@@ -201,30 +210,30 @@ public class UserService {
 		result.addAll(daoUser.getAllUsers());
 		return result;
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = true)
 	public void downloadCSV(HttpServletResponse response) throws IOException {
 
-		
-	        Collection<User> users = new ArrayList<User>();
-	        users =  daoUser.getAllUsers();
-	        
-	        if(!users.isEmpty()){
-	        	UserCSV userCSV = new UserCSV();
-	        	userCSV.downloadCSV(response, users);
-	        }
 
-	        
+		Collection<User> users = new ArrayList<User>();
+		users =  daoUser.getAllUsers();
+
+		if(!users.isEmpty()){
+			UserCSV userCSV = new UserCSV();
+			userCSV.downloadCSV(response, users);
+		}
+
+
 	}
-	
+
 	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
 	public ResultClass<Boolean> persistListUsers(Group group, List<User> list) {
 		ResultClass<Boolean> result = new ResultClass<>();
 		result.setSingleElement(daoUser.persistListUsers(list));
 		return result ;
 	}
-	
+
 	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
 	public Collection<User> getListUsersWithId(Group group, List<User> list) {
 		// TODO Auto-generated method stub
@@ -234,8 +243,8 @@ public class UserService {
 		}
 		return usersId;
 	}
-	
-	
-	
+
+
+
 
 }

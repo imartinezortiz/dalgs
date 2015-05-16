@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import es.ucm.fdi.dalgs.classes.CharsetString;
 import es.ucm.fdi.dalgs.classes.ResultClass;
@@ -84,7 +86,7 @@ public class UserController {
 	/**
 	 * Methods for list academic terms of a term
 	 */
-	@RequestMapping(value = "/user/page/{pageIndex}.htm")
+	@RequestMapping(value = "/user/page/{pageIndex}.htm", method = RequestMethod.GET)
 	public ModelAndView getUsersGET(
 			@PathVariable("pageIndex") Integer pageIndex,
 			@RequestParam(value = "showAll", defaultValue = "false") Boolean show,
@@ -201,20 +203,24 @@ public class UserController {
 	@RequestMapping(value = "/user/upload.htm", method = RequestMethod.POST)
 	public String uploadPost(
 			@ModelAttribute("newUpload") @Valid UploadForm upload,
-			BindingResult result, Model model) {
+			BindingResult resultBinding, Model model,
+			RedirectAttributes attr, Locale locale) {
 
-		if (result.hasErrors() || upload.getCharset().isEmpty()) {
-			for (ObjectError error : result.getAllErrors()) {
+		if (resultBinding.hasErrors() || upload.getCharset().isEmpty()) {
+			for (ObjectError error : resultBinding.getAllErrors()) {
 				System.err.println("Error: " + error.getCode() + " - "
 						+ error.getDefaultMessage());
 			}
 			return "upload";
 		}
-
-		if (serviceUser.uploadCVS(upload, typeOfUser).getSingleElement())
-			 return "redirect:/user/page/0.htm";
-		else
-			return "upload";
+		ResultClass<Boolean> result =  serviceUser.uploadCVS(upload, typeOfUser, locale);
+		if (!result.hasErrors())
+			 return "redirect:/user/page/0.htm?showAll=" + showAll
+						+ "&typeOfUser=" + typeOfUser;
+		else{
+			attr.addFlashAttribute("errors",result.getErrorsList());
+			return "redirect:/user/upload.htm";
+		}
 	}
 
 	@RequestMapping(value = "/user/{userId}/modify.htm", method = RequestMethod.GET)

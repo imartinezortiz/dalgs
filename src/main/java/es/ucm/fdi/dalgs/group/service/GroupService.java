@@ -422,8 +422,10 @@ public class GroupService {
 
 	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public boolean uploadUserCVS(Group group, UploadForm upload,
-			String typeOfUser) {
+	public ResultClass<Boolean> uploadUserCVS(Group group, UploadForm upload,
+			String typeOfUser, Locale locale) {
+		
+		ResultClass<Boolean> result = new ResultClass<>();
 		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
 				.charAt(0), upload.getDelimiterChar().charAt(0),
 				upload.getEndOfLineSymbols()).build();
@@ -434,34 +436,41 @@ public class GroupService {
 			UserCSV userUpload = new UserCSV();
 			list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
 					upload.getCharset(), prefers, typeOfUser);
+			if (list == null){
+				
+					result.setHasErrors(true);
+					result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
+	
+			}
+			else{
 			if (serviceUser.persistListUsers(group, list).getSingleElement() && list != null) { // Added
 				list = (List<User>) serviceUser.getListUsersWithId(group,list);													// correctly
 				
-				ResultClass<Boolean> success = new ResultClass<Boolean>();
+//				ResultClass<Boolean> success = new ResultClass<Boolean>();
 				if (typeOfUser.equalsIgnoreCase("ROLE_PROFESSOR")) {
 
 
-					success = setProfessors(group, group.getId(), group
+					result = setProfessors(group, group.getId(), group
 							.getCourse().getId(), group.getCourse()
 							.getAcademicTerm().getId(), list);
 				} else if (typeOfUser.equalsIgnoreCase("ROLE_STUDENT")) {
 					// group.setStudents(list);
-					success = setStudents(group, group.getId(), group
+					result = setStudents(group, group.getId(), group
 							.getCourse().getId(), group.getCourse()
 							.getAcademicTerm().getId(), list);
 
 				}
-				return !success.hasErrors();
+				else result.setSingleElement(false);
 			}
-
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
+			result.setSingleElement(false);
 		} catch (final IllegalArgumentException e) {
 			e.printStackTrace();
-			return false;
+			result.setSingleElement(false);
 		}
-		return false;
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")

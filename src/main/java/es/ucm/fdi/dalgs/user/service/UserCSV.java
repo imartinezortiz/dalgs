@@ -26,6 +26,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.supercsv.cellprocessor.ParseLong;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.constraint.StrRegEx;
@@ -40,7 +42,8 @@ import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.domain.UserRole;
 
 public class UserCSV {
-
+	protected static final Logger logger = LoggerFactory
+			.getLogger(UserCSV.class);
 	@SuppressWarnings("unused")
 	public List<User> readCSVUserToBean(InputStream in, String charsetName,
 			CsvPreference csvPreference, String typeOfUser) throws IOException {
@@ -50,7 +53,7 @@ public class UserCSV {
 			beanReader = new CsvBeanReader(new InputStreamReader(in,
 					Charset.forName(charsetName)), csvPreference);
 			// the name mapping provide the basis for bean setters
-			final String[] nameMapping = new String[] { "id", "email",
+			final String[] nameMapping = new String[] {"email",
 					"firstname", "lastname", "password", "username", "fullname" };
 			// just read the header, so that it don't get mapped to User
 			// object
@@ -64,6 +67,9 @@ public class UserCSV {
 				u.getRoles().add(new UserRole(typeOfUser));
 				users.add(u);
 			}
+		}catch(Exception e){
+			logger.error("params are not correct");
+			users = null;
 
 		} finally {
 			if (beanReader != null) {
@@ -79,7 +85,7 @@ public class UserCSV {
 		StrRegEx.registerMessage(emailRegex, "must be a valid email address");
 
 		final CellProcessor[] processors = new CellProcessor[] {
-				new ParseLong(), // ID (must be unique)
+//				new ParseLong(), // ID (must be unique)
 				new StrRegEx(emailRegex), // Email
 				new NotNull(), // FirstName
 				new NotNull(), // Lastname

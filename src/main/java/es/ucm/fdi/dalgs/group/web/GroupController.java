@@ -380,16 +380,18 @@ public class GroupController {
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/{typeOfUser}/upload.htm", method = RequestMethod.POST)
 	public String uploadUserPost(
 			@ModelAttribute("newUpload") @Valid UploadForm upload,
-			BindingResult result, Model model,
+			BindingResult resultBinding, Model model,
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
-			@PathVariable("typeOfUser") String typeOfUser) {
+			@PathVariable("typeOfUser") String typeOfUser,
+			Locale locale,
+			RedirectAttributes attr) {
 
 		logger.info("Upload POST USERS: " + typeOfUser);
 
-		if (result.hasErrors() || upload.getCharset().isEmpty()) {
-			for (ObjectError error : result.getAllErrors()) {
+		if (resultBinding.hasErrors() || upload.getCharset().isEmpty()) {
+			for (ObjectError error : resultBinding.getAllErrors()) {
 				System.err.println("Error: " + error.getCode() + " - "
 						+ error.getDefaultMessage());
 			}
@@ -400,13 +402,22 @@ public class GroupController {
 				.getSingleElement();
 		
 		boolean success = !serviceGroup.removeUsersFromGroup(group, typeOfUser, id_academic,id_course).hasErrors();
+		if (success){
+			ResultClass<Boolean> result = serviceGroup.uploadUserCVS(group, upload, typeOfUser, locale);
 		
-		success = success && serviceGroup.uploadUserCVS(group, upload, typeOfUser);
-		if (success) {
+			
+			if (!result.hasErrors()) {
+				return "redirect:/academicTerm/" + id_academic + "/course/"
+						+ id_course + "/group/" + id_group + ".htm";
+			} else
+				attr.addFlashAttribute("errors", result.getErrorsList());
+				return "redirect:/academicTerm/" + id_academic + "/course/"
+				+ id_course + "/group/" + id_group + "/"+ typeOfUser +"/upload.htm";
+		}else{
+			
 			return "redirect:/academicTerm/" + id_academic + "/course/"
-					+ id_course + "/group/" + id_group + ".htm";
-		} else
-			return "upload";
+			+ id_course + "/group/" + id_group + "/"+ typeOfUser +"/upload.htm";
+		}
 	}
 
 
