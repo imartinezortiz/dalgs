@@ -14,16 +14,27 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with D.A.L.G.S.  If not, see <http://www.gnu.org/licenses/>.
  */
-package es.ucm.fdi.dalgs.scheduling;
+package es.ucm.fdi.dalgs.mailbox;
 
 
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import es.ucm.fdi.dalgs.mailbox.classes.IMAP;
+import es.ucm.fdi.dalgs.mailbox.service.MailBoxService;
 
 @Component("scheduleBean")
 public class ScheduleBean {
+	
+	@Autowired
+	private MailBoxService mailBoxService;
  
     public void printMessage() {
         System.out.println("I am called by Spring scheduler");
+        
+        mailBoxService.downloadEmails(new IMAP());
+        
     }
 }
 

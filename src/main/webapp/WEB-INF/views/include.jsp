@@ -50,23 +50,30 @@
 <!-- Latest compiled and minified JavaScript -->
 <script type="text/javascript"
 	src="<c:url value="/resources/scripts/jquery-1.11.1.min.js" /> ">
-	
 </script>
 
 <script type="text/javascript"
 	src=" <c:url value="/resources/scripts/bootstrap.js" /> ">
-	
 </script>
 
 <script type="text/javascript"
 	src=" <c:url value="/resources/scripts/bootstrap-dropdown.js" /> ">
-	
 </script>
 
 <script type="text/javascript"
 	src=" <c:url value="/resources/scripts/bootstrap-filestyle.js" /> ">
-	
 </script>
+
+
+<script>
+    function popup() {
+        window.open("/mailbox", 'window', 'width=200,height=100');
+    }
+</script> 
+
+
+
+
 
 <!-- FONTS -->
 <link href='http://fonts.googleapis.com/css?family=Gruppo'
@@ -101,6 +108,7 @@
 <c:url value="/admin.htm" var="adminUrl" />
 <c:url value="/logout.htm" var="logoutUrl" />
 <c:url value="/externalActivities.htm" var="externals" />
+<c:url value="/mailbox.htm" var="mailbox" />
 
 <%-- <c:out value="${upload}"></c:out>
 <c:out value="${contextPath}"></c:out>
@@ -154,6 +162,13 @@
 				     <fmt:message key="common.external" />
 				  </a>
 						</li>
+				
+				<li><a class="navbar-link" data-toggle="navbar-link" 
+				 href="${mailbox}">
+				     <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> 
+				     <fmt:message key="common.mail" />
+				  </a>
+				</li>
 						
 					</sec:authorize>
 					<sec:authorize access="hasAnyRole('ROLE_ADMIN' ,  'ROLE_USER')">
