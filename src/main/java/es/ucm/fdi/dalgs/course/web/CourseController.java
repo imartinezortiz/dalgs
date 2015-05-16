@@ -378,7 +378,7 @@ public class CourseController {
 
 						if (element instanceof String) {
 							User user = serviceUser.findByUsername(element
-									.toString());
+									.toString()).getSingleElement();
 
 							logger.info("Loking up {} to {}", element, user);
 							return user;

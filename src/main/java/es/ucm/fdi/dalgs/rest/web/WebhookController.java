@@ -29,8 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.domain.Activity;
-import es.ucm.fdi.dalgs.domain.Course;
-import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.rest.classes.Activity_Request;
 import es.ucm.fdi.dalgs.rest.classes.Activity_Response;
 import es.ucm.fdi.dalgs.rest.service.WebhookService;
@@ -63,24 +61,25 @@ public class WebhookController {
 	public @ResponseBody Activity_Response externalActivity(
 			@Valid @RequestBody Activity_Request activity_rest) {
 
-		Activity act = new Activity();
-		act.getInfo().setName(activity_rest.getName());
-		act.getInfo().setDescription(activity_rest.getDescription());
-		act.getInfo().setCode(activity_rest.getCode());
-		ResultClass<Activity> result = new ResultClass<Activity>();
-
-		Course course = service_rest.getCourseREST(activity_rest.getId_course())
-				.getSingleElement();
-		Group group = service_rest.getGroupREST(activity_rest.getId_group())
-				.getSingleElement();
-		if (course != null && group != null) {
-			result = service_rest.addActivitytoGroupREST(group, act, group
-					.getId(), course.getId(), course.getAcademicTerm().getId());
-		} else if (course != null) {
-			result = service_rest
-					.addActivityCourseREST(course, act, course.getId(), course
-							.getAcademicTerm().getId());
-		}
+//		Activity act = new Activity();
+//		act.getInfo().setName(activity_rest.getName());
+//		act.getInfo().setDescription(activity_rest.getDescription());
+//		act.getInfo().setCode(activity_rest.getCode());
+//		ResultClass<Activity> result = new ResultClass<Activity>();
+		
+		ResultClass<Activity> result= service_rest.createExternalActivity(activity_rest);
+//		Course course = service_rest.getCourseREST(activity_rest.getId_course())
+//				.getSingleElement();
+//		Group group = service_rest.getGroupREST(activity_rest.getId_group())
+//				.getSingleElement();
+//		if (course != null && group != null) {
+//			result = service_rest.addActivitytoGroupREST(group, act, group
+//					.getId(), course.getId(), course.getAcademicTerm().getId());
+//		} else if (course != null) {
+//			result = service_rest
+//					.addActivityCourseREST(course, act, course.getId(), course
+//							.getAcademicTerm().getId());
+//		}
 	
 		
 		return new Activity_Response(result.getSingleElement(),

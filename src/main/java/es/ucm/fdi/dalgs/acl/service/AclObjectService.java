@@ -303,7 +303,7 @@ public class AclObjectService {
 			// (ACE)
 			ObjectIdentity oi = new ObjectIdentityImpl(name_class, id_object);
 
-			User admin = userService.findByUsername("admin");
+			User admin = userService.findByUsername("admin").getSingleElement();
 			Sid admin_sid = new PrincipalSid(admin.getUsername());
 			List<Sid> sids = new ArrayList<Sid>();
 			sids.add(admin_sid);

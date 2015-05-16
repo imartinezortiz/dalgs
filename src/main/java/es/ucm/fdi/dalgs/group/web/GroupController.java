@@ -426,7 +426,7 @@ public class GroupController {
 						}
 						if (element instanceof String) {
 							User user = serviceUser.findByFullName(element
-									.toString());
+									.toString()).getSingleElement();
 							logger.info("Loking up {} to {}", element, user);
 
 							return user;
@@ -446,7 +446,7 @@ public class GroupController {
 						}
 						if (element instanceof String) {
 							User user = serviceUser.findByFullName(element
-									.toString());
+									.toString()).getSingleElement();
 							logger.info("Loking up {} to {}", element, user);
 
 							return user;

@@ -93,10 +93,10 @@ public class UserController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		List<User> p = serviceUser.getAll(pageIndex, show, typeOfUser);
+		ResultClass<User> p = serviceUser.getAll(pageIndex, show, typeOfUser);
 
 		model.put("users", p);
-		model.put("numberOfPages", serviceUser.numberOfPages());
+		model.put("numberOfPages", serviceUser.numberOfPages().getSingleElement());
 		model.put("currentPage", pageIndex);
 		model.put("showAll", show);
 		model.put("typeOfUser", typeOfUser);
@@ -112,7 +112,7 @@ public class UserController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		User user = serviceUser.getUser(id_user);
+		User user = serviceUser.getUser(id_user).getSingleElement();
 		if (user != null) {
 			model.put("userDetails", user);
 
@@ -175,7 +175,7 @@ public class UserController {
 
 		if (!result.hasErrors()) {
 
-			boolean created = serviceUser.addUser(user);
+			boolean created = serviceUser.addUser(user).getSingleElement();
 			if (created)
 				return "redirect:/user/page/0.htm?showAll=" + showAll
 						+ "&typeOfUser=" + typeOfUser;
@@ -211,7 +211,7 @@ public class UserController {
 			return "upload";
 		}
 
-		if (serviceUser.uploadCVS(upload, typeOfUser))
+		if (serviceUser.uploadCVS(upload, typeOfUser).getSingleElement())
 			 return "redirect:/user/page/0.htm";
 		else
 			return "upload";
@@ -221,7 +221,7 @@ public class UserController {
 	public String modifyUserGET(@PathVariable("userId") Long id_user,
 			Model model) {
 
-		User user = serviceUser.getUser(id_user);
+		User user = serviceUser.getUser(id_user).getSingleElement();
 
 		model.addAttribute("modifyUser", user);
 		return "user/modify";
@@ -234,13 +234,13 @@ public class UserController {
 			@ModelAttribute("modifyUser") @Valid User user,
 			BindingResult result, Model model) {
 
-		User user_aux = serviceUser.getUser(id_user);
+		User user_aux = serviceUser.getUser(id_user).getSingleElement();
 
 		user_aux.setUsername(user.getUsername());
 		user_aux.setFirstName(user.getFirstName());
 		user_aux.setLastName(user.getLastName());
 
-		if (serviceUser.saveUser(user_aux)) {
+		if (serviceUser.saveUser(user_aux).getSingleElement()) {
 			 return "redirect:/user/{userId}.htm";
 		}
 
@@ -251,13 +251,13 @@ public class UserController {
 	public String disabledUser(@PathVariable("userId") Long id_user)
 			throws ServletException {
 
-		User user = serviceUser.getUser(id_user);
+		User user = serviceUser.getUser(id_user).getSingleElement();
 		if (user.isEnabled())
 			user.setEnabled(false);
 		else
 			user.setEnabled(true);
 
-		if (serviceUser.saveUser(user)) {
+		if (serviceUser.saveUser(user).getSingleElement()) {
 			return "redirect:/user/page/0.htm?showAll=" + showAll
 					+ "&typeOfUser=" + typeOfUser;
 		} else

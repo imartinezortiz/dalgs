@@ -398,7 +398,7 @@ public class GroupService {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		Group g = daoGroup.getGroup(id_group, id_course, id_academic);
 
-		User u = serviceUser.getUser(id_user);
+		User u = serviceUser.getUser(id_user).getSingleElement();
 		if (serviceUser.hasRole(u, "ROLE_PROFESSOR")
 				&& !serviceUser.hasRole(u, "ROLE_COORDINATOR")) {
 
@@ -432,7 +432,7 @@ public class GroupService {
 			UserCSV userUpload = new UserCSV();
 			list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
 					upload.getCharset(), prefers, typeOfUser);
-			if (serviceUser.persistListUsers(group, list) && list != null) { // Added
+			if (serviceUser.persistListUsers(group, list).getSingleElement() && list != null) { // Added
 				list = (List<User>) serviceUser.getListUsersWithId(group,list);													// correctly
 				
 				ResultClass<Boolean> success = new ResultClass<Boolean>();
@@ -514,5 +514,10 @@ public class GroupService {
 		ResultClass<Boolean> result = new ResultClass<>();
 		result.setSingleElement(daoGroup.saveGroup(group));
 		return result;
+	}
+
+	public Group getGroupFormatter(Long id_group) {
+		
+		return daoGroup.getGroupFormatter(id_group);
 	}
 }
