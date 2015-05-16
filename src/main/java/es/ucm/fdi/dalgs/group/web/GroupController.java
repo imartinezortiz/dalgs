@@ -188,7 +188,7 @@ public class GroupController {
 		model.addAttribute("valueButton", "Modify");
 
 		if (!model.containsAttribute("group")) {
-			Group p = serviceGroup.getGroup(id_group, id_course, id_academic)
+			Group p = serviceGroup.getGroup(id_group, id_course, id_academic, false)
 					.getSingleElement();
 			model.addAttribute("group", p);
 
@@ -236,7 +236,7 @@ public class GroupController {
 			@PathVariable("groupId") Long id_group) throws ServletException {
 
 		if (serviceGroup.deleteGroup(
-				serviceGroup.getGroup(id_group, id_course, id_academic)
+				serviceGroup.getGroup(id_group, id_course, id_academic, false)
 						.getSingleElement()).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_academic + "/course/"
 					+ id_course + ".htm";
@@ -257,7 +257,7 @@ public class GroupController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		Group a = serviceGroup.getGroup(id_group, id_course, id_academic)
+		Group a = serviceGroup.getGroup(id_group, id_course, id_academic, show)
 				.getSingleElement();
 		model.put("showAll", show);
 
@@ -265,8 +265,8 @@ public class GroupController {
 			model.put("group", a);
 			model.put("groupId", id_group);
 			
-			
-			model.put("activitiesGroup", serviceActivity.getActivitiesForGroup(id_group, show));
+//			serviceActivity.getActivitiesForGroup(id_group, show)
+			model.put("activitiesGroup", a.getActivities());
 			model.put("activitiesCourse", a.getCourse().getActivities());
 			model.put("externalActivities", a.getExternal_activities());
 			this.setShowAll(show);
@@ -287,7 +287,7 @@ public class GroupController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		Group a = serviceGroup.getGroup(id_group, id_course, id_academic)
+		Group a = serviceGroup.getGroup(id_group, id_course, id_academic, false)
 				.getSingleElement();
 		model.put("showAll", show);
 
@@ -312,7 +312,7 @@ public class GroupController {
 			@PathVariable("groupId") Long id_group, Locale locale) {
 
 		ResultClass<Group> result = serviceGroup.unDeleteGroup(serviceGroup
-				.getGroup(id_group, id_course, id_academic).getSingleElement(),
+				.getGroup(id_group, id_course, id_academic, false).getSingleElement(),
 				id_course, locale);
 
 		if (!result.hasErrors())
@@ -333,7 +333,7 @@ public class GroupController {
 			@PathVariable("groupId") Long id_group,
 			@PathVariable("userId") Long id_user, Locale locale) {
 
-		Group group = serviceGroup.getGroup(id_group, id_course, id_academic).getSingleElement();
+		Group group = serviceGroup.getGroup(id_group, id_course, id_academic, false).getSingleElement();
 		if (group !=null && serviceGroup.deleteUserGroup(group, id_group, id_user, id_course,
 				id_academic, locale).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_academic + "/course/"
@@ -348,7 +348,7 @@ public class GroupController {
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group, Locale locale) {
 		Group aux_group = serviceGroup.getGroup(id_group, id_course,
-				id_academic).getSingleElement();
+				id_academic, false).getSingleElement();
 		ResultClass<Group> result = serviceGroup.copyGroup(aux_group,
 				id_course, locale);
 
@@ -396,7 +396,7 @@ public class GroupController {
 			return "upload";
 		}
 
-		Group group = serviceGroup.getGroup(id_group, id_course, id_academic)
+		Group group = serviceGroup.getGroup(id_group, id_course, id_academic, false)
 				.getSingleElement();
 		
 		boolean success = !serviceGroup.removeUsersFromGroup(group, typeOfUser, id_academic,id_course).hasErrors();

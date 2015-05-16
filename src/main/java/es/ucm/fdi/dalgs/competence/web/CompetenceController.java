@@ -292,21 +292,25 @@ public class CompetenceController {
 	@RequestMapping(value = "/degree/{degreeId}/competence/upload.htm", method = RequestMethod.POST)
 	public String uploadPost(
 			@ModelAttribute("newUpload") @Valid UploadForm upload,
-			BindingResult result, Model model,
-			@PathVariable("degreeId") Long id_degree) {
+			BindingResult resultBinding, Model model,
+			@PathVariable("degreeId") Long id_degree,
+			RedirectAttributes attr, Locale locale) {
 
-		if (result.hasErrors() || upload.getCharset().isEmpty()) {
-			for (ObjectError error : result.getAllErrors()) {
+		if (resultBinding.hasErrors() || upload.getCharset().isEmpty()) {
+			for (ObjectError error : resultBinding.getAllErrors()) {
 				System.err.println("Error: " + error.getCode() + " - "
 						+ error.getDefaultMessage());
 			}
 			return "upload";
 		}
-
-		if (serviceCompetence.uploadCSV(upload, id_degree))
+		ResultClass<Boolean> result= serviceCompetence.uploadCSV(upload, id_degree, locale);
+		if (!result.hasErrors())
 			return "redirect:/degree/"+ id_degree+".htm" ;
-		else
-			return "upload";
+		else{
+			attr.addFlashAttribute("errors", result.getErrorsList());
+			return "redirect:/degree/" +id_degree + "/competence/upload.htm";
+		}
+			
 	}
 	
 	@RequestMapping(value = "/competence/download.htm")

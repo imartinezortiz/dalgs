@@ -221,7 +221,6 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 			activity.setCourse(null);
 			copy.activities.add(activity);
 		}
-
 		copy.students = new ArrayList<User>();
 		copy.professors = new ArrayList<User>();
 

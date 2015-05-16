@@ -26,6 +26,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanReader;
@@ -37,7 +39,8 @@ import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.domain.info.DegreeInfo;
 
 public class DegreeCSV {
-
+	protected static final Logger logger = LoggerFactory
+			.getLogger(DegreeCSV.class);
 	@SuppressWarnings("unused")
 	public List<Degree> readCSVDegreeToBean(InputStream in, String charsetName,
 			CsvPreference csvPreference) throws IOException {
@@ -61,7 +64,10 @@ public class DegreeCSV {
 				d.setInfo(info);
 				degrees.add(d);
 			}
-
+		}catch(Exception e){
+			logger.error("params are not correct");
+			degrees = null;
+			
 		} finally {
 			if (beanReader != null) {
 				beanReader.close();

@@ -236,8 +236,9 @@ public class ModuleService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public boolean uploadCSV(UploadForm upload, Long id_degree) {
-		boolean success = false;
+	public ResultClass<Boolean> uploadCSV(UploadForm upload, Long id_degree, Locale locale) {
+		ResultClass<Boolean> result = new ResultClass<>();
+//		boolean success = false;
 		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
 				.charAt(0), upload.getDelimiterChar().charAt(0),
 				upload.getEndOfLineSymbols()).build();
@@ -250,40 +251,44 @@ public class ModuleService {
 			Degree d = serviceDegree.getDegree(id_degree).getSingleElement();
 			list = moduleUpload.readCSVModuleToBean(fileItem.getInputStream(),
 					upload.getCharset(), prefers, d);
+			if (list == null){
+				result.setHasErrors(true);
+				result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
+			}
+			else{
+				result.setSingleElement(daoModule.persistListModules(list));
+				if (result.getSingleElement()) {
+					for (Module c : list) {
+						Module aux = daoModule.existByCode(c.getInfo().getCode(),
+								id_degree);
+						result.setSingleElement(result.getSingleElement()
+								&& manageAclService.addACLToObject(aux.getId(), aux
+										.getClass().getName()));
 
-			success = daoModule.persistListModules(list);
-			if (success) {
-				for (Module c : list) {
-					Module aux = daoModule.existByCode(c.getInfo().getCode(),
-							id_degree);
-					success = success
-							&& manageAclService.addACLToObject(aux.getId(), aux
-									.getClass().getName());
+					}
 
 				}
-
 			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
+			result.setSingleElement(false);
 		}
 
-		return success;
+		return result;
 	}
 
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public void downloadCSV(HttpServletResponse response) throws IOException {
 
-        Collection<Module> modules = new ArrayList<Module>();
-        modules =  daoModule.getAll();
-        
-        if(!modules.isEmpty()){
-        	ModuleCSV moduleCSV = new ModuleCSV();
-        	moduleCSV.downloadCSV(response, modules);
-        }
-      
+		Collection<Module> modules = new ArrayList<Module>();
+		modules =  daoModule.getAll();
+
+		if(!modules.isEmpty()){
+			ModuleCSV moduleCSV = new ModuleCSV();
+			moduleCSV.downloadCSV(response, modules);
+		}
+
 	}
 }

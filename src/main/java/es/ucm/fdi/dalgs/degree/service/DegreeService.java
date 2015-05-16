@@ -170,7 +170,7 @@ public class DegreeService {
 
 		if (!degree.getModules().isEmpty())
 			deleteModules = serviceModule.deleteModulesForDegree(degree)
-					.getSingleElement();
+			.getSingleElement();
 		if (!degree.getCompetences().isEmpty())
 			deleteCompetences = serviceCompetence.deleteCompetencesForDegree(
 					degree).getSingleElement();
@@ -261,8 +261,9 @@ public class DegreeService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public boolean uploadCSV(UploadForm upload) {
-		boolean success = false;
+	public ResultClass<Boolean> uploadCSV(UploadForm upload, Locale locale) {
+		ResultClass<Boolean> result = new ResultClass<>();
+		//		boolean success = false;
 		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
 				.charAt(0), upload.getDelimiterChar().charAt(0),
 				upload.getEndOfLineSymbols()).build();
@@ -275,37 +276,43 @@ public class DegreeService {
 			list = degreeUpload.readCSVDegreeToBean(fileItem.getInputStream(),
 					upload.getCharset(), prefers);
 
-			success = daoDegree.persistListDegrees(list);
-			if (success) {
-				for (Degree c : list) {
-					Degree aux = daoDegree.existByCode(c.getInfo().getCode());
-					success = success
-							&& manageAclService.addACLToObject(aux.getId(), aux
-									.getClass().getName());
+			if (list == null){
+				result.setHasErrors(true);
+				result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
+			}
+			else{
+				result.setSingleElement(daoDegree.persistListDegrees(list));
+				if (result.getSingleElement()) {
+					for (Degree c : list) {
+						Degree aux = daoDegree.existByCode(c.getInfo().getCode());
+						result.setSingleElement(result.getSingleElement()
+								&& manageAclService.addACLToObject(aux.getId(), aux
+										.getClass().getName()));
+
+					}
 
 				}
-
 			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
+			result.setSingleElement(false);
 		}
-		return success;
+		return result;
 
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public void downloadCSV(HttpServletResponse response) throws IOException {
 
-        Collection<Degree> degrees = new ArrayList<Degree>();
-        degrees =  daoDegree.getAll();
-        
-        if(!degrees.isEmpty()){
-	        DegreeCSV degreeCSV = new DegreeCSV();
-	        degreeCSV.downloadCSV(response, degrees);
-        }
+		Collection<Degree> degrees = new ArrayList<Degree>();
+		degrees =  daoDegree.getAll();
+
+		if(!degrees.isEmpty()){
+			DegreeCSV degreeCSV = new DegreeCSV();
+			degreeCSV.downloadCSV(response, degrees);
+		}
 	}
 
 }

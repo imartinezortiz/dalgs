@@ -30,7 +30,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.acl.service.AclObjectService;
@@ -258,8 +257,9 @@ public class TopicService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public boolean uploadCSV(UploadForm upload, Long id_module, Long id_degree) {
-		boolean success = false;
+	public ResultClass<Boolean> uploadCSV(UploadForm upload, Long id_module, Long id_degree, Locale locale) {
+		ResultClass<Boolean> result = new ResultClass<>();
+//		boolean success = false;
 		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
 				.charAt(0), upload.getDelimiterChar().charAt(0),
 				upload.getEndOfLineSymbols()).build();
@@ -273,38 +273,42 @@ public class TopicService {
 					.getSingleElement();
 			list = topicUpload.readCSVTopicToBean(fileItem.getInputStream(),
 					upload.getCharset(), prefers, m);
+			if (list == null){
+				result.setHasErrors(true);
+				result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
+			}
+			else{
+				result.setSingleElement(daoTopic.persistListTopics(list));
+				if (result.getSingleElement()) {
+					for (Topic c : list) {
+						Topic aux = daoTopic.existByCode(c.getInfo().getCode(),
+								id_module);
+						result.setSingleElement(result.getSingleElement()
+								&& manageAclService.addACLToObject(aux.getId(), aux
+										.getClass().getName()));
 
-			success = daoTopic.persistListTopics(list);
-			if (success) {
-				for (Topic c : list) {
-					Topic aux = daoTopic.existByCode(c.getInfo().getCode(),
-							id_module);
-					success = success
-							&& manageAclService.addACLToObject(aux.getId(), aux
-									.getClass().getName());
+					}
 
 				}
-
 			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
+			result.setSingleElement(false);
 		}
-		return success;
+		return result;
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public void downloadCSV(HttpServletResponse response) throws IOException {
-	
-	        Collection<Topic> topics = new ArrayList<Topic>();
-	        topics =  daoTopic.getAll();
 
-	       if(!topics.isEmpty()){
-	    	 TopicCSV topicCSV = new TopicCSV();
-	    	 topicCSV.downloadCSV(response, topics);
-	       }
+		Collection<Topic> topics = new ArrayList<Topic>();
+		topics =  daoTopic.getAll();
+
+		if(!topics.isEmpty()){
+			TopicCSV topicCSV = new TopicCSV();
+			topicCSV.downloadCSV(response, topics);
+		}
 	}
 
 }

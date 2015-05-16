@@ -273,23 +273,26 @@ public class TopicController {
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/upload.htm", method = RequestMethod.POST)
 	public String uploadPost(
 			@ModelAttribute("newUpload") @Valid UploadForm upload,
-			BindingResult result, Model model,
+			BindingResult resultBinding, Model model,
 			@PathVariable("moduleId") Long id_module,
-			@PathVariable("degreeId") Long id_degree) {
+			@PathVariable("degreeId") Long id_degree,
+			RedirectAttributes attr, Locale locale) {
 
-		if (result.hasErrors() || upload.getCharset().isEmpty()) {
-			for (ObjectError error : result.getAllErrors()) {
+		if (resultBinding.hasErrors() || upload.getCharset().isEmpty()) {
+			for (ObjectError error : resultBinding.getAllErrors()) {
 				System.err.println("Error: " + error.getCode() + " - "
 						+ error.getDefaultMessage());
 			}
 			return "upload";
 		}
-
-		if (serviceTopic.uploadCSV(upload, id_module, id_degree))
+		ResultClass<Boolean> result = serviceTopic.uploadCSV(upload, id_module, id_degree, locale);
+		if (!result.hasErrors())
 			 return "redirect:/degree/"+ id_degree +"/module/"+id_module+".htm";
 
-		else
-			return "upload";
+		else{
+			attr.addFlashAttribute("errors", result.getErrorsList());
+			return "redirect:/degree/" +id_degree + "/module/"+id_module+"/topic/upload.htm";
+		}
 	}
 	
 	@RequestMapping(value = "/topic/download.htm")

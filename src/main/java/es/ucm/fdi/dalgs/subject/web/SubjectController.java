@@ -347,23 +347,26 @@ public class SubjectController {
 	@RequestMapping(value = "/degree/{degreeId}/module/{moduleId}/topic/{topicId}/subject/upload.htm", method = RequestMethod.POST)
 	public String uploadPost(
 			@ModelAttribute("newUpload") @Valid UploadForm upload,
-			BindingResult result, Model model,
+			BindingResult resultBinding, Model model,
 			@PathVariable("degreeId") Long id_degree,
 			@PathVariable("moduleId") Long id_module,
-			@PathVariable("topicId") Long id_topic) {
+			@PathVariable("topicId") Long id_topic,
+			RedirectAttributes attr, Locale locale) {
 
-		if (result.hasErrors() || upload.getCharset().isEmpty()) {
-			for (ObjectError error : result.getAllErrors()) {
+		if (resultBinding.hasErrors() || upload.getCharset().isEmpty()) {
+			for (ObjectError error : resultBinding.getAllErrors()) {
 				System.err.println("Error: " + error.getCode() + " - "
 						+ error.getDefaultMessage());
 			}
 			return "upload";
 		}
-
-		if (serviceSubject.uploadCSV(upload, id_topic, id_module, id_degree))
+		ResultClass<Boolean> result = serviceSubject.uploadCSV(upload, id_topic, id_module, id_degree, locale);
+		if (!result.hasErrors())
 			 return "redirect:/degree/"+ id_degree +"/module/"+id_module+"/topic/"+id_topic+".htm";
-		else
-			return "upload";
+		else{
+			attr.addFlashAttribute("errors", result.getErrorsList());
+			return "redirect:/degree/" +id_degree + "/module/"+id_module+"/topic/"+id_topic+"/subject/upload.htm";
+		}
 	}
 
 	

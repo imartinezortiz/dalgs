@@ -122,10 +122,12 @@ public class GroupService {
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Group> getGroup(Long id_group, Long id_course,
-			Long id_academic) {
+			Long id_academic, Boolean show) {
 		ResultClass<Group> result = new ResultClass<Group>();
-		result.setSingleElement(daoGroup.getGroup(id_group, id_course,
-				id_academic));
+		Group g = daoGroup.getGroup(id_group, id_course,
+				id_academic);
+		g.setActivities(serviceActivity.getActivitiesForGroup(id_group, show));
+		result.setSingleElement(g);
 		return result;
 	}
 

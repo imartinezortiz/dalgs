@@ -207,7 +207,8 @@ public class Course implements Cloneable, Copyable<Course>, Serializable {
 		copy.groups = new ArrayList<Group>();
 		copy.isDeleted = false;
 		copy.activities = new ArrayList<Activity>();
-
+		copy.external_activities = new ArrayList<Activity>();
+		
 		for (Group g : this.groups) {
 			Group group = g.depth_copy();
 			group.setCourse(copy);

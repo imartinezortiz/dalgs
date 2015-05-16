@@ -26,6 +26,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseInt;
 import org.supercsv.cellprocessor.constraint.NotNull;
@@ -40,7 +42,9 @@ import es.ucm.fdi.dalgs.domain.Topic;
 import es.ucm.fdi.dalgs.domain.info.SubjectInfo;
 
 public class SubjectCSV {
-
+	protected static final Logger logger = LoggerFactory
+			.getLogger(SubjectCSV.class);
+	
 	@SuppressWarnings("unused")
 	public List<Subject> readCSVSubjectToBean(InputStream in,
 			String charsetName, CsvPreference csvPreference, Topic topic)
@@ -67,7 +71,10 @@ public class SubjectCSV {
 				s.setTopic(topic);
 				subjects.add(s);
 			}
-
+		}catch(Exception e){
+			logger.error("params are not correct");
+			subjects = null;
+			
 		} finally {
 			if (beanReader != null) {
 				beanReader.close();

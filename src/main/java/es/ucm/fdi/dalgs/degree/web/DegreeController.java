@@ -273,20 +273,24 @@ public class DegreeController {
 	@RequestMapping(value = "/degree/upload.htm", method = RequestMethod.POST)
 	public String uploadPost(
 			@ModelAttribute("newUpload") @Valid UploadForm upload,
-			BindingResult result, Model model) {
+			BindingResult resultBinding, Model model, Locale locale, RedirectAttributes attr) {
 
-		if (result.hasErrors() || upload.getCharset().isEmpty()) {
-			for (ObjectError error : result.getAllErrors()) {
+		if (resultBinding.hasErrors() || upload.getCharset().isEmpty()) {
+			for (ObjectError error : resultBinding.getAllErrors()) {
 				System.err.println("Error: " + error.getCode() + " - "
 						+ error.getDefaultMessage());
 			}
 			return "upload";
 		}
-
-		if (serviceDegree.uploadCSV(upload))
+		ResultClass<Boolean> result = serviceDegree.uploadCSV(upload, locale); 
+		
+		if (!result.hasErrors())
 			return "redirect:/degree/page/0.htm";
-		else
-			return "upload";
+		else{
+			attr.addFlashAttribute("errors", result.getErrorsList());
+			return "redirect:/degree/upload.htm";
+		}
+			
 	}
 
 	@RequestMapping(value = "/degree/download.htm")
