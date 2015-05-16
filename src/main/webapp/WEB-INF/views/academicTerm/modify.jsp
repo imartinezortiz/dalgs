@@ -23,11 +23,7 @@
 <html>
 <head>
 <title><fmt:message key="common.title" /></title>
-<style>
-.error {
-	color: red;
-}
-</style>
+
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
@@ -62,7 +58,7 @@
 	</div>
 
 	<c:if test="${not empty errors}">
-		<div align="center">
+		<div align="center" class="error">
 			<h3 class="panel-title list"><fmt:message key="common.errors" />:</h3>
 			<br />
 			<c:forEach items="${errors}" var="error">

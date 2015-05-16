@@ -1,8 +1,8 @@
 ---		TFG Project (May)	---
 
 //TO-DO
-0.- Listado con todas las actividades externas 
-1.- Borrar tablas intermedias de usuarios de un grupo al modifciar el listado
+0.- Controlar excepciones en la subida y descarga de CSV
+1.- Modulo usuarios con resultclass
 
 2.- Añadir archivos pdf, doc....  enunciados de las actividades (campo url). 
 		Para ello rutas relativas a WEB-INF/attachments
@@ -20,6 +20,11 @@ Optional: Change the pagination
 // DONE
 0.- Añadir coleccion de actividades externas a curso y grupo (mover de una coleccion a otra)
 1.- Permitir a profesores y coordinadores importar users a un grupo concreto
+2.- Listado con todas las actividades externas 
+3.- Borrar tablas intermedias de usuarios de un grupo al modifciar el listado
+
+
+
 
 //   OAUTH2
 
