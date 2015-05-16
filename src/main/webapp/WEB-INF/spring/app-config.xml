@@ -55,6 +55,8 @@
 	<context:component-scan base-package="es.ucm.fdi.dalgs.topic.web" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.user.web" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.rest.web" />
+	<context:component-scan base-package="es.ucm.fdi.dalgs.mailbox.web" />
+	
 	<!-- <mvc:annotation-driven /> -->
 	
 
