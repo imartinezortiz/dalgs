@@ -57,7 +57,7 @@ public class MediatorController {
 
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
-		User u = serviceUser.findByUsername(username);
+		User u = serviceUser.findByUsername(username).getSingleElement();
 		logger.info(username + "  " + u.getEmail());
 		myModel.put("userDetails", u);
 
@@ -88,7 +88,7 @@ public class MediatorController {
 
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
-		User u = serviceUser.findByUsername(username);
+		User u = serviceUser.findByUsername(username).getSingleElement();
 		logger.info(username + "  " + u.getEmail());
 		model.addAttribute("userDetails", u);
 		return new ModelAndView("user/admin", "model", myModel);

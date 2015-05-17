@@ -20,11 +20,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.supercsv.prefs.CsvPreference;
 
 import es.ucm.fdi.dalgs.acl.service.AclObjectService;
+import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.classes.StringSHA;
 import es.ucm.fdi.dalgs.classes.UploadForm;
 import es.ucm.fdi.dalgs.domain.Group;
@@ -44,72 +47,94 @@ import es.ucm.fdi.dalgs.user.repository.UserRepository;
 public class UserService {
 	@Autowired
 	private UserRepository daoUser;
-	
+
 	@Autowired
 	private AclObjectService manageAclService;
 
+	@Autowired
+	private MessageSource messageSource;
+
 	@PreAuthorize("permitAll")
 	@Transactional(readOnly = true)
-	public User findByEmail(String email) {
-		return daoUser.findByEmail(email);
+	public ResultClass<User> findByEmail(String email) {
+		ResultClass<User> result = new ResultClass<>();
+		result.setSingleElement(daoUser.findByEmail(email));
+		return result;
 	}
 
 	@PreAuthorize("permitAll")
 	@Transactional(readOnly = true)
-	public User findByUsername(String username) {
-		return daoUser.findByUsername(username);
+	public ResultClass<User> findByUsername(String username) {
+		ResultClass<User> result = new ResultClass<>();
+		result.setSingleElement(daoUser.findByUsername(username));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public List<User> getAll(Integer pageIndex, Boolean showAll,
+	public ResultClass<User> getAll(Integer pageIndex, Boolean showAll,
 			String typeOfUser) {
-		return daoUser.getAll(pageIndex, showAll, typeOfUser);
+		ResultClass<User> result = new ResultClass<>();
+		result.addAll(daoUser.getAll(pageIndex, showAll, typeOfUser));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean deleteUser(Long id) {
-		return daoUser.deleteUser(id);
+	public ResultClass<Boolean>  deleteUser(Long id) {
+		ResultClass<Boolean> result = new ResultClass<>();
+		result.setSingleElement(daoUser.deleteUser(id));
+		return result;
 	}
 
 	@PreAuthorize("hasPermission(#user, 'WRITE') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public boolean saveUser(User user) {
-		return daoUser.saveUser(user);
+	public ResultClass<Boolean>  saveUser(User user) {
+		ResultClass<Boolean> result = new ResultClass<>();
+		result.setSingleElement(daoUser.saveUser(user));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = false)
-	public Integer numberOfPages() {
-		return daoUser.numberOfPages();
+	public ResultClass<Integer> numberOfPages() {
+		ResultClass<Integer> result = new ResultClass<>();
+		result.setSingleElement(daoUser.numberOfPages());
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@Transactional(readOnly = true)
-	public User getUser(Long id_user) {
-		return daoUser.getUser(id_user);
+	public ResultClass<User> getUser(Long id_user) {
+		ResultClass<User> result = new ResultClass<>();
+		result.setSingleElement(daoUser.getUser(id_user));
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public boolean addUser(User user) {
-		 StringSHA sha = new StringSHA();
-		 String pass = sha.getStringMessageDigest(user.getPassword());
-		 user.setPassword(pass);
+	public ResultClass<Boolean> addUser(User user) {
+		ResultClass<Boolean> result = new ResultClass<>();
+		StringSHA sha = new StringSHA();
+		String pass = sha.getStringMessageDigest(user.getPassword());
+		user.setPassword(pass);
 		if(daoUser.addUser(user)){
-			User u = findByUsername(user.getUsername());
+			User u = findByUsername(user.getUsername()).getSingleElement();
 			manageAclService.addACLToObject(u.getId(), u.getClass().getName());
 
 			manageAclService.addPermissionToAnObject_WRITE(u, u.getId(), u.getClass().getName());
-			return true;
+			result.setSingleElement(true);
 		}
-		return false;
+		else result.setSingleElement(false);
+
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public boolean uploadCVS(UploadForm upload, String typeOfUser) {
+	public ResultClass<Boolean> uploadCVS(UploadForm upload, String typeOfUser, Locale locale) {
+		ResultClass<Boolean> result = new ResultClass<>();
+
 		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
 				.charAt(0), upload.getDelimiterChar().charAt(0),
 				upload.getEndOfLineSymbols()).build();
@@ -120,22 +145,26 @@ public class UserService {
 			UserCSV userUpload = new UserCSV();
 			list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
 					upload.getCharset(), prefers, typeOfUser);
-
-			if( daoUser.persistListUsers(list)){
-				for(User u : list){
-					User aux = findByUsername(u.getUsername());
-					manageAclService.addACLToObject(u.getId(), u.getClass().getName());
-					manageAclService.addPermissionToAnObject_WRITE(aux, aux.getId(), aux.getClass().getName());
-				}
-				return true;
+			if (list == null){
+				result.setHasErrors(true);
+				result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
 			}
-
+			else{
+				if( daoUser.persistListUsers(list)){
+					for(User u : list){
+						User aux = findByUsername(u.getUsername()).getSingleElement();
+						manageAclService.addACLToObject(u.getId(), u.getClass().getName());
+						manageAclService.addPermissionToAnObject_WRITE(aux, aux.getId(), aux.getClass().getName());
+					}
+					result.setSingleElement(true);
+				}
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
+			result.setSingleElement(false);
 		}
-		
-		return false;
+
+		return result;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -161,46 +190,50 @@ public class UserService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	public List<String> getAllByRole(String user_role) {
-		return daoUser.getAllByRole(user_role);
+	public ResultClass<String> getAllByRole(String user_role) {
+		ResultClass<String> result = new ResultClass<>();
+		result.addAll(daoUser.getAllByRole(user_role));
+		return result;
 
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	public User findByFullName(String fullname) {
-		String fullnamesplit[] = fullname.split(" - ");
+	public ResultClass<User> findByFullName(String fullname) {
+		String fullnamesplit[] = fullname.split(" - ");		
 		return findByUsername(fullnamesplit[0]);
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = true)
-	public Collection<User> getAll() {
-		// TODO Auto-generated method stub
-		return daoUser.getAllUsers();
+	public ResultClass<User> getAll() {
+		ResultClass<User> result = new ResultClass<>();
+		result.addAll(daoUser.getAllUsers());
+		return result;
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = true)
 	public void downloadCSV(HttpServletResponse response) throws IOException {
 
-		
-	        Collection<User> users = new ArrayList<User>();
-	        users =  daoUser.getAllUsers();
-	        
-	        if(!users.isEmpty()){
-	        	UserCSV userCSV = new UserCSV();
-	        	userCSV.downloadCSV(response, users);
-	        }
 
-	        
+		Collection<User> users = new ArrayList<User>();
+		users =  daoUser.getAllUsers();
+
+		if(!users.isEmpty()){
+			UserCSV userCSV = new UserCSV();
+			userCSV.downloadCSV(response, users);
+		}
+
+
 	}
-	
+
 	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
-	public boolean persistListUsers(Group group, List<User> list) {
-		// TODO Auto-generated method stub
-		return daoUser.persistListUsers(list);
+	public ResultClass<Boolean> persistListUsers(Group group, List<User> list) {
+		ResultClass<Boolean> result = new ResultClass<>();
+		result.setSingleElement(daoUser.persistListUsers(list));
+		return result ;
 	}
-	
+
 	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
 	public Collection<User> getListUsersWithId(Group group, List<User> list) {
 		// TODO Auto-generated method stub
@@ -210,8 +243,8 @@ public class UserService {
 		}
 		return usersId;
 	}
-	
-	
-	
+
+
+
 
 }

@@ -56,7 +56,7 @@ public class ExternalActivityService {
 			Long id_group, Long id_externalEexternalActivity) {
 		boolean success;
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		Group group = serviceGroup.getGroup(id_group, id_course, id_academic).getSingleElement();
+		Group group = serviceGroup.getGroup(id_group, id_course, id_academic, false).getSingleElement();
 		Activity externalActivity = serviceActivity.getActivity(id_externalEexternalActivity, id_course, id_group, id_academic).getSingleElement(); 
 		externalActivity.setGroup(null);
 		success = daoExternalActivity.deleteExternalActivity(externalActivity);
@@ -106,7 +106,7 @@ public class ExternalActivityService {
 	public ResultClass<Boolean> moveGroup(Long id_externalActivity, Long id_academic,
 			Long id_course, Long id_group) {
 		
-		Group group = serviceGroup.getGroup(id_group, id_course, id_academic).getSingleElement();
+		Group group = serviceGroup.getGroup(id_group, id_course, id_academic, false).getSingleElement();
 		Activity externalActivity = serviceActivity.getActivity(id_externalActivity, id_course, id_group, id_academic).getSingleElement();
 		ResultClass<Boolean> result = new ResultClass<>();
 

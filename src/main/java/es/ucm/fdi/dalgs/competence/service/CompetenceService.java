@@ -294,8 +294,9 @@ public class CompetenceService {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public boolean uploadCSV(UploadForm upload, Long id_degree) {
-		boolean success = false;
+	public ResultClass<Boolean> uploadCSV(UploadForm upload, Long id_degree, Locale locale) {
+		ResultClass<Boolean> result = new ResultClass<>();
+//		boolean success = false;
 		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
 				.charAt(0), upload.getDelimiterChar().charAt(0),
 				upload.getEndOfLineSymbols()).build();
@@ -309,36 +310,41 @@ public class CompetenceService {
 			list = competenceUpload.readCSVCompetenceToBean(
 					fileItem.getInputStream(), upload.getCharset(), prefers, d);
 
-			success = daoCompetence.persistListCompetences(list);
-			if (success) {
-				for (Competence c : list) {
-					Competence aux = daoCompetence.existByCode(c.getInfo()
-							.getCode(), d);
-					success = success
-							&& manageAclService.addACLToObject(aux.getId(), aux
-									.getClass().getName());
+			if (list == null){
+				result.setHasErrors(true);
+				result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
+			}
+			else{
+				result.setSingleElement(daoCompetence.persistListCompetences(list));
+				if (result.getSingleElement()) {
+					for (Competence c : list) {
+						Competence aux = daoCompetence.existByCode(c.getInfo()
+								.getCode(), d);
+						result.setSingleElement(result.getSingleElement()
+								&& manageAclService.addACLToObject(aux.getId(), aux
+										.getClass().getName()));
+
+					}
 
 				}
-
 			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
+			result.setSingleElement(false);
 		}
-		return success;
+		return result;
 
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public void dowloadCSV(HttpServletResponse response) throws IOException {
-	    Collection<Competence> competences = new ArrayList<Competence>();
-	    competences =  daoCompetence.getAll();
-	    
-	    if(!competences.isEmpty()){
-		    CompetenceCSV competenceCSV = new CompetenceCSV();
-		    competenceCSV.downloadCSV(response, competences);
-	    }
+		Collection<Competence> competences = new ArrayList<Competence>();
+		competences =  daoCompetence.getAll();
+
+		if(!competences.isEmpty()){
+			CompetenceCSV competenceCSV = new CompetenceCSV();
+			competenceCSV.downloadCSV(response, competences);
+		}
 	}
 }

@@ -99,7 +99,7 @@ public class SubjectService {
 						.getCode());
 				success = manageAclService.addACLToObject(
 						subjectExists.getId(), subjectExists.getClass()
-								.getName());
+						.getName());
 				if (success)
 					result.setSingleElement(subject);
 
@@ -299,12 +299,13 @@ public class SubjectService {
 		return result;
 
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public boolean uploadCSV(UploadForm upload, Long id_topic, Long id_module,
-			Long id_degree) {
-		boolean success = false;
+	public ResultClass<Boolean> uploadCSV(UploadForm upload, Long id_topic, Long id_module,
+			Long id_degree, Locale locale) {
+		ResultClass<Boolean> result = new ResultClass<>();
+//		boolean success = false;
 		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
 				.charAt(0), upload.getDelimiterChar().charAt(0),
 				upload.getEndOfLineSymbols()).build();
@@ -318,40 +319,45 @@ public class SubjectService {
 					.getSingleElement();
 			list = subjectUpload.readCSVSubjectToBean(
 					fileItem.getInputStream(), upload.getCharset(), prefers, t);
+			if (list == null){
+				result.setHasErrors(true);
+				result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
+			}
+			else{
+				result.setSingleElement(daoSubject.persistListSubjects(list));
+				if (result.getSingleElement()) {
+					for (Subject s : list) {
+						Subject aux = daoSubject.existByCode(s.getInfo().getCode());
+						result.setSingleElement(result.getSingleElement()
+								&& manageAclService.addACLToObject(aux.getId(), aux
+										.getClass().getName()));
 
-			success = daoSubject.persistListSubjects(list);
-			if (success) {
-				for (Subject s : list) {
-					Subject aux = daoSubject.existByCode(s.getInfo().getCode());
-					success = success
-							&& manageAclService.addACLToObject(aux.getId(), aux
-									.getClass().getName());
+					}
 
 				}
-
 			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
+			result.setSingleElement(false);
+			
 		}
 
-		return success;
+		return result;
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public void downloadCSV(HttpServletResponse response) throws IOException {
 
-        Collection<Subject> subjects = new ArrayList<Subject>();
-        subjects =  daoSubject.getAll();
-        
-        if(!subjects.isEmpty()){
-        	SubjectCSV subjectCSV = new SubjectCSV();
-        	subjectCSV.downloadCSV(response, subjects);
-        }
+		Collection<Subject> subjects = new ArrayList<Subject>();
+		subjects =  daoSubject.getAll();
+
+		if(!subjects.isEmpty()){
+			SubjectCSV subjectCSV = new SubjectCSV();
+			subjectCSV.downloadCSV(response, subjects);
+		}
 
 	}
-	
+
 
 }

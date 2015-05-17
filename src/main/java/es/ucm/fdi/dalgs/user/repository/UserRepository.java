@@ -164,7 +164,7 @@ public class UserRepository {
 		query.setParameter(1, email);
 
 		if (query.getResultList().isEmpty()) {
-			logger.error("User not found by email " + email);
+//			logger.error("User not found by email " + email);
 			return null;
 		}
 		return (User) query.getSingleResult();

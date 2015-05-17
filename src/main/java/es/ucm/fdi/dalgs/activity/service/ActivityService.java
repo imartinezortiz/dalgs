@@ -502,6 +502,11 @@ public class ActivityService {
 		}
 	}
 
+	public Activity existByCode(String code) {
+	
+		return daoActivity.existByCode(code);
+	}
+
 
 	
 

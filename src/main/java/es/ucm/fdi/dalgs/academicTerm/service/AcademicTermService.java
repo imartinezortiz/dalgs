@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PostFilter;
@@ -280,7 +281,8 @@ public class AcademicTermService {
 			result.setErrorsList(errors);
 
 		} else {
-			copy.setTerm(copy.getTerm() + " (copy)");
+			DateTime time = new DateTime();
+			copy.setTerm(copy.getTerm() + " (copy)" +  time.getMillisOfDay());
 
 			for (Course c : copy.getCourses()) {
 
@@ -289,14 +291,14 @@ public class AcademicTermService {
 				for (Activity a : c.getActivities()) {
 
 					// a.setGroup(null);
-					a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
+					a.getInfo().setCode(a.getInfo().getCode() + " (copy)" + time.getMillisOfDay());
 				}
 
 				for (Group g : c.getGroups()) {
-					g.setName(g.getName() + " (copy)");
+					g.setName(g.getName() + " (copy)" + time.getMillisOfDay());
 					for (Activity a : g.getActivities()) {
-;
-						a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
+
+						a.getInfo().setCode(a.getInfo().getCode() + " (copy)" + time.getMillisOfDay());
 					}
 				}
 

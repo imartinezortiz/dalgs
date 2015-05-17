@@ -23,31 +23,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.ucm.fdi.dalgs.acl.service.AclObjectService;
-import es.ucm.fdi.dalgs.activity.repository.ActivityRepository;
+import es.ucm.fdi.dalgs.activity.service.ActivityService;
 import es.ucm.fdi.dalgs.classes.ResultClass;
-import es.ucm.fdi.dalgs.course.repository.CourseRepository;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.Activity;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Group;
-import es.ucm.fdi.dalgs.externalActivity.repository.ExternalActivityRepository;
-import es.ucm.fdi.dalgs.group.repository.GroupRepository;
 import es.ucm.fdi.dalgs.group.service.GroupService;
+import es.ucm.fdi.dalgs.rest.classes.Activity_Request;
 import es.ucm.fdi.dalgs.user.service.UserService;
 
 @Service
 public class WebhookService {
-	@Autowired
-	private ActivityRepository daoActivity;
+
 	
-	@Autowired
-	private ExternalActivityRepository daoExternalActivity;
-	
-	@Autowired
-	private CourseRepository daoCourse;
-	
-	@Autowired
-	private GroupRepository daoGroup;
 
 	@Autowired
 	private CourseService serviceCourse;
@@ -57,6 +46,9 @@ public class WebhookService {
 
 	@Autowired
 	private UserService serviceUser;
+	
+	@Autowired
+	private ActivityService serviceActivity;
 
 	@Autowired
 	private AclObjectService manageAclService;
@@ -65,19 +57,19 @@ public class WebhookService {
 	@Transactional(readOnly = true)
 	public ResultClass<Course> getCourseREST(Long id) {
 		ResultClass<Course> result = new ResultClass<Course>();
-		result.setSingleElement(daoCourse.getCourseFormatter(id));
+		result.setSingleElement(serviceCourse.getCourseFormatter(id));
 		return result;
 	}
 	
 	@Transactional(readOnly = true)
 	public ResultClass<Group> getGroupREST(Long id_group) {
 		ResultClass<Group> result = new ResultClass<Group>();
-		result.setSingleElement(daoGroup.getGroupFormatter(id_group));
+		result.setSingleElement(serviceGroup.getGroupFormatter(id_group));
 		return result;
 	}
 
-	@Transactional(readOnly = false)
-	public ResultClass<Activity> addActivityCourseREST(Course course,
+	
+	private ResultClass<Activity> addActivityCourseREST(Course course,
 			Activity act, Long id_course, Long id_academic) {
 
 		boolean success = false;
@@ -88,11 +80,11 @@ public class WebhookService {
 			act.getInfo().setCode(code);
 			course.getExternal_activities().add(act);
 			act.setCourse(course);
-			success = daoCourse.saveCourse(course);
+			success = serviceCourse.updateCourse(course).getSingleElement();
 			
 			
 			if (success) {
-				Activity externalActivityExists = daoActivity.existByCode(act.getInfo()
+				Activity externalActivityExists = serviceActivity.existByCode(act.getInfo()
 						.getCode());
 				success = manageAclService.addACLToObject(externalActivityExists
 						.getId(), externalActivityExists.getClass().getName());
@@ -121,8 +113,8 @@ public class WebhookService {
 	}
 
 
-	@Transactional(readOnly = false)
-	public ResultClass<Activity> addActivitytoGroupREST(Group group,
+	
+	private ResultClass<Activity> addActivitytoGroupREST(Group group,
 			Activity act, Long id_group, Long id_course, Long id_academic) {
 		
 		
@@ -134,16 +126,15 @@ public class WebhookService {
 			act.getInfo().setCode(code);
 			group.getExternal_activities().add(act);
 			act.setGroup(group);
-//			act.setGroup(getGroupREST(id_group).getSingleElement());
-//			success = daoExternalActivity.addActivity(act);
+
 			
 			
 					
-			success = daoGroup.saveGroup(group);
+			success = serviceGroup.updateGroup(group).getSingleElement();
 			
 			result.setSingleElement(act);
 			if (success) {
-				Activity ExternalActivityExists = daoActivity.existByCode(act.getInfo()
+				Activity ExternalActivityExists = serviceActivity.existByCode(act.getInfo()
 						.getCode());
 				success = manageAclService.addACLToObject(ExternalActivityExists
 						.getId(), ExternalActivityExists.getClass().getName());
@@ -174,7 +165,32 @@ public class WebhookService {
 	@Transactional(readOnly = true)
 	public ResultClass<Activity> getActivityREST(Long id) {
 		ResultClass<Activity> result = new ResultClass<Activity>();
-		result.setSingleElement(daoActivity.getActivityFormatter(id));
+		result.setSingleElement(serviceActivity.getActivityREST(id).getSingleElement());
+		return result;
+	}
+	
+	@Transactional(readOnly = false)
+	public ResultClass<Activity> createExternalActivity(Activity_Request activity_rest) {
+		
+		Activity act = new Activity();
+		act.getInfo().setName(activity_rest.getName());
+		act.getInfo().setDescription(activity_rest.getDescription());
+		act.getInfo().setCode(activity_rest.getCode());
+		ResultClass<Activity> result = new ResultClass<Activity>();
+		
+		Course course = this.getCourseREST(activity_rest.getId_course())
+				.getSingleElement();
+		Group group = this.getGroupREST(activity_rest.getId_group())
+				.getSingleElement();
+		if (course != null && group != null) {
+			result = this.addActivitytoGroupREST(group, act, group
+					.getId(), course.getId(), course.getAcademicTerm().getId());
+		} else if (course != null) {
+			result = this
+					.addActivityCourseREST(course, act, course.getId(), course
+							.getAcademicTerm().getId());
+		}
+		
 		return result;
 	}
 

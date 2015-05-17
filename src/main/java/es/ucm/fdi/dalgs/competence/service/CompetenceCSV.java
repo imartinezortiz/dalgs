@@ -26,6 +26,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.supercsv.cellprocessor.ParseEnum;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
@@ -40,7 +42,9 @@ import es.ucm.fdi.dalgs.domain.Degree;
 import es.ucm.fdi.dalgs.domain.info.CompetenceInfo;
 
 public class CompetenceCSV {
-
+	protected static final Logger logger = LoggerFactory
+			.getLogger(CompetenceCSV.class);
+	
 	@SuppressWarnings("unused")
 	public List<Competence> readCSVCompetenceToBean(InputStream in,
 			String charsetName, CsvPreference csvPreference, Degree degree)
@@ -67,7 +71,10 @@ public class CompetenceCSV {
 				c.setDegree(degree);
 				competences.add(c);
 			}
-
+		}catch(Exception e){
+			logger.error("params are not correct");
+			competences = null;
+			
 		} finally {
 			if (beanReader != null) {
 				beanReader.close();

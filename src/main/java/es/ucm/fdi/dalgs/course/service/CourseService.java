@@ -373,4 +373,9 @@ public class CourseService {
 		result.setSingleElement(daoCourse.saveCourse(course));
 		return result;
 	}
+
+	public Course getCourseFormatter(Long id) {
+		
+		return daoCourse.getCourseFormatter(id);
+	}
 }

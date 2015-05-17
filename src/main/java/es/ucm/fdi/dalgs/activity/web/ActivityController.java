@@ -448,7 +448,7 @@ public class ActivityController {
 
 		if (!resultBinding.hasErrors()) {
 			Group group = serviceGroup.getGroup(id_group, id_course,
-					id_academic).getSingleElement();
+					id_academic, false).getSingleElement();
 
 			ResultClass<Activity> result = serviceActivity.addActivitytoGroup(
 					group, newactivity, id_group, id_course, id_academic);
@@ -495,7 +495,7 @@ public class ActivityController {
 		if (!resultBinding.hasErrors()) {
 
 			Group group = serviceGroup.getGroup(id_group, id_course,
-					id_academic).getSingleElement();
+					id_academic, false).getSingleElement();
 
 			ResultClass<Activity> result = serviceActivity.unDeleteActivity(
 					null, group, activity, locale);
@@ -578,7 +578,7 @@ public class ActivityController {
 
 		if (!resultBinding.hasErrors()) {
 			Group group = serviceGroup.getGroup(id_group, id_course,
-					id_academic).getSingleElement();
+					id_academic, false).getSingleElement();
 
 			ResultClass<Boolean> result = serviceActivity.modifyActivity(null,
 					group, activity, id_activity, id_course, id_academic,
@@ -618,7 +618,7 @@ public class ActivityController {
 
 		if (!result.hasErrors()) {
 			Group group = serviceGroup.getGroup(id_group, id_course,
-					id_academic).getSingleElement();
+					id_academic, false).getSingleElement();
 
 			if (serviceActivity.addLearningGoals(null, group, id,
 					learningGoalStatus, id_course, id_academic)
@@ -675,7 +675,7 @@ public class ActivityController {
 
 			File file = multipartToFile(fileupload.getFilepath(), request);
 			Group group = serviceGroup.getGroup(id_group, id_course,
-					id_academic).getSingleElement();
+					id_academic, false).getSingleElement();
 			
 			if (file != null && group !=null) {
 
@@ -717,7 +717,7 @@ public class ActivityController {
 			@PathVariable("activityId") Long id_activity)
 			throws ServletException {
 
-		Group group = serviceGroup.getGroup(id_group, id_course, id_academic)
+		Group group = serviceGroup.getGroup(id_group, id_course, id_academic, false)
 				.getSingleElement();
 
 		if (serviceActivity.deleteActivity(null, group, id_activity)
@@ -741,7 +741,7 @@ public class ActivityController {
 			@PathVariable("compStatusId") Long id_learningStatus)
 			throws ServletException {
 
-		Group group = serviceGroup.getGroup(id_group, id_course, id_academic)
+		Group group = serviceGroup.getGroup(id_group, id_course, id_academic, false)
 				.getSingleElement();
 
 		if (serviceActivity.deleteLearningActivity(null, group,
@@ -765,7 +765,7 @@ public class ActivityController {
 			@PathVariable("activityId") Long id_Activity,
 			@PathVariable("attachment") String attachment)
 			throws ServletException {
-		Group group = serviceGroup.getGroup(id_group, id_course, id_academic)
+		Group group = serviceGroup.getGroup(id_group, id_course, id_academic, false)
 				.getSingleElement();
 
 		if (serviceActivity.deleteAttachmentActivity(null, group, attachment,
@@ -814,7 +814,7 @@ public class ActivityController {
 
 			@PathVariable("activityId") Long id_activity, Locale locale) {
 
-		Group group = serviceGroup.getGroup(id_group, id_course, id_academic)
+		Group group = serviceGroup.getGroup(id_group, id_course, id_academic, false)
 				.getSingleElement();
 
 		ResultClass<Activity> result = serviceActivity.unDeleteActivity(

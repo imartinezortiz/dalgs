@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.fileupload.FileItem;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PostFilter;
@@ -122,10 +123,12 @@ public class GroupService {
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public ResultClass<Group> getGroup(Long id_group, Long id_course,
-			Long id_academic) {
+			Long id_academic, Boolean show) {
 		ResultClass<Group> result = new ResultClass<Group>();
-		result.setSingleElement(daoGroup.getGroup(id_group, id_course,
-				id_academic));
+		Group g = daoGroup.getGroup(id_group, id_course,
+				id_academic);
+		g.setActivities(serviceActivity.getActivitiesForGroup(id_group, show));
+		result.setSingleElement(g);
 		return result;
 	}
 
@@ -398,7 +401,7 @@ public class GroupService {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		Group g = daoGroup.getGroup(id_group, id_course, id_academic);
 
-		User u = serviceUser.getUser(id_user);
+		User u = serviceUser.getUser(id_user).getSingleElement();
 		if (serviceUser.hasRole(u, "ROLE_PROFESSOR")
 				&& !serviceUser.hasRole(u, "ROLE_COORDINATOR")) {
 
@@ -420,8 +423,10 @@ public class GroupService {
 
 	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
-	public boolean uploadUserCVS(Group group, UploadForm upload,
-			String typeOfUser) {
+	public ResultClass<Boolean> uploadUserCVS(Group group, UploadForm upload,
+			String typeOfUser, Locale locale) {
+		
+		ResultClass<Boolean> result = new ResultClass<>();
 		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
 				.charAt(0), upload.getDelimiterChar().charAt(0),
 				upload.getEndOfLineSymbols()).build();
@@ -432,34 +437,41 @@ public class GroupService {
 			UserCSV userUpload = new UserCSV();
 			list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
 					upload.getCharset(), prefers, typeOfUser);
-			if (serviceUser.persistListUsers(group, list) && list != null) { // Added
+			if (list == null){
+				
+					result.setHasErrors(true);
+					result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
+	
+			}
+			else{
+			if (serviceUser.persistListUsers(group, list).getSingleElement() && list != null) { // Added
 				list = (List<User>) serviceUser.getListUsersWithId(group,list);													// correctly
 				
-				ResultClass<Boolean> success = new ResultClass<Boolean>();
+//				ResultClass<Boolean> success = new ResultClass<Boolean>();
 				if (typeOfUser.equalsIgnoreCase("ROLE_PROFESSOR")) {
 
 
-					success = setProfessors(group, group.getId(), group
+					result = setProfessors(group, group.getId(), group
 							.getCourse().getId(), group.getCourse()
 							.getAcademicTerm().getId(), list);
 				} else if (typeOfUser.equalsIgnoreCase("ROLE_STUDENT")) {
 					// group.setStudents(list);
-					success = setStudents(group, group.getId(), group
+					result = setStudents(group, group.getId(), group
 							.getCourse().getId(), group.getCourse()
 							.getAcademicTerm().getId(), list);
 
 				}
-				return !success.hasErrors();
+				else result.setSingleElement(false);
 			}
-
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
+			result.setSingleElement(false);
 		} catch (final IllegalArgumentException e) {
 			e.printStackTrace();
-			return false;
+			result.setSingleElement(false);
 		}
-		return false;
+		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -477,11 +489,11 @@ public class GroupService {
 			result.setErrorsList(errors);
 
 		} else {
-
-			copy.setName(copy.getName() + " (copy)");
+			DateTime time =  new DateTime();
+			copy.setName(copy.getName() + " (copy)" +time.getMillisOfDay());
 
 			for (Activity a : copy.getActivities()) {
-				a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
+				a.getInfo().setCode(a.getInfo().getCode() + " (copy)" + time.getMillisOfDay());
 			}
 
 			boolean success = daoGroup.addGroup(copy);
@@ -514,5 +526,10 @@ public class GroupService {
 		ResultClass<Boolean> result = new ResultClass<>();
 		result.setSingleElement(daoGroup.saveGroup(group));
 		return result;
+	}
+
+	public Group getGroupFormatter(Long id_group) {
+		
+		return daoGroup.getGroupFormatter(id_group);
 	}
 }
