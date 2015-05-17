@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.fileupload.FileItem;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PostFilter;
@@ -488,11 +489,11 @@ public class GroupService {
 			result.setErrorsList(errors);
 
 		} else {
-
-			copy.setName(copy.getName() + " (copy)");
+			DateTime time =  new DateTime();
+			copy.setName(copy.getName() + " (copy)" +time.getMillisOfDay());
 
 			for (Activity a : copy.getActivities()) {
-				a.getInfo().setCode(a.getInfo().getCode() + " (copy)");
+				a.getInfo().setCode(a.getInfo().getCode() + " (copy)" + time.getMillisOfDay());
 			}
 
 			boolean success = daoGroup.addGroup(copy);

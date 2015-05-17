@@ -187,11 +187,12 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 
 		copy.id = null;
 		copy.isDeleted = false;
-
+	
 		ActivityInfo aInfo = this.getInfo().depth_copy();
 		copy.info = aInfo;
 		copy.learningGoalStatus = new ArrayList<LearningGoalStatus>();
-
+		copy.attachments = new ArrayList<String>();
+		
 		return copy;
 
 	}

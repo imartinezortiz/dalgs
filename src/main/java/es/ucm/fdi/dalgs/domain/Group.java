@@ -84,7 +84,7 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 	private Boolean isDeleted;
 
 //	@Where(clause="isDeleted = 'false'")
-	@OneToMany( cascade = CascadeType.MERGE)
+	@OneToMany( cascade = CascadeType.ALL)
 	@JoinTable(name = "group_activities", joinColumns ={@JoinColumn(name = "id_group")},
     inverseJoinColumns ={@JoinColumn(name = "id_activity")})
 	@JsonManagedReference

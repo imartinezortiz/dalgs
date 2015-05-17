@@ -56,7 +56,7 @@ public class AcademicTerm implements Cloneable, Copyable<AcademicTerm>,
 	@NotEmpty
 	@NotNull
 	@NotBlank
-	@Size(min = 4, max = 20)
+	@Size(min = 4, max = 40)
 	@Basic(optional = false)
 	@Column(name = "term", nullable = false, columnDefinition = "varchar(32) default '2014/2015'")
 	private String term;

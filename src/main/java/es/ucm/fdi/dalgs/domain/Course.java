@@ -60,7 +60,7 @@ public class Course implements Cloneable, Copyable<Course>, Serializable {
 	@JsonBackReference
 	private Subject subject;
 	
-	@OneToMany(cascade = CascadeType.MERGE)
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "course_activities", joinColumns ={@JoinColumn(name = "id_course")},
     inverseJoinColumns ={@JoinColumn(name = "id_activity")})
 //	@Where(clause="isDeleted = 'false'")
