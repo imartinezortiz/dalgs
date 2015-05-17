@@ -98,7 +98,7 @@ public class LearningGoalService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<LearningGoal> getLearningGoal(Long id_learningGoal,
 			Long id_competence, Long id_degree) {
@@ -169,7 +169,7 @@ public class LearningGoalService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<LearningGoal> getLearningGoalsFromCourse(Long id_course,
 			Activity activity) {
@@ -188,7 +188,7 @@ public class LearningGoalService {
 		}
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<LearningGoal> getLearningGoalByName(String name) {
 		ResultClass<LearningGoal> result = new ResultClass<>();
@@ -196,7 +196,7 @@ public class LearningGoalService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	public ResultClass<LearningGoal> getLearningGoalsFromCompetence(
 			Competence competence, Boolean show) {
 		ResultClass<LearningGoal> result = new ResultClass<>();

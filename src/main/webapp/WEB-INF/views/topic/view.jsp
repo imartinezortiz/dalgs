@@ -85,7 +85,7 @@
 				</div>
 
 				<div class="form-group view">
-					<label><fmt:message key="module.mod" />: </label>
+					<label><fmt:message key="module.module" />: </label>
 					<p class="details">${model.topic.module.info.name}</p>
 				</div>
 			</div>

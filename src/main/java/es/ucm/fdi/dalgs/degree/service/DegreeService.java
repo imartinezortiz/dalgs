@@ -109,7 +109,7 @@ public class DegreeService {
 
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getDegrees(Integer pageIndex, Boolean showAll) {
 		ResultClass<Degree> result = new ResultClass<>();
@@ -117,7 +117,7 @@ public class DegreeService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getAll() {
 		ResultClass<Degree> result = new ResultClass<>();
@@ -199,7 +199,7 @@ public class DegreeService {
 	// return result;
 	// }
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	public ResultClass<Degree> getDegree(Long id) {
 		ResultClass<Degree> result = new ResultClass<>();
 		result.setSingleElement(daoDegree.getDegree(id));
@@ -207,7 +207,7 @@ public class DegreeService {
 
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getDegreeAll(Long id, Boolean show) {
 		ResultClass<Degree> result = new ResultClass<Degree>();

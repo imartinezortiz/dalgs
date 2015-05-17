@@ -50,26 +50,30 @@
 <!-- Latest compiled and minified JavaScript -->
 <script type="text/javascript"
 	src="<c:url value="/resources/scripts/jquery-1.11.1.min.js" /> ">
+	
 </script>
 
 <script type="text/javascript"
 	src=" <c:url value="/resources/scripts/bootstrap.js" /> ">
+	
 </script>
 
 <script type="text/javascript"
 	src=" <c:url value="/resources/scripts/bootstrap-dropdown.js" /> ">
+	
 </script>
 
 <script type="text/javascript"
 	src=" <c:url value="/resources/scripts/bootstrap-filestyle.js" /> ">
+	
 </script>
 
 
 <script>
-    function popup() {
-        window.open("/mailbox", 'window', 'width=200,height=100');
-    }
-</script> 
+	function popup() {
+		window.open("/mailbox", 'window', 'width=200,height=100');
+	}
+</script>
 
 
 
@@ -86,10 +90,11 @@
 		src="<c:url value="/resources/images/es_ES.png" /> " />
 	</a><br> <a href="?lang=en_UK"> <img style="max-width: 40px;"
 		src="<c:url value="/resources/images/en_UK.png" /> ">
-	</a></div>
+	</a>
+</div>
 <div class="page-header logo">
-<img alt="tfg" class="img-rounded logo2" style="margin-top: -0.9%;" 
-		src="<c:url value="/resources/images/theme/Education_-_Grad_Hat.png" /> ">	
+	<img alt="tfg" class="img-rounded logo2" style="margin-top: -0.9%;"
+		src="<c:url value="/resources/images/theme/Education_-_Grad_Hat.png" /> ">
 	<h1 class="logo">
 
 		DALGS <small>TFG 2014/ 2015</small>
@@ -108,15 +113,15 @@
 <c:url value="/admin.htm" var="adminUrl" />
 <c:url value="/logout.htm" var="logoutUrl" />
 <c:url value="/externalActivities.htm" var="externals" />
+<c:url value="/login.htm" var="loginUrl" />
 <c:url value="/mailbox.htm" var="mailbox" />
-
 <%-- <c:out value="${upload}"></c:out>
 <c:out value="${contextPath}"></c:out>
  --%>
 <div class="list-group index">
 
 	<nav class="navbar navbar-default">
-	
+
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
@@ -136,45 +141,52 @@
 				id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 					<sec:authorize access="hasRole('ROLE_ANONYMOUS')">
-						<li><a href="${userUrl}"> <span
-								class="glyphicon glyphicon-user" aria-hidden="true"></span>
-										<fmt:message key="access.login" />
- 					<span class="sr-only">(current)</span></a></li>
+						<li><a href="${loginUrl}"> <span
+								class="glyphicon glyphicon-user" aria-hidden="true"></span> <fmt:message
+									key="access.login" /> <span class="sr-only">(current)</span></a></li>
 					</sec:authorize>
 
-					<sec:authorize
-						access="hasRole('ROLE_STUDENT') or hasRole('ROLE_PROFESSOR')">
-						<li><a href="${userUrl}"> <span
-								class="glyphicon glyphicon-user" aria-hidden="true"></span> <fmt:message key="user.user" />
-								<span class="sr-only">(current)</span></a></li>
-					</sec:authorize>
 
-					<sec:authorize access="hasRole('ROLE_ADMIN')">
-						<li><a href="${adminUrl}"> <span
-								class="glyphicon glyphicon-user" aria-hidden="true"></span>
-								Admin
-						</a>
-					</li>	
- 						<!-- TODO --> 
-				 <li><a class="navbar-link" data-toggle="navbar-link" 
-				 href="${externals}">
-				     <span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> 
-				     <fmt:message key="common.external" />
-				  </a>
-						</li>
-				
-				<li><a class="navbar-link" data-toggle="navbar-link" 
-				 href="${mailbox}">
-				     <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> 
-				     <fmt:message key="common.mail" />
-				  </a>
-				</li>
-						
-					</sec:authorize>
-					<sec:authorize access="hasAnyRole('ROLE_ADMIN' ,  'ROLE_USER')">
+					<c:choose>
+						<c:when test="hasRole('ROLE_ADMIN')">
+							<sec:authorize access="hasRole('ROLE_ADMIN')">
+								<li><a href="${adminUrl}"> <span
+										class="glyphicon glyphicon-user" aria-hidden="true"></span>
+										Admin
+								</a></li>
+								<!-- TODO -->
+								<li><a class="navbar-link" data-toggle="navbar-link"
+									href="${externals}"> <span
+										class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span>
+										<fmt:message key="common.external" />
+								</a></li>
+
+								<li><a class="navbar-link" data-toggle="navbar-link"
+									href="${mailbox}"> <span
+										class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+										<fmt:message key="common.mail" />
+								</a></li>
+
+							</sec:authorize>
+
+
+						</c:when>
+
+						<c:otherwise>
+
+							<sec:authorize access="isAuthenticated()">
+								<li><a href="${userUrl}"> <span
+										class="glyphicon glyphicon-user" aria-hidden="true"></span> <fmt:message
+											key="user.user" /> <span class="sr-only">(current)</span></a></li>
+							</sec:authorize>
+
+
+						</c:otherwise>
+					</c:choose>
+					<sec:authorize access="isAuthenticated()">
 						<li><a href="${logoutUrl}"> <span
-								class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
-										<fmt:message key="access.logout" />
+								class="glyphicon glyphicon-log-out" aria-hidden="true"></span> <fmt:message
+									key="access.logout" />
 
 						</a></li>
 					</sec:authorize>
@@ -184,55 +196,62 @@
 
 
 				<ul class="nav navbar-nav navbar-right">
-				
-				<c:url value="/activity/download.htm" var="activitiesUrl" />
-				<c:url value="/competence/download.htm" var="competencestUrl" />
-				<c:url value="/degree/download.htm" var="degreesUrl" />
-				<c:url value="/module/download.htm" var="modulesUrl" />
-				<c:url value="/subject/download.htm" var="subjectsUrl" />
-				<c:url value="/topic/download.htm" var="topicstUrl" />
-				<c:url value="/user/download.htm" var="usersUrl" />
-								
-				<sec:authorize access="hasRole('ROLE_ADMIN')">	
-				
-				  <li class="dropdown" id="menu1">
-				    <a class="dropdown-toggle" data-toggle="dropdown" href="#menu1">
-				     <span class="glyphicon glyphicon-download" aria-hidden="true"></span>  CSV
-				      <b class="caret"></b>
-				    </a>
-				    <ul class="dropdown-menu">	
-				     <li><a href="${activitiesUrl}"><fmt:message key="activity.ac" /></a></li>
-				      <li class="divider"></li>    
-				      <li><a href="${competencestUrl}"><fmt:message key="competence.com" /></a></li>
-				      <li class="divider"></li>
-				      <li><a href="${degreesUrl}"><fmt:message key="degree.deg" /></a></li>
-				      <li class="divider"></li>
-				      <li><a href="${modulesUrl}"><fmt:message key="module.module" /></a></li>
-				      <li class="divider"></li>
-				      <li><a href="${subjectsUrl}"><fmt:message key="subject.sub" /></a></li>
-				      <li class="divider"></li>
-				      <li><a href="${topicstUrl}"><fmt:message key="topic.top" /></a></li>
-				      <li class="divider"></li>
-				      <li><a href="${usersUrl}"><fmt:message key="user.user" /></a></li>
-				    </ul>
-				  </li>
-			  </sec:authorize>
-					
+
+					<c:url value="/activity/download.htm" var="activitiesUrl" />
+					<c:url value="/competence/download.htm" var="competencestUrl" />
+					<c:url value="/degree/download.htm" var="degreesUrl" />
+					<c:url value="/module/download.htm" var="modulesUrl" />
+					<c:url value="/subject/download.htm" var="subjectsUrl" />
+					<c:url value="/topic/download.htm" var="topicstUrl" />
+					<c:url value="/user/download.htm" var="usersUrl" />
+
+					<sec:authorize access="hasRole('ROLE_ADMIN')">
+
+						<li class="dropdown" id="menu1"><a class="dropdown-toggle"
+							data-toggle="dropdown" href="#menu1"> <span
+								class="glyphicon glyphicon-download" aria-hidden="true"></span>
+								CSV <b class="caret"></b>
+						</a>
+							<ul class="dropdown-menu">
+								<li><a href="${activitiesUrl}"><fmt:message
+											key="activity.ac" /></a></li>
+								<li class="divider"></li>
+								<li><a href="${competencestUrl}"><fmt:message
+											key="competence.com" /></a></li>
+								<li class="divider"></li>
+								<li><a href="${degreesUrl}"><fmt:message
+											key="degree.deg" /></a></li>
+								<li class="divider"></li>
+								<li><a href="${modulesUrl}"><fmt:message
+											key="module.module" /></a></li>
+								<li class="divider"></li>
+								<li><a href="${subjectsUrl}"><fmt:message
+											key="subject.sub" /></a></li>
+								<li class="divider"></li>
+								<li><a href="${topicstUrl}"><fmt:message
+											key="topic.top" /></a></li>
+								<li class="divider"></li>
+								<li><a href="${usersUrl}"><fmt:message key="user.user" /></a></li>
+							</ul></li>
+					</sec:authorize>
+
 					<sec:authorize access="isAuthenticated()">
-					<p class="navbar-text navbar-right" style="font-size: 15px;">
-					
-						<span class="glyphicon glyphicon-eye-open" aria-hidden="true">
-						</span> <fmt:message key="access.signedIn" />
- 						<a href="#" class="navbar-link">
- 						<%=SecurityContextHolder.getContext().getAuthentication().getName()%>
- 						</a>&nbsp;&nbsp;
- 			
- 						
- 					
- 						
-					</p></sec:authorize>
-			
- 						
+						<p class="navbar-text navbar-right" style="font-size: 15px;">
+
+							<span class="glyphicon glyphicon-eye-open" aria-hidden="true">
+							</span>
+							<fmt:message key="access.signedIn" />
+							<a href="#" class="navbar-link"> <%=SecurityContextHolder.getContext()
+						.getAuthentication().getName()%>
+							</a>&nbsp;&nbsp;
+
+
+
+
+						</p>
+					</sec:authorize>
+
+
 				</ul>
 
 			</div>

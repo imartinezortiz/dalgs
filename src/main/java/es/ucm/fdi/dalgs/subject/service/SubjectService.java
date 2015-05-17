@@ -121,7 +121,7 @@ public class SubjectService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = false)
 	public ResultClass<Subject> getSubject(Long id, Long id_topic,
 			Long id_module, Long id_degree) {
@@ -152,7 +152,7 @@ public class SubjectService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectsForTopic(Long id_topic, Boolean show) {
 		ResultClass<Subject> result = new ResultClass<>();
@@ -209,7 +209,7 @@ public class SubjectService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectForCourse(Long id) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
@@ -217,7 +217,7 @@ public class SubjectService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectByName(String string) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
@@ -225,7 +225,7 @@ public class SubjectService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectAll(Long id_subject, Long id_topic,
 			Long id_module, Long id_degree) {
@@ -241,7 +241,7 @@ public class SubjectService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectForDegree(Degree degree) {
 		ResultClass<Subject> result = new ResultClass<>();

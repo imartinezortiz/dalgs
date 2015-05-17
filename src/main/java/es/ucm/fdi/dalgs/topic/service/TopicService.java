@@ -104,7 +104,7 @@ public class TopicService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Topic> getAll() {
 		ResultClass<Topic> result = new ResultClass<>();
@@ -147,7 +147,7 @@ public class TopicService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Topic> getTopic(Long id, Long id_module, Long id_degree) {
 		ResultClass<Topic> result = new ResultClass<Topic>();
@@ -170,7 +170,7 @@ public class TopicService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Topic> getTopicAll(Long id_topic, Long id_module,
 			Long id_degree, Boolean show) {
@@ -184,7 +184,7 @@ public class TopicService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Topic> getTopicsForModule(Long id, Boolean show) {
 		ResultClass<Topic> result = new ResultClass<>();

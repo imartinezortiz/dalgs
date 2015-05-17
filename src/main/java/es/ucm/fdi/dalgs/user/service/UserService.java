@@ -87,7 +87,7 @@ public class UserService {
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#user, 'WRITE') or hasRole('ROLE_ADMIN')")
+	@PreAuthorize("#user.username == principal.username or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean>  saveUser(User user) {
 		ResultClass<Boolean> result = new ResultClass<>();

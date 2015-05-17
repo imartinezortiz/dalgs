@@ -113,7 +113,7 @@ public class CompetenceService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Competence> getAll() {
 		ResultClass<Competence> result = new ResultClass<Competence>();
@@ -121,7 +121,7 @@ public class CompetenceService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = false)
 	public ResultClass<Competence> getCompetence(Long id, Long id_degree) {
 		ResultClass<Competence> result = new ResultClass<Competence>();
@@ -129,7 +129,7 @@ public class CompetenceService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = false)
 	public ResultClass<Competence> getCompetenceByName(String name) {
 		ResultClass<Competence> result = new ResultClass<>();
@@ -152,7 +152,7 @@ public class CompetenceService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = false)
 	public ResultClass<Competence> getCompetencesForSubject(Long id_subject) {
 		ResultClass<Competence> result = new ResultClass<>();
@@ -160,7 +160,7 @@ public class CompetenceService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Competence> getCompetencesForDegree(Long id_degree,
 			Boolean show) {
@@ -244,7 +244,7 @@ public class CompetenceService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Competence> getCompetenceAll(Long id_competence,
 			Long id_degree, Boolean show) {

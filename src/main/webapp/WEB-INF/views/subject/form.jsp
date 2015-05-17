@@ -69,15 +69,15 @@
 					<form:errors path="info.description" cssStyle="color: #ff0000" />
 				</div>
 				<div class="form-group">
-					<label><fmt:message key="input.desc" />: </label>
-					<form:input path="info.url_doc" class="form-control"
+					<label><fmt:message key="subject.credits" />: </label>
+					<form:input path="info.credits" class="form-control"
 						placeholder="${credSub}" required="true" />
 					<form:errors path="info.credits" cssStyle="color: #ff0000" />
 				</div>
 				
 				<div class="form-group">
-					<label><fmt:message key="input.desc" />: </label>
-					<form:input path="info.description" class="form-control"
+					<label><fmt:message key="subject.url" />: </label>
+					<form:input path="info.url_doc" class="form-control"
 						placeholder="${urlSub}" required="true" />
 					<form:errors path="info.url_doc" cssStyle="color: #ff0000" />
 				</div>

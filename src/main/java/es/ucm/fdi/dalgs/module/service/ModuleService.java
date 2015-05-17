@@ -106,7 +106,7 @@ public class ModuleService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Module> getAll() {
 		ResultClass<Module> result = new ResultClass<Module>();
@@ -149,7 +149,7 @@ public class ModuleService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Module> getModule(Long id, Long id_degree) {
 		ResultClass<Module> result = new ResultClass<Module>();
@@ -169,7 +169,7 @@ public class ModuleService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Module> getModuleAll(Long id_module, Long id_degree,
 			Boolean show) {
@@ -182,7 +182,7 @@ public class ModuleService {
 		return result;
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	@Transactional(readOnly = true)
 	public ResultClass<Module> getModulesForDegree(Long id, Boolean show) {
 		ResultClass<Module> result = new ResultClass<>();
