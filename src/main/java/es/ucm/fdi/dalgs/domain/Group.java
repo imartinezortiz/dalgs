@@ -214,6 +214,7 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 		copy.activities = new ArrayList<Activity>();
 		copy.external_activities = new ArrayList<Activity>();
 		copy.isDeleted = false;
+		copy.external_activities = new ArrayList<Activity>();
 
 		for (Activity a : this.activities) {
 			Activity activity = a.depth_copy();
