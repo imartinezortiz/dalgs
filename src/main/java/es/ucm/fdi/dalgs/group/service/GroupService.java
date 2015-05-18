@@ -229,7 +229,7 @@ public class GroupService {
 				manageAclService.removePermissionCollectionCASCADE(group
 						.getStudents(), group,
 						course.getAcademicTerm().getId(), course.getId(), group
-								.getId());
+						.getId());
 				manageAclService.removePermissionCollectionCASCADE(group
 						.getProfessors(), group, course.getAcademicTerm()
 						.getId(), course.getId(), group.getId());
@@ -317,9 +317,9 @@ public class GroupService {
 		Group modifyGroup = daoGroup.getGroup(id_group, id_course, id_academic);
 
 		modifyGroup.setProfessors(users);
-		
 
-		 
+
+
 		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
 
 		if (!result.hasErrors()) {
@@ -373,10 +373,10 @@ public class GroupService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> setStudents(Group group, Long id_group,
 			Long id_course, Long id_academic, Collection<User> users) {
-		
+
 		ResultClass<Boolean> result = new ResultClass<>();
 		Group modifyGroup = daoGroup.getGroup(id_group, id_course, id_academic);
-	
+
 
 		modifyGroup.setStudents(users);
 		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
@@ -425,51 +425,57 @@ public class GroupService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> uploadUserCVS(Group group, UploadForm upload,
 			String typeOfUser, Locale locale) {
-		
-		ResultClass<Boolean> result = new ResultClass<>();
-		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
-				.charAt(0), upload.getDelimiterChar().charAt(0),
-				upload.getEndOfLineSymbols()).build();
 
-		List<User> list = null;
-		try {
-			FileItem fileItem = upload.getFileData().getFileItem();
-			UserCSV userUpload = new UserCSV();
-			list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
-					upload.getCharset(), prefers, typeOfUser);
-			if (list == null){
-				
+		ResultClass<Boolean> result = new ResultClass<>();
+		if(!upload.getFileData().isEmpty()){
+			CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
+					.charAt(0), upload.getDelimiterChar().charAt(0),
+					upload.getEndOfLineSymbols()).build();
+
+			List<User> list = null;
+			try {
+				FileItem fileItem = upload.getFileData().getFileItem();
+				UserCSV userUpload = new UserCSV();
+				list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
+						upload.getCharset(), prefers, typeOfUser);
+				if (list == null){
+
 					result.setHasErrors(true);
 					result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
-	
-			}
-			else{
-			if (serviceUser.persistListUsers(group, list).getSingleElement() && list != null) { // Added
-				list = (List<User>) serviceUser.getListUsersWithId(group,list);													// correctly
-				
-//				ResultClass<Boolean> success = new ResultClass<Boolean>();
-				if (typeOfUser.equalsIgnoreCase("ROLE_PROFESSOR")) {
-
-
-					result = setProfessors(group, group.getId(), group
-							.getCourse().getId(), group.getCourse()
-							.getAcademicTerm().getId(), list);
-				} else if (typeOfUser.equalsIgnoreCase("ROLE_STUDENT")) {
-					// group.setStudents(list);
-					result = setStudents(group, group.getId(), group
-							.getCourse().getId(), group.getCourse()
-							.getAcademicTerm().getId(), list);
 
 				}
-				else result.setSingleElement(false);
+				else{
+					if (serviceUser.persistListUsers(group, list).getSingleElement() && list != null) { // Added
+						list = (List<User>) serviceUser.getListUsersWithId(group,list);													// correctly
+
+						//				ResultClass<Boolean> success = new ResultClass<Boolean>();
+						if (typeOfUser.equalsIgnoreCase("ROLE_PROFESSOR")) {
+
+
+							result = setProfessors(group, group.getId(), group
+									.getCourse().getId(), group.getCourse()
+									.getAcademicTerm().getId(), list);
+						} else if (typeOfUser.equalsIgnoreCase("ROLE_STUDENT")) {
+							// group.setStudents(list);
+							result = setStudents(group, group.getId(), group
+									.getCourse().getId(), group.getCourse()
+									.getAcademicTerm().getId(), list);
+
+						}
+						else result.setSingleElement(false);
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				result.setSingleElement(false);
+			} catch (final IllegalArgumentException e) {
+				e.printStackTrace();
+				result.setSingleElement(false);
 			}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			result.setSingleElement(false);
-		} catch (final IllegalArgumentException e) {
-			e.printStackTrace();
-			result.setSingleElement(false);
+		}
+		else {
+			result.setHasErrors(true);
+			result.getErrorsList().add(messageSource.getMessage("error.fileEmpty", null, locale));
 		}
 		return result;
 	}
@@ -490,10 +496,12 @@ public class GroupService {
 
 		} else {
 			DateTime time =  new DateTime();
-			copy.setName(copy.getName() + "  " + time.getMillisOfSecond());
+
+			copy.setName(copy.getName() + "  " +time.getMillisOfSecond());
 
 			for (Activity a : copy.getActivities()) {
-				a.getInfo().setCode(a.getInfo().getCode() + " " + time.getMillisOfSecond());
+				a.getInfo().setCode(a.getInfo().getCode() + "  "+ time.getMillisOfSecond());
+
 			}
 
 			boolean success = daoGroup.addGroup(copy);
@@ -529,7 +537,7 @@ public class GroupService {
 	}
 
 	public Group getGroupFormatter(Long id_group) {
-		
+
 		return daoGroup.getGroupFormatter(id_group);
 	}
 }

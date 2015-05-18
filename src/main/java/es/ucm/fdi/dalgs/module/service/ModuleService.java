@@ -238,42 +238,46 @@ public class ModuleService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> uploadCSV(UploadForm upload, Long id_degree, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
-//		boolean success = false;
-		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
-				.charAt(0), upload.getDelimiterChar().charAt(0),
-				upload.getEndOfLineSymbols()).build();
+		if(!upload.getFileData().isEmpty()){
+			CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
+					.charAt(0), upload.getDelimiterChar().charAt(0),
+					upload.getEndOfLineSymbols()).build();
 
-		List<Module> list = null;
-		try {
-			FileItem fileItem = upload.getFileData().getFileItem();
-			ModuleCSV moduleUpload = new ModuleCSV();
+			List<Module> list = null;
+			try {
+				FileItem fileItem = upload.getFileData().getFileItem();
+				ModuleCSV moduleUpload = new ModuleCSV();
 
-			Degree d = serviceDegree.getDegree(id_degree).getSingleElement();
-			list = moduleUpload.readCSVModuleToBean(fileItem.getInputStream(),
-					upload.getCharset(), prefers, d);
-			if (list == null){
-				result.setHasErrors(true);
-				result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
-			}
-			else{
-				result.setSingleElement(daoModule.persistListModules(list));
-				if (result.getSingleElement()) {
-					for (Module c : list) {
-						Module aux = daoModule.existByCode(c.getInfo().getCode(),
-								id_degree);
-						result.setSingleElement(result.getSingleElement()
-								&& manageAclService.addACLToObject(aux.getId(), aux
-										.getClass().getName()));
+				Degree d = serviceDegree.getDegree(id_degree).getSingleElement();
+				list = moduleUpload.readCSVModuleToBean(fileItem.getInputStream(),
+						upload.getCharset(), prefers, d);
+				if (list == null){
+					result.setHasErrors(true);
+					result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
+				}
+				else{
+					result.setSingleElement(daoModule.persistListModules(list));
+					if (result.getSingleElement()) {
+						for (Module c : list) {
+							Module aux = daoModule.existByCode(c.getInfo().getCode(),
+									id_degree);
+							result.setSingleElement(result.getSingleElement()
+									&& manageAclService.addACLToObject(aux.getId(), aux
+											.getClass().getName()));
+
+						}
 
 					}
-
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				result.setSingleElement(false);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			result.setSingleElement(false);
 		}
-
+		else {
+			result.setHasErrors(true);
+			result.getErrorsList().add(messageSource.getMessage("error.fileEmpty", null, locale));
+		}
 		return result;
 	}
 

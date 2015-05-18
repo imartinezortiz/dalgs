@@ -259,41 +259,46 @@ public class TopicService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> uploadCSV(UploadForm upload, Long id_module, Long id_degree, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
-//		boolean success = false;
-		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
-				.charAt(0), upload.getDelimiterChar().charAt(0),
-				upload.getEndOfLineSymbols()).build();
+		if (!upload.getFileData().isEmpty()){
+			CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
+					.charAt(0), upload.getDelimiterChar().charAt(0),
+					upload.getEndOfLineSymbols()).build();
 
-		List<Topic> list = null;
-		try {
-			FileItem fileItem = upload.getFileData().getFileItem();
-			TopicCSV topicUpload = new TopicCSV();
+			List<Topic> list = null;
+			try {
+				FileItem fileItem = upload.getFileData().getFileItem();
+				TopicCSV topicUpload = new TopicCSV();
 
-			Module m = serviceModule.getModule(id_module, id_degree)
-					.getSingleElement();
-			list = topicUpload.readCSVTopicToBean(fileItem.getInputStream(),
-					upload.getCharset(), prefers, m);
-			if (list == null){
-				result.setHasErrors(true);
-				result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
-			}
-			else{
-				result.setSingleElement(daoTopic.persistListTopics(list));
-				if (result.getSingleElement()) {
-					for (Topic c : list) {
-						Topic aux = daoTopic.existByCode(c.getInfo().getCode(),
-								id_module);
-						result.setSingleElement(result.getSingleElement()
-								&& manageAclService.addACLToObject(aux.getId(), aux
-										.getClass().getName()));
+				Module m = serviceModule.getModule(id_module, id_degree)
+						.getSingleElement();
+				list = topicUpload.readCSVTopicToBean(fileItem.getInputStream(),
+						upload.getCharset(), prefers, m);
+				if (list == null){
+					result.setHasErrors(true);
+					result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
+				}
+				else{
+					result.setSingleElement(daoTopic.persistListTopics(list));
+					if (result.getSingleElement()) {
+						for (Topic c : list) {
+							Topic aux = daoTopic.existByCode(c.getInfo().getCode(),
+									id_module);
+							result.setSingleElement(result.getSingleElement()
+									&& manageAclService.addACLToObject(aux.getId(), aux
+											.getClass().getName()));
+
+						}
 
 					}
-
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				result.setSingleElement(false);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			result.setSingleElement(false);
+		}
+		else {
+			result.setHasErrors(true);
+			result.getErrorsList().add(messageSource.getMessage("error.fileEmpty", null, locale));
 		}
 		return result;
 	}

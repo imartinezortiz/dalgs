@@ -196,7 +196,7 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 		for(String s: this.attachments){
 			copy.attachments.add(new String(s));
 		}
-		
+
 		return copy;
 
 	}

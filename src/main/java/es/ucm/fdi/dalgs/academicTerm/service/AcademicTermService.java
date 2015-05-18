@@ -282,20 +282,17 @@ public class AcademicTermService {
 
 		} else {
 			DateTime time = new DateTime();
-			copy.setTerm(copy.getTerm() + "  " +  time.getMillisOfSecond());
+
+			copy.setTerm(copy.getTerm() + " "+ time.getMillisOfSecond());
 
 			for (Course c : copy.getCourses()) {
-
-				// c.setActivities(null);
-
 				for (Activity a : c.getActivities()) {
 
-					// a.setGroup(null);
-					a.getInfo().setCode(a.getInfo().getCode() + "  " + time.getMillisOfSecond());
+					a.getInfo().setCode(a.getInfo().getCode() + "  " +time.getMillisOfSecond());
 				}
 
 				for (Group g : c.getGroups()) {
-					g.setName(g.getName() + "  " + time.getMillisOfSecond());
+					g.setName(g.getName() + time.getMillisOfSecond());
 					for (Activity a : g.getActivities()) {
 
 						a.getInfo().setCode(a.getInfo().getCode() + "  " + time.getMillisOfSecond());
