@@ -261,7 +261,7 @@ public class ModuleController {
 			@PathVariable("degreeId") Long id_degree,
 			RedirectAttributes attr, Locale locale) {
 
-		if (resultBinding.hasErrors() || upload.getCharset().isEmpty()) {
+		if (resultBinding.hasErrors() || upload.getCharset().isEmpty()  || upload.getFileData().getSize() ==0) {
 			for (ObjectError error : resultBinding.getAllErrors()) {
 				System.err.println("Error: " + error.getCode() + " - "
 						+ error.getDefaultMessage());

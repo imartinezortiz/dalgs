@@ -206,7 +206,7 @@ public class UserController {
 			BindingResult resultBinding, Model model,
 			RedirectAttributes attr, Locale locale) {
 
-		if (resultBinding.hasErrors() || upload.getCharset().isEmpty()) {
+		if (resultBinding.hasErrors() || upload.getCharset().isEmpty()  || upload.getFileData().getSize() ==0) {
 			for (ObjectError error : resultBinding.getAllErrors()) {
 				System.err.println("Error: " + error.getCode() + " - "
 						+ error.getDefaultMessage());

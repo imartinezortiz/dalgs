@@ -275,7 +275,7 @@ public class DegreeController {
 			@ModelAttribute("newUpload") @Valid UploadForm upload,
 			BindingResult resultBinding, Model model, Locale locale, RedirectAttributes attr) {
 
-		if (resultBinding.hasErrors() || upload.getCharset().isEmpty()) {
+		if (resultBinding.hasErrors() || upload.getCharset().isEmpty() || upload.getFileData().getSize() ==0) {
 			for (ObjectError error : resultBinding.getAllErrors()) {
 				System.err.println("Error: " + error.getCode() + " - "
 						+ error.getDefaultMessage());

@@ -115,6 +115,8 @@
 <c:url value="/externalActivities.htm" var="externals" />
 <c:url value="/login.htm" var="loginUrl" />
 <c:url value="/mailbox.htm" var="mailbox" />
+<sec:authorize access="hasRole('ROLE_ADMIN')" var="isAdmin" />
+
 <%-- <c:out value="${upload}"></c:out>
 <c:out value="${contextPath}"></c:out>
  --%>
@@ -146,9 +148,9 @@
 									key="access.login" /> <span class="sr-only">(current)</span></a></li>
 					</sec:authorize>
 
-
+					
 					<c:choose>
-						<c:when test="hasRole('ROLE_ADMIN')">
+  						<c:when test="${isAdmin}">
 							<sec:authorize access="hasRole('ROLE_ADMIN')">
 								<li><a href="${adminUrl}"> <span
 										class="glyphicon glyphicon-user" aria-hidden="true"></span>

@@ -490,10 +490,10 @@ public class GroupService {
 
 		} else {
 			DateTime time =  new DateTime();
-			copy.setName(copy.getName() + " (copy)" +time.getMillisOfDay());
+			copy.setName(copy.getName() + "  " + time.getMillisOfSecond());
 
 			for (Activity a : copy.getActivities()) {
-				a.getInfo().setCode(a.getInfo().getCode() + " (copy)" + time.getMillisOfDay());
+				a.getInfo().setCode(a.getInfo().getCode() + " " + time.getMillisOfSecond());
 			}
 
 			boolean success = daoGroup.addGroup(copy);
