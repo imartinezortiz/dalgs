@@ -76,7 +76,7 @@ public class WebhookService {
 
 		ResultClass<Activity> result = new ResultClass<>();
 		DateTime time = new DateTime();
-		String code = "ext" +  time.getMillisOfDay();
+		String code = "ext" +  time.getMillis();
 			act.getInfo().setCode(code);
 			course.getExternal_activities().add(act);
 			act.setCourse(course);
@@ -122,7 +122,7 @@ public class WebhookService {
 
 		ResultClass<Activity> result = new ResultClass<>();
 		DateTime time = new DateTime();
-		String code = "ext" +  time.getMillisOfDay();
+		String code = "ext" +  time.getMillis();
 			act.getInfo().setCode(code);
 			group.getExternal_activities().add(act);
 			act.setGroup(group);

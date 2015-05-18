@@ -282,7 +282,7 @@ public class AcademicTermService {
 
 		} else {
 			DateTime time = new DateTime();
-			copy.setTerm(copy.getTerm() + " (copy)" +  time.getMillisOfDay());
+			copy.setTerm(copy.getTerm() + " - ("+ time.getMillis() + ")");
 
 			for (Course c : copy.getCourses()) {
 
@@ -291,14 +291,14 @@ public class AcademicTermService {
 				for (Activity a : c.getActivities()) {
 
 					// a.setGroup(null);
-					a.getInfo().setCode(a.getInfo().getCode() + " (copy)" + time.getMillisOfDay());
+					a.getInfo().setCode(a.getInfo().getCode() + " - (" +time.getMillis()+")");
 				}
 
 				for (Group g : c.getGroups()) {
-					g.setName(g.getName() + " (copy)" + time.getMillisOfDay());
+					g.setName(g.getName() + time.getMillis());
 					for (Activity a : g.getActivities()) {
 
-						a.getInfo().setCode(a.getInfo().getCode() + " (copy)" + time.getMillisOfDay());
+						a.getInfo().setCode(a.getInfo().getCode() + " - (" + time.getMillis() + ")");
 					}
 				}
 

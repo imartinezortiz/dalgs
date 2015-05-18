@@ -305,10 +305,10 @@ public class SubjectService {
 	public ResultClass<Boolean> uploadCSV(UploadForm upload, Long id_topic, Long id_module,
 			Long id_degree, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
-//		boolean success = false;
-		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
-				.charAt(0), upload.getDelimiterChar().charAt(0),
-				upload.getEndOfLineSymbols()).build();
+		if (!upload.getFileData().isEmpty()){
+			CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
+					.charAt(0), upload.getDelimiterChar().charAt(0),
+					upload.getEndOfLineSymbols()).build();
 
 		List<Subject> list = null;
 		try {
@@ -339,25 +339,30 @@ public class SubjectService {
 		} catch (IOException e) {
 			e.printStackTrace();
 			result.setSingleElement(false);
-			
-		}
 
-		return result;
+		}
+	}
+	else {
+		result.setHasErrors(true);
+		result.getErrorsList().add(messageSource.getMessage("error.fileEmpty", null, locale));
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@Transactional(readOnly = false)
-	public void downloadCSV(HttpServletResponse response) throws IOException {
+	return result;
+}
 
-		Collection<Subject> subjects = new ArrayList<Subject>();
-		subjects =  daoSubject.getAll();
+@PreAuthorize("hasRole('ROLE_ADMIN')")
+@Transactional(readOnly = false)
+public void downloadCSV(HttpServletResponse response) throws IOException {
 
-		if(!subjects.isEmpty()){
-			SubjectCSV subjectCSV = new SubjectCSV();
-			subjectCSV.downloadCSV(response, subjects);
-		}
+	Collection<Subject> subjects = new ArrayList<Subject>();
+	subjects =  daoSubject.getAll();
 
+	if(!subjects.isEmpty()){
+		SubjectCSV subjectCSV = new SubjectCSV();
+		subjectCSV.downloadCSV(response, subjects);
 	}
+
+}
 
 
 }

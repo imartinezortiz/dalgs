@@ -263,40 +263,46 @@ public class DegreeService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> uploadCSV(UploadForm upload, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		//		boolean success = false;
-		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
-				.charAt(0), upload.getDelimiterChar().charAt(0),
-				upload.getEndOfLineSymbols()).build();
 
-		List<Degree> list = null;
-		try {
-			FileItem fileItem = upload.getFileData().getFileItem();
-			DegreeCSV degreeUpload = new DegreeCSV();
+		if(!upload.getFileData().isEmpty()){
+			CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
+					.charAt(0), upload.getDelimiterChar().charAt(0),
+					upload.getEndOfLineSymbols()).build();
 
-			list = degreeUpload.readCSVDegreeToBean(fileItem.getInputStream(),
-					upload.getCharset(), prefers);
+			List<Degree> list = null;
+			try {
+				FileItem fileItem = upload.getFileData().getFileItem();
+				DegreeCSV degreeUpload = new DegreeCSV();
 
-			if (list == null){
-				result.setHasErrors(true);
-				result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
-			}
-			else{
-				result.setSingleElement(daoDegree.persistListDegrees(list));
-				if (result.getSingleElement()) {
-					for (Degree c : list) {
-						Degree aux = daoDegree.existByCode(c.getInfo().getCode());
-						result.setSingleElement(result.getSingleElement()
-								&& manageAclService.addACLToObject(aux.getId(), aux
-										.getClass().getName()));
+				list = degreeUpload.readCSVDegreeToBean(fileItem.getInputStream(),
+						upload.getCharset(), prefers);
+
+				if (list == null){
+					result.setHasErrors(true);
+					result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
+				}
+				else{
+					result.setSingleElement(daoDegree.persistListDegrees(list));
+					if (result.getSingleElement()) {
+						for (Degree c : list) {
+							Degree aux = daoDegree.existByCode(c.getInfo().getCode());
+							result.setSingleElement(result.getSingleElement()
+									&& manageAclService.addACLToObject(aux.getId(), aux
+											.getClass().getName()));
+
+						}
 
 					}
-
 				}
-			}
 
-		} catch (IOException e) {
-			e.printStackTrace();
-			result.setSingleElement(false);
+			} catch (IOException e) {
+				e.printStackTrace();
+				result.setSingleElement(false);
+			}
+		}
+		else {
+			result.setHasErrors(true);
+			result.getErrorsList().add(messageSource.getMessage("error.fileEmpty", null, locale));
 		}
 		return result;
 

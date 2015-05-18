@@ -296,41 +296,47 @@ public class CompetenceService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> uploadCSV(UploadForm upload, Long id_degree, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
-//		boolean success = false;
-		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
-				.charAt(0), upload.getDelimiterChar().charAt(0),
-				upload.getEndOfLineSymbols()).build();
 
-		List<Competence> list = null;
-		try {
-			FileItem fileItem = upload.getFileData().getFileItem();
-			CompetenceCSV competenceUpload = new CompetenceCSV();
+		if(!upload.getFileData().isEmpty()){
+			CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
+					.charAt(0), upload.getDelimiterChar().charAt(0),
+					upload.getEndOfLineSymbols()).build();
 
-			Degree d = serviceDegree.getDegree(id_degree).getSingleElement();
-			list = competenceUpload.readCSVCompetenceToBean(
-					fileItem.getInputStream(), upload.getCharset(), prefers, d);
+			List<Competence> list = null;
+			try {
+				FileItem fileItem = upload.getFileData().getFileItem();
+				CompetenceCSV competenceUpload = new CompetenceCSV();
 
-			if (list == null){
-				result.setHasErrors(true);
-				result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
-			}
-			else{
-				result.setSingleElement(daoCompetence.persistListCompetences(list));
-				if (result.getSingleElement()) {
-					for (Competence c : list) {
-						Competence aux = daoCompetence.existByCode(c.getInfo()
-								.getCode(), d);
-						result.setSingleElement(result.getSingleElement()
-								&& manageAclService.addACLToObject(aux.getId(), aux
-										.getClass().getName()));
+				Degree d = serviceDegree.getDegree(id_degree).getSingleElement();
+				list = competenceUpload.readCSVCompetenceToBean(
+						fileItem.getInputStream(), upload.getCharset(), prefers, d);
+
+				if (list == null){
+					result.setHasErrors(true);
+					result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
+				}
+				else{
+					result.setSingleElement(daoCompetence.persistListCompetences(list));
+					if (result.getSingleElement()) {
+						for (Competence c : list) {
+							Competence aux = daoCompetence.existByCode(c.getInfo()
+									.getCode(), d);
+							result.setSingleElement(result.getSingleElement()
+									&& manageAclService.addACLToObject(aux.getId(), aux
+											.getClass().getName()));
+
+						}
 
 					}
-
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				result.setSingleElement(false);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			result.setSingleElement(false);
+		}
+		else {
+			result.setHasErrors(true);
+			result.getErrorsList().add(messageSource.getMessage("error.fileEmpty", null, locale));
 		}
 		return result;
 

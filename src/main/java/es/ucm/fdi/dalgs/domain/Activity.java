@@ -192,7 +192,8 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 		copy.info = aInfo;
 		copy.learningGoalStatus = new ArrayList<LearningGoalStatus>();
 		copy.attachments = new ArrayList<String>();
-		
+		for(String a : this.attachments)
+			copy.attachments.add(a);
 		return copy;
 
 	}

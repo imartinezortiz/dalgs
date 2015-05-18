@@ -134,36 +134,40 @@ public class UserService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> uploadCVS(UploadForm upload, String typeOfUser, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
+		if (!upload.getFileData().isEmpty()) {
+			CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
+					.charAt(0), upload.getDelimiterChar().charAt(0),
+					upload.getEndOfLineSymbols()).build();
 
-		CsvPreference prefers = new CsvPreference.Builder(upload.getQuoteChar()
-				.charAt(0), upload.getDelimiterChar().charAt(0),
-				upload.getEndOfLineSymbols()).build();
-
-		List<User> list = null;
-		try {
-			FileItem fileItem = upload.getFileData().getFileItem();
-			UserCSV userUpload = new UserCSV();
-			list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
-					upload.getCharset(), prefers, typeOfUser);
-			if (list == null){
-				result.setHasErrors(true);
-				result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
-			}
-			else{
-				if( daoUser.persistListUsers(list)){
-					for(User u : list){
-						User aux = findByUsername(u.getUsername()).getSingleElement();
-						manageAclService.addACLToObject(u.getId(), u.getClass().getName());
-						manageAclService.addPermissionToAnObject_WRITE(aux, aux.getId(), aux.getClass().getName());
-					}
-					result.setSingleElement(true);
+			List<User> list = null;
+			try {
+				FileItem fileItem = upload.getFileData().getFileItem();
+				UserCSV userUpload = new UserCSV();
+				list = userUpload.readCSVUserToBean(fileItem.getInputStream(),
+						upload.getCharset(), prefers, typeOfUser);
+				if (list == null){
+					result.setHasErrors(true);
+					result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
 				}
+				else{
+					if( daoUser.persistListUsers(list)){
+						for(User u : list){
+							User aux = findByUsername(u.getUsername()).getSingleElement();
+							manageAclService.addACLToObject(u.getId(), u.getClass().getName());
+							manageAclService.addPermissionToAnObject_WRITE(aux, aux.getId(), aux.getClass().getName());
+						}
+						result.setSingleElement(true);
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				result.setSingleElement(false);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			result.setSingleElement(false);
 		}
-
+		else {
+			result.setHasErrors(true);
+			result.getErrorsList().add(messageSource.getMessage("error.fileEmpty", null, locale));
+		}
 		return result;
 	}
 
