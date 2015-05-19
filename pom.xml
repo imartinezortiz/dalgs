@@ -25,6 +25,8 @@
 	<name>D.A.L.G.S</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
+	<description>Degrees and Learning Goals System</description>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>	
 		<java-version>1.7</java-version>
@@ -450,5 +452,4 @@
 			<url>http://repository.jboss.org/maven2/</url>
 		</repository>
 	</repositories>
-	<description>Degrees and Learning Goals System</description>
 </project>
