@@ -21,7 +21,6 @@ package es.ucm.fdi.dalgs.mailbox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import es.ucm.fdi.dalgs.mailbox.classes.IMAP;
 import es.ucm.fdi.dalgs.mailbox.service.MailBoxService;
 
 @Component("scheduleBean")
@@ -33,7 +32,7 @@ public class ScheduleBean {
     public void printMessage() {
         System.out.println("I am called by Spring scheduler");
         
-        mailBoxService.downloadEmails(new IMAP());
+        mailBoxService.downloadEmails();
         
     }
 }

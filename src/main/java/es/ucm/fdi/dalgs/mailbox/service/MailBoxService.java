@@ -31,9 +31,9 @@ import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Store;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import es.ucm.fdi.dalgs.mailbox.classes.IMAP;
 import es.ucm.fdi.dalgs.mailbox.classes.MessageBox;
  
 /**
@@ -42,8 +42,65 @@ import es.ucm.fdi.dalgs.mailbox.classes.MessageBox;
  */
 @Service
 public class MailBoxService{
- 
-    /**
+
+	@Value("${mail.protocol}")
+	private String protocol;
+	
+	@Value("${mail.host}")
+	private String host;
+	
+	@Value("${mail.port}")
+	private String port;
+	
+	@Value("${mail.userName}")
+	private String userName;
+	
+	@Value("${mail.password}")
+	private String password;
+	
+	
+	
+    public String getProtocol() {
+		return protocol;
+	}
+
+	public void setProtocol(String protocol) {
+		this.protocol = protocol;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public String getPort() {
+		return port;
+	}
+
+	public void setPort(String port) {
+		this.port = port;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	/**
      * Returns a Properties object which is configured for a POP3/IMAP server
      */
     private Properties getServerProperties(String protocol, String host,
@@ -71,8 +128,9 @@ public class MailBoxService{
     /**
      * Returns new messages and fetches details for each message.
      */
-    public Collection<MessageBox> downloadEmails(IMAP imap) {
-        Properties properties = getServerProperties(imap.getProtocol(), imap.getHost(), imap.getPort());
+    public Collection<MessageBox> downloadEmails() {
+
+        Properties properties = getServerProperties(protocol, host, port);
         Session session = Session.getDefaultInstance(properties);
  
         try {
@@ -80,8 +138,8 @@ public class MailBoxService{
         	Collection<MessageBox> messagesbox = new ArrayList<MessageBox>();
             
         	// connects to the message store
-            Store store = session.getStore(imap.getProtocol());
-            store.connect(imap.getUserName(), imap.getPassword());
+            Store store = session.getStore(protocol);
+            store.connect(userName, password);
  
             // opens the inbox folder
             Folder folderInbox = store.getFolder("INBOX");
@@ -146,7 +204,7 @@ public class MailBoxService{
             return messagesbox;
             
         } catch (NoSuchProviderException ex) {
-            System.out.println("No provider for protocol: " + imap.getProtocol());
+            System.out.println("No provider for protocol: " + protocol);
             ex.printStackTrace();
         } catch (MessagingException ex) {
             System.out.println("Could not connect to the message store");
