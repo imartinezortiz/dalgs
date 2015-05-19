@@ -30,8 +30,7 @@
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
 				<fmt:message key="externalActivity.list" />
-				-
-				<fmt:message key="group.gr" />
+
 			</h3>
 
 			<!-- If you are a professor who belongs to this course you can edit -->
