@@ -27,6 +27,16 @@
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<description>Degrees and Learning Goals System</description>
 
+	<repositories>
+		<repository>
+			<id>repo de maven</id>
+			<url>http://repo1.maven.org/maven2/</url>
+		</repository>
+		<repository>
+			<id>repo de jboss</id>
+			<url>http://repository.jboss.org/maven2/</url>
+		</repository>
+	</repositories>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>	
 		<java-version>1.7</java-version>
@@ -442,14 +452,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<repositories>
-		<repository>
-			<id>repo de maven</id>
-			<url>http://repo1.maven.org/maven2/</url>
-		</repository>
-		<repository>
-			<id>repo de jboss</id>
-			<url>http://repository.jboss.org/maven2/</url>
-		</repository>
-	</repositories>
 </project>
