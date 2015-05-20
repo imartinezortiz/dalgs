@@ -45,7 +45,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "_group", uniqueConstraints = { @UniqueConstraint(columnNames = {
+@Table(name = "CourseGroup", uniqueConstraints = { @UniqueConstraint(columnNames = {
 		"id_course", "name" }) })
 public class Group implements Cloneable, Copyable<Group>, Serializable {
 
