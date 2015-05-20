@@ -25,13 +25,28 @@
 	<name>D.A.L.G.S</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
+	<description>Degrees and Learning Goals System</description>
+
+	<repositories>
+		<repository>
+			<id>repo de maven</id>
+			<url>http://repo1.maven.org/maven2/</url>
+		</repository>
+		<repository>
+			<id>repo de jboss</id>
+			<url>http://repository.jboss.org/maven2/</url>
+		</repository>
+	</repositories>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>	
 		<java-version>1.7</java-version>
-		<org.springframework-version>4.1.4.RELEASE</org.springframework-version>
+		<spring.version>4.1.4.RELEASE</spring.version>
+		<spring.security.version>3.2.4.RELEASE</spring.security.version>
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<org.slf4j-version>1.6.6</org.slf4j-version>
-		<spring.security.version>3.2.3.RELEASE</spring.security.version>
+		<!-- This properties must be overridden in ~/.m2/settings.xml -->
+		<mail.userName>mailUsernameChangeMe</mail.userName>
+		<mail.password>mailPasswordChangeMe</mail.password>
 	</properties>
 
 
@@ -40,7 +55,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${org.springframework-version}</version>
+			<version>${spring.version}</version>
 			<exclusions>
 				<!-- Exclude Commons Logging in favor of SLF4j -->
 				<exclusion>
@@ -52,7 +67,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>${org.springframework-version}</version>
+			<version>${spring.version}</version>
 		</dependency>
 
 		<!-- AspectJ -->
@@ -112,7 +127,7 @@
 			<version>1</version>
 		</dependency>
 
-		<!-- Servlet -->
+		<!-- Servlet + JSTL -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -124,8 +139,13 @@
 			<artifactId>jsp-api</artifactId>
 			<version>2.1</version>
 			<scope>provided</scope>
+		</dependency>		
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
 		</dependency>
-
+		
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -140,42 +160,23 @@
 			<version>5.1.3.Final</version>
 		</dependency>
 
-
-		<!-- Acceso a la base de datos MySQL mediante JPA -->
-
-
+		<!-- Spring ORM / JPA config -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
-			<version>${org.springframework-version}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.34</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${org.springframework-version}</version>
-			<scope>runtime</scope>
-		</dependency>
+
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>4.3.8.Final</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-			<version>${org.springframework-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${org.springframework-version}</version>
-		</dependency>
-
 
 		<!-- Para el formato JSON (mismas versiones) -->
 
@@ -183,27 +184,6 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.3.1</version>
-		</dependency>
-		<!-- Para poder mapear mis POJOS y poder transformarlos a XML y viceversa -->
-	<!-- 	<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.7.2</version>
-		</dependency> -->
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-config</artifactId>
-			<version>3.2.4.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-web</artifactId>
-			<version>3.2.4.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<version>3.2.4.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
@@ -229,19 +209,10 @@
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.3.1</version>
 		</dependency>
-
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
-		</dependency>
-
-
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.3.5</version>
-			<classifier>tests</classifier>
 		</dependency>
 		
 		<!-- Spring Security -->
@@ -250,7 +221,6 @@
 			<artifactId>spring-security-web</artifactId>
 			<version>${spring.security.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
@@ -266,49 +236,34 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-acl</artifactId>
-			<version>3.2.3.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
-			<version>4.1.4.RELEASE</version>
+			<version>${spring.security.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache-core</artifactId>
 			<version>2.6.10</version>
 		</dependency>
-		
-		
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
-			<version>4.1.1.RELEASE</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>jstl</groupId>
-			<artifactId>jstl</artifactId>
-			<version>1.2</version>
-		</dependency>
+        <dependency>
+        	<!-- Needed for org.springframework.cache.ehcache.EhCacheFactoryBean -->
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
-
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.5.2</version>
-		</dependency>
-		
 
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
 			<version>2.5.2</version>
-		</dependency>
-		
+		</dependency>				
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
+			<version>2.5.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
 			<version>2.5.2</version>
 		</dependency>
 		<dependency>
@@ -317,12 +272,6 @@
 			<version>1.9.13</version>
 		</dependency>
 
-		<dependency>
-
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>2.7</version>
-			</dependency>
 		<dependency>
 		    <groupId>io.jsonwebtoken</groupId>
 		    <artifactId>jjwt</artifactId>
@@ -338,7 +287,6 @@
 		<dependency>
 			<groupId>org.springframework.security.oauth</groupId>
 			<artifactId>spring-security-oauth2</artifactId>
-
 			<version>1.0.0.RELEASE</version>
 		</dependency>
 		<dependency>
@@ -346,11 +294,7 @@
 			<artifactId>commons-lang</artifactId>
 			<version>2.4</version>
 		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>1.3.2</version>
-		</dependency>
+
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
@@ -360,6 +304,12 @@
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.8.3</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>joda-time</groupId>
@@ -440,15 +390,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<repositories>
-		<repository>
-			<id>repo de maven</id>
-			<url>http://repo1.maven.org/maven2/</url>
-		</repository>
-		<repository>
-			<id>repo de jboss</id>
-			<url>http://repository.jboss.org/maven2/</url>
-		</repository>
-	</repositories>
-	<description>Degrees and Learning Goals System</description>
 </project>
