@@ -418,6 +418,9 @@
 			</properties>
 		</profile>
 		<profile>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<id>mysql</id>
 			<dependencies>
 				<!-- MySQL Connector -->
@@ -429,8 +432,10 @@
 			</dependencies>
 			<properties>
 				<jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
-				<jdbc.url><![CDATA[jdbc:mysql://192.168.189.139:3306/tfg1415?useUnicode=true&characterEncoding=UTF-8]]></jdbc.url>
-				<!-- jdbc.url><![CDATA[jdbc:mysql://192.168.205.140:3306/tfg1415?useUnicode=true&characterEncoding=UTF-8]]></jdbc.url -->
+<!-- 			
+				jdbc.url><![CDATA[jdbc:mysql://192.168.189.139:3306/tfg1415?useUnicode=true&characterEncoding=UTF-8]]></jdbc.url
+ -->				
+ 				<jdbc.url><![CDATA[jdbc:mysql://192.168.205.140:3306/tfg1415?useUnicode=true&characterEncoding=UTF-8]]></jdbc.url>
 				<jdbc.username>badgemaker</jdbc.username>
 				<jdbc.password>secret</jdbc.password>
 				<hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>

@@ -43,7 +43,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import es.ucm.fdi.dalgs.domain.info.ActivityInfo;
 
 @Entity
-@Table(name = "CourseActivity", uniqueConstraints = @UniqueConstraint(columnNames = {
+@Table(name = "Activity", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"code_activity", "id_course", "id_group" }))
 
 public class Activity implements Cloneable, Copyable<Activity>, Serializable {

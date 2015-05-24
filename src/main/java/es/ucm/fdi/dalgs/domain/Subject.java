@@ -41,7 +41,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import es.ucm.fdi.dalgs.domain.info.SubjectInfo;
 
 @Entity
-@Table(name = "subject")
+@Table(name = "Subject")
 public class Subject implements Cloneable, Copyable<Subject>, Serializable {
 
 	private static final long serialVersionUID = 1L;

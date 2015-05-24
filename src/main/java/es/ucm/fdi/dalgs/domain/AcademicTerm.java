@@ -41,7 +41,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name = "academicterm", uniqueConstraints = { @UniqueConstraint(columnNames = {
+@Table(name = "AcademicTerm", uniqueConstraints = { @UniqueConstraint(columnNames = {
 		"term", "id_degree" }) })
 public class AcademicTerm implements Cloneable, Copyable<AcademicTerm>,
 		Serializable {

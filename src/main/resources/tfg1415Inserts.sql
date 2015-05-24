@@ -19,9 +19,9 @@ INSERT INTO acl_sid (id, principal, sid) VALUES	(1,00000001,'admin');
 -- -------------------------------------------------------
 
 -- Degree Inserts 
-INSERT INTO degree (id_degree,code_degree,description,name) VALUES (1,'DEG1','Grado en Ingenieria del Software','GIS');
-INSERT INTO degree (id_degree,code_degree,description,name) VALUES (2,'DEG2','Grado en Ingenieria Informatica','GII');
-INSERT INTO degree (id_degree,code_degree,description,name) VALUES (3,'DEG3','Grado en Ingenieria de Computadores','GIC');
+INSERT INTO Degree (id_degree,code_degree,description,name) VALUES (1,'DEG1','Grado en Ingenieria del Software','GIS');
+INSERT INTO Degree (id_degree,code_degree,description,name) VALUES (2,'DEG2','Grado en Ingenieria Informatica','GII');
+INSERT INTO Degree (id_degree,code_degree,description,name) VALUES (3,'DEG3','Grado en Ingenieria de Computadores','GIC');
 
 -- Object Identity
 INSERT INTO acl_object_identity (ID, ENTRIES_INHERITING, OBJECT_ID_IDENTITY, OBJECT_ID_CLASS, PARENT_OBJECT, OWNER_SID) VALUES (1,00000001,1,5,NULL,1);
@@ -35,12 +35,12 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 -- -----------------------------------------------------
 
 -- Academic Term Inserts - Fill into acl domain
-INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (1, '2014/2015', '1');
-INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (2, '2014/2015', '2');
-INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (3, '2014/2015', '3');
-INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (4, '2015/2016', '1');
-INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (5, '2015/2016', '2');
-INSERT INTO academicterm (id_academicterm,term, id_degree) VALUES (6, '2015/2016', '3');
+INSERT INTO AcademicTerm (id_academicterm,term, id_degree) VALUES (1, '2014/2015', '1');
+INSERT INTO AcademicTerm (id_academicterm,term, id_degree) VALUES (2, '2014/2015', '2');
+INSERT INTO AcademicTerm (id_academicterm,term, id_degree) VALUES (3, '2014/2015', '3');
+INSERT INTO AcademicTerm (id_academicterm,term, id_degree) VALUES (4, '2015/2016', '1');
+INSERT INTO AcademicTerm (id_academicterm,term, id_degree) VALUES (5, '2015/2016', '2');
+INSERT INTO AcademicTerm (id_academicterm,term, id_degree) VALUES (6, '2015/2016', '3');
 
 -- Object Identity --
 INSERT INTO acl_object_identity (ID, ENTRIES_INHERITING, OBJECT_ID_IDENTITY, OBJECT_ID_CLASS, PARENT_OBJECT, OWNER_SID) VALUES (4,00000001,1,1,NULL,1);
@@ -63,29 +63,29 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 
 --Module Inserts
 
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (1, 'MOD1', 'Materias Básicas', 'description1', 1);
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (2, 'MOD2', 'Materias comunes a la informatica','description2', 1);
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (3, 'MOD3', 'Tecnologia especifica','description3', 1);
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (4, 'MOD4', 'Complementario', 'description4',1);
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (5, 'MOD5', 'Optativo', 'description5',1);
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (6, 'MOD6', 'Trabajo fin de grado','description6', 1);
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (7, 'MOD7', 'Materias comunes a la informatica','description7', 1);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (1, 'MOD1', 'Materias Básicas', 'description1', 1);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (2, 'MOD2', 'Materias comunes a la informatica','description2', 1);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (3, 'MOD3', 'Tecnologia especifica','description3', 1);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (4, 'MOD4', 'Complementario', 'description4',1);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (5, 'MOD5', 'Optativo', 'description5',1);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (6, 'MOD6', 'Trabajo fin de grado','description6', 1);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (7, 'MOD7', 'Materias comunes a la informatica','description7', 1);
 
-INSERT INTO module (id_module, code_module, name, description, id_degree) VALUES (8, 'MOD8', 'Materias Básicas','description8', 2);
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (9, 'MOD9', 'Materias comunes a la informatica','description9', 2);
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (10, 'MOD10', 'Tecnologia especifica', 'description10',2);
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (11, 'MOD11', 'Complementario', 'description11',2);
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (12, 'MOD12', 'Optativo','description12', 2);
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (13, 'MOD13', 'Trabajo fin de grado','description13', 2);
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (14, 'MOD14', 'Materias comunes a la informatica','description14', 2);
+INSERT INTO Module (id_module, code_module, name, description, id_degree) VALUES (8, 'MOD8', 'Materias Básicas','description8', 2);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (9, 'MOD9', 'Materias comunes a la informatica','description9', 2);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (10, 'MOD10', 'Tecnologia especifica', 'description10',2);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (11, 'MOD11', 'Complementario', 'description11',2);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (12, 'MOD12', 'Optativo','description12', 2);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (13, 'MOD13', 'Trabajo fin de grado','description13', 2);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (14, 'MOD14', 'Materias comunes a la informatica','description14', 2);
 
-INSERT INTO module (id_module, code_module, name, description, id_degree) VALUES (15, 'MOD15', 'Materias Básicas','description15', 3);
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (16, 'MOD16', 'Materias comunes a la informatica','description16', 3);
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (17, 'MOD17', 'Tecnologia especifica','description17', 3);
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (18, 'MOD18', 'Complementario','description18', 3);
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (19, 'MOD19', 'Optativo', 'description19',3);
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (20, 'MOD20', 'Trabajo fin de grado','description20', 3);
-INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (21, 'MOD21', 'Materias comunes a la informatica','description21',  3);
+INSERT INTO Module (id_module, code_module, name, description, id_degree) VALUES (15, 'MOD15', 'Materias Básicas','description15', 3);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (16, 'MOD16', 'Materias comunes a la informatica','description16', 3);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (17, 'MOD17', 'Tecnologia especifica','description17', 3);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (18, 'MOD18', 'Complementario','description18', 3);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (19, 'MOD19', 'Optativo', 'description19',3);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (20, 'MOD20', 'Trabajo fin de grado','description20', 3);
+INSERT INTO Module (id_module, code_module, name, description,id_degree) VALUES (21, 'MOD21', 'Materias comunes a la informatica','description21',  3);
 
 -- Object Identity --
 INSERT INTO acl_object_identity (ID, ENTRIES_INHERITING, OBJECT_ID_IDENTITY, OBJECT_ID_CLASS, PARENT_OBJECT, OWNER_SID) VALUES (10,00000001,1,8,NULL,1);
@@ -121,11 +121,11 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (50,1,00000000,00000000,00000001,16,17,1);
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (53,1,00000000,00000000,00000001,16,18,1);
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (56,1,00000000,00000000,00000001,16,19,1);
-INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (59,1,00000000,00000000,00000001,16,20,1);
-INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (62,1,00000000,00000000,00000001,16,21,1);
+INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (57,1,00000000,00000000,00000001,16,20,1);
+INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (58,1,00000000,00000000,00000001,16,21,1);
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (59,1,00000000,00000000,00000001,16,22,1);
-INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (62,1,00000000,00000000,00000001,16,23,1);
-INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (59,1,00000000,00000000,00000001,16,24,1);
+INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (60,1,00000000,00000000,00000001,16,23,1);
+INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (61,1,00000000,00000000,00000001,16,24,1);
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (62,1,00000000,00000000,00000001,16,25,1);
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (65,1,00000000,00000000,00000001,16,26,1);
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (68,1,00000000,00000000,00000001,16,27,1);
@@ -136,13 +136,13 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 
 --Topic Inserts
 
-INSERT INTO topic (id_topic, code_topic, name, description,id_module) VALUES (1, 'TOP1', 'Fisica', 'description1',1);
-INSERT INTO topic (id_topic, code_topic, name, description,id_module) VALUES (2, 'TOP2', 'Empresa', 'description2',2);
-INSERT INTO topic (id_topic, code_topic, name, description,id_module) VALUES (3, 'TOP3', 'Informatica','description3', 3);
-INSERT INTO topic (id_topic, code_topic, name, description,id_module) VALUES (4, 'TOP4', 'Matematicas','description4', 1);
-INSERT INTO topic (id_topic, code_topic, name, description,id_module) VALUES (5, 'TOP5', 'Sistemas operativos y redes fundamentales','description5', 3);
-INSERT INTO topic (id_topic, code_topic, name, description,id_module) VALUES (6, 'TOP6', 'Métodos Estadísticos y de Investigación Operativa','description6', 15);
-INSERT INTO topic (id_topic, code_topic, name, description,id_module) VALUES (7, 'TOP7', 'Desarrollo del software fundamental','description7', 21);
+INSERT INTO Topic (id_topic, code_topic, name, description,id_module) VALUES (1, 'TOP1', 'Fisica', 'description1',1);
+INSERT INTO Topic (id_topic, code_topic, name, description,id_module) VALUES (2, 'TOP2', 'Empresa', 'description2',2);
+INSERT INTO Topic (id_topic, code_topic, name, description,id_module) VALUES (3, 'TOP3', 'Informatica','description3', 3);
+INSERT INTO Topic (id_topic, code_topic, name, description,id_module) VALUES (4, 'TOP4', 'Matematicas','description4', 1);
+INSERT INTO Topic (id_topic, code_topic, name, description,id_module) VALUES (5, 'TOP5', 'Sistemas operativos y redes fundamentales','description5', 3);
+INSERT INTO Topic (id_topic, code_topic, name, description,id_module) VALUES (6, 'TOP6', 'Métodos Estadísticos y de Investigación Operativa','description6', 15);
+INSERT INTO Topic (id_topic, code_topic, name, description,id_module) VALUES (7, 'TOP7', 'Desarrollo del software fundamental','description7', 21);
 
 -- Object Identity --
 INSERT INTO acl_object_identity (ID, ENTRIES_INHERITING, OBJECT_ID_IDENTITY, OBJECT_ID_CLASS, PARENT_OBJECT, OWNER_SID) VALUES (31,00000001,1,10,NULL,1);
@@ -164,15 +164,15 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (98,1,00000000,00000000,00000001,16,37,1);
 
 -- Subject Inserts
-INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (1,'SUB1',12,'Ingenieria Software','IS', 'url',7);
-INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (2,'SUB2',6,'Bases de Datos','BD','url',7);
-INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (3,'SUB3',6,'Sistemas Operativos','SO','url',3);
-INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (4,'SUB4',9,'Ingenieria Software','IS','url',3);
-INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (5,'SUB5',6,'Bases de Datos','BD','url',3);
-INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (6,'SUB6',6,'Sistemas Operativos','SO','url',1); 
-INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (7,'SUB7',12,'Ingenieria Software','IS','url',1);
-INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (8,'SUB8',6,'Bases de Datos','BD','url',5);
-INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (9,'SUB9',6,'Sistemas Operativos','SO','url',5);
+INSERT INTO Subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (1,'SUB1',12,'Ingenieria Software','IS', 'url',7);
+INSERT INTO Subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (2,'SUB2',6,'Bases de Datos','BD','url',7);
+INSERT INTO Subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (3,'SUB3',6,'Sistemas Operativos','SO','url',3);
+INSERT INTO Subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (4,'SUB4',9,'Ingenieria Software','IS','url',3);
+INSERT INTO Subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (5,'SUB5',6,'Bases de Datos','BD','url',3);
+INSERT INTO Subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (6,'SUB6',6,'Sistemas Operativos','SO','url',1); 
+INSERT INTO Subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (7,'SUB7',12,'Ingenieria Software','IS','url',1);
+INSERT INTO Subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (8,'SUB8',6,'Bases de Datos','BD','url',5);
+INSERT INTO Subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (9,'SUB9',6,'Sistemas Operativos','SO','url',5);
 
 -- Object Identity --
 INSERT INTO acl_object_identity (ID, ENTRIES_INHERITING, OBJECT_ID_IDENTITY, OBJECT_ID_CLASS, PARENT_OBJECT, OWNER_SID) VALUES (38,00000001,1,9,NULL,1);
@@ -198,12 +198,12 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (125,1,00000000,00000000,00000001,16,46,1);
 
 -- Course Inserts
-INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (1, '1', '1');
-INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (2, '1', '2');
-INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (3, '1', '3');
-INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (4, '2', '1');
-INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (5, '2', '5');
-INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (6, '3', '7');
+INSERT INTO Course (id_course, id_academicterm, id_subject) VALUES (1, '1', '1');
+INSERT INTO Course (id_course, id_academicterm, id_subject) VALUES (2, '1', '2');
+INSERT INTO Course (id_course, id_academicterm, id_subject) VALUES (3, '1', '3');
+INSERT INTO Course (id_course, id_academicterm, id_subject) VALUES (4, '2', '1');
+INSERT INTO Course (id_course, id_academicterm, id_subject) VALUES (5, '2', '5');
+INSERT INTO Course (id_course, id_academicterm, id_subject) VALUES (6, '3', '7');
 
 
 -- Object Identity --
@@ -226,11 +226,11 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 
 	
 -- Competence Inserts 
-INSERT INTO competence (id_competence,code_competence,description,name, competence_type, id_degree) VALUES (1,'COMP1','adquirir conocimientos en UML','UML', 0, 1);
-INSERT INTO competence (id_competence,code_competence,description,name, competence_type,id_degree) VALUES (2,'COMP2','aprender diversos patrones de Ingenieria Software','Patrones', 1,1);
-INSERT INTO competence (id_competence,code_competence,description,name, competence_type,id_degree) VALUES (3,'COMP3','Saber diseñar una base de datos relacional','Base datos relacional',0,2);
-INSERT INTO competence (id_competence,code_competence,description,name, competence_type,id_degree) VALUES (4,'COMP4','Adquirir conocimientos en consultas contra una base de datos','Consultas SQL',2,2);
-INSERT INTO competence (id_competence,code_competence,description,name, competence_type,id_degree) VALUES (5,'COMP5','Aprendizaje de sincronizacion y comunicacion de procesos','Sincronizacion de Procesos',3,3);
+INSERT INTO Competence (id_competence,code_competence,description,name, competence_type, id_degree) VALUES (1,'COMP1','adquirir conocimientos en UML','UML', 0, 1);
+INSERT INTO Competence (id_competence,code_competence,description,name, competence_type,id_degree) VALUES (2,'COMP2','aprender diversos patrones de Ingenieria Software','Patrones', 1,1);
+INSERT INTO Competence (id_competence,code_competence,description,name, competence_type,id_degree) VALUES (3,'COMP3','Saber diseñar una base de datos relacional','Base datos relacional',0,2);
+INSERT INTO Competence (id_competence,code_competence,description,name, competence_type,id_degree) VALUES (4,'COMP4','Adquirir conocimientos en consultas contra una base de datos','Consultas SQL',2,2);
+INSERT INTO Competence (id_competence,code_competence,description,name, competence_type,id_degree) VALUES (5,'COMP5','Aprendizaje de sincronizacion y comunicacion de procesos','Sincronizacion de Procesos',3,3);
 
 -- Object Identity --
 INSERT INTO acl_object_identity (ID, ENTRIES_INHERITING, OBJECT_ID_IDENTITY, OBJECT_ID_CLASS, PARENT_OBJECT, OWNER_SID) VALUES (53,00000001,1,3,NULL,1);
@@ -247,14 +247,14 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (158,1,00000000,00000000,00000001,16,57,1);
 
 --LearningGoal Inserts
-INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (1, 'LEA1', 'learning 1','descripcion learning 1', 1);
-INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (2, 'LEA2', 'learning 2','descripcion learning 2', 1);
-INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (3, 'LEA3', 'learning 3','descripcion learning 3', 2);
-INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (4, 'LEA4', 'learning 4','descripcion learning 4', 2);
-INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (5, 'LEA5', 'learning 5','descripcion learning 5', 2);
-INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (6, 'LEA6', 'learning 6','descripcion learning 6', 3);
-INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (7, 'LEA7', 'learning 7','descripcion learning 7', 4);
-INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (8, 'LEA8', 'learning 8','descripcion learning 8', 5);
+INSERT INTO LearningGoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (1, 'LEA1', 'learning 1','descripcion learning 1', 1);
+INSERT INTO LearningGoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (2, 'LEA2', 'learning 2','descripcion learning 2', 1);
+INSERT INTO LearningGoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (3, 'LEA3', 'learning 3','descripcion learning 3', 2);
+INSERT INTO LearningGoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (4, 'LEA4', 'learning 4','descripcion learning 4', 2);
+INSERT INTO LearningGoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (5, 'LEA5', 'learning 5','descripcion learning 5', 2);
+INSERT INTO LearningGoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (6, 'LEA6', 'learning 6','descripcion learning 6', 3);
+INSERT INTO LearningGoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (7, 'LEA7', 'learning 7','descripcion learning 7', 4);
+INSERT INTO LearningGoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (8, 'LEA8', 'learning 8','descripcion learning 8', 5);
 
 -- Object Identity --
 INSERT INTO acl_object_identity (ID, ENTRIES_INHERITING, OBJECT_ID_IDENTITY, OBJECT_ID_CLASS, PARENT_OBJECT, OWNER_SID) VALUES (58,00000001,1,7,NULL,1);
@@ -278,11 +278,11 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (182,1,00000000,00000000,00000001,16,65,1);
 
 --Activity Inserts 
-INSERT INTO CourseActivity (id_activity,code_activity,description,name,id_course) VALUES (1,'ACT1','Desarrollar diagramas de casos de uso','Casos de Uso',1);
-INSERT INTO CourseActivity (id_activity,code_activity,description,name,id_course) VALUES (2,'ACT2','Elaborar un diagrama Entidad-Relacion','Entidad-Relacion',1);
-INSERT INTO CourseActivity (id_activity,code_activity,description,name,id_course) VALUES (3,'ACT3','Diagramas de secuencia','Secuencia',2);
-INSERT INTO CourseActivity (id_activity,code_activity,description,name,id_course) VALUES (4,'ACT4','Diagramas de activitidades','actividades',2);
-INSERT INTO CourseActivity (id_activity,code_activity,description,name,id_course) VALUES (5,'ACT5','Diagrama de clases','clases',3);
+INSERT INTO Activity (id_activity,code_activity,description,name,id_course) VALUES (1,'ACT1','Desarrollar diagramas de casos de uso','Casos de Uso',1);
+INSERT INTO Activity (id_activity,code_activity,description,name,id_course) VALUES (2,'ACT2','Elaborar un diagrama Entidad-Relacion','Entidad-Relacion',1);
+INSERT INTO Activity (id_activity,code_activity,description,name,id_course) VALUES (3,'ACT3','Diagramas de secuencia','Secuencia',2);
+INSERT INTO Activity (id_activity,code_activity,description,name,id_course) VALUES (4,'ACT4','Diagramas de activitidades','actividades',2);
+INSERT INTO Activity (id_activity,code_activity,description,name,id_course) VALUES (5,'ACT5','Diagrama de clases','clases',3);
 
 
 INSERT INTO course_activities (id_course,id_activity) VALUES (1,1);

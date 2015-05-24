@@ -8,7 +8,6 @@
 	<persistence-unit name="tfgPU" transaction-type="RESOURCE_LOCAL">
 	
 		<class>es.ucm.fdi.dalgs.domain.AcademicTerm</class>
- 		
  		<class>es.ucm.fdi.dalgs.domain.Activity</class>
 		<class>es.ucm.fdi.dalgs.domain.Competence</class>
 		<class>es.ucm.fdi.dalgs.domain.LearningGoal</class>
@@ -25,12 +24,6 @@
 		<class>es.ucm.fdi.dalgs.domain.acl.AclSid</class>
 		<class>es.ucm.fdi.dalgs.domain.Persistent_Logins</class>
 		<class>es.ucm.fdi.storage.business.entity.StorageObject</class>
-
-<!-- 		<class>es.ucm.fdi.dalgs.domain.OAuthAccessToken</class>
-		<class>es.ucm.fdi.dalgs.domain.OAuthClientDetails</class>
-		<class>es.ucm.fdi.dalgs.domain.OAuthRefreshToken</class>
-
-		 -->
 		
 	</persistence-unit>
 	

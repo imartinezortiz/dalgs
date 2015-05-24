@@ -42,7 +42,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import es.ucm.fdi.dalgs.domain.info.CompetenceInfo;
 
 @Entity
-@Table(name = "competence", uniqueConstraints = @UniqueConstraint(columnNames = {
+@Table(name = "Competence", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"code_competence", "id_degree" }))
 public class Competence implements Cloneable, Copyable<Competence>,
 		Serializable {
