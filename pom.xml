@@ -42,8 +42,9 @@
 		<java-version>1.7</java-version>
 		<spring.version>4.1.4.RELEASE</spring.version>
 		<spring.security.version>3.2.4.RELEASE</spring.security.version>
+		<spring.data.version>1.7.2.RELEASE</spring.data.version>
 		<org.aspectj-version>1.6.10</org.aspectj-version>
-		<org.slf4j-version>1.6.6</org.slf4j-version>
+		<org.slf4j-version>1.7.10</org.slf4j-version>
 		<!-- This properties must be overridden in ~/.m2/settings.xml -->
 		<mail.userName>mailUsernameChangeMe</mail.userName>
 		<mail.password>mailPasswordChangeMe</mail.password>
@@ -170,6 +171,13 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>4.3.8.Final</version>
+		</dependency>
+		
+		<!-- Spring JPA -->		
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>${spring.data.version}</version>
 		</dependency>
 
 		<!-- Para el formato JSON (mismas versiones) -->

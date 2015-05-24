@@ -642,19 +642,7 @@ public class ActivityController {
 			throws ServletException, IllegalStateException, IOException {
 
 		if (!result.hasErrors()) {
-
-			File file = multipartToFile(fileupload.getFilepath(), request);
-
-			if (file != null) {
-
-				Activity act = serviceActivity.getActivity(id_activity,
-						id_course, null, id_academic).getSingleElement();
-				act.getAttachments().add(file.getName());
-
-				if (serviceActivity.modifyActivity(act.getCourse(), null, act,
-						id_activity, id_course, id_academic, null).hasErrors()) // Locale
-					return "redirect:/error.htm";
-			}
+			serviceActivity.addAttachmentToCourseActivity(fileupload, id_activity, id_course, id_academic);
 		}
 		return "redirect:/academicTerm/" + id_academic + "/course/" + id_course
 				+ "/activity/" + id_activity + "/modify.htm";
@@ -672,36 +660,21 @@ public class ActivityController {
 			throws ServletException, IllegalStateException, IOException {
 
 		if (!result.hasErrors()) {
-
-			File file = multipartToFile(fileupload.getFilepath(), request);
-			Group group = serviceGroup.getGroup(id_group, id_course,
-					id_academic, false).getSingleElement();
-			
-			if (file != null && group !=null) {
-
-				Activity activity = serviceActivity.getActivity(id_activity,
-						id_course, null, id_academic).getSingleElement();
-				activity.getAttachments().add(file.getName());
-				
-				if ( serviceActivity.modifyActivity(null,
-						group, activity, id_activity, id_course, id_academic,
-						null).hasErrors()) // Locale
-					return "redirect:/error.htm";
-			}
+			serviceActivity.addAttachmentToGroupActivity(fileupload, id_group, id_course, id_activity, id_academic);
 		}
 		return "redirect:/academicTerm/" + id_academic + "/course/" + id_course + "/group/" + id_group
 				+ "/activity/" + id_activity + "/modify.htm";
 	}
 
 	// /-------------
-	public File multipartToFile(MultipartFile multipart,
-			HttpServletRequest request) throws IllegalStateException,
-			IOException {
-		File convFile = new File(request.getSession().getServletContext()
-				.getRealPath("/WEB-INF/"), multipart.getOriginalFilename());
-		multipart.transferTo(convFile);
-		return convFile;
-	}
+//	public File multipartToFile(MultipartFile multipart,
+//			HttpServletRequest request) throws IllegalStateException,
+//			IOException {
+//		File convFile = new File(request.getSession().getServletContext()
+//				.getRealPath("/WEB-INF/"), multipart.getOriginalFilename());
+//		multipart.transferTo(convFile);
+//		return convFile;
+//	}
 
 	// /---------------
 

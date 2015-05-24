@@ -16,6 +16,7 @@
  */
 package es.ucm.fdi.dalgs.activity.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,15 +25,18 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import es.ucm.fdi.dalgs.acl.service.AclObjectService;
 import es.ucm.fdi.dalgs.activity.repository.ActivityRepository;
+import es.ucm.fdi.dalgs.classes.FileUpload;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.Activity;
@@ -43,6 +47,7 @@ import es.ucm.fdi.dalgs.domain.LearningGoalStatus;
 import es.ucm.fdi.dalgs.group.service.GroupService;
 import es.ucm.fdi.dalgs.learningGoal.service.LearningGoalService;
 import es.ucm.fdi.dalgs.user.service.UserService;
+import es.ucm.fdi.storage.business.boundary.StorageManager;
 
 @Service
 public class ActivityService {
@@ -66,6 +71,14 @@ public class ActivityService {
 
 	@Autowired
 	private MessageSource messageSource;
+	
+	@Autowired
+	private StorageManager storageManager;
+	
+	// app-config.xml
+	@Value("#{attachmentsPrefs[bucket]}")
+	private String bucket;
+
 
 	@PreAuthorize("hasPermission(#course, 'WRITE') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
@@ -507,7 +520,43 @@ public class ActivityService {
 		return daoActivity.existByCode(code);
 	}
 
+	public void addAttachmentToCourseActivity(FileUpload fileupload, Long id_activity, Long id_course, Long id_academic) throws IOException {
+		
+		Activity act = getActivity(id_activity,
+				id_course, null, id_academic).getSingleElement();
+		
+		CommonsMultipartFile file = fileupload.getFilepath();
+		
+		String key = getStorageKey(id_activity);
+		String mimeType = file.getContentType();
+		storageManager.putObject(bucket, key, mimeType, file.getInputStream());
+		act.getAttachments().add(storageManager.getUrl(bucket, key).toExternalForm());
+		modifyActivity(act.getCourse(), null, act,
+				id_activity, id_course, id_academic, null);
+	}
+	
 
+	public void addAttachmentToGroupActivity(FileUpload fileupload, Long id_group, Long id_course, Long id_activity, Long id_academic) throws IOException {
+		
+		Group group = serviceGroup.getGroup(id_group, id_course,
+				id_academic, false).getSingleElement();
+		
+		CommonsMultipartFile file = fileupload.getFilepath();
+		
+		Activity activity = getActivity(id_activity,
+				id_course, null, id_academic).getSingleElement();
+		activity.getAttachments().add(file.getName());
+		
+		modifyActivity(null,
+				group, activity, id_activity, id_course, id_academic,
+				null);
+	}
+
+
+	
+	private String getStorageKey(Long id) {
+		return "attachment/"+Long.toString(id);
+	}
 	
 
 }
