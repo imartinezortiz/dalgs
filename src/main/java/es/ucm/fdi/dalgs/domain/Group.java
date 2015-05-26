@@ -83,7 +83,7 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 	@Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
 
-//	@Where(clause="isDeleted = 'false'")
+
 	@OneToMany( cascade = CascadeType.ALL)
 	@JoinTable(name = "group_activities", joinColumns ={@JoinColumn(name = "id_group")},
     inverseJoinColumns ={@JoinColumn(name = "id_activity")})
@@ -95,6 +95,11 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
     inverseJoinColumns ={@JoinColumn(name = "id_activity")})
 	@JsonManagedReference
 	private Collection<Activity> external_activities;
+	
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@JoinTable(name = "group_messages", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_message_box") })
+	@JsonManagedReference
+	private Collection<MessageBox> messages;
 
 
 	public Group() {
@@ -103,6 +108,7 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 		this.professors = new ArrayList<User>();
 		this.students = new ArrayList<User>();
 		this.activities = new ArrayList<Activity>();
+		this.messages = new ArrayList<MessageBox>();
 	}
 
 	public Long getId() {
@@ -206,6 +212,16 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 			return false;
 		return true;
 	}
+	
+	
+
+	public Collection<MessageBox> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(Collection<MessageBox> messages) {
+		this.messages = messages;
+	}
 
 	public Group depth_copy() {
 		Group copy = this.shallow_copy();
@@ -214,7 +230,7 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 		copy.activities = new ArrayList<Activity>();
 		copy.external_activities = new ArrayList<Activity>();
 		copy.isDeleted = false;
-		copy.external_activities = new ArrayList<Activity>();
+		
 
 		for (Activity a : this.activities) {
 			Activity activity = a.depth_copy();
@@ -224,7 +240,7 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 		}
 		copy.students = new ArrayList<User>();
 		copy.professors = new ArrayList<User>();
-
+		copy.messages = new ArrayList<MessageBox>();
 		return copy;
 	}
 

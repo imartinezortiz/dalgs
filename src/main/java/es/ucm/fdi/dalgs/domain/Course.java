@@ -29,12 +29,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
-
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -82,7 +82,19 @@ public class Course implements Cloneable, Copyable<Course>, Serializable {
 	@JsonBackReference
 	private AcademicTerm academicTerm;
 
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@JoinTable(name = "course_messages", joinColumns = { @JoinColumn(name = "id_course") }, inverseJoinColumns = { @JoinColumn(name = "id_message_box") })
+	@JsonManagedReference
+	private Collection<MessageBox> messages;
 	
+	public Collection<MessageBox> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(Collection<MessageBox> messages) {
+		this.messages = messages;
+	}
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_coordinator")
 	@JsonBackReference

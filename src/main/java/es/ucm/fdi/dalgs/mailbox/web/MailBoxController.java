@@ -26,7 +26,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import es.ucm.fdi.dalgs.mailbox.classes.MessageBox;
+import es.ucm.fdi.dalgs.domain.MessageBox;
 import es.ucm.fdi.dalgs.mailbox.service.MailBoxService;
 
 @Controller
