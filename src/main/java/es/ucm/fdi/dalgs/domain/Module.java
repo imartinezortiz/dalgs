@@ -41,7 +41,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import es.ucm.fdi.dalgs.domain.info.ModuleInfo;
 
 @Entity
-@Table(name = "Module", uniqueConstraints = @UniqueConstraint(columnNames = {
+@Table(name = "module", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"code_module", "id_degree" }))
 public class Module implements Cloneable, Copyable<Module>, Serializable {
 

@@ -164,8 +164,17 @@ public class MailBoxService{
                 String contentType = msg.getContentType();
                 String messageContent = "";
  
+           /*     String id= null;
+                String[] idHeaders = msg.getHeader("Message-ID");
+                if (idHeaders != null && idHeaders.length > 0)
+                  id = idHeaders[0];
                 
-                
+                System.out.println("Message id " + id);
+                String[] replyHeaders = msg.getHeader("In-Reply-TO");
+                if (replyHeaders != null && replyHeaders.length > 0)
+                  id = replyHeaders[0];
+                System.out.println("In reply " +  id);
+*/
                 if (contentType.contains("text/plain")
                         || contentType.contains("text/html")) {
                     try {

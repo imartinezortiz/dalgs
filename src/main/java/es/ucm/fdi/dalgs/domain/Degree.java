@@ -38,7 +38,7 @@ import org.codehaus.jackson.annotate.JsonManagedReference;
 import es.ucm.fdi.dalgs.domain.info.DegreeInfo;
 
 @Entity
-@Table(name = "Degree")
+@Table(name = "degree")
 public class Degree implements Cloneable, Copyable<Degree>, Serializable {
 
 	private static final long serialVersionUID = 1L;

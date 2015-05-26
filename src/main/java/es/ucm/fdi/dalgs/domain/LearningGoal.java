@@ -36,7 +36,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import es.ucm.fdi.dalgs.domain.info.LearningGoalInfo;
 
 @Entity
-@Table(name = "LearningGoal")
+@Table(name = "learninggoal")
 public class LearningGoal implements Cloneable, Copyable<LearningGoal>,
 		Serializable {
 
