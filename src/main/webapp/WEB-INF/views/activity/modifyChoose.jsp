@@ -70,20 +70,31 @@
 						<c:forEach items="${attachments}" var="att" varStatus="attachment">		
 							<tr align="center">
 								<td><div class="td-content">
-									<a href="<c:url value='dalgs/WEB-INF/${att}/view.htm'/>">${att}</a>
-
-								
+									<a href="<c:url value='${att}'/>"><fmt:message key="common.file" />_${attachment.index}</a>
 									</div></td>
 								
 								<td>
 								
-									<a href="<c:url value='attachment/${att}/delete.htm'/>">
+									<c:choose>
+										<c:when test="${not empty groupId}">
+											<a href="<c:url value='${att}/academicTerm/${academicId}/course/${courseId}/group/${groupId}/activity/${activityId}/delete'/>">
+											<button type="button" class="btn btn-default btn-lg" 
+											style=" padding: 2px; margin-top: 1.2%;  background: rgb(236, 236, 236);">
+	  										<span class="glyphicon glyphicon-remove" aria-hidden="true" ></span> 
+											</button>
+										</a>
+										</c:when>
+										<c:otherwise>
+										<a href="<c:url value='${att}/academicTerm/${academicId}/course/${courseId}/activity/${activityId}/delete'/>">
+											<button type="button" class="btn btn-default btn-lg" 
+											style=" padding: 2px; margin-top: 1.2%;  background: rgb(236, 236, 236);">
+	  										<span class="glyphicon glyphicon-remove" aria-hidden="true" ></span> 
+											</button>
+										</a>
+										</c:otherwise>
+									</c:choose>
+									
 										
-										<button type="button" class="btn btn-default btn-lg" 
-										style=" padding: 2px; margin-top: 1.2%;  background: rgb(236, 236, 236);">
-  										<span class="glyphicon glyphicon-remove" aria-hidden="true" ></span> 
-										</button>
-									</a>
 							</td>
 								
 							</tr>

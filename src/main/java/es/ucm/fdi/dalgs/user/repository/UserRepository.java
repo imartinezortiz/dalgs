@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import es.ucm.fdi.dalgs.domain.User;
+import es.ucm.fdi.dalgs.domain.UserRole;
 
 @Repository
 public class UserRepository {
@@ -127,7 +128,7 @@ public class UserRepository {
 				// u.setPassword(pass);
 
 				u.setId(null); // If not a detached entity is passed to persist
-				
+				u.getRoles().add(new UserRole("ROLE_USER"));
 				if (findByEmail(u.getEmail())==null)
 					em.persist(u);
 					// em.flush();

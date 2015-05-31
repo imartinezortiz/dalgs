@@ -149,7 +149,7 @@ public class ActivityService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = true)
 	public ResultClass<Activity> getAll() {
 		ResultClass<Activity> result = new ResultClass<>();
@@ -204,7 +204,7 @@ public class ActivityService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Activity> getActivity(Long id, Long id_course,
 			Long id_group, Long id_academic) {
@@ -240,7 +240,7 @@ public class ActivityService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION') or hasRole('ROLE_ADMIN')")
 	public ResultClass<Activity> getActivitiesForCourse(Long id_course,
 			Boolean showAll) {
 		ResultClass<Activity> result = new ResultClass<>();
@@ -249,7 +249,7 @@ public class ActivityService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = true)
 	public ResultClass<Activity> getActivityByName(String string) {
 		ResultClass<Activity> result = new ResultClass<Activity>();
@@ -267,7 +267,7 @@ public class ActivityService {
 		Activity a = new Activity();
 
 		if (group != null) {
-			a = daoActivity.getActivity(id_activity, null, group.getId(),
+			a = daoActivity.getActivity(id_activity, group.getCourse().getId(), group.getId(),
 					id_academic);
 		} else if (course != null) {
 			a = daoActivity.getActivity(id_activity, course.getId(), null,
@@ -304,7 +304,7 @@ public class ActivityService {
 		Activity a = new Activity();
 
 		if (group != null) {
-			a = daoActivity.getActivity(id_activity, null, group.getId(),
+			a = daoActivity.getActivity(id_activity, course.getId(), group.getId(),
 					id_academic);
 		} else if (course != null) {
 			a = daoActivity.getActivity(id_activity, course.getId(), null,
@@ -359,6 +359,7 @@ public class ActivityService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteActivitiesFromCourses(
 			Collection<Course> courses) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -368,6 +369,7 @@ public class ActivityService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteActivitiesFromGroups(
 			Collection<Group> groups) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
@@ -376,6 +378,7 @@ public class ActivityService {
 	}
 
 	@PreAuthorize("hasPermission(#course, 'WRITE') or hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteActivitiesFromCourse(Course course) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		result.setSingleElement(daoActivity.deleteActivitiesFromCourse(course));
@@ -414,7 +417,8 @@ public class ActivityService {
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION') or hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = false)
 	public ResultClass<Activity> getActivitiesForGroup(Long id_group,
 			Boolean showAll) {
 		ResultClass<Activity> result = new ResultClass<>();
@@ -422,14 +426,15 @@ public class ActivityService {
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#group, 'ADMINISTRATION')")
+	@PreAuthorize("hasPermission(#group, 'ADMINISTRATION') or hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteActivitiesFromGroup(Group group) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		result.setSingleElement(daoActivity.deleteActivitiesFromGroup(group));
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#group, 'ADMINISTRATION')")
+	@PreAuthorize("hasPermission(#group, 'ADMINISTRATION') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Activity> addActivitytoGroup(Group group,
 			Activity activity, Long id_group, Long id_course, Long id_academic) {
@@ -453,11 +458,8 @@ public class ActivityService {
 				result.setSingleElement(activity);
 			result.setErrorsList(errors);
 		} else {
-//			activity.setGroup(serviceGroup.getGroup(id_group, id_course,
-//					id_academic).getSingleElement());
 			activity.setGroup(group);
 			group.getActivities().add(activity);
-//			success = daoActivity.addActivity(activity);
 			success = serviceGroup.modifyGroupActivities(group).getSingleElement();
 			
 
@@ -488,7 +490,7 @@ public class ActivityService {
 		return result;
 	}
 
-	@PreAuthorize("hasPermission(#group, 'ADMINISTRATION')")
+	@PreAuthorize("hasPermission(#group, 'ADMINISTRATION') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Activity> addActivitiestoGroup(Group group,
 			Collection<Activity> activities, Long id_group, Long id_course,
@@ -519,7 +521,9 @@ public class ActivityService {
 		return daoActivity.existByCode(code);
 	}
 
-	public void addAttachmentToCourseActivity(FileUpload fileupload, Long id_activity, Long id_course, Long id_academic) throws IOException {
+	@PreAuthorize("hasPermission(#course, 'WRITE') or hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = false)
+	public void addAttachmentToCourseActivity(Course course, FileUpload fileupload, Long id_activity, Long id_course, Long id_academic) throws IOException {
 		
 		Activity act = getActivity(id_activity,
 				id_course, null, id_academic).getSingleElement();
@@ -529,26 +533,30 @@ public class ActivityService {
 		String key = getStorageKey(id_activity);
 		String mimeType = file.getContentType();
 		storageManager.putObject(bucket, key, mimeType, file.getInputStream());
-		act.getAttachments().add(storageManager.getUrl(bucket, key).toExternalForm());
-		modifyActivity(act.getCourse(), null, act,
-				id_activity, id_course, id_academic, null);
+		if(act.getAttachments()==null) act.setAttachments(new ArrayList<String>());
+		String aaa=storageManager.getUrl(bucket, key).toExternalForm();
+		act.getAttachments().add(aaa);
+		daoActivity.saveActivity(act);
+
 	}
 	
-
-	public void addAttachmentToGroupActivity(FileUpload fileupload, Long id_group, Long id_course, Long id_activity, Long id_academic) throws IOException {
-		
-		Group group = serviceGroup.getGroup(id_group, id_course,
-				id_academic, false).getSingleElement();
+	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#group, 'ADMINISTRATION') or hasRole('ROLE_ADMIN')")
+	@Transactional(readOnly = false)
+	public void addAttachmentToGroupActivity(Course course, Group group, FileUpload fileupload, Long id_group, Long id_course, Long id_activity, Long id_academic) throws IOException {
+			
+		Activity act = getActivity(id_activity,
+				id_course,id_group, id_academic).getSingleElement();
 		
 		CommonsMultipartFile file = fileupload.getFilepath();
 		
-		Activity activity = getActivity(id_activity,
-				id_course, null, id_academic).getSingleElement();
-		activity.getAttachments().add(file.getName());
-		
-		modifyActivity(null,
-				group, activity, id_activity, id_course, id_academic,
-				null);
+		String key = getStorageKey(id_activity);
+		String mimeType = file.getContentType();
+		storageManager.putObject(bucket, key, mimeType, file.getInputStream());
+		if(act.getAttachments()==null) act.setAttachments(new ArrayList<String>());
+		String aaa=storageManager.getUrl(bucket, key).toExternalForm();
+		act.getAttachments().add(aaa);
+		daoActivity.saveActivity(act);
+
 	}
 
 

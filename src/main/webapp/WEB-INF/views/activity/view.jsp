@@ -95,7 +95,7 @@
 				<c:forEach items="${model.activity.attachments}" var="att" varStatus="attachment">		
 					<tr align="center">
 						<td><div class="td-content">
-									<a href="<c:url value='dalgs/WEB-INF/${att}/view.htm'/>">${att}</a>
+									<a href="<c:url value='${att}'/>"><fmt:message key="common.file" />_${attachment.index}</a>
 							</div></td>
 						
 					</tr>

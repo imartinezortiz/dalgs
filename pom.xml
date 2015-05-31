@@ -394,9 +394,6 @@
 	</build>
 	<profiles>
 		<profile>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<id>dev</id>
 			<dependencies>
 				<dependency>

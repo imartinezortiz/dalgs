@@ -341,18 +341,18 @@ public class ActivityController {
 	/**
 	 * Method for delete an attachment of an activity
 	 */
-
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/activity/{activityId}/attachment/{attachment}/delete.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "/storage/attachments/attachment/{id_attach}/academicTerm/{academicId}/course/{courseId}/activity/{activityId}/delete", method = RequestMethod.GET)
 	public String deleteAttachmentActivityCourse(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("activityId") Long id_Activity,
-			@PathVariable("attachment") String attachment)
+			@PathVariable("id_attach") Integer attachment)
 			throws ServletException {
 		Course course = serviceCourse.getCourse(id_course, id_academic)
 				.getSingleElement();
 
-		if (serviceActivity.deleteAttachmentActivity(course, null, attachment,
+		String url_attach = "http://localhost:8080/dalgs/storage/attachments/attachment/"+attachment;
+		if (serviceActivity.deleteAttachmentActivity(course, null, url_attach,
 				id_Activity, id_academic).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_academic + "/course/"
 					+ id_course + "/activity/" + id_Activity + "/modify.htm";
@@ -629,7 +629,6 @@ public class ActivityController {
 				+ "/group/" + id_group + "/activity/" + id + "/modify.htm";
 	}
 
-	// TODO and for group too
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{idCourse}/activity/{activityId}/addFileUpload.htm", method = RequestMethod.POST)
 	public String addAttachmentCoursePOST(
 			@PathVariable("academicId") Long id_academic,
@@ -639,16 +638,18 @@ public class ActivityController {
 			BindingResult result, Model model, HttpServletRequest request)
 			throws ServletException, IllegalStateException, IOException {
 
+		
 		if (!result.hasErrors()) {
-			serviceActivity.addAttachmentToCourseActivity(fileupload, id_activity, id_course, id_academic);
+			Course course = serviceCourse.getCourse(id_course, id_academic)
+					.getSingleElement();
+			serviceActivity.addAttachmentToCourseActivity(course,fileupload, id_activity, id_course, id_academic);
 		}
 		return "redirect:/academicTerm/" + id_academic + "/course/" + id_course
 				+ "/activity/" + id_activity + "/modify.htm";
 	}
 
-	//TODO Add File to activity
 	@RequestMapping(value = "/academicTerm/{academicId}/course/{idCourse}/group/{groupId}/activity/{activityId}/addFileUpload.htm", method = RequestMethod.POST)
-	public String addAttachmentGroupPOST(
+	public String addAttachmentGroupPOST (
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("idCourse") Long id_course,
 			@PathVariable("groupId") Long id_group,
@@ -658,7 +659,12 @@ public class ActivityController {
 			throws ServletException, IllegalStateException, IOException {
 
 		if (!result.hasErrors()) {
-			serviceActivity.addAttachmentToGroupActivity(fileupload, id_group, id_course, id_activity, id_academic);
+			Course course = serviceCourse.getCourse(id_course, id_academic)
+					.getSingleElement();
+			Group group = serviceGroup.getGroup(id_group, id_course,
+					id_academic, false).getSingleElement();
+			
+			serviceActivity.addAttachmentToGroupActivity(course,group,fileupload, id_group, id_course, id_activity, id_academic);
 		}
 		return "redirect:/academicTerm/" + id_academic + "/course/" + id_course + "/group/" + id_group
 				+ "/activity/" + id_activity + "/modify.htm";
@@ -728,18 +734,22 @@ public class ActivityController {
 	 * Method for delete an attachment of an activity
 	 */
 
-	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/activity/{activityId}/attachment/{attachment}/delete.htm", method = RequestMethod.GET)
+	@RequestMapping(value ="/storage/attachments/attachment/{id_attach}/academicTerm/{academicId}/course/{courseId}/group/{groupId}/activity/{activityId}/delete", method = RequestMethod.GET)
 	public String deleteAttachmentActivityGroup(
 			@PathVariable("academicId") Long id_academic,
 			@PathVariable("courseId") Long id_course,
 			@PathVariable("groupId") Long id_group,
 			@PathVariable("activityId") Long id_Activity,
-			@PathVariable("attachment") String attachment)
+			@PathVariable("id_attach") Integer attachment)
 			throws ServletException {
+		
+		Course course = serviceCourse.getCourse(id_course, id_academic)
+				.getSingleElement();
 		Group group = serviceGroup.getGroup(id_group, id_course, id_academic, false)
 				.getSingleElement();
-
-		if (serviceActivity.deleteAttachmentActivity(null, group, attachment,
+		
+		String url_attach = "http://localhost:8080/dalgs/storage/attachments/attachment/"+attachment;
+		if (serviceActivity.deleteAttachmentActivity(course, group, url_attach,
 				id_Activity, id_academic).getSingleElement()) {
 			return "redirect:/academicTerm/" + id_academic + "/course/"
 					+ id_course + "/group/" + id_group + "/activity/"

@@ -79,7 +79,7 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 	
 	
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.LAZY)
 	@CollectionTable(name="activity_attachments", joinColumns=@JoinColumn(name="id_activity"))
 	@Column(name="attachment")
 	private Collection<String> attachments;
