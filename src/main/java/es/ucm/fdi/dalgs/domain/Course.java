@@ -29,15 +29,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "course", uniqueConstraints = { @UniqueConstraint(columnNames = {
@@ -83,7 +82,7 @@ public class Course implements Cloneable, Copyable<Course>, Serializable {
 	private AcademicTerm academicTerm;
 
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	@JoinTable(name = "course_messages", joinColumns = { @JoinColumn(name = "id_course") }, inverseJoinColumns = { @JoinColumn(name = "id_message_box") })
+	@JoinTable(name = "course_messages", joinColumns = { @JoinColumn(name = "id_course") }, inverseJoinColumns = { @JoinColumn(name = "id_message") })
 	@JsonManagedReference
 	private Collection<MessageBox> messages;
 	

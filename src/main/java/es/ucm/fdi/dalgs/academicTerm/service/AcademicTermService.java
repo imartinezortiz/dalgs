@@ -47,7 +47,7 @@ public class AcademicTermService {
 	private AclObjectService manageAclService;
 
 	@Autowired
-	private AcademicTermRepository daoAcademicTerm;
+	private AcademicTermRepository repositoryAcademicTerm;
 
 	@Autowired
 	private ActivityService serviceActivity;
@@ -68,7 +68,7 @@ public class AcademicTermService {
 
 		boolean success = false;
 
-		AcademicTerm academicExists = daoAcademicTerm.exists(
+		AcademicTerm academicExists = repositoryAcademicTerm.exists(
 				academicTerm.getTerm(), academicTerm.getDegree());
 		ResultClass<AcademicTerm> result = new ResultClass<>();
 
@@ -92,10 +92,10 @@ public class AcademicTermService {
 			result.setErrorsList(errors);
 
 		} else {
-			success = daoAcademicTerm.addAcademicTerm(academicTerm);
+			success = repositoryAcademicTerm.addAcademicTerm(academicTerm);
 
 			if (success) {
-				academicExists = daoAcademicTerm.exists(academicTerm.getTerm(),
+				academicExists = repositoryAcademicTerm.exists(academicTerm.getTerm(),
 						academicTerm.getDegree());
 				success = manageAclService.addACLToObject(academicExists
 						.getId(), academicExists.getClass().getName());
@@ -118,10 +118,10 @@ public class AcademicTermService {
 			Long id_academic, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
-		AcademicTerm modifyAcademic = daoAcademicTerm
+		AcademicTerm modifyAcademic = repositoryAcademicTerm
 				.getAcademicTermById(id_academic);
 
-		AcademicTerm academicExists = daoAcademicTerm.exists(
+		AcademicTerm academicExists = repositoryAcademicTerm.exists(
 				academicTerm.getTerm(), modifyAcademic.getDegree());
 
 		if (!academicTerm.getTerm().equalsIgnoreCase(modifyAcademic.getTerm())
@@ -140,7 +140,7 @@ public class AcademicTermService {
 			result.setSingleElement(false);
 		} else {
 			modifyAcademic.setTerm(academicTerm.getTerm());
-			boolean r = daoAcademicTerm.saveAcademicTerm(modifyAcademic);
+			boolean r = repositoryAcademicTerm.saveAcademicTerm(modifyAcademic);
 			if (r)
 				result.setSingleElement(true);
 		}
@@ -160,7 +160,7 @@ public class AcademicTermService {
 	public ResultClass<AcademicTerm> getAcademicTerms(Integer pageIndex,
 			Boolean showAll) {
 		ResultClass<AcademicTerm> result = new ResultClass<>();
-		result.addAll(daoAcademicTerm.getAcademicsTerm(pageIndex, showAll));
+		result.addAll(repositoryAcademicTerm.getAcademicsTerm(pageIndex, showAll));
 
 		return result;
 	}
@@ -175,7 +175,7 @@ public class AcademicTermService {
 				|| serviceCourse.deleteCoursesFromAcademic(academicTerm)
 						.getSingleElement()) {
 
-			success = daoAcademicTerm.deleteAcademicTerm(academicTerm.getId());
+			success = repositoryAcademicTerm.deleteAcademicTerm(academicTerm.getId());
 		}
 		result.setSingleElement(success);
 		return result;
@@ -185,7 +185,7 @@ public class AcademicTermService {
 	@Transactional(readOnly = false)
 	public ResultClass<Integer> numberOfPages(Boolean showAll) {
 		ResultClass<Integer> result = new ResultClass<Integer>();
-		result.setSingleElement(daoAcademicTerm.numberOfPages(showAll));
+		result.setSingleElement(repositoryAcademicTerm.numberOfPages(showAll));
 		return result;
 	}
 
@@ -194,7 +194,7 @@ public class AcademicTermService {
 	@Transactional(readOnly = false)
 	public ResultClass<AcademicTerm> getAcademicTermsByDegree(Degree degree) {
 		ResultClass<AcademicTerm> result = new ResultClass<>();
-		result.addAll(daoAcademicTerm.getAcademicTermsByDegree(degree));
+		result.addAll(repositoryAcademicTerm.getAcademicTermsByDegree(degree));
 		return result;
 	}
 
@@ -204,7 +204,7 @@ public class AcademicTermService {
 	public ResultClass<AcademicTerm> getAcademicTerm(Long id_academic,
 			Boolean showAll) {
 		ResultClass<AcademicTerm> result = new ResultClass<AcademicTerm>();
-		AcademicTerm aT = daoAcademicTerm.getAcademicTermById(id_academic);
+		AcademicTerm aT = repositoryAcademicTerm.getAcademicTermById(id_academic);
 		if (aT != null) {
 			Collection<Course> courses = new ArrayList<Course>();
 			courses.addAll(serviceCourse.getCoursesByAcademicTerm(id_academic,
@@ -224,7 +224,7 @@ public class AcademicTermService {
 		boolean deleteCourses = serviceCourse.deleteCourses(academicList)
 				.getSingleElement();
 		if (deleteCourses)
-			result.setSingleElement(daoAcademicTerm
+			result.setSingleElement(repositoryAcademicTerm
 					.deleteAcademicTerm(academicList));
 		else
 			result.setSingleElement(false);
@@ -236,7 +236,7 @@ public class AcademicTermService {
 	@Transactional(readOnly = false)
 	public ResultClass<AcademicTerm> restoreAcademic(AcademicTerm academicTerm,
 			Locale locale) {
-		AcademicTerm a = daoAcademicTerm.exists(academicTerm.getTerm(),
+		AcademicTerm a = repositoryAcademicTerm.exists(academicTerm.getTerm(),
 				academicTerm.getDegree());
 		ResultClass<AcademicTerm> result = new ResultClass<>();
 
@@ -257,7 +257,7 @@ public class AcademicTermService {
 
 			a.setDeleted(false);
 			a.setTerm(academicTerm.getTerm());
-			boolean r = daoAcademicTerm.saveAcademicTerm(a);
+			boolean r = repositoryAcademicTerm.saveAcademicTerm(a);
 			if (r)
 				result.setSingleElement(a);
 
@@ -301,9 +301,9 @@ public class AcademicTermService {
 
 			}
 
-			boolean success = daoAcademicTerm.addAcademicTerm(copy);
+			boolean success = repositoryAcademicTerm.addAcademicTerm(copy);
 			if (success) {
-				AcademicTerm exists = daoAcademicTerm.exists(copy.getTerm(),
+				AcademicTerm exists = repositoryAcademicTerm.exists(copy.getTerm(),
 						copy.getDegree());
 				if (exists != null) {
 					result.setSingleElement(exists);

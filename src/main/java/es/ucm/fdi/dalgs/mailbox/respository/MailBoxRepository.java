@@ -1,5 +1,7 @@
 package es.ucm.fdi.dalgs.mailbox.respository;
 
+import java.util.Collection;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
@@ -9,16 +11,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import com.sun.mail.handlers.message_rfc822;
+
+
+
 
 import es.ucm.fdi.dalgs.domain.MessageBox;
 
 @Repository
-public class MessageBoxRepository {
+public class MailBoxRepository {
 
 	protected EntityManager em;
 	protected static final Logger logger = LoggerFactory
-			.getLogger(MessageBoxRepository.class);
+			.getLogger(MailBoxRepository.class);
 
 	public EntityManager getEntityManager() {
 		return em;
@@ -45,17 +49,28 @@ public class MessageBoxRepository {
 		}
 		
 	}
-	public MessageBox getMessageBox (String from, String to){
+	public MessageBox getMessageBox (String code){
 		
 		Query query = null;
 
 		query = em
-				.createQuery("select m FROM MessageBox m where m.from=?1 and m.to=?2");
-		query.setParameter(1, from);
-		query.setParameter(2, to);
+				.createQuery("select m FROM MessageBox m where m.code=?1");
+		query.setParameter(1, code);
 		
 		if(query.getResultList().isEmpty())
 			return null;
 		else return (MessageBox) query.getSingleResult();
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<? extends MessageBox> getAllMessages() {
+
+		Query query = null;
+
+		query = em
+				.createQuery("FROM MessageBox m");
+		
+		
+		return query.getResultList();
 	}
 }

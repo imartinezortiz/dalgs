@@ -27,37 +27,82 @@
 <body>
 	<div class="table-responsive list">
 		<div class="panel-heading list">
-			<h4>  
-			
-			<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="common.mail" /></h4>
-	
+			<h4>
+
+				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
+				<fmt:message key="common.mail" />
+			</h4>
+
 
 		</div>
-		<table class="table ">
+		<table class="table table-striped ">
 			<tr align="center">
-			<td> #</td>
+				<td>#</td>
 				<td><fmt:message key="mail.from" /></td>
+				<td><fmt:message key="mail.to" /></td>
 				<td><fmt:message key="mail.subject" /></td>
-				<td><fmt:message key="mail.date" /></td>
-				<td><fmt:message key="mail.msg" /></td>
-				
-				
+				<td><fmt:message key="mail.replies" /></td>
+				<td><fmt:message key="mail.msg"></fmt:message></td>
 			</tr>
 
+	
+			<c:forEach items="${mails}" var="mail">
+				<c:choose>
+					<c:when test="${mail.parent == null}">
+						<tr align="center">
 
-			<c:forEach items="${model.mails}" var="mail">
+							<td><c:out value="${mail.id}" /></td>
+							<td><c:out value="${mail.from}" /></td>
+							<td><c:out value="${mail.to}" /></td>
+							<td><c:out value="${mail.subject}" /></td>
+							<td><span class="badge"> <c:out
+										value="${fn:length(mail.replies)}" />
+							</span> <c:if test="${not empty mail.replies}">
+									<c:choose>
+										<c:when test="${groupId != null}">
+											<a class="glyphicon glyphicon-chevron-down"
+												href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/messages.htm?messageId=${mail.id}'/>">
 
-				<tr align="center">
-					
-					<td><c:out value="${mail.id}" /></td>
-					<td><c:out value="${mail.owner}" /></td>
-					<td><c:out value="${mail.subject}" /></td>
-					<td><c:out value="${mail.sentDate}" /></td>
-					<td><c:out value="${mail.message}" /></td>	
-					
-				</tr>
+											</a>
+										</c:when>
+										<c:otherwise>
+											<a class="glyphicon glyphicon-chevron-down"
+												href="<c:url value='/academicTerm/${academicId}/course/${courseId}/messages.htm?messageId=${mail.id}'/>">
 
+											</a>
+										</c:otherwise>
+									</c:choose>
+
+								</c:if></td>
+							<td><a class="glyphicon glyphicon-file"
+								href="<c:url value='${mail.file}'/>"></a></td>
+						</tr>
+
+						<c:if test="${showReplies eq mail.id}">
+							<tr align="center">
+								<td>#</td>
+								<td><fmt:message key="mail.from" /></td>
+								<td><fmt:message key="mail.to" /></td>
+								<td><fmt:message key="mail.subject" /></td>
+								<td><fmt:message key="mail.msg" /></td>
+							</tr>
+							<c:forEach items="${mail.replies}" var="reply">
+								<tr align="center">
+									<td><c:out value="${reply.id}" /></td>
+									<td><c:out value="${reply.from}" /></td>
+									<td><c:out value="${reply.to}" /></td>
+									<td><c:out value="${reply.subject}" /></td>									
+									<td><a class="glyphicon glyphicon-file"
+										href="<c:url value='${reply.file}'/>"></a></td>
+								</tr>
+							</c:forEach>
+
+						</c:if>
+
+
+					</c:when>
+
+				</c:choose>
 			</c:forEach>
 		</table>
 

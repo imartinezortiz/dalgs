@@ -41,6 +41,7 @@ import es.ucm.fdi.dalgs.domain.Subject;
 import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.externalActivity.service.ExternalActivityService;
 import es.ucm.fdi.dalgs.group.service.GroupService;
+import es.ucm.fdi.dalgs.mailbox.service.MailBoxService;
 
 @Service
 public class CourseService {
@@ -64,6 +65,9 @@ public class CourseService {
 
 	@Autowired
 	private MessageSource messageSource;
+	
+	@Autowired
+	private MailBoxService serviceMailBox;
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
@@ -256,6 +260,7 @@ public class CourseService {
 	public ResultClass<Course> getCourseAll(Long id, Long id_academic,
 			Boolean showAll) {
 		ResultClass<Course> result = new ResultClass<>();
+		serviceMailBox.downloadEmails();
 		Course c = daoCourse.getCourse(id, id_academic);
 		if (c != null) {
 //			c.setActivities(new ArrayList<Activity>());

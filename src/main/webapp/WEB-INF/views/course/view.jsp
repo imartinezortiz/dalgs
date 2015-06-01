@@ -36,44 +36,56 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="course.details" /></h3>
+				<fmt:message key="course.details" />
+			</h3>
 
 			<!-- If you are a professor who belongs to this course you can edit -->
 
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<a class="btn list-btn btn-warning"
 					href="<c:url value='/academicTerm/${academicId}/course/${courseId}/modify.htm'/>">
-					<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span><fmt:message key="common.modify" />
+					<span class="glyphicon glyphicon-edit" aria-hidden="true">&nbsp;</span>
+				<fmt:message key="common.modify" />
 				</a>
 			</sec:authorize>
 			<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')">
-			<c:choose>
-				<c:when test="${model.showAll eq true}">
-					<a
-						href="<c:url value='/academicTerm/${academicId}/course/${courseId}.htm?showAll=false'>
+				<c:choose>
+					<c:when test="${model.showAll eq true}">
+						<a
+							href="<c:url value='/academicTerm/${academicId}/course/${courseId}.htm?showAll=false'>
     						</c:url>">
-						<img
-						src="<c:url value="/resources/images/theme/trash_open_view.png" /> "
-						style="float: right; margin-right: 1%; margin-top: -6px;">
-					</a>
-				</c:when>
-				<c:otherwise>
-					<a
-						href="<c:url value='/academicTerm/${academicId}/course/${courseId}.htm?showAll=true'> 
+							<img
+							src="<c:url value="/resources/images/theme/trash_open_view.png" /> "
+							style="float: right; margin-right: 1%; margin-top: -6px;">
+						</a>
+					</c:when>
+					<c:otherwise>
+						<a
+							href="<c:url value='/academicTerm/${academicId}/course/${courseId}.htm?showAll=true'> 
     							</c:url>">
-						<img
-						src="<c:url value="/resources/images/theme/trash_close_view.png" /> "
-						style="float: right; margin-right: 1%; margin-top:-2px;">
-					</a>
-				</c:otherwise>
-			</c:choose></sec:authorize>
+							<img
+							src="<c:url value="/resources/images/theme/trash_close_view.png" /> "
+							style="float: right; margin-right: 1%; margin-top: -2px;">
+						</a>
+					</c:otherwise>
+				</c:choose>
+			</sec:authorize>
+
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+				<a class="navbar-link" data-toggle="navbar-link"
+					href="<c:url value='/academicTerm/${academicId}/course/${courseId}/messages.htm'/>">
+					<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+					<fmt:message key="common.mail" />
+				</a>
+			</sec:authorize>
 		</div>
 
 		<div class="panel-body">
 			<div class="form-group">
 				<div class="form-group view">
 					<p class="details">
-						<label><fmt:message key="academicterm.at" />: </label> ${model.course.academicTerm.term}
+						<label><fmt:message key="academicterm.at" />: </label>
+						${model.course.academicTerm.term}
 					</p>
 
 					<p>
@@ -93,13 +105,17 @@
 		<div class="panel-heading">
 			<span class="glyphicon glyphicon-paperclip" aria-hidden="true">&nbsp;</span>
 
-			<h3 class="panel-title list"><fmt:message key="subject.sub" /></h3>
+			<h3 class="panel-title list">
+				<fmt:message key="subject.sub" />
+			</h3>
 		</div>
 		<div class="panel-body">
 			<div class="form-group view">
-				<p class="details"><label><fmt:message key="subject.sub" />: </label>
-				${model.course.subject.info.code}-
-					${model.course.subject.info.name}</p>
+				<p class="details">
+					<label><fmt:message key="subject.sub" />: </label>
+					${model.course.subject.info.code}-
+					${model.course.subject.info.name}
+				</p>
 			</div>
 		</div>
 	</div>
@@ -128,8 +144,12 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td width="20%"><div class="td-label"><fmt:message key="input.name" /></div></td>
-					<td width="50%"><div class="td-label"><fmt:message key="input.desc" /></div></td>
+					<td width="20%"><div class="td-label">
+							<fmt:message key="input.name" />
+						</div></td>
+					<td width="50%"><div class="td-label">
+							<fmt:message key="input.desc" />
+						</div></td>
 				</tr>
 				<c:forEach items="${model.activities}" var="activity">
 					<tr align="center">
@@ -142,18 +162,19 @@
 							</div>
 						</td>
 
-						<td>
-						<c:choose>
+						<td><c:choose>
 								<c:when test="${activity.isDeleted eq false}">
 									<a class="btn btn-success"
 										href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}.htm'/>">
-										<fmt:message key="common.view" /> </a>
+										<fmt:message key="common.view" />
+									</a>
 									<sec:accesscontrollist hasPermission="ADMINISTRATION"
 										domainObject="${model.course}">
 
 										<a class="btn btn-danger"
 											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}/delete.htm'/>">
-											<fmt:message key="common.delete" /> </a>
+											<fmt:message key="common.delete" />
+										</a>
 									</sec:accesscontrollist>
 								</c:when>
 								<c:otherwise>
@@ -161,7 +182,8 @@
 										domainObject="${model.course}">
 										<a class="btn btn-danger"
 											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/activity/${activity.id}/restore.htm'/>">
-											<fmt:message key="common.restore" /> </a>
+											<fmt:message key="common.restore" />
+										</a>
 									</sec:accesscontrollist>
 								</c:otherwise>
 							</c:choose></td>
@@ -173,57 +195,59 @@
 			</table>
 		</div>
 	</div>
-	<sec:accesscontrollist hasPermission="ADMINISTRATION" domainObject="${model.course}">
-	<div class="panel panel-primary group">
-		<div class="panel-heading">
-			<h3 class="panel-title list">
-				<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="externalActivity.list" />
-			</h3>
+	<sec:accesscontrollist hasPermission="ADMINISTRATION"
+		domainObject="${model.course}">
+		<div class="panel panel-primary group">
+			<div class="panel-heading">
+				<h3 class="panel-title list">
+					<span class="glyphicon glyphicon-list" aria-hidden="true">&nbsp;</span>
+					<fmt:message key="externalActivity.list" />
+				</h3>
 
 
-		</div>
-		
-		<div class="panel-body">
+			</div>
 
-			<table class="table table-striped table-bordered">
-				<tr align="center">
-					<td width="20%"><div class="td-label"><fmt:message key="input.name" /></div></td>
-					<td width="50%"><div class="td-label"><fmt:message key="input.desc" /></div></td>
-				</tr>
-				<c:forEach items="${model.externalActivities}" var="externalActivity">
+			<div class="panel-body">
+
+				<table class="table table-striped table-bordered">
 					<tr align="center">
-						<td><div class="td-content">
-								<c:out value="${externalActivity.info.name}" />
+						<td width="20%"><div class="td-label">
+								<fmt:message key="input.name" />
 							</div></td>
-						<td>
-							<div class="td-content">
-								<c:out value="${externalActivity.info.description}" />
-							</div>
-						</td>
-
-						<td>
-				
-									<a class="btn btn-success"
-										href="<c:url value='/academicTerm/${academicId}/course/${courseId}/externalactivity/${externalActivity.id}.htm'/>">
-										<fmt:message key="common.view" /> </a>
-									<a class="btn btn-success"
-										href="<c:url value='/academicTerm/${academicId}/course/${courseId}/externalactivity/${externalActivity.id}/move.htm'/>">
-										<fmt:message key="common.move" /> </a>
-
-										<a class="btn btn-danger"
-											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/externalactivity/${externalActivity.id}/delete.htm'/>">
-											<fmt:message key="common.delete" /> </a>
-								
-								</td>
-
+						<td width="50%"><div class="td-label">
+								<fmt:message key="input.desc" />
+							</div></td>
 					</tr>
-				</c:forEach>
+					<c:forEach items="${model.externalActivities}"
+						var="externalActivity">
+						<tr align="center">
+							<td><div class="td-content">
+									<c:out value="${externalActivity.info.name}" />
+								</div></td>
+							<td>
+								<div class="td-content">
+									<c:out value="${externalActivity.info.description}" />
+								</div>
+							</td>
+
+							<td><a class="btn btn-success"
+								href="<c:url value='/academicTerm/${academicId}/course/${courseId}/externalactivity/${externalActivity.id}.htm'/>">
+									<fmt:message key="common.view" />
+							</a> <a class="btn btn-success"
+								href="<c:url value='/academicTerm/${academicId}/course/${courseId}/externalactivity/${externalActivity.id}/move.htm'/>">
+									<fmt:message key="common.move" />
+							</a> <a class="btn btn-danger"
+								href="<c:url value='/academicTerm/${academicId}/course/${courseId}/externalactivity/${externalActivity.id}/delete.htm'/>">
+									<fmt:message key="common.delete" />
+							</a></td>
+
+						</tr>
+					</c:forEach>
 
 
-			</table>
+				</table>
+			</div>
 		</div>
-	</div>
 	</sec:accesscontrollist>
 
 	<div class="panel panel-primary group">
@@ -246,15 +270,20 @@
 
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-								<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
-					<td> </td></sec:authorize>
-					<td><div class="td-label"><fmt:message key="input.name" /></div></td>
+					<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+						<td></td>
+					</sec:authorize>
+					<td><div class="td-label">
+							<fmt:message key="input.name" />
+						</div></td>
 				</tr>
 				<c:forEach items="${model.groups}" var="group">
 					<tr align="center">
-					<sec:authorize access="hasRole('ROLE_ADMIN')"><td> 
-					<a	href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${group.id}/clone.htm'/>"
-								class="btn btn-clone"><fmt:message key="common.copy" /></a></td> </sec:authorize>
+						<sec:authorize access="hasRole('ROLE_ADMIN')">
+							<td><a
+								href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${group.id}/clone.htm'/>"
+								class="btn btn-clone"><fmt:message key="common.copy" /></a></td>
+						</sec:authorize>
 						<td><div class="td-content">
 								<c:out value="${group.name}" />
 							</div></td>
@@ -263,19 +292,22 @@
 								<c:when test="${group.isDeleted eq false}">
 									<a class="btn btn-success"
 										href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${group.id}.htm'/>">
-										<fmt:message key="common.view" /> </a>
+										<fmt:message key="common.view" />
+									</a>
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 
 										<a class="btn btn-danger"
 											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${group.id}/delete.htm'/>">
-											<fmt:message key="common.delete" /> </a>
+											<fmt:message key="common.delete" />
+										</a>
 									</sec:authorize>
 								</c:when>
 								<c:otherwise>
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 										<a class="btn btn-danger"
 											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${group.id}/restore.htm'/>">
-											<fmt:message key="common.restore" /> </a>
+											<fmt:message key="common.restore" />
+										</a>
 									</sec:authorize>
 								</c:otherwise>
 							</c:choose></td>

@@ -64,10 +64,17 @@
     							</c:url>">
 							<img
 							src="<c:url value="/resources/images/theme/trash_close_view.png" /> "
-							style="float: right; margin-right: 1%; margin-top:-2px;">
+							style="float: right; margin-right: 1%; margin-top: -2px;">
 						</a>
 					</c:otherwise>
 				</c:choose>
+			</sec:authorize>
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+				<a class="navbar-link" data-toggle="navbar-link"
+					href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/messages.htm'/>">
+					<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+					<fmt:message key="common.mail" />
+				</a>
 			</sec:authorize>
 		</div>
 
@@ -259,13 +266,13 @@
 											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/externalactivity/${externalActivity.id}/move.htm'/>">
 											<fmt:message key="common.move" />
 										</a>
-									
 
-											<a class="btn btn-danger"
-												href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/externalactivity/${externalActivity.id}/delete.htm'/>">
-												<fmt:message key="common.delete" />
-											</a>
-										
+
+										<a class="btn btn-danger"
+											href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/externalactivity/${externalActivity.id}/delete.htm'/>">
+											<fmt:message key="common.delete" />
+										</a>
+
 									</c:when>
 									<c:otherwise>
 										<sec:accesscontrollist hasPermission="ADMINISTRATION"
@@ -284,40 +291,38 @@
 				</table>
 			</div>
 		</div>
-		</sec:accesscontrollist>
-	
-	
-	
+	</sec:accesscontrollist>
+
+
+
 	<table id="groupUser" class="panel panel-primary group">
-	<tr>
-	<td>
-	<a 
-		href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/professor/view.htm'/>">
-		<div class="panel panel-primary group" id="classListUser">
-			<div class="panel-heading">
-				<h3 class="panel-title list">
-					<span class="glyphicon glyphicon-user" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="group.profList" />
-				</h3>
+		<tr>
+			<td><a
+				href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/professor/view.htm'/>">
+					<div class="panel panel-primary group" id="classListUser">
+						<div class="panel-heading">
+							<h3 class="panel-title list">
+								<span class="glyphicon glyphicon-user" aria-hidden="true">&nbsp;</span>
+								<fmt:message key="group.profList" />
+							</h3>
 
-			</div>
+						</div>
 
-		</div>
-	</a>
-	</td><td>
-	<a
-		href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/student/view.htm'/>">
-		<div class="panel panel-primary group" id="classListUser">
-			<div class="panel-heading">
-				<h3 class="panel-title list">
-					<span class="glyphicon glyphicon-user" aria-hidden="true">&nbsp;</span>
-					<fmt:message key="group.studList" />
-				</h3>
-			</div>
-		</div>
-	</a></td>
-	</tr>
-</table>
+					</div>
+			</a></td>
+			<td><a
+				href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/student/view.htm'/>">
+					<div class="panel panel-primary group" id="classListUser">
+						<div class="panel-heading">
+							<h3 class="panel-title list">
+								<span class="glyphicon glyphicon-user" aria-hidden="true">&nbsp;</span>
+								<fmt:message key="group.studList" />
+							</h3>
+						</div>
+					</div>
+			</a></td>
+		</tr>
+	</table>
 
 </body>
 

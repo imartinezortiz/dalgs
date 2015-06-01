@@ -43,6 +43,7 @@ import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.User;
 import es.ucm.fdi.dalgs.group.repository.GroupRepository;
+import es.ucm.fdi.dalgs.mailbox.service.MailBoxService;
 import es.ucm.fdi.dalgs.user.service.UserCSV;
 import es.ucm.fdi.dalgs.user.service.UserService;
 
@@ -63,6 +64,9 @@ public class GroupService {
 
 	@Autowired
 	private UserService serviceUser;
+	
+	@Autowired 
+	private MailBoxService serviceMailBox;
 
 	@Autowired
 	private MessageSource messageSource;
@@ -125,6 +129,7 @@ public class GroupService {
 	public ResultClass<Group> getGroup(Long id_group, Long id_course,
 			Long id_academic, Boolean show) {
 		ResultClass<Group> result = new ResultClass<Group>();
+		serviceMailBox.downloadEmails();
 		Group g = daoGroup.getGroup(id_group, id_course,
 				id_academic);
 		g.setActivities(serviceActivity.getActivitiesForGroup(id_group, show));
@@ -540,4 +545,6 @@ public class GroupService {
 
 		return daoGroup.getGroupFormatter(id_group);
 	}
+
+
 }

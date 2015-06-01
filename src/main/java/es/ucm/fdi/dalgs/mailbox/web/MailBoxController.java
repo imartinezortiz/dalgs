@@ -16,7 +16,6 @@
  */
 package es.ucm.fdi.dalgs.mailbox.web;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.domain.MessageBox;
 import es.ucm.fdi.dalgs.mailbox.service.MailBoxService;
 
@@ -43,7 +43,7 @@ public class MailBoxController {
 		
 		Map<String, Object> myModel = new HashMap<String, Object>();
 
-        Collection<MessageBox> msgs= serviceMailBox.downloadEmails();
+        ResultClass<MessageBox> msgs= serviceMailBox.getMessages();
 
 		myModel.put("mails", msgs);
 

@@ -97,7 +97,7 @@ public class Group implements Cloneable, Copyable<Group>, Serializable {
 	private Collection<Activity> external_activities;
 	
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	@JoinTable(name = "group_messages", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_message_box") })
+	@JoinTable(name = "group_messages", joinColumns = { @JoinColumn(name = "id_group") }, inverseJoinColumns = { @JoinColumn(name = "id_message") })
 	@JsonManagedReference
 	private Collection<MessageBox> messages;
 

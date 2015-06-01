@@ -338,7 +338,30 @@ public class CourseController {
 		} else
 			return "redirect:/error.htm";
 	}
+	
+	/**
+	 * SHOW MESSAGES
+	 * @param model
+	 * @param id_academic
+	 * @param id_course
+	 * @return
+	 */
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/messages.htm", method = RequestMethod.GET)
+	public String courseMessagesGET(Model model,
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("courseId") Long id_course,
+			@RequestParam(value = "messageId", defaultValue = "-1") Long id_message)
+		{
 
+		
+		ResultClass<Course> result = serviceCourse.getCourse(id_course, id_academic);
+		
+		model.addAttribute("showReplies",id_message);
+		model.addAttribute("mails", result.getSingleElement().getMessages());
+
+	
+		return "mail/list";
+	}
 	/**
 	 * Add a coordinator //
 	 */

@@ -82,6 +82,17 @@ public class GroupController {
 	public void setShowAll(Boolean showAll) {
 		this.showAll = showAll;
 	}
+	
+	private Long id_message;
+	
+
+	public Long getId_message() {
+		return id_message;
+	}
+
+	public void setId_message(Long id_message) {
+		this.id_message = id_message;
+	}
 
 	/**
 	 * Methods for adding activities
@@ -419,7 +430,32 @@ public class GroupController {
 			+ id_course + "/group/" + id_group + "/"+ typeOfUser +"/upload.htm";
 		}
 	}
+	
+	/**
+	 * SHOW MESSAGES
+	 * @param model
+	 * @param id_academic
+	 * @param id_course
+	 * @param id_group
+	 * @return 
+	 */
+	@RequestMapping(value = "/academicTerm/{academicId}/course/{courseId}/group/{groupId}/messages.htm", method = RequestMethod.GET)
+	public String groupMessagesGET(Model model,
+			@PathVariable("academicId") Long id_academic,
+			@PathVariable("courseId") Long id_course,
+			@PathVariable("groupId") Long id_group,
+			@RequestParam(value = "messageId", defaultValue = "-1") Long id_message)
+		{
 
+		
+		ResultClass<Group> result = serviceGroup.getGroup(id_group, id_course, id_academic, false);
+		
+		model.addAttribute("showReplies",id_message);
+		model.addAttribute("mails", result.getSingleElement().getMessages());
+
+	
+		return "mail/list";
+	}
 
 	
 	
