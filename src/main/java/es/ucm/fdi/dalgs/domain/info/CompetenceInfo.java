@@ -65,7 +65,7 @@ public class CompetenceInfo implements Serializable, Cloneable,
 	@NotBlank
 	@Size(min = 1, max = 50)
 	@Basic(optional = false)
-	@Column(name = "_type", length = 50, nullable = false)
+	@Column(name = "competence_type", length = 50, nullable = false)
 	private TypeOfCompetence type;
 
 	public TypeOfCompetence getType() {

@@ -30,9 +30,9 @@ public class ScheduleBean {
 	private MailBoxService mailBoxService;
  
     public void printMessage() {
-        System.out.println("I am called by Spring scheduler");
+       // System.out.println("I am called by Spring scheduler");
         
-        mailBoxService.downloadEmails();
+       // mailBoxService.downloadEmails();
         
     }
 }

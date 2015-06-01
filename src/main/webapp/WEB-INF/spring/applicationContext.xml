@@ -18,11 +18,23 @@
 
 -->
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:data="http://www.springframework.org/schema/data/jpa"
+	xmlns:util="http://www.springframework.org/schema/util"
+	
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/data/jpa
+		http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util.xsd">
 
 
 	<!-- holding properties for database connectivity / -->
@@ -38,9 +50,6 @@
 		<property name="url" value="${jdbc.url}" />
 		<property name="username" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
-
-
-		<!-- <property name="hibernate.hbm2ddl.auto">create-drop</property> -->
 	</bean>
 
 	<bean id="entityManagerFactory"
@@ -53,10 +62,11 @@
 		<property name="persistenceUnitName" value="tfgPU"></property>
 		<property name="jpaProperties">
 			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
-				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
 				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
 				<prop key="hibernate.hbm2ddl.import_files">${hibernate.hbm2ddl.import_files}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
 				<prop key="hibernate.connection.characterEncoding">UTF-8</prop>
 				<!-- Use JDBC batch API with a batch size of 100 -->
 				<prop key="hibernate.jdbc.batch_size">100</prop>
@@ -67,15 +77,18 @@
 	</bean>
 
 	<bean id="jpaAdapter"
-		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
-		p:database="${jpa.database}">
-		<!-- p:showSql="${jpa.showSql}"> -->
+		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 	</bean>
 
 
 
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
 		p:entityManagerFactory-ref="entityManagerFactory" />
+
+	<!-- Packages to search for @Repository beans definitions -->
+	<data:repositories base-package="es.ucm.fdi.storage.business.control"
+		entity-manager-factory-ref="entityManagerFactory"
+		transaction-manager-ref="transactionManager" />
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
@@ -113,6 +126,7 @@
 	<context:component-scan base-package="es.ucm.fdi.dalgs.rest.security" />
 	<context:component-scan base-package="es.ucm.fdi.dalgs.mailbox.service" />
 	
+	<context:component-scan base-package="es.ucm.fdi.storage.business.boundary" />
 
 
 	
@@ -124,5 +138,15 @@
 	</bean>
 
 
+	
+	<util:properties id="storagePrefs">
+		<prop key="rootPath">WEB-INF/storage</prop>
+		<prop key="serviceURL">http://localhost:8080/dalgs/storage/</prop>
+	</util:properties>
+	
+	<util:properties id="attachmentsPrefs">
+		<prop key="bucket">attachments</prop>
+	</util:properties>
+	
 
 </beans>

@@ -24,7 +24,7 @@
 		<class>es.ucm.fdi.dalgs.domain.acl.AclSid</class>
 		<class>es.ucm.fdi.dalgs.domain.Persistent_Logins</class>
 		<class>es.ucm.fdi.dalgs.domain.MessageBox</class>
-
+		<class>es.ucm.fdi.storage.business.entity.StorageObject</class>
 
 		
 	</persistence-unit>

@@ -206,7 +206,8 @@ public class GroupService {
 				manageAclService.removePermissionGroupCoordinator(group
 						.getCourse().getCoordinator(), group.getId());
 			}
-
+			group.setProfessors(new ArrayList<User>());
+			group.setStudents(new ArrayList<User>());
 			result.setSingleElement(daoGroup.deleteGroup(group));
 
 			return result;
@@ -238,12 +239,13 @@ public class GroupService {
 				manageAclService.removePermissionCollectionCASCADE(group
 						.getProfessors(), group, course.getAcademicTerm()
 						.getId(), course.getId(), group.getId());
+				group.setProfessors(new ArrayList<User>());
+				group.setStudents(new ArrayList<User>());
 			}
 			if (course.getCoordinator() != null)
 				manageAclService.removePermissionCASCADE(course
 						.getCoordinator(), course, course.getAcademicTerm()
 						.getId(), course.getId(), null);
-
 		}
 
 		result.setSingleElement(daoGroup.deleteGroupsFromCourses(coursesList));

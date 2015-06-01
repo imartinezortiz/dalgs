@@ -10,7 +10,6 @@ INSERT INTO acl_class (id, class) VALUES (8,'es.ucm.fdi.dalgs.domain.Module');
 INSERT INTO acl_class (id, class) VALUES (9,'es.ucm.fdi.dalgs.domain.Subject');
 INSERT INTO acl_class (id, class) VALUES (10,'es.ucm.fdi.dalgs.domain.Topic');
 INSERT INTO acl_class (id, class) VALUES (11,'es.ucm.fdi.dalgs.domain.User');
-INSERT INTO acl_class (id, class) VALUES (12,'es.ucm.fdi.dalgs.domain.ExternalActivity');
 -- ---------------------------------------------------
 
 -- ACL Sid -- Authorizations - Roles
@@ -18,7 +17,7 @@ INSERT INTO acl_sid (id, principal, sid) VALUES	(1,00000001,'admin');
 
 -- -------------------------------------------------------
 
--- Degree Inserts 
+-- degree Inserts 
 INSERT INTO degree (id_degree,code_degree,description,name) VALUES (1,'DEG1','Grado en Ingenieria del Software','GIS');
 INSERT INTO degree (id_degree,code_degree,description,name) VALUES (2,'DEG2','Grado en Ingenieria Informatica','GII');
 INSERT INTO degree (id_degree,code_degree,description,name) VALUES (3,'DEG3','Grado en Ingenieria de Computadores','GIC');
@@ -61,7 +60,7 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 
 -- ----------------------------------------------------------------------------------
 
---Module Inserts
+--module Inserts
 
 INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (1, 'MOD1', 'Materias Básicas', 'description1', 1);
 INSERT INTO module (id_module, code_module, name, description,id_degree) VALUES (2, 'MOD2', 'Materias comunes a la informatica','description2', 1);
@@ -121,11 +120,11 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (50,1,00000000,00000000,00000001,16,17,1);
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (53,1,00000000,00000000,00000001,16,18,1);
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (56,1,00000000,00000000,00000001,16,19,1);
-INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (59,1,00000000,00000000,00000001,16,20,1);
-INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (62,1,00000000,00000000,00000001,16,21,1);
+INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (57,1,00000000,00000000,00000001,16,20,1);
+INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (58,1,00000000,00000000,00000001,16,21,1);
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (59,1,00000000,00000000,00000001,16,22,1);
-INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (62,1,00000000,00000000,00000001,16,23,1);
-INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (59,1,00000000,00000000,00000001,16,24,1);
+INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (60,1,00000000,00000000,00000001,16,23,1);
+INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (61,1,00000000,00000000,00000001,16,24,1);
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (62,1,00000000,00000000,00000001,16,25,1);
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (65,1,00000000,00000000,00000001,16,26,1);
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (68,1,00000000,00000000,00000001,16,27,1);
@@ -134,7 +133,7 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (77,1,00000000,00000000,00000001,16,30,1);
 
 
---Topic Inserts
+--topic Inserts
 
 INSERT INTO topic (id_topic, code_topic, name, description,id_module) VALUES (1, 'TOP1', 'Fisica', 'description1',1);
 INSERT INTO topic (id_topic, code_topic, name, description,id_module) VALUES (2, 'TOP2', 'Empresa', 'description2',2);
@@ -163,7 +162,7 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (95,1,00000000,00000000,00000001,16,36,1);
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (98,1,00000000,00000000,00000001,16,37,1);
 
--- Subject Inserts
+-- subject Inserts
 INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (1,'SUB1',12,'Ingenieria Software','IS', 'url',7);
 INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (2,'SUB2',6,'Bases de Datos','BD','url',7);
 INSERT INTO subject (id_subject,code_subject,credits,description,name,url_doc, id_topic) VALUES (3,'SUB3',6,'Sistemas Operativos','SO','url',3);
@@ -197,7 +196,7 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (122,1,00000000,00000000,00000001,16,45,1);
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (125,1,00000000,00000000,00000001,16,46,1);
 
--- Course Inserts
+-- course Inserts
 INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (1, '1', '1');
 INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (2, '1', '2');
 INSERT INTO course (id_course, id_academicterm, id_subject) VALUES (3, '1', '3');
@@ -225,12 +224,12 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (143,1,00000000,00000000,00000001,16,52,1);
 
 	
--- Competence Inserts 
-INSERT INTO competence (id_competence,code_competence,description,name, _type, id_degree) VALUES (1,'COMP1','adquirir conocimientos en UML','UML', 0, 1);
-INSERT INTO competence (id_competence,code_competence,description,name,_type,id_degree) VALUES (2,'COMP2','aprender diversos patrones de Ingenieria Software','Patrones', 1,1);
-INSERT INTO competence (id_competence,code_competence,description,name,_type,id_degree) VALUES (3,'COMP3','Saber diseñar una base de datos relacional','Base datos relacional',0,2);
-INSERT INTO competence (id_competence,code_competence,description,name,_type,id_degree) VALUES (4,'COMP4','Adquirir conocimientos en consultas contra una base de datos','Consultas SQL',2,2);
-INSERT INTO competence (id_competence,code_competence,description,name,_type,id_degree) VALUES (5,'COMP5','Aprendizaje de sincronizacion y comunicacion de procesos','Sincronizacion de Procesos',3,3);
+-- competence Inserts 
+INSERT INTO competence (id_competence,code_competence,description,name, competence_type, id_degree) VALUES (1,'COMP1','adquirir conocimientos en UML','UML', 0, 1);
+INSERT INTO competence (id_competence,code_competence,description,name, competence_type,id_degree) VALUES (2,'COMP2','aprender diversos patrones de Ingenieria Software','Patrones', 1,1);
+INSERT INTO competence (id_competence,code_competence,description,name, competence_type,id_degree) VALUES (3,'COMP3','Saber diseñar una base de datos relacional','Base datos relacional',0,2);
+INSERT INTO competence (id_competence,code_competence,description,name, competence_type,id_degree) VALUES (4,'COMP4','Adquirir conocimientos en consultas contra una base de datos','Consultas SQL',2,2);
+INSERT INTO competence (id_competence,code_competence,description,name, competence_type,id_degree) VALUES (5,'COMP5','Aprendizaje de sincronizacion y comunicacion de procesos','Sincronizacion de Procesos',3,3);
 
 -- Object Identity --
 INSERT INTO acl_object_identity (ID, ENTRIES_INHERITING, OBJECT_ID_IDENTITY, OBJECT_ID_CLASS, PARENT_OBJECT, OWNER_SID) VALUES (53,00000001,1,3,NULL,1);
@@ -246,7 +245,7 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (155,1,00000000,00000000,00000001,16,56,1);
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (158,1,00000000,00000000,00000001,16,57,1);
 
---LearningGoal Inserts
+--learninggoal Inserts
 INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (1, 'LEA1', 'learning 1','descripcion learning 1', 1);
 INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (2, 'LEA2', 'learning 2','descripcion learning 2', 1);
 INSERT INTO learninggoal (id_learninggoal, code_learning, name, description, id_competence) VALUES (3, 'LEA3', 'learning 3','descripcion learning 3', 2);
@@ -277,12 +276,12 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (179,1,00000000,00000000,00000001,16,64,1);
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (182,1,00000000,00000000,00000001,16,65,1);
 
---Activity Inserts 
-INSERT INTO _activity (id_activity,code_activity,description,name,id_course) VALUES (1,'ACT1','Desarrollar diagramas de casos de uso','Casos de Uso',1);
-INSERT INTO _activity (id_activity,code_activity,description,name,id_course) VALUES (2,'ACT2','Elaborar un diagrama Entidad-Relacion','Entidad-Relacion',1);
-INSERT INTO _activity (id_activity,code_activity,description,name,id_course) VALUES (3,'ACT3','Diagramas de secuencia','Secuencia',2);
-INSERT INTO _activity (id_activity,code_activity,description,name,id_course) VALUES (4,'ACT4','Diagramas de activitidades','actividades',2);
-INSERT INTO _activity (id_activity,code_activity,description,name,id_course) VALUES (5,'ACT5','Diagrama de clases','clases',3);
+--activity Inserts 
+INSERT INTO Activity (id_activity,code_activity,description,name,id_course) VALUES (1,'ACT1','Desarrollar diagramas de casos de uso','Casos de Uso',1);
+INSERT INTO Activity (id_activity,code_activity,description,name,id_course) VALUES (2,'ACT2','Elaborar un diagrama Entidad-Relacion','Entidad-Relacion',1);
+INSERT INTO Activity (id_activity,code_activity,description,name,id_course) VALUES (3,'ACT3','Diagramas de secuencia','Secuencia',2);
+INSERT INTO Activity (id_activity,code_activity,description,name,id_course) VALUES (4,'ACT4','Diagramas de activitidades','actividades',2);
+INSERT INTO Activity (id_activity,code_activity,description,name,id_course) VALUES (5,'ACT5','Diagrama de clases','clases',3);
 
 
 INSERT INTO course_activities (id_course,id_activity) VALUES (1,1);
@@ -304,11 +303,11 @@ INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MA
 INSERT INTO acl_entry (ID, ACE_ORDER, AUDIT_FAILURE, AUDIT_SUCCESS, GRANTING, MASK, ACL_OBJECT_IDENTITY, SID) VALUES (197,1,00000000,00000000,00000001,16,70,1);
 
 --Group Inserts
-INSERT INTO _group (id_group, name, id_course) VALUES (1, 'group 1', 1);
-INSERT INTO _group (id_group, name, id_course) VALUES (2, 'group 2', 1);
-INSERT INTO _group (id_group, name, id_course) VALUES (3, 'group 3', 2);
-INSERT INTO _group (id_group, name, id_course) VALUES (4, 'group 4', 2);
-INSERT INTO _group (id_group, name, id_course) VALUES (5, 'group 5', 3);
+INSERT INTO coursegroup (id_group, name, id_course) VALUES (1, 'group 1', 1);
+INSERT INTO coursegroup (id_group, name, id_course) VALUES (2, 'group 2', 1);
+INSERT INTO coursegroup (id_group, name, id_course) VALUES (3, 'group 3', 2);
+INSERT INTO coursegroup (id_group, name, id_course) VALUES (4, 'group 4', 2);
+INSERT INTO coursegroup (id_group, name, id_course) VALUES (5, 'group 5', 3);
 
 -- Object Identity --
 INSERT INTO acl_object_identity (ID, ENTRIES_INHERITING, OBJECT_ID_IDENTITY, OBJECT_ID_CLASS, PARENT_OBJECT, OWNER_SID) VALUES (71,00000001,1,6,NULL,1);
