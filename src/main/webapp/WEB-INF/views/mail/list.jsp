@@ -59,6 +59,14 @@
 										value="${fn:length(mail.replies)}" />
 							</span> <c:if test="${not empty mail.replies}">
 									<c:choose>
+										<c:when test="${groupId == null && courseId == null}">
+											<a class="glyphicon glyphicon-chevron-down"
+												href="<c:url value='/mailbox.htm?messageId=${mail.id}'/>">
+
+											</a>
+										
+										</c:when>
+										
 										<c:when test="${groupId != null}">
 											<a class="glyphicon glyphicon-chevron-down"
 												href="<c:url value='/academicTerm/${academicId}/course/${courseId}/group/${groupId}/messages.htm?messageId=${mail.id}'/>">
@@ -79,19 +87,14 @@
 						</tr>
 
 						<c:if test="${showReplies eq mail.id}">
-							<tr align="center">
-								<td>#</td>
-								<td><fmt:message key="mail.from" /></td>
-								<td><fmt:message key="mail.to" /></td>
-								<td><fmt:message key="mail.subject" /></td>
-								<td><fmt:message key="mail.msg" /></td>
-							</tr>
+							
 							<c:forEach items="${mail.replies}" var="reply">
 								<tr align="center">
 									<td><c:out value="${reply.id}" /></td>
 									<td><c:out value="${reply.from}" /></td>
 									<td><c:out value="${reply.to}" /></td>
-									<td><c:out value="${reply.subject}" /></td>									
+									<td><c:out value="${reply.subject}" /></td>
+									<td>Reply</td>									
 									<td><a class="glyphicon glyphicon-file"
 										href="<c:url value='${reply.file}'/>"></a></td>
 								</tr>

@@ -16,14 +16,14 @@
  */
 package es.ucm.fdi.dalgs.mailbox.web;
 
-import java.util.HashMap;
-import java.util.Map;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.domain.MessageBox;
@@ -38,16 +38,16 @@ public class MailBoxController {
 	private MailBoxService serviceMailBox;
 
 
-	@RequestMapping(value = "/mailbox")
-	public ModelAndView getMailBox(Model model) {
-		
-		Map<String, Object> myModel = new HashMap<String, Object>();
+	@RequestMapping(value = "/mailbox", method = RequestMethod.GET)
+	public String getMailBox(Model model,
+			@RequestParam(value = "messageId", defaultValue = "-1") Long id_message) {
+
 
         ResultClass<MessageBox> msgs= serviceMailBox.getMessages();
+        model.addAttribute("showReplies",id_message);
+        model.addAttribute("mails", msgs);
 
-		myModel.put("mails", msgs);
-
-		return new ModelAndView("mail/list", "model", myModel);
+        return "mail/list";
 	}
 
 	

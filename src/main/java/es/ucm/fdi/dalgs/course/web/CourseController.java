@@ -354,7 +354,7 @@ public class CourseController {
 		{
 
 		
-		ResultClass<Course> result = serviceCourse.getCourse(id_course, id_academic);
+		ResultClass<Course> result = serviceCourse.getCourseAll(id_course, id_academic, false);
 		
 		model.addAttribute("showReplies",id_message);
 		model.addAttribute("mails", result.getSingleElement().getMessages());

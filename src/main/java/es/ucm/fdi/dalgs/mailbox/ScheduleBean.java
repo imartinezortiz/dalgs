@@ -19,6 +19,7 @@ package es.ucm.fdi.dalgs.mailbox;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import es.ucm.fdi.dalgs.mailbox.service.MailBoxService;
@@ -28,11 +29,12 @@ public class ScheduleBean {
 	
 	@Autowired
 	private MailBoxService mailBoxService;
- 
+	
+	@Async
     public void printMessage() {
-       // System.out.println("I am called by Spring scheduler");
+       
         
-//        mailBoxService.downloadEmails();
+        mailBoxService.downloadEmails();
         
     }
 }

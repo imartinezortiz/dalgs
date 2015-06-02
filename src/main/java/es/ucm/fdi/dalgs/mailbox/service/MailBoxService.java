@@ -16,11 +16,7 @@
  */
 package es.ucm.fdi.dalgs.mailbox.service;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -36,12 +32,10 @@ import javax.mail.Store;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage.RecipientType;
 
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
@@ -73,6 +67,8 @@ public class MailBoxService{
 
 	@Value("${mail.password}")
 	private String password;
+	
+	private static final String pattern = "^\\s*(Re:\\s*)?\\[(course|group):(\\d+)\\]";
 
 	@Autowired
 	private MailBoxRepository repositoryMailBox;
@@ -169,8 +165,6 @@ public class MailBoxService{
 
 		try {
 
-			//			Collection<MessageBox> messagesbox = new ArrayList<MessageBox>();
-
 			// connects to the message store
 			Store store = session.getStore(protocol);
 			
@@ -243,17 +237,18 @@ public class MailBoxService{
 	}
 
 	private ResultClass<Boolean> parseSubjectAndCreate(MessageBox messageBox, Message msg) throws MessagingException, IOException{
-		//    	String pattern= "^\\s*\\[(course|group):(\\d+)\\]";
+		
 
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		String pattern = "^\\s*(Re:\\s*)?\\[(course|group):(\\d+)\\]";
+		
 		Pattern p = Pattern.compile(pattern);            	
 		Matcher m = p.matcher(messageBox.getSubject());
 		if (m.matches()){
 			
 			String mimeType = msg.getContentType();
 			String key = getStorageKey(Long.parseLong(m.group(3)));
+		
 			storageManager.putObject(bucket, key, mimeType, msg.getInputStream());			
 			String aaa=storageManager.getUrl(bucket, key).toExternalForm();
 			messageBox.setFile(aaa);
@@ -297,11 +292,16 @@ public class MailBoxService{
 //		File file= null;
 //		OutputStream out = null;
 //		InputStream in = null;
+//		
 //		try{
+//			
 //			in = msg.getInputStream();
 //			int k;
 ////			filename = filename + ".txt";
 //			file = File.createTempFile("tmp", ".txt");
+//			;
+////			FileUtils.copyInputStreamToFile(msg.getInputStream(), file);
+//		
 //			out = new FileOutputStream(file);
 //			while ((k = in.read()) != -1) {
 //				out.write(k);
@@ -373,10 +373,9 @@ public class MailBoxService{
 //		return file;
 //	}
 
-	@Transactional(readOnly=false)
+	@Transactional(readOnly=true)
 	public ResultClass<MessageBox> getMessages() {
 
-		this.downloadEmails();
 
 		ResultClass<MessageBox> result = new ResultClass<>();
 

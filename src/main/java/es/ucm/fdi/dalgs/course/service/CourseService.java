@@ -260,7 +260,6 @@ public class CourseService {
 	public ResultClass<Course> getCourseAll(Long id, Long id_academic,
 			Boolean showAll) {
 		ResultClass<Course> result = new ResultClass<>();
-		serviceMailBox.downloadEmails();
 		Course c = daoCourse.getCourse(id, id_academic);
 		if (c != null) {
 //			c.setActivities(new ArrayList<Activity>());
@@ -383,4 +382,6 @@ public class CourseService {
 		
 		return daoCourse.getCourseFormatter(id);
 	}
+	
+
 }

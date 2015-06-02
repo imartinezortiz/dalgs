@@ -129,7 +129,6 @@ public class GroupService {
 	public ResultClass<Group> getGroup(Long id_group, Long id_course,
 			Long id_academic, Boolean show) {
 		ResultClass<Group> result = new ResultClass<Group>();
-		serviceMailBox.downloadEmails();
 		Group g = daoGroup.getGroup(id_group, id_course,
 				id_academic);
 		g.setActivities(serviceActivity.getActivitiesForGroup(id_group, show));
@@ -547,6 +546,7 @@ public class GroupService {
 
 		return daoGroup.getGroupFormatter(id_group);
 	}
+
 
 
 }
