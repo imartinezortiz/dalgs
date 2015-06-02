@@ -248,7 +248,7 @@ public class MailBoxService{
 			
 			String mimeType = msg.getContentType();
 			String key = getStorageKey(Long.parseLong(m.group(3)));
-		
+
 			storageManager.putObject(bucket, key, mimeType, msg.getInputStream());			
 			String aaa=storageManager.getUrl(bucket, key).toExternalForm();
 			messageBox.setFile(aaa);
@@ -388,6 +388,8 @@ public class MailBoxService{
 	private String getStorageKey(Long id) {
 		return "attachment/"+Long.toString(id);
 	}
+
+
 
 
 }

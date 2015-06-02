@@ -42,7 +42,7 @@ public class LearningGoalService {
 	CompetenceService serviceCompetence;
 
 	@Autowired
-	LearningGoalRepository daoLearningGoal;
+	LearningGoalRepository repositoryLearningGoal;
 
 	@Autowired
 	ActivityService serviceActivity;
@@ -60,7 +60,7 @@ public class LearningGoalService {
 
 		boolean success = false;
 
-		LearningGoal learningExists = daoLearningGoal.existByCode(learningGoal
+		LearningGoal learningExists = repositoryLearningGoal.existByCode(learningGoal
 				.getInfo().getCode());
 		ResultClass<LearningGoal> result = new ResultClass<>();
 
@@ -80,9 +80,9 @@ public class LearningGoalService {
 		} else {
 			learningGoal.setCompetence(serviceCompetence.getCompetence(
 					id_competence, id_degree).getSingleElement());
-			success = daoLearningGoal.addLearningGoal(learningGoal);
+			success = repositoryLearningGoal.addLearningGoal(learningGoal);
 			if (success) {
-				learningExists = daoLearningGoal.existByCode(learningGoal
+				learningExists = repositoryLearningGoal.existByCode(learningGoal
 						.getInfo().getCode());
 				success = manageAclService.addACLToObject(learningExists
 						.getId(), learningExists.getClass().getName());
@@ -104,10 +104,10 @@ public class LearningGoalService {
 			Long id_competence, Long id_degree) {
 		ResultClass<LearningGoal> result = new ResultClass<>();
 		if (id_competence == null && id_degree == null)
-			result.setSingleElement(daoLearningGoal
+			result.setSingleElement(repositoryLearningGoal
 					.getLearningGoalFormatter(id_learningGoal));
 		else
-			result.setSingleElement(daoLearningGoal.getLearningGoal(
+			result.setSingleElement(repositoryLearningGoal.getLearningGoal(
 					id_learningGoal, id_competence, id_degree));
 		return result;
 	}
@@ -119,10 +119,10 @@ public class LearningGoalService {
 			Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		LearningGoal modifyLearning = daoLearningGoal.getLearningGoal(
+		LearningGoal modifyLearning = repositoryLearningGoal.getLearningGoal(
 				id_learningGoal, id_competence, id_degree);
 
-		LearningGoal learningExists = daoLearningGoal.existByCode(learningGoal
+		LearningGoal learningExists = repositoryLearningGoal.existByCode(learningGoal
 				.getInfo().getCode());
 
 		if (!learningGoal.getInfo().getCode()
@@ -142,7 +142,7 @@ public class LearningGoalService {
 			result.setSingleElement(false);
 		} else {
 			modifyLearning.setInfo(learningGoal.getInfo());
-			boolean r = daoLearningGoal.saveLearningGoal(modifyLearning);
+			boolean r = repositoryLearningGoal.saveLearningGoal(modifyLearning);
 			if (r)
 				result.setSingleElement(true);
 		}
@@ -154,7 +154,7 @@ public class LearningGoalService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteLearningGoal(LearningGoal learningGoal) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		result.setSingleElement(daoLearningGoal
+		result.setSingleElement(repositoryLearningGoal
 				.deleteLearningGoal(learningGoal));
 		return result;
 
@@ -164,7 +164,7 @@ public class LearningGoalService {
 	public ResultClass<Boolean> deleteLearningGoalForCompetence(
 			Competence competence) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		result.setSingleElement(daoLearningGoal
+		result.setSingleElement(repositoryLearningGoal
 				.deleteLearningGoalForCompetence(competence));
 		return result;
 	}
@@ -174,16 +174,16 @@ public class LearningGoalService {
 	public ResultClass<LearningGoal> getLearningGoalsFromCourse(Long id_course,
 			Activity activity) {
 		ResultClass<LearningGoal> result = new ResultClass<>();
-		Collection<LearningGoal> learningGoals = daoLearningGoal
+		Collection<LearningGoal> learningGoals = repositoryLearningGoal
 				.getLearningGoalsFromActivity(activity);
 		if (!learningGoals.isEmpty()) {
-			result.addAll(daoLearningGoal.getLearningGoalsFromCourse(id_course,
+			result.addAll(repositoryLearningGoal.getLearningGoalsFromCourse(id_course,
 					learningGoals));
 			return result;
 		}
 
 		else {
-			result.addAll(daoLearningGoal.getLearningGoalsFromCourse(id_course));
+			result.addAll(repositoryLearningGoal.getLearningGoalsFromCourse(id_course));
 			return result;
 		}
 	}
@@ -192,7 +192,7 @@ public class LearningGoalService {
 	@Transactional(readOnly = true)
 	public ResultClass<LearningGoal> getLearningGoalByName(String name) {
 		ResultClass<LearningGoal> result = new ResultClass<>();
-		result.setSingleElement(daoLearningGoal.getLearningGoalByName(name));
+		result.setSingleElement(repositoryLearningGoal.getLearningGoalByName(name));
 		return result;
 	}
 
@@ -200,7 +200,7 @@ public class LearningGoalService {
 	public ResultClass<LearningGoal> getLearningGoalsFromCompetence(
 			Competence competence, Boolean show) {
 		ResultClass<LearningGoal> result = new ResultClass<>();
-		result.addAll(daoLearningGoal.getLearningGoalsFromCompetence(
+		result.addAll(repositoryLearningGoal.getLearningGoalsFromCompetence(
 				competence, show));
 		return result;
 	}
@@ -209,7 +209,7 @@ public class LearningGoalService {
 	public ResultClass<Boolean> deleteLearningGoalForCompetences(
 			Collection<Competence> competences) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setSingleElement(daoLearningGoal
+		result.setSingleElement(repositoryLearningGoal
 				.deleteLearningGoalsForCompetences(competences));
 		return result;
 	}
@@ -218,7 +218,7 @@ public class LearningGoalService {
 	@Transactional(readOnly = false)
 	public ResultClass<LearningGoal> unDeleteLearningGoal(
 			LearningGoal learningGoal, Locale locale) {
-		LearningGoal l = daoLearningGoal.existByCode(learningGoal.getInfo()
+		LearningGoal l = repositoryLearningGoal.existByCode(learningGoal.getInfo()
 				.getCode());
 		ResultClass<LearningGoal> result = new ResultClass<>();
 		if (l == null) {
@@ -238,7 +238,7 @@ public class LearningGoalService {
 
 			l.setDeleted(false);
 			l.setInfo(learningGoal.getInfo());
-			boolean r = daoLearningGoal.saveLearningGoal(l);
+			boolean r = repositoryLearningGoal.saveLearningGoal(l);
 			if (r)
 				result.setSingleElement(l);
 

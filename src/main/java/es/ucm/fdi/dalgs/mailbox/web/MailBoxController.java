@@ -50,5 +50,6 @@ public class MailBoxController {
         return "mail/list";
 	}
 
+
 	
 }

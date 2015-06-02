@@ -46,7 +46,7 @@ import es.ucm.fdi.dalgs.mailbox.service.MailBoxService;
 @Service
 public class CourseService {
 	@Autowired
-	private CourseRepository daoCourse;
+	private CourseRepository repositoryCourse;
 
 	@Autowired
 	private AclObjectService manageAclService;
@@ -78,7 +78,7 @@ public class CourseService {
 
 		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic,
 				false).getSingleElement());
-		Course courseExists = daoCourse.exist(course);
+		Course courseExists = repositoryCourse.exist(course);
 		ResultClass<Course> result = new ResultClass<Course>();
 
 		if (courseExists != null) {
@@ -97,10 +97,10 @@ public class CourseService {
 			result.setErrorsList(errors);
 		} else {
 
-			success = daoCourse.addCourse(course);
+			success = repositoryCourse.addCourse(course);
 
 			if (success) {
-				courseExists = daoCourse.exist(course);
+				courseExists = repositoryCourse.exist(course);
 				success = manageAclService.addACLToObject(courseExists.getId(),
 						courseExists.getClass().getName());
 
@@ -127,7 +127,7 @@ public class CourseService {
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	@Transactional(readOnly = true)
 	public List<Course> getAll() {
-		return daoCourse.getAll();
+		return repositoryCourse.getAll();
 	}
 
 	@PreAuthorize("hasPermission(#course, 'WRITE') or hasRole('ROLE_ADMIN')")
@@ -139,9 +139,9 @@ public class CourseService {
 		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic,
 				false).getSingleElement());
 
-		Course modifyCourse = daoCourse.getCourse(id_course, id_academic);
+		Course modifyCourse = repositoryCourse.getCourse(id_course, id_academic);
 
-		Course courseExists = daoCourse.exist(course);
+		Course courseExists = repositoryCourse.exist(course);
 
 		User old_coordinator = modifyCourse.getCoordinator();
 
@@ -162,7 +162,7 @@ public class CourseService {
 		} else {
 			modifyCourse.setSubject(course.getSubject());
 			modifyCourse.setCoordinator(course.getCoordinator());
-			boolean r = daoCourse.saveCourse(modifyCourse);
+			boolean r = repositoryCourse.saveCourse(modifyCourse);
 			if (r) {
 				result.setSingleElement(true);
 				// Deleting the authorities to the old coordinator
@@ -201,7 +201,7 @@ public class CourseService {
 	@Transactional(readOnly = true)
 	public ResultClass<Course> getCourse(Long id, Long id_academic) {
 		ResultClass<Course> result = new ResultClass<Course>();
-		result.setSingleElement(daoCourse.getCourse(id, id_academic));
+		result.setSingleElement(repositoryCourse.getCourse(id, id_academic));
 		return result;
 	}
 
@@ -209,14 +209,14 @@ public class CourseService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean> deleteCourse(Long id, Long id_academic) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		Course course = daoCourse.getCourse(id, id_academic);
+		Course course = repositoryCourse.getCourse(id, id_academic);
 		if (serviceActivity.deleteActivitiesFromCourse(course)
 				.getSingleElement()) {
 			
 			if(course.getCoordinator() !=null)
 				manageAclService.removePermissionCASCADE(course.getCoordinator(), course, id_academic, course.getId(), null);
 			
-			result.setSingleElement(daoCourse.deleteCourse(course));
+			result.setSingleElement(repositoryCourse.deleteCourse(course));
 			return result;
 		}
 		
@@ -232,7 +232,7 @@ public class CourseService {
 		ResultClass<Course> result = new ResultClass<>();
 
 		Collection<Course> courses = new ArrayList<Course>();
-		courses.addAll(daoCourse.getCoursesByAcademicTerm(id_academic, showAll));
+		courses.addAll(repositoryCourse.getCoursesByAcademicTerm(id_academic, showAll));
 		result.addAll(courses);
 		return result;
 	}
@@ -245,7 +245,7 @@ public class CourseService {
 		boolean deleteGroups = serviceGroup.deleteGroupsFromCourses(
 				academic.getCourses()).getSingleElement();
 		if (deleteActivities && deleteGroups) {
-			result.setSingleElement(daoCourse
+			result.setSingleElement(repositoryCourse
 					.deleteCoursesFromAcademic(academic));
 		} else
 			result.setSingleElement(false);
@@ -260,7 +260,7 @@ public class CourseService {
 	public ResultClass<Course> getCourseAll(Long id, Long id_academic,
 			Boolean showAll) {
 		ResultClass<Course> result = new ResultClass<>();
-		Course c = daoCourse.getCourse(id, id_academic);
+		Course c = repositoryCourse.getCourse(id, id_academic);
 		if (c != null) {
 //			c.setActivities(new ArrayList<Activity>());
 			c.setGroups(new ArrayList<Group>());
@@ -283,7 +283,7 @@ public class CourseService {
 			Collection<AcademicTerm> academicList) {
 
 		ResultClass<Course> result = new ResultClass<>();
-		result.addAll(daoCourse.getCoursesFromListAcademic(academicList));
+		result.addAll(repositoryCourse.getCoursesFromListAcademic(academicList));
 
 		return result;
 	}
@@ -294,14 +294,14 @@ public class CourseService {
 
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		Collection<Course> coursesList = daoCourse
+		Collection<Course> coursesList = repositoryCourse
 				.getCoursesFromListAcademic(academicList);
 		boolean deleteActivities = serviceActivity.deleteActivitiesFromCourses(
 				coursesList).getSingleElement();
 		boolean deleteGroups = serviceGroup
 				.deleteGroupsFromCourses(coursesList).getSingleElement();
 		if (deleteActivities && deleteGroups) {
-			result.setSingleElement(daoCourse.deleteCourses(academicList));
+			result.setSingleElement(repositoryCourse.deleteCourses(academicList));
 		} else
 			result.setSingleElement(false);
 
@@ -314,7 +314,7 @@ public class CourseService {
 			Locale locale) {
 		course.setAcademicTerm(serviceAcademicTerm.getAcademicTerm(id_academic,
 				false).getSingleElement());
-		Course c = daoCourse.exist(course);
+		Course c = repositoryCourse.exist(course);
 		ResultClass<Course> result = new ResultClass<>();
 		if (c == null) {
 			result.setHasErrors(true);
@@ -339,7 +339,7 @@ public class CourseService {
 				c.setCoordinator(course.getCoordinator());
 			}
 			
-			boolean r = daoCourse.saveCourse(c);
+			boolean r = repositoryCourse.saveCourse(c);
 			if (r)
 				result.setSingleElement(c);
 
@@ -351,7 +351,7 @@ public class CourseService {
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Course> getCoursesBySubject(Subject subject) {
 		ResultClass<Course> result = new ResultClass<>();
-		result.addAll(daoCourse.getCoursesBySubject(subject));
+		result.addAll(repositoryCourse.getCoursesBySubject(subject));
 		return result;
 	}
 
@@ -359,7 +359,7 @@ public class CourseService {
 	public ResultClass<Boolean> deleteCoursesForSubject(
 			Collection<Subject> subjects) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		result.setSingleElement(daoCourse.deleteCoursesForSubject(subjects));
+		result.setSingleElement(repositoryCourse.deleteCoursesForSubject(subjects));
 
 		return result;
 	}
@@ -368,19 +368,19 @@ public class CourseService {
 	@PostFilter("hasPermission(filterObject, 'READ') or hasPermission(filterObject, 'ADMINISTRATION')")
 	public ResultClass<Course> getCourseForCoordinator(Long id_user) {
 		ResultClass<Course> result = new ResultClass<>();
-		result.addAll(daoCourse.getCoursesByUser(id_user));
+		result.addAll(repositoryCourse.getCoursesByUser(id_user));
 		return result;
 	}
 
 	public ResultClass<Boolean> updateCourse(Course course) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		result.setSingleElement(daoCourse.saveCourse(course));
+		result.setSingleElement(repositoryCourse.saveCourse(course));
 		return result;
 	}
 
 	public Course getCourseFormatter(Long id) {
 		
-		return daoCourse.getCourseFormatter(id);
+		return repositoryCourse.getCourseFormatter(id);
 	}
 	
 

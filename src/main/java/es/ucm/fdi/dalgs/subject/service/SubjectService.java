@@ -49,7 +49,7 @@ import es.ucm.fdi.dalgs.topic.service.TopicService;
 public class SubjectService {
 
 	@Autowired
-	private SubjectRepository daoSubject;
+	private SubjectRepository repositorySubject;
 
 	@Autowired
 	private TopicService serviceTopic;
@@ -72,7 +72,7 @@ public class SubjectService {
 			Long id_module, Long id_degree, Locale locale) {
 
 		boolean success = false;
-		Subject subjectExists = daoSubject.existByCode(subject.getInfo()
+		Subject subjectExists = repositorySubject.existByCode(subject.getInfo()
 				.getCode());
 		ResultClass<Subject> result = new ResultClass<>();
 
@@ -92,10 +92,10 @@ public class SubjectService {
 		} else {
 			subject.setTopic(serviceTopic.getTopic(id_topic, id_module,
 					id_degree).getSingleElement());
-			success = daoSubject.addSubject(subject);
+			success = repositorySubject.addSubject(subject);
 
 			if (success) {
-				subjectExists = daoSubject.existByCode(subject.getInfo()
+				subjectExists = repositorySubject.existByCode(subject.getInfo()
 						.getCode());
 				success = manageAclService.addACLToObject(
 						subjectExists.getId(), subjectExists.getClass()
@@ -117,7 +117,7 @@ public class SubjectService {
 	public ResultClass<Subject> getAll() {
 
 		ResultClass<Subject> result = new ResultClass<>();
-		result.addAll(daoSubject.getAll());
+		result.addAll(repositorySubject.getAll());
 		return result;
 	}
 
@@ -126,7 +126,7 @@ public class SubjectService {
 	public ResultClass<Subject> getSubject(Long id, Long id_topic,
 			Long id_module, Long id_degree) {
 		ResultClass<Subject> result = new ResultClass<>();
-		result.setSingleElement(daoSubject.getSubject(id, id_topic, id_module,
+		result.setSingleElement(repositorySubject.getSubject(id, id_topic, id_module,
 				id_degree));
 		return result;
 	}
@@ -145,10 +145,10 @@ public class SubjectService {
 					.deleteCoursesForSubject(subjects);
 			if (deleteCourses.getSingleElement()) {
 				subject.getCompetences().clear();
-				result.setSingleElement(daoSubject.deleteSubject(subject));
+				result.setSingleElement(repositorySubject.deleteSubject(subject));
 			}
 		} else
-			result.setSingleElement(daoSubject.deleteSubject(subject));
+			result.setSingleElement(repositorySubject.deleteSubject(subject));
 		return result;
 	}
 
@@ -156,7 +156,7 @@ public class SubjectService {
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectsForTopic(Long id_topic, Boolean show) {
 		ResultClass<Subject> result = new ResultClass<>();
-		result.addAll(daoSubject.getSubjectsForTopic(id_topic, show));
+		result.addAll(repositorySubject.getSubjectsForTopic(id_topic, show));
 		return result;
 	}
 
@@ -166,10 +166,10 @@ public class SubjectService {
 			Long id_topic, Long id_module, Long id_degree, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		Subject modifySubject = daoSubject.getSubject(id_subject, id_topic,
+		Subject modifySubject = repositorySubject.getSubject(id_subject, id_topic,
 				id_module, id_degree);
 
-		Subject subjectExists = daoSubject.existByCode(subject.getInfo()
+		Subject subjectExists = repositorySubject.existByCode(subject.getInfo()
 				.getCode());
 
 		if (!subject.getInfo().getCode()
@@ -189,7 +189,7 @@ public class SubjectService {
 			result.setSingleElement(false);
 		} else {
 			modifySubject.setInfo(subject.getInfo());
-			boolean r = daoSubject.saveSubject(modifySubject);
+			boolean r = repositorySubject.saveSubject(modifySubject);
 			if (r)
 				result.setSingleElement(true);
 		}
@@ -201,11 +201,11 @@ public class SubjectService {
 	public ResultClass<Boolean> addCompetences(Subject modify, Long id_subject,
 			Long id_topic, Long id_module, Long id_degree) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		Subject subject = daoSubject.getSubject(id_subject, id_topic,
+		Subject subject = repositorySubject.getSubject(id_subject, id_topic,
 				id_module, id_degree);
 		subject.setInfo(modify.getInfo());
 		subject.setCompetences(modify.getCompetences());
-		result.setSingleElement(daoSubject.saveSubject(subject));
+		result.setSingleElement(repositorySubject.saveSubject(subject));
 		return result;
 	}
 
@@ -213,7 +213,7 @@ public class SubjectService {
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectForCourse(Long id) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
-		result.setSingleElement(daoSubject.getSubjectForCourse(id));
+		result.setSingleElement(repositorySubject.getSubjectForCourse(id));
 		return result;
 	}
 
@@ -221,7 +221,7 @@ public class SubjectService {
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectByName(String string) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
-		result.setSingleElement(daoSubject.getSubjectByName(string));
+		result.setSingleElement(repositorySubject.getSubjectByName(string));
 		return result;
 	}
 
@@ -230,7 +230,7 @@ public class SubjectService {
 	public ResultClass<Subject> getSubjectAll(Long id_subject, Long id_topic,
 			Long id_module, Long id_degree) {
 		ResultClass<Subject> result = new ResultClass<Subject>();
-		Subject p = daoSubject.getSubject(id_subject, id_topic, id_module,
+		Subject p = repositorySubject.getSubject(id_subject, id_topic, id_module,
 				id_degree);
 		if (p != null) {
 			p.setCompetences(serviceCompetence
@@ -245,7 +245,7 @@ public class SubjectService {
 	@Transactional(readOnly = true)
 	public ResultClass<Subject> getSubjectForDegree(Degree degree) {
 		ResultClass<Subject> result = new ResultClass<>();
-		result.addAll(daoSubject.getSubjectForDegree(degree));
+		result.addAll(repositorySubject.getSubjectForDegree(degree));
 		return result;
 	}
 
@@ -254,25 +254,25 @@ public class SubjectService {
 	public ResultClass<Boolean> deleteSubjectsForTopic(Collection<Topic> topics) {
 
 		ResultClass<Boolean> result = new ResultClass<>();
-		Collection<Subject> subjects = daoSubject.getSubjectsForTopics(topics);
+		Collection<Subject> subjects = repositorySubject.getSubjectsForTopics(topics);
 
 		if (!subjects.isEmpty()) {
 			ResultClass<Boolean> deleteCourses = serviceCourse
 					.deleteCoursesForSubject(subjects);
 			if (deleteCourses.getSingleElement())
-				result.setSingleElement(daoSubject
+				result.setSingleElement(repositorySubject
 						.deleteSubjectsForTopics(topics));
 			else
 				result.setSingleElement(false);
 		} else
-			result.setSingleElement(daoSubject.deleteSubjectsForTopics(topics));
+			result.setSingleElement(repositorySubject.deleteSubjectsForTopics(topics));
 		return result;
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
 	public ResultClass<Subject> unDeleteSubject(Subject subject, Locale locale) {
-		Subject s = daoSubject.existByCode(subject.getInfo().getCode());
+		Subject s = repositorySubject.existByCode(subject.getInfo().getCode());
 		ResultClass<Subject> result = new ResultClass<>();
 		if (s == null) {
 			result.setHasErrors(true);
@@ -291,7 +291,7 @@ public class SubjectService {
 
 			s.setDeleted(false);
 			s.setInfo(subject.getInfo());
-			boolean r = daoSubject.saveSubject(s);
+			boolean r = repositorySubject.saveSubject(s);
 			if (r)
 				result.setSingleElement(s);
 
@@ -324,10 +324,10 @@ public class SubjectService {
 				result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
 			}
 			else{
-				result.setSingleElement(daoSubject.persistListSubjects(list));
+				result.setSingleElement(repositorySubject.persistListSubjects(list));
 				if (result.getSingleElement()) {
 					for (Subject s : list) {
-						Subject aux = daoSubject.existByCode(s.getInfo().getCode());
+						Subject aux = repositorySubject.existByCode(s.getInfo().getCode());
 						result.setSingleElement(result.getSingleElement()
 								&& manageAclService.addACLToObject(aux.getId(), aux
 										.getClass().getName()));
@@ -355,7 +355,7 @@ public class SubjectService {
 public void downloadCSV(HttpServletResponse response) throws IOException {
 
 	Collection<Subject> subjects = new ArrayList<Subject>();
-	subjects =  daoSubject.getAll();
+	subjects =  repositorySubject.getAll();
 
 	if(!subjects.isEmpty()){
 		SubjectCSV subjectCSV = new SubjectCSV();

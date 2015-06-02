@@ -51,7 +51,7 @@ import es.ucm.fdi.storage.business.boundary.StorageManager;
 @Service
 public class ActivityService {
 	@Autowired
-	private ActivityRepository daoActivity;
+	private ActivityRepository repositoryActivity;
 
 	@Autowired
 	private CourseService serviceCourse;
@@ -86,7 +86,7 @@ public class ActivityService {
 
 		boolean success = false;
 
-		Activity activityExists = daoActivity.existByCode(activity.getInfo()
+		Activity activityExists = repositoryActivity.existByCode(activity.getInfo()
 				.getCode());
 		ResultClass<Activity> result = new ResultClass<>();
 
@@ -116,7 +116,7 @@ public class ActivityService {
 //			success = daoActivity.addActivity(activity);
 
 			if (success) {
-				activityExists = daoActivity.existByCode(activity.getInfo()
+				activityExists = repositoryActivity.existByCode(activity.getInfo()
 						.getCode());
 				success = manageAclService.addACLToObject(activityExists
 						.getId(), activityExists.getClass().getName());
@@ -153,7 +153,7 @@ public class ActivityService {
 	@Transactional(readOnly = true)
 	public ResultClass<Activity> getAll() {
 		ResultClass<Activity> result = new ResultClass<>();
-		result.addAll(daoActivity.getAll());
+		result.addAll(repositoryActivity.getAll());
 		return result;
 	}
 
@@ -168,14 +168,14 @@ public class ActivityService {
 		Activity modifyActivity = new Activity();
 
 		if (group != null) {
-			modifyActivity = daoActivity.getActivity(id_activity, id_course,
+			modifyActivity = repositoryActivity.getActivity(id_activity, id_course,
 					group.getId(), id_academic);
 		} else if (course != null) {
-			modifyActivity = daoActivity.getActivity(id_activity,
+			modifyActivity = repositoryActivity.getActivity(id_activity,
 					course.getId(), null, id_academic);
 		}
 
-		Activity activityExists = daoActivity.existByCode(activity.getInfo()
+		Activity activityExists = repositoryActivity.existByCode(activity.getInfo()
 				.getCode());
 
 		if (!activity.getInfo().getCode()
@@ -195,7 +195,7 @@ public class ActivityService {
 			result.setSingleElement(false);
 		} else {
 			modifyActivity.setInfo(activity.getInfo());
-			boolean r = daoActivity.saveActivity(modifyActivity);
+			boolean r = repositoryActivity.saveActivity(modifyActivity);
 			if (r)
 				result.setSingleElement(true);
 		}
@@ -209,7 +209,7 @@ public class ActivityService {
 	public ResultClass<Activity> getActivity(Long id, Long id_course,
 			Long id_group, Long id_academic) {
 		ResultClass<Activity> result = new ResultClass<Activity>();
-		Activity activity = daoActivity.getActivity(id, id_course, id_group,
+		Activity activity = repositoryActivity.getActivity(id, id_course, id_group,
 				id_academic);
 
 		if (activity == null)
@@ -225,7 +225,7 @@ public class ActivityService {
 	@Transactional(readOnly = true)
 	public ResultClass<Activity> getActivityREST(Long id) {
 		ResultClass<Activity> result = new ResultClass<Activity>();
-		result.setSingleElement(daoActivity.getActivityFormatter(id));
+		result.setSingleElement(repositoryActivity.getActivityFormatter(id));
 
 		return result;
 	}
@@ -235,7 +235,7 @@ public class ActivityService {
 	public ResultClass<Boolean> deleteActivity(Course course, Group group,
 			Long id) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setSingleElement(daoActivity.deleteActivity(id));
+		result.setSingleElement(repositoryActivity.deleteActivity(id));
 		return result;
 	}
 
@@ -244,7 +244,7 @@ public class ActivityService {
 	public ResultClass<Activity> getActivitiesForCourse(Long id_course,
 			Boolean showAll) {
 		ResultClass<Activity> result = new ResultClass<>();
-		result.addAll(daoActivity.getActivitiesForCourse(id_course, showAll));
+		result.addAll(repositoryActivity.getActivitiesForCourse(id_course, showAll));
 		return result;
 	}
 
@@ -253,7 +253,7 @@ public class ActivityService {
 	@Transactional(readOnly = true)
 	public ResultClass<Activity> getActivityByName(String string) {
 		ResultClass<Activity> result = new ResultClass<Activity>();
-		result.setSingleElement(daoActivity.getActivityByName(string));
+		result.setSingleElement(repositoryActivity.getActivityByName(string));
 		return result;
 	}
 
@@ -267,10 +267,10 @@ public class ActivityService {
 		Activity a = new Activity();
 
 		if (group != null) {
-			a = daoActivity.getActivity(id_activity, group.getCourse().getId(), group.getId(),
+			a = repositoryActivity.getActivity(id_activity, group.getCourse().getId(), group.getId(),
 					id_academic);
 		} else if (course != null) {
-			a = daoActivity.getActivity(id_activity, course.getId(), null,
+			a = repositoryActivity.getActivity(id_activity, course.getId(), null,
 					id_academic);
 		}
 
@@ -286,7 +286,7 @@ public class ActivityService {
 				}
 
 			}
-			result.setSingleElement(daoActivity.saveActivity(a));
+			result.setSingleElement(repositoryActivity.saveActivity(a));
 
 		} catch (Exception e) {
 			result.setSingleElement(false);
@@ -304,10 +304,10 @@ public class ActivityService {
 		Activity a = new Activity();
 
 		if (group != null) {
-			a = daoActivity.getActivity(id_activity, course.getId(), group.getId(),
+			a = repositoryActivity.getActivity(id_activity, course.getId(), group.getId(),
 					id_academic);
 		} else if (course != null) {
-			a = daoActivity.getActivity(id_activity, course.getId(), null,
+			a = repositoryActivity.getActivity(id_activity, course.getId(), null,
 					id_academic);
 		}
 
@@ -322,7 +322,7 @@ public class ActivityService {
 				}
 
 			}
-			result.setSingleElement(daoActivity.saveActivity(a));
+			result.setSingleElement(repositoryActivity.saveActivity(a));
 
 		} catch (Exception e) {
 			result.setSingleElement(false);
@@ -338,10 +338,10 @@ public class ActivityService {
 		Activity activity = new Activity();
 
 		if (group != null) {
-			activity = daoActivity.getActivity(id, id_course, group.getId(),
+			activity = repositoryActivity.getActivity(id, id_course, group.getId(),
 					id_academic);
 		} else if (course != null) {
-			activity = daoActivity
+			activity = repositoryActivity
 					.getActivity(id, id_course, null, id_academic);
 		}
 
@@ -352,7 +352,7 @@ public class ActivityService {
 
 		} else {
 			activity.getLearningGoalStatus().add(learningGoalStatus);
-			result.setSingleElement(daoActivity.saveActivity(activity));
+			result.setSingleElement(repositoryActivity.saveActivity(activity));
 		}
 
 		return result;
@@ -363,7 +363,7 @@ public class ActivityService {
 	public ResultClass<Boolean> deleteActivitiesFromCourses(
 			Collection<Course> courses) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setSingleElement(daoActivity
+		result.setSingleElement(repositoryActivity
 				.deleteActivitiesFromCourses(courses));
 		return result;
 	}
@@ -373,7 +373,7 @@ public class ActivityService {
 	public ResultClass<Boolean> deleteActivitiesFromGroups(
 			Collection<Group> groups) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setSingleElement(daoActivity.deleteActivitiesFromGroups(groups));
+		result.setSingleElement(repositoryActivity.deleteActivitiesFromGroups(groups));
 		return result;
 	}
 
@@ -381,7 +381,7 @@ public class ActivityService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteActivitiesFromCourse(Course course) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setSingleElement(daoActivity.deleteActivitiesFromCourse(course));
+		result.setSingleElement(repositoryActivity.deleteActivitiesFromCourse(course));
 		return result;
 	}
 
@@ -389,7 +389,7 @@ public class ActivityService {
 	@Transactional(readOnly = false)
 	public ResultClass<Activity> unDeleteActivity(Course course, Group group,
 			Activity activity, Locale locale) {
-		Activity a = daoActivity.existByCode(activity.getInfo().getCode());
+		Activity a = repositoryActivity.existByCode(activity.getInfo().getCode());
 		ResultClass<Activity> result = new ResultClass<>();
 		if (a == null) {
 			result.setHasErrors(true);
@@ -408,7 +408,7 @@ public class ActivityService {
 
 			a.setDeleted(false);
 			a.setInfo(activity.getInfo());
-			boolean r = daoActivity.saveActivity(a);
+			boolean r = repositoryActivity.saveActivity(a);
 			if (r)
 				result.setSingleElement(a);
 
@@ -422,7 +422,7 @@ public class ActivityService {
 	public ResultClass<Activity> getActivitiesForGroup(Long id_group,
 			Boolean showAll) {
 		ResultClass<Activity> result = new ResultClass<>();
-		result.addAll(daoActivity.getActivitiesForGroup(id_group, showAll));
+		result.addAll(repositoryActivity.getActivitiesForGroup(id_group, showAll));
 		return result;
 	}
 
@@ -430,7 +430,7 @@ public class ActivityService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean> deleteActivitiesFromGroup(Group group) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		result.setSingleElement(daoActivity.deleteActivitiesFromGroup(group));
+		result.setSingleElement(repositoryActivity.deleteActivitiesFromGroup(group));
 		return result;
 	}
 
@@ -440,7 +440,7 @@ public class ActivityService {
 			Activity activity, Long id_group, Long id_course, Long id_academic) {
 		boolean success = false;
 
-		Activity activityExists = daoActivity.existByCode(activity.getInfo()
+		Activity activityExists = repositoryActivity.existByCode(activity.getInfo()
 				.getCode());
 		ResultClass<Activity> result = new ResultClass<>();
 
@@ -464,7 +464,7 @@ public class ActivityService {
 			
 
 			if (success) {
-				activityExists = daoActivity.existByCode(activity.getInfo()
+				activityExists = repositoryActivity.existByCode(activity.getInfo()
 						.getCode());
 				success = manageAclService.addACLToObject(activityExists
 						.getId(), activityExists.getClass().getName());
@@ -508,7 +508,7 @@ public class ActivityService {
 	@Transactional(readOnly = false)
 	public void dowloadCSV(HttpServletResponse response) throws IOException {
 		Collection<Activity> activities = new ArrayList<Activity>();
-		activities = daoActivity.getAll();
+		activities = repositoryActivity.getAll();
 		
 		if(!activities.isEmpty()){
 			ActivityCSV activityCSV = new ActivityCSV();
@@ -518,7 +518,7 @@ public class ActivityService {
 
 	public Activity existByCode(String code) {
 	
-		return daoActivity.existByCode(code);
+		return repositoryActivity.existByCode(code);
 	}
 
 	@PreAuthorize("hasPermission(#course, 'WRITE') or hasRole('ROLE_ADMIN')")
@@ -536,7 +536,7 @@ public class ActivityService {
 		if(act.getAttachments()==null) act.setAttachments(new ArrayList<String>());
 		String aaa=storageManager.getUrl(bucket, key).toExternalForm();
 		act.getAttachments().add(aaa);
-		daoActivity.saveActivity(act);
+		repositoryActivity.saveActivity(act);
 
 	}
 	
@@ -555,7 +555,7 @@ public class ActivityService {
 		if(act.getAttachments()==null) act.setAttachments(new ArrayList<String>());
 		String aaa=storageManager.getUrl(bucket, key).toExternalForm();
 		act.getAttachments().add(aaa);
-		daoActivity.saveActivity(act);
+		repositoryActivity.saveActivity(act);
 
 	}
 

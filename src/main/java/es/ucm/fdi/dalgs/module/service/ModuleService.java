@@ -45,7 +45,7 @@ import es.ucm.fdi.dalgs.topic.service.TopicService;
 public class ModuleService {
 
 	@Autowired
-	private ModuleRepository daoModule;
+	private ModuleRepository repositoryModule;
 
 	@Autowired
 	private DegreeService serviceDegree;
@@ -66,7 +66,7 @@ public class ModuleService {
 
 		boolean success = false;
 
-		Module moduleExists = daoModule.existByCode(module.getInfo().getCode(),
+		Module moduleExists = repositoryModule.existByCode(module.getInfo().getCode(),
 				id_degree);
 		ResultClass<Module> result = new ResultClass<Module>();
 
@@ -86,10 +86,10 @@ public class ModuleService {
 		} else {
 			module.setDegree(serviceDegree.getDegree(id_degree)
 					.getSingleElement());
-			success = daoModule.addModule(module);
+			success = repositoryModule.addModule(module);
 
 			if (success) {
-				moduleExists = daoModule.existByCode(
+				moduleExists = repositoryModule.existByCode(
 						module.getInfo().getCode(), id_degree);
 				success = manageAclService.addACLToObject(moduleExists.getId(),
 						moduleExists.getClass().getName());
@@ -110,7 +110,7 @@ public class ModuleService {
 	@Transactional(readOnly = true)
 	public ResultClass<Module> getAll() {
 		ResultClass<Module> result = new ResultClass<Module>();
-		result.addAll(daoModule.getAll());
+		result.addAll(repositoryModule.getAll());
 		return result;
 	}
 
@@ -120,9 +120,9 @@ public class ModuleService {
 			Long id_degree, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
-		Module modifyModule = daoModule.getModule(id_module, id_degree);
+		Module modifyModule = repositoryModule.getModule(id_module, id_degree);
 
-		Module moduleExists = daoModule.existByCode(module.getInfo().getCode(),
+		Module moduleExists = repositoryModule.existByCode(module.getInfo().getCode(),
 				id_degree);
 
 		if (!module.getInfo().getCode()
@@ -142,7 +142,7 @@ public class ModuleService {
 			result.setSingleElement(false);
 		} else {
 			modifyModule.setInfo(module.getInfo());
-			boolean r = daoModule.saveModule(modifyModule);
+			boolean r = repositoryModule.saveModule(modifyModule);
 			if (r)
 				result.setSingleElement(true);
 		}
@@ -153,7 +153,7 @@ public class ModuleService {
 	@Transactional(readOnly = true)
 	public ResultClass<Module> getModule(Long id, Long id_degree) {
 		ResultClass<Module> result = new ResultClass<Module>();
-		result.setSingleElement(daoModule.getModule(id, id_degree));
+		result.setSingleElement(repositoryModule.getModule(id, id_degree));
 		return result;
 	}
 
@@ -162,7 +162,7 @@ public class ModuleService {
 	public ResultClass<Boolean> deleteModule(Module module) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		if (serviceTopic.deleteTopicsForModule(module).getSingleElement()) {
-			result.setSingleElement(daoModule.deleteModule(module));
+			result.setSingleElement(repositoryModule.deleteModule(module));
 			return result;
 		}
 		result.setSingleElement(false);
@@ -174,7 +174,7 @@ public class ModuleService {
 	public ResultClass<Module> getModuleAll(Long id_module, Long id_degree,
 			Boolean show) {
 		ResultClass<Module> result = new ResultClass<Module>();
-		Module p = daoModule.getModule(id_module, id_degree);
+		Module p = repositoryModule.getModule(id_module, id_degree);
 		if (p != null) {
 			p.setTopics(serviceTopic.getTopicsForModule(id_module, show));
 			result.setSingleElement(p);
@@ -186,7 +186,7 @@ public class ModuleService {
 	@Transactional(readOnly = true)
 	public ResultClass<Module> getModulesForDegree(Long id, Boolean show) {
 		ResultClass<Module> result = new ResultClass<>();
-		result.addAll(daoModule.getModulesForDegree(id, show));
+		result.addAll(repositoryModule.getModulesForDegree(id, show));
 		return result;
 	}
 
@@ -196,7 +196,7 @@ public class ModuleService {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 		if (serviceTopic.deleteTopicsForModules(d.getModules())
 				.getSingleElement()) {
-			result.setSingleElement(daoModule.deleteModulesForDegree(d));
+			result.setSingleElement(repositoryModule.deleteModulesForDegree(d));
 		} else
 			result.setSingleElement(false);
 		return result;
@@ -206,7 +206,7 @@ public class ModuleService {
 	@Transactional(readOnly = false)
 	public ResultClass<Module> unDeleteModule(Module module, Long id_degree,
 			Locale locale) {
-		Module m = daoModule.existByCode(module.getInfo().getCode(), id_degree);
+		Module m = repositoryModule.existByCode(module.getInfo().getCode(), id_degree);
 		ResultClass<Module> result = new ResultClass<Module>();
 		if (m == null) {
 			result.setHasErrors(true);
@@ -226,7 +226,7 @@ public class ModuleService {
 
 			m.setDeleted(false);
 			m.setInfo(module.getInfo());
-			boolean r = daoModule.saveModule(m);
+			boolean r = repositoryModule.saveModule(m);
 			if (r)
 				result.setSingleElement(m);
 
@@ -256,10 +256,10 @@ public class ModuleService {
 					result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
 				}
 				else{
-					result.setSingleElement(daoModule.persistListModules(list));
+					result.setSingleElement(repositoryModule.persistListModules(list));
 					if (result.getSingleElement()) {
 						for (Module c : list) {
-							Module aux = daoModule.existByCode(c.getInfo().getCode(),
+							Module aux = repositoryModule.existByCode(c.getInfo().getCode(),
 									id_degree);
 							result.setSingleElement(result.getSingleElement()
 									&& manageAclService.addACLToObject(aux.getId(), aux
@@ -287,7 +287,7 @@ public class ModuleService {
 	public void downloadCSV(HttpServletResponse response) throws IOException {
 
 		Collection<Module> modules = new ArrayList<Module>();
-		modules =  daoModule.getAll();
+		modules =  repositoryModule.getAll();
 
 		if(!modules.isEmpty()){
 			ModuleCSV moduleCSV = new ModuleCSV();

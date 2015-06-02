@@ -48,8 +48,11 @@ public class MessageBox implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="parent")
 	private Collection<MessageBox> replies;
 	
+	
 	@ManyToOne
 	private MessageBox parent;
+	
+
 	
 	public MessageBox (){
 		replies = new ArrayList<>();
@@ -124,6 +127,7 @@ public class MessageBox implements Serializable {
 	public void setCode(String code) {
 		this.code = code;
 	}
+
 	
 	
 	

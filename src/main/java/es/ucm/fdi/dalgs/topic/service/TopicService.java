@@ -44,7 +44,7 @@ import es.ucm.fdi.dalgs.topic.repository.TopicRepository;
 @Service
 public class TopicService {
 	@Autowired
-	private TopicRepository daoTopic;
+	private TopicRepository repositoryTopic;
 
 	@Autowired
 	private ModuleService serviceModule;
@@ -65,7 +65,7 @@ public class TopicService {
 
 		boolean success = false;
 
-		Topic topicExists = daoTopic.existByCode(topic.getInfo().getCode(),
+		Topic topicExists = repositoryTopic.existByCode(topic.getInfo().getCode(),
 				id_module);
 		ResultClass<Topic> result = new ResultClass<>();
 
@@ -85,10 +85,10 @@ public class TopicService {
 		} else {
 			topic.setModule(serviceModule.getModule(id_module, id_degree)
 					.getSingleElement());
-			success = daoTopic.addTopic(topic);
+			success = repositoryTopic.addTopic(topic);
 
 			if (success) {
-				topicExists = daoTopic.existByCode(topic.getInfo().getCode(),
+				topicExists = repositoryTopic.existByCode(topic.getInfo().getCode(),
 						id_module);
 				success = manageAclService.addACLToObject(topicExists.getId(),
 						topicExists.getClass().getName());
@@ -108,7 +108,7 @@ public class TopicService {
 	@Transactional(readOnly = true)
 	public ResultClass<Topic> getAll() {
 		ResultClass<Topic> result = new ResultClass<>();
-		result.addAll(daoTopic.getAll());
+		result.addAll(repositoryTopic.getAll());
 		return result;
 	}
 
@@ -118,9 +118,9 @@ public class TopicService {
 			Long id_module, Long id_degree, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		Topic modifyTopic = daoTopic.getTopic(id_topic, id_module, id_degree);
+		Topic modifyTopic = repositoryTopic.getTopic(id_topic, id_module, id_degree);
 
-		Topic topicExists = daoTopic.existByCode(topic.getInfo().getCode(),
+		Topic topicExists = repositoryTopic.existByCode(topic.getInfo().getCode(),
 				id_module);
 
 		if (!topic.getInfo().getCode()
@@ -140,7 +140,7 @@ public class TopicService {
 			result.setSingleElement(false);
 		} else {
 			modifyTopic.setInfo(topic.getInfo());
-			boolean r = daoTopic.saveTopic(modifyTopic);
+			boolean r = repositoryTopic.saveTopic(modifyTopic);
 			if (r)
 				result.setSingleElement(true);
 		}
@@ -151,7 +151,7 @@ public class TopicService {
 	@Transactional(readOnly = true)
 	public ResultClass<Topic> getTopic(Long id, Long id_module, Long id_degree) {
 		ResultClass<Topic> result = new ResultClass<Topic>();
-		result.setSingleElement(daoTopic.getTopic(id, id_module, id_degree));
+		result.setSingleElement(repositoryTopic.getTopic(id, id_module, id_degree));
 		return result;
 	}
 
@@ -162,7 +162,7 @@ public class TopicService {
 		Collection<Topic> topics = new ArrayList<>();
 		topics.add(topic);
 		if (serviceSubject.deleteSubjectsForTopic(topics).getSingleElement()) {
-			result.setSingleElement(daoTopic.deleteTopic(topic));
+			result.setSingleElement(repositoryTopic.deleteTopic(topic));
 			return result;
 		}
 		result.setSingleElement(false);
@@ -175,7 +175,7 @@ public class TopicService {
 	public ResultClass<Topic> getTopicAll(Long id_topic, Long id_module,
 			Long id_degree, Boolean show) {
 		ResultClass<Topic> result = new ResultClass<Topic>();
-		Topic p = daoTopic.getTopic(id_topic, id_module, id_degree);
+		Topic p = repositoryTopic.getTopic(id_topic, id_module, id_degree);
 		if (p != null) {
 			p.setSubjects(serviceSubject.getSubjectsForTopic(id_topic, show));
 
@@ -188,7 +188,7 @@ public class TopicService {
 	@Transactional(readOnly = true)
 	public ResultClass<Topic> getTopicsForModule(Long id, Boolean show) {
 		ResultClass<Topic> result = new ResultClass<>();
-		result.addAll(daoTopic.getTopicsForModule(id, show));
+		result.addAll(repositoryTopic.getTopicsForModule(id, show));
 		return result;
 	}
 
@@ -197,10 +197,10 @@ public class TopicService {
 	public ResultClass<Boolean> deleteTopicsForModules(
 			Collection<Module> modules) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		Collection<Topic> topics = daoTopic.getTopicsForModules(modules);
+		Collection<Topic> topics = repositoryTopic.getTopicsForModules(modules);
 
 		if (serviceSubject.deleteSubjectsForTopic(topics).getSingleElement()) {
-			result.setSingleElement(daoTopic.deleteTopicsForModules(modules));
+			result.setSingleElement(repositoryTopic.deleteTopicsForModules(modules));
 			return result;
 		}
 		result.setSingleElement(false);
@@ -214,7 +214,7 @@ public class TopicService {
 		if (!module.getTopics().isEmpty())
 			if (serviceSubject.deleteSubjectsForTopic(module.getTopics())
 					.getSingleElement()) {
-				result.setSingleElement(daoTopic.deleteTopicsForModule(module));
+				result.setSingleElement(repositoryTopic.deleteTopicsForModule(module));
 				return result;
 			} else
 				result.setSingleElement(false);
@@ -228,7 +228,7 @@ public class TopicService {
 	@Transactional(readOnly = false)
 	public ResultClass<Topic> unDeleteTopic(Topic topic, Long id_module,
 			Locale locale) {
-		Topic t = daoTopic.existByCode(topic.getInfo().getCode(), id_module);
+		Topic t = repositoryTopic.existByCode(topic.getInfo().getCode(), id_module);
 		ResultClass<Topic> result = new ResultClass<>();
 		if (t == null) {
 			result.setHasErrors(true);
@@ -247,7 +247,7 @@ public class TopicService {
 
 			t.setDeleted(false);
 			t.setInfo(topic.getInfo());
-			boolean r = daoTopic.saveTopic(t);
+			boolean r = repositoryTopic.saveTopic(t);
 			if (r)
 				result.setSingleElement(t);
 
@@ -278,10 +278,10 @@ public class TopicService {
 					result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
 				}
 				else{
-					result.setSingleElement(daoTopic.persistListTopics(list));
+					result.setSingleElement(repositoryTopic.persistListTopics(list));
 					if (result.getSingleElement()) {
 						for (Topic c : list) {
-							Topic aux = daoTopic.existByCode(c.getInfo().getCode(),
+							Topic aux = repositoryTopic.existByCode(c.getInfo().getCode(),
 									id_module);
 							result.setSingleElement(result.getSingleElement()
 									&& manageAclService.addACLToObject(aux.getId(), aux
@@ -308,7 +308,7 @@ public class TopicService {
 	public void downloadCSV(HttpServletResponse response) throws IOException {
 
 		Collection<Topic> topics = new ArrayList<Topic>();
-		topics =  daoTopic.getAll();
+		topics =  repositoryTopic.getAll();
 
 		if(!topics.isEmpty()){
 			TopicCSV topicCSV = new TopicCSV();

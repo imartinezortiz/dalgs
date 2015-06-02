@@ -4,16 +4,11 @@ import java.util.Collection;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-
-
-
-
 
 import es.ucm.fdi.dalgs.domain.MessageBox;
 
@@ -37,18 +32,7 @@ public class MailBoxRepository {
 		}
 	}
 	
-	public boolean addMessageBox(MessageBox messageBox){
-		
-		try{
-			em.persist(messageBox);
-			return true;
-		}catch(PersistenceException e){
-			logger.debug("can't create");
-			return false;
-			
-		}
-		
-	}
+
 	public MessageBox getMessageBox (String code){
 		
 		Query query = null;
@@ -73,4 +57,6 @@ public class MailBoxRepository {
 		
 		return query.getResultList();
 	}
+
+
 }

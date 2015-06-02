@@ -39,7 +39,7 @@ public class ExternalActivityService {
 	private MessageSource messageSource;
 
 	@Autowired 
-	private ExternalActivityRepository daoExternalActivity;
+	private ExternalActivityRepository repositoryExternalActivity;
 	@Autowired
 	private ActivityService serviceActivity;
 	
@@ -59,7 +59,7 @@ public class ExternalActivityService {
 		Group group = serviceGroup.getGroup(id_group, id_course, id_academic, false).getSingleElement();
 		Activity externalActivity = serviceActivity.getActivity(id_externalEexternalActivity, id_course, id_group, id_academic).getSingleElement(); 
 		externalActivity.setGroup(null);
-		success = daoExternalActivity.deleteExternalActivity(externalActivity);
+		success = repositoryExternalActivity.deleteExternalActivity(externalActivity);
 		group.getExternal_activities().remove(externalActivity);
 		if (success)result.setSingleElement(serviceGroup.updateGroup(group).getSingleElement());
 	
@@ -74,7 +74,7 @@ public class ExternalActivityService {
 		Course course = serviceCourse.getCourseAll(id_course, id_academic, false).getSingleElement();
 		Activity externalActivity = serviceActivity.getActivity(id_externalEexternalActivity, id_course, null,id_academic).getSingleElement(); 
 		externalActivity.setCourse(null);
-		success = daoExternalActivity.deleteExternalActivity(externalActivity);
+		success = repositoryExternalActivity.deleteExternalActivity(externalActivity);
 		course.getExternal_activities().remove(externalActivity);
 		if (success) result.setSingleElement(serviceCourse.updateCourse(course).getSingleElement());
 	
@@ -143,7 +143,7 @@ public class ExternalActivityService {
 
 	public ResultClass<Activity> getExternalActivitiesAll() {
 		ResultClass<Activity> result = new ResultClass<>();
-		result.addAll(daoExternalActivity.getExternalActivitiesAll());
+		result.addAll(repositoryExternalActivity.getExternalActivitiesAll());
 
 		return result;
 	}

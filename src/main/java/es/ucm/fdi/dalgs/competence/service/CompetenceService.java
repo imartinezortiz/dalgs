@@ -46,7 +46,7 @@ import es.ucm.fdi.dalgs.subject.service.SubjectService;
 @Service
 public class CompetenceService {
 	@Autowired
-	private CompetenceRepository daoCompetence;
+	private CompetenceRepository repositoryCompetence;
 
 	@Autowired
 	private SubjectService serviceSubject;
@@ -73,7 +73,7 @@ public class CompetenceService {
 		competence.setDegree(serviceDegree.getDegree(id_degree)
 				.getSingleElement());
 
-		Competence competenceExists = daoCompetence.existByCode(competence
+		Competence competenceExists = repositoryCompetence.existByCode(competence
 				.getInfo().getCode(), competence.getDegree());
 		ResultClass<Competence> result = new ResultClass<>();
 
@@ -93,10 +93,10 @@ public class CompetenceService {
 			result.setErrorsList(errors);
 		} else {
 
-			success = daoCompetence.addCompetence(competence);
+			success = repositoryCompetence.addCompetence(competence);
 
 			if (success) {
-				competenceExists = daoCompetence.existByCode(competence
+				competenceExists = repositoryCompetence.existByCode(competence
 						.getInfo().getCode(), competence.getDegree());
 				success = manageAclService.addACLToObject(competenceExists
 						.getId(), competenceExists.getClass().getName());
@@ -117,7 +117,7 @@ public class CompetenceService {
 	@Transactional(readOnly = true)
 	public ResultClass<Competence> getAll() {
 		ResultClass<Competence> result = new ResultClass<Competence>();
-		result.addAll(daoCompetence.getAll());
+		result.addAll(repositoryCompetence.getAll());
 		return result;
 	}
 
@@ -125,7 +125,7 @@ public class CompetenceService {
 	@Transactional(readOnly = false)
 	public ResultClass<Competence> getCompetence(Long id, Long id_degree) {
 		ResultClass<Competence> result = new ResultClass<Competence>();
-		result.setSingleElement(daoCompetence.getCompetence(id, id_degree));
+		result.setSingleElement(repositoryCompetence.getCompetence(id, id_degree));
 		return result;
 	}
 
@@ -133,7 +133,7 @@ public class CompetenceService {
 	@Transactional(readOnly = false)
 	public ResultClass<Competence> getCompetenceByName(String name) {
 		ResultClass<Competence> result = new ResultClass<>();
-		result.setSingleElement(daoCompetence.getCompetenceByName(name));
+		result.setSingleElement(repositoryCompetence.getCompetenceByName(name));
 		return result;
 	}
 
@@ -148,7 +148,7 @@ public class CompetenceService {
 				.getSingleElement())
 			result.setSingleElement(false);
 		else
-			result.setSingleElement(daoCompetence.deleteCompetence(competence));
+			result.setSingleElement(repositoryCompetence.deleteCompetence(competence));
 		return result;
 	}
 
@@ -156,7 +156,7 @@ public class CompetenceService {
 	@Transactional(readOnly = false)
 	public ResultClass<Competence> getCompetencesForSubject(Long id_subject) {
 		ResultClass<Competence> result = new ResultClass<>();
-		result.addAll(daoCompetence.getCompetencesForSubject(id_subject));
+		result.addAll(repositoryCompetence.getCompetencesForSubject(id_subject));
 		return result;
 	}
 
@@ -166,7 +166,7 @@ public class CompetenceService {
 			Boolean show) {
 		ResultClass<Competence> result = new ResultClass<>();
 
-		result.addAll(daoCompetence.getCompetencesForDegree(id_degree, show));
+		result.addAll(repositoryCompetence.getCompetencesForDegree(id_degree, show));
 		return result;
 	}
 
@@ -178,10 +178,10 @@ public class CompetenceService {
 
 		competence.setDegree(serviceDegree.getDegree(id_degree)
 				.getSingleElement());
-		Competence modifyCompetence = daoCompetence.getCompetence(
+		Competence modifyCompetence = repositoryCompetence.getCompetence(
 				id_competence, id_degree);
 
-		Competence competenceExists = daoCompetence.existByCode(competence
+		Competence competenceExists = repositoryCompetence.existByCode(competence
 				.getInfo().getCode(), competence.getDegree());
 
 		if (!competence.getInfo().getCode()
@@ -201,7 +201,7 @@ public class CompetenceService {
 			result.setSingleElement(false);
 		} else {
 			modifyCompetence.setInfo(competence.getInfo());
-			boolean r = daoCompetence.saveCompetence(modifyCompetence);
+			boolean r = repositoryCompetence.saveCompetence(modifyCompetence);
 			if (r)
 				result.setSingleElement(true);
 		}
@@ -218,7 +218,7 @@ public class CompetenceService {
 				.getSubject(id_subject, id_topic, id_module, id_degree)
 				.getSingleElement().getCompetences();
 		try {
-			c.remove(daoCompetence.getCompetence(id_competence, id_degree));
+			c.remove(repositoryCompetence.getCompetence(id_competence, id_degree));
 			result.setSingleElement(true);
 
 		} catch (Exception e) {
@@ -234,7 +234,7 @@ public class CompetenceService {
 
 		if (serviceLearning.deleteLearningGoalForCompetences(
 				degree.getCompetences()).getSingleElement()) {
-			result.setSingleElement(daoCompetence
+			result.setSingleElement(repositoryCompetence
 					.deleteCompetencesForDegree(degree));
 		}
 
@@ -249,7 +249,7 @@ public class CompetenceService {
 	public ResultClass<Competence> getCompetenceAll(Long id_competence,
 			Long id_degree, Boolean show) {
 		ResultClass<Competence> result = new ResultClass<>();
-		Competence competence = daoCompetence.getCompetence(id_competence,
+		Competence competence = repositoryCompetence.getCompetence(id_competence,
 				id_degree);
 		competence.setLearningGoals(serviceLearning
 				.getLearningGoalsFromCompetence(competence, show));
@@ -264,7 +264,7 @@ public class CompetenceService {
 
 		competence.setDegree(serviceDegree.getDegree(id_degree)
 				.getSingleElement());
-		Competence c = daoCompetence.existByCode(
+		Competence c = repositoryCompetence.existByCode(
 				competence.getInfo().getCode(), competence.getDegree());
 		ResultClass<Competence> result = new ResultClass<>();
 		if (c == null) {
@@ -284,7 +284,7 @@ public class CompetenceService {
 
 			c.setDeleted(false);
 			c.setInfo(competence.getInfo());
-			boolean r = daoCompetence.saveCompetence(c);
+			boolean r = repositoryCompetence.saveCompetence(c);
 			if (r)
 				result.setSingleElement(c);
 
@@ -316,10 +316,10 @@ public class CompetenceService {
 					result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
 				}
 				else{
-					result.setSingleElement(daoCompetence.persistListCompetences(list));
+					result.setSingleElement(repositoryCompetence.persistListCompetences(list));
 					if (result.getSingleElement()) {
 						for (Competence c : list) {
-							Competence aux = daoCompetence.existByCode(c.getInfo()
+							Competence aux = repositoryCompetence.existByCode(c.getInfo()
 									.getCode(), d);
 							result.setSingleElement(result.getSingleElement()
 									&& manageAclService.addACLToObject(aux.getId(), aux
@@ -346,7 +346,7 @@ public class CompetenceService {
 	@Transactional(readOnly = false)
 	public void dowloadCSV(HttpServletResponse response) throws IOException {
 		Collection<Competence> competences = new ArrayList<Competence>();
-		competences =  daoCompetence.getAll();
+		competences =  repositoryCompetence.getAll();
 
 		if(!competences.isEmpty()){
 			CompetenceCSV competenceCSV = new CompetenceCSV();

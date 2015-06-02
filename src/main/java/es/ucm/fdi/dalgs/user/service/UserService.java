@@ -46,7 +46,7 @@ import es.ucm.fdi.dalgs.user.repository.UserRepository;
 @Service
 public class UserService {
 	@Autowired
-	private UserRepository daoUser;
+	private UserRepository repositoryUser;
 
 	@Autowired
 	private AclObjectService manageAclService;
@@ -58,7 +58,7 @@ public class UserService {
 	@Transactional(readOnly = true)
 	public ResultClass<User> findByEmail(String email) {
 		ResultClass<User> result = new ResultClass<>();
-		result.setSingleElement(daoUser.findByEmail(email));
+		result.setSingleElement(repositoryUser.findByEmail(email));
 		return result;
 	}
 
@@ -66,7 +66,7 @@ public class UserService {
 	@Transactional(readOnly = true)
 	public ResultClass<User> findByUsername(String username) {
 		ResultClass<User> result = new ResultClass<>();
-		result.setSingleElement(daoUser.findByUsername(username));
+		result.setSingleElement(repositoryUser.findByUsername(username));
 		return result;
 	}
 
@@ -75,7 +75,7 @@ public class UserService {
 	public ResultClass<User> getAll(Integer pageIndex, Boolean showAll,
 			String typeOfUser) {
 		ResultClass<User> result = new ResultClass<>();
-		result.addAll(daoUser.getAll(pageIndex, showAll, typeOfUser));
+		result.addAll(repositoryUser.getAll(pageIndex, showAll, typeOfUser));
 		return result;
 	}
 
@@ -83,7 +83,7 @@ public class UserService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ResultClass<Boolean>  deleteUser(Long id) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		result.setSingleElement(daoUser.deleteUser(id));
+		result.setSingleElement(repositoryUser.deleteUser(id));
 		return result;
 	}
 
@@ -91,7 +91,7 @@ public class UserService {
 	@Transactional(readOnly = false)
 	public ResultClass<Boolean>  saveUser(User user) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		result.setSingleElement(daoUser.saveUser(user));
+		result.setSingleElement(repositoryUser.saveUser(user));
 		return result;
 	}
 
@@ -99,7 +99,7 @@ public class UserService {
 	@Transactional(readOnly = false)
 	public ResultClass<Integer> numberOfPages() {
 		ResultClass<Integer> result = new ResultClass<>();
-		result.setSingleElement(daoUser.numberOfPages());
+		result.setSingleElement(repositoryUser.numberOfPages());
 		return result;
 	}
 
@@ -107,7 +107,7 @@ public class UserService {
 	@Transactional(readOnly = true)
 	public ResultClass<User> getUser(Long id_user) {
 		ResultClass<User> result = new ResultClass<>();
-		result.setSingleElement(daoUser.getUser(id_user));
+		result.setSingleElement(repositoryUser.getUser(id_user));
 		return result;
 	}
 
@@ -118,7 +118,7 @@ public class UserService {
 		StringSHA sha = new StringSHA();
 		String pass = sha.getStringMessageDigest(user.getPassword());
 		user.setPassword(pass);
-		if(daoUser.addUser(user)){
+		if(repositoryUser.addUser(user)){
 			User u = findByUsername(user.getUsername()).getSingleElement();
 			manageAclService.addACLToObject(u.getId(), u.getClass().getName());
 
@@ -150,7 +150,7 @@ public class UserService {
 					result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
 				}
 				else{
-					if( daoUser.persistListUsers(list)){
+					if( repositoryUser.persistListUsers(list)){
 						for(User u : list){
 							User aux = findByUsername(u.getUsername()).getSingleElement();
 							manageAclService.addACLToObject(u.getId(), u.getClass().getName());
@@ -196,7 +196,7 @@ public class UserService {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResultClass<String> getAllByRole(String user_role) {
 		ResultClass<String> result = new ResultClass<>();
-		result.addAll(daoUser.getAllByRole(user_role));
+		result.addAll(repositoryUser.getAllByRole(user_role));
 		return result;
 
 	}
@@ -211,7 +211,7 @@ public class UserService {
 	@Transactional(readOnly = true)
 	public ResultClass<User> getAll() {
 		ResultClass<User> result = new ResultClass<>();
-		result.addAll(daoUser.getAllUsers());
+		result.addAll(repositoryUser.getAllUsers());
 		return result;
 	}
 
@@ -221,7 +221,7 @@ public class UserService {
 
 
 		Collection<User> users = new ArrayList<User>();
-		users =  daoUser.getAllUsers();
+		users =  repositoryUser.getAllUsers();
 
 		if(!users.isEmpty()){
 			UserCSV userCSV = new UserCSV();
@@ -234,7 +234,7 @@ public class UserService {
 	@PreAuthorize("hasPermission(#group, 'WRITE') or hasPermission(#group, 'ADMINISTRATION')")
 	public ResultClass<Boolean> persistListUsers(Group group, List<User> list) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		result.setSingleElement(daoUser.persistListUsers(list));
+		result.setSingleElement(repositoryUser.persistListUsers(list));
 		return result ;
 	}
 
@@ -243,7 +243,7 @@ public class UserService {
 		// TODO Auto-generated method stub
 		Collection<User> usersId = new ArrayList<User>();
 		for (User u: list){
-			usersId.add(daoUser.findByUsername(u.getUsername()));
+			usersId.add(repositoryUser.findByUsername(u.getUsername()));
 		}
 		return usersId;
 	}

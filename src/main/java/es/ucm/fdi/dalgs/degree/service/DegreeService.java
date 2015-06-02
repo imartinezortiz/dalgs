@@ -49,7 +49,7 @@ public class DegreeService {
 	private AclObjectService manageAclService;
 
 	@Autowired
-	private DegreeRepository daoDegree;
+	private DegreeRepository repositoryDegree;
 
 	@Autowired
 	private ModuleService serviceModule;
@@ -69,7 +69,7 @@ public class DegreeService {
 
 		boolean success = false;
 
-		Degree degreeExists = daoDegree.existByCode(degree.getInfo().getCode());
+		Degree degreeExists = repositoryDegree.existByCode(degree.getInfo().getCode());
 		ResultClass<Degree> result = new ResultClass<Degree>();
 		Collection<String> errors = new ArrayList<String>();
 		if (degreeExists != null) {
@@ -89,10 +89,10 @@ public class DegreeService {
 
 		} else {
 
-			success = daoDegree.addDegree(degree);
+			success = repositoryDegree.addDegree(degree);
 
 			if (success) {
-				degreeExists = daoDegree
+				degreeExists = repositoryDegree
 						.existByCode(degree.getInfo().getCode());
 				success = manageAclService.addACLToObject(degreeExists.getId(),
 						degreeExists.getClass().getName());
@@ -113,7 +113,7 @@ public class DegreeService {
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getDegrees(Integer pageIndex, Boolean showAll) {
 		ResultClass<Degree> result = new ResultClass<>();
-		result.addAll(daoDegree.getDegrees(pageIndex, showAll));
+		result.addAll(repositoryDegree.getDegrees(pageIndex, showAll));
 		return result;
 	}
 
@@ -121,7 +121,7 @@ public class DegreeService {
 	@Transactional(readOnly = true)
 	public ResultClass<Degree> getAll() {
 		ResultClass<Degree> result = new ResultClass<>();
-		result.addAll(daoDegree.getAll());
+		result.addAll(repositoryDegree.getAll());
 		return result;
 
 	}
@@ -132,9 +132,9 @@ public class DegreeService {
 			Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		Degree modifydegree = daoDegree.getDegree(id_degree);
+		Degree modifydegree = repositoryDegree.getDegree(id_degree);
 
-		Degree degreeExists = daoDegree.existByCode(degree.getInfo().getCode());
+		Degree degreeExists = repositoryDegree.existByCode(degree.getInfo().getCode());
 
 		if (!degree.getInfo().getCode()
 				.equalsIgnoreCase(modifydegree.getInfo().getCode())
@@ -152,7 +152,7 @@ public class DegreeService {
 			result.setErrorsList(errors);
 		} else {
 			modifydegree.setInfo(degree.getInfo());
-			boolean r = daoDegree.saveDegree(modifydegree);
+			boolean r = repositoryDegree.saveDegree(modifydegree);
 			if (r)
 				result.setSingleElement(true);
 		}
@@ -183,7 +183,7 @@ public class DegreeService {
 		if ((deleteModules || degree.getModules().isEmpty())
 				&& (deleteCompetences || degree.getCompetences().isEmpty())
 				&& (deleteAcademic || academicList.isEmpty())) {
-			result.setSingleElement(daoDegree.deleteDegree(degree));
+			result.setSingleElement(repositoryDegree.deleteDegree(degree));
 			return result;
 		} else {
 			result.setSingleElement(false);
@@ -202,7 +202,7 @@ public class DegreeService {
 	@PreAuthorize("isAuthenticated()")
 	public ResultClass<Degree> getDegree(Long id) {
 		ResultClass<Degree> result = new ResultClass<>();
-		result.setSingleElement(daoDegree.getDegree(id));
+		result.setSingleElement(repositoryDegree.getDegree(id));
 		return result;
 
 	}
@@ -212,7 +212,7 @@ public class DegreeService {
 	public ResultClass<Degree> getDegreeAll(Long id, Boolean show) {
 		ResultClass<Degree> result = new ResultClass<Degree>();
 
-		Degree d = daoDegree.getDegree(id);
+		Degree d = repositoryDegree.getDegree(id);
 		if (d != null) {
 			d.setModules(serviceModule.getModulesForDegree(id, show));
 			d.setCompetences(serviceCompetence
@@ -225,7 +225,7 @@ public class DegreeService {
 	@PreAuthorize("hasPermission(#degree, 'WRITE') or hasPermission(#degree, 'ADMINISTRATION')")
 	@Transactional(readOnly = false)
 	public ResultClass<Degree> unDeleteDegree(Degree degree, Locale locale) {
-		Degree d = daoDegree.existByCode(degree.getInfo().getCode());
+		Degree d = repositoryDegree.existByCode(degree.getInfo().getCode());
 		ResultClass<Degree> result = new ResultClass<Degree>();
 		if (d == null) {
 			result.setHasErrors(true);
@@ -244,7 +244,7 @@ public class DegreeService {
 
 			d.setDeleted(false);
 			d.setInfo(degree.getInfo());
-			boolean r = daoDegree.saveDegree(d);
+			boolean r = repositoryDegree.saveDegree(d);
 			if (r)
 				result.setSingleElement(d);
 
@@ -255,7 +255,7 @@ public class DegreeService {
 	@Transactional(readOnly = true)
 	public ResultClass<Integer> numberOfPages(Boolean showAll) {
 		ResultClass<Integer> result = new ResultClass<>();
-		result.setSingleElement(daoDegree.numberOfPages(showAll));
+		result.setSingleElement(repositoryDegree.numberOfPages(showAll));
 		return result;
 	}
 
@@ -282,10 +282,10 @@ public class DegreeService {
 					result.getErrorsList().add(messageSource.getMessage("error.params", null, locale));
 				}
 				else{
-					result.setSingleElement(daoDegree.persistListDegrees(list));
+					result.setSingleElement(repositoryDegree.persistListDegrees(list));
 					if (result.getSingleElement()) {
 						for (Degree c : list) {
-							Degree aux = daoDegree.existByCode(c.getInfo().getCode());
+							Degree aux = repositoryDegree.existByCode(c.getInfo().getCode());
 							result.setSingleElement(result.getSingleElement()
 									&& manageAclService.addACLToObject(aux.getId(), aux
 											.getClass().getName()));
@@ -313,7 +313,7 @@ public class DegreeService {
 	public void downloadCSV(HttpServletResponse response) throws IOException {
 
 		Collection<Degree> degrees = new ArrayList<Degree>();
-		degrees =  daoDegree.getAll();
+		degrees =  repositoryDegree.getAll();
 
 		if(!degrees.isEmpty()){
 			DegreeCSV degreeCSV = new DegreeCSV();

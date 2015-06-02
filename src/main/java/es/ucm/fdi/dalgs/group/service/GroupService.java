@@ -54,7 +54,7 @@ public class GroupService {
 	private AclObjectService manageAclService;
 
 	@Autowired
-	private GroupRepository daoGroup;
+	private GroupRepository repositoryGroup;
 
 	@Autowired
 	private CourseService serviceCourse;
@@ -78,7 +78,7 @@ public class GroupService {
 
 		boolean success = false;
 
-		Group groupExists = daoGroup.existInCourse(id_course, group.getName());
+		Group groupExists = repositoryGroup.existInCourse(id_course, group.getName());
 		ResultClass<Group> result = new ResultClass<>();
 
 		if (groupExists != null) {
@@ -97,10 +97,10 @@ public class GroupService {
 		} else {
 			group.setCourse(serviceCourse.getCourse(id_course, id_academic)
 					.getSingleElement());
-			success = daoGroup.addGroup(group);
+			success = repositoryGroup.addGroup(group);
 
 			if (success) {
-				groupExists = daoGroup
+				groupExists = repositoryGroup
 						.existInCourse(id_course, group.getName());
 				success = manageAclService.addACLToObject(groupExists.getId(),
 						groupExists.getClass().getName());
@@ -129,7 +129,7 @@ public class GroupService {
 	public ResultClass<Group> getGroup(Long id_group, Long id_course,
 			Long id_academic, Boolean show) {
 		ResultClass<Group> result = new ResultClass<Group>();
-		Group g = daoGroup.getGroup(id_group, id_course,
+		Group g = repositoryGroup.getGroup(id_group, id_course,
 				id_academic);
 		g.setActivities(serviceActivity.getActivitiesForGroup(id_group, show));
 		result.setSingleElement(g);
@@ -142,9 +142,9 @@ public class GroupService {
 			Long id_course, Long id_academic, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
-		Group modifyGroup = daoGroup.getGroup(id_group, id_course, id_academic);
+		Group modifyGroup = repositoryGroup.getGroup(id_group, id_course, id_academic);
 
-		Group groupExists = daoGroup.existInCourse(id_course, group.getName());
+		Group groupExists = repositoryGroup.existInCourse(id_course, group.getName());
 
 		if (!group.getName().equalsIgnoreCase(modifyGroup.getName())
 				&& groupExists != null) {
@@ -162,7 +162,7 @@ public class GroupService {
 			result.setSingleElement(false);
 		} else {
 			modifyGroup.setName(group.getName());
-			boolean r = daoGroup.saveGroup(modifyGroup);
+			boolean r = repositoryGroup.saveGroup(modifyGroup);
 			if (r) {
 				result.setSingleElement(true);
 
@@ -177,7 +177,7 @@ public class GroupService {
 	public ResultClass<Boolean> modifyGroupActivities(Group group) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
 
-		boolean r = daoGroup.saveGroup(group);
+		boolean r = repositoryGroup.saveGroup(group);
 		if (r)
 			result.setSingleElement(true);
 
@@ -207,7 +207,7 @@ public class GroupService {
 			}
 			group.setProfessors(new ArrayList<User>());
 			group.setStudents(new ArrayList<User>());
-			result.setSingleElement(daoGroup.deleteGroup(group));
+			result.setSingleElement(repositoryGroup.deleteGroup(group));
 
 			return result;
 		}
@@ -220,7 +220,7 @@ public class GroupService {
 	@Transactional(readOnly = true)
 	public ResultClass<Group> getGroupsForCourse(Long id, Boolean showAll) {
 		ResultClass<Group> result = new ResultClass<>();
-		result.addAll(daoGroup.getGroupsForCourse(id, showAll));
+		result.addAll(repositoryGroup.getGroupsForCourse(id, showAll));
 		return result;
 	}
 
@@ -247,7 +247,7 @@ public class GroupService {
 						.getId(), course.getId(), null);
 		}
 
-		result.setSingleElement(daoGroup.deleteGroupsFromCourses(coursesList));
+		result.setSingleElement(repositoryGroup.deleteGroupsFromCourses(coursesList));
 		return result;
 	}
 
@@ -256,7 +256,7 @@ public class GroupService {
 	public ResultClass<Group> unDeleteGroup(Group group, Long id_course,
 			Locale locale) {
 
-		Group g = daoGroup.existInCourse(id_course, group.getName());
+		Group g = repositoryGroup.existInCourse(id_course, group.getName());
 
 		ResultClass<Group> result = new ResultClass<>();
 		if (g == null) {
@@ -275,7 +275,7 @@ public class GroupService {
 			} else {
 				g.setDeleted(false);
 				g.setName(group.getName());
-				boolean r = daoGroup.saveGroup(g);
+				boolean r = repositoryGroup.saveGroup(g);
 				if (r) {
 					result.setSingleElement(g);
 					if (group.getCourse().getCoordinator() != null) {
@@ -295,7 +295,7 @@ public class GroupService {
 	@Transactional(readOnly = true)
 	public ResultClass<Group> getGroupsForStudent(Long id_student) {
 		ResultClass<Group> result = new ResultClass<>();
-		Collection<Group> groups = daoGroup.getGroupsForStudent(id_student);
+		Collection<Group> groups = repositoryGroup.getGroupsForStudent(id_student);
 
 		if (groups != null)
 			result.addAll(groups);
@@ -308,7 +308,7 @@ public class GroupService {
 	public ResultClass<Group> getGroupsForProfessor(Long id_professor) {
 		ResultClass<Group> result = new ResultClass<>();
 
-		Collection<Group> groups = daoGroup.getGroupsForProfessor(id_professor);
+		Collection<Group> groups = repositoryGroup.getGroupsForProfessor(id_professor);
 		if (groups != null)
 			result.addAll(groups);
 		return result;
@@ -320,13 +320,13 @@ public class GroupService {
 			Long id_course, Long id_academic, Collection<User> users) {
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		Group modifyGroup = daoGroup.getGroup(id_group, id_course, id_academic);
+		Group modifyGroup = repositoryGroup.getGroup(id_group, id_course, id_academic);
 
 		modifyGroup.setProfessors(users);
 
 
 
-		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
+		result.setHasErrors(!repositoryGroup.saveGroup(modifyGroup));
 
 		if (!result.hasErrors()) {
 			manageAclService.addPermissionCollectionCASCADE(users, group,
@@ -370,7 +370,7 @@ public class GroupService {
 			}
 		}
 
-		result.setHasErrors(!daoGroup.saveGroup(group));
+		result.setHasErrors(!repositoryGroup.saveGroup(group));
 
 		return result;
 	}
@@ -381,11 +381,11 @@ public class GroupService {
 			Long id_course, Long id_academic, Collection<User> users) {
 
 		ResultClass<Boolean> result = new ResultClass<>();
-		Group modifyGroup = daoGroup.getGroup(id_group, id_course, id_academic);
+		Group modifyGroup = repositoryGroup.getGroup(id_group, id_course, id_academic);
 
 
 		modifyGroup.setStudents(users);
-		result.setHasErrors(!daoGroup.saveGroup(modifyGroup));
+		result.setHasErrors(!repositoryGroup.saveGroup(modifyGroup));
 
 		if (!result.hasErrors()) {
 			manageAclService.addPermissionCollectionCASCADE(
@@ -405,7 +405,7 @@ public class GroupService {
 	public ResultClass<Boolean> deleteUserGroup(Group group, Long id_group, Long id_user,
 			Long id_course, Long id_academic, Locale locale) {
 		ResultClass<Boolean> result = new ResultClass<Boolean>();
-		Group g = daoGroup.getGroup(id_group, id_course, id_academic);
+		Group g = repositoryGroup.getGroup(id_group, id_course, id_academic);
 
 		User u = serviceUser.getUser(id_user).getSingleElement();
 		if (serviceUser.hasRole(u, "ROLE_PROFESSOR")
@@ -510,9 +510,9 @@ public class GroupService {
 
 			}
 
-			boolean success = daoGroup.addGroup(copy);
+			boolean success = repositoryGroup.addGroup(copy);
 			if (success) {
-				Group exists = daoGroup
+				Group exists = repositoryGroup
 						.existInCourse(id_course, copy.getName());
 
 				if (exists != null) {
@@ -538,13 +538,13 @@ public class GroupService {
 
 	public ResultClass<Boolean> updateGroup(Group group) {
 		ResultClass<Boolean> result = new ResultClass<>();
-		result.setSingleElement(daoGroup.saveGroup(group));
+		result.setSingleElement(repositoryGroup.saveGroup(group));
 		return result;
 	}
 
 	public Group getGroupFormatter(Long id_group) {
 
-		return daoGroup.getGroupFormatter(id_group);
+		return repositoryGroup.getGroupFormatter(id_group);
 	}
 
 
