@@ -71,13 +71,13 @@
 				</c:choose>
 			</sec:authorize>
 
-			<sec:authorize access="hasRole('ROLE_ADMIN')">
-				<a class="navbar-link" data-toggle="navbar-link"
+			<sec:accesscontrollist hasPermission="ADMINISTRATION"
+				domainObject="${model.course}">				<a class="navbar-link" id="envelop" data-toggle="navbar-link"
 					href="<c:url value='/academicTerm/${academicId}/course/${courseId}/messages.htm'/>">
 					<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
 					<fmt:message key="common.mail" />
 				</a>
-			</sec:authorize>
+			</sec:accesscontrollist>
 		</div>
 
 		<div class="panel-body">
