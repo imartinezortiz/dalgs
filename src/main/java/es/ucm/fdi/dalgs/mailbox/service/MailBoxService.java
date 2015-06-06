@@ -16,7 +16,11 @@
  */
 package es.ucm.fdi.dalgs.mailbox.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -31,7 +35,9 @@ import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage.RecipientType;
+import javax.mail.internet.MimeUtility;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -190,7 +196,17 @@ public class MailBoxService{
 						messageBox.setSubject(msg.getSubject());
 						messageBox.setCode(idHeaders[0]);
 						
-						messageBox.setFrom(InternetAddress.toString(msg.getFrom()));
+						Address[] fromAddresses = msg.getFrom();
+						String from = InternetAddress.toString(fromAddresses);
+//						ByteArrayInputStream in = new ByteArrayInputStream(from.getBytes());
+//						InputStream decode = MimeUtility.decode(in, "quoted-printable");
+//						StringWriter writer = new StringWriter();
+//						IOUtils.copy(decode, writer, "UTF-8");
+//						from = writer.toString();
+						if ( from.startsWith("=?")) {
+							from = MimeUtility.decodeWord(from);
+						}
+						messageBox.setFrom(from);
 						messageBox.setTo(parseAddresses(msg
 								.getRecipients(RecipientType.TO)));
 
