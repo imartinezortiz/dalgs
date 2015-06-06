@@ -262,7 +262,7 @@ public class MailBoxService{
 		Matcher m = p.matcher(messageBox.getSubject());
 		if (m.matches()){
 			
-			String mimeType = msg.getContentType();
+			String mimeType = msg.getAllHeaders() + msg.getContentType();
 			String key = getStorageKey(Long.parseLong(m.group(3)));
 
 			storageManager.putObject(bucket, key, mimeType, msg.getInputStream());			
