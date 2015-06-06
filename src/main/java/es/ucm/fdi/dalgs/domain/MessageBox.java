@@ -17,11 +17,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="messages")
 public class MessageBox implements Serializable {
-	
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	@Id

@@ -86,17 +86,16 @@
 		<div class="panel-body">
 			<table class="table table-striped table-bordered">
 				<tr align="center">
-					<td><div class="td-label">
-							<fmt:message key="common.file" />
-						</div></td>
+							<td><div class="td-label"><fmt:message key="common.file" /></div></td>
+							<td><div class="td-label"><fmt:message key="input.desc" /></div></td>
 					
 
 				</tr>
 				<c:forEach items="${model.activity.attachments}" var="att" varStatus="attachment">		
 					<tr align="center">
-						<td><div class="td-content">
-									<a href="<c:url value='${att}'/>"><fmt:message key="common.file" />_${attachment.index}</a>
-							</div></td>
+							<td><div class="td-content">${att.name}</div></td>
+						<td><div class="td-content">${att.description}</div></td>
+						<td><a class="glyphicon glyphicon-file" href="<c:url value='${att.file}'/>"></a></td>
 						
 					</tr>
 				</c:forEach>

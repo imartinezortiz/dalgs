@@ -20,9 +20,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
-
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -37,6 +37,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonManagedReference;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -79,10 +80,11 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 	
 	
 
-	@ElementCollection(fetch = FetchType.LAZY)
-	@CollectionTable(name="activity_attachments", joinColumns=@JoinColumn(name="id_activity"))
-	@Column(name="attachment")
-	private Collection<String> attachments;
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@JoinTable(name="activity_attachments", joinColumns={@JoinColumn(name="id_activity")}, inverseJoinColumns = { @JoinColumn(name = "id_attachment") })
+	@JsonManagedReference
+	private Collection<Attachment> attachments;
+	
 	
 
 	public Activity() {
@@ -90,16 +92,16 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 		this.isDeleted = false;
 		this.learningGoalStatus = new ArrayList<LearningGoalStatus>();
 		this.info = new ActivityInfo();
-		this.attachments = new ArrayList<String>();
+		this.attachments = new ArrayList<Attachment>();
 	}
 	
 
-	public Collection<String> getAttachments() {
+	public Collection<Attachment> getAttachments() {
 		return attachments;
 	}
 
 
-	public void setAttachments(Collection<String> attachments) {
+	public void setAttachments(Collection<Attachment> attachments) {
 		this.attachments = attachments;
 	}
 
@@ -191,7 +193,7 @@ public class Activity implements Cloneable, Copyable<Activity>, Serializable {
 		ActivityInfo aInfo = this.getInfo().depth_copy();
 		copy.info = aInfo;
 		copy.learningGoalStatus = new ArrayList<LearningGoalStatus>();
-		copy.attachments = new ArrayList<String>();
+		copy.attachments = new ArrayList<Attachment>();
 		
 	
 

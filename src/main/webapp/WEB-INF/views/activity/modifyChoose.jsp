@@ -63,21 +63,22 @@
 				
 					<table class="table table-condensed">
 						<tr align="center">
-							<td width="20%"><div class="td-label"><fmt:message key="common.file" /></div></td>
+							<td><div class="td-label"><fmt:message key="common.file" /></div></td>
+							<td><div class="td-label"><fmt:message key="input.desc" /></div></td>
 						</tr>
 						
 						
 						<c:forEach items="${attachments}" var="att" varStatus="attachment">		
 							<tr align="center">
-								<td><div class="td-content">
-									<a href="<c:url value='${att}'/>"><fmt:message key="common.file" />_${attachment.index}</a>
-									</div></td>
-								
+								<td><div class="td-content">${att.name}</div></td>
+								<td><div class="td-content">${att.description}</div></td>
+								<td><a class="glyphicon glyphicon-file" href="<c:url value='${att.file}'/>"></a></td>
+							
 								<td>
 								
 									<c:choose>
 										<c:when test="${not empty groupId}">
-											<a href="<c:url value='${att}/academicTerm/${academicId}/course/${courseId}/group/${groupId}/activity/${activityId}/delete'/>">
+											<a href="<c:url value='${att.file}/academicTerm/${academicId}/course/${courseId}/group/${groupId}/activity/${activityId}/delete'/>">
 											<button type="button" class="btn btn-default btn-lg" 
 											style=" padding: 2px; margin-top: 1.2%;  background: rgb(236, 236, 236);">
 	  										<span class="glyphicon glyphicon-remove" aria-hidden="true" ></span> 
@@ -85,7 +86,7 @@
 										</a>
 										</c:when>
 										<c:otherwise>
-										<a href="<c:url value='${att}/academicTerm/${academicId}/course/${courseId}/activity/${activityId}/delete'/>">
+										<a href="<c:url value='${att.file}/academicTerm/${academicId}/course/${courseId}/activity/${activityId}/delete'/>">
 											<button type="button" class="btn btn-default btn-lg" 
 											style=" padding: 2px; margin-top: 1.2%;  background: rgb(236, 236, 236);">
 	  										<span class="glyphicon glyphicon-remove" aria-hidden="true" ></span> 
@@ -180,6 +181,20 @@
 					<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
 					<fmt:message key="activity.doc" /></h4>
 					<br>
+					
+				<div class="form-group">
+					<label><fmt:message key="input.name" />: </label>
+					<form:input path="name" class="form-control" id="name"
+						required="true" />
+				</div>
+				
+				<div class="form-group">
+					<label><fmt:message key="input.desc" />: </label>
+					<form:input class="form-control" path="description"
+						id="description"  />
+				</div>
+					
+					
 					<spring:message code="upload.choosefile" var="choose"/>
 					<spring:message code="upload.upload" var="upload"/>
 					

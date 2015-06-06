@@ -221,7 +221,7 @@ public class ActivityController {
 
 			LearningGoalStatus cs = new LearningGoalStatus();
 			model.addAttribute("addlearningstatus", cs);
-
+			
 			FileUpload file = new FileUpload();
 			model.addAttribute("addfileupload", file);
 
@@ -551,7 +551,7 @@ public class ActivityController {
 			model.addAttribute("learningGoals", lg);
 
 			model.addAttribute("attachments", p.getAttachments());
-
+			
 			FileUpload file = new FileUpload();
 			model.addAttribute("addfileupload", file);
 
@@ -654,6 +654,7 @@ public class ActivityController {
 			@PathVariable("idCourse") Long id_course,
 			@PathVariable("groupId") Long id_group,
 			@PathVariable("activityId") Long id_activity,
+			
 			@ModelAttribute("addfileupload") FileUpload fileupload,
 			BindingResult result, Model model, HttpServletRequest request)
 			throws ServletException, IllegalStateException, IOException {
@@ -670,17 +671,6 @@ public class ActivityController {
 				+ "/activity/" + id_activity + "/modify.htm";
 	}
 
-	// /-------------
-//	public File multipartToFile(MultipartFile multipart,
-//			HttpServletRequest request) throws IllegalStateException,
-//			IOException {
-//		File convFile = new File(request.getSession().getServletContext()
-//				.getRealPath("/WEB-INF/"), multipart.getOriginalFilename());
-//		multipart.transferTo(convFile);
-//		return convFile;
-//	}
-
-	// /---------------
 
 	/**
 	 * Method for delete an activities

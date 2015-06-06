@@ -39,6 +39,7 @@ import es.ucm.fdi.dalgs.classes.FileUpload;
 import es.ucm.fdi.dalgs.classes.ResultClass;
 import es.ucm.fdi.dalgs.course.service.CourseService;
 import es.ucm.fdi.dalgs.domain.Activity;
+import es.ucm.fdi.dalgs.domain.Attachment;
 import es.ucm.fdi.dalgs.domain.Course;
 import es.ucm.fdi.dalgs.domain.Group;
 import es.ucm.fdi.dalgs.domain.LearningGoal;
@@ -311,11 +312,11 @@ public class ActivityService {
 					id_academic);
 		}
 
-		Collection<String> attachs = a.getAttachments();
+		Collection<Attachment> attachs = a.getAttachments();
 
 		try {
-			for (String aux : attachs) {
-				if (aux.compareToIgnoreCase(attachment) == 0) {
+			for (Attachment aux : attachs) {
+				if (aux.getFile().compareToIgnoreCase(attachment) == 0) {
 					a.getAttachments().remove(aux);
 					break;
 
@@ -527,23 +528,28 @@ public class ActivityService {
 		
 		Activity act = getActivity(id_activity,
 				id_course, null, id_academic).getSingleElement();
-		
+		Attachment attach = new Attachment();
 		CommonsMultipartFile file = fileupload.getFilepath();
-		
 		String key = getStorageKey(id_activity);
 		String mimeType = file.getContentType();
 		storageManager.putObject(bucket, key, mimeType, file.getInputStream());
-		if(act.getAttachments()==null) act.setAttachments(new ArrayList<String>());
+		
+		if(act.getAttachments()==null) act.setAttachments(new ArrayList<Attachment>());
+		
 		String aaa=storageManager.getUrl(bucket, key).toExternalForm();
-		act.getAttachments().add(aaa);
+		attach.setFile(aaa);
+		attach.setDescription(fileupload.getDescription());
+		attach.setName(fileupload.getName());
+		act.getAttachments().add(attach);
 		repositoryActivity.saveActivity(act);
 
 	}
 	
 	@PreAuthorize("hasPermission(#course, 'WRITE') or hasPermission(#group, 'ADMINISTRATION') or hasRole('ROLE_ADMIN')")
 	@Transactional(readOnly = false)
-	public void addAttachmentToGroupActivity(Course course, Group group, FileUpload fileupload, Long id_group, Long id_course, Long id_activity, Long id_academic) throws IOException {
+	public void addAttachmentToGroupActivity(Course course, Group group,FileUpload fileupload, Long id_group, Long id_course, Long id_activity, Long id_academic) throws IOException {
 			
+		Attachment attach = new Attachment();
 		Activity act = getActivity(id_activity,
 				id_course,id_group, id_academic).getSingleElement();
 		
@@ -552,9 +558,12 @@ public class ActivityService {
 		String key = getStorageKey(id_activity);
 		String mimeType = file.getContentType();
 		storageManager.putObject(bucket, key, mimeType, file.getInputStream());
-		if(act.getAttachments()==null) act.setAttachments(new ArrayList<String>());
+		if(act.getAttachments()==null) act.setAttachments(new ArrayList<Attachment>());
 		String aaa=storageManager.getUrl(bucket, key).toExternalForm();
-		act.getAttachments().add(aaa);
+		attach.setFile(aaa);
+		attach.setDescription(fileupload.getDescription());
+		attach.setName(fileupload.getName());
+		act.getAttachments().add(attach);
 		repositoryActivity.saveActivity(act);
 
 	}

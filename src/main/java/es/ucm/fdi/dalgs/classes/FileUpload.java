@@ -17,11 +17,15 @@
 
 package es.ucm.fdi.dalgs.classes;
 
+
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 public class FileUpload {
 	private CommonsMultipartFile filepath;
 
+
+	private String name;
+	private String description;
 	
 	
 	public FileUpload() {
@@ -35,6 +39,23 @@ public class FileUpload {
 	public void setFilepath(CommonsMultipartFile filepath) {
 		this.filepath = filepath;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	
 	
 }
