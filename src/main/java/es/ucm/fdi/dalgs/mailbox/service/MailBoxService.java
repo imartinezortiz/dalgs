@@ -31,7 +31,10 @@ import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage.RecipientType;
+import javax.mail.internet.MimeUtility;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -67,7 +70,7 @@ public class MailBoxService{
 
 	@Value("${mail.password}")
 	private String password;
-	
+
 	private static final String pattern = "^\\s*(Re:\\s*)?\\[(course|group):(\\d+)\\]";
 
 	@Autowired
@@ -81,11 +84,14 @@ public class MailBoxService{
 
 	@Autowired
 	private StorageManager storageManager;
-	
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(MailBoxService.class);
+
 	// app-config.xml
 	@Value("#{attachmentsPrefs[bucket]}")
 	private String bucket;
-	
+
 
 	public String getProtocol() {
 		return protocol;
@@ -167,12 +173,11 @@ public class MailBoxService{
 
 			// connects to the message store
 			Store store = session.getStore(protocol);
-			
+
 			store.connect(userName, password);
 			// opens the inbox folder
 			Folder folderInbox = store.getFolder("INBOX");
 			folderInbox.open(Folder.READ_ONLY);
-
 			// fetches new messages from server
 			Message[] messages = folderInbox.getMessages();
 			for (int i = 0; i < messages.length; i++) {
@@ -189,28 +194,31 @@ public class MailBoxService{
 						MessageBox messageBox = new MessageBox();
 						messageBox.setSubject(msg.getSubject());
 						messageBox.setCode(idHeaders[0]);
-						
-						messageBox.setFrom(InternetAddress.toString(msg.getFrom()));
-						messageBox.setTo(parseAddresses(msg
-								.getRecipients(RecipientType.TO)));
+
+						Address[] fromAddresses = msg.getFrom();
+						String from = InternetAddress.toString(fromAddresses);
+
+						if ( from.startsWith("=?")) {
+							from = MimeUtility.decodeWord(from);
+						}
+						messageBox.setFrom(from);
+						String to = InternetAddress.toString(msg.getRecipients(RecipientType.TO));
+
+						if ( to.startsWith("=?")) {
+									to = MimeUtility.decodeWord(to);
+						}
+						messageBox.setTo(to);
 
 
-//						String[] replyHeaders = msg.getHeader("In-Reply-TO");
 						String[] replyHeaders = msg.getHeader("References");
-						
-											
+
+
 						if (replyHeaders != null && replyHeaders.length > 0){
 							StringTokenizer tokens = new StringTokenizer(replyHeaders[0]);
 							MessageBox parent = repositoryMailBox.getMessageBox(tokens.nextToken());
 							if (parent != null) parent.addReply(messageBox);
 						}
 
-
-
-						
-						//						saveParts(msg.getContent(), filename,  msg.getContentType());
-//						File file = saveParts(msg);
-//						messageBox.setFile(filename);
 						result = parseSubjectAndCreate(messageBox, msg);
 					}
 				}
@@ -223,10 +231,10 @@ public class MailBoxService{
 			return result;
 
 		} catch (NoSuchProviderException ex) {
-			System.out.println("No provider for protocol: " + protocol);
+			logger.error("No provider for protocol: " + protocol);
 			ex.printStackTrace();
 		} catch (MessagingException ex) {
-			System.out.println("Could not connect to the message store");
+			logger.error("Could not connect to the message store");
 			ex.printStackTrace();
 		} catch (IOException e) {
 
@@ -237,15 +245,15 @@ public class MailBoxService{
 	}
 
 	private ResultClass<Boolean> parseSubjectAndCreate(MessageBox messageBox, Message msg) throws MessagingException, IOException{
-		
+
 
 		ResultClass<Boolean> result = new ResultClass<>();
 
-		
+
 		Pattern p = Pattern.compile(pattern);            	
 		Matcher m = p.matcher(messageBox.getSubject());
 		if (m.matches()){
-			
+
 			String mimeType = msg.getAllHeaders() + msg.getContentType();
 			String key = getStorageKey(Long.parseLong(m.group(3)));
 
@@ -255,123 +263,27 @@ public class MailBoxService{
 
 			if (("group").equalsIgnoreCase(m.group(2))){
 				Group group = serviceGroup.getGroupFormatter(Long.parseLong(m.group(3)));
-				group.getMessages().add(messageBox);				
-				result = serviceGroup.updateGroup(group);
-				
+				if (group != null){
+					group.getMessages().add(messageBox);
+					result = serviceGroup.updateGroup(group);
+				}
+
+
 
 			}
 
 			else if (("course").equalsIgnoreCase(m.group(2))){
 				Course course = serviceCourse.getCourseFormatter(Long.parseLong(m.group(3)));
-				course.getMessages().add(messageBox);
-				result = serviceCourse.updateCourse(course);
-
+				if(course != null){
+					course.getMessages().add(messageBox);
+					result = serviceCourse.updateCourse(course);
+				}
 			}
 
 		}
 		return result;
 	}
-	private String parseAddresses(Address[] address) {
-		String listAddress = "";
 
-		if (address != null) {
-			for (int i = 0; i < address.length; i++) {
-				listAddress += address[i].toString() + ", ";
-			}
-		}
-		if (listAddress.length() > 1) {
-			listAddress = listAddress.substring(0, listAddress.length() - 2);
-		}
-
-		return listAddress;
-	}
-
-//	private File saveParts(Message msg)//, String filename)
-//			throws IOException, MessagingException
-//	{
-//		File file= null;
-//		OutputStream out = null;
-//		InputStream in = null;
-//		
-//		try{
-//			
-//			in = msg.getInputStream();
-//			int k;
-////			filename = filename + ".txt";
-//			file = File.createTempFile("tmp", ".txt");
-//			;
-////			FileUtils.copyInputStreamToFile(msg.getInputStream(), file);
-//		
-//			out = new FileOutputStream(file);
-//			while ((k = in.read()) != -1) {
-//				out.write(k);
-//			}
-//			
-//		} catch (Exception ex) {
-//
-//			ex.printStackTrace();
-//		}
-//		//		try {
-//		//			if (content instanceof Multipart) {
-//		//				Multipart multi = ((Multipart)content);
-//		//				int parts = multi.getCount();
-//		//				for (int j=0; j < parts; ++j) {
-//		//					MimeBodyPart part = (MimeBodyPart)multi.getBodyPart(j);
-//		//					if (part.getContent() instanceof Multipart) {
-//		//						// part-within-a-part, do some recursion...
-//		//						saveParts(part.getContent(), filename);
-//		//					}
-//		//					else {
-//		//						String extension = "";
-//		//						if (part.isMimeType("text/html")) {
-//		//							extension = "html";
-//		//						}
-//		//						else {
-//		//							if (part.isMimeType("text/plain")) {
-//		//								extension = "txt";
-//		//							}
-//		//							else {
-//		//								//  Try to get the name of the attachment
-//		//								extension = part.getDataHandler().getName();
-//		//							}
-//		//							filename = filename + "." + extension;
-//		//							System.out.println("... " + filename);
-//		//							out = new FileOutputStream(new File(filename));
-//		//
-//		//							in = part.getInputStream();
-//		//							int k;
-//		//							while ((k = in.read()) != -1) {
-//		//								out.write(k);
-//		//							}
-//		//						}
-//		//					}
-//		//				}
-//		//			}
-//		//			else if (msg instanceof String){
-//		//				try {
-//		//					filename = filename+".txt";
-//		//					if (msg != null) {
-//		//						System.out.println("... " + filename);
-//		//						out = new FileOutputStream(new File(filename));
-//		//						String c = msg.toString();
-//		//						out.write(c.getBytes());
-//		//
-//		//
-//		//					}
-//		//
-//		//
-//		//				} catch (Exception ex) {
-//		//
-//		//					ex.printStackTrace();
-//		//				}
-//		//			}
-//		//		}
-//		finally {
-//			if (in != null) { in.close(); }
-//			if (out != null) { out.flush(); out.close(); }
-//		}
-//		return file;
-//	}
 
 	@Transactional(readOnly=true)
 	public ResultClass<MessageBox> getMessages() {
@@ -384,7 +296,7 @@ public class MailBoxService{
 		return result;
 
 	}
-	
+
 	private String getStorageKey(Long id) {
 		return "attachment/"+Long.toString(id);
 	}
