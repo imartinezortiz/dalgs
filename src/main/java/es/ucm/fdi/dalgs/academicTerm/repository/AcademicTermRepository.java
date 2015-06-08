@@ -124,15 +124,6 @@ public class AcademicTermRepository {
 
 	}
 
-	// public boolean existByTerm(String term) {
-	// Query query = em.createQuery("from AcademicTerm a where a.term=?1");
-	// query.setParameter(1, term);
-	//
-	// if (query.getResultList().isEmpty())
-	// return false;
-	//
-	// return true;
-	// }
 
 	public AcademicTerm getAcademicTermById(Long id) {
 		return em.find(AcademicTerm.class, id);

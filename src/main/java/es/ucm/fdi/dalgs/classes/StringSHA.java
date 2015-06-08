@@ -21,9 +21,9 @@ import java.security.NoSuchAlgorithmException;
 
 public class StringSHA {
     /***
-     * Convierte un arreglo de bytes a String usando valores hexadecimales
-     * @param digest arreglo de bytes a convertir
-     * @return String creado a partir de <code>digest</code>
+     * Converts an array of bytes to a String using hexadecimal values
+     * @param digest array of bytes to convert
+     * @return String in hexadecimal 
      */
     private static String toHexadecimal(byte[] digest){
         String hash = "";
@@ -36,10 +36,10 @@ public class StringSHA {
     }
 
     /***
-     * Encripta un mensaje de texto mediante algoritmo de resumen de mensaje.
-     * @param message texto a encriptar
-     * @param algorithm algoritmo de encriptacion, puede ser: MD2, MD5, SHA-1, SHA-256, SHA-384, SHA-512
-     * @return mensaje encriptado
+     * Encrypts a text message by message digest algorithm.
+     * @param message to encrypt
+     * @param encrypt algorithm  it can be: MD2, MD5, SHA-1, SHA-256, SHA-384, SHA-512
+     * @return encrypted message 
      */
     public String getStringMessageDigest(String message){
         byte[] digest = null;
