@@ -132,13 +132,13 @@ def generate_token(url_data):
     logging.debug('%s\n' % url)
     # TOKEN Call
     try:
-        resp, content = h.request(url, "GET", headers={'Content-Type':'application/json', 'Accept': 'application/json'})
+        resp, content = h.request(url, "GET", headers={'Content-Type': 'application/json', 'Accept': 'application/json'})
 
         # Transform resp to JSON Object
         content_obj = json.loads(content)
         # Status
         status = resp["status"]
-        logging.info("Status: %s" % status)
+        logging.debug("Status: %s" % status)
 
         if status == "200":
             url_data.token = content_obj["value"]
@@ -162,11 +162,16 @@ def get_activity(url_data):
         try:
             url = "%sapi/activity/%s?access_token=%s" % (url_data.path, id_activity, url_data.token)
             resp, content = h.request(url, "GET", headers={'Content-Type': 'application/json', 'Accept': 'application/json'})
+            logging.debug("Status: %s" % resp["status"])
+
             if resp["status"] == "200":
                 content_obj = json.loads(content)
-                print 'Activity:'
-                print content_obj[""u'activity'""]
+                aux = json.dumps(content_obj['activity'])
 
+                if aux != 'null':
+                    logging.info('Activity:\n %s' % aux)
+                else:
+                    logging.error("Activity with ID=%s no exists" % id_activity)
             else:
                 print resp
 
