@@ -69,19 +69,6 @@
 		</sec:authorize>
 		<br>
 		
-		<br> Direct Access to delete <a class="list-group-item "
-			href="<c:url value='/academicTerm/1/course/1.htm'/>">
-			<h4 class="list-group-item-heading">
-				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-				Course 1 (Coordinator)
-			</h4>
-		</a> <a class="list-group-item "
-			href="<c:url value='/academicTerm/1/course/1/group/1.htm'/>">
-			<h4 class="list-group-item-heading">
-				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-				Group 1 - C1 (Student, Professor)
-			</h4>
-		</a>
 
 	</div>
 </body>

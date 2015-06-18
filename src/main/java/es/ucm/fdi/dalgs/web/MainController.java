@@ -77,6 +77,7 @@ public class MainController {
 	 @ResponseStatus(value= HttpStatus.BAD_REQUEST)
 	 public ModelAndView handleException(Exception exception){
 		ModelAndView model = new ModelAndView("error");
+		System.out.println("por aqui");
 		model.addObject("reason", exception.getMessage());
 		return model;
 		  
