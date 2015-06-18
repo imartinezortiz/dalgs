@@ -41,6 +41,7 @@ import es.ucm.fdi.dalgs.domain.info.DegreeInfo;
 public class DegreeCSV {
 	protected static final Logger logger = LoggerFactory
 			.getLogger(DegreeCSV.class);
+	
 	@SuppressWarnings("unused")
 	public List<Degree> readCSVDegreeToBean(InputStream in, String charsetName,
 			CsvPreference csvPreference) throws IOException {
