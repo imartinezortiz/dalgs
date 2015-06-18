@@ -33,7 +33,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title list">
 				<span class="glyphicon glyphicon-plus" aria-hidden="true">&nbsp;</span>
-				<fmt:message key="${typeform}"/> <fmt:message key="module.mod" />
+				<fmt:message key="${typeform}"/> <fmt:message key="module.module" />
 			</h3>
 		</div>
 		<div class="panel-body">

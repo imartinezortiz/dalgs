@@ -1,14 +1,14 @@
-code;name
-1;Materias básicas
-2;Complementario
-3;Ingeniería de computadores
-4;Ingeniería del software
-5;Materias comunes a la rama de la informática
-6;Optativo
-7;Tecnología específica: Computación
-8;Tecnología específica: Tecnologías de la información
-9;Trabajo de fin de grado
-10;Dirección y gestión
-11;Tecnologías informáticas
-12;Complementos de ingeniería informática
-13;Trabajo fin de máster
+code;name;description
+1;Materias bÃ¡sicas;ssssss
+2;Complementario;ssssss
+3;IngenierÃ­a de computadores;ssssss
+4;IngenierÃ­a del software;ssssss
+5;Materias comunes a la rama de la informÃ¡tica;ssssss
+6;Optativo;ssssss
+7;TecnologÃ­a especÃ­fica: ComputaciÃ³n;ssssss
+8;TecnologÃ­a especÃ­fica: TecnologÃ­as de la informaciÃ³n;ssssss
+9;Trabajo de fin de grado;ssssss
+10;DirecciÃ³n y gestiÃ³n;ssssss
+11;TecnologÃ­as informÃ¡ticas;ssssss
+12;Complementos de ingenierÃ­a informÃ¡tica;ssssss
+13;Trabajo fin de mÃ¡ster;ssssss

@@ -59,10 +59,9 @@ public class UserCSV {
 			final String[] header = beanReader.getHeader(true);
 			final CellProcessor[] processors = getUserProcessors();
 
-			User u;
+			User u = new User();
 
 			while ((u = beanReader.read(User.class, nameMapping, processors)) != null) {
-				u.getRoles().add(new UserRole("ROLE_USER"));
 				u.getRoles().add(new UserRole(typeOfUser));
 				users.add(u);
 			}

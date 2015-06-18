@@ -67,7 +67,7 @@
 					<p style=" font-family: monospace;"><%=request.getAttribute("javax.servlet.error.message")%></p>
 				</c:when>
 				<c:otherwise>
-					<h3 class="nf_error"><fmt:message key="error.notFound" /></h3>
+					<h3 class="nf_error" align="center"><fmt:message key="error.notFound" /></h3>
 				
 				</c:otherwise>
 				</c:choose>
