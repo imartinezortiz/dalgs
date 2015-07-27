@@ -16,6 +16,9 @@
  */
 package es.ucm.fdi.dalgs.mailbox.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -244,7 +247,7 @@ public class MailBoxService{
 		return result;
 	}
 
-	private ResultClass<Boolean> parseSubjectAndCreate(MessageBox messageBox, Message msg) throws MessagingException, IOException{
+	private ResultClass<Boolean> parseSubjectAndCreate(MessageBox messageBox, Message msg) throws MessagingException, IOException {
 
 
 		ResultClass<Boolean> result = new ResultClass<>();
@@ -256,8 +259,28 @@ public class MailBoxService{
 
 			String mimeType = msg.getAllHeaders() + msg.getContentType();
 			String key = getStorageKey(Long.parseLong(m.group(3)));
-
-			storageManager.putObject(bucket, key, mimeType, msg.getInputStream());			
+			File f = File.createTempFile("msg", null);
+			FileOutputStream out = null;
+			try {
+				out = new FileOutputStream(f);
+				msg.writeTo(out);
+			} finally {
+				if (out != null ) {
+					out.close();
+				}
+			}
+			
+			FileInputStream in = new FileInputStream(f);
+			try {
+				storageManager.putObject(bucket, key, mimeType, in);
+			} finally {
+				if (in != null) {
+					in.close();
+				}
+				if ( f != null ) {
+					f.delete();
+				}
+			}
 			String aaa=storageManager.getUrl(bucket, key).toExternalForm();
 			messageBox.setFile(aaa);
 
