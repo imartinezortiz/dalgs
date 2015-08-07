@@ -1,6 +1,0 @@
-code,name,description,type
-COMP1,UML,adquirir conocimientos en UML,General
-COMP2,Patrones,aprender diversos patrones de Ingenieria Software,Transversal
-COMP3,Base datos relacional,Saber diseñar una base de datos relacional,General
-COMP4,Consultas SQL,Adquirir conocimientos en consultas contra una base de datos,Basica
-COMP5,Sincronizacion de Procesos,Aprendizaje de sincronizacion y comunicacion de procesos,Especifica
