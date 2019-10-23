@@ -40,17 +40,17 @@ public class SubjectInfo implements Serializable, Cloneable,
 	@NotEmpty
 	@NotNull
 	@NotBlank
-	@Size(min = 1, max = 100)
+	@Size(min = 1, max = 200)
 	@Basic(optional = false)
-	@Column(name = "name", length = 100, nullable = false)
+	@Column(name = "name", length = 200, nullable = false)
 	private String name;
 
 	@NotEmpty
 	@NotNull
 	@NotBlank
-	@Size(min = 1, max = 250)
+	@Size(min = 1, max = 500)
 	@Basic(optional = false)
-	@Column(name = "description", length = 250, nullable = false)
+	@Column(name = "description", length = 500, nullable = false)
 	private String description;
 
 	@NotEmpty
@@ -61,9 +61,9 @@ public class SubjectInfo implements Serializable, Cloneable,
 	private String code;
 	
 
-	@Size(min = 1, max = 250)
+	@Size(min = 1, max = 500)
 	@Basic(optional = true)
-	@Column(name = "url_doc", length = 250, nullable = true)
+	@Column(name = "url_doc", length = 500, nullable = true)
 	private String url_doc;
 	
 
